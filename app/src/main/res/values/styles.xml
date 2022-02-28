@@ -46,10 +46,13 @@
     </style>
 
     <style name="NumpadButton.Image" parent="Widget.AppCompat.ImageButton">
+        <!-- Layout -->
         <item name="android:layout_width">60dp</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_marginStart">7.5dp</item>
         <item name="android:layout_marginEnd">7.5dp</item>
         <item name="android:layout_marginBottom">15dp</item>
+        <!-- Style -->
+        <item name="tint">?colorOnPrimary</item>
     </style>
 </resources>
