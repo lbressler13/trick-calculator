@@ -3,6 +3,7 @@ package com.example.trickcalculator.ui.main
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -75,11 +76,14 @@ class MainFragment : Fragment() {
         binding.clearButton.setOnClickListener {
             viewModel.resetComputeData()
 
+            val enabledColor = TypedValue()
+            requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
+
             binding.numpadLayout.enableAllChildren()
             binding.numpadLayout.children.forEach {
                 setImageButtonTint(
                     it,
-                    R.color.black,
+                    enabledColor.resourceId,
                     requireContext()
                 )
             }
@@ -120,19 +124,27 @@ class MainFragment : Fragment() {
             } catch (e: Exception) {
                 binding.mainText.text = e.message
                 binding.numpadLayout.disableAllChildren()
+
+                // need to be able to clear error
+                val disabledColor = TypedValue()
+                requireContext().theme.resolveAttribute(R.attr.disabledForeground, disabledColor, true)
+
                 binding.numpadLayout.children.forEach {
                     setImageButtonTint(
                         it,
-                        R.color.disabled_foreground_gray,
+                        disabledColor.resourceId,
                         requireContext()
                     )
                 }
 
                 // need to be able to clear error
+                val enabledColor = TypedValue()
+                requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
+
                 binding.clearButton.enable()
                 setImageButtonTint(
                     binding.clearButton,
-                    R.color.black,
+                    enabledColor.resourceId,
                     requireContext()
                 )
             }

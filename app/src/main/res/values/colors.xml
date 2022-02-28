@@ -8,6 +8,8 @@
     <color name="black">#ff000000</color>
     <color name="white">#ffffffff</color>
 
-    <color name="disabled_foreground_gray">#999</color>
-    <color name="disabled_background_gray">#333</color>
+    <color name="light_disabled_foreground_gray">#888</color>
+    <color name="light_disabled_background_gray">#ddd</color>
+    <color name="dark_disabled_foreground_gray">#999</color>
+    <color name="dark_disabled_background_gray">#333</color>
 </resources>

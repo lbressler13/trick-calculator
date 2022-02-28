@@ -16,7 +16,7 @@
         android:background="@drawable/button_numpad"
         android:paddingHorizontal="10dp"
         android:scrollbars="vertical"
-        android:textColor="@color/black"
+        android:textColor="?colorOnPrimary"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0"
@@ -34,143 +34,149 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mainText">
 
-    <Button
-        android:id="@+id/oneButton"
-        style="@style/NumpadButton"
-        android:layout_row="0"
-        android:layout_column="0"
-        android:background="@drawable/button_numpad"
-        android:text="@string/one" />
+        <Button
+            android:id="@+id/oneButton"
+            style="@style/NumpadButton"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:background="@drawable/button_numpad"
+            android:text="@string/one" />
 
-    <Button
-        android:id="@+id/twoButton"
-        style="@style/NumpadButton"
-        android:layout_row="0"
-        android:layout_column="1"
-        android:background="@drawable/button_numpad"
-        android:text="@string/two" />
+        <Button
+            android:id="@+id/twoButton"
+            style="@style/NumpadButton"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:background="@drawable/button_numpad"
+            android:text="@string/two" />
 
-    <Button
-        android:id="@+id/threeButton"
-        style="@style/NumpadButton"
-        android:layout_row="0"
-        android:layout_column="2"
-        android:background="@drawable/button_numpad"
-        android:text="@string/three" />
+        <Button
+            android:id="@+id/threeButton"
+            style="@style/NumpadButton"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:background="@drawable/button_numpad"
+            android:text="@string/three" />
 
-    <Button
-        android:id="@+id/fourButton"
-        style="@style/NumpadButton"
-        android:layout_row="1"
-        android:layout_column="0"
-        android:background="@drawable/button_numpad"
-        android:text="@string/four" />
+        <Button
+            android:id="@+id/fourButton"
+            style="@style/NumpadButton"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:background="@drawable/button_numpad"
+            android:text="@string/four" />
 
-    <Button
-        android:id="@+id/fiveButton"
-        style="@style/NumpadButton"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:background="@drawable/button_numpad"
-        android:text="@string/five" />
+        <Button
+            android:id="@+id/fiveButton"
+            style="@style/NumpadButton"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:background="@drawable/button_numpad"
+            android:text="@string/five" />
 
-    <Button
-        android:id="@+id/sixButton"
-        style="@style/NumpadButton"
-        android:layout_row="1"
-        android:layout_column="2"
-        android:background="@drawable/button_numpad"
-        android:text="@string/six" />
+        <Button
+            android:id="@+id/sixButton"
+            style="@style/NumpadButton"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:background="@drawable/button_numpad"
+            android:text="@string/six" />
 
-    <Button
-        android:id="@+id/sevenButton"
-        style="@style/NumpadButton"
-        android:layout_row="2"
-        android:layout_column="0"
-        android:background="@drawable/button_numpad"
-        android:text="@string/seven" />
+        <Button
+            android:id="@+id/sevenButton"
+            style="@style/NumpadButton"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:background="@drawable/button_numpad"
+            android:text="@string/seven" />
 
-    <Button
-        android:id="@+id/eightButton"
-        style="@style/NumpadButton"
-        android:layout_row="2"
-        android:layout_column="1"
-        android:background="@drawable/button_numpad"
-        android:text="@string/eight" />
+        <Button
+            android:id="@+id/eightButton"
+            style="@style/NumpadButton"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:background="@drawable/button_numpad"
+            android:text="@string/eight" />
 
-    <Button
-        android:id="@+id/nineButton"
-        style="@style/NumpadButton"
-        android:layout_row="2"
-        android:layout_column="2"
-        android:background="@drawable/button_numpad"
-        android:text="@string/nine" />
+        <Button
+            android:id="@+id/nineButton"
+            style="@style/NumpadButton"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:background="@drawable/button_numpad"
+            android:text="@string/nine" />
 
-    <Button
-        android:id="@+id/zeroButton"
-        style="@style/NumpadButton"
-        android:layout_row="3"
-        android:layout_column="0"
-        android:background="@drawable/button_numpad"
-        android:text="@string/zero" />
+        <Button
+            android:id="@+id/zeroButton"
+            style="@style/NumpadButton"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:background="@drawable/button_numpad"
+            android:text="@string/zero" />
 
-    <ImageButton
-        android:id="@+id/plusButton"
-        style="@style/NumpadButton.Image"
-        android:layout_row="0"
-        android:layout_column="3"
-        android:background="@drawable/button_numpad"
-        android:src="@drawable/ic_plus" />
+        <ImageButton
+            android:id="@+id/plusButton"
+            style="@style/NumpadButton.Image"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:background="@drawable/button_numpad"
+            android:src="@drawable/ic_plus"
+            app:tint="?colorOnPrimary" />
 
-    <ImageButton
-        android:id="@+id/minusButton"
-        style="@style/NumpadButton.Image"
-        android:layout_row="1"
-        android:layout_column="3"
-        android:background="@drawable/button_numpad"
-        android:src="@drawable/ic_minus" />
+        <ImageButton
+            android:id="@+id/minusButton"
+            style="@style/NumpadButton.Image"
+            android:layout_row="1"
+            android:layout_column="3"
+            android:background="@drawable/button_numpad"
+            android:src="@drawable/ic_minus"
+            app:tint="?colorOnPrimary" />
 
-    <ImageButton
-        android:id="@+id/timesButton"
-        style="@style/NumpadButton.Image"
-        android:layout_row="2"
-        android:layout_column="3"
-        android:background="@drawable/button_numpad"
-        android:src="@drawable/ic_times" />
+        <ImageButton
+            android:id="@+id/timesButton"
+            style="@style/NumpadButton.Image"
+            android:layout_row="2"
+            android:layout_column="3"
+            android:background="@drawable/button_numpad"
+            android:src="@drawable/ic_times"
+            app:tint="?colorOnPrimary" />
 
-    <ImageButton
-        android:id="@+id/divideButton"
-        style="@style/NumpadButton.Image"
-        android:layout_row="3"
-        android:layout_column="3"
-        android:background="@drawable/button_numpad"
-        android:src="@drawable/ic_divide" />
+        <ImageButton
+            android:id="@+id/divideButton"
+            style="@style/NumpadButton.Image"
+            android:layout_row="3"
+            android:layout_column="3"
+            android:background="@drawable/button_numpad"
+            android:src="@drawable/ic_divide"
+            app:tint="?colorOnPrimary" />
 
-    <ImageButton
-        android:id="@+id/backspaceButton"
-        style="@style/NumpadButton.Image"
-        android:layout_row="3"
-        android:layout_column="1"
-        android:background="@drawable/button_numpad"
-        android:src="@drawable/ic_arrow_left" />
+        <ImageButton
+            android:id="@+id/backspaceButton"
+            style="@style/NumpadButton.Image"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:background="@drawable/button_numpad"
+            android:src="@drawable/ic_arrow_left"
+            app:tint="?colorOnPrimary" />
 
-    <Button
-        android:id="@+id/clearButton"
-        style="@style/NumpadButton"
-        android:layout_row="3"
-        android:layout_column="2"
-        android:layout_gravity="top"
-        android:background="@drawable/button_numpad"
-        android:text="@string/clear"
-        android:textSize="20sp" />
+        <Button
+            android:id="@+id/clearButton"
+            style="@style/NumpadButton"
+            android:layout_row="3"
+            android:layout_column="2"
+            android:layout_gravity="top"
+            android:background="@drawable/button_numpad"
+            android:text="@string/clear"
+            android:textSize="20sp" />
 
-    <ImageButton
-        android:id="@+id/equalsButton"
-        style="@style/NumpadButton.Image"
-        android:layout_row="4"
-        android:layout_column="3"
-        android:background="@drawable/button_numpad"
-        android:src="@drawable/ic_equals" />
+        <ImageButton
+            android:id="@+id/equalsButton"
+            style="@style/NumpadButton.Image"
+            android:layout_row="4"
+            android:layout_column="3"
+            android:background="@drawable/button_numpad"
+            android:src="@drawable/ic_equals"
+            app:tint="?colorOnPrimary" />
 
     </GridLayout>
 
