@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NumpadButton" parent="Widget.AppCompat.Button">
+        <!-- Layout -->
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">7.5dp</item>
+        <item name="android:layout_marginEnd">7.5dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+        <!-- Style -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">35sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="NumpadButton.Image" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">7.5dp</item>
+        <item name="android:layout_marginEnd">7.5dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+    </style>
+</resources>
