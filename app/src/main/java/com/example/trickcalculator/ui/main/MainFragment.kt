@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.lifecycle.Observer
 import com.example.trickcalculator.R
@@ -19,13 +20,16 @@ import com.example.trickcalculator.runComputation
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.setImageButtonTint
-import java.lang.Exception
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: MainViewModel
 
     private lateinit var computeText: StringList
+
+    // settings
+    private var shuffleNumbers: Boolean = false
+    private var shuffleOperators: Boolean = true
 
     companion object {
         fun newInstance() = MainFragment()
@@ -40,9 +44,12 @@ class MainFragment : Fragment() {
 
         // observe changes in viewmodel
         viewModel.getComputeText().observe(viewLifecycleOwner, getComputeTextObserver)
+        viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
+        viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
+        initSettingsDialog()
 
         return binding.root
     }
@@ -51,6 +58,9 @@ class MainFragment : Fragment() {
         computeText = it
         binding.mainText.text = it.joinToString("")
     }
+
+    private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
+    private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
 
     private fun initButtons() {
         // number buttons
@@ -90,8 +100,12 @@ class MainFragment : Fragment() {
         }
 
         binding.equalsButton.setOnClickListener {
-            // shuffle action for each operator
-            val operators = listOf("+", "-", "x", "/").shuffled()
+            // set action for each operator
+            val operators = if (shuffleOperators) {
+                listOf("+", "-", "x", "/").shuffled()
+            } else {
+                listOf("+", "-", "x", "/")
+            }
             val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
                 when (operator) {
                     operators[0] -> leftValue + rightValue
@@ -102,12 +116,11 @@ class MainFragment : Fragment() {
                 }
             }
 
-            // val numberOrder = if (shuffleNumbers) {
-            //     (0..9).shuffled()
-            // } else {
-            //     (0..9).toList()
-            // }
-            val numberOrder = (0..9).toList()
+            val numberOrder = if (shuffleNumbers) {
+                (0..9).shuffled()
+            } else {
+                (0..9).toList()
+            }
 
             try {
                 val computedValue: Int =
@@ -127,7 +140,11 @@ class MainFragment : Fragment() {
 
                 // need to be able to clear error
                 val disabledColor = TypedValue()
-                requireContext().theme.resolveAttribute(R.attr.disabledForeground, disabledColor, true)
+                requireContext().theme.resolveAttribute(
+                    R.attr.disabledForeground,
+                    disabledColor,
+                    true
+                )
 
                 binding.numpadLayout.children.forEach {
                     setImageButtonTint(
@@ -148,6 +165,34 @@ class MainFragment : Fragment() {
                     requireContext()
                 )
             }
+        }
+    }
+
+    private fun initSettingsDialog() {
+        val settingsDialog = MainSettingsDialogFragment()
+        val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
+        val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
+        val requestKey = requireContext().getString(R.string.key_settings_request)
+
+        // update viewmodel with response from dialog
+        childFragmentManager.setFragmentResultListener(
+            requestKey,
+            viewLifecycleOwner,
+            { _: String, result: Bundle ->
+                val returnedShuffleNumbers: Boolean = result.getBoolean(numbersKey, shuffleNumbers)
+                viewModel.setShuffleNumbers(returnedShuffleNumbers)
+
+                val returnedShuffleOperators: Boolean = result.getBoolean(operatorsKey, shuffleOperators)
+                viewModel.setShuffleOperators(returnedShuffleOperators)
+            }
+        )
+
+        binding.settingsButton.setOnClickListener {
+            settingsDialog.arguments = bundleOf(
+                numbersKey to shuffleNumbers,
+                operatorsKey to shuffleOperators,
+            )
+            settingsDialog.show(childFragmentManager, MainSettingsDialogFragment.TAG)
         }
     }
 }

@@ -14,12 +14,21 @@ class MainViewModel : ViewModel() {
     // result of parsing computeText
     private val computedValue = MutableLiveData<Int?>().apply { value = null }
 
+    // settings
+    private val shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
+    private val shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
+
     fun getComputeText(): LiveData<StringList> { return computeText }
     private fun clearComputeText() { computeText.value = listOf() }
 
-    fun getComputedValue(): LiveData<Int?> { return computedValue }
     fun setComputedValue(newValue: Int) { computedValue.value = newValue }
     private fun clearComputedValue() { computedValue.value = null }
+
+    fun setShuffleNumbers(newValue: Boolean) { shuffleNumbers.value = newValue }
+    fun getShuffleNumbers(): LiveData<Boolean> { return shuffleNumbers }
+
+    fun setShuffleOperators(newValue: Boolean) { shuffleOperators.value = newValue }
+    fun getShuffleOperators(): LiveData<Boolean> { return shuffleOperators }
 
     // add new value to end of list
     fun appendComputeText(addition: String) {

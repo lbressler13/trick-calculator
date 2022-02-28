@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Trick Calculator</string>
 
-    <!-- Numbers -->
+    <!-- Numpad -->
     <string name="zero">0</string>
     <string name="one">1</string>
     <string name="two">2</string>
@@ -12,6 +12,16 @@
     <string name="seven">7</string>
     <string name="eight">8</string>
     <string name="nine">9</string>
-
     <string name="clear">CE</string>
+
+    <!-- Settings UI -->
+    <string name="shuffle_operators">Shuffle Operators</string>
+    <string name="shuffle_numbers">Shuffle Numbers</string>
+    <string name="done">Done</string>
+    <string name="title_settings">Settings</string>
+
+    <!-- Settings Keys -->
+    <string name="key_settings_request">mainSettingsRequest</string>
+    <string name="key_shuffle_numbers">shuffleNumbers</string>
+    <string name="key_shuffle_operators">shuffleOperators</string>
 </resources>

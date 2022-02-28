@@ -6,6 +6,8 @@ import android.os.Bundle
 import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ui.main.MainFragment
 
+// TODO some link to attributions of icons
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
