@@ -85,6 +85,64 @@ class MainFragment : Fragment() {
             .commit()
     }
 
+    private val clearButtonOnClick = {
+        viewModel.resetComputeData()
+
+        val enabledColor = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
+
+        binding.numpadLayout.enableAllChildren()
+        binding.numpadLayout.children.forEach {
+            setImageButtonTint(
+                it,
+                enabledColor.resourceId,
+                requireContext()
+            )
+        }
+    }
+
+    // set op order, num order, run computation, and update viewmodel
+    private val equalsButtonOnClick = {
+        // set action for each operator
+        val operators = if (shuffleOperators) {
+            listOf("+", "-", "x", "/").shuffled()
+        } else {
+            listOf("+", "-", "x", "/")
+        }
+        val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
+            when (operator) {
+                operators[0] -> leftValue + rightValue
+                operators[1] -> leftValue - rightValue
+                operators[2] -> leftValue * rightValue
+                operators[3] -> leftValue / rightValue
+                else -> 0
+            }
+        }
+
+        val numberOrder = if (shuffleNumbers) {
+            (0..9).shuffled()
+        } else {
+            (0..9).toList()
+        }
+
+        try {
+            val computedValue: Int =
+                runComputation(
+                    computeText,
+                    operators.subList(2, 4), // multiply and divide ops
+                    operators.subList(0, 2), // add and subtract ops
+                    performOperation,
+                    numberOrder
+                )
+
+            viewModel.setComputedValue(computedValue)
+            viewModel.useComputedAsComputeText()
+            viewModel.setError(null)
+        } catch (e: Exception) {
+            viewModel.setError(e.message)
+        }
+    }
+
     private fun initButtons() {
         // number buttons
         binding.oneButton.setOnClickListener { viewModel.appendComputeText("1") }
@@ -104,67 +162,15 @@ class MainFragment : Fragment() {
         binding.timesButton.setOnClickListener { viewModel.appendComputeText("x") }
         binding.divideButton.setOnClickListener { viewModel.appendComputeText("/") }
 
+        // functional buttons
         binding.backspaceButton.setOnClickListener { viewModel.backspaceComputeText() }
-
-        binding.clearButton.setOnClickListener {
-            viewModel.resetComputeData()
-
-            val enabledColor = TypedValue()
-            requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
-
-            binding.numpadLayout.enableAllChildren()
-            binding.numpadLayout.children.forEach {
-                setImageButtonTint(
-                    it,
-                    enabledColor.resourceId,
-                    requireContext()
-                )
-            }
-        }
-
-        binding.equalsButton.setOnClickListener {
-            // set action for each operator
-            val operators = if (shuffleOperators) {
-                listOf("+", "-", "x", "/").shuffled()
-            } else {
-                listOf("+", "-", "x", "/")
-            }
-            val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
-                when (operator) {
-                    operators[0] -> leftValue + rightValue
-                    operators[1] -> leftValue - rightValue
-                    operators[2] -> leftValue * rightValue
-                    operators[3] -> leftValue / rightValue
-                    else -> 0
-                }
-            }
-
-            val numberOrder = if (shuffleNumbers) {
-                (0..9).shuffled()
-            } else {
-                (0..9).toList()
-            }
-
-            try {
-                val computedValue: Int =
-                    runComputation(
-                        computeText,
-                        operators.subList(2, 4), // multiply and divide ops
-                        operators.subList(0, 2), // add and subtract ops
-                        performOperation,
-                        numberOrder
-                    )
-
-                viewModel.setComputedValue(computedValue)
-                viewModel.useComputedAsComputeText()
-                viewModel.setError(null)
-            } catch (e: Exception) {
-                viewModel.setError(e.message)
-            }
-        }
+        binding.clearButton.setOnClickListener { clearButtonOnClick() }
+        binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
     }
 
+    // disable all buttons except clear
     private fun setErrorNumpad() {
+        // disable all buttons
         binding.numpadLayout.disableAllChildren()
 
         val disabledColor = TypedValue()
