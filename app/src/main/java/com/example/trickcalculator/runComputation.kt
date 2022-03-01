@@ -1,5 +1,6 @@
 package com.example.trickcalculator
 
+import android.util.Log
 import com.example.trickcalculator.utils.*
 
 // parse string list and compute mathematical expression, if possible
@@ -13,6 +14,7 @@ fun runComputation(
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Err: Syntax Error")
     }
+    Log.e(null, "validated")
 
     val text: StringList = if (validateNumbersOrder(numbersOrder)) {
         replaceNumbers(computeText, numbersOrder!!)
@@ -34,23 +36,35 @@ private fun validateComputeText(computeText: StringList, ops: StringList): Boole
     }
 
     var lastType = ""
+    var openParenCount = 0
 
     for (element in computeText) {
         val currentType: String? = when {
             isOperator(element, ops) -> "operator"
             isInt(element) -> "number"
+            element == "(" -> "lparen"
+            element == ")" -> "rparen"
             else -> null
         }
 
-        // can't have consecutive operators or numbers
-        if (currentType == null || lastType == currentType) {
+        if (currentType == "lparen") {
+            openParenCount++
+        } else if (currentType == "rparen") {
+            openParenCount--
+        }
+
+        if (openParenCount < 0 ||
+            currentType == null || // unknown char
+            (lastType == currentType && !currentType.endsWith("paren")) || // repeated num or op
+            (lastType == "lparen" && currentType == "rparen") // empty parens
+        ) {
             return false
         }
 
         lastType = currentType
     }
 
-    return true
+    return openParenCount == 0
 }
 
 private fun validateNumbersOrder(order: IntList?): Boolean {
@@ -65,10 +79,10 @@ private fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList 
         if (!isInt(it)) {
             it
         } else {
-           it.map { c ->
-               val index = Integer.parseInt(c.toString())
-               numbersOrder[index].toString()
-           }.joinToString("")
+            it.map { c ->
+                val index = Integer.parseInt(c.toString())
+                numbersOrder[index].toString()
+            }.joinToString("")
         }
     }
 }
@@ -138,4 +152,8 @@ private fun parseFirstRound(
 
 private fun isOperator(element: String, ops: StringList): Boolean {
     return element in ops
+}
+
+private fun isParen(element: String): Boolean {
+    return element == "(" || element == ")"
 }

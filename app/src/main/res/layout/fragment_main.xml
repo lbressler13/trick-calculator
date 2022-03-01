@@ -159,10 +159,26 @@
             android:background="@drawable/button_numpad"
             android:src="@drawable/ic_divide" />
 
+        <Button
+            android:id="@+id/lparenButton"
+            style="@style/NumpadButton"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:background="@drawable/button_numpad"
+            android:text="@string/lparen" />
+
+        <Button
+            android:id="@+id/rparenButton"
+            style="@style/NumpadButton"
+            android:layout_row="3"
+            android:layout_column="2"
+            android:background="@drawable/button_numpad"
+            android:text="@string/rparen" />
+
         <ImageButton
             android:id="@+id/backspaceButton"
             style="@style/NumpadButton.Image"
-            android:layout_row="3"
+            android:layout_row="4"
             android:layout_column="1"
             android:background="@drawable/button_numpad"
             android:src="@drawable/ic_arrow_left" />
@@ -170,7 +186,7 @@
         <Button
             android:id="@+id/clearButton"
             style="@style/NumpadButton"
-            android:layout_row="3"
+            android:layout_row="4"
             android:layout_column="2"
             android:layout_gravity="top"
             android:background="@drawable/button_numpad"

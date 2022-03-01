@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.lifecycle.Observer
@@ -144,17 +145,11 @@ class MainFragment : Fragment() {
     }
 
     private fun initButtons() {
-        // number buttons
-        binding.oneButton.setOnClickListener { viewModel.appendComputeText("1") }
-        binding.twoButton.setOnClickListener { viewModel.appendComputeText("2") }
-        binding.threeButton.setOnClickListener { viewModel.appendComputeText("3") }
-        binding.fourButton.setOnClickListener { viewModel.appendComputeText("4") }
-        binding.fiveButton.setOnClickListener { viewModel.appendComputeText("5") }
-        binding.sixButton.setOnClickListener { viewModel.appendComputeText("6") }
-        binding.sevenButton.setOnClickListener { viewModel.appendComputeText("7") }
-        binding.eightButton.setOnClickListener { viewModel.appendComputeText("8") }
-        binding.nineButton.setOnClickListener { viewModel.appendComputeText("9") }
-        binding.zeroButton.setOnClickListener { viewModel.appendComputeText("0") }
+        binding.numpadLayout.children.forEach {
+            if (it is Button && it.text != null && it != binding.clearButton) {
+                it.setOnClickListener { _ -> viewModel.appendComputeText(it.text.toString()) }
+            }
+        }
 
         // operation buttons
         binding.plusButton.setOnClickListener { viewModel.appendComputeText("+") }

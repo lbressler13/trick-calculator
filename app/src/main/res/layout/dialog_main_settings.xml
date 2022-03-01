@@ -23,4 +23,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/shuffleOperatorsSwitch" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/applyParensSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/apply_parens"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shuffleNumbersSwitch" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

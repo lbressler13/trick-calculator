@@ -12,18 +12,22 @@
     <string name="seven">7</string>
     <string name="eight">8</string>
     <string name="nine">9</string>
+    <string name="lparen">(</string>
+    <string name="rparen">)</string>
     <string name="clear">CE</string>
 
     <!-- Settings UI -->
-    <string name="shuffle_operators">Shuffle Operators</string>
-    <string name="shuffle_numbers">Shuffle Numbers</string>
     <string name="done">Done</string>
     <string name="title_settings">Settings</string>
+    <string name="shuffle_operators">Shuffle Operators</string>
+    <string name="shuffle_numbers">Shuffle Numbers</string>
+    <string name="apply_parens">Apply Parens</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">mainSettingsRequest</string>
     <string name="key_shuffle_numbers">shuffleNumbers</string>
     <string name="key_shuffle_operators">shuffleOperators</string>
+    <string name="key_apply_parens">applyParens</string>
 
     <!-- Image Attributions -->
     <string name="link">Link</string>
