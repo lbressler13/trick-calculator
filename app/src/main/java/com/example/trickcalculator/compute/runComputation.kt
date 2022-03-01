@@ -8,20 +8,26 @@ fun runComputation(
     firstRoundOps: StringList,
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
-    numbersOrder: IntList? = null
+    numbersOrder: IntList,
+    checkParens: Boolean
 ): Int {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Err: Syntax Error")
     }
 
-    val text: StringList = if (validateNumbersOrder(numbersOrder)) {
-        replaceNumbers(computeText, numbersOrder!!)
-    } else {
-        computeText
+    var currentState: StringList = computeText
+
+    if (validateNumbersOrder(numbersOrder)) {
+        currentState = replaceNumbers(currentState, numbersOrder)
     }
 
+    if (!checkParens) {
+        currentState = stripParens(currentState)
+    }
+
+
     return try {
-        parseText(text, firstRoundOps, secondRoundOps, performSingleOp)
+        parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
     } catch (e: ArithmeticException) {
         throw Exception("Err: Divide by 0")
     }
@@ -46,24 +52,21 @@ private fun parseText(
     computeText: StringList,
     firstRoundOps: StringList,
     secondRoundOps: StringList,
-    performSingleOp: OperatorFunction
+    performSingleOp: OperatorFunction,
+    checkParens: Boolean
 ): Int {
     var total = 0
     var currentOperator: String? = null
 
     var currentState = computeText
 
-    currentState = parseParens(computeText, firstRoundOps, secondRoundOps, performSingleOp)
+    if (checkParens) {
+        currentState = parseParens(computeText, firstRoundOps, secondRoundOps, performSingleOp)
+    }
 
     if (firstRoundOps.isNotEmpty()) {
         currentState = parseFirstRound(currentState, firstRoundOps, performSingleOp)
     }
-
-//    val afterFirstRound: StringList = if (firstRoundOps.isEmpty()) {
-//        afterParens
-//    } else {
-//        parseFirstRound(afterParens, firstRoundOps, performSingleOp)
-//    }
 
     // run second round operators (probably addition and subtraction)
     for (element in currentState) {
@@ -129,7 +132,7 @@ private fun parseParens(
             val openIndex = index
             val closeIndex = getMatchingParenIndex(openIndex, computeText)
             val subText = computeText.subList(openIndex + 1, closeIndex) // cut out start+end parens
-            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp)
+            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp, true)
             simplifiedList.add(result.toString())
             index = closeIndex + 1
         } else {
@@ -165,4 +168,8 @@ private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int 
     }
 
     return closeIndex
+}
+
+private fun stripParens(computeText: StringList): StringList {
+    return computeText.filter { it != "(" && it != ")" }
 }

@@ -19,6 +19,7 @@ class MainViewModel : ViewModel() {
     // settings
     private val shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
     private val shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
+    private val applyParens = MutableLiveData<Boolean>().apply { value = true }
 
     fun getComputeText(): LiveData<StringList> { return computeText }
     private fun clearComputeText() { computeText.value = listOf() }
@@ -34,6 +35,9 @@ class MainViewModel : ViewModel() {
 
     fun setShuffleOperators(newValue: Boolean) { shuffleOperators.value = newValue }
     fun getShuffleOperators(): LiveData<Boolean> { return shuffleOperators }
+
+    fun setApplyParens(newValue: Boolean) { applyParens.value = newValue }
+    fun getApplyParens(): LiveData<Boolean> { return applyParens }
 
     // add new value to end of list
     fun appendComputeText(addition: String) {

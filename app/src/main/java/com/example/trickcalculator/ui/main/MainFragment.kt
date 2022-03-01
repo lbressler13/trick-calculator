@@ -33,6 +33,7 @@ class MainFragment : Fragment() {
     // settings
     private var shuffleNumbers: Boolean = false
     private var shuffleOperators: Boolean = true
+    private var applyParens: Boolean = true
 
     companion object {
         fun newInstance() = MainFragment()
@@ -50,6 +51,7 @@ class MainFragment : Fragment() {
         viewModel.getError().observe(viewLifecycleOwner, getErrorObserver)
         viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
+        viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
@@ -78,6 +80,7 @@ class MainFragment : Fragment() {
 
     private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
     private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
+    private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
 
     private val infoButtonOnClick = {
         requireActivity().supportFragmentManager.beginTransaction()
@@ -133,7 +136,8 @@ class MainFragment : Fragment() {
                     operators.subList(2, 4), // multiply and divide ops
                     operators.subList(0, 2), // add and subtract ops
                     performOperation,
-                    numberOrder
+                    numberOrder,
+                    applyParens
                 )
 
             viewModel.setComputedValue(computedValue)
@@ -199,6 +203,7 @@ class MainFragment : Fragment() {
         val settingsDialog = MainSettingsDialogFragment()
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
+        val parensKey = requireContext().getString(R.string.key_apply_parens)
         val requestKey = requireContext().getString(R.string.key_settings_request)
 
         // update viewmodel with response from dialog
@@ -211,6 +216,9 @@ class MainFragment : Fragment() {
 
                 val returnedShuffleOperators: Boolean = result.getBoolean(operatorsKey, shuffleOperators)
                 viewModel.setShuffleOperators(returnedShuffleOperators)
+
+                val returnedApplyParens: Boolean = result.getBoolean(parensKey, applyParens)
+                viewModel.setApplyParens(returnedApplyParens)
             }
         )
 
@@ -218,6 +226,7 @@ class MainFragment : Fragment() {
             settingsDialog.arguments = bundleOf(
                 numbersKey to shuffleNumbers,
                 operatorsKey to shuffleOperators,
+                parensKey to applyParens
             )
             settingsDialog.show(childFragmentManager, MainSettingsDialogFragment.TAG)
         }

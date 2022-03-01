@@ -42,14 +42,22 @@ class MainSettingsDialogFragment : DialogFragment() {
         if (shuffleOperators != null) {
             binding.shuffleOperatorsSwitch.isChecked = shuffleOperators
         }
+
+        val parensKey = requireContext().getString(R.string.key_apply_parens)
+        val applyParens: Boolean? = args?.getBoolean(parensKey)
+        if (applyParens != null) {
+            binding.applyParensSwitch.isChecked = applyParens
+        }
     }
 
     private fun bundleSettings(): Bundle {
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
+        val parensKey = requireContext().getString(R.string.key_apply_parens)
         return bundleOf(
             numbersKey to binding.shuffleNumbersSwitch.isChecked,
-            operatorsKey to binding.shuffleOperatorsSwitch.isChecked
+            operatorsKey to binding.shuffleOperatorsSwitch.isChecked,
+            parensKey to binding.applyParensSwitch.isChecked
         )
     }
 
