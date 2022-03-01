@@ -1,6 +1,5 @@
-package com.example.trickcalculator
+package com.example.trickcalculator.compute
 
-import android.util.Log
 import com.example.trickcalculator.utils.*
 
 // parse string list and compute mathematical expression, if possible
@@ -14,7 +13,6 @@ fun runComputation(
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Err: Syntax Error")
     }
-    Log.e(null, "validated")
 
     val text: StringList = if (validateNumbersOrder(numbersOrder)) {
         replaceNumbers(computeText, numbersOrder!!)
@@ -27,50 +25,6 @@ fun runComputation(
     } catch (e: ArithmeticException) {
         throw Exception("Err: Divide by 0")
     }
-}
-
-private fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
-    // must start and end w/ number
-    if (isOperator(computeText.first(), ops) || isOperator(computeText.last(), ops)) {
-        return false
-    }
-
-    var lastType = ""
-    var openParenCount = 0
-
-    for (element in computeText) {
-        val currentType: String? = when {
-            isOperator(element, ops) -> "operator"
-            isInt(element) -> "number"
-            element == "(" -> "lparen"
-            element == ")" -> "rparen"
-            else -> null
-        }
-
-        if (currentType == "lparen") {
-            openParenCount++
-        } else if (currentType == "rparen") {
-            openParenCount--
-        }
-
-        if (openParenCount < 0 ||
-            currentType == null || // unknown char
-            (lastType == currentType && !currentType.endsWith("paren")) || // repeated num or op
-            (lastType == "lparen" && currentType == "rparen") // empty parens
-        ) {
-            return false
-        }
-
-        lastType = currentType
-    }
-
-    return openParenCount == 0
-}
-
-private fun validateNumbersOrder(order: IntList?): Boolean {
-    return order != null
-            && order.joinToString("") != "0123456789"
-            && order.sorted().joinToString("") == "0123456789"
 }
 
 // map digits to use values in numbers order
@@ -96,14 +50,23 @@ private fun parseText(
 ): Int {
     var total = 0
     var currentOperator: String? = null
-    val afterFirstRound: StringList = if (firstRoundOps.isEmpty()) {
-        computeText
-    } else {
-        parseFirstRound(computeText, firstRoundOps, performSingleOp)
+
+    var currentState = computeText
+
+    currentState = parseParens(computeText, firstRoundOps, secondRoundOps, performSingleOp)
+
+    if (firstRoundOps.isNotEmpty()) {
+        currentState = parseFirstRound(currentState, firstRoundOps, performSingleOp)
     }
 
+//    val afterFirstRound: StringList = if (firstRoundOps.isEmpty()) {
+//        afterParens
+//    } else {
+//        parseFirstRound(afterParens, firstRoundOps, performSingleOp)
+//    }
+
     // run second round operators (probably addition and subtraction)
-    for (element in afterFirstRound) {
+    for (element in currentState) {
         when {
             isOperator(element, secondRoundOps) -> currentOperator = element
             currentOperator == null -> total = Integer.parseInt(element)
@@ -150,10 +113,56 @@ private fun parseFirstRound(
     return simplifiedList
 }
 
-private fun isOperator(element: String, ops: StringList): Boolean {
-    return element in ops
+private fun parseParens(
+    computeText: StringList,
+    firstRoundOps: StringList,
+    secondRoundOps: StringList,
+    performSingleOp: OperatorFunction
+): StringList {
+    val simplifiedList: MutableList<String> = mutableListOf()
+    var index = 0
+
+    while (index < computeText.size) {
+        val element = computeText[index]
+
+        if (element == "(") {
+            val openIndex = index
+            val closeIndex = getMatchingParenIndex(openIndex, computeText)
+            val subText = computeText.subList(openIndex + 1, closeIndex) // cut out start+end parens
+            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp)
+            simplifiedList.add(result.toString())
+            index = closeIndex + 1
+        } else {
+            simplifiedList.add(element)
+            index++
+        }
+    }
+
+    return simplifiedList
 }
 
-private fun isParen(element: String): Boolean {
-    return element == "(" || element == ")"
+private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
+    var openCount = 0
+    val onlyParens = computeText.withIndex()
+        .toList()
+        .subList(openIndex, computeText.size)
+        .filter { it.value == "(" || it.value == ")" }
+
+    var closeIndex = -1
+    // TODO use a fold or while for this
+    onlyParens.forEach {
+        if (closeIndex == -1) {
+            if (it.value == "(") {
+                openCount++
+            } else if (it.value == ")") {
+                openCount--
+            }
+
+            if (openCount == 0) {
+                closeIndex = it.index
+            }
+        }
+    }
+
+    return closeIndex
 }

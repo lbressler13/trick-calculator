@@ -17,7 +17,7 @@ import com.example.trickcalculator.databinding.FragmentMainBinding
 import com.example.trickcalculator.ext.disableAllChildren
 import com.example.trickcalculator.ext.enable
 import com.example.trickcalculator.ext.enableAllChildren
-import com.example.trickcalculator.runComputation
+import com.example.trickcalculator.compute.runComputation
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
