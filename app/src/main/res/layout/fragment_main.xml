@@ -187,4 +187,17 @@
 
     </GridLayout>
 
+    <ImageButton
+        android:id="@+id/infoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:src="@drawable/ic_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:tint="?colorPrimary"
+        tools:ignore="RtlSymmetry" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

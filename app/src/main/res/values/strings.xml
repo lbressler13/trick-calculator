@@ -24,4 +24,8 @@
     <string name="key_settings_request">mainSettingsRequest</string>
     <string name="key_shuffle_numbers">shuffleNumbers</string>
     <string name="key_shuffle_operators">shuffleOperators</string>
+
+    <!-- Image Attributions -->
+    <string name="link">Link</string>
+    <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution.</string>
 </resources>
