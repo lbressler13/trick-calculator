@@ -27,6 +27,7 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
 
     private lateinit var computeText: StringList
+    private var error: String? = null
 
     // settings
     private var shuffleNumbers: Boolean = false
@@ -45,6 +46,7 @@ class MainFragment : Fragment() {
 
         // observe changes in viewmodel
         viewModel.getComputeText().observe(viewLifecycleOwner, getComputeTextObserver)
+        viewModel.getError().observe(viewLifecycleOwner, getErrorObserver)
         viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
 
@@ -58,7 +60,19 @@ class MainFragment : Fragment() {
 
     private val getComputeTextObserver: Observer<StringList> = Observer {
         computeText = it
-        binding.mainText.text = it.joinToString("")
+        if (error == null) {
+            binding.mainText.text = it.joinToString("")
+        }
+    }
+
+    private val getErrorObserver: Observer<String?> = Observer {
+        error = it
+        if (it != null) {
+            binding.mainText.text = it
+            setErrorNumpad()
+        } else {
+            binding.mainText.text = computeText.joinToString("")
+        }
     }
 
     private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
@@ -143,38 +157,41 @@ class MainFragment : Fragment() {
 
                 viewModel.setComputedValue(computedValue)
                 viewModel.useComputedAsComputeText()
+                viewModel.setError(null)
             } catch (e: Exception) {
-                binding.mainText.text = e.message
-                binding.numpadLayout.disableAllChildren()
-
-                // need to be able to clear error
-                val disabledColor = TypedValue()
-                requireContext().theme.resolveAttribute(
-                    R.attr.disabledForeground,
-                    disabledColor,
-                    true
-                )
-
-                binding.numpadLayout.children.forEach {
-                    setImageButtonTint(
-                        it,
-                        disabledColor.resourceId,
-                        requireContext()
-                    )
-                }
-
-                // need to be able to clear error
-                val enabledColor = TypedValue()
-                requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
-
-                binding.clearButton.enable()
-                setImageButtonTint(
-                    binding.clearButton,
-                    enabledColor.resourceId,
-                    requireContext()
-                )
+                viewModel.setError(e.message)
             }
         }
+    }
+
+    private fun setErrorNumpad() {
+        binding.numpadLayout.disableAllChildren()
+
+        val disabledColor = TypedValue()
+        requireContext().theme.resolveAttribute(
+            R.attr.disabledForeground,
+            disabledColor,
+            true
+        )
+
+        binding.numpadLayout.children.forEach {
+            setImageButtonTint(
+                it,
+                disabledColor.resourceId,
+                requireContext()
+            )
+        }
+
+        // enable button to clear error
+        val enabledColor = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
+
+        binding.clearButton.enable()
+        setImageButtonTint(
+            binding.clearButton,
+            enabledColor.resourceId,
+            requireContext()
+        )
     }
 
     private fun initSettingsDialog() {

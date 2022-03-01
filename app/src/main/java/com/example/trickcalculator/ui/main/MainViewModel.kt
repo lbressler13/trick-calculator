@@ -14,6 +14,8 @@ class MainViewModel : ViewModel() {
     // result of parsing computeText
     private val computedValue = MutableLiveData<Int?>().apply { value = null }
 
+    private val error = MutableLiveData<String?>().apply { value = null }
+
     // settings
     private val shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
     private val shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
@@ -23,6 +25,9 @@ class MainViewModel : ViewModel() {
 
     fun setComputedValue(newValue: Int) { computedValue.value = newValue }
     private fun clearComputedValue() { computedValue.value = null }
+
+    fun setError(newValue: String?) { error.value = newValue }
+    fun getError(): LiveData<String?> { return error }
 
     fun setShuffleNumbers(newValue: Boolean) { shuffleNumbers.value = newValue }
     fun getShuffleNumbers(): LiveData<Boolean> { return shuffleNumbers }
@@ -69,5 +74,6 @@ class MainViewModel : ViewModel() {
     fun resetComputeData() {
         clearComputeText()
         clearComputedValue()
+        error.value = null
     }
 }
