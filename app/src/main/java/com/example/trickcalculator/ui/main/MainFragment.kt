@@ -17,6 +17,7 @@ import com.example.trickcalculator.ext.disableAllChildren
 import com.example.trickcalculator.ext.enable
 import com.example.trickcalculator.ext.enableAllChildren
 import com.example.trickcalculator.runComputation
+import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.setImageButtonTint
@@ -50,6 +51,7 @@ class MainFragment : Fragment() {
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
         initSettingsDialog()
+        binding.infoButton.setOnClickListener { infoButtonOnClick() }
 
         return binding.root
     }
@@ -61,6 +63,13 @@ class MainFragment : Fragment() {
 
     private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
     private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
+
+    private val infoButtonOnClick = {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, AttributionsFragment.newInstance())
+            .addToBackStack(null)
+            .commit()
+    }
 
     private fun initButtons() {
         // number buttons
