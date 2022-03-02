@@ -35,17 +35,29 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toBottomOf="@id/settingsButton" />
 
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:textColor="?errorColor"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/mainText" />
+
     <GridLayout
         android:id="@+id/numpadLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:columnCount="4"
         android:rowCount="5"
         android:useDefaultMargins="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mainText">
+        app:layout_constraintTop_toBottomOf="@id/errorText">
 
         <Button
             android:id="@+id/oneButton"
@@ -208,11 +220,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:paddingBottom="10dp"
         android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
         android:src="@drawable/ic_info"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
         tools:ignore="RtlSymmetry" />
 

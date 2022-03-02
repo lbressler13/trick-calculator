@@ -10,6 +10,9 @@
 
     <color name="light_disabled_foreground_gray">#888</color>
     <color name="light_disabled_background_gray">#ddd</color>
+    <color name="light_error_red">#d00</color>
+
     <color name="dark_disabled_foreground_gray">#999</color>
     <color name="dark_disabled_background_gray">#333</color>
+    <color name="dark_error_red">#ef00</color>
 </resources>

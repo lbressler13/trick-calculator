@@ -1,6 +1,7 @@
 package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.utils.*
+import java.lang.NumberFormatException
 
 // parse string list and compute mathematical expression, if possible
 fun runComputation(
@@ -12,7 +13,7 @@ fun runComputation(
     checkParens: Boolean
 ): Int {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
-        throw Exception("Err: Syntax Error")
+        throw Exception("Syntax error")
     }
 
     var currentState: StringList = computeText
@@ -29,7 +30,19 @@ fun runComputation(
     return try {
         parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
     } catch (e: ArithmeticException) {
-        throw Exception("Err: Divide by 0")
+        throw Exception("Divide by 0")
+    } catch (e: NumberFormatException) {
+        val startIndex = e.message?.indexOf("\"")
+        val endIndex = e.message?.lastIndexOf("\"")
+
+        val newError = if (startIndex != null && endIndex != null && endIndex - startIndex > 0) {
+            val symbol = e.message?.substring(startIndex + 1, endIndex)
+            "Cannot parse symbol $symbol"
+        } else {
+            "Parse error"
+        }
+
+        throw Exception(newError)
     }
 }
 
@@ -152,18 +165,17 @@ private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int 
         .filter { it.value == "(" || it.value == ")" }
 
     var closeIndex = -1
-    // TODO use a fold or while for this
-    onlyParens.forEach {
-        if (closeIndex == -1) {
-            if (it.value == "(") {
-                openCount++
-            } else if (it.value == ")") {
-                openCount--
-            }
 
-            if (openCount == 0) {
-                closeIndex = it.index
-            }
+    for (idxVal in onlyParens) {
+        if (idxVal.value == "(") {
+            openCount++
+        } else if (idxVal.value == ")") {
+            openCount--
+        }
+
+        if (openCount == 0) {
+            closeIndex = idxVal.index
+            break
         }
     }
 

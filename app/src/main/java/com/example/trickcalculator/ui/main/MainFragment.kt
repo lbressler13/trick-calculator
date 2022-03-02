@@ -14,10 +14,8 @@ import androidx.core.view.children
 import androidx.lifecycle.Observer
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
-import com.example.trickcalculator.ext.disableAllChildren
-import com.example.trickcalculator.ext.enable
-import com.example.trickcalculator.ext.enableAllChildren
 import com.example.trickcalculator.compute.runComputation
+import com.example.trickcalculator.ext.*
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
@@ -63,18 +61,16 @@ class MainFragment : Fragment() {
 
     private val getComputeTextObserver: Observer<StringList> = Observer {
         computeText = it
-        if (error == null) {
-            binding.mainText.text = it.joinToString("")
-        }
+        binding.mainText.text = it.joinToString("")
     }
 
     private val getErrorObserver: Observer<String?> = Observer {
         error = it
         if (it != null) {
-            binding.mainText.text = it
-            setErrorNumpad()
+            binding.errorText.text = it
+            binding.errorText.visible()
         } else {
-            binding.mainText.text = computeText.joinToString("")
+            binding.errorText.gone()
         }
     }
 
@@ -107,96 +103,76 @@ class MainFragment : Fragment() {
 
     // set op order, num order, run computation, and update viewmodel
     private val equalsButtonOnClick = {
-        // set action for each operator
-        val operators = if (shuffleOperators) {
-            listOf("+", "-", "x", "/").shuffled()
-        } else {
-            listOf("+", "-", "x", "/")
-        }
-        val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
-            when (operator) {
-                operators[0] -> leftValue + rightValue
-                operators[1] -> leftValue - rightValue
-                operators[2] -> leftValue * rightValue
-                operators[3] -> leftValue / rightValue
-                else -> 0
+        if (computeText.isNotEmpty()) {
+            // set action for each operator
+            val operators = if (shuffleOperators) {
+                listOf("+", "-", "x", "/").shuffled()
+            } else {
+                listOf("+", "-", "x", "/")
+            }
+            val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
+                when (operator) {
+                    operators[0] -> leftValue + rightValue
+                    operators[1] -> leftValue - rightValue
+                    operators[2] -> leftValue * rightValue
+                    operators[3] -> leftValue / rightValue
+                    else -> 0
+                }
+            }
+
+            val numberOrder = if (shuffleNumbers) {
+                (0..9).shuffled()
+            } else {
+                (0..9).toList()
+            }
+
+            try {
+                val computedValue: Int =
+                    runComputation(
+                        computeText,
+                        operators.subList(2, 4), // multiply and divide ops
+                        operators.subList(0, 2), // add and subtract ops
+                        performOperation,
+                        numberOrder,
+                        applyParens
+                    )
+
+                viewModel.setComputedValue(computedValue)
+                viewModel.useComputedAsComputeText()
+                viewModel.setError(null)
+            } catch (e: Exception) {
+                viewModel.setError("Error: ${e.message}")
             }
         }
+    }
 
-        val numberOrder = if (shuffleNumbers) {
-            (0..9).shuffled()
-        } else {
-            (0..9).toList()
-        }
-
-        try {
-            val computedValue: Int =
-                runComputation(
-                    computeText,
-                    operators.subList(2, 4), // multiply and divide ops
-                    operators.subList(0, 2), // add and subtract ops
-                    performOperation,
-                    numberOrder,
-                    applyParens
-                )
-
-            viewModel.setComputedValue(computedValue)
-            viewModel.useComputedAsComputeText()
+    private fun genericAddComputeOnClick(addText: String) {
+        viewModel.appendComputeText(addText)
+        if (error != null) {
             viewModel.setError(null)
-        } catch (e: Exception) {
-            viewModel.setError(e.message)
         }
     }
 
     private fun initButtons() {
         binding.numpadLayout.children.forEach {
             if (it is Button && it.text != null && it != binding.clearButton) {
-                it.setOnClickListener { _ -> viewModel.appendComputeText(it.text.toString()) }
+                it.setOnClickListener { _ -> genericAddComputeOnClick(it.text.toString()) }
             }
         }
 
         // operation buttons
-        binding.plusButton.setOnClickListener { viewModel.appendComputeText("+") }
-        binding.minusButton.setOnClickListener { viewModel.appendComputeText("-") }
-        binding.timesButton.setOnClickListener { viewModel.appendComputeText("x") }
-        binding.divideButton.setOnClickListener { viewModel.appendComputeText("/") }
+        binding.plusButton.setOnClickListener { genericAddComputeOnClick("+") }
+        binding.minusButton.setOnClickListener { genericAddComputeOnClick("-") }
+        binding.timesButton.setOnClickListener { genericAddComputeOnClick("x") }
+        binding.divideButton.setOnClickListener { genericAddComputeOnClick("/") }
 
         // functional buttons
-        binding.backspaceButton.setOnClickListener { viewModel.backspaceComputeText() }
         binding.clearButton.setOnClickListener { clearButtonOnClick() }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
-    }
-
-    // disable all buttons except clear
-    private fun setErrorNumpad() {
-        // disable all buttons
-        binding.numpadLayout.disableAllChildren()
-
-        val disabledColor = TypedValue()
-        requireContext().theme.resolveAttribute(
-            R.attr.disabledForeground,
-            disabledColor,
-            true
-        )
-
-        binding.numpadLayout.children.forEach {
-            setImageButtonTint(
-                it,
-                disabledColor.resourceId,
-                requireContext()
-            )
+        binding.backspaceButton.setOnClickListener {
+            viewModel.setError(null)
+            viewModel.backspaceComputeText()
         }
-
-        // enable button to clear error
-        val enabledColor = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
-
-        binding.clearButton.enable()
-        setImageButtonTint(
-            binding.clearButton,
-            enabledColor.resourceId,
-            requireContext()
-        )
     }
 
     private fun initSettingsDialog() {
@@ -214,7 +190,8 @@ class MainFragment : Fragment() {
                 val returnedShuffleNumbers: Boolean = result.getBoolean(numbersKey, shuffleNumbers)
                 viewModel.setShuffleNumbers(returnedShuffleNumbers)
 
-                val returnedShuffleOperators: Boolean = result.getBoolean(operatorsKey, shuffleOperators)
+                val returnedShuffleOperators: Boolean =
+                    result.getBoolean(operatorsKey, shuffleOperators)
                 viewModel.setShuffleOperators(returnedShuffleOperators)
 
                 val returnedApplyParens: Boolean = result.getBoolean(parensKey, applyParens)
