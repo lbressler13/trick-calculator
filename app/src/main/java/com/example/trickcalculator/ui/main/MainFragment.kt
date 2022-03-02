@@ -32,6 +32,7 @@ class MainFragment : Fragment() {
     private var shuffleNumbers: Boolean = false
     private var shuffleOperators: Boolean = true
     private var applyParens: Boolean = true
+    private var clearOnError: Boolean = true
 
     companion object {
         fun newInstance() = MainFragment()
@@ -50,6 +51,7 @@ class MainFragment : Fragment() {
         viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
         viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
+        viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
@@ -69,6 +71,10 @@ class MainFragment : Fragment() {
         if (it != null) {
             binding.errorText.text = it
             binding.errorText.visible()
+
+            if (clearOnError) {
+                viewModel.resetComputeData(clearError = false)
+            }
         } else {
             binding.errorText.gone()
         }
@@ -77,6 +83,7 @@ class MainFragment : Fragment() {
     private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
     private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
     private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
+    private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
 
     private val infoButtonOnClick = {
         requireActivity().supportFragmentManager.beginTransaction()
@@ -180,6 +187,7 @@ class MainFragment : Fragment() {
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
         val parensKey = requireContext().getString(R.string.key_apply_parens)
+        val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
         val requestKey = requireContext().getString(R.string.key_settings_request)
 
         // update viewmodel with response from dialog
@@ -196,6 +204,9 @@ class MainFragment : Fragment() {
 
                 val returnedApplyParens: Boolean = result.getBoolean(parensKey, applyParens)
                 viewModel.setApplyParens(returnedApplyParens)
+
+                val returnedClearOnError: Boolean = result.getBoolean(clearOnErrorKey, clearOnError)
+                viewModel.setClearOnError(returnedClearOnError)
             }
         )
 
@@ -203,7 +214,8 @@ class MainFragment : Fragment() {
             settingsDialog.arguments = bundleOf(
                 numbersKey to shuffleNumbers,
                 operatorsKey to shuffleOperators,
-                parensKey to applyParens
+                parensKey to applyParens,
+                clearOnErrorKey to clearOnError
             )
             settingsDialog.show(childFragmentManager, MainSettingsDialogFragment.TAG)
         }
