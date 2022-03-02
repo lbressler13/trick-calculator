@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="actionBarBackground" format="reference" />
+    <attr name="actionBarTextColor" format="reference" />
     <attr name="disabledForeground" format="reference" />
     <attr name="disabledBackground" format="reference" />
     <attr name="errorColor" format="reference" />

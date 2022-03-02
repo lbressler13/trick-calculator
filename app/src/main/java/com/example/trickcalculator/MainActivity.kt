@@ -6,8 +6,6 @@ import android.os.Bundle
 import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ui.main.MainFragment
 
-// TODO some link to attributions of icons
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -17,8 +15,6 @@ class MainActivity : AppCompatActivity() {
         assignTheme()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        supportActionBar?.title = "Calculator"
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -35,5 +31,5 @@ class MainActivity : AppCompatActivity() {
             Configuration.UI_MODE_NIGHT_NO -> setTheme(R.style.CustomLight)
             else -> setTheme(R.style.CustomDark)
         }
-    }
+   }
 }

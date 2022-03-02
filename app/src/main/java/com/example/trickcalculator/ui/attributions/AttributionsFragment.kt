@@ -21,7 +21,7 @@ private val allAttributions = listOf(
     Attribution(R.drawable.ic_close, "Ilham Fitrotul Hayat", "www.flaticon.com/premium-icon/cross_4421536"),
     Attribution(R.drawable.ic_divide, "Smashicons", "www.flaticon.com/free-icon/divide_149702"),
     Attribution(R.drawable.ic_equals, "Freepik", "www.flaticon.com/free-icon/equal_56751"),
-    Attribution(R.drawable.ic_info, "Freepik", "www.flaticon.com/premium-icon/info_471662"),
+    Attribution(R.drawable.ic_info, "Freepik", "www.flaticon.com/free-icon/info-button_64494"),
     Attribution(R.drawable.ic_minus, "Freepik", "www.flaticon.com/free-icon/minus_56889"),
     Attribution(R.drawable.ic_plus, "Freepik", "www.flaticon.com/premium-icon/plus_3524388"),
     Attribution(R.drawable.ic_settings, "Freepik", "www.flaticon.com/premium-icon/gear_484613"),
