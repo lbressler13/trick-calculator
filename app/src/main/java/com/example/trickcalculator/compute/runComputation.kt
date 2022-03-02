@@ -22,10 +22,12 @@ fun runComputation(
         currentState = replaceNumbers(currentState, numbersOrder)
     }
 
+    // do this even when not checking parens to add mult operations
+    currentState = addMultToParens(currentState)
+
     if (!checkParens) {
         currentState = stripParens(currentState)
     }
-
 
     return try {
         parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
@@ -155,6 +157,36 @@ private fun parseParens(
     }
 
     return simplifiedList
+}
+
+// add times operator symbol when numbers are directly next to parens
+private fun addMultToParens(computeText: StringList): StringList {
+    val augmentedList: MutableList<String> = mutableListOf()
+
+    var lastType = ""
+
+    computeText.forEach {
+        val currentType: String = when {
+            isInt(it) -> "number"
+            it == "(" -> "lparen"
+            it == ")" -> "rparen"
+            else -> ""
+        }
+
+        // check for number next to closed set of parens, or adjacent sets of parens
+        if ((lastType == "number" && currentType == "lparen") ||
+            (lastType == "rparen" && currentType == "number") ||
+            (lastType == "rparen" && currentType == "lparen")) {
+            augmentedList.add("x")
+            augmentedList.add(it)
+        } else {
+            augmentedList.add(it)
+        }
+
+        lastType = currentType
+    }
+
+    return augmentedList
 }
 
 private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {

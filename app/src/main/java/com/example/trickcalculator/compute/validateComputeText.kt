@@ -30,8 +30,6 @@ fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
 
         if (openParenCount < 0 ||
             currentType == null || // unknown char
-            (lastType == "number" && currentType == "lparen") || // TODO allow number directly before/after parens
-            (lastType == "rparen" && currentType == "number") ||
             (lastType == currentType && !currentType.endsWith("paren")) || // repeated num or op
             (lastType == "lparen" && currentType == "rparen") // empty parens
         ) {
