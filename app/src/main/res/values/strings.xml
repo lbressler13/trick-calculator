@@ -33,7 +33,7 @@
 
     <!-- Image Attributions -->
     <string name="link">Link</string>
-    <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution.</string>
+    <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. Images, creators, and links are listed below.</string>
     <string name="show_link">Show link</string>
     <string name="hide_link">Hide link</string>
 </resources>
