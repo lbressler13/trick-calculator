@@ -2,4 +2,5 @@
 <resources>
     <attr name="disabledForeground" format="reference" />
     <attr name="disabledBackground" format="reference" />
+    <attr name="errorColor" format="reference" />
 </resources>

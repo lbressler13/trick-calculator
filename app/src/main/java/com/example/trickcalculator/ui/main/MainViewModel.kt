@@ -19,21 +19,29 @@ class MainViewModel : ViewModel() {
     // settings
     private val shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
     private val shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
+    private val applyParens = MutableLiveData<Boolean>().apply { value = true }
+    private val clearOnError = MutableLiveData<Boolean>().apply { value = true }
 
-    fun getComputeText(): LiveData<StringList> { return computeText }
+    fun getComputeText(): LiveData<StringList> = computeText
     private fun clearComputeText() { computeText.value = listOf() }
 
     fun setComputedValue(newValue: Int) { computedValue.value = newValue }
     private fun clearComputedValue() { computedValue.value = null }
 
     fun setError(newValue: String?) { error.value = newValue }
-    fun getError(): LiveData<String?> { return error }
+    fun getError(): LiveData<String?> = error
 
     fun setShuffleNumbers(newValue: Boolean) { shuffleNumbers.value = newValue }
-    fun getShuffleNumbers(): LiveData<Boolean> { return shuffleNumbers }
+    fun getShuffleNumbers(): LiveData<Boolean> = shuffleNumbers
 
     fun setShuffleOperators(newValue: Boolean) { shuffleOperators.value = newValue }
-    fun getShuffleOperators(): LiveData<Boolean> { return shuffleOperators }
+    fun getShuffleOperators(): LiveData<Boolean> = shuffleOperators
+
+    fun setApplyParens(newValue: Boolean) { applyParens.value = newValue }
+    fun getApplyParens(): LiveData<Boolean> = applyParens
+
+    fun setClearOnError(newValue: Boolean) { clearOnError.value = newValue }
+    fun getClearOnError(): LiveData<Boolean> = clearOnError
 
     // add new value to end of list
     fun appendComputeText(addition: String) {
@@ -71,9 +79,12 @@ class MainViewModel : ViewModel() {
         computeText.value = listOf(computed.toString())
     }
 
-    fun resetComputeData() {
+    fun resetComputeData(clearError: Boolean = true) {
         clearComputeText()
         clearComputedValue()
-        error.value = null
+
+        if (clearError) {
+            error.value = null
+        }
     }
 }
