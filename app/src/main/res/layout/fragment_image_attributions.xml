@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?backgroundColor">
 
     <ImageButton
         android:id="@+id/closeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
         android:background="@null"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,12 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
-        android:paddingBottom="15dp"
         android:paddingHorizontal="10dp"
+        android:paddingBottom="15dp"
         android:scrollbars="vertical"
+        android:text="@string/flaticon_message"
         android:textColor="?colorOnBackground"
         android:textSize="20sp"
-        android:text="@string/flaticon_message"
         app:layout_constraintTop_toBottomOf="@id/closeButton" />
 
 
@@ -40,9 +41,9 @@
         android:id="@+id/attributionsRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintVertical_bias="0"
         android:layout_marginHorizontal="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topText"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
