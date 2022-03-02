@@ -22,7 +22,7 @@
     <string name="shuffle_operators">Shuffle Operators</string>
     <string name="shuffle_numbers">Shuffle Numbers</string>
     <string name="apply_parens">Apply Parens</string>
-    <string name="clear_on_error">Clear Text on Error</string>
+    <string name="clear_on_error">Reset on Error</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">mainSettingsRequest</string>
