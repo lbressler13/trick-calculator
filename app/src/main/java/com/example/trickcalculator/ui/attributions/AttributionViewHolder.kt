@@ -1,19 +1,45 @@
 package com.example.trickcalculator.ui.attributions
 
 import android.content.Context
-import android.util.Log
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.ViewHolderAttributionBinding
+import com.example.trickcalculator.ext.gone
+import com.example.trickcalculator.ext.visible
 
 class AttributionViewHolder(private val binding: ViewHolderAttributionBinding, private val context: Context) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun update(attr: Attribution) {
-        // binding.image.background = AppCompatResources.getDrawable(context, attr.iconResId)
+    fun update(attr: Attribution, initialShowingLink: Boolean, setShowingLink: (Boolean) -> Unit) {
+        var showingLink = initialShowingLink
         binding.image.setImageResource(attr.iconResId)
         binding.creator.text = attr.creator
-        // TODO onclick for link
-        binding.link.setOnClickListener { Log.e(null, attr.url) }
+        binding.link.text = attr.url
+
+        if (initialShowingLink) {
+            showLink()
+        } else {
+            hideLink()
+        }
+
+        binding.showHideLink.setOnClickListener {
+            if (showingLink) {
+                hideLink()
+            } else {
+                showLink()
+            }
+            showingLink = !showingLink
+            setShowingLink(showingLink)
+        }
+    }
+
+    private fun hideLink() {
+        binding.link.gone()
+        binding.showHideLink.text = context.getString(R.string.show_link)
+    }
+
+    private fun showLink() {
+        binding.link.visible()
+        binding.showHideLink.text = context.getString(R.string.hide_link)
     }
 }

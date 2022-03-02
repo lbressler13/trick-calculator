@@ -7,6 +7,7 @@ import com.example.trickcalculator.databinding.ViewHolderAttributionBinding
 
 class AttributionsAdapter(private val attributions: List<Attribution>) :
     RecyclerView.Adapter<AttributionViewHolder>() {
+    private val showingLinks: MutableList<Boolean> = MutableList(attributions.size) { false }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttributionViewHolder {
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
@@ -17,7 +18,8 @@ class AttributionsAdapter(private val attributions: List<Attribution>) :
 
     override fun onBindViewHolder(holder: AttributionViewHolder, position: Int) {
         val attr = attributions[position]
-        holder.update(attr)
+        val setShowingLink: (Boolean) -> Unit = { showingLinks[position] = it }
+        holder.update(attr, showingLinks[position], setShowingLink)
     }
 
     override fun getItemCount(): Int {
