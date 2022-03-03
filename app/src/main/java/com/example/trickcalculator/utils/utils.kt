@@ -19,9 +19,12 @@ fun isInt(value: String): Boolean {
 
 fun isNumber(value: String): Boolean {
     return try {
-        BigDecimal(value)
-        value.toDouble()
-        true
+        if (value.endsWith('.')) {
+            false
+        } else {
+            BigDecimal(value)
+            true
+        }
     } catch (e: Exception) {
         false
     }

@@ -28,7 +28,7 @@
     <string name="apply_decimals">Apply Decimals</string>
 
     <!-- Settings Keys -->
-    <string name="key_settings_request">mainSettingsRequest</string>
+    <string name="key_settings_request">settingsUpdateRequest</string>
     <string name="key_shuffle_numbers">shuffleNumbers</string>
     <string name="key_shuffle_operators">shuffleOperators</string>
     <string name="key_apply_parens">applyParens</string>

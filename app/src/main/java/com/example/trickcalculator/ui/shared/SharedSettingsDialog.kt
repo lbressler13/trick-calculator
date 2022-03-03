@@ -72,6 +72,6 @@ class SharedSettingsDialog : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "MainSettingsDialog"
+        const val TAG = "SharedSettingsDialog"
     }
 }

@@ -89,9 +89,19 @@ class SharedViewModel : ViewModel() {
 
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
-        val computed: BigDecimal = computedValue.value!!.stripTrailingZeros()
+        val computed: BigDecimal = computedValue.value!!
+        var computeString = computed.toString()
 
-        computeText.value = listOf(computed.toString())
+        if (computeString.indexOf('.') != -1) {
+            val stripped = computeString.trimEnd { it == '0' }
+            if (stripped == ".") {
+                computeString = "0"
+            } else if (stripped.last() == '.') {
+                computeString = stripped.substring(0, stripped.lastIndex)
+            }
+        }
+
+        computeText.value = listOf(computeString)
     }
 
     fun resetComputeData(clearError: Boolean = true) {
