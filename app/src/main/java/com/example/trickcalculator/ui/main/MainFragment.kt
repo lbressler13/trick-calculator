@@ -115,22 +115,6 @@ class MainFragment : Fragment() {
             .commit()
     }
 
-    private val clearButtonOnClick = {
-        viewModel.resetComputeData()
-
-        val enabledColor = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
-
-        binding.numpadLayout.enableAllChildren()
-        binding.numpadLayout.children.forEach {
-            setImageButtonTint(
-                it,
-                enabledColor.resourceId,
-                requireContext()
-            )
-        }
-    }
-
     // set op order, num order, run computation, and update viewmodel
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
@@ -211,7 +195,7 @@ class MainFragment : Fragment() {
         binding.divideButton.setOnClickListener { genericAddComputeOnClick("/") }
 
         // functional buttons
-        binding.clearButton.setOnClickListener { clearButtonOnClick() }
+        binding.clearButton.setOnClickListener { viewModel.resetComputeData() }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
         binding.backspaceButton.setOnClickListener {
             viewModel.setError(null)

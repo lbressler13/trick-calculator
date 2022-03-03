@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ext.copyWithLastReplaced
+import com.example.trickcalculator.ext.substringTo
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 import com.example.trickcalculator.utils.isPartialDecimal
@@ -81,7 +82,7 @@ class SharedViewModel : ViewModel() {
                 computeText.value = currentText.subList(0, currentText.lastIndex)
             } else {
                 // delete last digit from multi-digit number
-                val newValue: String = lastValue.substring(0 until lastValue.lastIndex)
+                val newValue: String = lastValue.substringTo(lastValue.lastIndex)
                 computeText.value = currentText.copyWithLastReplaced(newValue)
             }
         }
@@ -93,11 +94,12 @@ class SharedViewModel : ViewModel() {
         var computeString = computed.toString()
 
         if (computeString.indexOf('.') != -1) {
-            val stripped = computeString.trimEnd { it == '0' }
-            if (stripped == ".") {
-                computeString = "0"
-            } else if (stripped.last() == '.') {
-                computeString = stripped.substring(0, stripped.lastIndex)
+            val stripped = computeString.trimEnd('0')
+
+            computeString = when {
+                stripped == "." -> "0"
+                stripped.last() == '.' -> stripped.substringTo(stripped.lastIndex)
+                else -> stripped
             }
         }
 
