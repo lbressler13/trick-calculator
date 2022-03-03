@@ -1,11 +1,13 @@
 package com.example.trickcalculator.ui.shared
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
+import com.example.trickcalculator.utils.isPartialDecimal
 
 class SharedViewModel : ViewModel() {
     // list of numbers and operators
@@ -23,24 +25,46 @@ class SharedViewModel : ViewModel() {
     private val clearOnError = MutableLiveData<Boolean>().apply { value = true }
 
     fun getComputeText(): LiveData<StringList> = computeText
-    private fun clearComputeText() { computeText.value = listOf() }
+    private fun clearComputeText() {
+        computeText.value = listOf()
+    }
 
-    fun setComputedValue(newValue: Int) { computedValue.value = newValue }
-    private fun clearComputedValue() { computedValue.value = null }
+    fun setComputedValue(newValue: Int) {
+        computedValue.value = newValue
+    }
 
-    fun setError(newValue: String?) { error.value = newValue }
+    private fun clearComputedValue() {
+        computedValue.value = null
+    }
+
+    fun setError(newValue: String?) {
+        error.value = newValue
+    }
+
     fun getError(): LiveData<String?> = error
 
-    fun setShuffleNumbers(newValue: Boolean) { shuffleNumbers.value = newValue }
+    fun setShuffleNumbers(newValue: Boolean) {
+        shuffleNumbers.value = newValue
+    }
+
     fun getShuffleNumbers(): LiveData<Boolean> = shuffleNumbers
 
-    fun setShuffleOperators(newValue: Boolean) { shuffleOperators.value = newValue }
+    fun setShuffleOperators(newValue: Boolean) {
+        shuffleOperators.value = newValue
+    }
+
     fun getShuffleOperators(): LiveData<Boolean> = shuffleOperators
 
-    fun setApplyParens(newValue: Boolean) { applyParens.value = newValue }
+    fun setApplyParens(newValue: Boolean) {
+        applyParens.value = newValue
+    }
+
     fun getApplyParens(): LiveData<Boolean> = applyParens
 
-    fun setClearOnError(newValue: Boolean) { clearOnError.value = newValue }
+    fun setClearOnError(newValue: Boolean) {
+        clearOnError.value = newValue
+    }
+
     fun getClearOnError(): LiveData<Boolean> = clearOnError
 
     // add new value to end of list
@@ -48,12 +72,14 @@ class SharedViewModel : ViewModel() {
         val currentVal: StringList = computeText.value!!
 
         // create multi-digit number
-        if (currentVal.isNotEmpty() && isInt(addition) && isInt(currentVal.last())) {
+        if (currentVal.isNotEmpty() && (isInt(addition) || addition == ".") &&
+            isPartialDecimal(currentVal.last())) {
             val newAddition: String = currentVal.last() + addition
             computeText.value = currentVal.copyWithLastReplaced(newAddition)
         } else {
             computeText.value = currentVal + addition
         }
+        Log.e(null, computeText.value.toString())
     }
 
     // delete last value from list

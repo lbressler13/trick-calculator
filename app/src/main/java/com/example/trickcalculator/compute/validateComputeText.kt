@@ -2,7 +2,7 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.utils.IntList
 import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.utils.isInt
+import com.example.trickcalculator.utils.isNumber
 
 fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
     // must start and end w/ number
@@ -16,7 +16,7 @@ fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
     for (element in computeText) {
         val currentType: String? = when {
             isOperator(element, ops) -> "operator"
-            isInt(element) -> "number"
+            isNumber(element) -> "number"
             element == "(" -> "lparen"
             element == ")" -> "rparen"
             else -> null

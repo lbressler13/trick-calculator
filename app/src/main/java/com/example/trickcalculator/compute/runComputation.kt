@@ -51,12 +51,16 @@ fun runComputation(
 // map digits to use values in numbers order
 private fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
     return text.map {
-        if (!isInt(it)) {
+        if (!isNumber(it)) {
             it
         } else {
             it.map { c ->
-                val index = Integer.parseInt(c.toString())
-                numbersOrder[index].toString()
+                if (c.isDigit()) {
+                    val index = Integer.parseInt(c.toString())
+                    numbersOrder[index].toString()
+                } else {
+                    c.toString()
+                }
             }.joinToString("")
         }
     }
@@ -167,7 +171,7 @@ private fun addMultToParens(computeText: StringList): StringList {
 
     computeText.forEach {
         val currentType: String = when {
-            isInt(it) -> "number"
+            isNumber(it) -> "number"
             it == "(" -> "lparen"
             it == ")" -> "rparen"
             else -> ""
