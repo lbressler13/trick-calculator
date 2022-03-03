@@ -2,6 +2,7 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.utils.*
 import java.lang.NumberFormatException
+import java.math.BigDecimal
 
 // parse string list and compute mathematical expression, if possible
 fun runComputation(
@@ -11,7 +12,7 @@ fun runComputation(
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
     checkParens: Boolean
-): Float {
+): BigDecimal {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Syntax error")
     }
@@ -31,8 +32,6 @@ fun runComputation(
 
     return try {
         parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
-    } catch (e: ArithmeticException) {
-        throw Exception("Divide by 0")
     } catch (e: NumberFormatException) {
         val startIndex = e.message?.indexOf("\"")
         val endIndex = e.message?.lastIndexOf("\"")
@@ -73,8 +72,8 @@ private fun parseText(
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
     checkParens: Boolean
-): Float {
-    var total: Float = 0f
+): BigDecimal {
+    var total = BigDecimal.ZERO
     var currentOperator: String? = null
 
     var currentState = computeText
@@ -91,9 +90,9 @@ private fun parseText(
     for (element in currentState) {
         when {
             isOperator(element, secondRoundOps) -> currentOperator = element
-            currentOperator == null -> total = element.toFloat()
+            currentOperator == null -> total = BigDecimal(element)
             else -> {
-                val currentVal: Float = element.toFloat()
+                val currentVal = BigDecimal(element)
                 total = performSingleOp(total, currentVal, currentOperator)
             }
         }
@@ -120,8 +119,8 @@ private fun parseFirstRound(
             index++
         } else {
             // don't have to worry about out of bounds or parse errors b/c of validation
-            val leftVal: Float = simplifiedList.last().toFloat()
-            val rightVal: Float = computeText[index + 1].toFloat()
+            val leftVal = BigDecimal(simplifiedList.last())
+            val rightVal = BigDecimal(computeText[index + 1])
             val result = performSingleOp(leftVal, rightVal, element)
             val lastIndex = simplifiedList.lastIndex
 

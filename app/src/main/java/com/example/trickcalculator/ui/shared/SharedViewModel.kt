@@ -1,6 +1,5 @@
 package com.example.trickcalculator.ui.shared
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,13 +7,14 @@ import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 import com.example.trickcalculator.utils.isPartialDecimal
+import java.math.BigDecimal
 
 class SharedViewModel : ViewModel() {
     // list of numbers and operators
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
-    private val computedValue = MutableLiveData<Float?>().apply { value = null }
+    private val computedValue = MutableLiveData<BigDecimal?>().apply { value = null }
 
     private val error = MutableLiveData<String?>().apply { value = null }
 
@@ -29,7 +29,7 @@ class SharedViewModel : ViewModel() {
         computeText.value = listOf()
     }
 
-    fun setComputedValue(newValue: Float) {
+    fun setComputedValue(newValue: BigDecimal) {
         computedValue.value = newValue
     }
 
@@ -79,7 +79,6 @@ class SharedViewModel : ViewModel() {
         } else {
             computeText.value = currentVal + addition
         }
-        Log.e(null, computeText.value.toString())
     }
 
     // delete last value from list
@@ -101,16 +100,9 @@ class SharedViewModel : ViewModel() {
 
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
-        val computed: Float = computedValue.value!!
-        val intVal: Int = computed.toInt()
+        val computed: BigDecimal = computedValue.value!!.stripTrailingZeros()
 
-        computeText.value = if (computed == intVal.toFloat()) {
-            listOf(intVal.toString())
-        } else {
-            listOf(computed.toString())
-        }
-
-        // computeText.value = listOf(computed.toString())
+        computeText.value = listOf(computed.toString())
     }
 
     fun resetComputeData(clearError: Boolean = true) {

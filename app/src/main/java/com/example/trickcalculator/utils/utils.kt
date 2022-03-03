@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import java.math.BigDecimal
 
 fun isInt(value: String): Boolean {
     return try {
@@ -18,7 +19,8 @@ fun isInt(value: String): Boolean {
 
 fun isNumber(value: String): Boolean {
     return try {
-        value.toFloat()
+        BigDecimal(value)
+        value.toDouble()
         true
     } catch (e: Exception) {
         false

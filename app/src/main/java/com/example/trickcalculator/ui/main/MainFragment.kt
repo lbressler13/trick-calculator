@@ -22,6 +22,9 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.setImageButtonTint
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
@@ -135,13 +138,14 @@ class MainFragment : Fragment() {
             } else {
                 listOf("+", "-", "x", "/")
             }
+
             val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
                 when (operator) {
-                    operators[0] -> leftValue + rightValue
-                    operators[1] -> leftValue - rightValue
-                    operators[2] -> leftValue * rightValue
-                    operators[3] -> leftValue / rightValue
-                    else -> 0f
+                    operators[0] -> leftValue.add(rightValue)
+                    operators[1] -> leftValue.subtract(rightValue)
+                    operators[2] -> leftValue.multiply(rightValue)
+                    operators[3] -> leftValue.divide(rightValue, 5, RoundingMode.HALF_UP)
+                    else -> BigDecimal.ZERO
                 }
             }
 
@@ -152,7 +156,7 @@ class MainFragment : Fragment() {
             }
 
             try {
-                val computedValue: Float =
+                val computedValue: BigDecimal =
                     runComputation(
                         computeText,
                         operators.subList(2, 4), // multiply and divide ops
@@ -166,7 +170,19 @@ class MainFragment : Fragment() {
                 viewModel.useComputedAsComputeText()
                 viewModel.setError(null)
             } catch (e: Exception) {
-                viewModel.setError("Error: ${e.message}")
+                val error: String = if (e.message == null) {
+                    "Computation error"
+                } else {
+                    var message: String = e.message!!.trim()
+
+                    val firstChar = message[0]
+                    if (firstChar.isLowerCase()) {
+                        message = message.replaceFirst(firstChar, firstChar.uppercaseChar())
+                    }
+                    message
+                }
+
+                viewModel.setError("Error: $error")
             }
         }
     }
