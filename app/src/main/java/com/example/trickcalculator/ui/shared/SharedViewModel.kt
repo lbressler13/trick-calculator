@@ -14,7 +14,7 @@ class SharedViewModel : ViewModel() {
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
-    private val computedValue = MutableLiveData<Int?>().apply { value = null }
+    private val computedValue = MutableLiveData<Float?>().apply { value = null }
 
     private val error = MutableLiveData<String?>().apply { value = null }
 
@@ -29,7 +29,7 @@ class SharedViewModel : ViewModel() {
         computeText.value = listOf()
     }
 
-    fun setComputedValue(newValue: Int) {
+    fun setComputedValue(newValue: Float) {
         computedValue.value = newValue
     }
 
@@ -101,8 +101,16 @@ class SharedViewModel : ViewModel() {
 
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
-        val computed: Int = computedValue.value!!
-        computeText.value = listOf(computed.toString())
+        val computed: Float = computedValue.value!!
+        val intVal: Int = computed.toInt()
+
+        computeText.value = if (computed == intVal.toFloat()) {
+            listOf(intVal.toString())
+        } else {
+            listOf(computed.toString())
+        }
+
+        // computeText.value = listOf(computed.toString())
     }
 
     fun resetComputeData(clearError: Boolean = true) {

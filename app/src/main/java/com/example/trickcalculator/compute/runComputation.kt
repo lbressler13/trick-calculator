@@ -11,7 +11,7 @@ fun runComputation(
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
     checkParens: Boolean
-): Int {
+): Float {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Syntax error")
     }
@@ -73,8 +73,8 @@ private fun parseText(
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
     checkParens: Boolean
-): Int {
-    var total = 0
+): Float {
+    var total: Float = 0f
     var currentOperator: String? = null
 
     var currentState = computeText
@@ -91,9 +91,9 @@ private fun parseText(
     for (element in currentState) {
         when {
             isOperator(element, secondRoundOps) -> currentOperator = element
-            currentOperator == null -> total = Integer.parseInt(element)
+            currentOperator == null -> total = element.toFloat()
             else -> {
-                val currentVal: Int = Integer.parseInt(element)
+                val currentVal: Float = element.toFloat()
                 total = performSingleOp(total, currentVal, currentOperator)
             }
         }
@@ -120,8 +120,8 @@ private fun parseFirstRound(
             index++
         } else {
             // don't have to worry about out of bounds or parse errors b/c of validation
-            val leftVal: Int = Integer.parseInt(simplifiedList.last())
-            val rightVal: Int = Integer.parseInt(computeText[index + 1])
+            val leftVal: Float = simplifiedList.last().toFloat()
+            val rightVal: Float = computeText[index + 1].toFloat()
             val result = performSingleOp(leftVal, rightVal, element)
             val lastIndex = simplifiedList.lastIndex
 

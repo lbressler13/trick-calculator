@@ -141,7 +141,7 @@ class MainFragment : Fragment() {
                     operators[1] -> leftValue - rightValue
                     operators[2] -> leftValue * rightValue
                     operators[3] -> leftValue / rightValue
-                    else -> 0
+                    else -> 0f
                 }
             }
 
@@ -152,7 +152,7 @@ class MainFragment : Fragment() {
             }
 
             try {
-                val computedValue: Int =
+                val computedValue: Float =
                     runComputation(
                         computeText,
                         operators.subList(2, 4), // multiply and divide ops
