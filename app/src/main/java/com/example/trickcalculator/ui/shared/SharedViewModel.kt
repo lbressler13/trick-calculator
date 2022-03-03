@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.main
+package com.example.trickcalculator.ui.shared
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 
-class MainViewModel : ViewModel() {
+class SharedViewModel : ViewModel() {
     // list of numbers and operators
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
 

@@ -12,10 +12,12 @@ import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.lifecycle.Observer
+import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
 import com.example.trickcalculator.compute.runComputation
 import com.example.trickcalculator.ext.*
+import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
@@ -23,7 +25,7 @@ import com.example.trickcalculator.utils.setImageButtonTint
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SharedViewModel
 
     private lateinit var computeText: StringList
     private var error: String? = null
@@ -43,7 +45,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodel
         viewModel.getComputeText().observe(viewLifecycleOwner, getComputeTextObserver)
@@ -55,8 +57,9 @@ class MainFragment : Fragment() {
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
-        initSettingsDialog()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
+
+        (requireActivity() as MainActivity).binding.actionBar.root.setOnClickListener(null)
 
         return binding.root
     }
@@ -86,8 +89,23 @@ class MainFragment : Fragment() {
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
 
     private val infoButtonOnClick = {
+        val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
+        val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
+        val parensKey = requireContext().getString(R.string.key_apply_parens)
+        val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
+
+        val currentSettings = bundleOf(
+            numbersKey to shuffleNumbers,
+            operatorsKey to shuffleOperators,
+            parensKey to applyParens,
+            clearOnErrorKey to clearOnError
+        )
+
+        val newFragment = AttributionsFragment.newInstance()
+        newFragment.arguments = currentSettings
+
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, AttributionsFragment.newInstance())
+            .replace(R.id.container, newFragment)
             .addToBackStack(null)
             .commit()
     }
@@ -179,45 +197,6 @@ class MainFragment : Fragment() {
         binding.backspaceButton.setOnClickListener {
             viewModel.setError(null)
             viewModel.backspaceComputeText()
-        }
-    }
-
-    private fun initSettingsDialog() {
-        val settingsDialog = MainSettingsDialogFragment()
-        val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
-        val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
-        val parensKey = requireContext().getString(R.string.key_apply_parens)
-        val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
-        val requestKey = requireContext().getString(R.string.key_settings_request)
-
-        // update viewmodel with response from dialog
-        childFragmentManager.setFragmentResultListener(
-            requestKey,
-            viewLifecycleOwner,
-            { _: String, result: Bundle ->
-                val returnedShuffleNumbers: Boolean = result.getBoolean(numbersKey, shuffleNumbers)
-                viewModel.setShuffleNumbers(returnedShuffleNumbers)
-
-                val returnedShuffleOperators: Boolean =
-                    result.getBoolean(operatorsKey, shuffleOperators)
-                viewModel.setShuffleOperators(returnedShuffleOperators)
-
-                val returnedApplyParens: Boolean = result.getBoolean(parensKey, applyParens)
-                viewModel.setApplyParens(returnedApplyParens)
-
-                val returnedClearOnError: Boolean = result.getBoolean(clearOnErrorKey, clearOnError)
-                viewModel.setClearOnError(returnedClearOnError)
-            }
-        )
-
-        binding.settingsButton.setOnClickListener {
-            settingsDialog.arguments = bundleOf(
-                numbersKey to shuffleNumbers,
-                operatorsKey to shuffleOperators,
-                parensKey to applyParens,
-                clearOnErrorKey to clearOnError
-            )
-            settingsDialog.show(childFragmentManager, MainSettingsDialogFragment.TAG)
         }
     }
 }

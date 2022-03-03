@@ -22,7 +22,7 @@ class AttributionViewHolder(private val binding: ViewHolderAttributionBinding, p
             hideLink()
         }
 
-        binding.showHideLink.setOnClickListener {
+        binding.root.setOnClickListener {
             if (showingLink) {
                 hideLink()
             } else {

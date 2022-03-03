@@ -7,13 +7,14 @@ import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         assignTheme()
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
