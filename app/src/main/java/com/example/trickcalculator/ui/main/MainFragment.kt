@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
 
-        (requireActivity() as MainActivity).binding.actionBar.settingsButton.gone()
+        (requireActivity() as MainActivity).binding.actionBar.root.setOnClickListener(null)
 
         return binding.root
     }

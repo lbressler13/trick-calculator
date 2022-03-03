@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentImageAttributionsBinding
-import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.shared.SharedSettingsDialog
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
@@ -31,7 +30,6 @@ private val allAttributions = listOf(
     Attribution(R.drawable.ic_info, "Freepik", "www.flaticon.com/free-icon/info-button_64494"),
     Attribution(R.drawable.ic_minus, "Freepik", "www.flaticon.com/free-icon/minus_56889"),
     Attribution(R.drawable.ic_plus, "Freepik", "www.flaticon.com/premium-icon/plus_3524388"),
-    Attribution(R.drawable.ic_settings, "Freepik", "www.flaticon.com/premium-icon/gear_484613"),
     Attribution(R.drawable.ic_times, "Freepik", "www.flaticon.com/free-icon/multiply-mathematical-sign_43823")
 )
 
@@ -66,14 +64,13 @@ class AttributionsFragment : Fragment() {
         binding.closeButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+        initSettingsDialog()
 
         viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
         viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
         viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
 
-        (requireActivity() as MainActivity).binding.actionBar.settingsButton.visible()
-        initSettingsDialog()
 
         return binding.root
     }
@@ -90,11 +87,6 @@ class AttributionsFragment : Fragment() {
         val parensKey = requireContext().getString(R.string.key_apply_parens)
         val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
         val requestKey = requireContext().getString(R.string.key_settings_request)
-
-//        val shuffleNumbers = arguments?.getBoolean(numbersKey) ?: false
-//        val shuffleOperators = arguments?.getBoolean(operatorsKey) ?: true
-//        val applyParens = arguments?.getBoolean(parensKey) ?: true
-//        val clearOnError = arguments?.getBoolean(clearOnErrorKey) ?: true
 
         // update viewmodel with response from dialog
         childFragmentManager.setFragmentResultListener(
@@ -116,9 +108,9 @@ class AttributionsFragment : Fragment() {
             }
         )
 
-        val settingsButton: View = (requireActivity() as MainActivity).binding.actionBar.settingsButton
+        val actionBar: View = (requireActivity() as MainActivity).binding.actionBar.root
 
-        settingsButton.setOnClickListener {
+        actionBar.setOnClickListener {
             settingsDialog.arguments = bundleOf(
                 numbersKey to shuffleNumbers,
                 operatorsKey to shuffleOperators,
