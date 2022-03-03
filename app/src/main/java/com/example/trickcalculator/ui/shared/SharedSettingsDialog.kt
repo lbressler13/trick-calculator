@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.main
+package com.example.trickcalculator.ui.shared
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -8,13 +8,13 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.example.trickcalculator.R
-import com.example.trickcalculator.databinding.DialogMainSettingsBinding
+import com.example.trickcalculator.databinding.DialogSharedSettingsBinding
 
-class MainSettingsDialogFragment : DialogFragment() {
-    private lateinit var binding: DialogMainSettingsBinding
+class SharedSettingsDialog : DialogFragment() {
+    private lateinit var binding: DialogSharedSettingsBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogMainSettingsBinding.inflate(layoutInflater)
+        binding = DialogSharedSettingsBinding.inflate(layoutInflater)
         val root = binding.root
 
         setUiFromArgs()
