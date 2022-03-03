@@ -22,6 +22,8 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.setImageButtonTint
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
@@ -35,6 +37,7 @@ class MainFragment : Fragment() {
     private var shuffleOperators: Boolean = true
     private var applyParens: Boolean = true
     private var clearOnError: Boolean = true
+    private var applyDecimals: Boolean = true
 
     companion object {
         fun newInstance() = MainFragment()
@@ -54,6 +57,7 @@ class MainFragment : Fragment() {
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
         viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
         viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
+        viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
@@ -87,6 +91,7 @@ class MainFragment : Fragment() {
     private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
     private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
+    private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
 
     private val infoButtonOnClick = {
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
@@ -110,22 +115,6 @@ class MainFragment : Fragment() {
             .commit()
     }
 
-    private val clearButtonOnClick = {
-        viewModel.resetComputeData()
-
-        val enabledColor = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, enabledColor, true)
-
-        binding.numpadLayout.enableAllChildren()
-        binding.numpadLayout.children.forEach {
-            setImageButtonTint(
-                it,
-                enabledColor.resourceId,
-                requireContext()
-            )
-        }
-    }
-
     // set op order, num order, run computation, and update viewmodel
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
@@ -135,13 +124,14 @@ class MainFragment : Fragment() {
             } else {
                 listOf("+", "-", "x", "/")
             }
+
             val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
                 when (operator) {
-                    operators[0] -> leftValue + rightValue
-                    operators[1] -> leftValue - rightValue
-                    operators[2] -> leftValue * rightValue
-                    operators[3] -> leftValue / rightValue
-                    else -> 0
+                    operators[0] -> leftValue.add(rightValue)
+                    operators[1] -> leftValue.subtract(rightValue)
+                    operators[2] -> leftValue.multiply(rightValue)
+                    operators[3] -> leftValue.divide(rightValue, 5, RoundingMode.HALF_UP)
+                    else -> BigDecimal.ZERO
                 }
             }
 
@@ -152,21 +142,34 @@ class MainFragment : Fragment() {
             }
 
             try {
-                val computedValue: Int =
+                val computedValue: BigDecimal =
                     runComputation(
                         computeText,
                         operators.subList(2, 4), // multiply and divide ops
                         operators.subList(0, 2), // add and subtract ops
                         performOperation,
                         numberOrder,
-                        applyParens
+                        applyParens,
+                        applyDecimals
                     )
 
                 viewModel.setComputedValue(computedValue)
                 viewModel.useComputedAsComputeText()
                 viewModel.setError(null)
             } catch (e: Exception) {
-                viewModel.setError("Error: ${e.message}")
+                val error: String = if (e.message == null) {
+                    "Computation error"
+                } else {
+                    var message: String = e.message!!.trim()
+
+                    val firstChar = message[0]
+                    if (firstChar.isLowerCase()) {
+                        message = message.replaceFirst(firstChar, firstChar.uppercaseChar())
+                    }
+                    message
+                }
+
+                viewModel.setError("Error: $error")
             }
         }
     }
@@ -192,7 +195,7 @@ class MainFragment : Fragment() {
         binding.divideButton.setOnClickListener { genericAddComputeOnClick("/") }
 
         // functional buttons
-        binding.clearButton.setOnClickListener { clearButtonOnClick() }
+        binding.clearButton.setOnClickListener { viewModel.resetComputeData() }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
         binding.backspaceButton.setOnClickListener {
             viewModel.setError(null)

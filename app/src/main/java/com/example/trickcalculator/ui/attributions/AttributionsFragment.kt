@@ -42,6 +42,7 @@ class AttributionsFragment : Fragment() {
     private var shuffleOperators: Boolean = true
     private var applyParens: Boolean = true
     private var clearOnError: Boolean = true
+    private var applyDecimals: Boolean = true
 
     companion object {
         fun newInstance() = AttributionsFragment()
@@ -70,7 +71,7 @@ class AttributionsFragment : Fragment() {
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
         viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
         viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
-
+        viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
 
         return binding.root
     }
@@ -79,6 +80,7 @@ class AttributionsFragment : Fragment() {
     private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
     private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
+    private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
 
     private fun initSettingsDialog() {
         val settingsDialog = SharedSettingsDialog()
@@ -86,6 +88,7 @@ class AttributionsFragment : Fragment() {
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
         val parensKey = requireContext().getString(R.string.key_apply_parens)
         val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
+        val decimalsKey = requireContext().getString(R.string.key_apply_decimals)
         val requestKey = requireContext().getString(R.string.key_settings_request)
 
         // update viewmodel with response from dialog
@@ -105,6 +108,9 @@ class AttributionsFragment : Fragment() {
 
                 val returnedClearOnError: Boolean = result.getBoolean(clearOnErrorKey, clearOnError)
                 viewModel.setClearOnError(returnedClearOnError)
+
+                val returnedApplyDecimals: Boolean = result.getBoolean(decimalsKey, applyDecimals)
+                viewModel.setApplyDecimals(returnedApplyDecimals)
             }
         )
 
@@ -115,7 +121,8 @@ class AttributionsFragment : Fragment() {
                 numbersKey to shuffleNumbers,
                 operatorsKey to shuffleOperators,
                 parensKey to applyParens,
-                clearOnErrorKey to clearOnError
+                clearOnErrorKey to clearOnError,
+                decimalsKey to applyDecimals
             )
             settingsDialog.show(childFragmentManager, SharedSettingsDialog.TAG)
         }

@@ -2,6 +2,7 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.utils.*
 import java.lang.NumberFormatException
+import java.math.BigDecimal
 
 // parse string list and compute mathematical expression, if possible
 fun runComputation(
@@ -10,13 +11,18 @@ fun runComputation(
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
-    checkParens: Boolean
-): Int {
+    checkParens: Boolean,
+    useDecimals: Boolean
+): BigDecimal {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Syntax error")
     }
 
     var currentState: StringList = computeText
+
+    if (!useDecimals) {
+        currentState = stripDecimals(currentState)
+    }
 
     if (validateNumbersOrder(numbersOrder)) {
         currentState = replaceNumbers(currentState, numbersOrder)
@@ -31,8 +37,6 @@ fun runComputation(
 
     return try {
         parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
-    } catch (e: ArithmeticException) {
-        throw Exception("Divide by 0")
     } catch (e: NumberFormatException) {
         val startIndex = e.message?.indexOf("\"")
         val endIndex = e.message?.lastIndexOf("\"")
@@ -51,12 +55,16 @@ fun runComputation(
 // map digits to use values in numbers order
 private fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
     return text.map {
-        if (!isInt(it)) {
+        if (!isNumber(it)) {
             it
         } else {
             it.map { c ->
-                val index = Integer.parseInt(c.toString())
-                numbersOrder[index].toString()
+                if (c.isDigit()) {
+                    val index = Integer.parseInt(c.toString())
+                    numbersOrder[index].toString()
+                } else {
+                    c.toString()
+                }
             }.joinToString("")
         }
     }
@@ -69,8 +77,8 @@ private fun parseText(
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
     checkParens: Boolean
-): Int {
-    var total = 0
+): BigDecimal {
+    var total = BigDecimal.ZERO
     var currentOperator: String? = null
 
     var currentState = computeText
@@ -87,9 +95,9 @@ private fun parseText(
     for (element in currentState) {
         when {
             isOperator(element, secondRoundOps) -> currentOperator = element
-            currentOperator == null -> total = Integer.parseInt(element)
+            currentOperator == null -> total = BigDecimal(element)
             else -> {
-                val currentVal: Int = Integer.parseInt(element)
+                val currentVal = BigDecimal(element)
                 total = performSingleOp(total, currentVal, currentOperator)
             }
         }
@@ -116,8 +124,8 @@ private fun parseFirstRound(
             index++
         } else {
             // don't have to worry about out of bounds or parse errors b/c of validation
-            val leftVal: Int = Integer.parseInt(simplifiedList.last())
-            val rightVal: Int = Integer.parseInt(computeText[index + 1])
+            val leftVal = BigDecimal(simplifiedList.last())
+            val rightVal = BigDecimal(computeText[index + 1])
             val result = performSingleOp(leftVal, rightVal, element)
             val lastIndex = simplifiedList.lastIndex
 
@@ -167,7 +175,7 @@ private fun addMultToParens(computeText: StringList): StringList {
 
     computeText.forEach {
         val currentType: String = when {
-            isInt(it) -> "number"
+            isNumber(it) -> "number"
             it == "(" -> "lparen"
             it == ")" -> "rparen"
             else -> ""
@@ -216,4 +224,10 @@ private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int 
 
 private fun stripParens(computeText: StringList): StringList {
     return computeText.filter { it != "(" && it != ")" }
+}
+
+private fun stripDecimals(computeText: StringList): StringList {
+    return computeText.map { element ->
+        element.filter { it != '.' }
+    }
 }

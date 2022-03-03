@@ -1,6 +1,7 @@
 package com.example.trickcalculator.utils
 
-typealias Digit = Pair<Int, Int?>
+import java.math.BigDecimal
+
 typealias IntList = List<Int>
-typealias OperatorFunction = (Int, Int, String) -> Int
+typealias OperatorFunction = (BigDecimal, BigDecimal, String) -> BigDecimal
 typealias StringList = List<String>

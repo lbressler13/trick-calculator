@@ -4,15 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ext.copyWithLastReplaced
+import com.example.trickcalculator.ext.substringTo
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
+import com.example.trickcalculator.utils.isPartialDecimal
+import java.math.BigDecimal
 
 class SharedViewModel : ViewModel() {
     // list of numbers and operators
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
-    private val computedValue = MutableLiveData<Int?>().apply { value = null }
+    private val computedValue = MutableLiveData<BigDecimal?>().apply { value = null }
 
     private val error = MutableLiveData<String?>().apply { value = null }
 
@@ -21,12 +24,20 @@ class SharedViewModel : ViewModel() {
     private val shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
     private val applyParens = MutableLiveData<Boolean>().apply { value = true }
     private val clearOnError = MutableLiveData<Boolean>().apply { value = true }
+    private val applyDecimals = MutableLiveData<Boolean>().apply { value = true }
 
     fun getComputeText(): LiveData<StringList> = computeText
-    private fun clearComputeText() { computeText.value = listOf() }
+    private fun clearComputeText() {
+        computeText.value = listOf()
+    }
 
-    fun setComputedValue(newValue: Int) { computedValue.value = newValue }
-    private fun clearComputedValue() { computedValue.value = null }
+    fun setComputedValue(newValue: BigDecimal) {
+        computedValue.value = newValue
+    }
+
+    private fun clearComputedValue() {
+        computedValue.value = null
+    }
 
     fun setError(newValue: String?) { error.value = newValue }
     fun getError(): LiveData<String?> = error
@@ -43,12 +54,16 @@ class SharedViewModel : ViewModel() {
     fun setClearOnError(newValue: Boolean) { clearOnError.value = newValue }
     fun getClearOnError(): LiveData<Boolean> = clearOnError
 
+    fun setApplyDecimals(newValue: Boolean) { applyDecimals.value = newValue }
+    fun getApplyDecimals(): LiveData<Boolean> = applyDecimals
+
     // add new value to end of list
     fun appendComputeText(addition: String) {
         val currentVal: StringList = computeText.value!!
 
         // create multi-digit number
-        if (currentVal.isNotEmpty() && isInt(addition) && isInt(currentVal.last())) {
+        if (currentVal.isNotEmpty() && (isInt(addition) || addition == ".") &&
+            isPartialDecimal(currentVal.last())) {
             val newAddition: String = currentVal.last() + addition
             computeText.value = currentVal.copyWithLastReplaced(newAddition)
         } else {
@@ -67,7 +82,7 @@ class SharedViewModel : ViewModel() {
                 computeText.value = currentText.subList(0, currentText.lastIndex)
             } else {
                 // delete last digit from multi-digit number
-                val newValue: String = lastValue.substring(0 until lastValue.lastIndex)
+                val newValue: String = lastValue.substringTo(lastValue.lastIndex)
                 computeText.value = currentText.copyWithLastReplaced(newValue)
             }
         }
@@ -75,8 +90,20 @@ class SharedViewModel : ViewModel() {
 
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
-        val computed: Int = computedValue.value!!
-        computeText.value = listOf(computed.toString())
+        val computed: BigDecimal = computedValue.value!!
+        var computeString = computed.toString()
+
+        if (computeString.indexOf('.') != -1) {
+            val stripped = computeString.trimEnd('0')
+
+            computeString = when {
+                stripped == "." -> "0"
+                stripped.last() == '.' -> stripped.substringTo(stripped.lastIndex)
+                else -> stripped
+            }
+        }
+
+        computeText.value = listOf(computeString)
     }
 
     fun resetComputeData(clearError: Boolean = true) {

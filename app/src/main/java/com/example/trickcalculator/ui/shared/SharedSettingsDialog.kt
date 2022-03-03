@@ -34,6 +34,7 @@ class SharedSettingsDialog : DialogFragment() {
         setSwitchUiFromArgs(R.string.key_shuffle_operators, binding.shuffleOperatorsSwitch)
         setSwitchUiFromArgs(R.string.key_apply_parens, binding.applyParensSwitch)
         setSwitchUiFromArgs(R.string.key_clear_on_error, binding.clearOnErrorSwitch)
+        setSwitchUiFromArgs(R.string.key_apply_decimals, binding.applyDecimalsSwitch)
     }
 
     private fun setSwitchUiFromArgs(keyId: Int, switch: SwitchCompat) {
@@ -49,11 +50,13 @@ class SharedSettingsDialog : DialogFragment() {
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
         val parensKey = requireContext().getString(R.string.key_apply_parens)
         val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
+        val decimalsKey = requireContext().getString(R.string.key_apply_decimals)
         return bundleOf(
             numbersKey to binding.shuffleNumbersSwitch.isChecked,
             operatorsKey to binding.shuffleOperatorsSwitch.isChecked,
             parensKey to binding.applyParensSwitch.isChecked,
-            clearOnErrorKey to binding.clearOnErrorSwitch.isChecked
+            clearOnErrorKey to binding.clearOnErrorSwitch.isChecked,
+            decimalsKey to binding.applyDecimalsSwitch.isChecked
         )
     }
 
@@ -69,6 +72,6 @@ class SharedSettingsDialog : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "MainSettingsDialog"
+        const val TAG = "SharedSettingsDialog"
     }
 }
