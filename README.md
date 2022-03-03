@@ -5,6 +5,7 @@ This calculator exists purely for fun and chaos.
 Here are the settings:
 | Setting              | Default | Description                                                                    |
 |:---------------------|:--------|:-------------------------------------------------------------------------------|
+| Apply decimals       | true    | Apply decimals entered in textbox                                              |
 | Apply parentheses    | true    | Apply parentheses entered in textbox                                           |
 | Reset text on error  | true    | Clear textbox when error occurs. Error message is shown regardless of setting  |
 | Shuffle numbers      | false   | Shuffle value of numbers. No visual indication of new values                   |
@@ -13,6 +14,7 @@ Here are the settings:
 For standard calculator function, use the following settings:
 | Setting              | Value  |
 |:---------------------|:-------|
+| Apply decimals       | true   |
 | Apply parentheses    | true   |
 | Clear text on error  | any    |
 | Shuffle numbers      | false  |

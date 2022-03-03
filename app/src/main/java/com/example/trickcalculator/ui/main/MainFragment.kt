@@ -23,7 +23,6 @@ import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.setImageButtonTint
 import java.math.BigDecimal
-import java.math.MathContext
 import java.math.RoundingMode
 
 class MainFragment : Fragment() {
@@ -38,6 +37,7 @@ class MainFragment : Fragment() {
     private var shuffleOperators: Boolean = true
     private var applyParens: Boolean = true
     private var clearOnError: Boolean = true
+    private var applyDecimals: Boolean = true
 
     companion object {
         fun newInstance() = MainFragment()
@@ -57,6 +57,7 @@ class MainFragment : Fragment() {
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
         viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
         viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
+        viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
@@ -90,6 +91,7 @@ class MainFragment : Fragment() {
     private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
     private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
+    private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
 
     private val infoButtonOnClick = {
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
@@ -163,7 +165,8 @@ class MainFragment : Fragment() {
                         operators.subList(0, 2), // add and subtract ops
                         performOperation,
                         numberOrder,
-                        applyParens
+                        applyParens,
+                        applyDecimals
                     )
 
                 viewModel.setComputedValue(computedValue)

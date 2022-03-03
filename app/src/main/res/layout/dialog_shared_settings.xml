@@ -38,4 +38,12 @@
         app:layout_constraintTop_toBottomOf="@id/applyParensSwitch"
         tools:ignore="MissingConstraints" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/applyDecimalsSwitch"
+        style="@style/SettingsSwitch"
+        android:checked="true"
+        android:text="@string/apply_decimals"
+        app:layout_constraintTop_toBottomOf="@id/clearOnErrorSwitch"
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

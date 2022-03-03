@@ -25,6 +25,7 @@
     <string name="shuffle_numbers">Shuffle Numbers</string>
     <string name="apply_parens">Apply Parens</string>
     <string name="clear_on_error">Reset on Error</string>
+    <string name="apply_decimals">Apply Decimals</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">mainSettingsRequest</string>
@@ -32,6 +33,7 @@
     <string name="key_shuffle_operators">shuffleOperators</string>
     <string name="key_apply_parens">applyParens</string>
     <string name="key_clear_on_error">clearOnError</string>
+    <string name="key_apply_decimals">applyDecimals</string>
 
     <!-- Image Attributions -->
     <string name="link">Link</string>

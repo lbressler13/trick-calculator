@@ -11,13 +11,18 @@ fun runComputation(
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
-    checkParens: Boolean
+    checkParens: Boolean,
+    useDecimals: Boolean
 ): BigDecimal {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Syntax error")
     }
 
     var currentState: StringList = computeText
+
+    if (!useDecimals) {
+        currentState = stripDecimals(currentState)
+    }
 
     if (validateNumbersOrder(numbersOrder)) {
         currentState = replaceNumbers(currentState, numbersOrder)
@@ -219,4 +224,10 @@ private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int 
 
 private fun stripParens(computeText: StringList): StringList {
     return computeText.filter { it != "(" && it != ")" }
+}
+
+private fun stripDecimals(computeText: StringList): StringList {
+    return computeText.map { element ->
+        element.filter { it != '.' }
+    }
 }
