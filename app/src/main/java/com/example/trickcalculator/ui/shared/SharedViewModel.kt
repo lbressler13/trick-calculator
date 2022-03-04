@@ -3,6 +3,7 @@ package com.example.trickcalculator.ui.shared
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.trickcalculator.BigFraction
 import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.ext.substringTo
 import com.example.trickcalculator.utils.StringList
@@ -15,7 +16,7 @@ class SharedViewModel : ViewModel() {
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
-    private val computedValue = MutableLiveData<BigDecimal?>().apply { value = null }
+    private val computedValue = MutableLiveData<BigFraction?>().apply { value = null }
 
     private val error = MutableLiveData<String?>().apply { value = null }
 
@@ -31,7 +32,7 @@ class SharedViewModel : ViewModel() {
         computeText.value = listOf()
     }
 
-    fun setComputedValue(newValue: BigDecimal) {
+    fun setComputedValue(newValue: BigFraction) {
         computedValue.value = newValue
     }
 
@@ -90,20 +91,20 @@ class SharedViewModel : ViewModel() {
 
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
-        val computed: BigDecimal = computedValue.value!!
-        var computeString = computed.toString()
+        val computed: BigFraction = computedValue.value!!
+//        var computeString = computed.toString()
+//
+//        if (computeString.indexOf('.') != -1) {
+//            val stripped = computeString.trimEnd('0')
+//
+//            computeString = when {
+//                stripped == "." -> "0"
+//                stripped.last() == '.' -> stripped.substringTo(stripped.lastIndex)
+//                else -> stripped
+//            }
+//        }
 
-        if (computeString.indexOf('.') != -1) {
-            val stripped = computeString.trimEnd('0')
-
-            computeString = when {
-                stripped == "." -> "0"
-                stripped.last() == '.' -> stripped.substringTo(stripped.lastIndex)
-                else -> stripped
-            }
-        }
-
-        computeText.value = listOf(computeString)
+        computeText.value = listOf(computed.toString())
     }
 
     fun resetComputeData(clearError: Boolean = true) {

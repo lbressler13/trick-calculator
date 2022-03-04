@@ -1,8 +1,8 @@
 package com.example.trickcalculator.compute
 
+import com.example.trickcalculator.BigFraction
 import com.example.trickcalculator.utils.*
 import java.lang.NumberFormatException
-import java.math.BigDecimal
 
 // parse string list and compute mathematical expression, if possible
 fun runComputation(
@@ -13,7 +13,7 @@ fun runComputation(
     numbersOrder: IntList,
     checkParens: Boolean,
     useDecimals: Boolean
-): BigDecimal {
+): BigFraction {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Syntax error")
     }
@@ -77,8 +77,8 @@ private fun parseText(
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
     checkParens: Boolean
-): BigDecimal {
-    var total = BigDecimal.ZERO
+): BigFraction {
+    var total = BigFraction.ZERO
     var currentOperator: String? = null
 
     var currentState = computeText
@@ -95,9 +95,9 @@ private fun parseText(
     for (element in currentState) {
         when {
             isOperator(element, secondRoundOps) -> currentOperator = element
-            currentOperator == null -> total = BigDecimal(element)
+            currentOperator == null -> total = BigFraction.parse(element)
             else -> {
-                val currentVal = BigDecimal(element)
+                val currentVal = BigFraction.parse(element)
                 total = performSingleOp(total, currentVal, currentOperator)
             }
         }
@@ -124,8 +124,8 @@ private fun parseFirstRound(
             index++
         } else {
             // don't have to worry about out of bounds or parse errors b/c of validation
-            val leftVal = BigDecimal(simplifiedList.last())
-            val rightVal = BigDecimal(computeText[index + 1])
+            val leftVal = BigFraction.parse(simplifiedList.last())
+            val rightVal = BigFraction.parse(computeText[index + 1])
             val result = performSingleOp(leftVal, rightVal, element)
             val lastIndex = simplifiedList.lastIndex
 

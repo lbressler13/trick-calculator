@@ -3,7 +3,6 @@ package com.example.trickcalculator.ui.main
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
-import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.lifecycle.Observer
+import com.example.trickcalculator.BigFraction
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
@@ -21,9 +21,6 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.utils.setImageButtonTint
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
@@ -127,11 +124,11 @@ class MainFragment : Fragment() {
 
             val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
                 when (operator) {
-                    operators[0] -> leftValue.add(rightValue)
-                    operators[1] -> leftValue.subtract(rightValue)
-                    operators[2] -> leftValue.multiply(rightValue)
-                    operators[3] -> leftValue.divide(rightValue, 5, RoundingMode.HALF_UP)
-                    else -> BigDecimal.ZERO
+                    operators[0] -> leftValue + rightValue
+                    operators[1] -> leftValue - rightValue
+                    operators[2] -> leftValue * rightValue
+                    operators[3] -> leftValue / rightValue
+                    else -> BigFraction.ZERO
                 }
             }
 
@@ -142,7 +139,7 @@ class MainFragment : Fragment() {
             }
 
             try {
-                val computedValue: BigDecimal =
+                val computedValue: BigFraction =
                     runComputation(
                         computeText,
                         operators.subList(2, 4), // multiply and divide ops
