@@ -1,5 +1,6 @@
 package com.example.trickcalculator.bigfraction
 
+import com.example.trickcalculator.ext.toBI
 import org.junit.Test
 import org.junit.Assert.*
 import java.math.BigDecimal
@@ -10,24 +11,24 @@ class BigFractionTest {
     @Test
     fun testConstructor() {
         var bf = BigFraction(0)
-        assertEquals(0, bf.numerator)
-        assertEquals(1, bf.denominator)
+        assertEquals(0.toBI(), bf.numerator)
+        assertEquals(1.toBI(), bf.denominator)
 
         bf = BigFraction(3)
-        assertEquals(3, bf.numerator)
-        assertEquals(1, bf.denominator)
+        assertEquals(3.toBI(), bf.numerator)
+        assertEquals(1.toBI(), bf.denominator)
 
         bf = BigFraction(-3)
-        assertEquals(-3, bf.numerator)
-        assertEquals(1, bf.denominator)
+        assertEquals((-3).toBI(), bf.numerator)
+        assertEquals(1.toBI(), bf.denominator)
 
         bf = BigFraction(3, 4)
-        assertEquals(3, bf.numerator)
-        assertEquals(4, bf.denominator)
+        assertEquals(3.toBI(), bf.numerator)
+        assertEquals(4.toBI(), bf.denominator)
 
         bf = BigFraction(3, -2)
-        assertEquals(-3, bf.numerator)
-        assertEquals(2, bf.denominator)
+        assertEquals((-3).toBI(), bf.numerator)
+        assertEquals(2.toBI(), bf.denominator)
 
         var error = ""
         try {
@@ -294,23 +295,23 @@ class BigFractionTest {
     @Test
     fun testToPair() {
         var bf = BigFraction(0)
-        var expected = Pair(0L, 1L)
+        var expected = Pair(0.toBI(), 1.toBI())
         assertEquals(expected, bf.toPair())
 
         bf = BigFraction(1)
-            expected = Pair(1, 1)
+            expected = Pair(1.toBI(), 1.toBI())
         assertEquals(expected, bf.toPair())
 
-        bf = BigFraction(2, 7)
-        expected = Pair(2, 7)
+        bf = BigFraction(2.toBI(), 7.toBI())
+        expected = Pair(2.toBI(), 7.toBI())
         assertEquals(expected, bf.toPair())
 
         bf = BigFraction(-1)
-        expected = Pair(-1, 1)
+        expected = Pair((-1).toBI(), 1.toBI())
         assertEquals(expected, bf.toPair())
 
         bf = BigFraction(-2, 7)
-        expected = Pair(-2, 7)
+        expected = Pair((-2).toBI(), 7.toBI())
         assertEquals(expected, bf.toPair())
     }
 
@@ -348,7 +349,7 @@ class BigFractionTest {
 
         mc = MathContext(20, RoundingMode.HALF_UP)
         bf = BigFraction(5, 3)
-        bd = BigDecimal(1.66666666666666666667, mc)
+        bd = BigDecimal("1.66666666666666666667", mc)
         assertEquals(bd, bf.toBigDecimal())
     }
 }

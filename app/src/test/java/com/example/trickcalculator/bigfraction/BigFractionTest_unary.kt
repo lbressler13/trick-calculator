@@ -8,57 +8,47 @@ class BigFractionTest_unary {
     @Test
     fun testUnaryMinus() {
         var bf = BigFraction(0)
-        var result = -bf
-        assertEquals(0, result.numerator)
-        assertEquals(1, result.denominator)
+        var expected = BigFraction(0)
+        assertEquals(expected, -bf)
 
         bf = BigFraction(3)
-        result = -bf
-        assertEquals(-3, result.numerator)
-        assertEquals(1, result.denominator)
+        expected = BigFraction(-3)
+        assertEquals(expected, -bf)
 
         bf = BigFraction(-3)
-        result = -bf
-        assertEquals(3, result.numerator)
-        assertEquals(1, result.denominator)
+        expected = BigFraction(3)
+        assertEquals(expected, -bf)
 
         bf = BigFraction(5, 2)
-        result = -bf
-        assertEquals(-5, result.numerator)
-        assertEquals(2, result.denominator)
+        expected = BigFraction(-5, 2)
+        assertEquals(expected, -bf)
 
         bf = BigFraction(-2, 5)
-        result = -bf
-        assertEquals(2, result.numerator)
-        assertEquals(5, result.denominator)
+        expected = BigFraction(2, 5)
+        assertEquals(expected, -bf)
     }
 
     @Test
     fun testUnaryPlus() {
         var bf = BigFraction(0)
-        var result = +bf
         var expected = BigFraction(0, 1)
-        assertEquals(expected, result)
+        assertEquals(expected, +bf)
 
         bf = BigFraction(3)
-        result = +bf
         expected = BigFraction(3, 1)
-        assertEquals(expected, result)
+        assertEquals(expected, +bf)
 
         bf = BigFraction(-3)
-        result = +bf
         expected = BigFraction(-3, 1)
-        assertEquals(expected, result)
+        assertEquals(expected, +bf)
 
         bf = BigFraction(5, 2)
-        result = +bf
         expected = BigFraction(5, 2)
-        assertEquals(expected, result)
+        assertEquals(expected, +bf)
 
         bf = BigFraction(-2, 5)
-        result = +bf
         expected = BigFraction(-2, 5)
-        assertEquals(expected, result)
+        assertEquals(expected, +bf)
     }
 
     @Test
