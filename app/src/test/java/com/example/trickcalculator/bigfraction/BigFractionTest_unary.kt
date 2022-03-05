@@ -1,4 +1,4 @@
-package com.example.trickcalculator
+package com.example.trickcalculator.bigfraction
 
 import org.junit.Assert.*
 import org.junit.Test

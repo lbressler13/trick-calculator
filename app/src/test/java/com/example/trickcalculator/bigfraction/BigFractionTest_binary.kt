@@ -1,4 +1,4 @@
-package com.example.trickcalculator
+package com.example.trickcalculator.bigfraction
 
 import org.junit.Test
 import org.junit.Assert.*
@@ -404,11 +404,26 @@ class BigFractionTest_binary {
 
     @Test
     fun testEquals() {
+        // BigFraction
         assertEquals(BigFraction(0, 1), BigFraction(0, 1))
         assertEquals(BigFraction(-1, 3), BigFraction(-1, 3))
         assertEquals(BigFraction(5, 2), BigFraction(5, 2))
 
         assertNotEquals(BigFraction(1, 3), BigFraction(-1, 3))
         assertNotEquals(BigFraction(2, 3), BigFraction(3, 2))
+
+        // Long
+
+        // Int
+
+        // Short
+
+        // Char
+
+        // Byte
+
+        // BigDecimal
+
+        // Other
     }
 }

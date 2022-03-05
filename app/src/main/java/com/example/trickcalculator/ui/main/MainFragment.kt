@@ -11,7 +11,7 @@ import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.lifecycle.Observer
-import com.example.trickcalculator.BigFraction
+import com.example.trickcalculator.bigfraction.BigFraction
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding

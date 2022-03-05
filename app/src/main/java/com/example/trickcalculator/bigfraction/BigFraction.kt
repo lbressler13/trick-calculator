@@ -1,14 +1,15 @@
-package com.example.trickcalculator
+package com.example.trickcalculator.bigfraction
 
-import com.example.trickcalculator.ext.length
-import com.example.trickcalculator.ext.pow
-import com.example.trickcalculator.ext.substringTo
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 import kotlin.math.abs
 
 // A custom number class inspired by BigDecimal, with better handling of irrational fractions
 
-// TODO implement Number
-class BigFraction private constructor() {
+fun abs(bf: BigFraction): BigFraction = bf.absoluteValue()
+
+class BigFraction private constructor() : Number() {
     var numerator: Int = 0
     var denominator: Int = 1
 
@@ -57,7 +58,11 @@ class BigFraction private constructor() {
         return BigFraction(newNumerator, newDenominator)
     }
 
+    operator fun plus(other: Int): BigFraction = plus(BigFraction(other))
+
     operator fun minus(other: BigFraction): BigFraction = plus(-other)
+
+    operator fun minus(other: Int): BigFraction = plus(-other)
 
     operator fun times(other: BigFraction): BigFraction {
         val newNumerator = numerator * other.numerator
@@ -65,18 +70,42 @@ class BigFraction private constructor() {
         return BigFraction(newNumerator, newDenominator)
     }
 
+    operator fun times(other: Int): BigFraction = times(BigFraction(other))
+
     operator fun div(other: BigFraction): BigFraction = times(other.inverse())
 
-    override operator fun equals(other: Any?): Boolean {
-        if (other == null || other !is BigFraction) {
-            return false
+    operator fun div(other: Int): BigFraction = div(BigFraction(other))
+
+    override fun equals(other: Any?): Boolean {
+        return when (other) {
+            null -> return false
+            is BigFraction -> {
+                val scaled1 = numerator * other.denominator
+                val scaled2 = other.numerator * denominator
+                scaled1 == scaled2
+            }
+            is Long -> {
+                toLong() == other
+            }
+            is Int -> {
+                toInt() == other
+            }
+            is Short -> {
+                toShort() == other
+            }
+            is Char -> {
+                toChar() == other
+            }
+            is Byte -> {
+                toByte() == other
+            }
+            is BigDecimal -> {
+                val text = other.toString()
+                val bf = parseDecimal(text)
+                equals(bf)
+            }
+            else -> false
         }
-
-        // TODO handling for number types
-
-        val scaled1 = numerator * other.denominator
-        val scaled2 = other.numerator * denominator
-        return scaled1 == scaled2
     }
 
     operator fun compareTo(other: BigFraction): Int {
@@ -95,6 +124,8 @@ class BigFraction private constructor() {
 
         return BigFraction(denominator, numerator)
     }
+
+    fun absoluteValue(): BigFraction = BigFraction(abs(numerator), denominator)
 
     fun isNegative(): Boolean = numerator < 0
 
@@ -134,6 +165,8 @@ class BigFraction private constructor() {
         }
     }
 
+    // STRING METHODS
+
     fun toDecimalString(digits: Int = 8): String {
         if (denominator == 1) {
             return numerator.toString()
@@ -152,15 +185,28 @@ class BigFraction private constructor() {
     }
 
     fun toPairString(): String = "($numerator, $denominator)"
-
     fun toBFString(): String = "BF[$numerator $denominator]"
 
     override fun toString(): String = toDecimalString()
 
-    override fun hashCode(): Int = Pair(numerator, denominator).hashCode()
+    override fun hashCode(): Int = toPair().hashCode()
 
     // CASTING
     fun toPair(): Pair<Int, Int> = Pair(numerator, denominator)
+
+    override fun toByte(): Byte = toInt().toByte()
+    override fun toChar(): Char = toInt().toChar()
+    override fun toShort(): Short = toInt().toShort()
+    override fun toInt(): Int = numerator / denominator
+    override fun toLong(): Long = numerator.toLong() / denominator
+
+    override fun toDouble(): Double = numerator.toDouble() / denominator
+    override fun toFloat(): Float = numerator.toFloat() / denominator
+
+    fun toBigDecimal(): BigDecimal {
+        val mc = MathContext(20, RoundingMode.HALF_UP)
+        return BigDecimal(numerator.toDouble() / denominator, mc)
+    }
 
     companion object {
         val ZERO = BigFraction(0)
@@ -174,79 +220,14 @@ class BigFraction private constructor() {
         val EIGHT = BigFraction(8)
         val NINE = BigFraction(9)
 
-        private fun parseDecimal(unparsed: String): BigFraction {
-            var currentState: String = unparsed.trim()
-
-            val isNegative = unparsed.startsWith("-")
-            val timesNeg = if (isNegative) -1 else 1
-            if (isNegative) {
-                currentState = currentState.substring(1)
-            }
-
-            val decimalIndex: Int = currentState.indexOf('.')
-
-            return when (decimalIndex) {
-                -1 -> {
-                    val numerator = Integer.parseInt(currentState)
-                    BigFraction(numerator * timesNeg)
-                }
-                0 -> {
-                    currentState = currentState.substring(1)
-                    val numerator = Integer.parseInt(currentState)
-
-                    if (numerator == 0) {
-                        return BigFraction(0)
-                    }
-                    val denominator = (10).pow(numerator.length())
-
-                    BigFraction(numerator * timesNeg, denominator)
-                }
-                else -> {
-                    val wholeString = currentState.substringTo(decimalIndex)
-                    val decimalString = currentState.substring(decimalIndex + 1)
-                    val whole = Integer.parseInt(wholeString)
-                    val decimal = Integer.parseInt(decimalString)
-
-                    if (decimal == 0) {
-                        return BigFraction(whole * timesNeg) // also covers the case where number is 0
-                    }
-
-                    val denominator = (10).pow(decimalString.length)
-                    val numerator = whole * denominator + decimal
-
-                    BigFraction(numerator * timesNeg, denominator)
-                }
-            }
-        }
-
-        private fun parseBFString(unparsed: String): BigFraction {
-            val numbers = unparsed.substring(3, unparsed.lastIndex)
-            val split = numbers.split(' ')
-            val numString = split[0].trim()
-            val denomString = split[1].trim()
-            val numerator = Integer.parseInt(numString)
-            val denominator = Integer.parseInt(denomString)
-            return BigFraction(numerator, denominator)
-        }
-
         fun parse(s: String): BigFraction {
-            if (s.startsWith("BF")) {
+            if (isBFString(s)) {
                 return parseBFString(s)
             }
 
             return parseDecimal(s)
         }
 
-        fun isBFString(s: String): Boolean {
-            return try {
-                val startEnd = s.trim().startsWith("BF[") && s.trim().endsWith("]")
-                val split = s.substring(3, s.lastIndex).split(" ")
-                Integer.parseInt(split[0])
-                Integer.parseInt(split[1])
-                startEnd
-            } catch (e: Exception) {
-                false
-            }
-        }
+        fun isBFString(s: String): Boolean = checkIsBFString(s)
     }
 }

@@ -1,6 +1,6 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.BigFraction
+import com.example.trickcalculator.bigfraction.BigFraction
 import com.example.trickcalculator.utils.*
 import java.lang.NumberFormatException
 
