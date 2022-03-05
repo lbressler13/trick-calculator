@@ -1,7 +1,5 @@
 package com.example.trickcalculator.bigfraction
 
-import com.example.trickcalculator.bigfraction.BigFraction
-import com.example.trickcalculator.bigfraction.checkIsBFString
 import org.junit.Test
 import org.junit.Assert.*
 

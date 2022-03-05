@@ -5,7 +5,9 @@ import java.math.MathContext
 import java.math.RoundingMode
 import kotlin.math.abs
 
-// A custom number class inspired by BigDecimal, with better handling of irrational fractions
+// A custom number class inspired by BigDecimal
+// More precise decimal tracking, and ability to handle irrational numbers without specifying precision
+
 
 fun abs(bf: BigFraction): BigFraction = bf.absoluteValue()
 

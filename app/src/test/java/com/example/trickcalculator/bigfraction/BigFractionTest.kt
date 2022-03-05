@@ -42,16 +42,16 @@ class BigFractionTest {
     fun testSimplify() {
         // simplify 0
         var bf = BigFraction(0, 2)
-        var expected = BigFraction(0, 1)
+        var expected = BigFraction(0)
         assertEquals(expected, bf)
 
         bf = BigFraction(0, -6)
-        expected = BigFraction(0, 1)
+        expected = BigFraction(0)
         assertEquals(expected, bf)
 
         // simplify exact division
         bf = BigFraction(4, 2)
-        expected = BigFraction(2, 1)
+        expected = BigFraction(2)
         assertEquals(expected, bf)
 
         bf = BigFraction(2, 4)
@@ -73,8 +73,8 @@ class BigFractionTest {
         assertEquals(expected, bf)
 
         // unchanged
-        bf = BigFraction(0, 1)
-        expected = BigFraction(0, 1)
+        bf = BigFraction(0)
+        expected = BigFraction(0)
         assertEquals(expected, bf)
 
         bf = BigFraction(-4, 3)
