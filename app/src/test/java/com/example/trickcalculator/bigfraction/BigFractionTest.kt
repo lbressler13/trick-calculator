@@ -2,10 +2,9 @@ package com.example.trickcalculator.bigfraction
 
 import org.junit.Test
 import org.junit.Assert.*
-
-// equality for everything
-// cast to big decimal
-// ops with int
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 
 class BigFractionTest {
     @Test
@@ -313,5 +312,43 @@ class BigFractionTest {
         bf = BigFraction(-2, 7)
         expected = Pair(-2, 7)
         assertEquals(expected, bf.toPair())
+    }
+
+    @Test
+    fun testToBigDecimal() {
+        var bf = BigFraction(0)
+        var bd = BigDecimal(0)
+        assertEquals(bd, bf.toBigDecimal())
+
+        bf = BigFraction(10)
+        bd = BigDecimal(10)
+        assertEquals(bd, bf.toBigDecimal())
+
+        bf = BigFraction(-10)
+        bd = BigDecimal(-10)
+        assertEquals(bd, bf.toBigDecimal())
+
+        bf = BigFraction(1, 2)
+        bd = BigDecimal(0.5)
+        assertEquals(bd, bf.toBigDecimal())
+
+        bf = BigFraction(-5, 4)
+        bd = BigDecimal(-1.25)
+        assertEquals(bd, bf.toBigDecimal())
+
+        var mc = MathContext(8, RoundingMode.HALF_UP)
+        bf = BigFraction(-4, 19)
+        bd = BigDecimal(-0.21052632, mc)
+        assertEquals(bd, bf.toBigDecimal(8))
+
+        mc = MathContext(4, RoundingMode.HALF_UP)
+        bf = BigFraction(1, 9)
+        bd = BigDecimal(0.1111, mc)
+        assertEquals(bd, bf.toBigDecimal(4))
+
+        mc = MathContext(20, RoundingMode.HALF_UP)
+        bf = BigFraction(5, 3)
+        bd = BigDecimal(1.66666666666666666667, mc)
+        assertEquals(bd, bf.toBigDecimal())
     }
 }

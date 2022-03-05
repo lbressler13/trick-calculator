@@ -2,6 +2,8 @@ package com.example.trickcalculator.bigfraction
 
 import org.junit.Test
 import org.junit.Assert.*
+import kotlin.Exception
+import kotlin.math.exp
 
 // tests for binary operators
 class BigFractionTest_binary {
@@ -85,6 +87,23 @@ class BigFractionTest_binary {
         second = BigFraction(-1, 3)
         expected = BigFraction(1, 6)
         assertEquals(expected, first + second)
+
+        // numbers
+        var bf = BigFraction(0, 1) + 3
+        expected = BigFraction(3)
+        assertEquals(bf, expected)
+
+        bf = BigFraction(4, 7) + 12
+        expected = BigFraction(88, 7)
+        assertEquals(bf, expected)
+
+        bf = BigFraction(-20, 7) + 3
+        expected = BigFraction(1, 7)
+        assertEquals(bf, expected)
+
+        bf = BigFraction(-12, 5) + 1
+        expected = BigFraction(-7, 5)
+        assertEquals(bf, expected)
     }
 
     @Test
@@ -177,6 +196,23 @@ class BigFractionTest_binary {
         second = BigFraction(-1, 3)
         expected = BigFraction(-4, 24)
         assertEquals(expected, first - second)
+
+        // numbers
+        var bf = BigFraction(0, 1) - 3
+        expected = BigFraction(-3)
+        assertEquals(bf, expected)
+
+        bf = BigFraction(3) - 5L
+        expected = BigFraction(-2L)
+        assertEquals(bf, expected)
+
+        bf = BigFraction(-6) - 20
+        expected = BigFraction(-26)
+        assertEquals(bf, expected)
+
+        bf = BigFraction(3, 7) - 4
+        expected = BigFraction(-25, 7)
+        assertEquals(bf, expected)
     }
 
     @Test
@@ -258,6 +294,27 @@ class BigFractionTest_binary {
         second = BigFraction(7, 6)
         expected = BigFraction(1)
         assertEquals(expected, first * second)
+
+        // numbers
+        var bf = BigFraction(0) * 3
+        expected = BigFraction(0)
+        assertEquals(expected, bf)
+
+        bf = BigFraction(3) * 0
+        expected = BigFraction(0)
+        assertEquals(expected, bf)
+
+        bf = BigFraction(-5) * 4
+        expected = BigFraction(-20)
+        assertEquals(expected, bf)
+
+        bf = BigFraction(5, 3) * 4
+        expected = BigFraction(20, 3)
+        assertEquals(expected, bf)
+
+        bf = BigFraction(-5, 4) * 4
+        expected = BigFraction(-5)
+        assertEquals(expected, bf)
     }
 
     @Test
@@ -346,6 +403,28 @@ class BigFractionTest_binary {
         second = BigFraction(-3, 2)
         expected = BigFraction(-1, 5)
         assertEquals(expected, first / second)
+
+        var bf = BigFraction(1)
+        error = ""
+
+        try {
+            bf / 0
+        } catch (e: ArithmeticException) {
+            error = e.message.toString()
+        }
+        assertEquals("divide by zero", error)
+
+        bf = BigFraction(6) / 3
+        expected = BigFraction(2)
+        assertEquals(expected, bf)
+
+        bf = BigFraction(-6, 7) / 4
+        expected = BigFraction(-6, 28)
+        assertEquals(expected, bf)
+
+        bf = BigFraction(9, 4) / 3
+        expected = BigFraction(3, 4)
+        assertEquals(expected, bf)
     }
 
     @Test
@@ -404,26 +483,11 @@ class BigFractionTest_binary {
 
     @Test
     fun testEquals() {
-        // BigFraction
         assertEquals(BigFraction(0, 1), BigFraction(0, 1))
         assertEquals(BigFraction(-1, 3), BigFraction(-1, 3))
         assertEquals(BigFraction(5, 2), BigFraction(5, 2))
 
         assertNotEquals(BigFraction(1, 3), BigFraction(-1, 3))
         assertNotEquals(BigFraction(2, 3), BigFraction(3, 2))
-
-        // Long
-
-        // Int
-
-        // Short
-
-        // Char
-
-        // Byte
-
-        // BigDecimal
-
-        // Other
     }
 }

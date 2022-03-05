@@ -83,35 +83,13 @@ class BigFraction private constructor() : Number() {
     operator fun div(other: Int): BigFraction = div(BigFraction(other))
 
     override fun equals(other: Any?): Boolean {
-        return when (other) {
-            null -> return false
-            is BigFraction -> {
-                val scaled1 = numerator * other.denominator
-                val scaled2 = other.numerator * denominator
-                scaled1 == scaled2
-            }
-            is Long -> {
-                toLong() == other
-            }
-            is Int -> {
-                toInt() == other
-            }
-            is Short -> {
-                toShort() == other
-            }
-            is Char -> {
-                toChar() == other
-            }
-            is Byte -> {
-                toByte() == other
-            }
-            is BigDecimal -> {
-                val text = other.toString()
-                val bf = parseDecimal(text)
-                equals(bf)
-            }
-            else -> false
+        if (other == null || other !is BigFraction) {
+            return false
         }
+
+        val scaled1 = numerator * other.denominator
+        val scaled2 = other.numerator * denominator
+        return scaled1 == scaled2
     }
 
     operator fun compareTo(other: BigFraction): Int {
@@ -201,7 +179,7 @@ class BigFraction private constructor() : Number() {
     fun toPair(): Pair<Long, Long> = Pair(numerator, denominator)
 
     override fun toByte(): Byte = toLong().toByte()
-    override fun toChar(): Char = toLong().toChar()
+    override fun toChar(): Char = toInt().toChar()
     override fun toShort(): Short = toLong().toShort()
     override fun toInt(): Int = toLong().toInt()
     override fun toLong(): Long = numerator / denominator
@@ -209,8 +187,8 @@ class BigFraction private constructor() : Number() {
     override fun toDouble(): Double = numerator.toDouble() / denominator
     override fun toFloat(): Float = numerator.toFloat() / denominator
 
-    fun toBigDecimal(): BigDecimal {
-        val mc = MathContext(20, RoundingMode.HALF_UP)
+    fun toBigDecimal(precision: Int = 20): BigDecimal {
+        val mc = MathContext(precision, RoundingMode.HALF_UP)
         return BigDecimal(numerator.toDouble() / denominator, mc)
     }
 
