@@ -4,6 +4,7 @@ import org.junit.Test
 import org.junit.Assert.*
 
 // equality for everything
+// cast to big decimal
 // ops with int
 
 class BigFractionTest {
@@ -294,11 +295,11 @@ class BigFractionTest {
     @Test
     fun testToPair() {
         var bf = BigFraction(0)
-        var expected = Pair(0, 1)
+        var expected = Pair(0L, 1L)
         assertEquals(expected, bf.toPair())
 
         bf = BigFraction(1)
-        expected = Pair(1, 1)
+            expected = Pair(1, 1)
         assertEquals(expected, bf.toPair())
 
         bf = BigFraction(2, 7)

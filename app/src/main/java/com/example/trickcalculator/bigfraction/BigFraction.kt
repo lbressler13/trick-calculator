@@ -10,16 +10,16 @@ import kotlin.math.abs
 fun abs(bf: BigFraction): BigFraction = bf.absoluteValue()
 
 class BigFraction private constructor() : Number() {
-    var numerator: Int = 0
-    var denominator: Int = 1
+    var numerator: Long = 0
+    var denominator: Long = 1
 
-    constructor (numerator: Int) : this() {
+    constructor (numerator: Long) : this() {
         this.numerator = numerator
         this.denominator = 1
     }
 
-    constructor (numerator: Int, denominator: Int) : this() {
-        if (denominator == 0) {
+    constructor (numerator: Long, denominator: Long) : this() {
+        if (denominator == 0L) {
             throw ArithmeticException("divide by zero")
         }
 
@@ -28,10 +28,13 @@ class BigFraction private constructor() : Number() {
         simplify()
     }
 
+    constructor (numerator: Int) : this(numerator.toLong())
+    constructor (numerator: Int, denominator: Int) : this(numerator.toLong(), denominator.toLong())
+
     // UNARY OPERATORS
     operator fun unaryMinus(): BigFraction = BigFraction(numerator * -1, denominator)
     operator fun unaryPlus(): BigFraction = BigFraction(numerator, denominator)
-    operator fun not(): Boolean = numerator == 0
+    operator fun not(): Boolean = isZero()
 
     operator fun inc(): BigFraction {
         val newNumerator = numerator + denominator
@@ -58,10 +61,11 @@ class BigFraction private constructor() : Number() {
         return BigFraction(newNumerator, newDenominator)
     }
 
+    operator fun plus(other: Long): BigFraction = plus(BigFraction(other))
     operator fun plus(other: Int): BigFraction = plus(BigFraction(other))
 
     operator fun minus(other: BigFraction): BigFraction = plus(-other)
-
+    operator fun minus(other: Long): BigFraction = plus(-other)
     operator fun minus(other: Int): BigFraction = plus(-other)
 
     operator fun times(other: BigFraction): BigFraction {
@@ -70,10 +74,12 @@ class BigFraction private constructor() : Number() {
         return BigFraction(newNumerator, newDenominator)
     }
 
+    operator fun times(other: Long): BigFraction = times(BigFraction(other))
     operator fun times(other: Int): BigFraction = times(BigFraction(other))
 
     operator fun div(other: BigFraction): BigFraction = times(other.inverse())
 
+    operator fun div(other: Long): BigFraction = div(BigFraction(other))
     operator fun div(other: Int): BigFraction = div(BigFraction(other))
 
     override fun equals(other: Any?): Boolean {
@@ -118,7 +124,7 @@ class BigFraction private constructor() : Number() {
     }
 
     fun inverse(): BigFraction {
-        if (numerator == 0) {
+        if (numerator == 0L) {
             throw ArithmeticException("divide by zero")
         }
 
@@ -129,17 +135,17 @@ class BigFraction private constructor() : Number() {
 
     fun isNegative(): Boolean = numerator < 0
 
-    fun isZero(): Boolean = numerator == 0
+    fun isZero(): Boolean = numerator == 0L
 
     fun simplify() {
-        if (numerator == 0) {
+        if (numerator == 0L) {
             denominator = 1
         }
 
-        if (denominator != 1 && numerator % denominator == 0) {
+        if (denominator != 1L && numerator % denominator == 0L) {
             numerator /= denominator
             denominator = 1
-        } else if (denominator != 1 && denominator % numerator == 0) {
+        } else if (denominator != 1L && denominator % numerator == 0L) {
             denominator /= numerator
             numerator = 1
         }
@@ -168,7 +174,7 @@ class BigFraction private constructor() : Number() {
     // STRING METHODS
 
     fun toDecimalString(digits: Int = 8): String {
-        if (denominator == 1) {
+        if (denominator == 1L) {
             return numerator.toString()
         }
 
@@ -178,7 +184,7 @@ class BigFraction private constructor() : Number() {
         return text.trimEnd('0')
     }
 
-    fun toFractionString(): String = if (denominator == 1) {
+    fun toFractionString(): String = if (denominator == 1L) {
         numerator.toString()
     } else {
         "$numerator/$denominator"
@@ -192,13 +198,13 @@ class BigFraction private constructor() : Number() {
     override fun hashCode(): Int = toPair().hashCode()
 
     // CASTING
-    fun toPair(): Pair<Int, Int> = Pair(numerator, denominator)
+    fun toPair(): Pair<Long, Long> = Pair(numerator, denominator)
 
-    override fun toByte(): Byte = toInt().toByte()
-    override fun toChar(): Char = toInt().toChar()
-    override fun toShort(): Short = toInt().toShort()
-    override fun toInt(): Int = numerator / denominator
-    override fun toLong(): Long = numerator.toLong() / denominator
+    override fun toByte(): Byte = toLong().toByte()
+    override fun toChar(): Char = toLong().toChar()
+    override fun toShort(): Short = toLong().toShort()
+    override fun toInt(): Int = toLong().toInt()
+    override fun toLong(): Long = numerator / denominator
 
     override fun toDouble(): Double = numerator.toDouble() / denominator
     override fun toFloat(): Float = numerator.toFloat() / denominator
