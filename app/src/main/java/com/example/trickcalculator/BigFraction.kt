@@ -1,6 +1,5 @@
 package com.example.trickcalculator
 
-import android.util.Log
 import com.example.trickcalculator.ext.length
 import com.example.trickcalculator.ext.pow
 import com.example.trickcalculator.ext.substringTo
@@ -141,7 +140,6 @@ class BigFraction private constructor() {
 
             val decimal = numDecimal.divide(denomDecimal, 5, RoundingMode.HALF_UP)
             var text = decimal.toString()
-            // Log.e("dec string", text)
 
             if (text.indexOf('.') != -1) {
                 val stripped = text.trimEnd('0')
@@ -198,6 +196,7 @@ class BigFraction private constructor() {
             var currentState: String = unparsed.trim()
 
             val isNegative = unparsed.startsWith("-")
+            val timesNeg = if (isNegative) -1 else 1
             if (isNegative) {
                 currentState = currentState.substring(1)
             }
@@ -207,7 +206,7 @@ class BigFraction private constructor() {
             return when (decimalIndex) {
                 -1 -> {
                     val numerator = Integer.parseInt(currentState)
-                    BigFraction(numerator)
+                    BigFraction(numerator * timesNeg)
                 }
                 0 -> {
                     currentState = currentState.substring(1)
@@ -218,24 +217,22 @@ class BigFraction private constructor() {
                     }
                     val denominator = (10).pow(numerator.length())
 
-                    BigFraction(numerator, denominator)
+                    BigFraction(numerator * timesNeg, denominator)
                 }
                 else -> {
-                    // Log.e("full string", unparsed)
                     val wholeString = currentState.substringTo(decimalIndex)
                     val decimalString = currentState.substring(decimalIndex + 1)
                     val whole = Integer.parseInt(wholeString)
                     val decimal = Integer.parseInt(decimalString)
-                    // Log.e("pieces", Pair(whole, decimal).toString())
 
                     if (decimal == 0) {
-                        return BigFraction(whole) // also covers the case where number is 0
+                        return BigFraction(whole * timesNeg) // also covers the case where number is 0
                     }
 
-                    val denominator = (10).pow(decimal.length())
+                    val denominator = (10).pow(decimalString.length)
                     val numerator = whole * denominator + decimal
 
-                    BigFraction(numerator, denominator)
+                    BigFraction(numerator * timesNeg, denominator)
                 }
             }
         }
