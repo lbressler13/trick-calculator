@@ -1,10 +1,7 @@
 package com.example.trickcalculator.bigfraction
 
-import com.example.trickcalculator.ext.length
 import com.example.trickcalculator.ext.pow
 import com.example.trickcalculator.ext.substringTo
-import com.example.trickcalculator.ext.toBI
-import java.math.BigDecimal
 import java.math.BigInteger
 
 fun parseDecimal(unparsed: String): BigFraction {
@@ -21,18 +18,18 @@ fun parseDecimal(unparsed: String): BigFraction {
     return when (decimalIndex) {
         -1 -> {
             val numerator = BigInteger(currentState)
-            BigFraction(numerator * timesNeg.toBI())
+            BigFraction(numerator * timesNeg)
         }
         0 -> {
             currentState = currentState.substring(1)
             val numerator = BigInteger(currentState)
 
-            if (numerator == 0.toBI()) {
+            if (numerator.isZero()) {
                 return BigFraction(0)
             }
             val denominator = (10).pow(currentState.length)
 
-            BigFraction(numerator * timesNeg.toBI(), denominator.toBI())
+            BigFraction(numerator * timesNeg, denominator)
         }
         else -> {
             val wholeString = currentState.substringTo(decimalIndex)

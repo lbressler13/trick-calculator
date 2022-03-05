@@ -87,9 +87,9 @@ private fun parseText(
     for (element in currentState) {
         when {
             isOperator(element, secondRoundOps) -> currentOperator = element
-            currentOperator == null -> total = BigFraction.parse(element)
+            currentOperator == null -> total = BigFraction(element)
             else -> {
-                val currentVal = BigFraction.parse(element)
+                val currentVal = BigFraction(element)
                 total = performSingleOp(total, currentVal, currentOperator)
             }
         }
@@ -116,8 +116,8 @@ private fun parseFirstRound(
             index++
         } else {
             // don't have to worry about out of bounds or parse errors b/c of validation
-            val leftVal = BigFraction.parse(simplifiedList.last())
-            val rightVal = BigFraction.parse(computeText[index + 1])
+            val leftVal = BigFraction(simplifiedList.last())
+            val rightVal = BigFraction(computeText[index + 1])
             val result = performSingleOp(leftVal, rightVal, element)
             val lastIndex = simplifiedList.lastIndex
 

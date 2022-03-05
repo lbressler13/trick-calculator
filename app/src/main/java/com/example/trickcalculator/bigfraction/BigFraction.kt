@@ -1,11 +1,9 @@
 package com.example.trickcalculator.bigfraction
 
-import com.example.trickcalculator.ext.toBI
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
 import java.math.RoundingMode
-import kotlin.math.abs
 
 // A custom number class inspired by BigDecimal
 // More precise decimal tracking, and ability to handle irrational numbers without specifying precision
@@ -14,16 +12,16 @@ import kotlin.math.abs
 fun abs(bf: BigFraction): BigFraction = bf.absoluteValue()
 
 class BigFraction private constructor() : Number() {
-    var numerator: BigInteger = 0.toBI()
-    var denominator: BigInteger = 1.toBI()
+    var numerator: BigInteger = BigInteger.ZERO
+    var denominator: BigInteger = BigInteger.ONE
 
     constructor (numerator: BigInteger) : this() {
         this.numerator = numerator
-        this.denominator = 1.toBI()
+        this.denominator = BigInteger.ONE
     }
 
     constructor (numerator: BigInteger, denominator: BigInteger) : this() {
-        if (denominator == 0.toBI()) {
+        if (denominator.isZero()) {
             throw ArithmeticException("divide by zero")
         }
 
@@ -32,13 +30,25 @@ class BigFraction private constructor() : Number() {
         simplify()
     }
 
+    constructor (s: String) : this() {
+        val result = parse(s)
+        numerator = result.numerator
+        denominator = result.denominator
+    }
+
     constructor (numerator: Int) : this(numerator.toBI())
     constructor (numerator: Int, denominator: Int) : this(numerator.toBI(), denominator.toBI())
     constructor (numerator: Long) : this(numerator.toBI())
+    constructor (numerator: Long, denominator: Long) : this(numerator.toBI(), denominator.toBI())
+    constructor (numerator: Int, denominator: Long) : this(numerator.toBI(), denominator.toBI())
     constructor (numerator: Long, denominator: Int) : this(numerator.toBI(), denominator.toBI())
+    constructor (numerator: BigInteger, denominator: Int) : this(numerator, denominator.toBI())
+    constructor (numerator: Int, denominator: BigInteger) : this(numerator.toBI(), denominator)
+    constructor (numerator: BigInteger, denominator: Long) : this(numerator, denominator.toBI())
+    constructor (numerator: Long, denominator: BigInteger) : this(numerator.toBI(), denominator)
 
     // UNARY OPERATORS
-    operator fun unaryMinus(): BigFraction = BigFraction(numerator * (-1).toBI(), denominator)
+    operator fun unaryMinus(): BigFraction = BigFraction(-numerator, denominator)
     operator fun unaryPlus(): BigFraction = BigFraction(numerator, denominator)
     operator fun not(): Boolean = isZero()
 
@@ -67,10 +77,12 @@ class BigFraction private constructor() : Number() {
         return BigFraction(newNumerator, newDenominator)
     }
 
-    operator fun plus(other: Long): BigFraction = plus(BigFraction(other))
-    operator fun plus(other: Int): BigFraction = plus(BigFraction(other))
+    operator fun plus(other: BigInteger): BigFraction = plus(other.toBF())
+    operator fun plus(other: Long): BigFraction = plus(other.toBF())
+    operator fun plus(other: Int): BigFraction = plus(other.toBF())
 
     operator fun minus(other: BigFraction): BigFraction = plus(-other)
+    operator fun minus(other: BigInteger): BigFraction = plus(-other)
     operator fun minus(other: Long): BigFraction = plus(-other)
     operator fun minus(other: Int): BigFraction = plus(-other)
 
@@ -80,13 +92,15 @@ class BigFraction private constructor() : Number() {
         return BigFraction(newNumerator, newDenominator)
     }
 
-    operator fun times(other: Long): BigFraction = times(BigFraction(other))
-    operator fun times(other: Int): BigFraction = times(BigFraction(other))
+    operator fun times(other: BigInteger): BigFraction = times(other.toBF())
+    operator fun times(other: Long): BigFraction = times(other.toBF())
+    operator fun times(other: Int): BigFraction = times(other.toBF())
 
     operator fun div(other: BigFraction): BigFraction = times(other.inverse())
 
-    operator fun div(other: Long): BigFraction = div(BigFraction(other))
-    operator fun div(other: Int): BigFraction = div(BigFraction(other))
+    operator fun div(other: BigInteger): BigFraction = div(other.toBF())
+    operator fun div(other: Long): BigFraction = div(other.toBF())
+    operator fun div(other: Int): BigFraction = div(other.toBF())
 
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is BigFraction) {
@@ -98,6 +112,10 @@ class BigFraction private constructor() : Number() {
         return scaled1 == scaled2
     }
 
+    fun eq(other: Int): Boolean = numerator.eq(other) && denominator.eq(1)
+    fun eq(other: Long): Boolean = numerator.eq(other) && denominator.eq(1)
+    fun eq(other: BigInteger): Boolean = numerator == other && denominator.eq(1)
+
     operator fun compareTo(other: BigFraction): Int {
         val difference = minus(other)
         return when {
@@ -107,8 +125,12 @@ class BigFraction private constructor() : Number() {
         }
     }
 
+    operator fun compareTo(other: Int): Int = compareTo(other.toBF())
+    operator fun compareTo(other: Long): Int = compareTo(other.toBF())
+    operator fun compareTo(other: BigInteger): Int = compareTo(other.toBF())
+
     fun inverse(): BigFraction {
-        if (numerator == 0.toBI()) {
+        if (numerator.eq(0)) {
             throw ArithmeticException("divide by zero")
         }
 
@@ -117,21 +139,20 @@ class BigFraction private constructor() : Number() {
 
     fun absoluteValue(): BigFraction = BigFraction(numerator.abs(), denominator)
 
-    fun isNegative(): Boolean = numerator < 0.toBI()
-
-    fun isZero(): Boolean = numerator == 0.toBI()
+    fun isNegative(): Boolean = numerator < BigInteger.ZERO
+    fun isZero(): Boolean = numerator.eq(0)
 
     fun simplify() {
-        if (numerator == 0.toBI()) {
-            denominator = 1.toBI()
+        if (numerator.eq(0)) {
+            denominator = BigInteger.ONE
         }
 
-        if (denominator != 1.toBI() && numerator % denominator == 0.toBI()) {
+        if (!denominator.eq(1) && (numerator % denominator).eq(0)) {
             numerator /= denominator
-            denominator = 1.toBI()
-        } else if (denominator != 1.toBI() && denominator % numerator == 0.toBI()) {
+            denominator = BigInteger.ONE
+        } else if (!denominator.eq(1) && (denominator % numerator).eq(0)) {
             denominator /= numerator
-            numerator = 1.toBI()
+            numerator = BigInteger.ONE
         }
         // TODO use GCF
 
@@ -140,8 +161,8 @@ class BigFraction private constructor() : Number() {
 
     // move negatives to numerator
     private fun setSign() {
-        val numNegative = numerator < 0.toBI()
-        val denomNegative = denominator < 0.toBI()
+        val numNegative = numerator < 0
+        val denomNegative = denominator < 0
 
         when {
             numNegative && denomNegative -> {
@@ -149,7 +170,7 @@ class BigFraction private constructor() : Number() {
                 denominator = denominator.abs()
             }
             !numNegative && denomNegative -> {
-                numerator *= (-1).toBI()
+                numerator *= -1
                 denominator = denominator.abs()
             }
         }
@@ -158,7 +179,7 @@ class BigFraction private constructor() : Number() {
     // STRING METHODS
 
     fun toDecimalString(digits: Int = 8): String {
-        if (denominator == 1.toBI()) {
+        if (denominator.eq(1)) {
             return numerator.toString()
         }
 
@@ -168,7 +189,7 @@ class BigFraction private constructor() : Number() {
         return text.trimEnd('0')
     }
 
-    fun toFractionString(): String = if (denominator == 1.toBI()) {
+    fun toFractionString(): String = if (denominator.eq(1)) {
         numerator.toString()
     } else {
         "$numerator/$denominator"
@@ -193,6 +214,8 @@ class BigFraction private constructor() : Number() {
     override fun toDouble(): Double = (numerator.toBigDecimal() / denominator.toBigDecimal()).toDouble()
     override fun toFloat(): Float = (numerator.toBigDecimal() / denominator.toBigDecimal()).toFloat()
 
+    fun toBigInteger(): BigInteger = numerator / denominator
+    fun toBI(): BigInteger = toBigInteger()
     fun toBigDecimal(precision: Int = 20): BigDecimal {
         val mc = MathContext(precision, RoundingMode.HALF_UP)
         return numerator.toBigDecimal().divide(denominator.toBigDecimal(), mc)
