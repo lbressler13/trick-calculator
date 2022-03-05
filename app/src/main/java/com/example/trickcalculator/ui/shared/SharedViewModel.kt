@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.BigFraction
 import com.example.trickcalculator.ext.copyWithLastReplaced
+import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.ext.substringTo
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 import com.example.trickcalculator.utils.isPartialDecimal
-import java.math.BigDecimal
 
 class SharedViewModel : ViewModel() {
     // list of numbers and operators
@@ -89,21 +89,28 @@ class SharedViewModel : ViewModel() {
         }
     }
 
+    fun finalizeComputeText() {
+        val computedVal = computedValue.value
+        val currentText = computeText.value
+
+        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toString()
+
+        if (computedVal != null && computeMatch) {
+            computeText.value = currentText?.copyWithReplacement(0, computedVal.toBFString())
+        }
+    }
+
+    fun restoreComputeText() {
+        val computedVal = computedValue.value
+        val currentText = computeText.value
+        if (computedVal != null) {
+            computeText.value = currentText?.copyWithReplacement(0, computedVal.toString())
+        }
+    }
+
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
         val computed: BigFraction = computedValue.value!!
-//        var computeString = computed.toString()
-//
-//        if (computeString.indexOf('.') != -1) {
-//            val stripped = computeString.trimEnd('0')
-//
-//            computeString = when {
-//                stripped == "." -> "0"
-//                stripped.last() == '.' -> stripped.substringTo(stripped.lastIndex)
-//                else -> stripped
-//            }
-//        }
-
         computeText.value = listOf(computed.toString())
     }
 

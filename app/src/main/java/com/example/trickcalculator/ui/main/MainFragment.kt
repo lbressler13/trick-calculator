@@ -115,6 +115,8 @@ class MainFragment : Fragment() {
     // set op order, num order, run computation, and update viewmodel
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
+            viewModel.finalizeComputeText()
+
             // set action for each operator
             val operators = if (shuffleOperators) {
                 listOf("+", "-", "x", "/").shuffled()
@@ -154,6 +156,8 @@ class MainFragment : Fragment() {
                 viewModel.useComputedAsComputeText()
                 viewModel.setError(null)
             } catch (e: Exception) {
+                viewModel.restoreComputeText()
+
                 val error: String = if (e.message == null) {
                     "Computation error"
                 } else {

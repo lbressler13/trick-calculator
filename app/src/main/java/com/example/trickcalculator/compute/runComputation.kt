@@ -129,7 +129,7 @@ private fun parseFirstRound(
             val result = performSingleOp(leftVal, rightVal, element)
             val lastIndex = simplifiedList.lastIndex
 
-            simplifiedList[lastIndex] = result.toString()
+            simplifiedList[lastIndex] = result.toBFString()
 
             // skip past next value, which was already used as rightValue
             index += 2

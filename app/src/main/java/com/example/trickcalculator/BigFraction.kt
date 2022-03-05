@@ -3,8 +3,6 @@ package com.example.trickcalculator
 import com.example.trickcalculator.ext.length
 import com.example.trickcalculator.ext.pow
 import com.example.trickcalculator.ext.substringTo
-import java.math.BigDecimal
-import java.math.RoundingMode
 import kotlin.math.abs
 
 // TODO implement Number
@@ -96,91 +94,73 @@ class BigFraction private constructor() {
         return BigFraction(denominator, numerator)
     }
 
-        fun isNegative(): Boolean = numerator < 0
+    fun isNegative(): Boolean = numerator < 0
 
-        fun isZero(): Boolean = numerator == 0
+    fun isZero(): Boolean = numerator == 0
 
-        fun simplify() {
-            if (numerator == 0) {
-                denominator = 1
+    fun simplify() {
+        if (numerator == 0) {
+            denominator = 1
+        }
+
+        if (denominator != 1 && numerator % denominator == 0) {
+            numerator /= denominator
+            denominator = 1
+        } else if (denominator != 1 && denominator % numerator == 0) {
+            denominator /= numerator
+            numerator = 1
+        }
+        // TODO use GCF
+
+        setSign()
+    }
+
+    // move negatives to numerator
+    private fun setSign() {
+        val numNegative = numerator < 0
+        val denomNegative = denominator < 0
+
+        when {
+            numNegative && denomNegative -> {
+                numerator = abs(numerator)
+                denominator = abs(denominator)
             }
-
-            if (denominator != 1 && numerator % denominator == 0) {
-                numerator /= denominator
-                denominator = 1
-            } else if (denominator != 1 && denominator % numerator == 0) {
-                denominator /= numerator
-                numerator = 1
-            }
-            // TODO use GCF
-
-            setSign()
-        }
-
-        // move negatives to numerator
-        private fun setSign() {
-            val numNegative = numerator < 0
-            val denomNegative = denominator < 0
-
-            when {
-                numNegative && denomNegative -> {
-                    numerator = abs(numerator)
-                    denominator = abs(denominator)
-                }
-                !numNegative && denomNegative -> {
-                    numerator *= -1
-                    denominator = abs(denominator)
-                }
+            !numNegative && denomNegative -> {
+                numerator *= -1
+                denominator = abs(denominator)
             }
         }
+    }
 
-        fun toDecimalString(): String {
-            val numDecimal = BigDecimal(numerator)
-            val denomDecimal = BigDecimal(denominator)
-
-            val decimal = numDecimal.divide(denomDecimal, 5, RoundingMode.HALF_UP)
-            var text = decimal.toString()
-
-            if (text.indexOf('.') != -1) {
-                val stripped = text.trimEnd('0')
-
-                text = when {
-                    stripped == "." -> "0"
-                    stripped.last() == '.' -> stripped.substringTo(stripped.lastIndex)
-                    else -> stripped
-                }
-            }
-
-            return text
+    fun toDecimalString(): String {
+        if (denominator == 1) {
+            return numerator.toString()
         }
 
-        fun toFractionString(): String {
-            if (denominator == 1) {
-                return numerator.toString()
-            }
+        val decimal = numerator.toDouble() / denominator.toDouble()
 
-            return "$numerator/$denominator"
-        }
+        val text = "%.8f".format(decimal)
+        return text.trimEnd('0')
+    }
 
-        fun toPairString(): String {
-            return "($numerator, $denominator)"
-        }
+    fun toFractionString(): String = if (denominator == 1) {
+        numerator.toString()
+    } else {
+        "$numerator/$denominator"
+    }
 
-        override fun toString(): String {
-            return toDecimalString()
-        }
+    fun toPairString(): String = "($numerator, $denominator)"
 
-        override fun hashCode(): Int {
-            return Pair(numerator, denominator).hashCode()
-        }
+    fun toBFString(): String = "BF[$numerator $denominator]"
 
-        // CASTING
-        fun toPair(): Pair<Int, Int> {
-            return Pair(numerator, denominator)
-        }
+    override fun toString(): String = toDecimalString()
 
+    override fun hashCode(): Int = Pair(numerator, denominator).hashCode()
 
-        companion object {
+    // CASTING
+    fun toPair(): Pair<Int, Int> = Pair(numerator, denominator)
+
+    companion object {
         val ZERO = BigFraction(0)
         val ONE = BigFraction(1)
         val TWO = BigFraction(2)
@@ -192,7 +172,7 @@ class BigFraction private constructor() {
         val EIGHT = BigFraction(8)
         val NINE = BigFraction(9)
 
-        fun parse(unparsed: String): BigFraction {
+        private fun parseDecimal(unparsed: String): BigFraction {
             var currentState: String = unparsed.trim()
 
             val isNegative = unparsed.startsWith("-")
@@ -234,6 +214,36 @@ class BigFraction private constructor() {
 
                     BigFraction(numerator * timesNeg, denominator)
                 }
+            }
+        }
+
+        private fun parseBFString(unparsed: String): BigFraction {
+            val numbers = unparsed.substring(3, unparsed.lastIndex)
+            val split = numbers.split(' ')
+            val numString = split[0].trim()
+            val denomString = split[1].trim()
+            val numerator = Integer.parseInt(numString)
+            val denominator = Integer.parseInt(denomString)
+            return BigFraction(numerator, denominator)
+        }
+
+        fun parse(s: String): BigFraction {
+            if (s.startsWith("BF")) {
+                return parseBFString(s)
+            }
+
+            return parseDecimal(s)
+        }
+
+        fun isBFString(s: String): Boolean {
+            return try {
+                val startEnd = s.trim().startsWith("BF[") && s.trim().endsWith("]")
+                val split = s.substring(3, s.lastIndex).split(" ")
+                Integer.parseInt(split[0])
+                Integer.parseInt(split[1])
+                startEnd
+            } catch (e: Exception) {
+                false
             }
         }
     }
