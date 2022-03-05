@@ -37,8 +37,8 @@ class BigFraction private constructor() : Number() {
     }
 
     constructor (numerator: Int) : this(numerator.toBI())
-    constructor (numerator: Int, denominator: Int) : this(numerator.toBI(), denominator.toBI())
     constructor (numerator: Long) : this(numerator.toBI())
+    constructor (numerator: Int, denominator: Int) : this(numerator.toBI(), denominator.toBI())
     constructor (numerator: Long, denominator: Long) : this(numerator.toBI(), denominator.toBI())
     constructor (numerator: Int, denominator: Long) : this(numerator.toBI(), denominator.toBI())
     constructor (numerator: Long, denominator: Int) : this(numerator.toBI(), denominator.toBI())
@@ -211,8 +211,19 @@ class BigFraction private constructor() : Number() {
     override fun toInt(): Int = (numerator / denominator).toInt()
     override fun toLong(): Long = (numerator / denominator).toLong()
 
-    override fun toDouble(): Double = (numerator.toBigDecimal() / denominator.toBigDecimal()).toDouble()
-    override fun toFloat(): Float = (numerator.toBigDecimal() / denominator.toBigDecimal()).toFloat()
+    override fun toDouble(): Double {
+        val mc = MathContext(20, RoundingMode.HALF_UP)
+        val numDecimal = numerator.toBigDecimal()
+        val denomDecimal = denominator.toBigDecimal()
+        return numDecimal.divide(denomDecimal, mc).toDouble()
+    }
+
+    override fun toFloat(): Float {
+        val mc = MathContext(20, RoundingMode.HALF_UP)
+        val numDecimal = numerator.toBigDecimal()
+        val denomDecimal = denominator.toBigDecimal()
+        return numDecimal.divide(denomDecimal, mc).toFloat()
+    }
 
     fun toBigInteger(): BigInteger = numerator / denominator
     fun toBI(): BigInteger = toBigInteger()
@@ -232,6 +243,7 @@ class BigFraction private constructor() : Number() {
         val SEVEN = BigFraction(7)
         val EIGHT = BigFraction(8)
         val NINE = BigFraction(9)
+        val NEG_ONE = BigFraction(-1)
 
         fun parse(s: String): BigFraction {
             if (isBFString(s)) {

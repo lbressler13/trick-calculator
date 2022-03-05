@@ -2,6 +2,9 @@ package com.example.trickcalculator.bigfraction
 
 import org.junit.Assert.*
 
+// TODO include other types
+// TODO eq
+
 fun runPlusTests() {
     // add zero
     var first = BigFraction(0)
