@@ -205,6 +205,18 @@ class BigFractionTest {
         bf = BigFraction(-4, 19)
         expected = "-0.21052632"
         assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(3, 8)
+        expected = "0.38"
+        assertEquals(expected, bf.toDecimalString(2))
+
+        bf = BigFraction(-1, 9)
+        expected = "-0.111111111111"
+        assertEquals(expected, bf.toDecimalString(12))
+
+        bf = BigFraction(-4, 19)
+        expected = "-0.21053"
+        assertEquals(expected, bf.toDecimalString(5))
     }
 
     @Test

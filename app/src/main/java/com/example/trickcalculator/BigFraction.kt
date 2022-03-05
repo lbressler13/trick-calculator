@@ -5,6 +5,8 @@ import com.example.trickcalculator.ext.pow
 import com.example.trickcalculator.ext.substringTo
 import kotlin.math.abs
 
+// A custom number class inspired by BigDecimal, with better handling of irrational fractions
+
 // TODO implement Number
 class BigFraction private constructor() {
     var numerator: Int = 0
@@ -132,14 +134,14 @@ class BigFraction private constructor() {
         }
     }
 
-    fun toDecimalString(): String {
+    fun toDecimalString(digits: Int = 8): String {
         if (denominator == 1) {
             return numerator.toString()
         }
 
         val decimal = numerator.toDouble() / denominator.toDouble()
 
-        val text = "%.8f".format(decimal)
+        val text = "%.${digits}f".format(decimal)
         return text.trimEnd('0')
     }
 
