@@ -1,5 +1,6 @@
 package com.example.trickcalculator.compute
 
+import androidx.core.text.isDigitsOnly
 import com.example.trickcalculator.bigfraction.BigFraction
 import com.example.trickcalculator.utils.*
 import java.lang.NumberFormatException
@@ -38,17 +39,8 @@ fun runComputation(
     return try {
         parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
     } catch (e: NumberFormatException) {
-        val startIndex = e.message?.indexOf("\"")
-        val endIndex = e.message?.lastIndexOf("\"")
-
-        val newError = if (startIndex != null && endIndex != null && endIndex - startIndex > 0) {
-            val symbol = e.message?.substring(startIndex + 1, endIndex)
-            "Cannot parse symbol $symbol"
-        } else {
-            "Parse error"
-        }
-
-        throw Exception(newError)
+        val error = getParsingError(e.message!!)
+        throw Exception(error)
     }
 }
 
@@ -184,7 +176,8 @@ private fun addMultToParens(computeText: StringList): StringList {
         // check for number next to closed set of parens, or adjacent sets of parens
         if ((lastType == "number" && currentType == "lparen") ||
             (lastType == "rparen" && currentType == "number") ||
-            (lastType == "rparen" && currentType == "lparen")) {
+            (lastType == "rparen" && currentType == "lparen")
+        ) {
             augmentedList.add("x")
             augmentedList.add(it)
         } else {
@@ -230,4 +223,30 @@ private fun stripDecimals(computeText: StringList): StringList {
     return computeText.map { element ->
         element.filter { it != '.' }
     }
+}
+
+private fun getParsingError(error: String): String {
+    val startIndex = error.indexOf("\"")
+    val endIndex = error.lastIndexOf("\"")
+
+    if (endIndex - startIndex <= 0) {
+        return "Parse error"
+    }
+
+    val symbol = error.substring(startIndex + 1, endIndex)
+
+    val decimalIndex = symbol.indexOf('.')
+
+    if (decimalIndex == -1 && symbol.isDigitsOnly()) {
+        return "Number overflow on value $symbol"
+    }
+
+    if (decimalIndex != -1) {
+        val split = symbol.split('.')
+        if (split.size < 3 && split.all { it.isDigitsOnly() }) {
+            return "Number overflow on value $symbol"
+        }
+    }
+
+    return "Cannot parse symbol $symbol"
 }
