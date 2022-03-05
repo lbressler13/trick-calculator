@@ -4,9 +4,8 @@ import org.junit.Test
 import org.junit.Assert.*
 
 class BigFractionTest {
-    // CONSTRUCTORS
     @Test
-    fun testConstructors() {
+    fun testConstructor() {
         var bf = BigFraction(0)
         assertEquals(0, bf.numerator)
         assertEquals(1, bf.denominator)
@@ -136,31 +135,146 @@ class BigFractionTest {
     }
 
     @Test
-    fun testIsNegative() {}
+    fun testIsNegative() {
+        var bf = BigFraction(0)
+        assert(!bf.isNegative())
+
+        bf = BigFraction(1)
+        assert(!bf.isNegative())
+
+        bf = BigFraction(2, 7)
+        assert(!bf.isNegative())
+
+        bf = BigFraction(-1)
+        assert(bf.isNegative())
+
+        bf = BigFraction(-2, 7)
+        assert(bf.isNegative())
+    }
 
     @Test
-    fun testIsZero() {}
+    fun testIsZero() {
+        var bf = BigFraction(0)
+        assert(bf.isZero())
+
+        bf = BigFraction(1)
+        assert(!bf.isZero())
+
+        bf = BigFraction(2, 7)
+        assert(!bf.isZero())
+
+        bf = BigFraction(-1)
+        assert(!bf.isZero())
+
+        bf = BigFraction(-2, 7)
+        assert(!bf.isZero())
+    }
 
     // TO STRING
 
     @Test
-    fun toDecimalString() {}
+    fun toDecimalString() {
+        var bf = BigFraction(0)
+        var expected = "0"
+        assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(4)
+        expected = "4"
+        assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(-3)
+        expected = "-3"
+        assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(1, 2)
+        expected = "0.5"
+        assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(3, 8)
+        expected = "0.375"
+        assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(-1, 9)
+        expected = "-0.11111"
+        assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(5, 9)
+        expected = "0.55556"
+        assertEquals(expected, bf.toDecimalString())
+
+        bf = BigFraction(-4, 19)
+        expected = "-0.21053"
+        assertEquals(expected, bf.toDecimalString())
+    }
 
     @Test
-    fun toFractionString() {}
+    fun toFractionString() {
+        var bf = BigFraction(0)
+        var expected = "0"
+        assertEquals(expected, bf.toFractionString())
+
+        bf = BigFraction(4)
+        expected = "4"
+        assertEquals(expected, bf.toFractionString())
+
+        bf = BigFraction(-3)
+        expected = "-3"
+        assertEquals(expected, bf.toFractionString())
+
+        bf = BigFraction(2, 7)
+        expected = "2/7"
+        assertEquals(expected, bf.toFractionString())
+
+        bf = BigFraction(-7, 2)
+        expected = "-7/2"
+        assertEquals(expected, bf.toFractionString())
+    }
 
     @Test
-    fun testToPairString() {}
+    fun testToPairString() {
+        var bf = BigFraction(0)
+        var expected = "(0, 1)"
+        assertEquals(expected, bf.toPairString())
+
+        bf = BigFraction(4)
+        expected = "(4, 1)"
+        assertEquals(expected, bf.toPairString())
+
+        bf = BigFraction(-3)
+        expected = "(-3, 1)"
+        assertEquals(expected, bf.toPairString())
+
+        bf = BigFraction(2, 7)
+        expected = "(2, 7)"
+        assertEquals(expected, bf.toPairString())
+
+        bf = BigFraction(-7, 2)
+        expected = "(-7, 2)"
+        assertEquals(expected, bf.toPairString())
+    }
 
     @Test
-    fun testHashCode() {}
+    fun testToPair() {
+        var bf = BigFraction(0)
+        var expected = Pair(0, 1)
+        assertEquals(expected, bf.toPair())
 
-    // CASTING
+        bf = BigFraction(1)
+        expected = Pair(1, 1)
+        assertEquals(expected, bf.toPair())
 
-    @Test
-    fun testToPair() {}
+        bf = BigFraction(2, 7)
+        expected = Pair(2, 7)
+        assertEquals(expected, bf.toPair())
 
-    // OBJECT FUNCTIONS
+        bf = BigFraction(-1)
+        expected = Pair(-1, 1)
+        assertEquals(expected, bf.toPair())
+
+        bf = BigFraction(-2, 7)
+        expected = Pair(-2, 7)
+        assertEquals(expected, bf.toPair())
+    }
 
     @Test
     fun testParse() {}

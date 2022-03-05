@@ -157,6 +157,10 @@ class BigFraction private constructor() {
         }
 
         fun toFractionString(): String {
+            if (denominator == 1) {
+                return numerator.toString()
+            }
+
             return "$numerator/$denominator"
         }
 
