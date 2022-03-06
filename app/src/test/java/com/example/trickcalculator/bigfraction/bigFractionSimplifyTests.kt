@@ -1,68 +1,86 @@
 package com.example.trickcalculator.bigfraction
 
-import org.junit.Assert
+import org.junit.Assert.*
 
 fun runSimplifyTests() {
-    // simplify 0
-    var bf = BigFraction(0, 2)
-    var expected = BigFraction(0)
-    Assert.assertEquals(expected, bf)
+    runSimplifyZeroTests()
+    runSimplifyGCDTests()
+    runSimplifySignTests()
 
-    bf = BigFraction(0, -6)
-    expected = BigFraction(0)
-    Assert.assertEquals(expected, bf)
-
-    // simplify exact division
-    bf = BigFraction(4, 2)
-    expected = BigFraction(2)
-    Assert.assertEquals(expected, bf)
-
-    bf = BigFraction(2, 4)
-    expected = BigFraction(1, 2)
-    Assert.assertEquals(expected, bf)
-
-    // simplify sign
-    bf = BigFraction(-3, -4)
-    expected = BigFraction(3, 4)
-    Assert.assertEquals(expected, bf)
-
-    bf = BigFraction(1, -3)
-    expected = BigFraction(-1, 3)
-    Assert.assertEquals(expected, bf)
 
     // multiple simplifications
-    bf = BigFraction(3, -9)
-    expected = BigFraction(-1, 3)
-    Assert.assertEquals(expected, bf)
+    var bf = BigFraction(3, -9)
+    assert(bf.numerator.eq(-1))
+    assert(bf.denominator.eq(3))
+
+    bf = BigFraction(-18, -12)
+    assert(bf.numerator.eq(3))
+    assert(bf.denominator.eq(2))
 
     // unchanged
     bf = BigFraction(0)
-    expected = BigFraction(0)
-    Assert.assertEquals(expected, bf)
+    assert(bf.numerator.eq(0))
+    assert(bf.denominator.eq(1))
 
     bf = BigFraction(-4, 3)
-    expected = BigFraction(-4, 3)
-    Assert.assertEquals(expected, bf)
+    assert(bf.numerator.eq(-4))
+    assert(bf.denominator.eq(3))
 
     bf = BigFraction(5, 7)
-    expected = BigFraction(5, 7)
-    Assert.assertEquals(expected, bf)
+    assert(bf.numerator.eq(5))
+    assert(bf.denominator.eq(7))
 }
 
-fun runSetSignTests() {
+private fun runSimplifyZeroTests() {
+    var bf = BigFraction(0, 2)
+    assert(bf.numerator.eq(0))
+    assert(bf.denominator.eq(1))
+
+    bf = BigFraction(0, 6)
+    assert(bf.numerator.eq(0))
+    assert(bf.denominator.eq(1))
+
+    bf = BigFraction(0, -6)
+    assert(bf.numerator.eq(0))
+    assert(bf.denominator.eq(1))
+}
+
+private fun runSimplifySignTests() {
     var bf = BigFraction(-3, -4)
-    var expected = BigFraction(3, 4)
-    Assert.assertEquals(expected, bf)
+    assert(bf.numerator.eq(3))
+    assert(bf.denominator.eq(4))
 
     bf = BigFraction(1, -3)
-    expected = BigFraction(-1, 3)
-    Assert.assertEquals(expected, bf)
+    assert(bf.numerator.eq(-1))
+    assert(bf.denominator.eq(3))
 
     bf = BigFraction(1, 3)
-    expected = BigFraction(1, 3)
-    Assert.assertEquals(expected, bf)
+    assert(bf.numerator.eq(1))
+    assert(bf.denominator.eq(3))
 
     bf = BigFraction(-5, 2)
-    expected = BigFraction(-5, 2)
-    Assert.assertEquals(expected, bf)
+    assert(bf.numerator.eq(-5))
+    assert(bf.denominator.eq(2))
+}
+
+private fun runSimplifyGCDTests() {
+    var bf = BigFraction(48, 10)
+    assert(bf.numerator.eq(24))
+    assert(bf.denominator.eq(5))
+
+    bf = BigFraction(-462, 1071)
+    assert(bf.numerator.eq(-22))
+    assert(bf.denominator.eq(51))
+
+    bf = BigFraction(5, 9)
+    assert(bf.numerator.eq(5))
+    assert(bf.denominator.eq(9))
+
+    bf = BigFraction(9, 3)
+    assert(bf.numerator.eq(3))
+    assert(bf.denominator.eq(1))
+
+    bf = BigFraction(10, 100)
+    assert(bf.numerator.eq(1))
+    assert(bf.denominator.eq(10))
 }

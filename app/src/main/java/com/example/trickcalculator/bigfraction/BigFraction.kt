@@ -6,7 +6,7 @@ import java.math.MathContext
 import java.math.RoundingMode
 
 // A custom number class inspired by BigDecimal
-// More precise decimal tracking, and ability to handle irrational numbers without specifying precision
+// More precise decimal tracking, and ability to handle infinite decimals without specifying precision
 
 
 fun abs(bf: BigFraction): BigFraction = bf.absoluteValue()
@@ -142,20 +142,20 @@ class BigFraction private constructor() : Number() {
     fun isNegative(): Boolean = numerator < BigInteger.ZERO
     fun isZero(): Boolean = numerator.eq(0)
 
-    fun simplify() {
+    private fun simplify() {
+        simplifyZero()
+        simplifyGCD()
+        simplifySign()
+    }
+
+    private fun simplifyZero() {
         if (numerator.eq(0)) {
             denominator = BigInteger.ONE
         }
-
-        val gcd = getGCD()
-        numerator /= gcd
-        denominator /= gcd
-
-        setSign()
     }
 
     // move negatives to numerator
-    private fun setSign() {
+    private fun simplifySign() {
         val numNegative = numerator < 0
         val denomNegative = denominator < 0
 
@@ -172,23 +172,27 @@ class BigFraction private constructor() : Number() {
     }
 
     // get greatest common divisor using euclidean algorithm
-    private fun getGCD(): BigInteger {
-        var sum = if (numerator > denominator) numerator else denominator
-        var value = if (numerator > denominator) denominator else numerator
-        var finished = false
+    private fun simplifyGCD() {
+        if (!numerator.isZero()) {
+            var sum = if (numerator > denominator) numerator else denominator
+            var value = if (numerator > denominator) denominator else numerator
+            var finished = false
 
-        while (!finished) {
-            val remainder = sum % value
+            while (!finished) {
+                val remainder = sum % value
 
-            if (remainder == BigInteger.ZERO) {
-                finished = true
-            } else {
-                sum = value
-                value = remainder
+                if (remainder == BigInteger.ZERO) {
+                    finished = true
+                } else {
+                    sum = value
+                    value = remainder
+                }
             }
-        }
 
-        return value
+            val gcd = value
+            numerator /= gcd
+            denominator /= gcd
+        }
     }
 
     // STRING METHODS

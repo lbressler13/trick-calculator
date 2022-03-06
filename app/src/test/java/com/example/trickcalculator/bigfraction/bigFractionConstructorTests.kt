@@ -28,9 +28,9 @@ fun runConstructorTests() {
 // thorough testing is done in parsing tests
 private fun testStringConstructor() {
     // Decimal string
-    var bf = BigFraction("1.5")
-    assertEquals(15.toBI(), bf.numerator)
-    assertEquals(10.toBI(), bf.denominator)
+    var bf = BigFraction("1.51")
+    assertEquals(151.toBI(), bf.numerator)
+    assertEquals(100.toBI(), bf.denominator)
 
     // BF string
     bf = BigFraction("BF[-7 3]")
@@ -125,8 +125,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(neg18, pos4)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(neg7, pos4)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // Int, Int
@@ -159,8 +159,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(-18, 4)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(-7, 4)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // Long, Long
@@ -193,8 +193,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(-18L, 4L)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(-7L, 4L)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // BigInteger, Int
@@ -227,8 +227,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(neg18, 4)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(neg7, 4)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // Int, BigInteger
@@ -261,8 +261,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(-18, pos4)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(-7, pos4)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // Int, Long
@@ -295,8 +295,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(-18, 4L)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(-7, 4L)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // Long, Int
@@ -329,8 +329,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(-18L, 4)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(-7L, 4)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // BigInteger, Long
@@ -363,8 +363,8 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(neg18, 4L)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(neg7, 4L)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 
     // Long, BigInteger
@@ -397,7 +397,7 @@ private fun testPairValConstructor() {
     assertEquals(neg1, bf.numerator)
     assertEquals(pos3, bf.denominator)
 
-    bf = BigFraction(-18L, pos4)
-    assertEquals(neg18, bf.numerator)
+    bf = BigFraction(-7L, pos4)
+    assertEquals(neg7, bf.numerator)
     assertEquals(pos4, bf.denominator)
 }

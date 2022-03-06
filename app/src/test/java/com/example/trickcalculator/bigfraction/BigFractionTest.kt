@@ -2,13 +2,14 @@ package com.example.trickcalculator.bigfraction
 
 import org.junit.Test
 
+// TODO fix tests b/c of euclidean algo
+
 class BigFractionTest {
     // all constructors
     @Test fun testConstructor() = runConstructorTests()
 
     // simplify
     @Test fun testSimplify() = runSimplifyTests()
-    @Test fun testSetSign() = runSetSignTests()
 
     // unary operators
     @Test fun testUnaryMinus() = runUnaryMinusTests()
