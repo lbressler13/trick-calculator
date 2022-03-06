@@ -205,24 +205,92 @@ class BigFraction private constructor() : Number() {
     // CASTING
     fun toPair(): Pair<BigInteger, BigInteger> = Pair(numerator, denominator)
 
-    override fun toByte(): Byte = (numerator / denominator).toByte()
-    override fun toChar(): Char = (numerator / denominator).toChar()
-    override fun toShort(): Short = (numerator / denominator).toShort()
-    override fun toInt(): Int = (numerator / denominator).toInt()
-    override fun toLong(): Long = (numerator / denominator).toLong()
+    override fun toByte(): Byte {
+        val value = numerator / denominator
+        val maxByte = Byte.MAX_VALUE.toInt().toBigInteger()
+        val minByte = Byte.MIN_VALUE.toInt().toBigInteger()
+        if (value in minByte..maxByte) {
+            return value.toByte()
+        }
+
+        throw ArithmeticException("Overflow when casting to Byte")
+    }
+
+    override fun toChar(): Char {
+        val value = numerator / denominator
+        val maxChar = Char.MAX_VALUE.code.toBigInteger()
+        val minChar = Char.MIN_VALUE.code.toBigInteger()
+        if (value in minChar..maxChar) {
+            return value.toInt().toChar()
+        }
+
+        throw ArithmeticException("Overflow when casting to Char")
+    }
+
+    override fun toShort(): Short {
+        val value = numerator / denominator
+        val maxShort = Short.MAX_VALUE.toInt().toBigInteger()
+        val minShort = Short.MIN_VALUE.toInt().toBigInteger()
+        if (value in minShort..maxShort) {
+            return value.toShort()
+        }
+
+        throw ArithmeticException("Overflow when casting to Short")
+    }
+
+    override fun toInt(): Int {
+        val value = numerator / denominator
+        val maxInt = Int.MAX_VALUE.toBigInteger()
+        val minInt = Int.MIN_VALUE.toBigInteger()
+        if (value in minInt..maxInt) {
+            return value.toInt()
+        }
+
+        throw ArithmeticException("Overflow when casting to Int")
+    }
+
+
+    override fun toLong(): Long {
+        val value = numerator / denominator
+        val maxLong = Long.MAX_VALUE.toBigInteger()
+        val minLong = Long.MIN_VALUE.toBigInteger()
+        if (value in minLong..maxLong) {
+            return value.toLong()
+        }
+
+        throw ArithmeticException("Overflow when casting to Long")
+    }
 
     override fun toDouble(): Double {
         val mc = MathContext(20, RoundingMode.HALF_UP)
         val numDecimal = numerator.toBigDecimal()
         val denomDecimal = denominator.toBigDecimal()
-        return numDecimal.divide(denomDecimal, mc).toDouble()
+        val value = numDecimal.divide(denomDecimal, mc)
+
+        val maxDouble = Double.MAX_VALUE.toBigDecimal()
+        val minDouble = -maxDouble
+
+        if (value in minDouble..maxDouble) {
+            return value.toDouble()
+        }
+
+        throw ArithmeticException("Overflow when casting to Double")
     }
 
     override fun toFloat(): Float {
         val mc = MathContext(20, RoundingMode.HALF_UP)
         val numDecimal = numerator.toBigDecimal()
         val denomDecimal = denominator.toBigDecimal()
-        return numDecimal.divide(denomDecimal, mc).toFloat()
+        val value = numDecimal.divide(denomDecimal, mc)
+
+        val maxFloat = Float.MAX_VALUE.toBigDecimal()
+        val minFloat = -maxFloat
+
+        if (value in minFloat..maxFloat) {
+            return value.toFloat()
+        }
+
+        throw ArithmeticException("Overflow when casting to Float")
     }
 
     fun toBigInteger(): BigInteger = numerator / denominator

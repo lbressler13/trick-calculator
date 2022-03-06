@@ -24,6 +24,7 @@ class BigFractionTest {
     @Test fun testDiv() = runDivTests()
     @Test fun testCompareTo() = runCompareToTests()
     @Test fun testEquals() = runEqualsTests()
+    @Test fun testEq() = runEqTests()
 
     // unary non-operator functions
     @Test fun testInverse() = runInverseTests()
@@ -41,5 +42,13 @@ class BigFractionTest {
 
     // casting
     @Test fun testToPair() = runToPairTests()
+    @Test fun testToByte() = runToByteTests()
+    @Test fun testToChar() = runToCharTests()
+    @Test fun testToShort() = runToShortTests()
+    @Test fun testToInt() = runToIntTests()
+    @Test fun testToLong() = runToLongTests()
+    @Test fun testToFloat() = runToFloatTests()
+    @Test fun testToDouble() = runToDoubleTests()
     @Test fun testToBigDecimal() = runToBigDecimalTests()
+    @Test fun testToBigInteger() = runToBigIntegerTests()
 }

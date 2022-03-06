@@ -17,7 +17,7 @@ private val neg7 = (-7).toBI()
 private val pos18 = 18.toBI()
 private val neg18 = (-18).toBI()
 
-private val divByZeroError = "divide by zero"
+private const val divByZeroError = "divide by zero"
 
 fun runConstructorTests() {
     testSingleValConstructor()

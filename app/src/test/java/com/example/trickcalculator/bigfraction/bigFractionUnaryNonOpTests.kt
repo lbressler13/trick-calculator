@@ -23,13 +23,8 @@ fun runInverseTests() {
     expected = BigFraction(7, 19)
     assertEquals(expected, bf.inverse())
 
-    var error = ""
-    try {
-        BigFraction(0, 1).inverse()
-    } catch (e: ArithmeticException) {
-        error = e.message.toString()
-    }
-    assertEquals("divide by zero", error)
+    val error = assertThrows(ArithmeticException::class.java) { BigFraction(0).inverse() }
+    assertEquals("divide by zero", error.message)
 }
 
 fun runAbsTests() {
