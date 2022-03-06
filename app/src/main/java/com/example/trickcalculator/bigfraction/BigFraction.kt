@@ -147,14 +147,9 @@ class BigFraction private constructor() : Number() {
             denominator = BigInteger.ONE
         }
 
-        if (!denominator.eq(1) && (numerator % denominator).eq(0)) {
-            numerator /= denominator
-            denominator = BigInteger.ONE
-        } else if (!denominator.eq(1) && (denominator % numerator).eq(0)) {
-            denominator /= numerator
-            numerator = BigInteger.ONE
-        }
-        // TODO use GCF
+        val gcd = getGCD()
+        numerator /= gcd
+        denominator /= gcd
 
         setSign()
     }
@@ -174,6 +169,26 @@ class BigFraction private constructor() : Number() {
                 denominator = denominator.abs()
             }
         }
+    }
+
+    // get greatest common divisor using euclidean algorithm
+    private fun getGCD(): BigInteger {
+        var sum = if (numerator > denominator) numerator else denominator
+        var value = if (numerator > denominator) denominator else numerator
+        var finished = false
+
+        while (!finished) {
+            val remainder = sum % value
+
+            if (remainder == BigInteger.ZERO) {
+                finished = true
+            } else {
+                sum = value
+                value = remainder
+            }
+        }
+
+        return value
     }
 
     // STRING METHODS
