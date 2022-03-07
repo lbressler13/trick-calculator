@@ -1,12 +1,9 @@
 package com.example.trickcalculator.bigfraction
 
-import org.junit.Assert.*
-
 fun runSimplifyTests() {
     runSimplifyZeroTests()
     runSimplifyGCDTests()
     runSimplifySignTests()
-
 
     // multiple simplifications
     var bf = BigFraction(3, -9)

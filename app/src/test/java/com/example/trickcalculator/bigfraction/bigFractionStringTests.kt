@@ -1,6 +1,7 @@
 package com.example.trickcalculator.bigfraction
 
 import org.junit.Assert.*
+import java.math.BigInteger
 
 // parsing
 fun runParseDecimalTests() {
@@ -213,4 +214,27 @@ fun runToPairStringTests() {
     bf = BigFraction(-7, 2)
     expected = "(-7, 2)"
     assertEquals(expected, bf.toPairString())
+}
+
+fun runToBFStringTests() {
+    var bf = BigFraction(0)
+    var expected = "BF[0 1]"
+    assertEquals(expected, bf.toBFString())
+
+    bf = BigFraction(-105)
+    expected = "BF[-105 1]"
+    assertEquals(expected, bf.toBFString())
+
+    bf = BigFraction(19, 32)
+    expected = "BF[19 32]"
+    assertEquals(expected, bf.toBFString())
+
+    bf = BigFraction(-9, 2)
+    expected = "BF[-9 2]"
+    assertEquals(expected, bf.toBFString())
+
+    val veryBig = "10000000000000000000"
+    bf = BigFraction(19, BigInteger(veryBig))
+    expected = "BF[19 $veryBig]"
+    assertEquals(expected, bf.toBFString())
 }

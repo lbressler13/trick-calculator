@@ -27,26 +27,26 @@ fun runInverseTests() {
     assertEquals("divide by zero", error.message)
 }
 
-fun runAbsTests() {
+fun runAbsoluteValueTests() {
     var bf = BigFraction(0)
     var expected = BigFraction(0)
-    assertEquals(expected, abs(bf))
+    assertEquals(expected, bf.absoluteValue())
 
     bf = BigFraction(3)
     expected = BigFraction(3)
-    assertEquals(expected, abs(bf))
+    assertEquals(expected, bf.absoluteValue())
 
     bf = BigFraction(-3)
     expected = BigFraction(3)
-    assertEquals(expected, abs(bf))
+    assertEquals(expected, bf.absoluteValue())
 
     bf = BigFraction(3, 5)
     expected = BigFraction(3, 5)
-    assertEquals(expected, abs(bf))
+    assertEquals(expected, bf.absoluteValue())
 
     bf = BigFraction(-5, 3)
     expected = BigFraction(5, 3)
-    assertEquals(expected, abs(bf))
+    assertEquals(expected, bf.absoluteValue())
 }
 
 fun runIsNegativeTests() {

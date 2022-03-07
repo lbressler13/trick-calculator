@@ -156,8 +156,8 @@ class BigFraction private constructor() : Number() {
 
     // move negatives to numerator
     private fun simplifySign() {
-        val numNegative = numerator < 0
-        val denomNegative = denominator < 0
+        val numNegative = numerator.isNegative()
+        val denomNegative = denominator.isNegative()
 
         when {
             numNegative && denomNegative -> {
@@ -165,7 +165,7 @@ class BigFraction private constructor() : Number() {
                 denominator = denominator.abs()
             }
             !numNegative && denomNegative -> {
-                numerator *= -1
+                numerator = -numerator
                 denominator = denominator.abs()
             }
         }

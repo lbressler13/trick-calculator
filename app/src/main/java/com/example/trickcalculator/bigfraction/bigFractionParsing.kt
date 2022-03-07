@@ -8,7 +8,7 @@ fun parseDecimal(unparsed: String): BigFraction {
     var currentState: String = unparsed.trim()
 
     val isNegative = unparsed.startsWith("-")
-    val timesNeg = if (isNegative) -1 else 1
+    val timesNeg = if (isNegative) -BigInteger.ONE else BigInteger.ONE
     if (isNegative) {
         currentState = currentState.substring(1)
     }
@@ -34,14 +34,14 @@ fun parseDecimal(unparsed: String): BigFraction {
         else -> {
             val wholeString = currentState.substringTo(decimalIndex)
             val decimalString = currentState.substring(decimalIndex + 1)
-            val whole = Integer.parseInt(wholeString)
-            val decimal = Integer.parseInt(decimalString)
+            val whole = BigInteger(wholeString)
+            val decimal = BigInteger(decimalString)
 
-            if (decimal == 0) {
+            if (decimal.isZero()) {
                 return BigFraction(whole * timesNeg) // also covers the case where number is 0
             }
 
-            val denominator = (10).pow(decimalString.length)
+            val denominator = (10).pow(decimalString.length).toBI()
             val numerator = whole * denominator + decimal
 
             BigFraction(numerator * timesNeg, denominator)
