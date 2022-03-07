@@ -1,7 +1,7 @@
 package com.example.trickcalculator.utils
 
-import java.math.BigDecimal
+import com.example.trickcalculator.bigfraction.BigFraction
 
 typealias IntList = List<Int>
-typealias OperatorFunction = (BigDecimal, BigDecimal, String) -> BigDecimal
+typealias OperatorFunction = (BigFraction, BigFraction, String) -> BigFraction
 typealias StringList = List<String>

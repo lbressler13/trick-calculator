@@ -3,19 +3,20 @@ package com.example.trickcalculator.ui.shared
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.trickcalculator.bigfraction.BigFraction
 import com.example.trickcalculator.ext.copyWithLastReplaced
+import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.ext.substringTo
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 import com.example.trickcalculator.utils.isPartialDecimal
-import java.math.BigDecimal
 
 class SharedViewModel : ViewModel() {
     // list of numbers and operators
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
-    private val computedValue = MutableLiveData<BigDecimal?>().apply { value = null }
+    private val computedValue = MutableLiveData<BigFraction?>().apply { value = null }
 
     private val error = MutableLiveData<String?>().apply { value = null }
 
@@ -31,7 +32,7 @@ class SharedViewModel : ViewModel() {
         computeText.value = listOf()
     }
 
-    fun setComputedValue(newValue: BigDecimal) {
+    fun setComputedValue(newValue: BigFraction) {
         computedValue.value = newValue
     }
 
@@ -88,22 +89,35 @@ class SharedViewModel : ViewModel() {
         }
     }
 
+    // replace first value with BF string if it matched the computed value
+    // used before running computation to retain exact value of last computed
+    fun finalizeComputeText() {
+        val computedVal = computedValue.value
+        val currentText = computeText.value
+
+        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toString()
+
+        if (computedVal != null && computeMatch) {
+            computeText.value = currentText?.copyWithReplacement(0, computedVal.toBFString())
+        }
+    }
+
+    // restore text to use initial value instead of BF string in case of error
+    fun restoreComputeText() {
+        val computedVal = computedValue.value
+        val currentText = computeText.value
+
+        val firstIsBFString = currentText != null && currentText.isNotEmpty() && BigFraction.isBFString(currentText[0])
+
+        if (computedVal != null && firstIsBFString) {
+            computeText.value = currentText?.copyWithReplacement(0, computedVal.toString())
+        }
+    }
+
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
-        val computed: BigDecimal = computedValue.value!!
-        var computeString = computed.toString()
-
-        if (computeString.indexOf('.') != -1) {
-            val stripped = computeString.trimEnd('0')
-
-            computeString = when {
-                stripped == "." -> "0"
-                stripped.last() == '.' -> stripped.substringTo(stripped.lastIndex)
-                else -> stripped
-            }
-        }
-
-        computeText.value = listOf(computeString)
+        val computed: BigFraction = computedValue.value!!
+        computeText.value = listOf(computed.toString())
     }
 
     fun resetComputeData(clearError: Boolean = true) {
