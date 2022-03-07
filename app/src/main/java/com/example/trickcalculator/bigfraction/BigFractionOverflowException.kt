@@ -1,6 +1,6 @@
 package com.example.trickcalculator.bigfraction
 
-class BigFractionOverFlowException() : ArithmeticException() {
+class BigFractionOverflowException() : ArithmeticException() {
     override var message: String? = null
     var overflowValue: String? = null
 

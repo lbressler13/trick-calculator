@@ -59,13 +59,13 @@ fun runToByteTests() {
 
     bf = BigFraction(Byte.MAX_VALUE.toInt())
     bf++
-    var error = assertThrows(BigFractionOverFlowException::class.java) { bf.toByte() }
+    var error = assertThrows(BigFractionOverflowException::class.java) { bf.toByte() }
     assertEquals("Overflow when casting to Byte", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
     bf = BigFraction(Byte.MIN_VALUE.toInt())
     bf--
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toByte() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toByte() }
     assertEquals("Overflow when casting to Byte", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 }
@@ -81,7 +81,7 @@ fun runToCharTests() {
     assertEquals(expected, bf.toChar())
 
     bf = BigFraction(-5)
-    var error = assertThrows(BigFractionOverFlowException::class.java) { bf.toChar() }
+    var error = assertThrows(BigFractionOverflowException::class.java) { bf.toChar() }
     assertEquals("Overflow when casting to Char", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
@@ -90,7 +90,7 @@ fun runToCharTests() {
     assertEquals(expected, bf.toChar())
 
     bf = BigFraction(-18, 5)
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toChar() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toChar() }
     assertEquals("Overflow when casting to Char", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
@@ -104,13 +104,13 @@ fun runToCharTests() {
 
     bf = BigFraction(Char.MAX_VALUE.code)
     bf++
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toChar() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toChar() }
     assertEquals("Overflow when casting to Char", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
     bf = BigFraction(Char.MIN_VALUE.code)
     bf--
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toChar() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toChar() }
     assertEquals("Overflow when casting to Char", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 }
@@ -146,13 +146,13 @@ fun runToShortTests() {
 
     bf = BigFraction(Short.MAX_VALUE.toInt())
     bf++
-    var error = assertThrows(BigFractionOverFlowException::class.java) { bf.toShort() }
+    var error = assertThrows(BigFractionOverflowException::class.java) { bf.toShort() }
     assertEquals("Overflow when casting to Short", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
     bf = BigFraction(Short.MIN_VALUE.toInt())
     bf--
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toShort() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toShort() }
     assertEquals("Overflow when casting to Short", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 }
@@ -188,13 +188,13 @@ fun runToIntTests() {
 
     bf = BigFraction(Int.MAX_VALUE)
     bf++
-    var error = assertThrows(BigFractionOverFlowException::class.java) { bf.toInt() }
+    var error = assertThrows(BigFractionOverflowException::class.java) { bf.toInt() }
     assertEquals("Overflow when casting to Int", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
     bf = BigFraction(Int.MIN_VALUE)
     bf--
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toInt() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toInt() }
     assertEquals("Overflow when casting to Int", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 }
@@ -230,13 +230,13 @@ fun runToLongTests() {
 
     bf = BigFraction(Long.MAX_VALUE)
     bf++
-    var error = assertThrows(BigFractionOverFlowException::class.java) { bf.toLong() }
+    var error = assertThrows(BigFractionOverflowException::class.java) { bf.toLong() }
     assertEquals("Overflow when casting to Long", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
     bf = BigFraction(Long.MIN_VALUE)
     bf--
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toLong() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toLong() }
     assertEquals("Overflow when casting to Long", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 }
@@ -279,13 +279,13 @@ fun runToDoubleTests() {
 
     bf = BigFraction(veryBig)
     bf *= 2
-    var error = assertThrows(BigFractionOverFlowException::class.java) { bf.toDouble() }
+    var error = assertThrows(BigFractionOverflowException::class.java) { bf.toDouble() }
     assertEquals("Overflow when casting to Double", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
     bf = BigFraction(verySmall)
     bf *= 2
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toDouble() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toDouble() }
     assertEquals("Overflow when casting to Double", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 }
@@ -328,13 +328,13 @@ fun runToFloatTests() {
 
     bf = BigFraction(veryBig)
     bf *= 2
-    var error = assertThrows(BigFractionOverFlowException::class.java) { bf.toFloat() }
+    var error = assertThrows(BigFractionOverflowException::class.java) { bf.toFloat() }
     assertEquals("Overflow when casting to Float", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 
     bf = BigFraction(verySmall)
     bf *= 2
-    error = assertThrows(BigFractionOverFlowException::class.java) { bf.toFloat() }
+    error = assertThrows(BigFractionOverflowException::class.java) { bf.toFloat() }
     assertEquals("Overflow when casting to Float", error.message)
     assertEquals(bf.toFractionString(), error.overflowValue)
 }

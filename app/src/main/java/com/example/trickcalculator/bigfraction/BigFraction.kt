@@ -9,8 +9,11 @@ import java.math.RoundingMode
 // Exact values for rational numbers, without specifying decimal precision
 
 class BigFraction private constructor() : Number() {
+    // These values are re-assigned in all public constructors
     var numerator: BigInteger = BigInteger.ZERO
     var denominator: BigInteger = BigInteger.ONE
+
+    // CONSTRUCTORS
 
     constructor (numerator: BigInteger) : this() {
         this.numerator = numerator
@@ -28,11 +31,13 @@ class BigFraction private constructor() : Number() {
     }
 
     constructor (s: String) : this() {
+        // result was simplified when initialized, no need to re-simplify here
         val result = parse(s)
         numerator = result.numerator
         denominator = result.denominator
     }
 
+    // constructors for combinations of Int, Long, and BigInteger
     constructor (numerator: Int) : this(numerator.toBI())
     constructor (numerator: Long) : this(numerator.toBI())
     constructor (numerator: Int, denominator: Int) : this(numerator.toBI(), denominator.toBI())
@@ -45,6 +50,7 @@ class BigFraction private constructor() : Number() {
     constructor (numerator: Long, denominator: BigInteger) : this(numerator.toBI(), denominator)
 
     // UNARY OPERATORS
+
     operator fun unaryMinus(): BigFraction = BigFraction(-numerator, denominator)
     operator fun unaryPlus(): BigFraction = BigFraction(numerator, denominator)
     operator fun not(): Boolean = isZero()
@@ -60,6 +66,7 @@ class BigFraction private constructor() : Number() {
     }
 
     // BINARY OPERATORS
+
     operator fun plus(other: BigFraction): BigFraction {
         if (denominator == other.denominator) {
             val newNumerator = numerator + other.numerator
@@ -126,6 +133,8 @@ class BigFraction private constructor() : Number() {
     operator fun compareTo(other: Long): Int = compareTo(other.toBF())
     operator fun compareTo(other: BigInteger): Int = compareTo(other.toBF())
 
+    // UNARY NON-OPERATORS
+
     fun inverse(): BigFraction {
         if (numerator.eq(0)) {
             throw ArithmeticException("divide by zero")
@@ -135,9 +144,10 @@ class BigFraction private constructor() : Number() {
     }
 
     fun absoluteValue(): BigFraction = BigFraction(numerator.abs(), denominator)
-
     fun isNegative(): Boolean = numerator < BigInteger.ZERO
     fun isZero(): Boolean = numerator.eq(0)
+
+    // SIMPLIFICATION
 
     private fun simplify() {
         simplifyZero()
@@ -202,10 +212,10 @@ class BigFraction private constructor() : Number() {
         val numDecimal = numerator.toBigDecimal()
         val denomDecimal = denominator.toBigDecimal()
 
-        // val precision = numerator.toString().length + 1 + digits
         var mc = MathContext(digits, RoundingMode.HALF_UP)
         var decimal = numDecimal.divide(denomDecimal, mc)
 
+        // return non-exponential string, regardless of digits
         val isExponentialString = decimal.toString().indexOf('E') != -1
         if (isExponentialString) {
             val precision = numerator.toString().length + digits
@@ -230,6 +240,7 @@ class BigFraction private constructor() : Number() {
     override fun hashCode(): Int = toPair().hashCode()
 
     // CASTING
+
     fun toPair(): Pair<BigInteger, BigInteger> = Pair(numerator, denominator)
 
     override fun toByte(): Byte {
@@ -240,7 +251,7 @@ class BigFraction private constructor() : Number() {
             return value.toByte()
         }
 
-        throw BigFractionOverFlowException("Overflow when casting to Byte", toFractionString())
+        throw overflowException("Byte")
     }
 
     override fun toChar(): Char {
@@ -251,7 +262,7 @@ class BigFraction private constructor() : Number() {
             return value.toInt().toChar()
         }
 
-        throw BigFractionOverFlowException("Overflow when casting to Char", toFractionString())
+        throw overflowException("Char")
     }
 
     override fun toShort(): Short {
@@ -262,7 +273,7 @@ class BigFraction private constructor() : Number() {
             return value.toShort()
         }
 
-        throw BigFractionOverFlowException("Overflow when casting to Short", toFractionString())
+        throw overflowException("Short")
     }
 
     override fun toInt(): Int {
@@ -273,7 +284,7 @@ class BigFraction private constructor() : Number() {
             return value.toInt()
         }
 
-        throw BigFractionOverFlowException("Overflow when casting to Int", toFractionString())
+        throw overflowException("Int")
     }
 
 
@@ -285,7 +296,7 @@ class BigFraction private constructor() : Number() {
             return value.toLong()
         }
 
-        throw BigFractionOverFlowException("Overflow when casting to Long", toFractionString())
+        throw overflowException("Long")
     }
 
     override fun toDouble(): Double {
@@ -301,7 +312,7 @@ class BigFraction private constructor() : Number() {
             return value.toDouble()
         }
 
-        throw BigFractionOverFlowException("Overflow when casting to Double", toFractionString())
+        throw overflowException("Double")
     }
 
     override fun toFloat(): Float {
@@ -317,7 +328,7 @@ class BigFraction private constructor() : Number() {
             return value.toFloat()
         }
 
-        throw BigFractionOverFlowException("Overflow when casting to Float", toFractionString())
+        throw overflowException("Float")
     }
 
     fun toBigInteger(): BigInteger = numerator / denominator
@@ -326,6 +337,8 @@ class BigFraction private constructor() : Number() {
         val mc = MathContext(precision, RoundingMode.HALF_UP)
         return numerator.toBigDecimal().divide(denominator.toBigDecimal(), mc)
     }
+
+    private fun overflowException(type: String): Exception = BigFractionOverflowException("Overflow when casting to $type", toFractionString())
 
     companion object {
         val ZERO = BigFraction(0)

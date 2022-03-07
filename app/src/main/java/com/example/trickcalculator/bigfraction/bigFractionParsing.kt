@@ -40,8 +40,6 @@ fun parseDecimal(unparsed: String): BigFraction {
             val whole = BigInteger(wholeString)
             val decimal = BigInteger(decimalString)
 
-            println(decimal)
-
             if (decimal.isZero()) {
                 return BigFraction(whole * timesNeg) // also covers the case where number is 0
             }
