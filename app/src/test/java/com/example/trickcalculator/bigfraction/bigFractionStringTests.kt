@@ -76,6 +76,16 @@ fun runParseDecimalTests() {
     s = "234.001"
     expected = BigFraction(234001, 1000)
     assertEquals(expected, BigFraction.parse(s))
+
+    val n = "11111111111111111111111111"
+    val d = "100000000000000000000000000"
+    s = "0.11111111111111111111111111"
+    expected = BigFraction(BigInteger(n), BigInteger(d))
+    assertEquals(expected, BigFraction.parse(s))
+
+    s = ".11111111111111111111111111"
+    expected = BigFraction(BigInteger(n), BigInteger(d))
+    assertEquals(expected, BigFraction.parse(s))
 }
 
 fun runParseBFStringTests() {

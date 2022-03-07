@@ -27,7 +27,10 @@ fun parseDecimal(unparsed: String): BigFraction {
             if (numerator.isZero()) {
                 return BigFraction(0)
             }
-            val denominator = (10).pow(currentState.length)
+
+            val zeros = "0".repeat(currentState.length)
+            val denomString = "1$zeros"
+            val denominator = BigInteger(denomString)
 
             BigFraction(numerator * timesNeg, denominator)
         }
@@ -37,11 +40,16 @@ fun parseDecimal(unparsed: String): BigFraction {
             val whole = BigInteger(wholeString)
             val decimal = BigInteger(decimalString)
 
+            println(decimal)
+
             if (decimal.isZero()) {
                 return BigFraction(whole * timesNeg) // also covers the case where number is 0
             }
 
-            val denominator = (10).pow(decimalString.length).toBI()
+            val zeros = "0".repeat(decimalString.length)
+            val denomString = "1$zeros"
+
+            val denominator = BigInteger(denomString)
             val numerator = whole * denominator + decimal
 
             BigFraction(numerator * timesNeg, denominator)

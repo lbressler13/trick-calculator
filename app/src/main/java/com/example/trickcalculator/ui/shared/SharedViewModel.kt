@@ -1,6 +1,5 @@
 package com.example.trickcalculator.ui.shared
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -90,6 +89,8 @@ class SharedViewModel : ViewModel() {
         }
     }
 
+    // replace first value with BF string if it matched the computed value
+    // used before running computation to retain exact value of last computed
     fun finalizeComputeText() {
         val computedVal = computedValue.value
         val currentText = computeText.value
@@ -101,10 +102,14 @@ class SharedViewModel : ViewModel() {
         }
     }
 
+    // restore text to use initial value instead of BF string in case of error
     fun restoreComputeText() {
         val computedVal = computedValue.value
         val currentText = computeText.value
-        if (computedVal != null) {
+
+        val firstIsBFString = currentText != null && currentText.isNotEmpty() && BigFraction.isBFString(currentText[0])
+
+        if (computedVal != null && firstIsBFString) {
             computeText.value = currentText?.copyWithReplacement(0, computedVal.toString())
         }
     }
@@ -112,10 +117,6 @@ class SharedViewModel : ViewModel() {
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
         val computed: BigFraction = computedValue.value!!
-
-        Log.e("bf", computed.toBFString())
-        Log.e("dec", computed.toDecimalString())
-
         computeText.value = listOf(computed.toString())
     }
 

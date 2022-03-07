@@ -6,10 +6,7 @@ import java.math.MathContext
 import java.math.RoundingMode
 
 // A custom number class inspired by BigDecimal
-// More precise decimal tracking, and ability to handle infinite decimals without specifying precision
-
-
-fun abs(bf: BigFraction): BigFraction = bf.absoluteValue()
+// Exact values for rational numbers, without specifying decimal precision
 
 class BigFraction private constructor() : Number() {
     var numerator: BigInteger = BigInteger.ZERO

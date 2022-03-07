@@ -7,7 +7,6 @@ import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.example.trickcalculator.bigfraction.BigFraction
-import java.math.BigDecimal
 
 fun isInt(value: String): Boolean {
     return try {
@@ -20,14 +19,8 @@ fun isInt(value: String): Boolean {
 
 fun isNumber(value: String): Boolean {
     return try {
-        if (BigFraction.isBFString(value)) {
-            true
-        } else if (value.endsWith('.')) {
-            false
-        } else {
-            BigDecimal(value)
-            true
-        }
+        BigFraction(value)
+        true
     } catch (e: Exception) {
         false
     }

@@ -4,7 +4,6 @@ import androidx.core.text.isDigitsOnly
 import com.example.trickcalculator.bigfraction.BigFraction
 import com.example.trickcalculator.bigfraction.BigFractionOverFlowException
 import com.example.trickcalculator.utils.*
-import java.lang.NumberFormatException
 
 // parse string list and compute mathematical expression, if possible
 fun runComputation(
@@ -46,7 +45,7 @@ fun runComputation(
 
         throw Exception("Number overflow")
     } catch (e: NumberFormatException) {
-        val error = getParsingError(e.message!!)
+        val error = getParsingError(e.message)
         throw Exception(error)
     }
 }
@@ -232,7 +231,11 @@ private fun stripDecimals(computeText: StringList): StringList {
     }
 }
 
-private fun getParsingError(error: String): String {
+private fun getParsingError(error: String?): String {
+    if (error == null) {
+        return "Parse error"
+    }
+
     val startIndex = error.indexOf("\"")
     val endIndex = error.lastIndexOf("\"")
 
