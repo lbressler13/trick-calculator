@@ -202,10 +202,21 @@ class BigFraction private constructor() : Number() {
             return numerator.toString()
         }
 
-        val decimal = numerator.toDouble() / denominator.toDouble()
+        val numDecimal = numerator.toBigDecimal()
+        val denomDecimal = denominator.toBigDecimal()
 
-        val text = "%.${digits}f".format(decimal)
-        return text.trimEnd('0')
+        // val precision = numerator.toString().length + 1 + digits
+        var mc = MathContext(digits, RoundingMode.HALF_UP)
+        var decimal = numDecimal.divide(denomDecimal, mc)
+
+        val isExponentialString = decimal.toString().indexOf('E') != -1
+        if (isExponentialString) {
+            val precision = numerator.toString().length + digits
+            mc = MathContext(precision, RoundingMode.HALF_UP)
+            decimal = numDecimal.divide(denomDecimal, mc)
+        }
+
+        return decimal.toString().trimEnd('0')
     }
 
     fun toFractionString(): String = if (denominator.eq(1)) {

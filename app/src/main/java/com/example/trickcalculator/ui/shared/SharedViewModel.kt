@@ -1,5 +1,6 @@
 package com.example.trickcalculator.ui.shared
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -111,6 +112,10 @@ class SharedViewModel : ViewModel() {
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
         val computed: BigFraction = computedValue.value!!
+
+        Log.e("bf", computed.toBFString())
+        Log.e("dec", computed.toDecimalString())
+
         computeText.value = listOf(computed.toString())
     }
 

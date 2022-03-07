@@ -143,6 +143,10 @@ fun runToDecimalStringTests() {
     expected = "0.5"
     assertEquals(expected, bf.toDecimalString())
 
+    bf = BigFraction(3, 2)
+    expected = "1.5"
+    assertEquals(expected, bf.toDecimalString())
+
     bf = BigFraction(3, 8)
     expected = "0.375"
     assertEquals(expected, bf.toDecimalString())
@@ -169,6 +173,12 @@ fun runToDecimalStringTests() {
 
     bf = BigFraction(-4, 19)
     expected = "-0.21053"
+    assertEquals(expected, bf.toDecimalString(5))
+
+    val veryBig = "100000000000000000000"
+    val bi = BigInteger(veryBig)
+    bf = BigFraction(bi, 3)
+    expected = "33333333333333333333.333333"
     assertEquals(expected, bf.toDecimalString(5))
 }
 
