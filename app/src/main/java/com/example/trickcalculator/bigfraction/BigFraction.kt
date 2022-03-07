@@ -232,7 +232,7 @@ class BigFraction private constructor() : Number() {
             return value.toByte()
         }
 
-        throw ArithmeticException("Overflow when casting to Byte")
+        throw BigFractionOverFlowException("Overflow when casting to Byte", toFractionString())
     }
 
     override fun toChar(): Char {
@@ -243,7 +243,7 @@ class BigFraction private constructor() : Number() {
             return value.toInt().toChar()
         }
 
-        throw ArithmeticException("Overflow when casting to Char")
+        throw BigFractionOverFlowException("Overflow when casting to Char", toFractionString())
     }
 
     override fun toShort(): Short {
@@ -254,7 +254,7 @@ class BigFraction private constructor() : Number() {
             return value.toShort()
         }
 
-        throw ArithmeticException("Overflow when casting to Short")
+        throw BigFractionOverFlowException("Overflow when casting to Short", toFractionString())
     }
 
     override fun toInt(): Int {
@@ -265,7 +265,7 @@ class BigFraction private constructor() : Number() {
             return value.toInt()
         }
 
-        throw ArithmeticException("Overflow when casting to Int")
+        throw BigFractionOverFlowException("Overflow when casting to Int", toFractionString())
     }
 
 
@@ -277,7 +277,7 @@ class BigFraction private constructor() : Number() {
             return value.toLong()
         }
 
-        throw ArithmeticException("Overflow when casting to Long")
+        throw BigFractionOverFlowException("Overflow when casting to Long", toFractionString())
     }
 
     override fun toDouble(): Double {
@@ -293,7 +293,7 @@ class BigFraction private constructor() : Number() {
             return value.toDouble()
         }
 
-        throw ArithmeticException("Overflow when casting to Double")
+        throw BigFractionOverFlowException("Overflow when casting to Double", toFractionString())
     }
 
     override fun toFloat(): Float {
@@ -309,7 +309,7 @@ class BigFraction private constructor() : Number() {
             return value.toFloat()
         }
 
-        throw ArithmeticException("Overflow when casting to Float")
+        throw BigFractionOverFlowException("Overflow when casting to Float", toFractionString())
     }
 
     fun toBigInteger(): BigInteger = numerator / denominator

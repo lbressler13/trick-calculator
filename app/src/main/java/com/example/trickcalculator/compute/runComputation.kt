@@ -2,6 +2,7 @@ package com.example.trickcalculator.compute
 
 import androidx.core.text.isDigitsOnly
 import com.example.trickcalculator.bigfraction.BigFraction
+import com.example.trickcalculator.bigfraction.BigFractionOverFlowException
 import com.example.trickcalculator.utils.*
 import java.lang.NumberFormatException
 
@@ -38,6 +39,12 @@ fun runComputation(
 
     return try {
         parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
+    } catch (e: BigFractionOverFlowException) {
+        if (e.overflowValue != null) {
+            throw Exception("Number overflow on value ${e.overflowValue}")
+        }
+
+        throw Exception("Number overflow")
     } catch (e: NumberFormatException) {
         val error = getParsingError(e.message!!)
         throw Exception(error)
