@@ -1,9 +1,9 @@
 package com.example.trickcalculator.compute
 
-import androidx.core.text.isDigitsOnly
 import com.example.trickcalculator.bigfraction.BigFraction
 import com.example.trickcalculator.bigfraction.BigFractionOverflowException
 import com.example.trickcalculator.utils.*
+import java.math.BigDecimal
 
 // parse string list and compute mathematical expression, if possible
 fun runComputation(
@@ -51,7 +51,7 @@ fun runComputation(
 }
 
 // map digits to use values in numbers order
-private fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
+fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
     return text.map {
         if (!isNumber(it)) {
             it
@@ -76,9 +76,6 @@ private fun parseText(
     performSingleOp: OperatorFunction,
     checkParens: Boolean
 ): BigFraction {
-    var total = BigFraction.ZERO
-    var currentOperator: String? = null
-
     var currentState = computeText
 
     if (checkParens) {
@@ -86,28 +83,23 @@ private fun parseText(
     }
 
     if (firstRoundOps.isNotEmpty()) {
-        currentState = parseFirstRound(currentState, firstRoundOps, performSingleOp)
+        currentState = parseSetOfOps(currentState, firstRoundOps, performSingleOp)
     }
 
-    // run second round operators (probably addition and subtraction)
-    for (element in currentState) {
-        when {
-            isOperator(element, secondRoundOps) -> currentOperator = element
-            currentOperator == null -> total = BigFraction(element)
-            else -> {
-                val currentVal = BigFraction(element)
-                total = performSingleOp(total, currentVal, currentOperator)
-            }
-        }
+    if (secondRoundOps.isNotEmpty()) {
+        currentState = parseSetOfOps(currentState, secondRoundOps, performSingleOp)
     }
 
-    return total
+    return when (currentState.size) {
+        0 -> BigFraction.ZERO
+        1 -> BigFraction(currentState[0])
+        else -> throw Exception("Parse error")
+    }
 }
 
-// run first round of operators (probably multiply and divide)
-private fun parseFirstRound(
+fun parseSetOfOps(
     computeText: StringList,
-    firstRoundOps: StringList,
+    ops: StringList,
     performSingleOp: OperatorFunction
 ): StringList {
     val simplifiedList: MutableList<String> = mutableListOf()
@@ -117,7 +109,7 @@ private fun parseFirstRound(
     while (index < computeText.size) {
         val element = computeText[index]
 
-        if (element !in firstRoundOps) {
+        if (element !in ops) {
             simplifiedList.add(element)
             index++
         } else {
@@ -137,7 +129,7 @@ private fun parseFirstRound(
     return simplifiedList
 }
 
-private fun parseParens(
+fun parseParens(
     computeText: StringList,
     firstRoundOps: StringList,
     secondRoundOps: StringList,
@@ -166,7 +158,7 @@ private fun parseParens(
 }
 
 // add times operator symbol when numbers are directly next to parens
-private fun addMultToParens(computeText: StringList): StringList {
+fun addMultToParens(computeText: StringList): StringList {
     val augmentedList: MutableList<String> = mutableListOf()
 
     var lastType = ""
@@ -196,7 +188,7 @@ private fun addMultToParens(computeText: StringList): StringList {
     return augmentedList
 }
 
-private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
+fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
     var openCount = 0
     val onlyParens = computeText.withIndex()
         .toList()
@@ -221,17 +213,17 @@ private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int 
     return closeIndex
 }
 
-private fun stripParens(computeText: StringList): StringList {
+fun stripParens(computeText: StringList): StringList {
     return computeText.filter { it != "(" && it != ")" }
 }
 
-private fun stripDecimals(computeText: StringList): StringList {
+fun stripDecimals(computeText: StringList): StringList {
     return computeText.map { element ->
         element.filter { it != '.' }
     }
 }
 
-private fun getParsingError(error: String?): String {
+fun getParsingError(error: String?): String {
     if (error == null) {
         return "Parse error"
     }
@@ -239,24 +231,16 @@ private fun getParsingError(error: String?): String {
     val startIndex = error.indexOf("\"")
     val endIndex = error.lastIndexOf("\"")
 
-    if (endIndex - startIndex <= 0) {
+    if (endIndex - startIndex <= 1) {
         return "Parse error"
     }
 
     val symbol = error.substring(startIndex + 1, endIndex)
 
-    val decimalIndex = symbol.indexOf('.')
-
-    if (decimalIndex == -1 && symbol.isDigitsOnly()) {
-        return "Number overflow on value $symbol"
+    return try {
+        BigDecimal(symbol)
+        "Number overflow on value $symbol"
+    } catch (e: Exception) {
+        "Cannot parse symbol $symbol"
     }
-
-    if (decimalIndex != -1) {
-        val split = symbol.split('.')
-        if (split.size < 3 && split.all { it.isDigitsOnly() }) {
-            return "Number overflow on value $symbol"
-        }
-    }
-
-    return "Cannot parse symbol $symbol"
 }

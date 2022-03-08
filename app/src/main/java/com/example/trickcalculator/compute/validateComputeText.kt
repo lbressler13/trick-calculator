@@ -5,6 +5,10 @@ import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isNumber
 
 fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
+    if (computeText.isEmpty()) {
+        return true
+    }
+
     // must start and end w/ number
     if (isOperator(computeText.first(), ops) || isOperator(computeText.last(), ops)) {
         return false
@@ -30,6 +34,8 @@ fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
 
         if (openParenCount < 0 ||
             currentType == null || // unknown char
+            (lastType == "lparen" && currentType == "operator") || // operator next to parens
+            (lastType == "operator" && currentType == "rparen") ||
             (lastType == currentType && !currentType.endsWith("paren")) || // repeated num or op
             (lastType == "lparen" && currentType == "rparen") // empty parens
         ) {
@@ -42,6 +48,7 @@ fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
     return openParenCount == 0
 }
 
+// validate that an order contains all numbers but is not already sorted
 fun validateNumbersOrder(order: IntList?): Boolean {
     return order != null
             && order.joinToString("") != "0123456789"

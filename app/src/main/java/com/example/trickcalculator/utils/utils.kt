@@ -1,11 +1,5 @@
 package com.example.trickcalculator.utils
 
-import android.content.Context
-import android.content.res.ColorStateList
-import android.view.View
-import android.widget.ImageButton
-import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat
 import com.example.trickcalculator.bigfraction.BigFraction
 
 fun isInt(value: String): Boolean {
@@ -19,8 +13,12 @@ fun isInt(value: String): Boolean {
 
 fun isNumber(value: String): Boolean {
     return try {
-        BigFraction(value)
-        true
+        if (value.count { it == '-' } > 1 || value.count { it == '.' } > 1) {
+            false
+        } else {
+            BigFraction(value)
+            true
+        }
     } catch (e: Exception) {
         false
     }
@@ -35,11 +33,4 @@ fun isPartialDecimal(value: String): Boolean {
     }
 
     return positiveString.isNotEmpty() && positiveString.all { it.isDigit() || it == '.' }
-}
-
-fun setImageButtonTint(button: View, colorId: Int, context: Context) {
-    if (button is ImageButton) {
-        val color: Int = ContextCompat.getColor(context, colorId)
-        ImageViewCompat.setImageTintList(button, ColorStateList.valueOf(color))
-    }
 }

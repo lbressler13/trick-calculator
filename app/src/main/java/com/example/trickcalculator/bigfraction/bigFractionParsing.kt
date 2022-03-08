@@ -1,6 +1,5 @@
 package com.example.trickcalculator.bigfraction
 
-import com.example.trickcalculator.ext.pow
 import com.example.trickcalculator.ext.substringTo
 import java.math.BigInteger
 
