@@ -145,7 +145,7 @@ fun runParseTextTests() {
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "4 - 7".split(' ')
-    expected = (-3).toBigFraction()
+    expected = -BigFraction.THREE
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "4 x 7".split(' ')

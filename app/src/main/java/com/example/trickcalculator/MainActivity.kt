@@ -6,9 +6,15 @@ import android.os.Bundle
 import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ui.main.MainFragment
 
+/**
+ * Activity that contains all functionality of app
+ */
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
+    /**
+     * Initialize activity
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,7 +30,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // assign theme based on night mode
+    /**
+     * Assign theme based on night mode
+     */
     private fun assignTheme() {
         val nightModeFlags: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         when (nightModeFlags) {

@@ -16,12 +16,20 @@ import com.example.trickcalculator.databinding.FragmentImageAttributionsBinding
 import com.example.trickcalculator.ui.shared.SharedSettingsDialog
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
+/**
+ * Information about a single image attribution
+ *
+ * @param iconResId [Int]: resourceId of the drawable resource for the image
+ * @param creator [String]: creator of image on Flaticon
+ * @param url [String]: URL to view image
+ */
 data class Attribution(
     val iconResId: Int,
     val creator: String,
     val url: String
 )
 
+// attributions for all images in app
 private val allAttributions = listOf(
     Attribution(R.drawable.ic_arrow_left, "Ilham Fitrotul Hayat", "www.flaticon.com/premium-icon/left_3416141"),
     Attribution(R.drawable.ic_close, "Ilham Fitrotul Hayat", "www.flaticon.com/premium-icon/cross_4421536"),
@@ -33,6 +41,9 @@ private val allAttributions = listOf(
     Attribution(R.drawable.ic_times, "Freepik", "www.flaticon.com/free-icon/multiply-mathematical-sign_43823")
 )
 
+/**
+ * Fragment to display image attributions for all Flaticon images used in the app, as required by Flaticon
+ */
 class AttributionsFragment : Fragment() {
     private lateinit var binding: FragmentImageAttributionsBinding
     private lateinit var viewModel: SharedViewModel
@@ -48,6 +59,9 @@ class AttributionsFragment : Fragment() {
         fun newInstance() = AttributionsFragment()
     }
 
+    /**
+     * Initialize fragment
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,6 +81,7 @@ class AttributionsFragment : Fragment() {
         }
         initSettingsDialog()
 
+        // observe changes in viewmodel
         viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
         viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
         viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
@@ -82,6 +97,9 @@ class AttributionsFragment : Fragment() {
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
     private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
 
+    /**
+     * Initialize handling of settings dialog
+     */
     private fun initSettingsDialog() {
         val settingsDialog = SharedSettingsDialog()
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)

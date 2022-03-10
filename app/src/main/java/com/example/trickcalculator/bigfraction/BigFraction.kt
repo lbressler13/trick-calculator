@@ -5,9 +5,10 @@ import java.math.BigInteger
 import java.math.MathContext
 import java.math.RoundingMode
 
-// A custom number class inspired by BigDecimal
-// Exact values for rational numbers, without specifying decimal precision
-
+/**
+ * Custom number implementation inspired by BigDecimal.
+ * Exact representations of rational numbers, without specifying decimal precision.
+ */
 class BigFraction private constructor() : Number() {
     // These values are re-assigned in all public constructors
     var numerator: BigInteger = BigInteger.ZERO
@@ -15,11 +16,25 @@ class BigFraction private constructor() : Number() {
 
     // CONSTRUCTORS
 
+    /**
+     * Constructor using only numerator.
+     * Creates BigFraction with integer value.
+     *
+     * @param numerator [BigInteger]: numerator of fraction
+     */
     constructor (numerator: BigInteger) : this() {
         this.numerator = numerator
         this.denominator = BigInteger.ONE
     }
 
+    /**
+     * Constructor using numerator and denominator.
+     * Simplifies fraction on creation
+     *
+     * @param numerator [BigInteger]: numerator of fraction
+     * @param denominator [BigInteger]: denominator of fraction
+     * @throws ArithmeticException if denominator is 0
+     */
     constructor (numerator: BigInteger, denominator: BigInteger) : this() {
         if (denominator.isZero()) {
             throw ArithmeticException("divide by zero")
@@ -30,6 +45,12 @@ class BigFraction private constructor() : Number() {
         simplify()
     }
 
+    /**
+     * Constructor which parses value from string
+     *
+     * @param s [String]: string to parse
+     * @throws NumberFormatException if s is not in a parsable format
+     */
     constructor (s: String) : this() {
         // result was simplified when initialized, no need to re-simplify here
         val result = parse(s)
@@ -155,13 +176,18 @@ class BigFraction private constructor() : Number() {
         simplifySign()
     }
 
+    /**
+     * Set denominator to 1 when numerator is 0
+     */
     private fun simplifyZero() {
         if (numerator.eq(0)) {
             denominator = BigInteger.ONE
         }
     }
 
-    // move negatives to numerator
+    /**
+     * Move negatives to numerator
+     */
     private fun simplifySign() {
         val numNegative = numerator.isNegative()
         val denomNegative = denominator.isNegative()
@@ -178,7 +204,9 @@ class BigFraction private constructor() : Number() {
         }
     }
 
-    // get greatest common divisor using euclidean algorithm
+    /**
+     * Simplify using greatest common divisor using Euclidean algorithm
+     */
     private fun simplifyGCD() {
         if (!numerator.isZero()) {
             var sum = if (numerator > denominator) numerator else denominator
@@ -204,6 +232,13 @@ class BigFraction private constructor() : Number() {
 
     // STRING METHODS
 
+    /**
+     * Create a string representation in standard decimal format
+     *
+     * @param digits [Int]: digits of precision in string. Defaults to 8.
+     * Will be ignored if this number results in a string in exponential format
+     * @return string representation in decimal format
+     */
     fun toDecimalString(digits: Int = 8): String {
         if (denominator.eq(1)) {
             return numerator.toString()
@@ -226,6 +261,11 @@ class BigFraction private constructor() : Number() {
         return decimal.toString().trimEnd('0')
     }
 
+    /**
+     * Create a fractional representation of the number, either as whole number or fraction
+     *
+     * @return string representation of number in fractional format
+     */
     fun toFractionString(): String = if (denominator.eq(1)) {
         numerator.toString()
     } else {
@@ -243,6 +283,12 @@ class BigFraction private constructor() : Number() {
 
     fun toPair(): Pair<BigInteger, BigInteger> = Pair(numerator, denominator)
 
+    /**
+     * If value is between min and max Byte values, cast to Byt using simple division, rounding down.
+     *
+     * @return number as Byte
+     * @throws BigFractionOverflowException if value is outside range of Byte value
+     */
     override fun toByte(): Byte {
         val value = numerator / denominator
         val maxByte = Byte.MAX_VALUE.toInt().toBigInteger()
@@ -254,6 +300,13 @@ class BigFraction private constructor() : Number() {
         throw overflowException("Byte")
     }
 
+    /**
+     * If value is between min and max Char values, cast to Char using simple division, rounding down.
+     * Accounts for Chars being non-negative
+     *
+     * @return number as Char
+     * @throws BigFractionOverflowException if value is outside range of Char value
+     */
     override fun toChar(): Char {
         val value = numerator / denominator
         val maxChar = Char.MAX_VALUE.code.toBigInteger()
@@ -265,6 +318,12 @@ class BigFraction private constructor() : Number() {
         throw overflowException("Char")
     }
 
+    /**
+     * If value is between min and max Short values, cast to Short using simple division, rounding down.
+     *
+     * @return number as Short
+     * @throws BigFractionOverflowException if value is outside range of Short value
+     */
     override fun toShort(): Short {
         val value = numerator / denominator
         val maxShort = Short.MAX_VALUE.toInt().toBigInteger()
@@ -276,6 +335,12 @@ class BigFraction private constructor() : Number() {
         throw overflowException("Short")
     }
 
+    /**
+     * If value is between min and max Int values, cast to Int using simple division, rounding down.
+     *
+     * @return number as Int
+     * @throws BigFractionOverflowException if value is outside range of Int value
+     */
     override fun toInt(): Int {
         val value = numerator / denominator
         val maxInt = Int.MAX_VALUE.toBigInteger()
@@ -287,7 +352,12 @@ class BigFraction private constructor() : Number() {
         throw overflowException("Int")
     }
 
-
+    /**
+     * If value is between min and max Long values, cast to Long using simple division, rounding down.
+     *
+     * @return number as Long
+     * @throws BigFractionOverflowException if value is outside range of Long value
+     */
     override fun toLong(): Long {
         val value = numerator / denominator
         val maxLong = Long.MAX_VALUE.toBigInteger()
@@ -299,6 +369,12 @@ class BigFraction private constructor() : Number() {
         throw overflowException("Long")
     }
 
+    /**
+     * If value is between min and max Double values, cast to Double, using division with precision of 20.
+     *
+     * @return number as Double
+     * @throws BigFractionOverflowException if value is outside range of Double value
+     */
     override fun toDouble(): Double {
         val mc = MathContext(20, RoundingMode.HALF_UP)
         val numDecimal = numerator.toBigDecimal()
@@ -315,6 +391,13 @@ class BigFraction private constructor() : Number() {
         throw overflowException("Double")
     }
 
+
+    /**
+     * If value is between min and max Float values, cast to Float, using division with precision of 20.
+     *
+     * @return number as Float
+     * @throws BigFractionOverflowException if value is outside range of Float value
+     */
     override fun toFloat(): Float {
         val mc = MathContext(20, RoundingMode.HALF_UP)
         val numDecimal = numerator.toBigDecimal()
