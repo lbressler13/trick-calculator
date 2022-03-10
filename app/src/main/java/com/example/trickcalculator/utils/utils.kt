@@ -1,13 +1,13 @@
 package com.example.trickcalculator.utils
 
-import android.content.Context
-import android.content.res.ColorStateList
-import android.view.View
-import android.widget.ImageButton
-import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat
 import com.example.trickcalculator.bigfraction.BigFraction
 
+/**
+ * Determine if a string can be parsed to an Int
+ *
+ * @param value [String]: string to check
+ * @return true if value can be parsed to an Int, false otherwise
+ */
 fun isInt(value: String): Boolean {
     return try {
         Integer.parseInt(value)
@@ -17,15 +17,34 @@ fun isInt(value: String): Boolean {
     }
 }
 
+/**
+ * Determine if a string can be parsed to a number.
+ * Number is defined as a BigFraction.
+ *
+ * @param value [String]: value to check
+ * @return true if value can be parsed to a BigFraction, false otherwise
+ */
 fun isNumber(value: String): Boolean {
     return try {
-        BigFraction(value)
-        true
+        if (value.count { it == '-' } > 1 || value.count { it == '.' } > 1) {
+            false
+        } else {
+            BigFraction(value)
+            true
+        }
     } catch (e: Exception) {
         false
     }
 }
 
+/**
+ * Determine if a string is in the process of being built to a decimal number.
+ * Partial decimal is defined as a string which may start with a negative sign but is otherwise made of digits and decimal points.
+ * Not necessarily a value that can be parsed to a number.
+ *
+ * @param value [String]: string to check
+ * @return true if value is a partial decimal as defined above, false otherwise
+ */
 fun isPartialDecimal(value: String): Boolean {
     // remove negative sign if it exists
     val positiveString = if (value.startsWith('-') && value.length > 1) {
@@ -35,11 +54,4 @@ fun isPartialDecimal(value: String): Boolean {
     }
 
     return positiveString.isNotEmpty() && positiveString.all { it.isDigit() || it == '.' }
-}
-
-fun setImageButtonTint(button: View, colorId: Int, context: Context) {
-    if (button is ImageButton) {
-        val color: Int = ContextCompat.getColor(context, colorId)
-        ImageViewCompat.setImageTintList(button, ColorStateList.valueOf(color))
-    }
 }

@@ -11,6 +11,9 @@ import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 import com.example.trickcalculator.utils.isPartialDecimal
 
+/**
+ * ViewModel to track variables related to computation and settings
+ */
 class SharedViewModel : ViewModel() {
     // list of numbers and operators
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
@@ -27,19 +30,7 @@ class SharedViewModel : ViewModel() {
     private val clearOnError = MutableLiveData<Boolean>().apply { value = true }
     private val applyDecimals = MutableLiveData<Boolean>().apply { value = true }
 
-    fun getComputeText(): LiveData<StringList> = computeText
-    private fun clearComputeText() {
-        computeText.value = listOf()
-    }
-
-    fun setComputedValue(newValue: BigFraction) {
-        computedValue.value = newValue
-    }
-
-    private fun clearComputedValue() {
-        computedValue.value = null
-    }
-
+    // getters and setters for variables
     fun setError(newValue: String?) { error.value = newValue }
     fun getError(): LiveData<String?> = error
 
@@ -58,7 +49,18 @@ class SharedViewModel : ViewModel() {
     fun setApplyDecimals(newValue: Boolean) { applyDecimals.value = newValue }
     fun getApplyDecimals(): LiveData<Boolean> = applyDecimals
 
-    // add new value to end of list
+    fun getComputeText(): LiveData<StringList> = computeText
+    fun setComputedValue(newValue: BigFraction) { computedValue.value = newValue }
+
+    // clear current computed values
+    private fun clearComputeText() { computeText.value = listOf() }
+    private fun clearComputedValue() { computedValue.value = null }
+
+    /**
+     * Append new value to end of list, creating multi-digit number when possible
+     *
+     * @param addition [String]: new character to add
+     */
     fun appendComputeText(addition: String) {
         val currentVal: StringList = computeText.value!!
 
@@ -72,7 +74,9 @@ class SharedViewModel : ViewModel() {
         }
     }
 
-    // delete last value from list
+    /**
+     * Remove latest addition to compute text, possibly bt shortening a multi-digit number
+     */
     fun backspaceComputeText() {
         val currentText: StringList = computeText.value!!
 
@@ -89,20 +93,24 @@ class SharedViewModel : ViewModel() {
         }
     }
 
-    // replace first value with BF string if it matched the computed value
-    // used before running computation to retain exact value of last computed
+    /**
+     * Replace first value with BF string if it matched the computed value.
+     * Used before running computation to retain exact value of last computed
+     */
     fun finalizeComputeText() {
         val computedVal = computedValue.value
         val currentText = computeText.value
 
-        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toString()
+        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toDecimalString()
 
         if (computedVal != null && computeMatch) {
             computeText.value = currentText?.copyWithReplacement(0, computedVal.toBFString())
         }
     }
 
-    // restore text to use initial value instead of BF string in case of error
+    /**
+     * Restore text to use initial value instead of BF string in case of error
+     */
     fun restoreComputeText() {
         val computedVal = computedValue.value
         val currentText = computeText.value
@@ -110,16 +118,25 @@ class SharedViewModel : ViewModel() {
         val firstIsBFString = currentText != null && currentText.isNotEmpty() && BigFraction.isBFString(currentText[0])
 
         if (computedVal != null && firstIsBFString) {
-            computeText.value = currentText?.copyWithReplacement(0, computedVal.toString())
+            computeText.value = currentText?.copyWithReplacement(0, computedVal.toDecimalString())
         }
     }
 
-    // replace compute text list with the computed value
+    /**
+     * Replace compute text list with the computed value
+     */
     fun useComputedAsComputeText() {
         val computed: BigFraction = computedValue.value!!
-        computeText.value = listOf(computed.toString())
+        computeText.value = listOf(computed.toDecimalString())
     }
 
+    /**
+     * Reset data related to computation.
+     * Settings are not reset.
+     *
+     * @param clearError [Boolean]: if error should be erased. True by default.
+     * If false, error is not reset with other computation data.
+     */
     fun resetComputeData(clearError: Boolean = true) {
         clearComputeText()
         clearComputedValue()

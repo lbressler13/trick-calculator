@@ -1,9 +1,16 @@
 package com.example.trickcalculator.bigfraction
 
-import com.example.trickcalculator.ext.pow
 import com.example.trickcalculator.ext.substringTo
 import java.math.BigInteger
 
+/**
+ * Parse a string from standard number format into a BigFraction.
+ * Standard format is a string which may start with "-", but otherwise consists of at least one digit and up to 1 "."
+ *
+ * @param unparsed [String]: string to parse
+ * @return parsed BigFraction
+ * @throws NumberFormatException in case of improperly formatted number string
+ */
 fun parseDecimal(unparsed: String): BigFraction {
     var currentState: String = unparsed.trim()
 
@@ -55,23 +62,46 @@ fun parseDecimal(unparsed: String): BigFraction {
     }
 }
 
+/**
+ * Parse a string from a BF string format into a BigFraction.
+ * BF string format is "BF[num denom]"
+ *
+ * @param unparsed [String]: string to parse
+ * @return parsed BigFraction
+ * @throws NumberFormatException in case of improperly formatted number string
+ */
 fun parseBFString(unparsed: String): BigFraction {
-    val numbers = unparsed.substring(3, unparsed.lastIndex)
-    val split = numbers.split(' ')
-    val numString = split[0].trim()
-    val denomString = split[1].trim()
-    val numerator = BigInteger(numString)
-    val denominator = BigInteger(denomString)
-    return BigFraction(numerator, denominator)
+    if (!checkIsBFString(unparsed)) {
+        throw NumberFormatException("Invalid BF string format")
+    }
+
+    try {
+        val numbers = unparsed.substring(3, unparsed.lastIndex)
+        val split = numbers.split(' ')
+        val numString = split[0].trim()
+        val denomString = split[1].trim()
+        val numerator = BigInteger(numString)
+        val denominator = BigInteger(denomString)
+        return BigFraction(numerator, denominator)
+    } catch (e: Exception) {
+        throw NumberFormatException("Invalid BF string format")
+    }
 }
 
+/**
+ * Check if a given string is in the BF string format.
+ * BF string format is "BF[num denom]"
+ *
+ * @param s [String]: string to check
+ * @return true if s is in BF string format, false otherwise
+ */
 fun checkIsBFString(s: String): Boolean {
     return try {
         val startEnd = s.trim().startsWith("BF[") && s.trim().endsWith("]")
         val split = s.substring(3, s.lastIndex).split(" ")
         BigInteger(split[0])
         BigInteger(split[1])
-        startEnd
+        startEnd && split.size == 2
     } catch (e: Exception) {
         false
     }

@@ -10,9 +10,15 @@ import androidx.fragment.app.DialogFragment
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogSharedSettingsBinding
 
+/**
+ * DialogFragment to display all configuration options for calculator
+ */
 class SharedSettingsDialog : DialogFragment() {
     private lateinit var binding: DialogSharedSettingsBinding
 
+    /**
+     * Initialize dialog
+     */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogSharedSettingsBinding.inflate(layoutInflater)
         val root = binding.root
@@ -29,6 +35,9 @@ class SharedSettingsDialog : DialogFragment() {
             .create()
     }
 
+    /**
+     * Get information from fragment args to set initial config in UI
+     */
     private fun setUiFromArgs() {
         setSwitchUiFromArgs(R.string.key_shuffle_numbers, binding.shuffleNumbersSwitch)
         setSwitchUiFromArgs(R.string.key_shuffle_operators, binding.shuffleOperatorsSwitch)
@@ -37,6 +46,12 @@ class SharedSettingsDialog : DialogFragment() {
         setSwitchUiFromArgs(R.string.key_apply_decimals, binding.applyDecimalsSwitch)
     }
 
+    /**
+     * Get information from fragment args to set if a switch should be checked
+     *
+     * @param keyId [Int]: resourceId of key to access argument
+     * @param switch [SwitchCompat]: switch to check
+     */
     private fun setSwitchUiFromArgs(keyId: Int, switch: SwitchCompat) {
         val key: String = requireContext().getString(keyId)
         val value: Boolean? = this.arguments?.getBoolean(key)
@@ -45,6 +60,11 @@ class SharedSettingsDialog : DialogFragment() {
         }
     }
 
+    /**
+     * Create bundle of settings to pass in fragment result
+     *
+     * @return bundle of current setting config in UI
+     */
     private fun bundleSettings(): Bundle {
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
@@ -60,6 +80,9 @@ class SharedSettingsDialog : DialogFragment() {
         )
     }
 
+    /**
+     * Set fragment result to be seen by parent
+     */
     override fun onDismiss(dialog: DialogInterface) {
         val requestKey = requireContext().getString(R.string.key_settings_request)
 
@@ -72,6 +95,7 @@ class SharedSettingsDialog : DialogFragment() {
     }
 
     companion object {
+        // tag is required when showing fragment
         const val TAG = "SharedSettingsDialog"
     }
 }

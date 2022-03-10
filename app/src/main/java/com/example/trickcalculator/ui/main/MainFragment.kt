@@ -22,6 +22,9 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 
+/**
+ * Fragment to display main calculator functionality
+ */
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: SharedViewModel
@@ -40,6 +43,9 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
+    /**
+     * Initialize fragment
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +76,9 @@ class MainFragment : Fragment() {
         binding.mainText.text = it.joinToString("")
     }
 
+    /**
+     * Display current error message, and clear compute data depending on settings
+     */
     private val getErrorObserver: Observer<String?> = Observer {
         error = it
         if (it != null) {
@@ -90,6 +99,9 @@ class MainFragment : Fragment() {
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
     private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
 
+    /**
+     * Launch AttributionsFragment
+     */
     private val infoButtonOnClick = {
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
@@ -112,7 +124,10 @@ class MainFragment : Fragment() {
             .commit()
     }
 
-    // set op order, num order, run computation, and update viewmodel
+    /**
+     * Sets operation order and number order, and runs computation.
+     * Updates viewmodel with resulting computed value or error message
+     */
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
             viewModel.finalizeComputeText()
@@ -124,13 +139,14 @@ class MainFragment : Fragment() {
                 listOf("+", "-", "x", "/")
             }
 
+            // maps operator symbols to their given functions
             val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
                 when (operator) {
                     operators[0] -> leftValue + rightValue
                     operators[1] -> leftValue - rightValue
                     operators[2] -> leftValue * rightValue
                     operators[3] -> leftValue / rightValue
-                    else -> BigFraction.ZERO
+                    else -> throw Exception("Invalid operator $operator")
                 }
             }
 
@@ -140,6 +156,7 @@ class MainFragment : Fragment() {
                 (0..9).toList()
             }
 
+            // try to run computation, and update compute text and error message
             try {
                 val computedValue: BigFraction =
                     runComputation(
@@ -175,6 +192,11 @@ class MainFragment : Fragment() {
         }
     }
 
+    /**
+     * Add a string to the compute text
+     *
+     * @param addText [String]: text to add
+     */
     private fun genericAddComputeOnClick(addText: String) {
         viewModel.appendComputeText(addText)
         if (error != null) {
@@ -182,6 +204,9 @@ class MainFragment : Fragment() {
         }
     }
 
+    /**
+     * Initialize all buttons in numpad
+     */
     private fun initButtons() {
         binding.numpadLayout.children.forEach {
             if (it is Button && it.text != null && it != binding.clearButton) {

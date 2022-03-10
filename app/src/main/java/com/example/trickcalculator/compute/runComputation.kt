@@ -1,11 +1,29 @@
 package com.example.trickcalculator.compute
 
-import androidx.core.text.isDigitsOnly
 import com.example.trickcalculator.bigfraction.BigFraction
 import com.example.trickcalculator.bigfraction.BigFractionOverflowException
 import com.example.trickcalculator.utils.*
 
-// parse string list and compute mathematical expression, if possible
+/**
+ * Parse string list and compute as a mathematical expression, if possible.
+ * Includes list validation, modifying the list based on parameters, and running the computation itself.
+ *
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @param firstRoundOps [List]: list of string operators to be applied in the first round of computation.
+ * Likely multiplication and division
+ * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
+ * Likely addition and subtraction
+ * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
+ * @param numbersOrder [List]: list of numbers, which can be used to reassign the values of digits
+ * @param checkParens [Boolean]: if parentheses should be recognized.
+ * If false, all parentheses will be removed before computation.
+ * No numbers or operators will be affected.
+ * @param useDecimals [Boolean]: if decimal points should be recognized.
+ * If false, the decimal point will be removed from each number and numbers will be processed using only the digits.
+ * @return BigFraction containing the single computed value
+ * @throws ArithmeticException in case of divide by zero
+ * @throws Exception in case of issues with syntax, parsing, or number overflow
+ */
 fun runComputation(
     computeText: StringList,
     firstRoundOps: StringList,
@@ -37,7 +55,7 @@ fun runComputation(
     }
 
     return try {
-        parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
+        parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp)
     } catch (e: BigFractionOverflowException) {
         if (e.overflowValue != null) {
             throw Exception("Number overflow on value ${e.overflowValue}")
@@ -50,64 +68,68 @@ fun runComputation(
     }
 }
 
-// map digits to use values in numbers order
-private fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
-    return text.map {
-        if (!isNumber(it)) {
-            it
-        } else {
-            it.map { c ->
-                if (c.isDigit()) {
-                    val index = Integer.parseInt(c.toString())
-                    numbersOrder[index].toString()
-                } else {
-                    c.toString()
-                }
-            }.joinToString("")
-        }
-    }
-}
-
-// run calculation by parsing text and performing operations
-private fun parseText(
+/**
+ * Run calculation by parsing text and performing operations
+ *
+ * Assumptions:
+ * - Validation succeeded
+ * - Any necessary modifications (i.e. number order, adding x for parens) have already occurred
+ *
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @param firstRoundOps [List]: list of string operators to be applied in the first round of computation.
+ * Likely multiplication and division
+ * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
+ * Likely addition and subtraction
+ * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
+ * @return BigFraction containing the single computed value
+ * @throws ArithmeticException in case of divide by zero
+ * @throws Exception in case of issues with parsing
+ */
+fun parseText(
     computeText: StringList,
     firstRoundOps: StringList,
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
-    checkParens: Boolean
 ): BigFraction {
-    var total = BigFraction.ZERO
-    var currentOperator: String? = null
-
     var currentState = computeText
 
-    if (checkParens) {
+    if (currentState.indexOf("(") != -1) {
         currentState = parseParens(computeText, firstRoundOps, secondRoundOps, performSingleOp)
     }
 
     if (firstRoundOps.isNotEmpty()) {
-        currentState = parseFirstRound(currentState, firstRoundOps, performSingleOp)
+        currentState = parseSetOfOps(currentState, firstRoundOps, performSingleOp)
     }
 
-    // run second round operators (probably addition and subtraction)
-    for (element in currentState) {
-        when {
-            isOperator(element, secondRoundOps) -> currentOperator = element
-            currentOperator == null -> total = BigFraction(element)
-            else -> {
-                val currentVal = BigFraction(element)
-                total = performSingleOp(total, currentVal, currentOperator)
-            }
-        }
+    if (secondRoundOps.isNotEmpty()) {
+        currentState = parseSetOfOps(currentState, secondRoundOps, performSingleOp)
     }
 
-    return total
+    return when (currentState.size) {
+        0 -> BigFraction.ZERO
+        1 -> BigFraction(currentState[0])
+        else -> throw Exception("Parse error")
+    }
 }
 
-// run first round of operators (probably multiply and divide)
-private fun parseFirstRound(
+/**
+ * Computes a single set of operators over the text, ignoring all other operators and all numbers not affected by the given operators
+ *
+ * Assumptions:
+ * - Validation succeeded
+ * - Compute text contains no parentheses
+ * - Any necessary modifications (i.e. number order, adding x for parens) have already occurred
+ *
+ * @param computeText [List]: list of string values to parse, consisting of operators and numbers
+ * @param ops [List]: list of string operators to be applied
+ * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
+ * @return modified list where each application of a given operator has been reduced to a single BigFraction, represented as a BF string
+ * @throws ArithmeticException in case of divide by zero
+ * @throws Exception in case of issues with parsing
+ */
+fun parseSetOfOps(
     computeText: StringList,
-    firstRoundOps: StringList,
+    ops: StringList,
     performSingleOp: OperatorFunction
 ): StringList {
     val simplifiedList: MutableList<String> = mutableListOf()
@@ -117,7 +139,7 @@ private fun parseFirstRound(
     while (index < computeText.size) {
         val element = computeText[index]
 
-        if (element !in firstRoundOps) {
+        if (element !in ops) {
             simplifiedList.add(element)
             index++
         } else {
@@ -137,7 +159,23 @@ private fun parseFirstRound(
     return simplifiedList
 }
 
-private fun parseParens(
+/**
+ * Simplify each set of parentheses to a single value by recursive calls to parseText.
+ * Should only be called if checkParens = true
+ *
+ * Assumptions:
+ * - Validation succeeded, including matched parentheses
+ * - Any necessary modifications have already occurred, including add multiplication around parens as needed
+ *
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @param firstRoundOps [List]: list of string operators to be applied in the first round of computation.
+ * Likely multiplication and division
+ * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
+ * Likely addition and subtraction
+ * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
+ * @return a modified string list where all pairs of parentheses have been simplified to a single BigFraction, represented as a BF string
+ */
+fun parseParens(
     computeText: StringList,
     firstRoundOps: StringList,
     secondRoundOps: StringList,
@@ -153,8 +191,8 @@ private fun parseParens(
             val openIndex = index
             val closeIndex = getMatchingParenIndex(openIndex, computeText)
             val subText = computeText.subList(openIndex + 1, closeIndex) // cut out start+end parens
-            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp, true)
-            simplifiedList.add(result.toString())
+            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp)
+            simplifiedList.add(result.toBFString())
             index = closeIndex + 1
         } else {
             simplifiedList.add(element)
@@ -165,8 +203,54 @@ private fun parseParens(
     return simplifiedList
 }
 
-// add times operator symbol when numbers are directly next to parens
-private fun addMultToParens(computeText: StringList): StringList {
+/**
+ * Given a list of text and the index of a left paren, find the index of the corresponding right paren
+ *
+ * Assumptions:
+ * - Validation succeeded, including matched parentheses
+ *
+ * @param openIndex [Int]: index of opening paren
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @return index of closing paren, or -1 if it cannot be found
+ * @throws IndexOutOfBoundsException if openIndex is greater than lastIndex
+ */
+fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
+    var openCount = 0
+    val onlyParens = computeText.withIndex()
+        .toList()
+        .subList(openIndex, computeText.size)
+        .filter { it.value == "(" || it.value == ")" }
+
+    var closeIndex = -1
+
+    for (idxVal in onlyParens) {
+        if (idxVal.value == "(") {
+            openCount++
+        } else if (idxVal.value == ")") {
+            openCount--
+        }
+
+        if (openCount == 0) {
+            closeIndex = idxVal.index
+            break
+        }
+    }
+
+    return closeIndex
+}
+
+/**
+ * Add times operator symbol when numbers are directly next to parens.
+ * Adds the string "x", even if this operator does not correspond to multiplication.
+ * All numbers, parens, and other operators are not affected
+ *
+ * Assumptions:
+ * - Validation succeeded, including matched parentheses
+ *
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @return a modified string list where no number or set of parentheses is directly adjacent to a set of parentheses
+ */
+fun addMultToParens(computeText: StringList): StringList {
     val augmentedList: MutableList<String> = mutableListOf()
 
     var lastType = ""
@@ -196,42 +280,73 @@ private fun addMultToParens(computeText: StringList): StringList {
     return augmentedList
 }
 
-private fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
-    var openCount = 0
-    val onlyParens = computeText.withIndex()
-        .toList()
-        .subList(openIndex, computeText.size)
-        .filter { it.value == "(" || it.value == ")" }
-
-    var closeIndex = -1
-
-    for (idxVal in onlyParens) {
-        if (idxVal.value == "(") {
-            openCount++
-        } else if (idxVal.value == ")") {
-            openCount--
+/**
+ * Update digits using values in number order.
+ * Does not affect any symbols other in the string.
+ * Numbers are mapped such that each digit is replaced by the value at the corresponding index in the number order.
+ * For example, 0 is replaced by the 0th value in the number order
+ *
+ * Assumptions:
+ * - Numbers order has passed validation
+ *
+ * @param text [List]: string list of numbers, operators, and parens
+ * @param numbersOrder [List]: list of numbers, containing the values 0..9 in any other order
+ * @return a list which is identical to the initial text, in everything other than the values of numbers.
+ * Values of numbers have been modified as described above.
+ */
+fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
+    return text.map {
+        if (!isNumber(it)) {
+            it
+        } else {
+            it.map { c ->
+                if (c.isDigit()) {
+                    val index = Integer.parseInt(c.toString())
+                    numbersOrder[index].toString()
+                } else {
+                    c.toString()
+                }
+            }.joinToString("")
         }
-
-        if (openCount == 0) {
-            closeIndex = idxVal.index
-            break
-        }
-    }
-
-    return closeIndex
-}
-
-private fun stripParens(computeText: StringList): StringList {
-    return computeText.filter { it != "(" && it != ")" }
-}
-
-private fun stripDecimals(computeText: StringList): StringList {
-    return computeText.map { element ->
-        element.filter { it != '.' }
     }
 }
 
-private fun getParsingError(error: String?): String {
+/**
+ * Given a list of text, remove all open and close parens.
+ * No operators or numbers are affected.
+ *
+ * Assumptions:
+ * - Validation succeeded
+ * - Every set of parentheses is separated from numbers and other parentheses, using an operator
+ *
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @return modified list containing all numbers and operators, without any parens
+ */
+fun stripParens(computeText: StringList): StringList = computeText.filter { it != "(" && it != ")" }
+
+/**
+ * Given a list of text, remove decimals points from all numbers.
+ * No operators, parens, or non-decimal numbers are affected.
+ * In addition, no digits are deleted.
+ * For example, the number 2.0 with become 20, not 2
+ *
+ * Assumptions:
+ * - Validation succeeded
+ *
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @return modified list containing all operators and parens, with numbers modified to remove any decimal points
+ */
+fun stripDecimals(computeText: StringList): StringList = computeText.map { element ->
+    element.filter { it != '.' }
+}
+
+/**
+ * Generate a specific error message after a NumberFormatException
+ *
+ * @param error [String]: message from initial exception, can be null
+ * @return new error message with details about the parsing error that occurred
+ */
+fun getParsingError(error: String?): String {
     if (error == null) {
         return "Parse error"
     }
@@ -239,24 +354,16 @@ private fun getParsingError(error: String?): String {
     val startIndex = error.indexOf("\"")
     val endIndex = error.lastIndexOf("\"")
 
-    if (endIndex - startIndex <= 0) {
+    if (endIndex - startIndex <= 1) {
         return "Parse error"
     }
 
     val symbol = error.substring(startIndex + 1, endIndex)
 
-    val decimalIndex = symbol.indexOf('.')
-
-    if (decimalIndex == -1 && symbol.isDigitsOnly()) {
-        return "Number overflow on value $symbol"
+    return try {
+        BigFraction(symbol)
+        "Number overflow on value $symbol"
+    } catch (e: Exception) {
+        "Cannot parse symbol $symbol"
     }
-
-    if (decimalIndex != -1) {
-        val split = symbol.split('.')
-        if (split.size < 3 && split.all { it.isDigitsOnly() }) {
-            return "Number overflow on value $symbol"
-        }
-    }
-
-    return "Cannot parse symbol $symbol"
 }
