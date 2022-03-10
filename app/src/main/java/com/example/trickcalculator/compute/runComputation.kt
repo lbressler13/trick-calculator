@@ -37,7 +37,7 @@ fun runComputation(
     }
 
     return try {
-        parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp, checkParens)
+        parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp)
     } catch (e: BigFractionOverflowException) {
         if (e.overflowValue != null) {
             throw Exception("Number overflow on value ${e.overflowValue}")
@@ -68,17 +68,22 @@ fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
     }
 }
 
-// run calculation by parsing text and performing operations
-private fun parseText(
+/**
+ * Run calculation by parsing text and performing operations
+ *
+ * Assumptions:
+ * - Validation succeeded
+ * - Any necessary modifications (i.e. number order, adding x for parens) have already occurred
+ */
+fun parseText(
     computeText: StringList,
     firstRoundOps: StringList,
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
-    checkParens: Boolean
 ): BigFraction {
     var currentState = computeText
 
-    if (checkParens) {
+    if (currentState.indexOf("(") != -1) {
         currentState = parseParens(computeText, firstRoundOps, secondRoundOps, performSingleOp)
     }
 
@@ -129,6 +134,14 @@ fun parseSetOfOps(
     return simplifiedList
 }
 
+/**
+ * Simplify each set of parentheses to a single value by recursive calls to parseText.
+ * Should only be called if checkParens = true
+ *
+ * Assumptions:
+ * - Validation succeeded, including matched parentheses
+ * - Any necessary modifications have already occurred, including add multiplication around parens as needed
+ */
 fun parseParens(
     computeText: StringList,
     firstRoundOps: StringList,
@@ -145,8 +158,8 @@ fun parseParens(
             val openIndex = index
             val closeIndex = getMatchingParenIndex(openIndex, computeText)
             val subText = computeText.subList(openIndex + 1, closeIndex) // cut out start+end parens
-            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp, true)
-            simplifiedList.add(result.toString())
+            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp)
+            simplifiedList.add(result.toBFString())
             index = closeIndex + 1
         } else {
             simplifiedList.add(element)
@@ -213,14 +226,10 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
     return closeIndex
 }
 
-fun stripParens(computeText: StringList): StringList {
-    return computeText.filter { it != "(" && it != ")" }
-}
+fun stripParens(computeText: StringList): StringList = computeText.filter { it != "(" && it != ")" }
 
-fun stripDecimals(computeText: StringList): StringList {
-    return computeText.map { element ->
-        element.filter { it != '.' }
-    }
+fun stripDecimals(computeText: StringList): StringList = computeText.map { element ->
+    element.filter { it != '.' }
 }
 
 fun getParsingError(error: String?): String {

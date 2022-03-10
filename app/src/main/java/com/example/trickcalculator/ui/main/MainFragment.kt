@@ -130,7 +130,7 @@ class MainFragment : Fragment() {
                     operators[1] -> leftValue - rightValue
                     operators[2] -> leftValue * rightValue
                     operators[3] -> leftValue / rightValue
-                    else -> BigFraction.ZERO
+                    else -> throw Exception("Invalid operator $operator")
                 }
             }
 

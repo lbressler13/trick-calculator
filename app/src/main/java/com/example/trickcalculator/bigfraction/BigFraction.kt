@@ -235,7 +235,7 @@ class BigFraction private constructor() : Number() {
     fun toPairString(): String = "($numerator, $denominator)"
     fun toBFString(): String = "BF[$numerator $denominator]"
 
-    override fun toString(): String = toDecimalString()
+    override fun toString(): String = toBFString()
 
     override fun hashCode(): Int = toPair().hashCode()
 

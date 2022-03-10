@@ -95,7 +95,7 @@ class SharedViewModel : ViewModel() {
         val computedVal = computedValue.value
         val currentText = computeText.value
 
-        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toString()
+        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toDecimalString()
 
         if (computedVal != null && computeMatch) {
             computeText.value = currentText?.copyWithReplacement(0, computedVal.toBFString())
@@ -110,14 +110,14 @@ class SharedViewModel : ViewModel() {
         val firstIsBFString = currentText != null && currentText.isNotEmpty() && BigFraction.isBFString(currentText[0])
 
         if (computedVal != null && firstIsBFString) {
-            computeText.value = currentText?.copyWithReplacement(0, computedVal.toString())
+            computeText.value = currentText?.copyWithReplacement(0, computedVal.toDecimalString())
         }
     }
 
     // replace compute text list with the computed value
     fun useComputedAsComputeText() {
         val computed: BigFraction = computedValue.value!!
-        computeText.value = listOf(computed.toString())
+        computeText.value = listOf(computed.toDecimalString())
     }
 
     fun resetComputeData(clearError: Boolean = true) {
