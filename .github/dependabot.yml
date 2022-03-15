@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      # update at end of work week
+      interval: "weekly"
+      day: "friday"
+      time: "18:00"
+      timezone: "America/New_York"
+    commit-message:
+      prefix: "dependabot"
+      include: "scope"
+    open-pull-requests-limit: 8
+    rebase-strategy: disabled
+    reviewers:
+      - lbressler13
