@@ -10,3 +10,4 @@ typealias OperatorFunction = (BigFraction, BigFraction, String) -> BigFraction
 
 typealias IntList = List<Int>
 typealias StringList = List<String>
+typealias MStringList = MutableList<String>

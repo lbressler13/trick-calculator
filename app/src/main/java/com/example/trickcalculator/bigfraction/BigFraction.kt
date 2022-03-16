@@ -45,6 +45,19 @@ class BigFraction private constructor() : Number() {
         simplify()
     }
 
+    // TODO test this
+    constructor (numerator: BigFraction, denominator: BigFraction) : this() {
+        if (denominator.isZero()) {
+            throw ArithmeticException("divide by zero")
+        }
+
+        val result = numerator / denominator
+
+        this.numerator = result.numerator
+        this.denominator = result.denominator
+        simplify()
+    }
+
     /**
      * Constructor which parses value from string
      *

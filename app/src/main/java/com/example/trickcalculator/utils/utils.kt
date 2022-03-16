@@ -55,3 +55,7 @@ fun isPartialDecimal(value: String): Boolean {
 
     return positiveString.isNotEmpty() && positiveString.all { it.isDigit() || it == '.' }
 }
+
+// TODO tests
+// TODO efficiency
+fun listsEqual(l1: StringList, l2: StringList): Boolean = l1.size == l2.size && l1.sorted() == l2.sorted()
