@@ -77,7 +77,7 @@ class UtilsTest {
         value = "-100000000000000000000000000000000.4444444444444444444444"
         assert(isNumber(value))
 
-        value = "BF[-123 457]"
+        value = "EF[-123 457]"
         assert(isNumber(value))
 
         // not number

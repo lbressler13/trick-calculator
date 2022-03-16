@@ -1,7 +1,7 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.bigfraction.BigFraction
-import com.example.trickcalculator.bigfraction.BigFractionOverflowException
+import com.example.trickcalculator.exactfraction.ExactFraction
+import com.example.trickcalculator.exactfraction.ExactFractionOverflowException
 import com.example.trickcalculator.utils.*
 
 /**
@@ -20,7 +20,7 @@ import com.example.trickcalculator.utils.*
  * No numbers or operators will be affected.
  * @param useDecimals [Boolean]: if decimal points should be recognized.
  * If false, the decimal point will be removed from each number and numbers will be processed using only the digits.
- * @return BigFraction containing the single computed value
+ * @return ExactFraction containing the single computed value
  * @throws ArithmeticException in case of divide by zero
  * @throws Exception in case of issues with syntax, parsing, or number overflow
  */
@@ -32,7 +32,7 @@ fun runComputation(
     numbersOrder: IntList,
     checkParens: Boolean,
     useDecimals: Boolean
-): BigFraction {
+): ExactFraction {
     if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
         throw Exception("Syntax error")
     }
@@ -56,7 +56,7 @@ fun runComputation(
 
     return try {
         parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp)
-    } catch (e: BigFractionOverflowException) {
+    } catch (e: ExactFractionOverflowException) {
         if (e.overflowValue != null) {
             throw Exception("Number overflow on value ${e.overflowValue}")
         }
@@ -81,7 +81,7 @@ fun runComputation(
  * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
  * Likely addition and subtraction
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
- * @return BigFraction containing the single computed value
+ * @return ExactFraction containing the single computed value
  * @throws ArithmeticException in case of divide by zero
  * @throws Exception in case of issues with parsing
  */
@@ -90,7 +90,7 @@ fun parseText(
     firstRoundOps: StringList,
     secondRoundOps: StringList,
     performSingleOp: OperatorFunction,
-): BigFraction {
+): ExactFraction {
     var currentState = computeText
 
     if (currentState.indexOf("(") != -1) {
@@ -106,8 +106,8 @@ fun parseText(
     }
 
     return when (currentState.size) {
-        0 -> BigFraction.ZERO
-        1 -> BigFraction(currentState[0])
+        0 -> ExactFraction.ZERO
+        1 -> ExactFraction(currentState[0])
         else -> throw Exception("Parse error")
     }
 }
@@ -123,7 +123,7 @@ fun parseText(
  * @param computeText [List]: list of string values to parse, consisting of operators and numbers
  * @param ops [List]: list of string operators to be applied
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
- * @return modified list where each application of a given operator has been reduced to a single BigFraction, represented as a BF string
+ * @return modified list where each application of a given operator has been reduced to a single ExactFraction, represented as a EF string
  * @throws ArithmeticException in case of divide by zero
  * @throws Exception in case of issues with parsing
  */
@@ -144,12 +144,12 @@ fun parseSetOfOps(
             index++
         } else {
             // don't have to worry about out of bounds or parse errors b/c of validation
-            val leftVal = BigFraction(simplifiedList.last())
-            val rightVal = BigFraction(computeText[index + 1])
+            val leftVal = ExactFraction(simplifiedList.last())
+            val rightVal = ExactFraction(computeText[index + 1])
             val result = performSingleOp(leftVal, rightVal, element)
             val lastIndex = simplifiedList.lastIndex
 
-            simplifiedList[lastIndex] = result.toBFString()
+            simplifiedList[lastIndex] = result.toEFString()
 
             // skip past next value, which was already used as rightValue
             index += 2
@@ -173,7 +173,7 @@ fun parseSetOfOps(
  * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
  * Likely addition and subtraction
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
- * @return a modified string list where all pairs of parentheses have been simplified to a single BigFraction, represented as a BF string
+ * @return a modified string list where all pairs of parentheses have been simplified to a single ExactFraction, represented as a EF string
  */
 fun parseParens(
     computeText: StringList,
@@ -192,7 +192,7 @@ fun parseParens(
             val closeIndex = getMatchingParenIndex(openIndex, computeText)
             val subText = computeText.subList(openIndex + 1, closeIndex) // cut out start+end parens
             val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp)
-            simplifiedList.add(result.toBFString())
+            simplifiedList.add(result.toEFString())
             index = closeIndex + 1
         } else {
             simplifiedList.add(element)
@@ -361,7 +361,7 @@ fun getParsingError(error: String?): String {
     val symbol = error.substring(startIndex + 1, endIndex)
 
     return try {
-        BigFraction(symbol)
+        ExactFraction(symbol)
         "Number overflow on value $symbol"
     } catch (e: Exception) {
         "Cannot parse symbol $symbol"

@@ -11,7 +11,7 @@ import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.lifecycle.Observer
-import com.example.trickcalculator.bigfraction.BigFraction
+import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
@@ -158,7 +158,7 @@ class MainFragment : Fragment() {
 
             // try to run computation, and update compute text and error message
             try {
-                val computedValue: BigFraction =
+                val computedValue: ExactFraction =
                     runComputation(
                         computeText,
                         operators.subList(2, 4), // multiply and divide ops
