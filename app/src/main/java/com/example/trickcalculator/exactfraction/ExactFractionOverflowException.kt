@@ -1,7 +1,8 @@
 package com.example.trickcalculator.exactfraction
 
 /**
- * ArithmeticException specifically for exact fraction casting overflow.
+<<<<<<< HEAD:app/src/main/java/com/example/trickcalculator/exactfraction/ExactFractionOverflowException.kt
+ * ArithmeticException specifically for ExactFraction casting overflow.
  * Has specific field for value of string that caused overflow
  */
 class ExactFractionOverflowException() : ArithmeticException() {

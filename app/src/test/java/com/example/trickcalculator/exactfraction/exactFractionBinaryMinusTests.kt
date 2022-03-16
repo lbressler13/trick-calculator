@@ -1,5 +1,6 @@
 package com.example.trickcalculator.exactfraction
 
+import com.example.trickcalculator.ext.toBI
 import org.junit.Assert.*
 
 fun runMinusTests() {

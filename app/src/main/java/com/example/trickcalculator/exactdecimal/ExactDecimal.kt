@@ -1,7 +1,7 @@
 package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.exactfraction.toExactFraction
+import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.listsEqual
 import java.lang.Integer.min

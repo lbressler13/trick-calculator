@@ -1,5 +1,6 @@
 package com.example.trickcalculator.exactfraction
 
+import com.example.trickcalculator.ext.toBI
 import java.math.BigInteger
 
 fun runCompareToTests() {

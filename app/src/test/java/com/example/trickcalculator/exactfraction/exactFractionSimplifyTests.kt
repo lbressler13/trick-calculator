@@ -1,5 +1,7 @@
 package com.example.trickcalculator.exactfraction
 
+import com.example.trickcalculator.ext.eq
+
 fun runSimplifyTests() {
     runSimplifyZeroTests()
     runSimplifyGCDTests()

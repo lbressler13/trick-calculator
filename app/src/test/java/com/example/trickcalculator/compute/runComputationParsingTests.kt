@@ -1,8 +1,8 @@
 package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.exactfraction.toEF
-import com.example.trickcalculator.exactfraction.toExactFraction
+import com.example.trickcalculator.ext.toEF
+import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.OperatorFunction
 import org.junit.Assert.*
 

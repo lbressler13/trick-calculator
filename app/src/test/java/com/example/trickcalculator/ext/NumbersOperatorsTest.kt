@@ -5,7 +5,7 @@ import org.junit.Assert.*
 import java.math.BigInteger
 import org.junit.Test
 
-class NumberOperatorsTest {
+class NumbersOperatorsTest {
     @Test
     fun testToExactFraction() {
         // Int
