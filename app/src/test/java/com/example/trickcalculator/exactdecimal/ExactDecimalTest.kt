@@ -34,12 +34,12 @@ class ExactDecimalTest {
 
     // parsing + toString
     // @Test fun testParseDecimal() = runParseDecimalTests()
-    // @Test fun testParseBFString() = runParseBFStringTests()
-    // @Test fun testCheckIsBFString() = runCheckIsBFStringTests()
+    // @Test fun testParseEDString() = runParseEDStringTests()
+    // @Test fun testCheckIsEDString() = runCheckIsEDStringTests()
     // @Test fun testToDecimalString() = runToDecimalStringTests()
     // @Test fun testToFractionString() = runToFractionStringTests()
     // @Test fun testToPairString() = runToPairStringTests()
-    // @Test fun testToBFString() = runToBFStringTests()
+    // @Test fun testToEDString() = runToEDStringTests()
 
     // casting
     // @Test fun testToPair() = runToPairTests()

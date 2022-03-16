@@ -1,8 +1,8 @@
-package com.example.trickcalculator.bigfraction
+package com.example.trickcalculator.exactfraction
 
 import org.junit.Test
 
-class BigFractionTest {
+class ExactFractionTest {
     // all constructors
     @Test fun testConstructor() = runConstructorTests()
 
@@ -34,12 +34,12 @@ class BigFractionTest {
 
     // parsing + toString
     @Test fun testParseDecimal() = runParseDecimalTests()
-    @Test fun testParseBFString() = runParseBFStringTests()
-    @Test fun testCheckIsBFString() = runCheckIsBFStringTests()
+    @Test fun testParseEFString() = runParseEFStringTests()
+    @Test fun testCheckIsEFString() = runCheckIsEFStringTests()
     @Test fun testToDecimalString() = runToDecimalStringTests()
     @Test fun testToFractionString() = runToFractionStringTests()
     @Test fun testToPairString() = runToPairStringTests()
-    @Test fun testToBFString() = runToBFStringTests()
+    @Test fun testToEFString() = runToEFStringTests()
 
     // casting
     @Test fun testToPair() = runToPairTests()

@@ -1,10 +1,10 @@
-package com.example.trickcalculator.bigfraction
+package com.example.trickcalculator.exactfraction
 
 /**
- * ArithmeticException specifically for big fraction casting overflow.
+ * ArithmeticException specifically for exact fraction casting overflow.
  * Has specific field for value of string that caused overflow
  */
-class BigFractionOverflowException() : ArithmeticException() {
+class ExactFractionOverflowException() : ArithmeticException() {
     override var message: String? = null
     var overflowValue: String? = null
 

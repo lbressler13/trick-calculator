@@ -1,22 +1,22 @@
-package com.example.trickcalculator.bigfraction
+package com.example.trickcalculator.exactfraction
 
 import java.math.BigInteger
 
-// Additional ext methods related to BigFraction and BigInteger
+// Additional ext methods related to ExactFraction and BigInteger
 
 // casting methods for Int
 fun Int.toBI(): BigInteger = toBigInteger()
-fun Int.toBigFraction(): BigFraction = BigFraction(this)
-fun Int.toBF(): BigFraction = toBigFraction()
+fun Int.toExactFraction(): ExactFraction = ExactFraction(this)
+fun Int.toEF(): ExactFraction = toExactFraction()
 
 // casting methods for Long
 fun Long.toBI(): BigInteger = toBigInteger()
-fun Long.toBigFraction(): BigFraction = BigFraction(this)
-fun Long.toBF(): BigFraction = toBigFraction()
+fun Long.toExactFraction(): ExactFraction = ExactFraction(this)
+fun Long.toEF(): ExactFraction = toExactFraction()
 
 // casting methods for BigInteger
-fun BigInteger.toBigFraction(): BigFraction = BigFraction(this)
-fun BigInteger.toBF(): BigFraction = toBigFraction()
+fun BigInteger.toExactFraction(): ExactFraction = ExactFraction(this)
+fun BigInteger.toEF(): ExactFraction = toExactFraction()
 
 // equality of BigInteger and standard number formats
 fun BigInteger.eq(other: Int): Boolean = other == toInt()

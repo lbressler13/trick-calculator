@@ -1,6 +1,6 @@
 package com.example.trickcalculator.utils
 
-import com.example.trickcalculator.bigfraction.BigFraction
+import com.example.trickcalculator.exactfraction.ExactFraction
 
 /**
  * Determine if a string can be parsed to an Int
@@ -19,17 +19,17 @@ fun isInt(value: String): Boolean {
 
 /**
  * Determine if a string can be parsed to a number.
- * Number is defined as a BigFraction.
+ * Number is defined as a ExactFraction.
  *
  * @param value [String]: value to check
- * @return true if value can be parsed to a BigFraction, false otherwise
+ * @return true if value can be parsed to a ExactFraction, false otherwise
  */
 fun isNumber(value: String): Boolean {
     return try {
         if (value.count { it == '-' } > 1 || value.count { it == '.' } > 1) {
             false
         } else {
-            BigFraction(value)
+            ExactFraction(value)
             true
         }
     } catch (e: Exception) {

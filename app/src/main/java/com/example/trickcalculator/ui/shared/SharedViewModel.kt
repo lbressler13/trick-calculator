@@ -3,7 +3,7 @@ package com.example.trickcalculator.ui.shared
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.trickcalculator.bigfraction.BigFraction
+import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.ext.substringTo
@@ -19,7 +19,7 @@ class SharedViewModel : ViewModel() {
     private val computeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
-    private val computedValue = MutableLiveData<BigFraction?>().apply { value = null }
+    private val computedValue = MutableLiveData<ExactFraction?>().apply { value = null }
 
     private val error = MutableLiveData<String?>().apply { value = null }
 
@@ -50,7 +50,7 @@ class SharedViewModel : ViewModel() {
     fun getApplyDecimals(): LiveData<Boolean> = applyDecimals
 
     fun getComputeText(): LiveData<StringList> = computeText
-    fun setComputedValue(newValue: BigFraction) { computedValue.value = newValue }
+    fun setComputedValue(newValue: ExactFraction) { computedValue.value = newValue }
 
     // clear current computed values
     private fun clearComputeText() { computeText.value = listOf() }
@@ -94,7 +94,7 @@ class SharedViewModel : ViewModel() {
     }
 
     /**
-     * Replace first value with BF string if it matched the computed value.
+     * Replace first value with EF string if it matched the computed value.
      * Used before running computation to retain exact value of last computed
      */
     fun finalizeComputeText() {
@@ -104,20 +104,20 @@ class SharedViewModel : ViewModel() {
         val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toDecimalString()
 
         if (computedVal != null && computeMatch) {
-            computeText.value = currentText?.copyWithReplacement(0, computedVal.toBFString())
+            computeText.value = currentText?.copyWithReplacement(0, computedVal.toEFString())
         }
     }
 
     /**
-     * Restore text to use initial value instead of BF string in case of error
+     * Restore text to use initial value instead of EF string in case of error
      */
     fun restoreComputeText() {
         val computedVal = computedValue.value
         val currentText = computeText.value
 
-        val firstIsBFString = currentText != null && currentText.isNotEmpty() && BigFraction.isBFString(currentText[0])
+        val firstIsEFString = currentText != null && currentText.isNotEmpty() && ExactFraction.isEFString(currentText[0])
 
-        if (computedVal != null && firstIsBFString) {
+        if (computedVal != null && firstIsEFString) {
             computeText.value = currentText?.copyWithReplacement(0, computedVal.toDecimalString())
         }
     }
@@ -126,7 +126,7 @@ class SharedViewModel : ViewModel() {
      * Replace compute text list with the computed value
      */
     fun useComputedAsComputeText() {
-        val computed: BigFraction = computedValue.value!!
+        val computed: ExactFraction = computedValue.value!!
         computeText.value = listOf(computed.toDecimalString())
     }
 

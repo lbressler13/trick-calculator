@@ -1,59 +1,60 @@
-package com.example.trickcalculator.bigfraction
+package com.example.trickcalculator.ext
 
+import com.example.trickcalculator.exactfraction.*
 import org.junit.Assert.*
 import java.math.BigInteger
 import org.junit.Test
 
-class BigOperatorsTests {
+class NumberOperatorsTest {
     @Test
-    fun testToBigFraction() {
+    fun testToExactFraction() {
         // Int
         var i = 0
-        assertEquals(BigFraction(i), i.toBF())
+        assertEquals(ExactFraction(i), i.toEF())
 
         i = -1
-        assertEquals(BigFraction(i), i.toBF())
+        assertEquals(ExactFraction(i), i.toEF())
 
         i = 1
-        assertEquals(BigFraction(i), i.toBF())
+        assertEquals(ExactFraction(i), i.toEF())
 
         i = Int.MIN_VALUE
-        assertEquals(BigFraction(i), i.toBF())
+        assertEquals(ExactFraction(i), i.toEF())
 
         i = Int.MAX_VALUE
-        assertEquals(BigFraction(i), i.toBF())
+        assertEquals(ExactFraction(i), i.toEF())
 
         // Long
         var l = 0L
-        assertEquals(BigFraction(l), l.toBF())
+        assertEquals(ExactFraction(l), l.toEF())
 
         l = -1
-        assertEquals(BigFraction(l), l.toBF())
+        assertEquals(ExactFraction(l), l.toEF())
 
         l = 1
-        assertEquals(BigFraction(l), l.toBF())
+        assertEquals(ExactFraction(l), l.toEF())
 
         l = Long.MIN_VALUE
-        assertEquals(BigFraction(l), l.toBF())
+        assertEquals(ExactFraction(l), l.toEF())
 
         l = Long.MAX_VALUE
-        assertEquals(BigFraction(l), l.toBF())
+        assertEquals(ExactFraction(l), l.toEF())
 
         // BigInteger
         var bi = BigInteger.ZERO
-        assertEquals(BigFraction(bi), bi.toBF())
+        assertEquals(ExactFraction(bi), bi.toEF())
 
         bi = -BigInteger.ONE
-        assertEquals(BigFraction(bi), bi.toBF())
+        assertEquals(ExactFraction(bi), bi.toEF())
 
         bi = BigInteger.ONE
-        assertEquals(BigFraction(bi), bi.toBF())
+        assertEquals(ExactFraction(bi), bi.toEF())
 
         bi = BigInteger("100000000000")
-        assertEquals(BigFraction(bi), bi.toBF())
+        assertEquals(ExactFraction(bi), bi.toEF())
 
         bi = BigInteger("-100000000000")
-        assertEquals(BigFraction(bi), bi.toBF())
+        assertEquals(ExactFraction(bi), bi.toEF())
     }
 
     @Test

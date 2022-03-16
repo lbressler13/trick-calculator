@@ -1,4 +1,4 @@
-package com.example.trickcalculator.bigfraction
+package com.example.trickcalculator.exactfraction
 
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -9,7 +9,7 @@ import java.math.RoundingMode
  * Custom number implementation inspired by BigDecimal.
  * Exact representations of rational numbers, without specifying decimal precision.
  */
-class BigFraction private constructor() : Number() {
+class ExactFraction private constructor() : Number() {
     // These values are re-assigned in all public constructors
     var numerator: BigInteger = BigInteger.ZERO
     var denominator: BigInteger = BigInteger.ONE
@@ -18,7 +18,7 @@ class BigFraction private constructor() : Number() {
 
     /**
      * Constructor using only numerator.
-     * Creates BigFraction with integer value.
+     * Creates ExactFraction with integer value.
      *
      * @param numerator [BigInteger]: numerator of fraction
      */
@@ -46,7 +46,7 @@ class BigFraction private constructor() : Number() {
     }
 
     // TODO test this
-    constructor (numerator: BigFraction, denominator: BigFraction) : this() {
+    constructor (numerator: ExactFraction, denominator: ExactFraction) : this() {
         if (denominator.isZero()) {
             throw ArithmeticException("divide by zero")
         }
@@ -85,26 +85,26 @@ class BigFraction private constructor() : Number() {
 
     // UNARY OPERATORS
 
-    operator fun unaryMinus(): BigFraction = BigFraction(-numerator, denominator)
-    operator fun unaryPlus(): BigFraction = BigFraction(numerator, denominator)
+    operator fun unaryMinus(): ExactFraction = ExactFraction(-numerator, denominator)
+    operator fun unaryPlus(): ExactFraction = ExactFraction(numerator, denominator)
     operator fun not(): Boolean = isZero()
 
-    operator fun inc(): BigFraction {
+    operator fun inc(): ExactFraction {
         val newNumerator = numerator + denominator
-        return BigFraction(newNumerator, denominator)
+        return ExactFraction(newNumerator, denominator)
     }
 
-    operator fun dec(): BigFraction {
+    operator fun dec(): ExactFraction {
         val newNumerator = numerator - denominator
-        return BigFraction(newNumerator, denominator)
+        return ExactFraction(newNumerator, denominator)
     }
 
     // BINARY OPERATORS
 
-    operator fun plus(other: BigFraction): BigFraction {
+    operator fun plus(other: ExactFraction): ExactFraction {
         if (denominator == other.denominator) {
             val newNumerator = numerator + other.numerator
-            return BigFraction(newNumerator, denominator)
+            return ExactFraction(newNumerator, denominator)
         }
 
         val scaled1 = numerator * other.denominator
@@ -112,36 +112,36 @@ class BigFraction private constructor() : Number() {
 
         val newNumerator = scaled1 + scaled2
         val newDenominator = denominator * other.denominator
-        return BigFraction(newNumerator, newDenominator)
+        return ExactFraction(newNumerator, newDenominator)
     }
 
-    operator fun plus(other: BigInteger): BigFraction = plus(other.toBF())
-    operator fun plus(other: Long): BigFraction = plus(other.toBF())
-    operator fun plus(other: Int): BigFraction = plus(other.toBF())
+    operator fun plus(other: BigInteger): ExactFraction = plus(other.toEF())
+    operator fun plus(other: Long): ExactFraction = plus(other.toEF())
+    operator fun plus(other: Int): ExactFraction = plus(other.toEF())
 
-    operator fun minus(other: BigFraction): BigFraction = plus(-other)
-    operator fun minus(other: BigInteger): BigFraction = plus(-other)
-    operator fun minus(other: Long): BigFraction = plus(-other)
-    operator fun minus(other: Int): BigFraction = plus(-other)
+    operator fun minus(other: ExactFraction): ExactFraction = plus(-other)
+    operator fun minus(other: BigInteger): ExactFraction = plus(-other)
+    operator fun minus(other: Long): ExactFraction = plus(-other)
+    operator fun minus(other: Int): ExactFraction = plus(-other)
 
-    operator fun times(other: BigFraction): BigFraction {
+    operator fun times(other: ExactFraction): ExactFraction {
         val newNumerator = numerator * other.numerator
         val newDenominator = denominator * other.denominator
-        return BigFraction(newNumerator, newDenominator)
+        return ExactFraction(newNumerator, newDenominator)
     }
 
-    operator fun times(other: BigInteger): BigFraction = times(other.toBF())
-    operator fun times(other: Long): BigFraction = times(other.toBF())
-    operator fun times(other: Int): BigFraction = times(other.toBF())
+    operator fun times(other: BigInteger): ExactFraction = times(other.toEF())
+    operator fun times(other: Long): ExactFraction = times(other.toEF())
+    operator fun times(other: Int): ExactFraction = times(other.toEF())
 
-    operator fun div(other: BigFraction): BigFraction = times(other.inverse())
+    operator fun div(other: ExactFraction): ExactFraction = times(other.inverse())
 
-    operator fun div(other: BigInteger): BigFraction = div(other.toBF())
-    operator fun div(other: Long): BigFraction = div(other.toBF())
-    operator fun div(other: Int): BigFraction = div(other.toBF())
+    operator fun div(other: BigInteger): ExactFraction = div(other.toEF())
+    operator fun div(other: Long): ExactFraction = div(other.toEF())
+    operator fun div(other: Int): ExactFraction = div(other.toEF())
 
     override fun equals(other: Any?): Boolean {
-        if (other == null || other !is BigFraction) {
+        if (other == null || other !is ExactFraction) {
             return false
         }
 
@@ -154,7 +154,7 @@ class BigFraction private constructor() : Number() {
     fun eq(other: Long): Boolean = numerator.eq(other) && denominator.eq(1)
     fun eq(other: BigInteger): Boolean = numerator == other && denominator.eq(1)
 
-    operator fun compareTo(other: BigFraction): Int {
+    operator fun compareTo(other: ExactFraction): Int {
         val difference = minus(other)
         return when {
             difference.isNegative() -> -1
@@ -163,21 +163,21 @@ class BigFraction private constructor() : Number() {
         }
     }
 
-    operator fun compareTo(other: Int): Int = compareTo(other.toBF())
-    operator fun compareTo(other: Long): Int = compareTo(other.toBF())
-    operator fun compareTo(other: BigInteger): Int = compareTo(other.toBF())
+    operator fun compareTo(other: Int): Int = compareTo(other.toEF())
+    operator fun compareTo(other: Long): Int = compareTo(other.toEF())
+    operator fun compareTo(other: BigInteger): Int = compareTo(other.toEF())
 
     // UNARY NON-OPERATORS
 
-    fun inverse(): BigFraction {
+    fun inverse(): ExactFraction {
         if (numerator.eq(0)) {
             throw ArithmeticException("divide by zero")
         }
 
-        return BigFraction(denominator, numerator)
+        return ExactFraction(denominator, numerator)
     }
 
-    fun absoluteValue(): BigFraction = BigFraction(numerator.abs(), denominator)
+    fun absoluteValue(): ExactFraction = ExactFraction(numerator.abs(), denominator)
     fun isNegative(): Boolean = numerator < BigInteger.ZERO
     fun isZero(): Boolean = numerator.eq(0)
 
@@ -286,9 +286,9 @@ class BigFraction private constructor() : Number() {
     }
 
     fun toPairString(): String = "($numerator, $denominator)"
-    fun toBFString(): String = "BF[$numerator $denominator]"
+    fun toEFString(): String = "EF[$numerator $denominator]"
 
-    override fun toString(): String = toBFString()
+    override fun toString(): String = toEFString()
 
     override fun hashCode(): Int = toPair().hashCode()
 
@@ -300,7 +300,7 @@ class BigFraction private constructor() : Number() {
      * If value is between min and max Byte values, cast to Byt using simple division, rounding down.
      *
      * @return number as Byte
-     * @throws BigFractionOverflowException if value is outside range of Byte value
+     * @throws ExactFractionOverflowException if value is outside range of Byte value
      */
     override fun toByte(): Byte {
         val value = numerator / denominator
@@ -318,7 +318,7 @@ class BigFraction private constructor() : Number() {
      * Accounts for Chars being non-negative
      *
      * @return number as Char
-     * @throws BigFractionOverflowException if value is outside range of Char value
+     * @throws ExactFractionOverflowException if value is outside range of Char value
      */
     override fun toChar(): Char {
         val value = numerator / denominator
@@ -335,7 +335,7 @@ class BigFraction private constructor() : Number() {
      * If value is between min and max Short values, cast to Short using simple division, rounding down.
      *
      * @return number as Short
-     * @throws BigFractionOverflowException if value is outside range of Short value
+     * @throws ExactFractionOverflowException if value is outside range of Short value
      */
     override fun toShort(): Short {
         val value = numerator / denominator
@@ -352,7 +352,7 @@ class BigFraction private constructor() : Number() {
      * If value is between min and max Int values, cast to Int using simple division, rounding down.
      *
      * @return number as Int
-     * @throws BigFractionOverflowException if value is outside range of Int value
+     * @throws ExactFractionOverflowException if value is outside range of Int value
      */
     override fun toInt(): Int {
         val value = numerator / denominator
@@ -369,7 +369,7 @@ class BigFraction private constructor() : Number() {
      * If value is between min and max Long values, cast to Long using simple division, rounding down.
      *
      * @return number as Long
-     * @throws BigFractionOverflowException if value is outside range of Long value
+     * @throws ExactFractionOverflowException if value is outside range of Long value
      */
     override fun toLong(): Long {
         val value = numerator / denominator
@@ -386,7 +386,7 @@ class BigFraction private constructor() : Number() {
      * If value is between min and max Double values, cast to Double, using division with precision of 20.
      *
      * @return number as Double
-     * @throws BigFractionOverflowException if value is outside range of Double value
+     * @throws ExactFractionOverflowException if value is outside range of Double value
      */
     override fun toDouble(): Double {
         val mc = MathContext(20, RoundingMode.HALF_UP)
@@ -409,7 +409,7 @@ class BigFraction private constructor() : Number() {
      * If value is between min and max Float values, cast to Float, using division with precision of 20.
      *
      * @return number as Float
-     * @throws BigFractionOverflowException if value is outside range of Float value
+     * @throws ExactFractionOverflowException if value is outside range of Float value
      */
     override fun toFloat(): Float {
         val mc = MathContext(20, RoundingMode.HALF_UP)
@@ -434,29 +434,29 @@ class BigFraction private constructor() : Number() {
         return numerator.toBigDecimal().divide(denominator.toBigDecimal(), mc)
     }
 
-    private fun overflowException(type: String): Exception = BigFractionOverflowException("Overflow when casting to $type", toFractionString())
+    private fun overflowException(type: String): Exception = ExactFractionOverflowException("Overflow when casting to $type", toFractionString())
 
     companion object {
-        val ZERO = BigFraction(0)
-        val ONE = BigFraction(1)
-        val TWO = BigFraction(2)
-        val THREE = BigFraction(3)
-        val FOUR = BigFraction(4)
-        val FIVE = BigFraction(5)
-        val SIX = BigFraction(6)
-        val SEVEN = BigFraction(7)
-        val EIGHT = BigFraction(8)
-        val NINE = BigFraction(9)
-        val NEG_ONE = BigFraction(-1)
+        val ZERO = ExactFraction(0)
+        val ONE = ExactFraction(1)
+        val TWO = ExactFraction(2)
+        val THREE = ExactFraction(3)
+        val FOUR = ExactFraction(4)
+        val FIVE = ExactFraction(5)
+        val SIX = ExactFraction(6)
+        val SEVEN = ExactFraction(7)
+        val EIGHT = ExactFraction(8)
+        val NINE = ExactFraction(9)
+        val NEG_ONE = ExactFraction(-1)
 
-        fun parse(s: String): BigFraction {
-            if (isBFString(s)) {
-                return parseBFString(s)
+        fun parse(s: String): ExactFraction {
+            if (isEFString(s)) {
+                return parseEFString(s)
             }
 
             return parseDecimal(s)
         }
 
-        fun isBFString(s: String): Boolean = checkIsBFString(s)
+        fun isEFString(s: String): Boolean = checkIsEFString(s)
     }
 }

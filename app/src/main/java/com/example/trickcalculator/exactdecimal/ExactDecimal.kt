@@ -1,8 +1,7 @@
 package com.example.trickcalculator.exactdecimal
 
-import com.example.trickcalculator.bigfraction.BigFraction
-import com.example.trickcalculator.bigfraction.eq
-import com.example.trickcalculator.bigfraction.toBigFraction
+import com.example.trickcalculator.exactfraction.ExactFraction
+import com.example.trickcalculator.exactfraction.toExactFraction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.listsEqual
 import java.lang.Integer.min
@@ -11,21 +10,21 @@ import kotlin.math.max
 class ExactDecimal private constructor() : Number() {
     var numerator: StringList = mutableListOf()
     var denominator: StringList = mutableListOf()
-    var coefficient: BigFraction = BigFraction.ONE
+    var coefficient: ExactFraction = ExactFraction.ONE
 
     private val pi: String = "p"
     private val ops: StringList = listOf("+", "-", "x", "/")
 
     // CONSTRUCTORS
 
-    constructor(coefficient: BigFraction) : this() {
+    constructor(coefficient: ExactFraction) : this() {
         this.coefficient = coefficient
     }
 
-    constructor(coefficient: Int) : this(coefficient.toBigFraction())
-    constructor(coefficient: Long) : this(coefficient.toBigFraction())
+    constructor(coefficient: Int) : this(coefficient.toExactFraction())
+    constructor(coefficient: Long) : this(coefficient.toExactFraction())
 
-    constructor(numerator: StringList, denominator: StringList, coefficient: BigFraction) : this() {
+    constructor(numerator: StringList, denominator: StringList, coefficient: ExactFraction) : this() {
         this.numerator = numerator
         this.denominator = denominator
         this.coefficient = coefficient
@@ -34,10 +33,10 @@ class ExactDecimal private constructor() : Number() {
     }
 
     constructor(numerator: StringList, denominator: StringList, coefficient: Int) :
-            this(numerator, denominator, coefficient.toBigFraction())
+            this(numerator, denominator, coefficient.toExactFraction())
 
     constructor(numerator: StringList, denominator: StringList, coefficient: Long) :
-            this(numerator, denominator, coefficient.toBigFraction())
+            this(numerator, denominator, coefficient.toExactFraction())
 
     // UNARY OPERATORS
 
@@ -62,7 +61,7 @@ class ExactDecimal private constructor() : Number() {
     operator fun plus(other: ExactDecimal): ExactDecimal {
         val newNumerator = numerator + other.denominator
         val newDenominator = denominator + other.numerator
-        val newCoefficient = BigFraction(coefficient, other.coefficient)
+        val newCoefficient = ExactFraction(coefficient, other.coefficient)
         return ExactDecimal(newNumerator, newDenominator, newCoefficient)
     }
 

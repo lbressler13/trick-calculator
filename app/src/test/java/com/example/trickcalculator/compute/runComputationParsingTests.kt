@@ -1,8 +1,8 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.bigfraction.BigFraction
-import com.example.trickcalculator.bigfraction.toBF
-import com.example.trickcalculator.bigfraction.toBigFraction
+import com.example.trickcalculator.exactfraction.ExactFraction
+import com.example.trickcalculator.exactfraction.toEF
+import com.example.trickcalculator.exactfraction.toExactFraction
 import com.example.trickcalculator.utils.OperatorFunction
 import org.junit.Assert.*
 
@@ -61,61 +61,61 @@ fun runRunComputationTests() {
     // numbers order
     text = "1 / 0".split(' ')
     var nums = listOf(3, 8, 2, 6, 0, 1, 9, 7, 5, 4)
-    var expected = BigFraction(8, 3)
+    var expected = ExactFraction(8, 3)
     var result = runComputation(text, timesDiv, plusMinus, performOp, nums, true, true)
     assertEquals(expected, result)
 
     text = "2 x ( 3 + 4 ) / 6.9".split(' ')
     nums = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
-    expected = BigFraction(33, 9)
+    expected = ExactFraction(33, 9)
     result = runComputation(text, timesDiv, plusMinus, performOp, nums, true, true)
     assertEquals(expected, result)
 
     // skip parens
     text = "2 ( 3 + 4 ) - 6 / ( 7 - 5 )".split(' ')
-    expected = BigFraction(29, 7)
+    expected = ExactFraction(29, 7)
     result = runComputation(text, timesDiv, plusMinus, performOp, (0..9).toList(), false, true)
     assertEquals(expected, result)
 
     text = "2 x ( 3 + 4 ) / ( 6.4 - .4 )".split(' ')
     nums = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
-    expected = BigFraction(685, 38)
+    expected = ExactFraction(685, 38)
     result = runComputation(text, timesDiv, plusMinus, performOp, nums, false, true)
     assertEquals(expected, result)
 
     // skip decimals
     text = "0.5 x 2 + 7".split(' ')
-    expected = 17.toBigFraction()
+    expected = 17.toExactFraction()
     result = runComputation(text, timesDiv, plusMinus, performOp, (0..9).toList(), true, false)
     assertEquals(expected, result)
 
     text = "8.7 / ( 16 - 2 )".split(' ')
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
-    expected = BigFraction(80, 51)
+    expected = ExactFraction(80, 51)
     result = runComputation(text, timesDiv, plusMinus, performOp, nums, true, false)
     assertEquals(expected, result)
 
     text = "1.1 + 2.2 + 3.3".split(' ')
-    expected = 66.toBigFraction()
+    expected = 66.toExactFraction()
     result = runComputation(text, timesDiv, plusMinus, performOp, (0..9).toList(), true, false)
     assertEquals(expected, result)
 
     // skip parens + decimals
     text = "8.7 / ( 16 - 2 )".split(' ')
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
-    expected = BigFraction(28, 52)
+    expected = ExactFraction(28, 52)
     result = runComputation(text, timesDiv, plusMinus, performOp, nums, false, false)
     assertEquals(expected, result)
 
     // alternate ops
     text = "2 ( 3 / 4 ) - 6 + ( 7 x 5 )".split(' ')
-    expected = BigFraction.ZERO
+    expected = ExactFraction.ZERO
     result = runComputation(text, plusMinus, timesDiv, performSwapped, (0..9).toList(), true, true)
     assertEquals(expected, result)
 
     // normal
     text = "( 17 + ( 12 - 90 ) ) / 3".split(' ')
-    expected = BigFraction(-61, 3)
+    expected = ExactFraction(-61, 3)
     result = runComputation(text, timesDiv, plusMinus, performOp, (0..9).toList(), true, true)
     assertEquals(expected, result)
 }
@@ -123,66 +123,66 @@ fun runRunComputationTests() {
 fun runParseTextTests() {
     // single value
     var text = listOf("3")
-    var expected = BigFraction.THREE
+    var expected = ExactFraction.THREE
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = listOf("-3.5")
-    expected = BigFraction(-7, 2)
+    expected = ExactFraction(-7, 2)
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     val long = "11111111111111111111111111144444444444444444444"
     text = listOf(long)
-    expected = BigFraction(long)
+    expected = ExactFraction(long)
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
-    text = listOf(BigFraction(17, 9).toBFString())
-    expected = BigFraction(17, 9)
+    text = listOf(ExactFraction(17, 9).toEFString())
+    expected = ExactFraction(17, 9)
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     // individual ops
     text = "4 + 7".split(' ')
-    expected = 11.toBigFraction()
+    expected = 11.toExactFraction()
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "4 - 7".split(' ')
-    expected = -BigFraction.THREE
+    expected = -ExactFraction.THREE
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "4 x 7".split(' ')
-    expected = 28.toBigFraction()
+    expected = 28.toExactFraction()
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "4 / 7".split(' ')
-    expected = BigFraction(4, 7)
+    expected = ExactFraction(4, 7)
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "0 / 3".split(' ')
-    expected = BigFraction.ZERO
+    expected = ExactFraction.ZERO
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "0 x 3".split(' ')
-    expected = BigFraction.ZERO
+    expected = ExactFraction.ZERO
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "1 x 3".split(' ')
-    expected = BigFraction.THREE
+    expected = ExactFraction.THREE
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "8888888888888888888888888888888888888888888 / 2".split(' ')
-    expected = BigFraction("4444444444444444444444444444444444444444444")
+    expected = ExactFraction("4444444444444444444444444444444444444444444")
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     // multiple ops + parens
     text = "5 + 3 x 2".split(' ')
-    expected = 11.toBigFraction()
+    expected = 11.toExactFraction()
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "0402 / 2 + 3".split(' ')
-    expected = 204.toBigFraction()
+    expected = 204.toExactFraction()
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "5 / ( 0.5 + 2 ) / ( 9 x ( 4 - 2 ) )".split(' ')
-    expected = BigFraction(1, 9)
+    expected = ExactFraction(1, 9)
     assertEquals(expected, parseText(text, timesDiv, plusMinus, performOp))
 
     text = "( 2 + 7 ) / ( 0.5 - 1 / 2 )".split(' ')
@@ -193,15 +193,15 @@ fun runParseTextTests() {
 
     // alternate ops
     text = "5 - ( 0.5 x 2 ) - ( 9 + ( 4 / 2 ) )".split(' ')
-    expected = BigFraction(1, 9)
+    expected = ExactFraction(1, 9)
     assertEquals(expected, parseText(text, plusMinus, timesDiv, performSwapped))
 
     text = "5 + 3 - 6".split(' ')
-    expected = BigFraction.TWO
+    expected = ExactFraction.TWO
     assertEquals(expected, parseText(text, listOf(), plusMinus, performOp))
 
     text = "5 x 3 / 6".split(' ')
-    expected = BigFraction(15, 6)
+    expected = ExactFraction(15, 6)
     assertEquals(expected, parseText(text, timesDiv, listOf(), performOp))
 
     text = "5 x 3 / 6 + 2".split(' ')
@@ -234,25 +234,25 @@ fun runParseSetOfOpsTests() {
 
     // changed
     text = "1 - 3 + 17".split(' ')
-    expected = listOf(15.toBF().toBFString())
+    expected = listOf(15.toEF().toEFString())
     assertEquals(expected, parseSetOfOps(text, plusMinus, performOp))
 
     text = "1.3 x 2 / 10 x 20".split(' ')
-    var bf = BigFraction("5.2").toBFString()
-    expected = listOf(bf)
+    var ef = ExactFraction("5.2").toEFString()
+    expected = listOf(ef)
     assertEquals(expected, parseSetOfOps(text, timesDiv, performOp))
 
     text = "1.3 x 2 + 10 x 20".split(' ')
-    bf = BigFraction("2.6").toBFString()
-    var bf2 = BigFraction(200).toBFString()
-    expected = listOf(bf, "+", bf2)
+    ef = ExactFraction("2.6").toEFString()
+    var ef2 = ExactFraction(200).toEFString()
+    expected = listOf(ef, "+", ef2)
     assertEquals(expected, parseSetOfOps(text, timesDiv, performOp))
 
     text = "1000000000000 - 87 x 10000000000000000 + 33 / 11 + 6 x 40".split(' ')
-    bf = BigFraction("870000000000000000").toBFString()
-    bf2 = BigFraction.THREE.toBFString()
-    val bf3 = BigFraction(240).toBFString()
-    expected = listOf("1000000000000", "-", bf, "+", bf2, "+", bf3)
+    ef = ExactFraction("870000000000000000").toEFString()
+    ef2 = ExactFraction.THREE.toEFString()
+    val ef3 = ExactFraction(240).toEFString()
+    expected = listOf("1000000000000", "-", ef, "+", ef2, "+", ef3)
     assertEquals(expected, parseSetOfOps(text, timesDiv, performOp))
 
     val fakeOps = listOf("a", "b", "c")
@@ -261,14 +261,14 @@ fun runParseSetOfOpsTests() {
             "a" -> lval + rval
             "b" -> rval - lval
             "c" -> rval / lval
-            else -> BigFraction.ZERO
+            else -> ExactFraction.ZERO
         }
     }
 
     text = "100 a 12 + 1.2 c 2.4 b 3".split(' ')
-    bf = BigFraction(112).toBFString()
-    bf2 = BigFraction.ONE.toBFString()
-    expected = listOf(bf, "+", bf2)
+    ef = ExactFraction(112).toEFString()
+    ef2 = ExactFraction.ONE.toEFString()
+    expected = listOf(ef, "+", ef2)
     assertEquals(expected, parseSetOfOps(text, fakeOps, performFake))
 }
 
@@ -284,28 +284,28 @@ fun runParseParensTests() {
 
     // parens
     text = "( 3.0 )".split(' ')
-    var bf = BigFraction(3).toBFString()
-    expected = listOf(bf)
+    var ef = ExactFraction(3).toEFString()
+    expected = listOf(ef)
     assertEquals(expected, parseParens(text, timesDiv, plusMinus, performOp))
 
     text = "( 2 + 3 )".split(' ')
-    bf = BigFraction(5).toBFString()
-    expected = listOf(bf)
+    ef = ExactFraction(5).toEFString()
+    expected = listOf(ef)
     assertEquals(expected, parseParens(text, timesDiv, plusMinus, performOp))
 
     text = "5 x ( 3 - 1 )".split(' ')
-    bf = BigFraction(2).toBFString()
-    expected = listOf("5", "x", bf)
+    ef = ExactFraction(2).toEFString()
+    expected = listOf("5", "x", ef)
     assertEquals(expected, parseParens(text, timesDiv, plusMinus, performOp))
 
     text = "( 9 / ( 6 / 2 ) x 3 x ( 2 + 5 ) ) - ( 7 / 8 )".split(' ')
-    bf = BigFraction(63).toBFString()
-    val bf2 = BigFraction(7, 8).toBFString()
-    expected = listOf(bf, "-", bf2)
+    ef = ExactFraction(63).toEFString()
+    val ef2 = ExactFraction(7, 8).toEFString()
+    expected = listOf(ef, "-", ef2)
     assertEquals(expected, parseParens(text, timesDiv, plusMinus, performOp))
 
     text = "2 + ( 5 / 3 )".split(' ')
-    bf = BigFraction(5, 3).toBFString()
-    expected = listOf("2", "+", bf)
+    ef = ExactFraction(5, 3).toEFString()
+    expected = listOf("2", "+", ef)
     assertEquals(expected, parseParens(text, plusMinus, timesDiv, performOp))
 }
