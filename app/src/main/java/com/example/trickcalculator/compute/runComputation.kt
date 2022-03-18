@@ -26,14 +26,13 @@ import com.example.trickcalculator.utils.*
  */
 fun runComputation(
     computeText: StringList,
-    firstRoundOps: StringList,
-    secondRoundOps: StringList,
+    operatorRounds: List<StringList>,
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
     checkParens: Boolean,
     useDecimals: Boolean
 ): ExactFraction {
-    if (!validateComputeText(computeText, firstRoundOps + secondRoundOps)) {
+    if (!validateComputeText(computeText, operatorRounds.flatten())) {
         throw Exception("Syntax error")
     }
 
@@ -55,7 +54,7 @@ fun runComputation(
     }
 
     return try {
-        parseText(currentState, firstRoundOps, secondRoundOps, performSingleOp)
+        parseText(currentState, operatorRounds, performSingleOp)
     } catch (e: ExactFractionOverflowException) {
         if (e.overflowValue != null) {
             throw Exception("Number overflow on value ${e.overflowValue}")
@@ -87,22 +86,19 @@ fun runComputation(
  */
 fun parseText(
     computeText: StringList,
-    firstRoundOps: StringList,
-    secondRoundOps: StringList,
+    operatorRounds: List<StringList>,
     performSingleOp: OperatorFunction,
 ): ExactFraction {
     var currentState = computeText
 
     if (currentState.indexOf("(") != -1) {
-        currentState = parseParens(computeText, firstRoundOps, secondRoundOps, performSingleOp)
+        currentState = parseParens(computeText, operatorRounds, performSingleOp)
     }
 
-    if (firstRoundOps.isNotEmpty()) {
-        currentState = parseSetOfOps(currentState, firstRoundOps, performSingleOp)
-    }
-
-    if (secondRoundOps.isNotEmpty()) {
-        currentState = parseSetOfOps(currentState, secondRoundOps, performSingleOp)
+    for (round in operatorRounds) {
+        if (round.isNotEmpty()) {
+            currentState = parseSetOfOps(currentState, round, performSingleOp)
+        }
     }
 
     return when (currentState.size) {
@@ -177,8 +173,7 @@ fun parseSetOfOps(
  */
 fun parseParens(
     computeText: StringList,
-    firstRoundOps: StringList,
-    secondRoundOps: StringList,
+    operatorRounds: List<StringList>,
     performSingleOp: OperatorFunction
 ): StringList {
     val simplifiedList: MutableList<String> = mutableListOf()
@@ -191,7 +186,7 @@ fun parseParens(
             val openIndex = index
             val closeIndex = getMatchingParenIndex(openIndex, computeText)
             val subText = computeText.subList(openIndex + 1, closeIndex) // cut out start+end parens
-            val result = parseText(subText, firstRoundOps, secondRoundOps, performSingleOp)
+            val result = parseText(subText, operatorRounds, performSingleOp)
             simplifiedList.add(result.toEFString())
             index = closeIndex + 1
         } else {

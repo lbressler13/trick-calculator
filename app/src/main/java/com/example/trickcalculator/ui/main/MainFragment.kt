@@ -134,9 +134,9 @@ class MainFragment : Fragment() {
 
             // set action for each operator
             val operators = if (shuffleOperators) {
-                listOf("+", "-", "x", "/").shuffled()
+                listOf("+", "-", "x", "/", "^").shuffled()
             } else {
-                listOf("+", "-", "x", "/")
+                listOf("+", "-", "x", "/", "^")
             }
 
             // maps operator symbols to their given functions
@@ -146,9 +146,16 @@ class MainFragment : Fragment() {
                     operators[1] -> leftValue - rightValue
                     operators[2] -> leftValue * rightValue
                     operators[3] -> leftValue / rightValue
+                    operators[4] -> leftValue.pow(rightValue)
                     else -> throw Exception("Invalid operator $operator")
                 }
             }
+
+            val operatorRounds = listOf(
+                listOf(operators[4]), // exponent
+                operators.subList(2, 4), // multiply and divide
+                operators.subList(0, 2), // add and subtract
+            )
 
             val numberOrder = if (shuffleNumbers) {
                 (0..9).shuffled()
@@ -161,8 +168,7 @@ class MainFragment : Fragment() {
                 val computedValue: ExactFraction =
                     runComputation(
                         computeText,
-                        operators.subList(2, 4), // multiply and divide ops
-                        operators.subList(0, 2), // add and subtract ops
+                        operatorRounds,
                         performOperation,
                         numberOrder,
                         applyParens,
