@@ -9,9 +9,9 @@ What did you do?
       Your future self will thank you.
       In this repo, we ♥ tests.
 * [ ] Any new/deleted images have been updated in
-    * [ ] the attribution fragment
+    * [ ] the image attributions fragment
     * [ ] the README
-* [ ]  Any new settings were updated in the README
+* [ ]  Any new settings have been updated in the README
 
 ## Comments
 Fun but optional
