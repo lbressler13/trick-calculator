@@ -6,6 +6,9 @@ import com.example.trickcalculator.ext.subListFrom
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.TermList
 
+// TODO javadocs with info about assumptions & guarantees of returns
+// also lol param descriptions. Much need
+
 
 /**
  * Important definitions
@@ -26,11 +29,14 @@ fun addExpressionLists(exprList1: StringList, exprList2: StringList): String {
     var index1 = 0
     var index2 = 0
 
+    // resulting terms are non-zero
     val terms1 = simplifyExpressionList(getTermLists(exprList1))
     val terms2 = simplifyExpressionList(getTermLists(exprList2))
 
     val allTerms: MutableList<Term> = mutableListOf()
 
+    // O(n) implementation
+    // Sorting would be O(nlog(n)) to sort + O(n) to compare
     while (index1 < terms1.size && index2 < terms2.size) {
         val term1 = terms1[index1]
         val term2 = terms2[index2]
@@ -47,7 +53,10 @@ fun addExpressionLists(exprList1: StringList, exprList2: StringList): String {
                 index2++
             }
             exp1 == exp2 -> {
-                allTerms.add(term1 + term2)
+                val sum = term1 + term2
+                if (sum.isNotZero()) {
+                    allTerms.add(term1 + term2)
+                }
                 index1++
                 index2++
             }
@@ -98,7 +107,7 @@ fun simplifyExpression(terms: TermList): TermList {
 
         val exp = it.key
         Term(newCoefficient, exp)
-    }
+    }.filter { it.isNotZero() }
 
     return simpleTerms
 }

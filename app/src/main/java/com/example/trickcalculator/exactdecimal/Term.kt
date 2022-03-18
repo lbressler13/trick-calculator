@@ -4,6 +4,8 @@ import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.TermList
 
+// easily extensible --> i.e. coefficient, piExp, eExp
+
 // c * pi^exp
 class Term : Comparable<Term> {
     val coefficient: ExactFraction
@@ -48,16 +50,19 @@ class Term : Comparable<Term> {
         return coefficient == other.coefficient && exp == other.exp
     }
 
-    override fun toString(): String {
-        return "${coefficient}pi^$exp"
-    }
-
     override operator fun compareTo(other: Term): Int {
         if (exp == other.exp) {
             return coefficient.compareTo(other.coefficient)
         }
 
         return exp.compareTo(other.exp)
+    }
+
+    fun isZero(): Boolean = coefficient.isZero()
+    fun isNotZero(): Boolean = !coefficient.isZero()
+
+    override fun toString(): String {
+        return "${coefficient}pi^$exp"
     }
 
     override fun hashCode(): Int = Pair(coefficient, exp).hashCode()
