@@ -26,3 +26,8 @@ fun <T> List<T>.copyWithReplacement(index: Int, value: T): List<T> {
  * @return list identical to this, with the exception of the value at the last index
  */
 fun <T> List<T>.copyWithLastReplaced(value: T): List<T> = copyWithReplacement(lastIndex, value)
+
+fun <T> List<T>.subListTo(index: Int): List<T> = subList(0, index)
+fun <T> List<T>.subListFrom(index: Int): List<T> = subList(index, size)
+
+fun <T> List<T>.isSingleItem(): Boolean = size == 1

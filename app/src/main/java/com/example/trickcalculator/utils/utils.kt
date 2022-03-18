@@ -58,4 +58,14 @@ fun isPartialDecimal(value: String): Boolean {
 
 // TODO tests
 // TODO efficiency
-fun listsEqual(l1: StringList, l2: StringList): Boolean = l1.size == l2.size && l1.sorted() == l2.sorted()
+//fun <T> listsEqual(l1: List<Comparable<T>>, l2: List<Comparable<T>>): Boolean {
+//    return l1.size == l2.size && l1.sorted() == l2.sorted()
+//}
+//
+//fun expressionListsEqual(l1: List<TermList>, l2: List<TermList>): Boolean {
+//    return k
+//}
+//
+//fun termListsEqual(l1: TermList, l2: TermList): Boolean {
+//    return l1.size == l2.size && l1.sorted() == l2.sorted()
+//}

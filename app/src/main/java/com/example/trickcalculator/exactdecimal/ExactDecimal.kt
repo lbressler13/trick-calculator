@@ -3,17 +3,17 @@ package com.example.trickcalculator.exactdecimal
 import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.utils.listsEqual
 import java.lang.Integer.min
 import kotlin.math.max
+
+// TODO about a million tests
 
 class ExactDecimal private constructor() : Number() {
     var numerator: StringList = mutableListOf()
     var denominator: StringList = mutableListOf()
     var coefficient: ExactFraction = ExactFraction.ONE
 
-    private val pi: String = "p"
-    private val ops: StringList = listOf("+", "-", "x", "/")
+    private val pi: String = "p" // TODO use this instead of p everywhere
 
     // CONSTRUCTORS
 
@@ -24,6 +24,12 @@ class ExactDecimal private constructor() : Number() {
     constructor(coefficient: Int) : this(coefficient.toExactFraction())
     constructor(coefficient: Long) : this(coefficient.toExactFraction())
 
+    // TODO do I accept expressions as standard strings? Or just TSS?
+    // TSS is easier here, but more difficult in runComputation
+    // Not difficult to parse one expr, but it gets complicated if there are multiple expressions
+    // Realistically, runComputation initializes an ED with 1 term. Then it expands to multiple terms via ops
+    // This makes sense
+
     constructor(numerator: StringList, denominator: StringList, coefficient: ExactFraction) : this() {
         this.numerator = numerator
         this.denominator = denominator
@@ -31,6 +37,12 @@ class ExactDecimal private constructor() : Number() {
 
         simplify()
     }
+
+    // runComputation will likely use one of these
+    constructor(numerator: String, denominator: String, coefficient: ExactFraction) :
+            this(listOf(numerator), listOf(denominator), coefficient)
+    constructor(numerator: String, denominator: String) :
+            this(listOf(numerator), listOf(denominator), ExactFraction.ONE)
 
     constructor(numerator: StringList, denominator: StringList, coefficient: Int) :
             this(numerator, denominator, coefficient.toExactFraction())
@@ -53,16 +65,30 @@ class ExactDecimal private constructor() : Number() {
         }
 
         return coefficient == other.coefficient
-                && listsEqual(numerator, other.numerator)
-                && listsEqual(denominator, other.denominator)
+//                && termListsEqual(numerator, other.numerator)
+//                && termListsEqual(denominator, other.denominator)
         // TODO fix this
     }
 
+    /**
+     * Computation:
+     * x/y + a/b = (xb + ay)/(yb)
+     * x/y + a/y = (x + a)/y
+     */
     operator fun plus(other: ExactDecimal): ExactDecimal {
-        val newNumerator = numerator + other.denominator
-        val newDenominator = denominator + other.numerator
         val newCoefficient = ExactFraction(coefficient, other.coefficient)
-        return ExactDecimal(newNumerator, newDenominator, newCoefficient)
+        if (denominator == other.denominator) {
+            val newDenominator = denominator // y
+            val newNumerator = addExpressionLists(numerator, other.numerator) // x + a
+            return ExactDecimal(listOf(newNumerator), newDenominator, newCoefficient)
+        }
+
+        val newDenominator = denominator + other.denominator // yb
+        val exprList1 = numerator + other.denominator // xb
+        val exprList2 = other.numerator + denominator // ay
+        val newNumerator = addExpressionLists(exprList1, exprList2) // xb + ay
+
+        return ExactDecimal(listOf(newNumerator), newDenominator, newCoefficient)
     }
 
     operator fun minus(other: ExactDecimal): ExactDecimal = plus(-other)
@@ -106,11 +132,11 @@ class ExactDecimal private constructor() : Number() {
     private fun simplifyCommon() {
         // TODO does this work with repeats and stuff?
         // NO it does not
-        val newNumerator: StringList = (numerator - denominator)
-        val newDenominator: StringList = (denominator - numerator)
-
-        numerator = newNumerator
-        denominator = newDenominator
+//        val newNumerator: StringList = (numerator - denominator)
+//        val newDenominator: StringList = (denominator - numerator)
+//
+//        numerator = newNumerator
+//        denominator = newDenominator
     }
 
     private fun simplifyAllStrings() {}
