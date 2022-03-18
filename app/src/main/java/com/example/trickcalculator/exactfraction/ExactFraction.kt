@@ -168,6 +168,37 @@ class ExactFraction private constructor() : Number() {
     operator fun compareTo(other: Long): Int = compareTo(other.toEF())
     operator fun compareTo(other: BigInteger): Int = compareTo(other.toEF())
 
+    fun pow(other: ExactFraction): ExactFraction {
+        if (other.isZero()) {
+            return ONE
+        }
+
+        if (other.denominator != BigInteger.ONE) {
+            throw ArithmeticException("Exponents must be whole numbers")
+        }
+
+        var numeratorMult = BigInteger.ONE
+        var denominatorMult = BigInteger.ONE
+        var remaining = other.absoluteValue().numerator.abs()
+        val intMax = Int.MAX_VALUE
+
+        while (remaining > BigInteger.ZERO) {
+            if (remaining > intMax.toBigInteger()) {
+                numeratorMult *= numerator.pow(intMax)
+                denominatorMult *= denominator.pow(intMax)
+                remaining -= intMax.toBigInteger()
+            } else {
+                val exp = remaining.toInt()
+                numeratorMult = numerator.pow(exp)
+                denominatorMult = denominator.pow(exp)
+                remaining = BigInteger.ZERO
+            }
+        }
+
+        val result = ExactFraction(numeratorMult, denominatorMult)
+        return if (other < 0) result.inverse() else result
+    }
+
     // UNARY NON-OPERATORS
 
     fun inverse(): ExactFraction {
