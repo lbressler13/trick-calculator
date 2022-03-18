@@ -25,6 +25,7 @@ class ExactFractionTest {
     @Test fun testCompareTo() = runCompareToTests()
     @Test fun testEquals() = runEqualsTests()
     @Test fun testEq() = runEqTests()
+    @Test fun testPow() = runPowTests()
 
     // unary non-operator functions
     @Test fun testInverse() = runInverseTests()

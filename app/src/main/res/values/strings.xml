@@ -16,6 +16,7 @@
     <string name="lparen">(</string>
     <string name="rparen">)</string>
     <string name="decimal">.</string>
+    <string name="exp">^</string>
     <string name="clear">CE</string>
 
     <!-- Settings UI -->

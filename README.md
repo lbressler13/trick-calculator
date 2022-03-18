@@ -24,6 +24,12 @@ Access to the settings menu is unintuitive to create added difficulty.
 In the spirit of the app, this access is undocumented.
 But you can read the code or click around in the app until you find it.
 
+## Testing
+**All** new logic needs unit tests.
+The logic in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
+There is a huge sense of relief from being able to press a button and know that everything still works.
+The hours writing tests will be worth it.
+
 ## Serious Stuff
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.
 This is the complete list of Flaticon images used within the app.
