@@ -2,26 +2,18 @@ package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toExactFraction
+import com.example.trickcalculator.utils.ExprList
 import com.example.trickcalculator.utils.IntList
-import com.example.trickcalculator.utils.StringList
 import java.lang.Integer.min
+import kotlin.math.absoluteValue
 import kotlin.math.max
 
 // TODO about a million tests
 
 class ExactDecimal private constructor() : Number() {
-    var numerator: StringList = mutableListOf()
-    var denominator: StringList = mutableListOf()
+    var numerator: ExprList = mutableListOf()
+    var denominator: ExprList = mutableListOf()
     var coefficient: ExactFraction = ExactFraction.ONE
-    // maybe keep track of terms list? and acknowledge that it needs to be updated sometimes
-    // it would need to be a list of terms lists
-    // but yeah a think that works...term list or term set?
-    // maybe a dictionary! that's the best of both worlds. Not sure if I actually need the term in that case?
-    // like { exp: coefficient } mapping. Yeah I like that a LOT
-    // actually wait. I get that. I really do. And I know I've been ignoring extensibility a lot but like.
-    // I don't think I can ignore it this much. Guess I'm keeping terms lol
-
-    private val pi: String = "p" // TODO use this instead of p everywhere
 
     // CONSTRUCTORS
 
@@ -38,7 +30,7 @@ class ExactDecimal private constructor() : Number() {
     // Realistically, runComputation initializes an ED with 1 term. Then it expands to multiple terms via ops
     // This makes sense
 
-    constructor(numerator: StringList, denominator: StringList, coefficient: ExactFraction) : this() {
+    constructor(numerator: ExprList, denominator: ExprList, coefficient: ExactFraction) : this() {
         this.numerator = numerator
         this.denominator = denominator
         this.coefficient = coefficient
@@ -47,16 +39,16 @@ class ExactDecimal private constructor() : Number() {
     }
 
     // runComputation will likely use one of these
-    constructor(numerator: String, denominator: String, coefficient: ExactFraction) :
-            this(listOf(numerator), listOf(denominator), coefficient)
-    constructor(numerator: String, denominator: String) :
-            this(listOf(numerator), listOf(denominator), ExactFraction.ONE)
-
-    constructor(numerator: StringList, denominator: StringList, coefficient: Int) :
-            this(numerator, denominator, coefficient.toExactFraction())
-
-    constructor(numerator: StringList, denominator: StringList, coefficient: Long) :
-            this(numerator, denominator, coefficient.toExactFraction())
+//    constructor(numerator: String, denominator: String, coefficient: ExactFraction) :
+//            this(listOf(numerator), listOf(denominator), coefficient)
+//    constructor(numerator: String, denominator: String) :
+//            this(listOf(numerator), listOf(denominator), ExactFraction.ONE)
+//
+//    constructor(numerator: StringList, denominator: StringList, coefficient: Int) :
+//            this(numerator, denominator, coefficient.toExactFraction())
+//
+//    constructor(numerator: StringList, denominator: StringList, coefficient: Long) :
+//            this(numerator, denominator, coefficient.toExactFraction())
 
     // UNARY OPERATORS
 
@@ -73,9 +65,8 @@ class ExactDecimal private constructor() : Number() {
         }
 
         return coefficient == other.coefficient
-//                && termListsEqual(numerator, other.numerator)
-//                && termListsEqual(denominator, other.denominator)
-        // TODO fix this
+                && numerator == other.numerator
+                && denominator == other.denominator
     }
 
     /**
@@ -84,7 +75,7 @@ class ExactDecimal private constructor() : Number() {
      * x/y + a/y = (x + a)/y
      */
     operator fun plus(other: ExactDecimal): ExactDecimal {
-        val newCoefficient = ExactFraction(coefficient, other.coefficient)
+        var newCoefficient = ExactFraction(coefficient, other.coefficient)
         if (denominator == other.denominator) {
             val newDenominator = denominator // y
             val newNumerator = addExpressionLists(numerator, other.numerator) // x + a
@@ -94,8 +85,13 @@ class ExactDecimal private constructor() : Number() {
         val newDenominator = denominator + other.denominator // yb
         val exprList1 = numerator + other.denominator // xb
         val exprList2 = other.numerator + denominator // ay
-        val newNumerator = addExpressionLists(exprList1, exprList2) // xb + ay
-        // TODO pull out last term as constant
+        var newNumerator = addExpressionLists(exprList1, exprList2) // xb + ay
+
+        val constant = newNumerator.rationalTerm
+        if (constant != ExactFraction.ZERO) {
+            newCoefficient *= constant
+            newNumerator = newNumerator.dropConstant()
+        }
 
         return ExactDecimal(listOf(newNumerator), newDenominator, newCoefficient)
     }
@@ -141,11 +137,11 @@ class ExactDecimal private constructor() : Number() {
     private fun simplifyCommon() {
         // TODO does this work with repeats and stuff?
         // NO it does not
-//        val newNumerator: StringList = (numerator - denominator)
-//        val newDenominator: StringList = (denominator - numerator)
-//
-//        numerator = newNumerator
-//        denominator = newDenominator
+        val newNumerator = numerator - denominator
+        val newDenominator = denominator - numerator
+
+        numerator = newNumerator
+        denominator = newDenominator
     }
 
     private fun simplifyAllStrings() {}
@@ -156,12 +152,12 @@ class ExactDecimal private constructor() : Number() {
         }
 
         if (values.size == 2) {
-            return getGCDPair(values[0], values[1])
+            return getGCDPair(values[0].absoluteValue, values[1].absoluteValue)
         }
 
-        var current: Int = values[0]
+        var current: Int = values[0].absoluteValue
         for (value in values) {
-            current = getGCDPair(value, current)
+            current = getGCDPair(value.absoluteValue, current)
             if (current == 1) {
                 return 1
             }
@@ -212,4 +208,11 @@ class ExactDecimal private constructor() : Number() {
     override fun toInt(): Int = 0
     override fun toLong(): Long = 0L
     override fun toShort(): Short = 0
+
+    override fun hashCode(): Int {
+        var result = numerator.hashCode()
+        result = 31 * result + denominator.hashCode()
+        result = 31 * result + coefficient.hashCode()
+        return result
+    }
 }

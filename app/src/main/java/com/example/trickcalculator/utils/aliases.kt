@@ -1,5 +1,6 @@
 package com.example.trickcalculator.utils
 
+import com.example.trickcalculator.exactdecimal.Expression
 import com.example.trickcalculator.exactdecimal.Term
 import com.example.trickcalculator.exactfraction.ExactFraction
 
@@ -11,6 +12,6 @@ typealias OperatorFunction = (ExactFraction, ExactFraction, String) -> ExactFrac
 
 typealias IntList = List<Int>
 typealias StringList = List<String>
-typealias MStringList = MutableList<String>
 
 typealias TermList = List<Term>
+typealias ExprList = List<Expression>

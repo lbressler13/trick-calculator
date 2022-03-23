@@ -55,17 +55,3 @@ fun isPartialDecimal(value: String): Boolean {
 
     return positiveString.isNotEmpty() && positiveString.all { it.isDigit() || it == '.' }
 }
-
-// TODO tests
-// TODO efficiency
-//fun <T> listsEqual(l1: List<Comparable<T>>, l2: List<Comparable<T>>): Boolean {
-//    return l1.size == l2.size && l1.sorted() == l2.sorted()
-//}
-//
-//fun expressionListsEqual(l1: List<TermList>, l2: List<TermList>): Boolean {
-//    return k
-//}
-//
-//fun termListsEqual(l1: TermList, l2: TermList): Boolean {
-//    return l1.size == l2.size && l1.sorted() == l2.sorted()
-//}
