@@ -1,5 +1,6 @@
 package com.example.trickcalculator.exactdecimal
 
+import com.example.trickcalculator.createExprList
 import com.example.trickcalculator.exactfraction.ExactFraction
 import org.junit.Assert.*
 
@@ -16,12 +17,32 @@ fun runUnaryMinusTests() {
     expected = ExactDecimal(ExactFraction(7, 11))
     assertEquals(expected, -ed)
 
-    ed = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), 4)
-    expected = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), -4)
+    ed = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        4
+    )
+
+    expected = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        -4
+    )
+
     assertEquals(expected, -ed)
 
-    ed = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), ExactFraction(12, 19))
-    expected = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), ExactFraction(-12, 19))
+    ed = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        ExactFraction(12, 19)
+    )
+
+    expected = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        ExactFraction(-12, 19)
+    )
+
     assertEquals(expected, -ed)
 }
 
@@ -38,12 +59,32 @@ fun runUnaryPlusTests() {
     expected = ExactDecimal(ExactFraction(-7, 11))
     assertEquals(expected, +ed)
 
-    ed = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), 4)
-    expected = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), 4)
+    ed = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        4
+    )
+
+    expected = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        4
+    )
+
     assertEquals(expected, +ed)
 
-    ed = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), ExactFraction(12, 19))
-    expected = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), ExactFraction(12, 19))
+    ed = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        ExactFraction(12, 19)
+    )
+
+    expected = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        ExactFraction(12, 19)
+    )
+
     assertEquals(expected, +ed)
 }
 
@@ -51,7 +92,11 @@ fun runNotTests() {
     var ed = ExactDecimal(0)
     assert(!ed)
 
-    ed = ExactDecimal(listOf("6"), listOf("pi + 5"), ExactFraction.ZERO)
+    ed = ExactDecimal(
+        createExprList(listOf("6")),
+        createExprList(listOf("1p1", "5")),
+        ExactFraction.ZERO
+    )
     assert(!ed)
 
     ed = ExactDecimal(2)
@@ -60,9 +105,19 @@ fun runNotTests() {
     ed = ExactDecimal(ExactFraction(-7, 11))
     assert(!!ed)
 
-    ed = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), 4)
+
+    ed = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        4
+    )
     assert(!!ed)
 
-    ed = ExactDecimal(listOf("2 + 4", "3"), listOf("7pi"), ExactFraction(12, 19))
+
+    ed = ExactDecimal(
+        createExprList(listOf("2 4", "3")),
+        createExprList(listOf("7p1")),
+        ExactFraction(12, 19)
+    )
     assert(!!ed)
 }

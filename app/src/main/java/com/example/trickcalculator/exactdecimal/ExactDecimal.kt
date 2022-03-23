@@ -44,11 +44,11 @@ class ExactDecimal private constructor() : Number() {
 //    constructor(numerator: String, denominator: String) :
 //            this(listOf(numerator), listOf(denominator), ExactFraction.ONE)
 //
-//    constructor(numerator: StringList, denominator: StringList, coefficient: Int) :
-//            this(numerator, denominator, coefficient.toExactFraction())
-//
-//    constructor(numerator: StringList, denominator: StringList, coefficient: Long) :
-//            this(numerator, denominator, coefficient.toExactFraction())
+    constructor(numerator: ExprList, denominator: ExprList, coefficient: Int) :
+            this(numerator, denominator, coefficient.toExactFraction())
+
+    constructor(numerator: ExprList, denominator: ExprList, coefficient: Long) :
+            this(numerator, denominator, coefficient.toExactFraction())
 
     // UNARY OPERATORS
 

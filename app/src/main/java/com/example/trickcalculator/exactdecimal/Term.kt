@@ -1,7 +1,8 @@
 package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.ext.toExactFraction
+import com.example.trickcalculator.ext.asExpression
+import com.example.trickcalculator.ext.toEF
 import com.example.trickcalculator.utils.TermList
 
 // representation of a single term
@@ -9,22 +10,39 @@ import com.example.trickcalculator.utils.TermList
 class Term {
     val coefficient: ExactFraction
     val exp: Int
-    val shortString: String
+    val shortString: String // abbreviated as tss (NOT ss)
     private val pi = ExactConstants.PI
     private val shortPi = "p"
 
     constructor(coefficient: ExactFraction, exp: Int) {
         this.coefficient = coefficient
-        this.exp = exp
+        this.exp = if (coefficient.isZero()) 0 else exp
         this.shortString = "$coefficient$shortPi$exp"
     }
 
+    constructor(coefficient: Int, exp: Int) : this(coefficient.toEF(), exp)
+    constructor(coefficient: ExactFraction) : this(coefficient, 0)
+    constructor(coefficient: Int) : this(coefficient.toEF(), 0)
+
     // parses short string
     constructor(s: String) {
-        val numbers = s.split(shortPi)
-        this.coefficient = Integer.parseInt(numbers[0]).toExactFraction()
-        this.exp = Integer.parseInt(numbers[1])
-        this.shortString = s
+        val isEF = try {
+            ExactFraction(s)
+            true
+        } catch (e: Exception) {
+            false
+        }
+
+        if (isEF) {
+            coefficient = ExactFraction(s)
+            exp = 0
+            shortString = "${coefficient}p0"
+        } else {
+            val numbers = s.split(shortPi)
+            coefficient = ExactFraction(numbers[0])
+            exp = if (coefficient.isZero()) 0 else Integer.parseInt(numbers[1])
+            shortString = s
+        }
     }
 
     operator fun times(other: Term): Term {
@@ -34,18 +52,33 @@ class Term {
     }
 
     operator fun times(other: TermList): TermList = other.map { times(it) }
-    operator fun times(other: Expression): Expression = other * this
+    operator fun times(other: Expression): Expression = times(other.terms).asExpression()
 
     operator fun plus(other: Term): Term {
-        if (exp != other.exp) {
+        val result = when {
+            coefficient.isZero() -> other
+            other.coefficient.isZero() -> this
+            exp == other.exp -> Term(coefficient + other.coefficient, exp)
+            else -> null
+        }
+
+        if (result == null) {
             throw ArithmeticException("Cannot add Terms with different exp values")
         }
 
-        return Term(coefficient + other.coefficient, exp)
+        return result
     }
 
-    override fun equals(other: Any?): Boolean = other != null && other is Term
-            && coefficient == other.coefficient && exp == other.exp
+    override fun equals(other: Any?): Boolean {
+        if (other == null && other !is Term) {
+            return false
+        }
+
+        other as Term
+
+        return (coefficient.isZero() && other.coefficient.isZero()) || (
+                coefficient == other.coefficient && exp == other.exp)
+    }
 
 
     fun isZero(): Boolean = coefficient.isZero()
