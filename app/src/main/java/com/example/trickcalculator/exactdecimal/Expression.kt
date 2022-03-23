@@ -75,7 +75,7 @@ class Expression(terms: TermList) {
 
     fun dropConstant(): Expression = terms.dropFirst { it.exp == 0 }.asExpression()
 
-    private fun simplifyExpression(terms: TermList): TermList {
+    fun simplifyExpression(terms: TermList): TermList {
         if (terms.size < 2) {
             return terms
         }

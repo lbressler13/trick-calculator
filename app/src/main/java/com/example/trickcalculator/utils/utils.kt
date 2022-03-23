@@ -1,6 +1,11 @@
 package com.example.trickcalculator.utils
 
 import com.example.trickcalculator.exactfraction.ExactFraction
+import com.example.trickcalculator.ext.isZero
+import com.example.trickcalculator.ext.max
+import com.example.trickcalculator.ext.min
+import java.math.BigInteger
+import kotlin.math.max
 
 /**
  * Determine if a string can be parsed to an Int
@@ -54,4 +59,34 @@ fun isPartialDecimal(value: String): Boolean {
     }
 
     return positiveString.isNotEmpty() && positiveString.all { it.isDigit() || it == '.' }
+}
+
+/**
+ * Get greatest common divisor of 2 numbers using Euclidean algorithm
+ */
+fun getGCD(val1: BigInteger, val2: BigInteger): BigInteger {
+    if (val1 == BigInteger.ZERO || val2 == BigInteger.ZERO || val1 == val2) {
+        return BigInteger.ONE
+    }
+
+    if (val1 == val2) {
+        return val1
+    }
+
+    var sum = max(val1, val2)
+    var value = min(val1, val2)
+    var finished = false
+
+    while (!finished) {
+        val remainder = sum % value
+
+        if (remainder.isZero()) {
+            finished = true
+        } else {
+            sum = value
+            value = remainder
+        }
+    }
+
+    return value
 }

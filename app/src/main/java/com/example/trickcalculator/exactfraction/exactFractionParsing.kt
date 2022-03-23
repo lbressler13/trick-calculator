@@ -64,11 +64,7 @@ fun parseDecimal(unparsed: String): ExactFraction {
 }
 
 /**
-<<<<<<< HEAD:app/src/main/java/com/example/trickcalculator/exactfraction/exactFractionParsing.kt
- * Parse a string from a EF string format into an ExactFraction
-=======
  * Parse a string from a EF string format into a ExactFraction.
->>>>>>> main:app/src/main/java/com/example/trickcalculator/bigfraction/bigFractionParsing.kt
  * EF string format is "EF[num denom]"
  *
  * @param unparsed [String]: string to parse

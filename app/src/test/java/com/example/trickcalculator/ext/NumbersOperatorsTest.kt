@@ -137,4 +137,14 @@ class NumbersOperatorsTest {
         bi = BigInteger("-100")
         assert(!bi.isZero())
     }
+
+    @Test
+    fun testMax() {
+        // TODO
+    }
+
+    @Test
+    fun testMin() {
+        // TODO
+    }
 }

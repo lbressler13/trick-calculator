@@ -2,8 +2,6 @@ package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.utils.ExprList
 
-// TODO javadocs with info about assumptions & guarantees of returns
-
 /**
  * Add two lists of expressions
  *

@@ -1,6 +1,7 @@
 package com.example.trickcalculator.exactfraction
 
 import com.example.trickcalculator.ext.*
+import com.example.trickcalculator.utils.getGCD
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
@@ -43,19 +44,6 @@ class ExactFraction private constructor() : Number() {
 
         this.numerator = numerator
         this.denominator = denominator
-        simplify()
-    }
-
-    // TODO test this
-    constructor (numerator: ExactFraction, denominator: ExactFraction) : this() {
-        if (denominator.isZero()) {
-            throw ArithmeticException("divide by zero")
-        }
-
-        val result = numerator / denominator
-
-        this.numerator = result.numerator
-        this.denominator = result.denominator
         simplify()
     }
 
@@ -253,23 +241,28 @@ class ExactFraction private constructor() : Number() {
      * Simplify using greatest common divisor using Euclidean algorithm
      */
     private fun simplifyGCD() {
+//        if (!numerator.isZero()) {
+//            var sum = if (numerator > denominator) numerator else denominator
+//            var value = if (numerator > denominator) denominator else numerator
+//            var finished = false
+//
+//            while (!finished) {
+//                val remainder = sum % value
+//
+//                if (remainder == BigInteger.ZERO) {
+//                    finished = true
+//                } else {
+//                    sum = value
+//                    value = remainder
+//                }
+//            }
+//
+//            val gcd = value
+//            numerator /= gcd
+//            denominator /= gcd
+//        }
         if (!numerator.isZero()) {
-            var sum = if (numerator > denominator) numerator else denominator
-            var value = if (numerator > denominator) denominator else numerator
-            var finished = false
-
-            while (!finished) {
-                val remainder = sum % value
-
-                if (remainder == BigInteger.ZERO) {
-                    finished = true
-                } else {
-                    sum = value
-                    value = remainder
-                }
-            }
-
-            val gcd = value
+            val gcd = getGCD(numerator, denominator)
             numerator /= gcd
             denominator /= gcd
         }

@@ -4,7 +4,9 @@ import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.ExprList
 import com.example.trickcalculator.utils.IntList
+import com.example.trickcalculator.utils.getGCD
 import java.lang.Integer.min
+import java.math.BigInteger
 import kotlin.math.absoluteValue
 import kotlin.math.max
 
@@ -75,7 +77,7 @@ class ExactDecimal private constructor() : Number() {
      * x/y + a/y = (x + a)/y
      */
     operator fun plus(other: ExactDecimal): ExactDecimal {
-        var newCoefficient = ExactFraction(coefficient, other.coefficient)
+        var newCoefficient = coefficient / other.coefficient
         if (denominator == other.denominator) {
             val newDenominator = denominator // y
             val newNumerator = addExpressionLists(numerator, other.numerator) // x + a
@@ -146,54 +148,24 @@ class ExactDecimal private constructor() : Number() {
 
     private fun simplifyAllStrings() {}
 
-    private fun getGCD(values: IntList): Int {
+    private fun getListGCD(values: List<BigInteger>): BigInteger {
         if (values.size < 2) {
-            return 1
+            return BigInteger.ONE
         }
 
         if (values.size == 2) {
-            return getGCDPair(values[0].absoluteValue, values[1].absoluteValue)
+            return getGCD(values[0], values[1])
         }
 
-        var current: Int = values[0].absoluteValue
+        var current: BigInteger = values[0]
         for (value in values) {
-            current = getGCDPair(value.absoluteValue, current)
-            if (current == 1) {
-                return 1
+            current = getGCD(value, current)
+            if (current == BigInteger.ONE) {
+                return BigInteger.ONE
             }
         }
 
         return current
-    }
-
-    /**
-     * Get greatest common divisor of 2 numbers using Euclidean algorithm
-     */
-    private fun getGCDPair(val1: Int, val2: Int): Int {
-        if (val1 == 0 || val2 == 0 || val1 == val2) {
-            return 1
-        }
-
-        if (val1 == val2) {
-            return val1
-        }
-
-        var sum = max(val1, val2)
-        var value = min(val1, val2)
-        var finished = false
-
-        while (!finished) {
-            val remainder = sum % value
-
-            if (remainder == 0) {
-                finished = true
-            } else {
-                sum = value
-                value = remainder
-            }
-        }
-
-        return value
     }
 
     override fun toString(): String {

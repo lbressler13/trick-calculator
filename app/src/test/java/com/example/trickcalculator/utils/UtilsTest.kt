@@ -176,4 +176,9 @@ class UtilsTest {
         value = "hello world"
         assert(!isPartialDecimal(value))
     }
+
+    @Test
+    fun testGetGCD() {
+        // TODO
+    }
 }
