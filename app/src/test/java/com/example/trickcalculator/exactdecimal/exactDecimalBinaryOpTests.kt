@@ -16,19 +16,19 @@ fun runTimesTests() {
     var ed1 = ExactDecimal(
         createExprList(listOf("1")),
         createExprList(listOf("2")),
-        ExactFraction(1, 5)
+        // ExactFraction(1, 5)
     )
 
     var ed2 = ExactDecimal(
         createExprList(listOf("1p1", "1p1 1")),
         createExprList(listOf("3")),
-        ExactFraction(2, 7)
+        // ExactFraction(2, 7)
     )
 
     var expected = ExactDecimal(
         createExprList(listOf("1", "1p1", "1p1 1")),
         createExprList(listOf("2", "3")),
-        ExactFraction(2, 35)
+        // ExactFraction(2, 35)
     )
 
     assertEquals(expected, ed1 * ed2)

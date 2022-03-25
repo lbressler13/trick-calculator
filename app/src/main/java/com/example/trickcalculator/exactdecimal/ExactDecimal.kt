@@ -15,12 +15,13 @@ import kotlin.math.max
 class ExactDecimal private constructor() : Number() {
     var numerator: ExprList = mutableListOf()
     var denominator: ExprList = mutableListOf()
-    var coefficient: ExactFraction = ExactFraction.ONE
+    // var coefficient: ExactFraction = ExactFraction.ONE
 
     // CONSTRUCTORS
 
     constructor(coefficient: ExactFraction) : this() {
-        this.coefficient = coefficient
+        numerator = listOf(Expression(coefficient.numerator))
+        denominator = listOf(Expression(coefficient.denominator))
     }
 
     constructor(coefficient: Int) : this(coefficient.toExactFraction())
@@ -32,32 +33,21 @@ class ExactDecimal private constructor() : Number() {
     // Realistically, runComputation initializes an ED with 1 term. Then it expands to multiple terms via ops
     // This makes sense
 
-    constructor(numerator: ExprList, denominator: ExprList, coefficient: ExactFraction) : this() {
+    constructor(numerator: ExprList, denominator: ExprList) : this() {
         this.numerator = numerator
         this.denominator = denominator
-        this.coefficient = coefficient
 
         simplify()
     }
 
-    // runComputation will likely use one of these
-//    constructor(numerator: String, denominator: String, coefficient: ExactFraction) :
-//            this(listOf(numerator), listOf(denominator), coefficient)
-//    constructor(numerator: String, denominator: String) :
-//            this(listOf(numerator), listOf(denominator), ExactFraction.ONE)
-//
-    constructor(numerator: ExprList, denominator: ExprList, coefficient: Int) :
-            this(numerator, denominator, coefficient.toExactFraction())
-
-    constructor(numerator: ExprList, denominator: ExprList, coefficient: Long) :
-            this(numerator, denominator, coefficient.toExactFraction())
-
     // UNARY OPERATORS
 
-    operator fun unaryMinus(): ExactDecimal = ExactDecimal(numerator, denominator, -coefficient)
-    operator fun unaryPlus(): ExactDecimal = ExactDecimal(numerator, denominator, coefficient)
+    operator fun unaryMinus(): ExactDecimal {
+        val newNumerator = numerator.map { -it }
+        return ExactDecimal(newNumerator, denominator)
+    }
+    operator fun unaryPlus(): ExactDecimal = ExactDecimal(numerator, denominator)
     operator fun not(): Boolean = isZero()
-    // TODO inc + dec
 
     // BINARY OPERATORS
 
@@ -66,9 +56,7 @@ class ExactDecimal private constructor() : Number() {
             return false
         }
 
-        return coefficient == other.coefficient
-                && numerator == other.numerator
-                && denominator == other.denominator
+        return numerator == other.numerator && denominator == other.denominator
     }
 
     /**
@@ -77,11 +65,10 @@ class ExactDecimal private constructor() : Number() {
      * x/y + a/y = (x + a)/y
      */
     operator fun plus(other: ExactDecimal): ExactDecimal {
-        var newCoefficient = coefficient / other.coefficient
         if (denominator == other.denominator) {
             val newDenominator = denominator // y
             val newNumerator = addExpressionLists(numerator, other.numerator) // x + a
-            return ExactDecimal(listOf(newNumerator), newDenominator, newCoefficient)
+            return ExactDecimal(listOf(newNumerator), newDenominator)
         }
 
         val newDenominator = denominator + other.denominator // yb
@@ -89,13 +76,7 @@ class ExactDecimal private constructor() : Number() {
         val exprList2 = other.numerator + denominator // ay
         var newNumerator = addExpressionLists(exprList1, exprList2) // xb + ay
 
-        val constant = newNumerator.rationalTerm
-        if (constant != ExactFraction.ZERO) {
-            newCoefficient *= constant
-            newNumerator = newNumerator.dropConstant()
-        }
-
-        return ExactDecimal(listOf(newNumerator), newDenominator, newCoefficient)
+        return ExactDecimal(listOf(newNumerator), newDenominator)
     }
 
     operator fun minus(other: ExactDecimal): ExactDecimal = plus(-other)
@@ -103,21 +84,33 @@ class ExactDecimal private constructor() : Number() {
     operator fun times(other: ExactDecimal): ExactDecimal {
         val newNumerator = numerator + other.numerator
         val newDenominator = denominator + other.denominator
-        val newCoefficient = coefficient * other.coefficient
-        return ExactDecimal(newNumerator, newDenominator, newCoefficient)
+        return ExactDecimal(newNumerator, newDenominator)
     }
 
     operator fun div(other: ExactDecimal): ExactDecimal = times(other.inverse())
 
     // UNARY NON-OPERATORS
 
-    fun isZero(): Boolean = coefficient.isZero()
+    fun isZero(): Boolean = numerator.isZero()
     fun inverse(): ExactDecimal {
-        if (coefficient.eq(0)) {
+        if (numerator.isZero()) {
             throw ArithmeticException("divide by zero")
         }
 
-        return ExactDecimal(denominator, numerator, coefficient.inverse())
+        return ExactDecimal(denominator, numerator)
+    }
+
+    /**
+     * Add two lists of expressions
+     *
+     * @param exprList1 [ExprList]: first list to add
+     * @param exprList2 [ExprList]: second list to add
+     * @return single simplified expression, which is the sum of both lists
+     */
+    fun addExpressionLists(exprList1: ExprList, exprList2: ExprList): Expression {
+        val partialTotal = exprList1.fold(Expression()) { acc, current-> acc * current }
+        val total = exprList2.fold(partialTotal) { acc, current -> acc + current }
+        return total
     }
 
     private fun simplify() {
@@ -130,8 +123,8 @@ class ExactDecimal private constructor() : Number() {
     }
 
     private fun simplifyZero() {
-        if (coefficient.isZero()) {
-            numerator = listOf()
+        if (numerator.isZero()) {
+            numerator = exprListOfTerm(Term.ZERO)
             denominator = listOf()
         }
     }
@@ -169,7 +162,7 @@ class ExactDecimal private constructor() : Number() {
     }
 
     override fun toString(): String {
-        return "ED[$coefficient $numerator $denominator]"
+        return "ED[$numerator $denominator]"
     }
 
     // TODO actual casting
@@ -184,7 +177,6 @@ class ExactDecimal private constructor() : Number() {
     override fun hashCode(): Int {
         var result = numerator.hashCode()
         result = 31 * result + denominator.hashCode()
-        result = 31 * result + coefficient.hashCode()
         return result
     }
 }

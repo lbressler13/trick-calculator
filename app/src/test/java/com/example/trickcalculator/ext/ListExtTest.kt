@@ -96,4 +96,29 @@ class ListExtTest {
         val expectedErr = listOf(e1, e2, e2)
         assertEquals(expectedErr, le.copyWithLastReplaced(e2))
     }
+
+    @Test
+    fun testSubListTo() {
+        // TODO
+    }
+
+    @Test
+    fun testSubListFrom() {
+        // TODO
+    }
+
+    @Test
+    fun testDropFirst() {
+        // TODO
+    }
+
+    @Test
+    fun testAsExpression() {
+        // TODO
+    }
+
+    @Test
+    fun testSorted() {
+        // TODO
+    }
 }

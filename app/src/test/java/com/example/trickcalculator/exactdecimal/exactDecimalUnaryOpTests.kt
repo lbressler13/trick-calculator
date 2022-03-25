@@ -20,13 +20,13 @@ fun runUnaryMinusTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        4
+        // 4
     )
 
     expected = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        -4
+        // -4
     )
 
     assertEquals(expected, -ed)
@@ -34,13 +34,13 @@ fun runUnaryMinusTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        ExactFraction(12, 19)
+        // ExactFraction(12, 19)
     )
 
     expected = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        ExactFraction(-12, 19)
+        // ExactFraction(-12, 19)
     )
 
     assertEquals(expected, -ed)
@@ -62,13 +62,13 @@ fun runUnaryPlusTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        4
+        // 4
     )
 
     expected = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        4
+        // 4
     )
 
     assertEquals(expected, +ed)
@@ -76,13 +76,13 @@ fun runUnaryPlusTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        ExactFraction(12, 19)
+        // ExactFraction(12, 19)
     )
 
     expected = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        ExactFraction(12, 19)
+        // ExactFraction(12, 19)
     )
 
     assertEquals(expected, +ed)
@@ -95,7 +95,7 @@ fun runNotTests() {
     ed = ExactDecimal(
         createExprList(listOf("6")),
         createExprList(listOf("1p1", "5")),
-        ExactFraction.ZERO
+        // ExactFraction.ZERO
     )
     assert(!ed)
 
@@ -109,7 +109,7 @@ fun runNotTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        4
+        // 4
     )
     assert(!!ed)
 
@@ -117,7 +117,7 @@ fun runNotTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        ExactFraction(12, 19)
+        // ExactFraction(12, 19)
     )
     assert(!!ed)
 }

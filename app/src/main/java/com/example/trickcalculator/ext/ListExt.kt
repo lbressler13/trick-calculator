@@ -43,25 +43,3 @@ fun <T> List<T>.dropFirst(checkFn: (T) -> Boolean): List<T> {
     val end = if (firstIndex == lastIndex) listOf() else subListFrom(firstIndex + 1)
     return start + end
 }
-
-/**
- * Create Expression from list of Terms
- *
- * @return expression using this list of terms
- */
-fun List<Term>.asExpression(): Expression = Expression(this)
-
-/**
- * Sort function for TermList
- *
- * @return terms sorted by exponent
- */
-fun List<Term>.sorted(): List<Term> = sortedBy { it.exp }
-
-/**
- * Simplify a list of expressions to a single expression via multiplication
- *
- * @return single expression, which is the product of all expressions in list
- */
-fun List<Expression>.toExpression(): Expression =
-    fold(Expression()) { acc, current -> acc * current }

@@ -1,23 +1,25 @@
 package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.ext.asExpression
 import com.example.trickcalculator.ext.dropFirst
-import com.example.trickcalculator.ext.sorted
 import com.example.trickcalculator.ext.subListFrom
 import com.example.trickcalculator.utils.TermList
+import java.math.BigInteger
 
-class Expression(terms: TermList) {
-    val terms = simplifyExpression(terms)
-    var rationalTerm = ExactFraction.ZERO
+class Expression {
+    val terms: TermList // = simplifyExpression(terms)
 
-    constructor() : this(listOf())
+    constructor() {
+        terms = listOf()
+    }
 
-    init {
-        val index = this.terms.indexOfFirst { it.exp == 0 }
-        if (index >= 0) {
-            rationalTerm = this.terms[index].coefficient
-        }
+    constructor(terms: TermList) {
+        this.terms = terms
+    }
+
+    constructor(constant: BigInteger) {
+        val term = Term(constant)
+        terms = listOf(term)
     }
 
     operator fun times(other: Term): Expression = terms.map { it * other }.asExpression()
@@ -66,6 +68,8 @@ class Expression(terms: TermList) {
 
         return allTerms.asExpression()
     }
+
+    operator fun unaryMinus(): Expression = Expression(terms.map { -it })
 
     override operator fun equals(other: Any?): Boolean {
         return other != null

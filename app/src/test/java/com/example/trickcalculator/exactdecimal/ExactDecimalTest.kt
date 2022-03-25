@@ -26,6 +26,8 @@ class ExactDecimalTest {
     @Test fun testInverse() = runInverseTests()
     @Test fun testIsZero() = runIsZeroTests()
 
+    @Test fun testAddExpressionLists() = runAddExpressionListsTests()
+
     // parsing + toString
     // @Test fun testParseDecimal() = runParseDecimalTests()
     // @Test fun testParseEDString() = runParseEDStringTests()

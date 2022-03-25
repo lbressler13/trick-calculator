@@ -1,7 +1,7 @@
 package com.example.trickcalculator
 
 import com.example.trickcalculator.exactdecimal.Term
-import com.example.trickcalculator.ext.asExpression
+import com.example.trickcalculator.exactdecimal.asExpression
 import com.example.trickcalculator.utils.ExprList
 import com.example.trickcalculator.utils.StringList
 

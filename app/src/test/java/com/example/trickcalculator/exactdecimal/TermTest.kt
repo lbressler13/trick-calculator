@@ -11,6 +11,7 @@ class TermTest {
     @Test fun testPlus() = runTermPlusTests()
     @Test fun testEquals() = runTermEqualsTests()
 
+    @Test fun testUnaryMinus() = runTermUnaryMinusTests()
     @Test fun testIsZero() = runTermIsZeroTests()
     @Test fun testIsNotZero() = runTermIsNotZeroTests()
     @Test fun testIsNegative() = runTermIsNegativeTests()

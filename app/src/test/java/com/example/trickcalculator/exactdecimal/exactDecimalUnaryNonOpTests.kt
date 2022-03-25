@@ -18,12 +18,12 @@ fun runInverseTests() {
     ed = ExactDecimal(
         createExprList(listOf("5 1p1", "2 -1p1")),
         createExprList(listOf("6", "7")),
-        ExactFraction(14, 3)
+        // ExactFraction(14, 3)
     )
     expected = ExactDecimal(
         createExprList(listOf("6", "7")),
         createExprList(listOf("5 1p1", "2 -1p1")),
-        ExactFraction(3, 14)
+        // ExactFraction(3, 14)
     )
 
     assertEquals(expected, ed.inverse())
@@ -36,7 +36,7 @@ fun runIsZeroTests() {
     ed = ExactDecimal(
         createExprList(listOf("6")),
         createExprList(listOf("1p1", "5")),
-        ExactFraction.ZERO
+        // ExactFraction.ZERO
     )
     assert(ed.isZero())
 
@@ -49,7 +49,7 @@ fun runIsZeroTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        4
+        // 4
     )
     assert(!ed.isZero())
 
@@ -57,7 +57,7 @@ fun runIsZeroTests() {
     ed = ExactDecimal(
         createExprList(listOf("2 4", "3")),
         createExprList(listOf("7p1")),
-        ExactFraction(12, 19)
+        // ExactFraction(12, 19)
     )
     assert(!ed.isZero())
 }

@@ -1,6 +1,29 @@
 package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.exactfraction.ExactFraction
+import org.junit.Assert.*
+
+fun runTermUnaryMinusTests() {
+    var t = Term.ZERO
+    var expected = Term.ZERO
+    assertEquals(expected, -t)
+
+    t = Term(3, 2)
+    expected = Term(-3, 2)
+    assertEquals(expected, -t)
+
+    t = Term(-3, 2)
+    expected = Term(3, 2)
+    assertEquals(expected, -t)
+
+    t = Term(-3, -2)
+    expected = Term(3, -2)
+    assertEquals(expected, -t)
+
+    t = Term(ExactFraction(1, 2), 0)
+    expected = Term(ExactFraction(-1, 2), 0)
+    assertEquals(expected, -t)
+}
 
 fun runTermIsZeroTests() {
     var t = Term(ExactFraction.ZERO, 0)

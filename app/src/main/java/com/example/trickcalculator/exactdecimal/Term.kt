@@ -1,9 +1,9 @@
 package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.ext.asExpression
 import com.example.trickcalculator.ext.toEF
 import com.example.trickcalculator.utils.TermList
+import java.math.BigInteger
 
 // representation of a single term
 // easily extensible for future additions (i.e. coefficient, piExp, eExp)
@@ -22,6 +22,7 @@ class Term {
 
     constructor(coefficient: Int, exp: Int) : this(coefficient.toEF(), exp)
     constructor(coefficient: ExactFraction) : this(coefficient, 0)
+    constructor(coefficient: BigInteger) : this(coefficient.toEF(), 0)
     constructor(coefficient: Int) : this(coefficient.toEF(), 0)
 
     // parses short string
@@ -80,6 +81,7 @@ class Term {
                 coefficient == other.coefficient && exp == other.exp)
     }
 
+    operator fun unaryMinus(): Term = Term(-coefficient, exp)
 
     fun isZero(): Boolean = coefficient.isZero()
     fun isNotZero(): Boolean = !coefficient.isZero()
@@ -87,4 +89,8 @@ class Term {
 
     override fun toString(): String = "$coefficient$pi^$exp"
     override fun hashCode(): Int = Pair(coefficient, exp).hashCode()
+
+    companion object {
+        val ZERO = Term(0)
+    }
 }

@@ -238,29 +238,9 @@ class ExactFraction private constructor() : Number() {
     }
 
     /**
-     * Simplify using greatest common divisor using Euclidean algorithm
+     * Simplify using greatest common divisor
      */
     private fun simplifyGCD() {
-//        if (!numerator.isZero()) {
-//            var sum = if (numerator > denominator) numerator else denominator
-//            var value = if (numerator > denominator) denominator else numerator
-//            var finished = false
-//
-//            while (!finished) {
-//                val remainder = sum % value
-//
-//                if (remainder == BigInteger.ZERO) {
-//                    finished = true
-//                } else {
-//                    sum = value
-//                    value = remainder
-//                }
-//            }
-//
-//            val gcd = value
-//            numerator /= gcd
-//            denominator /= gcd
-//        }
         if (!numerator.isZero()) {
             val gcd = getGCD(numerator, denominator)
             numerator /= gcd

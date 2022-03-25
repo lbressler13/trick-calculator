@@ -91,7 +91,6 @@ fun runTermTimesTests() {
 
     expr = Expression(tl)
     expectedE = Expression(expectedL)
-    // TODO possibly an issue with expr constructor
     assertEquals(expectedE, t * expr)
 }
 
