@@ -11,7 +11,7 @@ updates:
     commit-message:
       prefix: "dependabot"
       include: "scope"
-    open-pull-requests-limit: 8
+    open-pull-requests-limit: 0
     rebase-strategy: disabled
     reviewers:
       - lbressler13
