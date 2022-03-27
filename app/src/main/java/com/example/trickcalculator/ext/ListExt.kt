@@ -1,8 +1,5 @@
 package com.example.trickcalculator.ext
 
-import com.example.trickcalculator.exactdecimal.Expression
-import com.example.trickcalculator.exactdecimal.Term
-
 /**
  * Create a copy of a list, with one value changed
  *
@@ -29,17 +26,3 @@ fun <T> List<T>.copyWithReplacement(index: Int, value: T): List<T> {
  * @return list identical to this, with the exception of the value at the last index
  */
 fun <T> List<T>.copyWithLastReplaced(value: T): List<T> = copyWithReplacement(lastIndex, value)
-
-fun <T> List<T>.subListTo(index: Int): List<T> = subList(0, index)
-fun <T> List<T>.subListFrom(index: Int): List<T> = subList(index, size)
-
-fun <T> List<T>.dropFirst(checkFn: (T) -> Boolean): List<T> {
-    val firstIndex = indexOfFirst(checkFn)
-    if (firstIndex == -1) {
-        throw NoSuchElementException()
-    }
-
-    val start = if (firstIndex == 0) listOf() else subListTo(firstIndex)
-    val end = if (firstIndex == lastIndex) listOf() else subListFrom(firstIndex + 1)
-    return start + end
-}

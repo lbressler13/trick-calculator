@@ -453,6 +453,7 @@ class ExactFraction private constructor() : Number() {
         val EIGHT = ExactFraction(8)
         val NINE = ExactFraction(9)
         val NEG_ONE = ExactFraction(-1)
+        val HALF = ExactFraction(1, 2)
 
         fun parse(s: String): ExactFraction {
             if (isEFString(s)) {

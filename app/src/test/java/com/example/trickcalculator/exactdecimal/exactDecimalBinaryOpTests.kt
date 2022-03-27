@@ -4,13 +4,9 @@ import com.example.trickcalculator.createExprList
 import com.example.trickcalculator.exactfraction.ExactFraction
 import org.junit.Assert.*
 
-fun runPlusTests() {
-    // TODO
-}
+fun runPlusTests() {}
 
-fun runMinusTests() {
-    // TODO
-}
+fun runMinusTests() {}
 
 fun runTimesTests() {
     var ed1 = ExactDecimal(
@@ -34,10 +30,6 @@ fun runTimesTests() {
     assertEquals(expected, ed1 * ed2)
 }
 
-fun runDivTests() {
-    // TODO
-}
+fun runDivTests() {}
 
-fun runEqualsTests() {
-    // TODO
-}
+fun runEqualsTests() {}

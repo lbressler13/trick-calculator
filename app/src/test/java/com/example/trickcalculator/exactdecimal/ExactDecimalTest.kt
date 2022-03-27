@@ -4,7 +4,7 @@ import org.junit.Test
 
 class ExactDecimalTest {
     // all constructors
-    @Test fun testConstructor() = runConstructorTests()
+    @Test fun testConstructor() = runConstructorTests() // TODO
 
     // simplify
     // includes all private methods used in simplification
@@ -16,17 +16,17 @@ class ExactDecimalTest {
     @Test fun testNot() = runNotTests()
 
     // binary operators
-    @Test fun testPlus() = runPlusTests()
-    @Test fun testMinus() = runMinusTests()
-    @Test fun testTimes() = runTimesTests()
-    @Test fun testDiv() = runDivTests()
-    @Test fun testEquals() = runEqualsTests()
+    @Test fun testPlus() = runPlusTests() // TODO
+    @Test fun testMinus() = runMinusTests() // TODO
+    @Test fun testTimes() = runTimesTests() // TODO
+    @Test fun testDiv() = runDivTests() // TODO
+    @Test fun testEquals() = runEqualsTests() // TODO
 
     // unary non-operator functions
     @Test fun testInverse() = runInverseTests()
     @Test fun testIsZero() = runIsZeroTests()
 
-    @Test fun testAddExpressionLists() = runAddExpressionListsTests()
+    @Test fun testAddExpressionLists() = runAddExpressionListsTests() // TODO
 
     // parsing + toString
     // @Test fun testParseDecimal() = runParseDecimalTests()

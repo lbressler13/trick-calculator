@@ -1,18 +1,13 @@
 package com.example.trickcalculator.exactdecimal
 
+import com.example.trickcalculator.exactfraction.ExactFraction
 import org.junit.Assert.*
 
 fun runExpressionTimesTests() {
-    // TODO
     // Term
 
     // Expression
 }
 
-fun runExpressionPlusTests() {
-    // TODO
-}
+fun runExpressionPlusTests() {}
 
-fun runExpressionEqualsTests() {
-    // TODO
-}

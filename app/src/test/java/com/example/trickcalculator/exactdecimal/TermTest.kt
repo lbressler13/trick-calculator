@@ -10,6 +10,7 @@ class TermTest {
     @Test fun testTimes() = runTermTimesTests()
     @Test fun testPlus() = runTermPlusTests()
     @Test fun testEquals() = runTermEqualsTests()
+    @Test fun testCompareTo() = runTermCompareToTests()
 
     @Test fun testUnaryMinus() = runTermUnaryMinusTests()
     @Test fun testIsZero() = runTermIsZeroTests()

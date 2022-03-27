@@ -3,19 +3,12 @@ package com.example.trickcalculator.exactdecimal
 import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.ExprList
-import com.example.trickcalculator.utils.IntList
 import com.example.trickcalculator.utils.getGCD
-import java.lang.Integer.min
 import java.math.BigInteger
-import kotlin.math.absoluteValue
-import kotlin.math.max
-
-// TODO about a million tests
 
 class ExactDecimal private constructor() : Number() {
-    var numerator: ExprList = mutableListOf()
-    var denominator: ExprList = mutableListOf()
-    // var coefficient: ExactFraction = ExactFraction.ONE
+    var numerator: ExprList = mutableListOf(Expression.ONE)
+    var denominator: ExprList = mutableListOf(Expression.ONE)
 
     // CONSTRUCTORS
 
@@ -27,7 +20,7 @@ class ExactDecimal private constructor() : Number() {
     constructor(coefficient: Int) : this(coefficient.toExactFraction())
     constructor(coefficient: Long) : this(coefficient.toExactFraction())
 
-    // TODO do I accept expressions as standard strings? Or just TSS?
+    // do I accept expressions as standard strings? Or just TSS?
     // TSS is easier here, but more difficult in runComputation
     // Not difficult to parse one expr, but it gets complicated if there are multiple expressions
     // Realistically, runComputation initializes an ED with 1 term. Then it expands to multiple terms via ops
@@ -46,6 +39,7 @@ class ExactDecimal private constructor() : Number() {
         val newNumerator = numerator.map { -it }
         return ExactDecimal(newNumerator, denominator)
     }
+
     operator fun unaryPlus(): ExactDecimal = ExactDecimal(numerator, denominator)
     operator fun not(): Boolean = isZero()
 
@@ -74,7 +68,7 @@ class ExactDecimal private constructor() : Number() {
         val newDenominator = denominator + other.denominator // yb
         val exprList1 = numerator + other.denominator // xb
         val exprList2 = other.numerator + denominator // ay
-        var newNumerator = addExpressionLists(exprList1, exprList2) // xb + ay
+        val newNumerator = addExpressionLists(exprList1, exprList2) // xb + ay
 
         return ExactDecimal(listOf(newNumerator), newDenominator)
     }
@@ -97,6 +91,23 @@ class ExactDecimal private constructor() : Number() {
             throw ArithmeticException("divide by zero")
         }
 
+        val simpleNum = numerator.fold(Expression.ONE) { acc, expression -> acc * expression }.simplifyExpression()
+        val simpleDenom = denominator.fold(Expression.ONE) { acc, expression -> acc * expression }.simplifyExpression()
+
+        // check if numerator/denominator consist of single integer value
+        val numIsInt = simpleNum.terms.size == 1 && simpleNum.terms[0].exp == 0
+        val denomIsInt = simpleDenom.terms.size == 1 && simpleDenom.terms[0].exp == 0
+
+        println(simpleNum)
+        if (numIsInt && simpleNum.terms[0].coefficient.isZero()) {
+            throw ArithmeticException("divide by zero")
+        }
+
+        if (numIsInt && denomIsInt) {
+            val product = simpleNum.terms[0].coefficient * simpleDenom.terms[0].coefficient
+            return ExactDecimal(product.inverse())
+        }
+
         return ExactDecimal(denominator, numerator)
     }
 
@@ -108,7 +119,7 @@ class ExactDecimal private constructor() : Number() {
      * @return single simplified expression, which is the sum of both lists
      */
     fun addExpressionLists(exprList1: ExprList, exprList2: ExprList): Expression {
-        val partialTotal = exprList1.fold(Expression()) { acc, current-> acc * current }
+        val partialTotal = exprList1.fold(Expression()) { acc, current -> acc * current }
         val total = exprList2.fold(partialTotal) { acc, current -> acc + current }
         return total
     }
@@ -124,14 +135,17 @@ class ExactDecimal private constructor() : Number() {
 
     private fun simplifyZero() {
         if (numerator.isZero()) {
-            numerator = exprListOfTerm(Term.ZERO)
-            denominator = listOf()
+            numerator = listOf(Expression.ZERO)
+            denominator = listOf(Expression.ONE)
         }
     }
 
     private fun simplifyCommon() {
         // TODO does this work with repeats and stuff?
         // NO it does not
+        val simpNumerator = numerator.map { it.simplifyExpression() }
+        val simpDenominator = denominator.map { it.simplifyExpression() }
+
         val newNumerator = numerator - denominator
         val newDenominator = denominator - numerator
 

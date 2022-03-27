@@ -7,7 +7,7 @@ import java.math.BigInteger
 
 // representation of a single term
 // easily extensible for future additions (i.e. coefficient, piExp, eExp)
-class Term {
+class Term : Comparable<Term> {
     val coefficient: ExactFraction
     val exp: Int
     val shortString: String // abbreviated as tss (NOT ss)
@@ -82,6 +82,15 @@ class Term {
     }
 
     operator fun unaryMinus(): Term = Term(-coefficient, exp)
+
+    // order by exponent, or by coefficient if exp is the same
+    override operator fun compareTo(other: Term): Int {
+        if (exp != other.exp) {
+            return exp.compareTo(other.exp)
+        }
+
+        return coefficient.compareTo(other.coefficient)
+    }
 
     fun isZero(): Boolean = coefficient.isZero()
     fun isNotZero(): Boolean = !coefficient.isZero()

@@ -166,3 +166,43 @@ fun runTermEqualsTests() {
     other = Term(ef, -5)
     assertNotEquals(other, t)
 }
+
+fun runTermCompareToTests() {
+    var t1 = Term(0)
+
+    var t2 = Term(0)
+    assertFalse(t1 < t2)
+    assertFalse(t1 > t2)
+
+    t2 = Term(3)
+    assert(t1 < t2)
+    assert(t2 > t1)
+
+    t2 = Term(-3)
+    assert(t1 > t2)
+    assert(t2 < t1)
+
+    t2 = Term(ExactFraction(-3, 5))
+    assert(t1 > t2)
+    assert(t2 < t1)
+
+    t1 = Term(1, 0)
+
+    t2 = Term(1, 1)
+    assert(t1 < t2)
+    assert(t2 > t1)
+
+    t2 = Term(1, -1)
+    assert(t1 > t2)
+    assert(t2 < t1)
+
+    t1 = Term(3, 5)
+
+    t2 = Term(3, 5)
+    assertFalse(t1 < t2)
+    assertFalse(t1 > t2)
+
+    t2 = Term(3, -5)
+    assert(t1 > t2)
+    assert(t2 < t1)
+}
