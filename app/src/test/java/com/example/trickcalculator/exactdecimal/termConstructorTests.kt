@@ -138,4 +138,29 @@ fun runTermConstructorTests() {
     assertEquals(i.toEF(), t.coefficient)
     assertEquals(0, t.exp)
     assertEquals("${i.toEF()}p0", t.shortString)
+
+    // Long
+    var l: Long = 0
+    t = Term(l)
+    assertEquals(l.toEF(), t.coefficient)
+    assertEquals(0, t.exp)
+    assertEquals("${l.toEF()}p0", t.shortString)
+
+    l = -13
+    t = Term(l)
+    assertEquals(l.toEF(), t.coefficient)
+    assertEquals(0, t.exp)
+    assertEquals("${l.toEF()}p0", t.shortString)
+
+    l = 10000
+    t = Term(l)
+    assertEquals(l.toEF(), t.coefficient)
+    assertEquals(0, t.exp)
+    assertEquals("${l.toEF()}p0", t.shortString)
+
+    l = Long.MAX_VALUE
+    t = Term(l)
+    assertEquals(l.toEF(), t.coefficient)
+    assertEquals(0, t.exp)
+    assertEquals("${l.toEF()}p0", t.shortString)
 }

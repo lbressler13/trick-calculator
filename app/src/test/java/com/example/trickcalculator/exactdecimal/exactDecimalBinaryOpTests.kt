@@ -9,24 +9,32 @@ fun runPlusTests() {}
 fun runMinusTests() {}
 
 fun runTimesTests() {
-    var ed1 = ExactDecimal(
-        createExprList(listOf("1")),
-        createExprList(listOf("2")),
-        // ExactFraction(1, 5)
-    )
+    var ed1 = ExactDecimal(0)
 
-    var ed2 = ExactDecimal(
+    var ed2 = ExactDecimal(3)
+    var expected = ExactDecimal(0)
+    assertEquals(expected, ed1 * ed2)
+
+    ed2 = ExactDecimal(
         createExprList(listOf("1p1", "1p1 1")),
-        createExprList(listOf("3")),
-        // ExactFraction(2, 7)
+        createExprList(listOf("3"))
     )
+    assertEquals(expected, ed1 * ed2)
 
-    var expected = ExactDecimal(
-        createExprList(listOf("1", "1p1", "1p1 1")),
-        createExprList(listOf("2", "3")),
-        // ExactFraction(2, 35)
+    ed1 = ExactDecimal(1)
+
+    ed2 = ExactDecimal(3)
+    expected = ExactDecimal(3)
+    assertEquals(expected, ed1 * ed2)
+
+    ed2 = ExactDecimal(
+        createExprList(listOf("1p1", "1p1 1")),
+        createExprList(listOf("3"))
     )
-
+    expected = ExactDecimal(
+        createExprList(listOf("1p1", "1p1 1")),
+        createExprList(listOf("3"))
+    )
     assertEquals(expected, ed1 * ed2)
 }
 

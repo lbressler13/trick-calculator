@@ -96,27 +96,27 @@ private fun equalsTests() {
 
 private fun notEqualsTests() {
     var e1 = Expression()
-    var e2 = Expression(listOf(Term(3)))
+    var e2 = Expression(Term(3))
     assertNotEquals(e1, e2)
 
-    e1 = Expression(listOf(Term(2)))
-    e2 = Expression(listOf(Term(3)))
+    e1 = Expression(Term(2))
+    e2 = Expression(Term(3))
     assertNotEquals(e1, e2)
 
-    e1 = Expression(listOf(Term(-3)))
-    e2 = Expression(listOf(Term(3)))
+    e1 = Expression(Term(-3))
+    e2 = Expression(Term(3))
     assertNotEquals(e1, e2)
 
-    e1 = Expression(listOf(Term(half)))
-    e2 = Expression(listOf(Term(half.inverse())))
+    e1 = Expression(Term(half))
+    e2 = Expression(Term(half.inverse()))
     assertNotEquals(e1, e2)
 
-    e1 = Expression(listOf(Term(3, 1)))
-    e2 = Expression(listOf(Term(3, 2)))
+    e1 = Expression(Term(3, 1))
+    e2 = Expression(Term(3, 2))
     assertNotEquals(e1, e2)
 
-    e1 = Expression(listOf(Term(3, 1)))
-    e2 = Expression(listOf(Term(3, -1)))
+    e1 = Expression(Term(3, 1))
+    e2 = Expression(Term(3, -1))
     assertNotEquals(e1, e2)
 
     var t1 = listOf(Term(2), Term(2))

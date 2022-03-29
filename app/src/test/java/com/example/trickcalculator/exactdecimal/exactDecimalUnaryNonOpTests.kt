@@ -33,6 +33,7 @@ fun runInverseTests() {
         createExprList(listOf("6", "7")),
         createExprList(listOf("5 1p1", "2 -1p1", "-7p-4"))
     )
+    assertEquals(expected, ed.inverse())
 
     ed = ExactDecimal(
         createExprList(listOf("1p1 -1p1", "1p1")),
@@ -44,12 +45,6 @@ fun runInverseTests() {
 
 fun runIsZeroTests() {
     var ed = ExactDecimal(0)
-    assert(ed.isZero())
-
-    ed = ExactDecimal(
-        listOf(),
-        listOf()
-    )
     assert(ed.isZero())
 
     ed = ExactDecimal(

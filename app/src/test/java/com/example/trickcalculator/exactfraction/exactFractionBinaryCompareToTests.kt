@@ -1,59 +1,43 @@
 package com.example.trickcalculator.exactfraction
 
 import com.example.trickcalculator.ext.toBI
+import org.junit.Assert.*
 import java.math.BigInteger
 
 fun runCompareToTests() {
     // equal values
     var first = ExactFraction(0)
     var second = ExactFraction(0)
-    assert(first <= second)
-    assert(first >= second)
+    assertEquals(0, first.compareTo(second))
 
     first = ExactFraction(100)
     second = ExactFraction(100)
-    assert(first <= second)
-    assert(first >= second)
+    assertEquals(0, first.compareTo(second))
 
     // pos less than zero
     first = ExactFraction(3)
     second = ExactFraction(0)
     assert(first > second)
-    assert(first >= second)
-    assert(second < first)
-    assert(second <= first)
 
     // neg less than zero
     first = ExactFraction(-3)
     second = ExactFraction(0)
     assert(first < second)
-    assert(first <= second)
-    assert(second > first)
-    assert(second >= first)
 
-    // pos less than neg
+    // neg less than pos
     first = ExactFraction(-1)
     second = ExactFraction(1)
     assert(first < second)
-    assert(first <= second)
-    assert(second > first)
-    assert(second >= first)
 
     // neg order
     first = ExactFraction(-3)
     second = ExactFraction(-2)
     assert(first < second)
-    assert(first <= second)
-    assert(second > first)
-    assert(second >= first)
 
     // pos order
     first = ExactFraction(3)
     second = ExactFraction(2)
     assert(first > second)
-    assert(first >= second)
-    assert(second < first)
-    assert(second <= first)
 
     // BigInteger
     var ef = ExactFraction(0)

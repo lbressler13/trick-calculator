@@ -4,7 +4,7 @@ import org.junit.Test
 
 class ExactDecimalTest {
     // all constructors
-    @Test fun testConstructor() = runConstructorTests() // TODO
+    @Test fun testConstructor() = runConstructorTests()
 
     // simplify
     // includes all private methods used in simplification

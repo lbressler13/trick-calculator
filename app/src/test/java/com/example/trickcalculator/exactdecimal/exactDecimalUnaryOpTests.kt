@@ -119,12 +119,6 @@ fun runNotTests() {
     assert(!ed)
 
     ed = ExactDecimal(
-        listOf(),
-        listOf()
-    )
-    assert(!ed)
-
-    ed = ExactDecimal(
         createExprList(listOf("0", "0 3")),
         createExprList(listOf("1"))
     )

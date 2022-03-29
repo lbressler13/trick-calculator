@@ -50,22 +50,34 @@ class ExpressionTest {
         expr = Expression(bi)
         expected = listOf(Term(bi))
         assertEquals(expected, expr.terms)
+
+        // Term
+        var t = Term.ZERO
+        expr = Expression(t)
+        expected = listOf(t)
+        assertEquals(expected, expr.terms)
+
+        t = Term(8, -1)
+        expr = Expression(t)
+        expected = listOf(t)
+        assertEquals(expected, expr.terms)
+
+        t = Term(ExactFraction(101, 7), 104)
+        expr = Expression(t)
+        expected = listOf(t)
+        assertEquals(expected, expr.terms)
     }
 
-    @Test fun testTimes() = runExpressionTimesTests() // TODO
-    @Test fun testPlus() = runExpressionPlusTests() // TODO
+    @Test fun testTimes() = runExpressionTimesTests() // TODO (just x expr)
+    @Test fun testPlus() = runExpressionPlusTests()
     @Test fun testEquals() = runExpressionEqualsTests()
 
     @Test fun testIsZero() = runExpressionIsZeroTests()
     @Test fun testUnaryMinus() = runExpressionUnaryMinusTests()
+    @Test fun testIsAllConstants() {} // TODO
 
     @Test
     fun testSimplifyExpression() {
-        // TODO
-    }
-
-    @Test
-    fun testToString() {
         // TODO
     }
 }

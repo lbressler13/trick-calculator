@@ -11,7 +11,7 @@ import java.math.RoundingMode
  * Custom number implementation inspired by BigDecimal.
  * Exact representations of rational numbers, without specifying decimal precision.
  */
-class ExactFraction private constructor() : Number() {
+class ExactFraction private constructor() : Comparable<ExactFraction>, Number() {
     // These values are re-assigned in all public constructors
     var numerator: BigInteger = BigInteger.ZERO
     var denominator: BigInteger = BigInteger.ONE
@@ -143,7 +143,7 @@ class ExactFraction private constructor() : Number() {
     fun eq(other: Long): Boolean = numerator.eq(other) && denominator.eq(1)
     fun eq(other: BigInteger): Boolean = numerator == other && denominator.eq(1)
 
-    operator fun compareTo(other: ExactFraction): Int {
+    override operator fun compareTo(other: ExactFraction): Int {
         val difference = minus(other)
         return when {
             difference.isNegative() -> -1

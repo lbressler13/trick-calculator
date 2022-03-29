@@ -29,19 +29,19 @@ fun runExpressionIsZeroTests() {
     assert(e.isZero())
 
     // not zero
-    e = listOf(Term(1)).asExpression()
+    e = Expression(Term(1))
     assertFalse(e.isZero())
 
-    e = listOf(Term(-1)).asExpression()
+    e = Expression(Term(-1))
     assertFalse(e.isZero())
 
     e = listOf(Term(half)).asExpression()
     assertFalse(e.isZero())
 
-    e = listOf(Term(1, 2)).asExpression()
+    e = Expression(Term(1, 2))
     assertFalse(e.isZero())
 
-    e = listOf(Term(1, -2)).asExpression()
+    e = Expression(Term(1, -2))
     assertFalse(e.isZero())
 
     e = listOf(Term(0), Term(1)).asExpression()
@@ -74,30 +74,38 @@ fun runExpressionIsZeroTests() {
 }
 
 fun runExpressionUnaryMinusTests() {
-    var expected = listOf<Term>()
-    assertEquals(Expression(expected), -Expression())
+    var expected = Expression(listOf())
+    assertEquals(expected, -Expression())
 
-    var terms = listOf(Term.ZERO)
-    expected = listOf(Term.ZERO)
-    assertEquals(Expression(expected), -Expression(terms))
+    var expr = Expression(Term.ZERO)
+    expected = Expression(Term.ZERO)
+    assertEquals(expected, -expr)
 
-    terms = listOf(Term(17))
-    expected = listOf(Term(-17))
-    assertEquals(Expression(expected), -Expression(terms))
+    expr = Expression(Term(17))
+    expected = Expression(Term(-17))
+    assertEquals(expected, -expr)
 
-    terms = listOf(Term(17, -3))
-    expected = listOf(Term(-17, -3))
-    assertEquals(Expression(expected), -Expression(terms))
+    expr = Expression(Term(17, -3))
+    expected = Expression(Term(-17, -3))
+    assertEquals(expected, -expr)
 
-    terms = listOf(Term(17, 3))
-    expected = listOf(Term(-17, 3))
-    assertEquals(Expression(expected), -Expression(terms))
+    expr = Expression(Term(17, 3))
+    expected = Expression(Term(-17, 3))
+    assertEquals(expected, -expr)
 
-    terms = listOf(Term(ExactFraction(-33, 4), 3))
-    expected = listOf(Term(ExactFraction(33, 4), 3))
-    assertEquals(Expression(expected), -Expression(terms))
+    expr = Expression(Term(ExactFraction(-33, 4), 3))
+    expected = Expression(Term(ExactFraction(33, 4), 3))
+    assertEquals(expected, -expr)
 
-    terms = listOf(Term(ExactFraction(1, 2), 4), Term(1000000), Term(123456789, Int.MIN_VALUE))
-    expected = listOf(Term(ExactFraction(-1, 2), 4), Term(-1000000), Term(-123456789, Int.MIN_VALUE))
-    assertEquals(Expression(expected), -Expression(terms))
+    expr = listOf(
+        Term(ExactFraction(1, 2), 4),
+        Term(1000000),
+        Term(123456789, Int.MIN_VALUE)
+    ).asExpression()
+    expected = listOf(
+        Term(ExactFraction(-1, 2), 4),
+        Term(-1000000),
+        Term(-123456789, Int.MIN_VALUE)
+    ).asExpression()
+    assertEquals(expected, -expr)
 }

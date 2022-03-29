@@ -20,56 +20,15 @@ class Expression {
         terms = listOf(term)
     }
 
+    constructor(term: Term) {
+        terms = listOf(term)
+    }
+
     operator fun times(other: Term): Expression = terms.map { it * other }.asExpression()
     operator fun times(other: Expression): Expression =
         terms.flatMap { it * other.terms }.asExpression()
 
     operator fun plus(other: Expression): Expression = Expression(terms + other.terms)
-
-//    operator fun plus(other: Expression): Expression {
-//        val terms1 = simplifyExpression().terms
-//        val terms2 = other.simplifyExpression().terms
-//        var index1 = 0
-//        var index2 = 0
-//
-//        val allTerms: MutableList<Term> = mutableListOf()
-//
-//        // O(n) implementation
-//        // Sorting would be O(nlog(n)) to sort + O(n) to compare
-//        while (index1 < terms1.size && index2 < terms2.size) {
-//            val term1 = terms1[index1]
-//            val term2 = terms2[index2]
-//            val exp1 = term1.exp
-//            val exp2 = term2.exp
-//
-//            when {
-//                exp1 < exp2 -> {
-//                    allTerms.add(term1)
-//                    index1++
-//                }
-//                exp1 > exp2 -> {
-//                    allTerms.add(term2)
-//                    index2++
-//                }
-//                exp1 == exp2 -> {
-//                    val sum = term1 + term2
-//                    if (sum.isNotZero()) {
-//                        allTerms.add(term1 + term2)
-//                    }
-//                    index1++
-//                    index2++
-//                }
-//            }
-//        }
-//
-//        if (index1 < terms1.size) {
-//            allTerms.addAll(terms1.subListFrom(index1))
-//        } else if (index2 < terms2.size) {
-//            allTerms.addAll(terms2.subListFrom(index2))
-//        }
-//
-//        return allTerms.asExpression()
-//    }
 
     override operator fun equals(other: Any?): Boolean {
         return other != null
@@ -109,6 +68,8 @@ class Expression {
         val simplified = simplifyExpression()
         return simplified.terms.isEmpty() || simplified.terms.all { it.isZero() }
     }
+
+    fun isAllConstants(): Boolean = terms.all { it.exp == 0 }
 
     override fun toString(): String {
         return "Expr($terms)"

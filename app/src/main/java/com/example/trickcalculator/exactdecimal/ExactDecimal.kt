@@ -30,8 +30,22 @@ class ExactDecimal private constructor() : Number() {
         this.numerator = numerator
         this.denominator = denominator
 
+        if (numerator.isEmpty()) {
+            throw NumberFormatException("Numerator cannot be empty")
+        }
+
+        if (denominator.isEmpty()) {
+            throw NumberFormatException("Denominator cannot be empty")
+        }
+
+        if (denominator.isZero()) {
+            throw ArithmeticException("Divide by zero")
+        }
+
         simplify()
     }
+
+    constructor(numerator: ExprList) : this(numerator, listOf(Expression.ONE))
 
     // UNARY OPERATORS
 
@@ -91,14 +105,15 @@ class ExactDecimal private constructor() : Number() {
             throw ArithmeticException("divide by zero")
         }
 
-        val simpleNum = numerator.fold(Expression.ONE) { acc, expression -> acc * expression }.simplifyExpression()
-        val simpleDenom = denominator.fold(Expression.ONE) { acc, expression -> acc * expression }.simplifyExpression()
+        val simpleNum = numerator.fold(Expression.ONE) { acc, expression -> acc * expression }
+            .simplifyExpression()
+        val simpleDenom = denominator.fold(Expression.ONE) { acc, expression -> acc * expression }
+            .simplifyExpression()
 
         // check if numerator/denominator consist of single integer value
         val numIsInt = simpleNum.terms.size == 1 && simpleNum.terms[0].exp == 0
         val denomIsInt = simpleDenom.terms.size == 1 && simpleDenom.terms[0].exp == 0
 
-        println(simpleNum)
         if (numIsInt && simpleNum.terms[0].coefficient.isZero()) {
             throw ArithmeticException("divide by zero")
         }
@@ -124,36 +139,92 @@ class ExactDecimal private constructor() : Number() {
         return total
     }
 
-    private fun simplify() {
-        simplifyZero()
-//        simplifyCommon()
-//
-//        simplifyAllStrings()
-//        simplifyCommon()
-//        simplifyZero()
+    fun simplify() {
+        var currentNum = numerator
+        var currentDenom = denominator
+
+        var result = simplifyZero(currentNum, currentDenom)
+        currentNum = result.first
+        currentDenom = result.second
+
+        val numGroups = currentNum.groupBy { it.isAllConstants() }
+        val denomGroups = currentDenom.groupBy { it.isAllConstants() }
+        val numConstant: Expression =
+            numGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
+        val denomConstant: Expression =
+            denomGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
+
+        val numList = simplifyAllStrings(numGroups[false] ?: listOf())
+        val denomList = simplifyAllStrings(denomGroups[false] ?: listOf())
+
+        result = removeCommon(numList, denomList)
+        currentNum = result.first + numConstant
+        currentDenom = result.second + denomConstant
+
+        numerator = currentNum
+        denominator = currentDenom
     }
 
-    private fun simplifyZero() {
-        if (numerator.isZero()) {
-            numerator = listOf(Expression.ZERO)
-            denominator = listOf(Expression.ONE)
+    private fun simplifyZero(num: ExprList, denom: ExprList): Pair<ExprList, ExprList> {
+        if (num.isZero()) {
+            return Pair(
+                listOf(Expression.ZERO),
+                listOf(Expression.ONE)
+            )
+        }
+        return Pair(num, denom)
+    }
+
+    private fun removeCommon(num: ExprList?, denom: ExprList?): Pair<ExprList, ExprList> {
+        if (num.isNullOrEmpty() && denom.isNullOrEmpty()) {
+            return Pair(listOf(), listOf())
+        }
+
+        if (num.isNullOrEmpty()) {
+            return Pair(listOf(), denom!!)
+        }
+
+        if (denom.isNullOrEmpty()) {
+            return Pair(num, listOf())
+        }
+
+        // map: O(n)
+        // groupBy: O(n)
+        // count: O(n)
+        // adding to num/denom: O(n)
+        val newNumerator: MutableList<Expression> = mutableListOf()
+        val newDenominator: MutableList<Expression> = mutableListOf()
+        (num.map { Pair(it, "num") } + denom.map { Pair(it, "denom") })
+            .groupBy { it.first }
+            .forEach { (expr, group) ->
+                val countNum = group.count { it.second == "num" }
+                val countDenom = group.size - countNum
+
+                if (countNum > countDenom) {
+                    for (i in (0 until countNum - countDenom)) {
+                        newNumerator.add(expr)
+                    }
+                } else if (countDenom > countNum) {
+                    for (i in (0 until countDenom - countNum)) {
+                        newDenominator.add(expr)
+                    }
+                }
+            }
+
+        return Pair(newNumerator, newDenominator)
+    }
+
+    private fun simplifyAllStrings(exprs: ExprList): ExprList {
+        return exprs.map { it ->
+            val coeffs = it.terms.map { t -> t.coefficient.toBigInteger() } // TODO what the hell
+            val gcd = getListGCD(coeffs)
+            val newTerms = it.terms.map { t ->
+                val newCoeff = t.coefficient / gcd
+                Term(newCoeff, t.exp)
+            }
+            Expression(newTerms)
         }
     }
-
-    private fun simplifyCommon() {
-        // TODO does this work with repeats and stuff?
-        // NO it does not
-        val simpNumerator = numerator.map { it.simplifyExpression() }
-        val simpDenominator = denominator.map { it.simplifyExpression() }
-
-        val newNumerator = numerator - denominator
-        val newDenominator = denominator - numerator
-
-        numerator = newNumerator
-        denominator = newDenominator
-    }
-
-    private fun simplifyAllStrings() {}
 
     private fun getListGCD(values: List<BigInteger>): BigInteger {
         if (values.size < 2) {

@@ -135,19 +135,9 @@ fun runTermPlusTests() {
 fun runTermEqualsTests() {
     var t = Term(0, 0)
 
-    var other: Any? = null
-    assertNotEquals(other, t)
+    assertEquals(t, Term(0, 0))
 
-    other = "hello world"
-    assertNotEquals(other, t)
-
-    other = Term(1, 0)
-    assertNotEquals(other, t)
-
-    other = Term(0, 0)
-    assertEquals(other, t)
-
-    other = Term(0, 3)
+    var other = Term(0, 3)
     assertEquals(other, t)
 
     var ef = ExactFraction(3, 2)
@@ -171,38 +161,30 @@ fun runTermCompareToTests() {
     var t1 = Term(0)
 
     var t2 = Term(0)
-    assertFalse(t1 < t2)
-    assertFalse(t1 > t2)
+    assertEquals(0, t1.compareTo(t2))
 
     t2 = Term(3)
     assert(t1 < t2)
-    assert(t2 > t1)
 
     t2 = Term(-3)
     assert(t1 > t2)
-    assert(t2 < t1)
 
     t2 = Term(ExactFraction(-3, 5))
     assert(t1 > t2)
-    assert(t2 < t1)
 
     t1 = Term(1, 0)
 
     t2 = Term(1, 1)
     assert(t1 < t2)
-    assert(t2 > t1)
 
     t2 = Term(1, -1)
     assert(t1 > t2)
-    assert(t2 < t1)
 
     t1 = Term(3, 5)
 
     t2 = Term(3, 5)
-    assertFalse(t1 < t2)
-    assertFalse(t1 > t2)
+    assertEquals(0, t1.compareTo(t2))
 
     t2 = Term(3, -5)
     assert(t1 > t2)
-    assert(t2 < t1)
 }

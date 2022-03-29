@@ -24,6 +24,7 @@ class Term : Comparable<Term> {
     constructor(coefficient: ExactFraction) : this(coefficient, 0)
     constructor(coefficient: BigInteger) : this(coefficient.toEF(), 0)
     constructor(coefficient: Int) : this(coefficient.toEF(), 0)
+    constructor(coefficient: Long) : this(coefficient.toEF(), 0)
 
     // parses short string
     constructor(s: String) {
