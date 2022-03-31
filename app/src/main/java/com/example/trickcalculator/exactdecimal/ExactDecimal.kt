@@ -42,7 +42,9 @@ class ExactDecimal private constructor() : Number() {
             throw ArithmeticException("Divide by zero")
         }
 
-        simplify()
+        val simplified = simplify(this)
+        this.numerator = simplified.first
+        this.denominator = simplified.second
     }
 
     constructor(numerator: ExprList) : this(numerator, listOf(Expression.ONE))
@@ -137,113 +139,6 @@ class ExactDecimal private constructor() : Number() {
         val partialTotal = exprList1.fold(Expression()) { acc, current -> acc * current }
         val total = exprList2.fold(partialTotal) { acc, current -> acc + current }
         return total
-    }
-
-    fun simplify() {
-        var currentNum = numerator
-        var currentDenom = denominator
-
-        var result = simplifyZero(currentNum, currentDenom)
-        currentNum = result.first
-        currentDenom = result.second
-
-        val numGroups = currentNum.groupBy { it.isAllConstants() }
-        val denomGroups = currentDenom.groupBy { it.isAllConstants() }
-        val numConstant: Expression =
-            numGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
-        val denomConstant: Expression =
-            denomGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
-
-        val numList = simplifyAllStrings(numGroups[false] ?: listOf())
-        val denomList = simplifyAllStrings(denomGroups[false] ?: listOf())
-
-        result = removeCommon(numList, denomList)
-        currentNum = result.first + numConstant
-        currentDenom = result.second + denomConstant
-
-        numerator = currentNum
-        denominator = currentDenom
-    }
-
-    private fun simplifyZero(num: ExprList, denom: ExprList): Pair<ExprList, ExprList> {
-        if (num.isZero()) {
-            return Pair(
-                listOf(Expression.ZERO),
-                listOf(Expression.ONE)
-            )
-        }
-        return Pair(num, denom)
-    }
-
-    private fun removeCommon(num: ExprList?, denom: ExprList?): Pair<ExprList, ExprList> {
-        if (num.isNullOrEmpty() && denom.isNullOrEmpty()) {
-            return Pair(listOf(), listOf())
-        }
-
-        if (num.isNullOrEmpty()) {
-            return Pair(listOf(), denom!!)
-        }
-
-        if (denom.isNullOrEmpty()) {
-            return Pair(num, listOf())
-        }
-
-        // map: O(n)
-        // groupBy: O(n)
-        // count: O(n)
-        // adding to num/denom: O(n)
-        val newNumerator: MutableList<Expression> = mutableListOf()
-        val newDenominator: MutableList<Expression> = mutableListOf()
-        (num.map { Pair(it, "num") } + denom.map { Pair(it, "denom") })
-            .groupBy { it.first }
-            .forEach { (expr, group) ->
-                val countNum = group.count { it.second == "num" }
-                val countDenom = group.size - countNum
-
-                if (countNum > countDenom) {
-                    for (i in (0 until countNum - countDenom)) {
-                        newNumerator.add(expr)
-                    }
-                } else if (countDenom > countNum) {
-                    for (i in (0 until countDenom - countNum)) {
-                        newDenominator.add(expr)
-                    }
-                }
-            }
-
-        return Pair(newNumerator, newDenominator)
-    }
-
-    private fun simplifyAllStrings(exprs: ExprList): ExprList {
-        return exprs.map { it ->
-            val coeffs = it.terms.map { t -> t.coefficient.toBigInteger() } // TODO what the hell
-            val gcd = getListGCD(coeffs)
-            val newTerms = it.terms.map { t ->
-                val newCoeff = t.coefficient / gcd
-                Term(newCoeff, t.exp)
-            }
-            Expression(newTerms)
-        }
-    }
-
-    private fun getListGCD(values: List<BigInteger>): BigInteger {
-        if (values.size < 2) {
-            return BigInteger.ONE
-        }
-
-        if (values.size == 2) {
-            return getGCD(values[0], values[1])
-        }
-
-        var current: BigInteger = values[0]
-        for (value in values) {
-            current = getGCD(value, current)
-            if (current == BigInteger.ONE) {
-                return BigInteger.ONE
-            }
-        }
-
-        return current
     }
 
     override fun toString(): String {

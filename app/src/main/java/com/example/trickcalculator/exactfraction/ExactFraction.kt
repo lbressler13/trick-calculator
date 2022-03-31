@@ -38,6 +38,7 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
      * @throws ArithmeticException if denominator is 0
      */
     constructor (numerator: BigInteger, denominator: BigInteger) : this() {
+        println(Pair(numerator, denominator))
         if (denominator.isZero()) {
             throw ArithmeticException("divide by zero")
         }

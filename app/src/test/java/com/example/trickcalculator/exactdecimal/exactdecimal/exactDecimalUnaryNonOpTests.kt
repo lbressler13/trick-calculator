@@ -3,7 +3,6 @@ package com.example.trickcalculator.exactdecimal
 import com.example.trickcalculator.createExprList
 import com.example.trickcalculator.exactfraction.ExactFraction
 import org.junit.Assert.*
-import kotlin.math.exp
 
 fun runInverseTests() {
     var ed = ExactDecimal(0)

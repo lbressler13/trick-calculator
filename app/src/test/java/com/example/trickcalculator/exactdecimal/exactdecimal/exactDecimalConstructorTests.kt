@@ -76,7 +76,8 @@ fun runConstructorTests() {
     testList(listOf(Expression.ONE, Expression(Term(3))))
     testList(listOf(
         Expression(Term(1, -8)),
-        Expression(Term(3)))
+        Expression(Term(3))
+    )
     )
     testList(listOf(
         Expression(Term(ExactFraction.HALF * 7, 3333333)),

@@ -6,22 +6,32 @@ import java.math.BigInteger
 
 class Expression {
     val terms: TermList
+    val maxExponent: Int
 
     constructor() {
         terms = listOf()
+        maxExponent = 0
     }
 
     constructor(terms: TermList) {
         this.terms = terms
+
+        maxExponent = if (terms.isEmpty()) {
+            0
+        } else {
+            terms.maxOrNull()!!.exp
+        }
     }
 
     constructor(constant: BigInteger) {
         val term = Term(constant)
         terms = listOf(term)
+        maxExponent = 0
     }
 
     constructor(term: Term) {
         terms = listOf(term)
+        maxExponent = term.exp
     }
 
     operator fun times(other: Term): Expression = terms.map { it * other }.asExpression()
@@ -73,6 +83,10 @@ class Expression {
 
     override fun toString(): String {
         return "Expr($terms)"
+    }
+
+    override fun hashCode(): Int {
+        return terms.sorted().hashCode()
     }
 
     companion object {

@@ -15,3 +15,4 @@ typealias StringList = List<String>
 
 typealias TermList = List<Term>
 typealias ExprList = List<Expression>
+typealias ExprLPair = Pair<ExprList, ExprList>

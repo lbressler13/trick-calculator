@@ -6,10 +6,6 @@ class ExactDecimalTest {
     // all constructors
     @Test fun testConstructor() = runConstructorTests()
 
-    // simplify
-    // includes all private methods used in simplification
-    // @Test fun testSimplify() = runSimplifyTests()
-
     // unary operators
     @Test fun testUnaryMinus() = runUnaryMinusTests()
     @Test fun testUnaryPlus() = runUnaryPlusTests()

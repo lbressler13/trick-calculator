@@ -1,5 +1,6 @@
 package com.example.trickcalculator.exactdecimal
 
+import com.example.trickcalculator.exactdecimal.Term
 import com.example.trickcalculator.exactfraction.ExactFraction
 import org.junit.Test
 import org.junit.Assert.*
