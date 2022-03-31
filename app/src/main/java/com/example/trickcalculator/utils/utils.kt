@@ -65,16 +65,21 @@ fun isPartialDecimal(value: String): Boolean {
  * Get greatest common divisor of 2 numbers using Euclidean algorithm
  */
 fun getGCD(val1: BigInteger, val2: BigInteger): BigInteger {
-    if (val1 == BigInteger.ZERO || val2 == BigInteger.ZERO || val1 == val2) {
+    if (val1 == BigInteger.ZERO || val2 == BigInteger.ZERO) {
         return BigInteger.ONE
     }
 
-    if (val1 == val2) {
-        return val1
+    val aval1 = val1.abs()
+    val aval2 = val2.abs()
+
+    when {
+        aval1.isZero() -> return aval2
+        aval2.isZero() -> return aval1
+        aval1 == aval2 -> return aval1
     }
 
-    var sum = max(val1, val2)
-    var value = min(val1, val2)
+    var sum = max(aval1, aval2)
+    var value = min(aval1, aval2)
     var finished = false
 
     while (!finished) {

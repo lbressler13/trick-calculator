@@ -102,5 +102,6 @@ class Term : Comparable<Term> {
 
     companion object {
         val ZERO = Term(0)
+        val ONE = Term(1)
     }
 }

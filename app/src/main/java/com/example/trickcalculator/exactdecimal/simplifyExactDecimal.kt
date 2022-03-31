@@ -78,11 +78,11 @@ fun simplifyAllStrings(exprs: ExprList): Pair<ExprList, ExactFraction> {
         var denomCoeffs = it.terms.map { t -> t.coefficient.denominator }
 
         if (numCoeffs.all { co -> co.isNegative() }) {
-            c = -ExactFraction.ONE
+            c = -c
             numCoeffs = numCoeffs.map { co -> -co }
         }
         if (denomCoeffs.all { co -> co.isNegative() }) {
-            c = -ExactFraction.ONE
+            c = -c
             denomCoeffs = denomCoeffs.map { co -> -co }
         }
 
@@ -91,8 +91,9 @@ fun simplifyAllStrings(exprs: ExprList): Pair<ExprList, ExactFraction> {
         val gcd = ExactFraction(numGcd, denomGcd)
 
         c *= gcd
-        val newTerms = it.terms.map { t ->
-            val newCoeff = t.coefficient / gcd
+        val newTerms = it.terms.mapIndexed { index, t ->
+            val oldCoeff = ExactFraction(numCoeffs[index], denomCoeffs[index]) // uses coeffs that have been mapped to positive if possible
+            val newCoeff = oldCoeff / gcd
             Term(newCoeff, t.exp)
         }
         Expression(newTerms)
