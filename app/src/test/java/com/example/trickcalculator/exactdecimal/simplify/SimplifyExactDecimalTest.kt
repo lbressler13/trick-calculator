@@ -10,9 +10,4 @@ class SimplifyExactDecimalTest {
 
     @Test fun testRemoveCommon() = runRemoveCommonTests()
     @Test fun testSimplifyAllStrings() = runSimplifyAllStringsTests() // TODO
-
-    @Test
-    fun testGetListGCD() {
-        // TODO
-    }
 }

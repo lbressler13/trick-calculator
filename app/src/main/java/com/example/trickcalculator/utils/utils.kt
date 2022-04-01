@@ -62,17 +62,14 @@ fun isPartialDecimal(value: String): Boolean {
 }
 
 /**
- * Get greatest common divisor of 2 numbers using Euclidean algorithm
+ * Get positive greatest common divisor of 2 numbers using Euclidean algorithm
  */
 fun getGCD(val1: BigInteger, val2: BigInteger): BigInteger {
-    if (val1 == BigInteger.ZERO || val2 == BigInteger.ZERO) {
-        return BigInteger.ONE
-    }
-
     val aval1 = val1.abs()
     val aval2 = val2.abs()
 
     when {
+        aval1.isZero() && aval2.isZero() -> return BigInteger.ONE
         aval1.isZero() -> return aval2
         aval2.isZero() -> return aval1
         aval1 == aval2 -> return aval1
@@ -94,4 +91,24 @@ fun getGCD(val1: BigInteger, val2: BigInteger): BigInteger {
     }
 
     return value
+}
+
+// guaranteed returns a positive value
+fun getListGCD(values: List<BigInteger>): BigInteger {
+    when {
+        values.isEmpty() -> return BigInteger.ONE
+        values.size == 1 && values[0].isZero() -> return BigInteger.ONE
+        values.size == 1 -> return values[0].abs()
+        values.size == 2 -> return getGCD(values[0], values[1])
+    }
+
+    var current: BigInteger = values[0]
+    for (value in values) {
+        current = getGCD(value, current)
+        if (current == BigInteger.ONE) {
+            return BigInteger.ONE
+        }
+    }
+
+    return current
 }

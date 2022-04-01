@@ -5,6 +5,7 @@ import com.example.trickcalculator.ext.isNegative
 import com.example.trickcalculator.utils.ExprLPair
 import com.example.trickcalculator.utils.ExprList
 import com.example.trickcalculator.utils.getGCD
+import com.example.trickcalculator.utils.getListGCD
 import java.math.BigInteger
 
 // this needs to return a pair instead of an ED in order to avoid getting stuck in an infinite loop of constructor/simplify
@@ -73,6 +74,9 @@ fun simplifyAllStrings(exprs: ExprList): Pair<ExprList, ExactFraction> {
     var c = ExactFraction.ONE
 
     // maybe gcd of nums and denoms? that's probably right lol
+    // TODO ^ test that
+    // this is literally what TDD is for
+    // This has explained the purpose of TDD, much better than anything at work ever could
     val newExprs = exprs.map {
         var numCoeffs = it.terms.map { t -> t.coefficient.numerator }
         var denomCoeffs = it.terms.map { t -> t.coefficient.denominator }
@@ -100,28 +104,4 @@ fun simplifyAllStrings(exprs: ExprList): Pair<ExprList, ExactFraction> {
     }
 
     return Pair(newExprs, c)
-}
-
-fun getListGCD(values: List<BigInteger>): BigInteger {
-    if (values.isEmpty()) {
-        return BigInteger.ONE
-    }
-
-    if (values.size == 1) {
-        return values[0]
-    }
-
-    if (values.size == 2) {
-        return getGCD(values[0], values[1])
-    }
-
-    var current: BigInteger = values[0]
-    for (value in values) {
-        current = getGCD(value, current)
-        if (current == BigInteger.ONE) {
-            return BigInteger.ONE
-        }
-    }
-
-    return current
 }
