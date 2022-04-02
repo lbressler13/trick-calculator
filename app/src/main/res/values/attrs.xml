@@ -5,4 +5,5 @@
     <attr name="disabledForeground" format="reference" />
     <attr name="disabledBackground" format="reference" />
     <attr name="errorColor" format="reference" />
+    <attr name="firstTermColor" format="reference" />
 </resources>

@@ -1,13 +1,13 @@
 # Trick Calculator
 
-This calculator exists purely for fun and chaos. 
+This calculator exists purely for fun and chaos, which are both worthy goals.
 
 Here are the settings:
 | Setting              | Default | Description                                                                    |
 |:---------------------|:--------|:-------------------------------------------------------------------------------|
 | Apply decimals       | true    | Apply decimals entered in textbox                                              |
 | Apply parentheses    | true    | Apply parentheses entered in textbox                                           |
-| Reset text on error  | true    | Clear textbox when error occurs. Error message is shown regardless of setting  |
+| Reset text on error  | false   | Clear textbox when error occurs. Error message is shown regardless of setting  |
 | Shuffle numbers      | false   | Shuffle value of numbers. No visual indication of new values                   |
 | Shuffle operator     | true    | Shuffle action of operators. No visual indication of new actions               |
 
@@ -28,7 +28,9 @@ But you can read the code or click around in the app until you find it.
 **All** new logic needs unit tests.
 The logic in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
 There is a huge sense of relief from being able to press a button and know that everything still works.
-The hours writing tests will be worth it. You will understand the appeal of TDD.
+The hours writing tests will be worth it. 
+
+You will gain a huge appreciation for testing and TDD.
 
 ## Serious Stuff
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.

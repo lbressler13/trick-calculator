@@ -33,7 +33,6 @@
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/clearOnErrorSwitch"
         style="@style/SettingsSwitch"
-        android:checked="true"
         android:text="@string/clear_on_error"
         app:layout_constraintTop_toBottomOf="@id/applyParensSwitch"
         tools:ignore="MissingConstraints" />
