@@ -23,11 +23,13 @@ class SharedViewModel : ViewModel() {
 
     private val error = MutableLiveData<String?>().apply { value = null }
 
+    private val usesComputedValue = MutableLiveData<Boolean>().apply { value = false }
+
     // settings
     private val shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
     private val shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
     private val applyParens = MutableLiveData<Boolean>().apply { value = true }
-    private val clearOnError = MutableLiveData<Boolean>().apply { value = true }
+    private val clearOnError = MutableLiveData<Boolean>().apply { value = false }
     private val applyDecimals = MutableLiveData<Boolean>().apply { value = true }
 
     // getters and setters for variables
@@ -52,6 +54,8 @@ class SharedViewModel : ViewModel() {
     fun getComputeText(): LiveData<StringList> = computeText
     fun setComputedValue(newValue: ExactFraction) { computedValue.value = newValue }
 
+    fun getUsesComputedValues(): LiveData<Boolean> = usesComputedValue
+
     // clear current computed values
     private fun clearComputeText() { computeText.value = listOf() }
     private fun clearComputedValue() { computedValue.value = null }
@@ -64,8 +68,10 @@ class SharedViewModel : ViewModel() {
     fun appendComputeText(addition: String) {
         val currentVal: StringList = computeText.value!!
 
-        // create multi-digit number
-        if (currentVal.isNotEmpty() && (isInt(addition) || addition == ".") &&
+        if (currentVal.size == 1 && computedValue.value != null) {
+            computeText.value = currentVal + addition
+        } else if (currentVal.isNotEmpty() && (isInt(addition) || addition == ".") &&
+            // create multi-digit number
             isPartialDecimal(currentVal.last())) {
             val newAddition: String = currentVal.last() + addition
             computeText.value = currentVal.copyWithLastReplaced(newAddition)
@@ -80,7 +86,11 @@ class SharedViewModel : ViewModel() {
     fun backspaceComputeText() {
         val currentText: StringList = computeText.value!!
 
-        if (currentText.isNotEmpty()) {
+        if (currentText.size == 1 && computedValue.value != null) {
+            usesComputedValue.value = false
+            computeText.value = listOf()
+            computedValue.value = null
+        } else if (currentText.isNotEmpty()) {
             val lastValue = currentText.last()
 
             if (lastValue.length == 1) {
@@ -126,6 +136,7 @@ class SharedViewModel : ViewModel() {
      * Replace compute text list with the computed value
      */
     fun useComputedAsComputeText() {
+        usesComputedValue.value = true
         val computed: ExactFraction = computedValue.value!!
         computeText.value = listOf(computed.toDecimalString())
     }
