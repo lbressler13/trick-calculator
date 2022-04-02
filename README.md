@@ -7,7 +7,7 @@ Here are the settings:
 |:---------------------|:--------|:-------------------------------------------------------------------------------|
 | Apply decimals       | true    | Apply decimals entered in textbox                                              |
 | Apply parentheses    | true    | Apply parentheses entered in textbox                                           |
-| Reset text on error  | true    | Clear textbox when error occurs. Error message is shown regardless of setting  |
+| Reset text on error  | false   | Clear textbox when error occurs. Error message is shown regardless of setting  |
 | Shuffle numbers      | false   | Shuffle value of numbers. No visual indication of new values                   |
 | Shuffle operator     | true    | Shuffle action of operators. No visual indication of new actions               |
 

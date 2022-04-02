@@ -52,7 +52,7 @@ class AttributionsFragment : Fragment() {
     private var shuffleNumbers: Boolean = false
     private var shuffleOperators: Boolean = true
     private var applyParens: Boolean = true
-    private var clearOnError: Boolean = true
+    private var clearOnError: Boolean = false
     private var applyDecimals: Boolean = true
 
     companion object {

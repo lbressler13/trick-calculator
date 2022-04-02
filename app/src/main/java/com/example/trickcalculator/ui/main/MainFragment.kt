@@ -2,7 +2,11 @@ package com.example.trickcalculator.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.method.ScrollingMovementMethod
+import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,12 +35,13 @@ class MainFragment : Fragment() {
 
     private lateinit var computeText: StringList
     private var error: String? = null
+    private var usesComputedValue = false
 
     // settings
     private var shuffleNumbers: Boolean = false
     private var shuffleOperators: Boolean = true
     private var applyParens: Boolean = true
-    private var clearOnError: Boolean = true
+    private var clearOnError: Boolean = false
     private var applyDecimals: Boolean = true
 
     companion object {
@@ -61,6 +66,7 @@ class MainFragment : Fragment() {
         viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
         viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
         viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
+        viewModel.getUsesComputedValues().observe(viewLifecycleOwner, getUsesComputedValueObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
@@ -73,7 +79,8 @@ class MainFragment : Fragment() {
 
     private val getComputeTextObserver: Observer<StringList> = Observer {
         computeText = it
-        binding.mainText.text = it.joinToString("")
+        // binding.mainText.text = it.joinToString("")
+        setTextUI()
     }
 
     /**
@@ -98,6 +105,7 @@ class MainFragment : Fragment() {
     private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
     private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
+    private val getUsesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
 
     /**
      * Launch AttributionsFragment
@@ -232,6 +240,20 @@ class MainFragment : Fragment() {
         binding.backspaceButton.setOnClickListener {
             viewModel.setError(null)
             viewModel.backspaceComputeText()
+        }
+    }
+
+    private fun setTextUI() {
+        if (computeText.isNotEmpty() && usesComputedValue) {
+            val textColor = TypedValue()
+            requireContext().theme.resolveAttribute(R.attr.firstTermColor, textColor, true)
+
+            val text = computeText.joinToString("")
+            val spannableString = SpannableString(text)
+            spannableString.setSpan(ForegroundColorSpan(textColor.data), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            binding.mainText.text = spannableString
+        } else {
+            binding.mainText.text = computeText.joinToString("")
         }
     }
 }
