@@ -79,8 +79,7 @@ class MainFragment : Fragment() {
 
     private val getComputeTextObserver: Observer<StringList> = Observer {
         computeText = it
-        // binding.mainText.text = it.joinToString("")
-        setTextUI()
+        setMainText()
     }
 
     /**
@@ -141,10 +140,11 @@ class MainFragment : Fragment() {
             viewModel.finalizeComputeText()
 
             // set action for each operator
-            val operators = if (shuffleOperators) {
-                listOf("+", "-", "x", "/", "^").shuffled()
-            } else {
-                listOf("+", "-", "x", "/", "^")
+            // only include exponent if exp is used
+            val operators = when {
+                !shuffleOperators -> listOf("+", "-", "x", "/", "^")
+                computeText.indexOf("^") == -1 -> listOf("+", "-", "x", "/").shuffled() + listOf("^")
+                else -> listOf("+", "-", "x", "/", "^").shuffled()
             }
 
             // maps operator symbols to their given functions
@@ -243,7 +243,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setTextUI() {
+    private fun setMainText() {
         if (computeText.isNotEmpty() && usesComputedValue) {
             val textColor = TypedValue()
             requireContext().theme.resolveAttribute(R.attr.firstTermColor, textColor, true)
