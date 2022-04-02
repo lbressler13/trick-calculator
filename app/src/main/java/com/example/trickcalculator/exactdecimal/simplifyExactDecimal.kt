@@ -26,8 +26,8 @@ fun simplify(ed: ExactDecimal): ExprLPair {
     val denomConstant: Expression =
         denomGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
 
-    val numResult = simplifyAllStrings(numGroups[false] ?: listOf())
-    val denomResult = simplifyAllStrings(denomGroups[false] ?: listOf())
+    val numResult = simplifyAllCoeffs(numGroups[false] ?: listOf())
+    val denomResult = simplifyAllCoeffs(denomGroups[false] ?: listOf())
 
     val result = removeCommon(numResult.first, denomResult.first)
     currentNum = result.first + numConstant * Term(numResult.second)
@@ -70,73 +70,45 @@ fun removeCommon(num: ExprList, denom: ExprList): ExprLPair {
     return Pair(newNumerator, newDenominator)
 }
 
-fun simplifyAllStrings(exprs: ExprList): Pair<ExprList, ExactFraction> {
+fun simplifyAllCoeffs(exprs: ExprList): Pair<ExprList, ExactFraction> {
     var c = ExactFraction.ONE
 
     // maybe gcd of nums and denoms? that's probably right lol
     // TODO ^ test that
+    // Okay it is CLEARLY not right at all
     // this is literally what TDD is for
     // This has explained the purpose of TDD, much better than anything at work ever could
     val newExprs = exprs.map {
-        var numCoeffs = it.terms.map { t -> t.coefficient.numerator }
-        var denomCoeffs = it.terms.map { t -> t.coefficient.denominator }
-
-        if (numCoeffs.all { co -> co.isNegative() }) {
-            c = -c
-            numCoeffs = numCoeffs.map { co -> -co }
-        }
-        if (denomCoeffs.all { co -> co.isNegative() }) {
-            c = -c
-            denomCoeffs = denomCoeffs.map { co -> -co }
-        }
-
-        val numGcd = getListGCD(numCoeffs)
-        val denomGcd = getListGCD(denomCoeffs)
-        val gcd = ExactFraction(numGcd, denomGcd)
-
-        c *= gcd
-        val newTerms = it.terms.mapIndexed { index, t ->
-            val oldCoeff = ExactFraction(
-                numCoeffs[index],
-                denomCoeffs[index]
-            ) // uses coeffs that have been mapped to positive if possible
-            val newCoeff = oldCoeff / gcd
-            Term(newCoeff, t.exp)
-        }
-        Expression(newTerms)
+        val result = simplifyCoeffsSingleExpr(it)
+        c *= result.second
+        result.first
     }
-//    val newExprs = exprs.map {
-//        val result = simplifyCoeffsSingleExpr(it)
-//        c *= result.second
-//        result.first
-//    }
 
     return Pair(newExprs, c)
 }
 
-fun simplifyCoeffsSingleExpr(expr: Expression): Pair<Expression, BigInteger> {
-    var negative = expr.terms.all { it.coefficient.isNegative() }
+fun simplifyCoeffsSingleExpr(expr: Expression): Pair<Expression, ExactFraction> {
+    val negative = expr.terms.all { it.coefficient.isNegative() }
 
-    val totalDenom: BigInteger =
-        expr.terms.fold(BigInteger.ONE) { acc, t -> acc * t.coefficient.denominator }
-    val numPairs = expr.terms.map {
-        // multiply by all denoms except current
-        var scaledNum = it.coefficient.numerator * totalDenom / it.coefficient.denominator
-        if (negative) {
-            scaledNum = -scaledNum
-        }
-        Pair(scaledNum, it.exp)
+    val numCoeffs = expr.terms.map { it.coefficient.numerator.abs() }
+    val denomCoeffs = expr.terms.map { it.coefficient.denominator } // no abs, denom is neg by definition
+
+    val numGcd = getListGCD(numCoeffs)
+    val denomGcd = getListGCD(denomCoeffs)
+    val gcd = ExactFraction(numGcd, denomGcd)
+
+    val newTerms = expr.terms.mapIndexed { index, t ->
+        val oldCoeff = ExactFraction(
+            numCoeffs[index],
+            denomCoeffs[index]
+        ) // uses coeffs that have been mapped to positive
+        val newCoeff = oldCoeff / gcd
+        Term(newCoeff, t.exp)
     }
 
-    val gcd = getListGCD(numPairs.map { it.first })
-    val simplified = numPairs.map {
-        val coeff = ExactFraction(it.first, gcd) / totalDenom
-        Term(coeff, it.second)
-    }.asExpression()
-
     return if (negative) {
-        Pair(simplified, -gcd)
+        Pair(Expression(newTerms), -gcd)
     } else {
-        Pair(simplified, gcd)
+        Pair(Expression(newTerms), gcd)
     }
 }

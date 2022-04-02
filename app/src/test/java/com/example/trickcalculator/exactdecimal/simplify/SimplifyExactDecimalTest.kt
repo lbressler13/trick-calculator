@@ -9,5 +9,6 @@ class SimplifyExactDecimalTest {
     }
 
     @Test fun testRemoveCommon() = runRemoveCommonTests()
-    @Test fun testSimplifyAllStrings() = runSimplifyAllStringsTests() // TODO
+    @Test fun testSimplifyCoeffsSingleExpr() = runSimplifyCoeffsSingleExprTests() // TODO
+    @Test fun testSimplifyAllCoeffs() = runSimplifyAllCoeffsTests() // TODO
 }
