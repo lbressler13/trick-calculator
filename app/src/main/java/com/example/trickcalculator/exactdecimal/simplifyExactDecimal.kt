@@ -1,10 +1,8 @@
 package com.example.trickcalculator.exactdecimal
 
 import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.ext.isNegative
 import com.example.trickcalculator.utils.ExprLPair
 import com.example.trickcalculator.utils.ExprList
-import com.example.trickcalculator.utils.getGCD
 import com.example.trickcalculator.utils.getListGCD
 import java.math.BigInteger
 
@@ -91,19 +89,24 @@ fun simplifyCoeffsSingleExpr(expr: Expression): Pair<Expression, ExactFraction> 
     val negative = expr.terms.all { it.coefficient.isNegative() }
 
     val numCoeffs = expr.terms.map { it.coefficient.numerator.abs() }
-    val denomCoeffs = expr.terms.map { it.coefficient.denominator } // no abs, denom is neg by definition
 
-    val numGcd = getListGCD(numCoeffs)
-    val denomGcd = getListGCD(denomCoeffs)
-    val gcd = ExactFraction(numGcd, denomGcd)
+    val totalDenom = expr.terms.fold(BigInteger.ONE) { acc, t -> acc * t.coefficient.denominator }
 
-    val newTerms = expr.terms.mapIndexed { index, t ->
+    val scaledNums = expr.terms.map {
+        val signedNum = if (negative) it.coefficient.numerator.abs() else it.coefficient.numerator
+        signedNum * totalDenom / it.coefficient.denominator
+    }
+
+    val gcd = ExactFraction(getListGCD(scaledNums), totalDenom)
+
+    val newTerms = expr.terms.map {
+        val signedNum = if (negative) it.coefficient.numerator.abs() else it.coefficient.numerator
         val oldCoeff = ExactFraction(
-            numCoeffs[index],
-            denomCoeffs[index]
-        ) // uses coeffs that have been mapped to positive
+            signedNum,
+            it.coefficient.denominator
+        )
         val newCoeff = oldCoeff / gcd
-        Term(newCoeff, t.exp)
+        Term(newCoeff, it.exp)
     }
 
     return if (negative) {

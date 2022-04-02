@@ -82,10 +82,10 @@ fun runSimplifyCoeffsSingleExprTests() {
     ).asExpression()
     expected = Pair(
         listOf(
-            Term(ExactFraction(1, 5)),
-            Term(ExactFraction.ONE)
+            Term(1),
+            Term(5),
         ).asExpression(),
-        ExactFraction.SIX
+        ExactFraction(6, 5)
     )
     assertEquals(expected, simplifyCoeffsSingleExpr(e))
 
