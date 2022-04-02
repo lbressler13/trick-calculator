@@ -243,6 +243,9 @@ class MainFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets the text in the textbox, including ui modifications for first term
+     */
     private fun setMainText() {
         if (computeText.isNotEmpty() && usesComputedValue) {
             val textColor = TypedValue()
