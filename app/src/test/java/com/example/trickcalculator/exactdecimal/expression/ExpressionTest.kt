@@ -8,16 +8,18 @@ import java.math.BigInteger
 class ExpressionTest {
     @Test
     fun testConstructor() {
+        val zeroTerms = listOf(Term.ZERO)
+
         // empty
         var terms = listOf<Term>()
         var expr = Expression()
-        assertEquals(terms, expr.terms)
+        assertEquals(zeroTerms, expr.terms)
         assertEquals(0, expr.maxExponent)
 
         // TermList
         terms = listOf()
         expr = Expression(terms)
-        assertEquals(terms, expr.terms)
+        assertEquals(zeroTerms, expr.terms)
         assertEquals(0, expr.maxExponent)
 
         terms = listOf(Term(3))
@@ -96,16 +98,13 @@ class ExpressionTest {
         assertEquals(104, expr.maxExponent)
     }
 
-    @Test fun testTimes() = runExpressionTimesTests() // TODO (just x expr)
+    @Test fun testTimes() = runExpressionTimesTests()
     @Test fun testPlus() = runExpressionPlusTests()
     @Test fun testEquals() = runExpressionEqualsTests()
 
     @Test fun testIsZero() = runExpressionIsZeroTests()
     @Test fun testUnaryMinus() = runExpressionUnaryMinusTests()
-    @Test fun testIsAllConstants() {} // TODO
+    @Test fun testIsAllConstants() = runExpressionIsAllConstantsTests()
 
-    @Test
-    fun testSimplifyExpression() {
-        // TODO
-    }
+    @Test fun testSimplifyExpression() = runExpressionSimplifyExpressionTests()
 }

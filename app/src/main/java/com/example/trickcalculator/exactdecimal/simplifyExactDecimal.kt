@@ -96,12 +96,47 @@ fun simplifyAllStrings(exprs: ExprList): Pair<ExprList, ExactFraction> {
 
         c *= gcd
         val newTerms = it.terms.mapIndexed { index, t ->
-            val oldCoeff = ExactFraction(numCoeffs[index], denomCoeffs[index]) // uses coeffs that have been mapped to positive if possible
+            val oldCoeff = ExactFraction(
+                numCoeffs[index],
+                denomCoeffs[index]
+            ) // uses coeffs that have been mapped to positive if possible
             val newCoeff = oldCoeff / gcd
             Term(newCoeff, t.exp)
         }
         Expression(newTerms)
     }
+//    val newExprs = exprs.map {
+//        val result = simplifyCoeffsSingleExpr(it)
+//        c *= result.second
+//        result.first
+//    }
 
     return Pair(newExprs, c)
+}
+
+fun simplifyCoeffsSingleExpr(expr: Expression): Pair<Expression, BigInteger> {
+    var negative = expr.terms.all { it.coefficient.isNegative() }
+
+    val totalDenom: BigInteger =
+        expr.terms.fold(BigInteger.ONE) { acc, t -> acc * t.coefficient.denominator }
+    val numPairs = expr.terms.map {
+        // multiply by all denoms except current
+        var scaledNum = it.coefficient.numerator * totalDenom / it.coefficient.denominator
+        if (negative) {
+            scaledNum = -scaledNum
+        }
+        Pair(scaledNum, it.exp)
+    }
+
+    val gcd = getListGCD(numPairs.map { it.first })
+    val simplified = numPairs.map {
+        val coeff = ExactFraction(it.first, gcd) / totalDenom
+        Term(coeff, it.second)
+    }.asExpression()
+
+    return if (negative) {
+        Pair(simplified, -gcd)
+    } else {
+        Pair(simplified, gcd)
+    }
 }

@@ -17,7 +17,7 @@ class Term : Comparable<Term> {
     constructor(coefficient: ExactFraction, exp: Int) {
         this.coefficient = coefficient
         this.exp = if (coefficient.isZero()) 0 else exp
-        this.shortString = "$coefficient$shortPi$exp"
+        this.shortString = "$coefficient$shortPi${this.exp}"
     }
 
     constructor(coefficient: Int, exp: Int) : this(coefficient.toEF(), exp)

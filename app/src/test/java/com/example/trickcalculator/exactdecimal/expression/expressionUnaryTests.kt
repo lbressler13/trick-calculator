@@ -109,3 +109,37 @@ fun runExpressionUnaryMinusTests() {
     ).asExpression()
     assertEquals(expected, -expr)
 }
+
+fun runExpressionIsAllConstantsTests() {
+    // all constants
+    var expr = Expression()
+    assert(expr.isAllConstants())
+
+    expr = Expression.ZERO
+    assert(expr.isAllConstants())
+
+    expr = Expression(Term(0, 10)) // 0 gets simplified to constant
+    assert(expr.isAllConstants())
+
+    expr = Expression(Term(3))
+    assert(expr.isAllConstants())
+
+    expr = Expression(Term(-14))
+    assert(expr.isAllConstants())
+
+    expr = Expression(Term(3, 0))
+    assert(expr.isAllConstants())
+
+    expr = listOf(Term(3), Term(18), Term(-6)).asExpression()
+    assert(expr.isAllConstants())
+
+    // not all constants
+    expr = Expression(Term(3, 1))
+    assertFalse(expr.isAllConstants())
+
+    expr = Expression(Term(3, -1))
+    assertFalse(expr.isAllConstants())
+
+    expr = listOf(Term(3), Term(4), Term(5), Term(6, 1)).asExpression()
+    assertFalse(expr.isAllConstants())
+}

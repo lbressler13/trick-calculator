@@ -14,6 +14,20 @@ fun runTermConstructorTests() {
     assertEquals(exp, t.exp)
     assertEquals("${ef}p$exp", t.shortString)
 
+    ef = ExactFraction.ZERO
+    exp = 4
+    t = Term(ef, exp)
+    assertEquals(ef, t.coefficient)
+    assertEquals(0, t.exp)
+    assertEquals("${ef}p0", t.shortString)
+
+    ef = ExactFraction.ZERO
+    exp = -4
+    t = Term(ef, exp)
+    assertEquals(ef, t.coefficient)
+    assertEquals(0, t.exp)
+    assertEquals("${ef}p0", t.shortString)
+
     ef = ExactFraction(-1, 2)
     exp = 0
     t = Term(ef, exp)

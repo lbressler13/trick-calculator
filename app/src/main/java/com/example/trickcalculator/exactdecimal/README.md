@@ -13,14 +13,14 @@ Currently, the **ExactDecimal** class supports numbers and **pi**, but additiona
 All definitions are currently given in terms of constants and pi, but will be modified when additional functionality is added
 
 * **Term**: c * pi^exp, for some constant **c** and exponent **exp**
-* **Expression**: sum of terms c_k * pi^exp_k, where values of **k** may not be sequential and **exp** values may not be distinct
+* **Expression**: sum of terms c_k * pi^exp_k, where **exp** values may not be distinct
 * **Simplified expression**: expression where each term has a distinct **exp** value
-* **Term list**: representation of expression where each c * pi^exp value is stored as an individual term, which represents an summation over the given terms
+* **Term list**: representation of expression where each c * pi^exp value is stored as an individual term, which represents a summation over the given terms
 * **Expression list**: list of expressions, which represents a multiplication over the given expressions
 
 ## Classes
-* **ExactDecimal**: number implementation to store exact representation of a number, using expression lists for the numerator and denominator, and an **ExactFraction** for a coefficient
+* **ExactDecimal**: number implementation to store exact representation of a number, using expression lists for the numerator and denominator
 * **Term**: a single term, containing a coefficient and an exponent of pi, which can be any whole number
 * **Expression**: represents the expression as a term list
-* **TermList**: alias for **List<Term>**
-* **ExprList**: alias for **List<Expression<**
+* **TermList**: list of terms, an alias for **List<Term>**
+* **ExprList**: list of expressions, an alias for **List<Expression<**

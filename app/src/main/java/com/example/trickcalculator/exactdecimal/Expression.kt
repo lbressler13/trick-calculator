@@ -9,12 +9,16 @@ class Expression {
     val maxExponent: Int
 
     constructor() {
-        terms = listOf()
+        terms = listOf(Term.ZERO)
         maxExponent = 0
     }
 
     constructor(terms: TermList) {
-        this.terms = terms
+        this.terms = if (terms.isEmpty()) {
+            listOf(Term.ZERO)
+        } else {
+            terms
+        }
 
         maxExponent = if (terms.isEmpty()) {
             0
@@ -82,7 +86,15 @@ class Expression {
     fun isAllConstants(): Boolean = terms.all { it.exp == 0 }
 
     override fun toString(): String {
-        return "Expr($terms)"
+        var body = ""
+
+        // remove brackets around list
+        if (terms.isNotEmpty()) {
+            val listString = terms.toString()
+            body = listString.substring(1, listString.lastIndex)
+        }
+
+        return "Expr($body)"
     }
 
     override fun hashCode(): Int {
