@@ -102,7 +102,50 @@ fun runSimplifyCoeffsSingleExprTests() {
     )
     assertEquals(expected, simplifyCoeffsSingleExpr(e))
 
+    e = listOf(
+        Term(ExactFraction(6, 5), 1),
+        Term(ExactFraction(-3, 10), -3)
+    ).asExpression()
+    expected = Pair(
+        listOf(
+            Term(ExactFraction.FOUR, 1),
+            Term(-ExactFraction.ONE, -3)
+        ).asExpression(),
+        ExactFraction(3, 10)
+    )
+    assertEquals(expected, simplifyCoeffsSingleExpr(e))
+
     // all negative terms
+
+    e = listOf(
+        Term(ExactFraction(-2, 5), 1),
+        Term(ExactFraction(-3, 10), 3)
+    ).asExpression()
+    expected = Pair(
+        listOf(
+            Term(ExactFraction.FOUR, 1),
+            Term(ExactFraction.THREE, 3)
+        ).asExpression(),
+        ExactFraction(-1, 10)
+    )
+    assertEquals(expected, simplifyCoeffsSingleExpr(e))
+
+    e = listOf(
+        Term(81),
+        Term(ExactFraction(9, 2), 2),
+        Term(ExactFraction(12, 11), -4),
+        Term(-102, 3)
+    ).asExpression()
+    expected = Pair(
+        listOf(
+            Term(594),
+            Term(33, 2),
+            Term(8, -4),
+            Term(-748, 3)
+        ).asExpression(),
+        ExactFraction(3, 22)
+    )
+    assertEquals(expected, simplifyCoeffsSingleExpr(e))
 }
 
 fun runSimplifyAllCoeffsTests() {
