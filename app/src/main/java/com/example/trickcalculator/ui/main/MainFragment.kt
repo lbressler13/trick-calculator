@@ -109,7 +109,7 @@ class MainFragment : Fragment() {
     /**
      * Launch AttributionsFragment
      */
-    private val infoButtonOnClick = {
+    private val infoButtonOnClick: () -> Unit = {
         val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
         val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
         val parensKey = requireContext().getString(R.string.key_apply_parens)
@@ -253,7 +253,9 @@ class MainFragment : Fragment() {
 
             val text = computeText.joinToString("")
             val spannableString = SpannableString(text)
-            spannableString.setSpan(ForegroundColorSpan(textColor.data), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            // spannableString.setSpan(ForegroundColorSpan(textColor.data), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            spannableString.setSpan(BorderSpan(1000), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+
             binding.mainText.text = spannableString
         } else {
             binding.mainText.text = computeText.joinToString("")
