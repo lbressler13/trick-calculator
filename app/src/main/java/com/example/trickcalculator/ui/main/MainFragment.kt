@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.ScrollingMovementMethod
-import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,6 +24,8 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
+import android.content.res.ColorStateList
+
 
 /**
  * Fragment to display main calculator functionality
@@ -43,6 +44,8 @@ class MainFragment : Fragment() {
     private var applyParens: Boolean = true
     private var clearOnError: Boolean = false
     private var applyDecimals: Boolean = true
+
+    private var devMode: Boolean = true
 
     companion object {
         fun newInstance() = MainFragment()
@@ -67,8 +70,10 @@ class MainFragment : Fragment() {
         viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
         viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
         viewModel.getUsesComputedValues().observe(viewLifecycleOwner, getUsesComputedValueObserver)
+        viewModel.getIsDevMode().observe(viewLifecycleOwner, getIsDevModeObserver)
 
         initButtons()
+        initDevModeSwitch()
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
 
@@ -105,6 +110,33 @@ class MainFragment : Fragment() {
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
     private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
     private val getUsesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
+    private val getIsDevModeObserver: Observer<Boolean> = Observer { devMode = it }
+
+    /**
+     * Set UI and onCheckChangeListener
+     */
+    private fun initDevModeSwitch() {
+        val switch = (requireActivity() as MainActivity).binding.actionBar.devModeSwitch
+        switch.setOnCheckedChangeListener { view, isChecked -> viewModel.setIsDevMode(isChecked) }
+
+        val checkedColor = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.actionBarSwitchTrackCheckedColor, checkedColor, true)
+        val uncheckedColor = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.actionBarSwitchTrackUncheckedColor, uncheckedColor, true)
+
+        val buttonStates = ColorStateList(
+            arrayOf(
+                intArrayOf(-android.R.attr.state_enabled),
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf()
+            ), intArrayOf(
+                uncheckedColor.data,
+                checkedColor.data,
+                uncheckedColor.data
+            )
+        )
+        switch.trackDrawable.setTintList(buttonStates)
+    }
 
     /**
      * Launch AttributionsFragment
@@ -247,16 +279,25 @@ class MainFragment : Fragment() {
      * Sets the text in the textbox, including ui modifications for first term
      */
     private fun setMainText() {
-        if (computeText.isNotEmpty() && usesComputedValue) {
-            val textColor = TypedValue()
-            requireContext().theme.resolveAttribute(R.attr.firstTermColor, textColor, true)
+        if (devMode) {
+            if (computeText.isNotEmpty() && usesComputedValue) {
+                val textColor = TypedValue()
+                requireContext().theme.resolveAttribute(R.attr.firstTermColor, textColor, true)
 
-            val text = computeText.joinToString("")
-            val spannableString = SpannableString(text)
-            // spannableString.setSpan(ForegroundColorSpan(textColor.data), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
-            spannableString.setSpan(BorderSpan(1000), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+                val text = computeText.joinToString("")
+                val spannableString = SpannableString(text)
+                // spannableString.setSpan(ForegroundColorSpan(textColor.data), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+                spannableString.setSpan(
+                    BorderSpan(1000),
+                    0,
+                    computeText[0].length,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                )
 
-            binding.mainText.text = spannableString
+                binding.mainText.text = spannableString
+            } else {
+                binding.mainText.text = computeText.joinToString("")
+            }
         } else {
             binding.mainText.text = computeText.joinToString("")
         }

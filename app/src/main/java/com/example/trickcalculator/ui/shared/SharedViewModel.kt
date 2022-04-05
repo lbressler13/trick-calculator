@@ -32,6 +32,8 @@ class SharedViewModel : ViewModel() {
     private val clearOnError = MutableLiveData<Boolean>().apply { value = false }
     private val applyDecimals = MutableLiveData<Boolean>().apply { value = true }
 
+    private val isDevMode = MutableLiveData<Boolean>().apply { value = true }
+
     // getters and setters for variables
     fun setError(newValue: String?) { error.value = newValue }
     fun getError(): LiveData<String?> = error
@@ -53,6 +55,9 @@ class SharedViewModel : ViewModel() {
 
     fun getComputeText(): LiveData<StringList> = computeText
     fun setComputedValue(newValue: ExactFraction) { computedValue.value = newValue }
+
+    fun getIsDevMode(): LiveData<Boolean> = isDevMode
+    fun setIsDevMode(newValue: Boolean) { isDevMode.value = newValue }
 
     fun getUsesComputedValues(): LiveData<Boolean> = usesComputedValue
 
