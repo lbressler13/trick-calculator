@@ -22,11 +22,24 @@ android {
         dev {
             dimension "type"
             versionNameSuffix "-dev"
+            applicationId "com.example.trickcalculator.dev"
         }
 
+        // labelled as complete b/c final can't be used
         complete {
             dimension "type"
             versionNameSuffix "-final"
+        }
+    }
+
+    sourceSets {
+        dev {
+            java.srcDirs = ['src/dev/java']
+            resources.srcDirs = ['src/dev/res']
+        }
+
+        complete {
+            java.srcDirs = ['src/final/java']
         }
     }
 
