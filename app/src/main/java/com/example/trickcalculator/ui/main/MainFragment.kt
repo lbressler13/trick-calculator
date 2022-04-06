@@ -1,5 +1,6 @@
 package com.example.trickcalculator.ui.main
 
+import BuildOptions
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Spannable
@@ -44,6 +45,8 @@ class MainFragment : Fragment() {
     private var clearOnError: Boolean = false
     private var applyDecimals: Boolean = true
 
+    private var devMode = false
+
     companion object {
         fun newInstance() = MainFragment()
     }
@@ -67,12 +70,12 @@ class MainFragment : Fragment() {
         viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
         viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
         viewModel.getUsesComputedValues().observe(viewLifecycleOwner, getUsesComputedValueObserver)
+        viewModel.getIsDevMode().observe(viewLifecycleOwner, getIsDevModeObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
-
-        (requireActivity() as MainActivity).binding.actionBar.root.setOnClickListener(null)
+        initActionBar()
 
         return binding.root
     }
@@ -105,6 +108,7 @@ class MainFragment : Fragment() {
     private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
     private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
     private val getUsesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
+    private val getIsDevModeObserver: Observer<Boolean> = Observer { devMode = it }
 
     /**
      * Launch AttributionsFragment
@@ -240,6 +244,20 @@ class MainFragment : Fragment() {
         binding.backspaceButton.setOnClickListener {
             viewModel.setError(null)
             viewModel.backspaceComputeText()
+        }
+    }
+
+    /**
+     * Set functionality in action bar
+     */
+    private fun initActionBar() {
+        val actionBar = (requireActivity() as MainActivity).binding.actionBar
+        actionBar.root.setOnClickListener(null)
+
+        if (BuildOptions.buildType == "dev") {
+            actionBar.devModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setIsDevMode(isChecked)
+            }
         }
     }
 
