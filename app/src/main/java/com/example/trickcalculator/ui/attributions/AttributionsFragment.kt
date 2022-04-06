@@ -82,20 +82,20 @@ class AttributionsFragment : Fragment() {
         initSettingsDialog()
 
         // observe changes in viewmodel
-        viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
-        viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
-        viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
-        viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
-        viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
+        viewModel.shuffleNumbers.observe(viewLifecycleOwner, shuffleNumbersObserver)
+        viewModel.shuffleOperators.observe(viewLifecycleOwner, shuffleOperatorsObserver)
+        viewModel.applyParens.observe(viewLifecycleOwner, applyParensObserver)
+        viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
+        viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
 
         return binding.root
     }
 
-    private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
-    private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
-    private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
-    private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
-    private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
+    private val shuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
+    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
+    private val applyParensObserver: Observer<Boolean> = Observer { applyParens = it }
+    private val clearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
+    private val applyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
 
     /**
      * Initialize handling of settings dialog
