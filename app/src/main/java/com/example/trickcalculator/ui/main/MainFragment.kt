@@ -147,7 +147,12 @@ class MainFragment : Fragment() {
             // only include exponent if exp is used
             val operators = when {
                 !shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                computeText.indexOf("^") == -1 -> listOf("+", "-", "x", "/").shuffled() + listOf("^")
+                computeText.indexOf("^") == -1 -> listOf(
+                    "+",
+                    "-",
+                    "x",
+                    "/"
+                ).shuffled() + listOf("^")
                 else -> listOf("+", "-", "x", "/", "^").shuffled()
             }
 
@@ -254,10 +259,9 @@ class MainFragment : Fragment() {
         val actionBar = (requireActivity() as MainActivity).binding.actionBar
         actionBar.root.setOnClickListener(null)
 
-        if (BuildOptions.buildType == "dev") {
-            actionBar.devModeSwitch.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.setIsDevMode(isChecked)
-            }
+        // only visible and enabled in dev flavor
+        actionBar.devModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setIsDevMode(isChecked)
         }
     }
 

@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import com.example.trickcalculator.databinding.ActivityMainBinding
+import com.example.trickcalculator.ext.disable
+import com.example.trickcalculator.ext.enable
 import com.example.trickcalculator.ext.gone
 import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.main.MainFragment
@@ -55,8 +57,6 @@ class MainActivity : AppCompatActivity() {
         val switch = binding.actionBar.devModeSwitch
 
         if (BuildOptions.buildType == "dev") {
-            binding.actionBar.devModeSwitch.visible()
-
             val checkedColor = TypedValue()
             theme.resolveAttribute(R.attr.actionBarSwitchTrackCheckedColor, checkedColor, true)
             val uncheckedColor = TypedValue()
@@ -74,7 +74,11 @@ class MainActivity : AppCompatActivity() {
                 )
             )
             switch.trackDrawable.setTintList(buttonStates)
+
+            switch.enable()
+            switch.visible()
         } else {
+            switch.disable()
             switch.gone()
         }
     }
