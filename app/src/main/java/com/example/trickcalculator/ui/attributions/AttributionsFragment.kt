@@ -31,6 +31,7 @@ data class Attribution(
 
 // attributions for all images in app
 private val allAttributions = listOf(
+    Attribution(R.drawable.launcher, "Pixel perfect", "https://www.flaticon.com/free-icon/keys_2891382"),
     Attribution(R.drawable.ic_arrow_left, "Ilham Fitrotul Hayat", "www.flaticon.com/premium-icon/left_3416141"),
     Attribution(R.drawable.ic_close, "Ilham Fitrotul Hayat", "www.flaticon.com/premium-icon/cross_4421536"),
     Attribution(R.drawable.ic_divide, "Smashicons", "www.flaticon.com/free-icon/divide_149702"),
