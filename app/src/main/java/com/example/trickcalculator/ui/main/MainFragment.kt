@@ -1,5 +1,6 @@
 package com.example.trickcalculator.ui.main
 
+import BuildOptions
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Spannable
@@ -44,6 +45,8 @@ class MainFragment : Fragment() {
     private var clearOnError: Boolean = false
     private var applyDecimals: Boolean = true
 
+    private var devMode = false
+
     companion object {
         fun newInstance() = MainFragment()
     }
@@ -59,25 +62,25 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodel
-        viewModel.getComputeText().observe(viewLifecycleOwner, getComputeTextObserver)
-        viewModel.getError().observe(viewLifecycleOwner, getErrorObserver)
-        viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
-        viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
-        viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
-        viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
-        viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
-        viewModel.getUsesComputedValues().observe(viewLifecycleOwner, getUsesComputedValueObserver)
+        viewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
+        viewModel.error.observe(viewLifecycleOwner, errorObserver)
+        viewModel.shuffleNumbers.observe(viewLifecycleOwner, shuffleNumbersObserver)
+        viewModel.shuffleOperators.observe(viewLifecycleOwner, shuffleOperatorsObserver)
+        viewModel.applyParens.observe(viewLifecycleOwner, applyParensObserver)
+        viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
+        viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
+        viewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
+        viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initButtons()
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
-
-        (requireActivity() as MainActivity).binding.actionBar.root.setOnClickListener(null)
+        initActionBar()
 
         return binding.root
     }
 
-    private val getComputeTextObserver: Observer<StringList> = Observer {
+    private val computeTextObserver: Observer<StringList> = Observer {
         computeText = it
         setMainText()
     }
@@ -85,7 +88,7 @@ class MainFragment : Fragment() {
     /**
      * Display current error message, and clear compute data depending on settings
      */
-    private val getErrorObserver: Observer<String?> = Observer {
+    private val errorObserver: Observer<String?> = Observer {
         error = it
         if (it != null) {
             binding.errorText.text = it
@@ -99,12 +102,13 @@ class MainFragment : Fragment() {
         }
     }
 
-    private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
-    private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
-    private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
-    private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
-    private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
-    private val getUsesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
+    private val shuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
+    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
+    private val applyParensObserver: Observer<Boolean> = Observer { applyParens = it }
+    private val clearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
+    private val applyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
+    private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
+    private val isDevModeObserver: Observer<Boolean> = Observer { devMode = it }
 
     /**
      * Launch AttributionsFragment
@@ -143,7 +147,12 @@ class MainFragment : Fragment() {
             // only include exponent if exp is used
             val operators = when {
                 !shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                computeText.indexOf("^") == -1 -> listOf("+", "-", "x", "/").shuffled() + listOf("^")
+                computeText.indexOf("^") == -1 -> listOf(
+                    "+",
+                    "-",
+                    "x",
+                    "/"
+                ).shuffled() + listOf("^")
                 else -> listOf("+", "-", "x", "/", "^").shuffled()
             }
 
@@ -244,17 +253,39 @@ class MainFragment : Fragment() {
     }
 
     /**
+     * Set functionality in action bar
+     */
+    private fun initActionBar() {
+        val actionBar = (requireActivity() as MainActivity).binding.actionBar
+        actionBar.root.setOnClickListener(null)
+
+        // only visible and enabled in dev flavor
+        actionBar.devModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setIsDevMode(isChecked)
+        }
+    }
+
+    /**
      * Sets the text in the textbox, including ui modifications for first term
      */
     private fun setMainText() {
-        if (computeText.isNotEmpty() && usesComputedValue) {
-            val textColor = TypedValue()
-            requireContext().theme.resolveAttribute(R.attr.firstTermColor, textColor, true)
+        if (devMode) {
+            if (computeText.isNotEmpty() && usesComputedValue) {
+                val textColor = TypedValue()
+                requireContext().theme.resolveAttribute(R.attr.firstTermColor, textColor, true)
 
-            val text = computeText.joinToString("")
-            val spannableString = SpannableString(text)
-            spannableString.setSpan(ForegroundColorSpan(textColor.data), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
-            binding.mainText.text = spannableString
+                val text = computeText.joinToString("")
+                val spannableString = SpannableString(text)
+                spannableString.setSpan(
+                    ForegroundColorSpan(textColor.data),
+                    0,
+                    computeText[0].length,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                )
+                binding.mainText.text = spannableString
+            } else {
+                binding.mainText.text = computeText.joinToString("")
+            }
         } else {
             binding.mainText.text = computeText.joinToString("")
         }

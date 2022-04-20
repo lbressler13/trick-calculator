@@ -31,6 +31,7 @@ data class Attribution(
 
 // attributions for all images in app
 private val allAttributions = listOf(
+    Attribution(R.drawable.launcher, "Pixel perfect", "https://www.flaticon.com/free-icon/keys_2891382"),
     Attribution(R.drawable.ic_arrow_left, "Ilham Fitrotul Hayat", "www.flaticon.com/premium-icon/left_3416141"),
     Attribution(R.drawable.ic_close, "Ilham Fitrotul Hayat", "www.flaticon.com/premium-icon/cross_4421536"),
     Attribution(R.drawable.ic_divide, "Smashicons", "www.flaticon.com/free-icon/divide_149702"),
@@ -82,20 +83,20 @@ class AttributionsFragment : Fragment() {
         initSettingsDialog()
 
         // observe changes in viewmodel
-        viewModel.getShuffleNumbers().observe(viewLifecycleOwner, getShuffleNumbersObserver)
-        viewModel.getShuffleOperators().observe(viewLifecycleOwner, getShuffleOperatorsObserver)
-        viewModel.getApplyParens().observe(viewLifecycleOwner, getApplyParensObserver)
-        viewModel.getClearOnError().observe(viewLifecycleOwner, getClearOnErrorObserver)
-        viewModel.getApplyDecimals().observe(viewLifecycleOwner, getApplyDecimalsObserver)
+        viewModel.shuffleNumbers.observe(viewLifecycleOwner, shuffleNumbersObserver)
+        viewModel.shuffleOperators.observe(viewLifecycleOwner, shuffleOperatorsObserver)
+        viewModel.applyParens.observe(viewLifecycleOwner, applyParensObserver)
+        viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
+        viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
 
         return binding.root
     }
 
-    private val getShuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
-    private val getShuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
-    private val getApplyParensObserver: Observer<Boolean> = Observer { applyParens = it }
-    private val getClearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
-    private val getApplyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
+    private val shuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
+    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
+    private val applyParensObserver: Observer<Boolean> = Observer { applyParens = it }
+    private val clearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
+    private val applyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
 
     /**
      * Initialize handling of settings dialog

@@ -39,6 +39,7 @@ The list is also available within the app itself.
 
 | Icon                                                        | Creator              | Link                                                                  |
 |:------------------------------------------------------------|:---------------------|:----------------------------------------------------------------------|
+| ![img](app/src/main/res/drawable-hdpi/launcher.png)         | Pixel perfect        | <https://www.flaticon.com/free-icon/keys_2891382>                     |
 | ![img](app/src/main/res/drawable-hdpi/ic_arrow_left.png)    | Ilham Fitrotul Hayat | <https://www.flaticon.com/premium-icon/left_3416141>                  |
 | ![img](app/src/main/res/drawable-hdpi/ic_close.png)         | Ilham Fitrotul Hayat | <https://www.flaticon.com/premium-icon/cross_4421536>                 |
 | ![img](app/src/main/res/drawable-hdpi/ic_divide.png)        | Smashicons           | <https://www.flaticon.com/free-icon/divide_149702>                    |
