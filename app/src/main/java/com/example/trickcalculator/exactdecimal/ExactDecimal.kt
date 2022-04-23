@@ -42,9 +42,10 @@ class ExactDecimal private constructor() : Number() {
             throw ArithmeticException("Divide by zero")
         }
 
-        val simplified = simplify(this)
-        this.numerator = simplified.first
-        this.denominator = simplified.second
+        // simplify returns a pair instead of an ED to prevent an infinite loop of simplifying
+        // val simplified = simplify(this)
+        // this.numerator = simplified.first
+        // this.denominator = simplified.second
     }
 
     constructor(numerator: ExprList) : this(numerator, listOf(Expression.ONE))
@@ -66,7 +67,10 @@ class ExactDecimal private constructor() : Number() {
             return false
         }
 
-        return numerator == other.numerator && denominator == other.denominator
+        val simplified = simplify(this)
+        val otherSimplified = simplify(other)
+        return simplified.numerator == otherSimplified.numerator
+                && simplified.denominator == otherSimplified.denominator
     }
 
     /**

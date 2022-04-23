@@ -7,12 +7,12 @@ import com.example.trickcalculator.utils.getListGCD
 import java.math.BigInteger
 
 // this needs to return a pair instead of an ED in order to avoid getting stuck in an infinite loop of constructor/simplify
-fun simplify(ed: ExactDecimal): ExprLPair {
+fun simplify(ed: ExactDecimal): ExactDecimal {
     var currentNum = ed.numerator
     var currentDenom = ed.denominator
 
     if (currentNum.isZero()) {
-        return Pair(
+        return ExactDecimal(
             listOf(Expression.ZERO), listOf(Expression.ONE)
         )
     }
@@ -24,14 +24,22 @@ fun simplify(ed: ExactDecimal): ExprLPair {
     val denomConstant: Expression =
         denomGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
 
-    val numResult = simplifyAllCoeffs(numGroups[false] ?: listOf())
-    val denomResult = simplifyAllCoeffs(denomGroups[false] ?: listOf())
+    val numResult = if (numGroups[false].isNullOrEmpty()) {
+        Pair(listOf(), ExactFraction.ONE)
+    } else {
+        simplifyAllCoeffs(numGroups[false] ?: listOf(Expression.ONE))
+    }
+    val denomResult = if (denomGroups[false].isNullOrEmpty()) {
+        Pair(listOf(), ExactFraction.ONE)
+    } else {
+        simplifyAllCoeffs(denomGroups[false] ?: listOf(Expression.ONE))
+    }
 
     val result = removeCommon(numResult.first, denomResult.first)
     currentNum = result.first + numConstant * Term(numResult.second)
     currentDenom = result.second + denomConstant * Term(denomResult.second)
 
-    return Pair(currentNum, currentDenom)
+    return ExactDecimal(currentNum, currentDenom)
 }
 
 fun removeCommon(num: ExprList, denom: ExprList): ExprLPair {
@@ -69,26 +77,31 @@ fun removeCommon(num: ExprList, denom: ExprList): ExprLPair {
 }
 
 fun simplifyAllCoeffs(exprs: ExprList): Pair<ExprList, ExactFraction> {
-    var c = ExactFraction.ONE
+    if (exprs.isEmpty()) {
+        return Pair(listOf(), ExactFraction.ZERO)
+    }
 
-    // maybe gcd of nums and denoms? that's probably right lol
-    // TODO ^ test that
-    // Okay it is CLEARLY not right at all
-    // this is literally what TDD is for
-    // This has explained the purpose of TDD, much better than anything at work ever could
+    var c = ExactFraction.ONE
     val newExprs = exprs.map {
         val result = simplifyCoeffsSingleExpr(it)
         c *= result.second
         result.first
     }
 
+    if (c.isZero()) {
+        return Pair(listOf(Expression.ZERO), ExactFraction.ZERO)
+    }
+
     return Pair(newExprs, c)
 }
 
+// for all terms in return, denominator of coeff is 1
 fun simplifyCoeffsSingleExpr(expr: Expression): Pair<Expression, ExactFraction> {
-    val negative = expr.terms.all { it.coefficient.isNegative() }
+    if (expr.isZero()) {
+        return Pair(expr, ExactFraction.ZERO)
+    }
 
-    val numCoeffs = expr.terms.map { it.coefficient.numerator.abs() }
+    val negative = expr.terms.all { it.coefficient.isNegative() }
 
     val totalDenom = expr.terms.fold(BigInteger.ONE) { acc, t -> acc * t.coefficient.denominator }
 
