@@ -1,5 +1,6 @@
 package com.example.trickcalculator.exactfraction
 
+import com.example.trickcalculator.assertDivByZero
 import org.junit.Assert.*
 
 fun runInverseTests() {
@@ -23,8 +24,7 @@ fun runInverseTests() {
     expected = ExactFraction(7, 19)
     assertEquals(expected, ef.inverse())
 
-    val error = assertThrows(ArithmeticException::class.java) { ExactFraction(0).inverse() }
-    assertEquals("divide by zero", error.message)
+    assertDivByZero { ExactFraction.ZERO.inverse() }
 }
 
 fun runAbsoluteValueTests() {

@@ -1,10 +1,9 @@
 package com.example.trickcalculator.exactfraction
 
+import com.example.trickcalculator.assertDivByZero
 import com.example.trickcalculator.ext.toBI
 import org.junit.Assert.*
 import java.math.BigInteger
-
-private const val divByZeroError = "divide by zero"
 
 fun runDivTests() {
     // 0
@@ -15,13 +14,11 @@ fun runDivTests() {
 
     first = ExactFraction(1)
     second = ExactFraction(0)
-    var error = assertThrows(ArithmeticException::class.java) { first / second }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { first / second }
 
     first = ExactFraction(0)
     second = ExactFraction(0)
-    error = assertThrows(ArithmeticException::class.java) { first / second }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { first / second }
 
     // whole numbers
     first = ExactFraction(8)
@@ -82,8 +79,7 @@ fun runDivTests() {
 
     // BigInteger
     var ef = ExactFraction(1)
-    error = assertThrows(ArithmeticException::class.java) { ef / BigInteger.ZERO }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ef / BigInteger.ZERO }
 
     ef = ExactFraction(6) / 3.toBI()
     expected = ExactFraction(2)
@@ -99,8 +95,7 @@ fun runDivTests() {
 
     // Int
     ef = ExactFraction(1)
-    error = assertThrows(ArithmeticException::class.java) { ef / 0 }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero() { ef / 0 }
 
     ef = ExactFraction(6) / 3
     expected = ExactFraction(2)
@@ -116,8 +111,7 @@ fun runDivTests() {
 
     // Long
     ef = ExactFraction(1)
-    error = assertThrows(ArithmeticException::class.java) { ef / 0L }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero() { ef / 0L }
 
     ef = ExactFraction(6) / 3L
     expected = ExactFraction(2)

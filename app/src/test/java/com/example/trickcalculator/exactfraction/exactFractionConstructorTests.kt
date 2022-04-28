@@ -1,5 +1,6 @@
 package com.example.trickcalculator.exactfraction
 
+import com.example.trickcalculator.assertDivByZero
 import com.example.trickcalculator.ext.toBI
 import org.junit.Assert.*
 import java.math.BigInteger
@@ -17,8 +18,6 @@ private val pos7 = 7.toBI()
 private val neg7 = (-7).toBI()
 private val pos18 = 18.toBI()
 private val neg18 = (-18).toBI()
-
-private const val divByZeroError = "divide by zero"
 
 fun runConstructorTests() {
     testSingleValConstructor()
@@ -101,10 +100,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    var error = assertThrows(ArithmeticException::class.java) {
-        ExactFraction(pos1, zero)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(pos1, zero) }
 
     ef = ExactFraction(pos4, pos1)
     assertEquals(pos4, ef.numerator)
@@ -135,10 +131,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(1, 0)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(1, 0) }
 
     ef = ExactFraction(4, 1)
     assertEquals(pos4, ef.numerator)
@@ -169,10 +162,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(1L, 0L)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(1L, 0L) }
 
     ef = ExactFraction(4L, 1L)
     assertEquals(pos4, ef.numerator)
@@ -203,10 +193,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(pos1, 0)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(pos1, 0) }
 
     ef = ExactFraction(pos4, 1)
     assertEquals(pos4, ef.numerator)
@@ -237,10 +224,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(1, zero)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(1, zero) }
 
     ef = ExactFraction(4, pos1)
     assertEquals(pos4, ef.numerator)
@@ -271,10 +255,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(1, 0L)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(1, 0L) }
 
     ef = ExactFraction(4, 1L)
     assertEquals(pos4, ef.numerator)
@@ -305,10 +286,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(1L, 0)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(1L, 0) }
 
     ef = ExactFraction(4L, 1)
     assertEquals(pos4, ef.numerator)
@@ -339,10 +317,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(pos1, 0L)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(pos1, 0L) }
 
     ef = ExactFraction(pos4, 1L)
     assertEquals(pos4, ef.numerator)
@@ -373,10 +348,7 @@ private fun testPairValConstructor() {
     assertEquals(zero, ef.numerator)
     assertEquals(pos1, ef.denominator)
 
-    error = assertThrows("divide by zero", ArithmeticException::class.java) {
-        ExactFraction(1L, zero)
-    }
-    assertEquals(divByZeroError, error.message)
+    assertDivByZero { ExactFraction(1L, zero) }
 
     ef = ExactFraction(4L, pos1)
     assertEquals(pos4, ef.numerator)

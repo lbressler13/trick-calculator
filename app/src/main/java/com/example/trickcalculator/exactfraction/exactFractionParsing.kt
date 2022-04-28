@@ -84,6 +84,8 @@ fun parseEFString(unparsed: String): ExactFraction {
         val numerator = BigInteger(numString)
         val denominator = BigInteger(denomString)
         return ExactFraction(numerator, denominator)
+    } catch (e: ArithmeticException) {
+        throw e
     } catch (e: Exception) {
         throw NumberFormatException("Invalid EF string format")
     }
