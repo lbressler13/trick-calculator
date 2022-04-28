@@ -1,24 +1,22 @@
 package com.example.trickcalculator.ui.main
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.text.style.ReplacementSpan
-import android.util.Log
 
-// copied from https://stackoverflow.com/questions/16026577/border-in-clickable-object-in-spannablestring
+// adapted from https://stackoverflow.com/questions/16026577/border-in-clickable-object-in-spannablestring
 class BorderSpan(private val textColor: Int) : ReplacementSpan() {
     private val border: Paint = Paint() // = null
     private var width: Int  = 0
 
-    private val padding = 8f
-    private val postPadding = 20f
+    private val innerPadding = 12f
+    private val outerPadding = 12f
 
     init {
         border.style = Paint.Style.STROKE
         border.isAntiAlias = true
-        // border.color = textColor
-        border.color = Color.RED
+        border.color = textColor
         border.strokeWidth = 10f
     }
 
@@ -29,8 +27,8 @@ class BorderSpan(private val textColor: Int) : ReplacementSpan() {
         end: Int,
         fm: Paint.FontMetricsInt?
     ): Int {
-        width = paint.measureText(text.toString(), start, end).toInt() + 2 * padding.toInt()
-        return width + postPadding.toInt()
+        width = paint.measureText(text.toString(), start, end).toInt() + 2 * innerPadding.toInt()
+        return width + 2 * innerPadding.toInt() + outerPadding.toInt()
     }
 
     override fun draw(
@@ -44,23 +42,18 @@ class BorderSpan(private val textColor: Int) : ReplacementSpan() {
         bottom: Int,
         paint: Paint
     ) {
-        val textHeight = paint.fontMetrics.descent - paint.fontMetrics.ascent
-        val startY = bottom - textHeight - padding
-        val endY = startY + textHeight
+        text!!
 
-        Log.e("text", textHeight.toString())
-        Log.e("top", top.toString())
-        Log.e("bottom", bottom.toString())
-        Log.e("y", y.toString())
-        Log.e("startY", startY.toString())
-        Log.e("endY", endY.toString())
+        val bounds = Rect()
+        paint.getTextBounds(text, 0, text.length, bounds)
+        val startX = bounds.left + outerPadding // bounds.width() / 2f
 
-        val endX = x + width + 2 * padding
-        // canvas.drawRect(x, top.toFloat(), endX, bottom.toFloat(), border)
-        canvas.drawRect(x, startY, endX, endY, border)
-
-        // paint.color = textColor //use the default text paint to preserve font size/style
         paint.color = textColor
-        canvas.drawText(text!!, start, end, x + padding, y.toFloat(), paint)
+        canvas.drawText(text, start, end, startX, y.toFloat(), paint)
+
+        val topY = bounds.top + y - innerPadding
+        val bottomY = bounds.bottom + y + innerPadding
+        val endX = startX + width - innerPadding
+        canvas.drawRect(startX - innerPadding, topY, endX, bottomY, border)
     }
 }
