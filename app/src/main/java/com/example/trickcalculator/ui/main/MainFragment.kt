@@ -1,6 +1,5 @@
 package com.example.trickcalculator.ui.main
 
-import BuildOptions
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Spannable
@@ -26,7 +25,6 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import android.content.res.ColorStateList
-
 
 /**
  * Fragment to display main calculator functionality
@@ -136,6 +134,10 @@ class MainFragment : Fragment() {
             )
         )
         switch.trackDrawable.setTintList(buttonStates)
+
+        val isDevBuild = BuildOptions.buildType == "dev"
+        switch.isChecked = isDevBuild
+        viewModel.setIsDevMode(BuildOptions.buildType == "dev")
     }
 
     /**
@@ -300,13 +302,13 @@ class MainFragment : Fragment() {
         if (devMode) {
             if (computeText.isNotEmpty() && usesComputedValue) {
                 val textColor = TypedValue()
-                requireContext().theme.resolveAttribute(R.attr.firstTermColor, textColor, true)
+                requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, textColor, true)
 
                 val text = computeText.joinToString("")
+
                 val spannableString = SpannableString(text)
-                // spannableString.setSpan(ForegroundColorSpan(textColor.data), 0, computeText[0].length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
                 spannableString.setSpan(
-                    BorderSpan(1000),
+                    BorderSpan(textColor.data),
                     0,
                     computeText[0].length,
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE
