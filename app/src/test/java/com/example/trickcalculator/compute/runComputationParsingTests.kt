@@ -1,5 +1,6 @@
 package com.example.trickcalculator.compute
 
+import com.example.trickcalculator.assertDivByZero
 import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toEF
 import com.example.trickcalculator.ext.toExactFraction
@@ -48,10 +49,15 @@ fun runRunComputationTests() {
     assertEquals("Syntax error", error.message)
 
     text = "1 / 0".split(' ')
-    error = assertThrows(ArithmeticException::class.java) {
+    assertDivByZero {
         runComputation(text, allOps, performOp, (0..9).toList(), true, true)
     }
-    assertEquals("divide by zero", error.message)
+
+    text = listOf("EF[1 2]")
+    val zeroOps = listOf(2, 1, 0, 3, 4, 5, 6, 7, 8, 9)
+    assertDivByZero {
+        runComputation(text, allOps, performOp, zeroOps, true, true)
+    }
 
     text = "1 + 0".split(' ')
     error = assertThrows(Exception::class.java) {
@@ -202,10 +208,9 @@ fun runParseTextTests() {
     assertEquals(expected, parseText(text, allOps, performOp))
 
     text = "( 2 + 7 ) / ( 0.5 - 1 / 2 )".split(' ')
-    var error: Exception = assertThrows(ArithmeticException::class.java) {
+    assertDivByZero {
         parseText(text, allOps, performOp)
     }
-    assertEquals(error.message, "divide by zero")
 
     // alternate ops
     text = "5 - ( 0.5 x 2 ) - ( 9 + ( 4 / 2 ) )".split(' ')
@@ -221,7 +226,7 @@ fun runParseTextTests() {
     assertEquals(expected, parseText(text, listOf(timesDiv, listOf()), performOp))
 
     text = "5 x 3 / 6 + 2".split(' ')
-    error = assertThrows(Exception::class.java) {
+    var error = assertThrows(Exception::class.java) {
         parseText(text, listOf(timesDiv, listOf()), performOp)
     }
     assertEquals(error.message, "Parse error")

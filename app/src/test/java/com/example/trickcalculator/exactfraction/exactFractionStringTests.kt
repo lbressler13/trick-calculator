@@ -116,6 +116,9 @@ fun runParseEFStringTests() {
     assertEquals(expected, parseEFString(s))
 
     // errors
+    s = "EF[1 0]"
+    assertThrows(ArithmeticException::class.java) { parseEFString(s) }
+
     s = "abc"
     assertThrows(NumberFormatException::class.java) { parseEFString(s) }
 
