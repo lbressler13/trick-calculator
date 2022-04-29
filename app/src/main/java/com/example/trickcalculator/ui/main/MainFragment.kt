@@ -25,6 +25,7 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import android.content.res.ColorStateList
+import android.util.Log
 
 /**
  * Fragment to display main calculator functionality
@@ -305,10 +306,11 @@ class MainFragment : Fragment() {
                 requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, textColor, true)
 
                 val text = computeText.joinToString("")
+                val parentWidth = binding.mainText.width - binding.mainText.paddingStart - binding.mainText.paddingEnd
 
                 val spannableString = SpannableString(text)
                 spannableString.setSpan(
-                    BorderSpan(textColor.data),
+                    BorderSpan(textColor.data, parentWidth),
                     0,
                     computeText[0].length,
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE
