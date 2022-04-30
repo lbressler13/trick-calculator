@@ -23,8 +23,6 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import android.content.res.ColorStateList
-import android.util.Log
-import android.widget.TextView
 
 /**
  * Fragment to display main calculator functionality
@@ -61,9 +59,6 @@ class MainFragment : Fragment() {
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-
-        // needs to come before initializing observers
-        setMaxDigits()
 
         // observe changes in viewmodel
         viewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
@@ -116,15 +111,14 @@ class MainFragment : Fragment() {
     }
 
     private fun setMaxDigits() {
-        // Log.e("tv", binding.mainText.toString())
-        // val textview = binding.mainText
-        // textview.text = "0"
-        // while (textview.layout.lineCount < 2) {
-        //     textview.text = textview.text.toString() + 'c'
-        // }
+        val textview = binding.mainText
+        textview.text = "0"
+        while (textview.layout.lineCount < 2) {
+            textview.text = textview.text.toString() + 'c'
+        }
 
-        // maxDigits = textview.text.length - 1
-        // textview.text = ""
+        maxDigits = textview.text.length - 1
+        textview.text = ""
         maxDigits = 14
     }
 
@@ -321,10 +315,11 @@ class MainFragment : Fragment() {
         val fullText = computeText.joinToString("")
 
         if (devMode) {
-            if (computeText.isNotEmpty() && usesComputedValue) {
-                val lines = getLines(fullText, textview)
+            if (maxDigits == -1) {
+                setMaxDigits()
+            }
 
-                // val spannableString = addBorder(computeText[0], lines, requireContext(), textview)
+            if (computeText.isNotEmpty() && usesComputedValue) {
                 val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
                 textview.text = spannableString
             } else {
@@ -333,22 +328,5 @@ class MainFragment : Fragment() {
         } else {
             textview.text = fullText
         }
-    }
-
-    private fun getLines(text: String, textview: TextView): StringList {
-        textview.text = text
-
-        val lineStarts = (0 until textview.lineCount).map { textview.layout.getLineStart(it) }
-        val lines: StringList = lineStarts.mapIndexed { index, lineStart ->
-            val lineEnd = if (index == textview.lineCount - 1) {
-                text.length
-            } else {
-                lineStarts[index + 1]
-            }
-
-            text.substring(lineStart, lineEnd)
-        }
-
-        return lines
     }
 }

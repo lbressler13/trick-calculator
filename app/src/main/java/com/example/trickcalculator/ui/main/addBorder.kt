@@ -48,6 +48,7 @@ fun addBorder(fullText: StringList, digitsPerLine: Int, context: Context, parent
             )
         }
         else -> {
+            // first row
             spannableString.setSpan(
                 TopBorderSpan(textColor.data, parentWidth),
                 0,
@@ -55,6 +56,7 @@ fun addBorder(fullText: StringList, digitsPerLine: Int, context: Context, parent
                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE
             )
 
+            // middle rows
             var startIndex = lines[0].length
             for (i in 1 until lines.lastIndex) {
                 val length = lines[i].length
@@ -67,6 +69,7 @@ fun addBorder(fullText: StringList, digitsPerLine: Int, context: Context, parent
                 startIndex += length
             }
 
+            // bottom row
             spannableString.setSpan(
                 BottomBorderSpan(textColor.data, parentWidth),
                 startIndex,
