@@ -2,8 +2,6 @@ package com.example.trickcalculator.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.method.ScrollingMovementMethod
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
@@ -26,6 +24,7 @@ import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import android.content.res.ColorStateList
 import android.util.Log
+import android.widget.TextView
 
 /**
  * Fragment to display main calculator functionality
@@ -37,6 +36,8 @@ class MainFragment : Fragment() {
     private lateinit var computeText: StringList
     private var error: String? = null
     private var usesComputedValue = false
+
+    private var maxDigits = -1
 
     // settings
     private var shuffleNumbers: Boolean = false
@@ -60,6 +61,9 @@ class MainFragment : Fragment() {
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+
+        // needs to come before initializing observers
+        setMaxDigits()
 
         // observe changes in viewmodel
         viewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
@@ -109,6 +113,19 @@ class MainFragment : Fragment() {
         } else {
             binding.errorText.gone()
         }
+    }
+
+    private fun setMaxDigits() {
+        // Log.e("tv", binding.mainText.toString())
+        // val textview = binding.mainText
+        // textview.text = "0"
+        // while (textview.layout.lineCount < 2) {
+        //     textview.text = textview.text.toString() + 'c'
+        // }
+
+        // maxDigits = textview.text.length - 1
+        // textview.text = ""
+        maxDigits = 14
     }
 
     /**
@@ -300,27 +317,38 @@ class MainFragment : Fragment() {
      * Sets the text in the textbox, including ui modifications for first term
      */
     private fun setMainText() {
+        val textview = binding.mainText
+        val fullText = computeText.joinToString("")
+
         if (devMode) {
             if (computeText.isNotEmpty() && usesComputedValue) {
-                val textColor = TypedValue()
-                requireContext().theme.resolveAttribute(R.attr.colorOnPrimary, textColor, true)
+                val lines = getLines(fullText, textview)
 
-                val text = computeText.joinToString("")
-                val parentWidth = binding.mainText.width - binding.mainText.paddingStart - binding.mainText.paddingEnd
-
-                val spannableString = SpannableString(text)
-                spannableString.setSpan(
-                    BorderSpan(textColor.data, parentWidth),
-                    0,
-                    computeText[0].length,
-                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-                )
-                binding.mainText.text = spannableString
+                // val spannableString = addBorder(computeText[0], lines, requireContext(), textview)
+                val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
+                textview.text = spannableString
             } else {
-                binding.mainText.text = computeText.joinToString("")
+                textview.text = fullText
             }
         } else {
-            binding.mainText.text = computeText.joinToString("")
+            textview.text = fullText
         }
+    }
+
+    private fun getLines(text: String, textview: TextView): StringList {
+        textview.text = text
+
+        val lineStarts = (0 until textview.lineCount).map { textview.layout.getLineStart(it) }
+        val lines: StringList = lineStarts.mapIndexed { index, lineStart ->
+            val lineEnd = if (index == textview.lineCount - 1) {
+                text.length
+            } else {
+                lineStarts[index + 1]
+            }
+
+            text.substring(lineStart, lineEnd)
+        }
+
+        return lines
     }
 }
