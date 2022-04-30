@@ -39,6 +39,7 @@ private val allAttributions = listOf(
     Attribution(R.drawable.ic_info, "Freepik", "www.flaticon.com/free-icon/info-button_64494"),
     Attribution(R.drawable.ic_minus, "Freepik", "www.flaticon.com/free-icon/minus_56889"),
     Attribution(R.drawable.ic_plus, "Freepik", "www.flaticon.com/premium-icon/plus_3524388"),
+    Attribution(R.drawable.ic_settings, "Freepik", "https://www.flaticon.com/premium-icon/gear_484613"),
     Attribution(R.drawable.ic_times, "Freepik", "www.flaticon.com/free-icon/multiply-mathematical-sign_43823")
 )
 

@@ -86,7 +86,14 @@ class MainFragment : Fragment() {
     private val clearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
     private val applyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
-    private val isDevModeObserver: Observer<Boolean> = Observer { devMode = it }
+    private val isDevModeObserver: Observer<Boolean> = Observer {
+        devMode = it
+        if (it) {
+            binding.settingsButton.visible()
+        } else {
+            binding.settingsButton.gone()
+        }
+    }
 
     private val computeTextObserver: Observer<StringList> = Observer {
         computeText = it
