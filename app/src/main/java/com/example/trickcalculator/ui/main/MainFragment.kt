@@ -23,6 +23,8 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import android.content.res.ColorStateList
+import com.example.trickcalculator.ui.shared.Settings
+import com.example.trickcalculator.ui.shared.initSettingsDialog
 
 /**
  * Fragment to display main calculator functionality
@@ -37,12 +39,13 @@ class MainFragment : Fragment() {
 
     private var maxDigits = -1
 
-    // settings
-    private var shuffleNumbers: Boolean = false
-    private var shuffleOperators: Boolean = true
-    private var applyParens: Boolean = true
-    private var clearOnError: Boolean = false
-    private var applyDecimals: Boolean = true
+    private val settings = Settings(
+        shuffleNumbers = false,
+        shuffleOperators = false,
+        applyParens = true,
+        clearOnError = false,
+        applyDecimals = true
+    )
 
     private var devMode = false
 
@@ -77,14 +80,16 @@ class MainFragment : Fragment() {
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         initActionBar()
 
+        initSettingsDialog(this, viewModel, settings, binding.settingsButton)
+
         return binding.root
     }
 
-    private val shuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
-    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
-    private val applyParensObserver: Observer<Boolean> = Observer { applyParens = it }
-    private val clearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
-    private val applyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
+    private val shuffleNumbersObserver: Observer<Boolean> = Observer { settings.shuffleNumbers = it }
+    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { settings.shuffleOperators = it }
+    private val applyParensObserver: Observer<Boolean> = Observer { settings.applyParens = it }
+    private val clearOnErrorObserver: Observer<Boolean> = Observer { settings.clearOnError = it }
+    private val applyDecimalsObserver: Observer<Boolean> = Observer { settings.applyDecimals = it }
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
     private val isDevModeObserver: Observer<Boolean> = Observer {
         devMode = it
@@ -109,7 +114,7 @@ class MainFragment : Fragment() {
             binding.errorText.text = it
             binding.errorText.visible()
 
-            if (clearOnError) {
+            if (settings.clearOnError) {
                 viewModel.resetComputeData(clearError = false)
             }
         } else {
@@ -118,14 +123,15 @@ class MainFragment : Fragment() {
     }
 
     private fun setMaxDigits() {
-        val textview = binding.mainText
-        textview.text = "0"
-        while (textview.layout.lineCount < 2) {
-            textview.text = textview.text.toString() + 'c'
-        }
+        // TODO make this work
+        // val textview = binding.mainText
+        // textview.text = "0"
+        // while (textview.layout.lineCount < 2) {
+        //     textview.text = textview.text.toString() + 'c'
+        // }
 
-        maxDigits = textview.text.length - 1
-        textview.text = ""
+        // maxDigits = textview.text.length - 1
+        // textview.text = ""
         maxDigits = 14
     }
 
@@ -134,7 +140,7 @@ class MainFragment : Fragment() {
      */
     private fun initDevModeSwitch() {
         val switch = (requireActivity() as MainActivity).binding.actionBar.devModeSwitch
-        switch.setOnCheckedChangeListener { view, isChecked -> viewModel.setIsDevMode(isChecked) }
+        switch.setOnCheckedChangeListener { _, isChecked -> viewModel.setIsDevMode(isChecked) }
 
         val checkedColor = TypedValue()
         requireContext().theme.resolveAttribute(R.attr.actionBarSwitchTrackCheckedColor, checkedColor, true)
@@ -163,20 +169,7 @@ class MainFragment : Fragment() {
      * Launch AttributionsFragment
      */
     private val infoButtonOnClick: () -> Unit = {
-        val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
-        val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
-        val parensKey = requireContext().getString(R.string.key_apply_parens)
-        val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
-
-        val currentSettings = bundleOf(
-            numbersKey to shuffleNumbers,
-            operatorsKey to shuffleOperators,
-            parensKey to applyParens,
-            clearOnErrorKey to clearOnError
-        )
-
         val newFragment = AttributionsFragment.newInstance()
-        newFragment.arguments = currentSettings
 
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, newFragment)
@@ -195,7 +188,7 @@ class MainFragment : Fragment() {
             // set action for each operator
             // only include exponent if exp is used
             val operators = when {
-                !shuffleOperators -> listOf("+", "-", "x", "/", "^")
+                !settings.shuffleOperators -> listOf("+", "-", "x", "/", "^")
                 computeText.indexOf("^") == -1 -> listOf(
                     "+",
                     "-",
@@ -223,7 +216,7 @@ class MainFragment : Fragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = if (shuffleNumbers) {
+            val numberOrder = if (settings.shuffleNumbers) {
                 (0..9).shuffled()
             } else {
                 (0..9).toList()
@@ -237,8 +230,8 @@ class MainFragment : Fragment() {
                         operatorRounds,
                         performOperation,
                         numberOrder,
-                        applyParens,
-                        applyDecimals
+                        settings.applyParens,
+                        settings.applyDecimals
                     )
 
                 viewModel.setComputedValue(computedValue)

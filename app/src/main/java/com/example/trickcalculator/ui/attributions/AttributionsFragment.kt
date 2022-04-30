@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentImageAttributionsBinding
-import com.example.trickcalculator.ui.shared.SharedSettingsDialog
+import com.example.trickcalculator.ui.shared.Settings
 import com.example.trickcalculator.ui.shared.SharedViewModel
+import com.example.trickcalculator.ui.shared.initSettingsDialog
 
 /**
  * Information about a single image attribution
@@ -50,12 +50,13 @@ class AttributionsFragment : Fragment() {
     private lateinit var binding: FragmentImageAttributionsBinding
     private lateinit var viewModel: SharedViewModel
 
-    // settings
-    private var shuffleNumbers: Boolean = false
-    private var shuffleOperators: Boolean = true
-    private var applyParens: Boolean = true
-    private var clearOnError: Boolean = false
-    private var applyDecimals: Boolean = true
+    private val settings = Settings(
+        shuffleNumbers = false,
+        shuffleOperators = false,
+        applyParens = true,
+        clearOnError = false,
+        applyDecimals = true
+    )
 
     companion object {
         fun newInstance() = AttributionsFragment()
@@ -81,7 +82,8 @@ class AttributionsFragment : Fragment() {
         binding.closeButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        initSettingsDialog()
+        val actionBar: View = (requireActivity() as MainActivity).binding.actionBar.root
+        initSettingsDialog(this, viewModel, settings, actionBar)
 
         // observe changes in viewmodel
         viewModel.shuffleNumbers.observe(viewLifecycleOwner, shuffleNumbersObserver)
@@ -93,58 +95,9 @@ class AttributionsFragment : Fragment() {
         return binding.root
     }
 
-    private val shuffleNumbersObserver: Observer<Boolean> = Observer { shuffleNumbers = it }
-    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { shuffleOperators = it }
-    private val applyParensObserver: Observer<Boolean> = Observer { applyParens = it }
-    private val clearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
-    private val applyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
-
-    /**
-     * Initialize handling of settings dialog
-     */
-    private fun initSettingsDialog() {
-        val settingsDialog = SharedSettingsDialog()
-        val numbersKey = requireContext().getString(R.string.key_shuffle_numbers)
-        val operatorsKey = requireContext().getString(R.string.key_shuffle_operators)
-        val parensKey = requireContext().getString(R.string.key_apply_parens)
-        val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
-        val decimalsKey = requireContext().getString(R.string.key_apply_decimals)
-        val requestKey = requireContext().getString(R.string.key_settings_request)
-
-        // update viewmodel with response from dialog
-        childFragmentManager.setFragmentResultListener(
-            requestKey,
-            viewLifecycleOwner,
-            { _: String, result: Bundle ->
-                val returnedShuffleNumbers: Boolean = result.getBoolean(numbersKey, shuffleNumbers)
-                viewModel.setShuffleNumbers(returnedShuffleNumbers)
-
-                val returnedShuffleOperators: Boolean =
-                    result.getBoolean(operatorsKey, shuffleOperators)
-                viewModel.setShuffleOperators(returnedShuffleOperators)
-
-                val returnedApplyParens: Boolean = result.getBoolean(parensKey, applyParens)
-                viewModel.setApplyParens(returnedApplyParens)
-
-                val returnedClearOnError: Boolean = result.getBoolean(clearOnErrorKey, clearOnError)
-                viewModel.setClearOnError(returnedClearOnError)
-
-                val returnedApplyDecimals: Boolean = result.getBoolean(decimalsKey, applyDecimals)
-                viewModel.setApplyDecimals(returnedApplyDecimals)
-            }
-        )
-
-        val actionBar: View = (requireActivity() as MainActivity).binding.actionBar.root
-
-        actionBar.setOnClickListener {
-            settingsDialog.arguments = bundleOf(
-                numbersKey to shuffleNumbers,
-                operatorsKey to shuffleOperators,
-                parensKey to applyParens,
-                clearOnErrorKey to clearOnError,
-                decimalsKey to applyDecimals
-            )
-            settingsDialog.show(childFragmentManager, SharedSettingsDialog.TAG)
-        }
-    }
+    private val shuffleNumbersObserver: Observer<Boolean> = Observer { settings.shuffleNumbers = it }
+    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { settings.shuffleOperators = it }
+    private val applyParensObserver: Observer<Boolean> = Observer { settings.applyParens = it }
+    private val clearOnErrorObserver: Observer<Boolean> = Observer { settings.clearOnError = it }
+    private val applyDecimalsObserver: Observer<Boolean> = Observer { settings.applyDecimals = it }
 }
