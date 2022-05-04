@@ -1,169 +1,137 @@
 package com.example.trickcalculator.utils
 
+import com.example.trickcalculator.exactfraction.ExactFraction
 import org.junit.Assert.*
 import java.math.BigInteger
 
-// TODO tests for EF
-
 fun runGetGCDTests() {
+    runGetGcdBiTests()
+    runGetGcdEfTests()
+}
+
+private fun runGetGcdBiTests() {
     // zero
-    var b1 = BigInteger.ZERO
-
-    var b2 = BigInteger.ZERO
-    var expected = BigInteger.ONE
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b2 = BigInteger.ONE
-    expected = BigInteger.ONE
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b2 = 4.toBigInteger()
-    expected = 4.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b2 = (-4).toBigInteger()
-    expected = 4.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    testGcdBI(0, 0, 1)
+    testGcdBI(1, 0, 1)
+    testGcdBI(4, 0, 4)
+    testGcdBI(-4, 0, 4)
 
     // one
-    b1 = BigInteger.ONE
-    expected = BigInteger.ONE
-
-    b2 = BigInteger.ONE
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b2 = BigInteger.TEN
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b2 = -BigInteger.TEN
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    testGcdBI(1, 1, 1)
+    testGcdBI(1, -1, 1)
+    testGcdBI(1, 103, 1)
+    testGcdBI(1, -103, 1)
 
     // equal
-    b1 = 17.toBigInteger()
-    b2 = 17.toBigInteger()
-    expected = 17.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = 17.toBigInteger()
-    b2 = (-17).toBigInteger()
-    expected = 17.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = 81.toBigInteger()
-    b2 = 81.toBigInteger()
-    expected = 81.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = 81.toBigInteger()
-    b2 = (-81).toBigInteger()
-    expected = 81.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    testGcdBI(17, 17, 17)
+    testGcdBI(17, -17, 17)
+    testGcdBI(-81, -81, 81)
 
     // co-prime
-    expected = BigInteger.ONE
-
-    b1 = 17.toBigInteger()
-    b2 = 19.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = (-17).toBigInteger()
-    b2 = 19.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = (-17).toBigInteger()
-    b2 = (-19).toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = 2.toBigInteger()
-    b2 = 3.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = 14.toBigInteger()
-    b2 = 81.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = (-15).toBigInteger()
-    b2 = 1024.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    // primes
+    testGcdBI(17, 19, 1)
+    testGcdBI(-17, 19, 1)
+    testGcdBI(-2, -3, 1)
+    // composites
+    testGcdBI(14, 81, 1)
+    testGcdBI(-15, 1024, 1)
 
     // exact divisor
-    b1 = 2.toBigInteger()
-    b2 = 4.toBigInteger()
-    expected = 2.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = 1002.toBigInteger()
-    b2 = 334.toBigInteger()
-    expected = 334.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = 1002.toBigInteger()
-    b2 = (-3).toBigInteger()
-    expected = 3.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
-
-    b1 = (-1002).toBigInteger()
-    b2 = 3.toBigInteger()
-    expected = 3.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    // primes
+    testGcdBI(2, 4, 2)
+    testGcdBI(-1002, 3, 3)
+    testGcdBI(1002, -3, 3)
+    // composites
+    testGcdBI(1002, 334, 334)
 
     // common factor
-    b1 = 6.toBigInteger()
-    b2 = 4.toBigInteger()
-    expected = 2.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    // prime gcd
+    testGcdBI(6, 4, 2)
+    testGcdBI(15, -25, 5)
+    // composite gcd
+    testGcdBI(120, 100, 20)
+    testGcdBI(-120, -100, 20)
+    testGcdBI(34, 51, 17)
+}
 
-    b1 = 6.toBigInteger()
-    b2 = (-4).toBigInteger()
-    expected = 2.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+private fun runGetGcdEfTests() {
+    val zero = ExactFraction.ZERO
+    val one = ExactFraction.ONE
 
-    b1 = 15.toBigInteger()
-    b2 = 25.toBigInteger()
-    expected = 5.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    // zero
+    testGcdEF(zero, zero, one)
+    testGcdEF(zero, one, one)
+    testGcdEF(zero, ExactFraction.FOUR, ExactFraction.FOUR)
+    testGcdEF(zero, -ExactFraction.FOUR, ExactFraction.FOUR)
+    testGcdEF(zero, ExactFraction.HALF, ExactFraction.HALF)
+    testGcdEF(zero, ExactFraction(-17, 3), ExactFraction(17, 3))
 
-    b1 = 120.toBigInteger()
-    b2 = 100.toBigInteger()
-    expected = 20.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    // one
+    testGcdEF(one, one, one)
+    testGcdEF(ExactFraction(10), one, one)
+    testGcdEF(ExactFraction(-10), one, one)
+    // testGcdEF(one, ExactFraction.HALF, one)
+    // testGcdEF(one, ExactFraction(-17, 3), one)
 
-    b1 = (-120).toBigInteger()
-    b2 = (-100).toBigInteger()
-    expected = 20.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    // equal
+    var ef = ExactFraction(17)
+    testGcdEF(ef, ef, ef)
+    testGcdEF(ef, -ef, ef)
 
-    b1 = 34.toBigInteger()
-    b2 = 51.toBigInteger()
-    expected = 17.toBigInteger()
-    assertEquals(expected, getGCD(b1, b2))
-    assertEquals(expected, getGCD(b2, b1))
+    ef = ExactFraction(81)
+    testGcdEF(ef, ef, ef)
+    testGcdEF(ef, -ef, ef)
+
+    ef = ExactFraction(19, 909)
+    testGcdEF(ef, ef, ef)
+    testGcdEF(ef, -ef, ef)
+
+    ef = ExactFraction(2000, 909)
+    testGcdEF(ef, ef, ef)
+    testGcdEF(ef, -ef, ef)
+
+    // co-prime
+    // primes
+    testGcdEF(ExactFraction(17), ExactFraction(19), one)
+    testGcdEF(ExactFraction(-17), ExactFraction(19), one)
+    testGcdEF(ExactFraction(-17), ExactFraction(-19), one)
+    // composites
+    testGcdEF(ExactFraction(2), ExactFraction(3), one)
+    testGcdEF(ExactFraction(81), ExactFraction(14), one)
+    testGcdEF(ExactFraction(-15), ExactFraction(1024), one)
+    // same denominator
+    testGcdEF(ExactFraction(81, 17), ExactFraction(14, 17), ExactFraction(1, 17))
+    testGcdEF(ExactFraction(-2, 5), ExactFraction(3, 5), ExactFraction(1, 5))
+    // different denominator
+    testGcdEF(ExactFraction(9, 11), ExactFraction(10, 13), ExactFraction(1, 143))
+    testGcdEF(ExactFraction(-21, 25), ExactFraction(-16), ExactFraction(1, 25))
+
+    // exact divisor
+    // primes
+    testGcdEF(ExactFraction.TWO, ExactFraction.FOUR, ExactFraction.TWO)
+    testGcdEF(ExactFraction(1002), ExactFraction(-3), ExactFraction(3))
+    testGcdEF(ExactFraction(-1002), ExactFraction(3), ExactFraction(3))
+    // composites
+    testGcdEF(ExactFraction(1002), ExactFraction(334), ExactFraction(334))
+    // fractional
+    testGcdEF(ExactFraction(5, 6), ExactFraction(5, 6), ExactFraction(5, 6))
+    testGcdEF(ExactFraction(31, 45), ExactFraction(-31, 45), ExactFraction(31, 45))
+
+    // common factor
+    // prime gcd
+    testGcdEF(ExactFraction.SIX, ExactFraction.FOUR, ExactFraction.TWO)
+    testGcdEF(ExactFraction.SIX, -ExactFraction.FOUR, ExactFraction.TWO)
+    testGcdEF(ExactFraction(15), ExactFraction(25), ExactFraction.FIVE)
+    // composite gcd
+    testGcdEF(ExactFraction(120), ExactFraction(100), ExactFraction(20))
+    testGcdEF(ExactFraction(-120), ExactFraction(-100), ExactFraction(20))
+    testGcdEF(ExactFraction(34), ExactFraction(51), ExactFraction(17))
+    // same denominator
+    testGcdEF(ExactFraction(5, 7), ExactFraction(10, 7), ExactFraction(5, 7))
+    testGcdEF(ExactFraction(14, 45), ExactFraction(-49, 45), ExactFraction(7, 45))
+    // different denominator
+    testGcdEF(ExactFraction(42, 5), ExactFraction(12, 7), ExactFraction(6, 35))
+    testGcdEF(ExactFraction(9, 14), ExactFraction(12, 11), ExactFraction(3, 154))
 }
 
 fun runGetGCDListTests() {
@@ -267,4 +235,18 @@ fun runGetGCDListTests() {
     )
     expected = 5.toBigInteger()
     assertEquals(expected, getListGCD(l))
+}
+
+// helpers
+private fun testGcdBI(num1: Int, num2: Int, expected: Int) {
+    val b1 = num1.toBigInteger()
+    val b2 = num2.toBigInteger()
+    val expectedBI = expected.toBigInteger()
+    assertEquals(expectedBI, getGCD(b1, b2))
+    assertEquals(expectedBI, getGCD(b2, b1))
+}
+
+private fun testGcdEF(ef1: ExactFraction, ef2: ExactFraction, expected: ExactFraction) {
+    assertEquals(expected, getGCD(ef1, ef2))
+    assertEquals(expected, getGCD(ef2, ef1))
 }

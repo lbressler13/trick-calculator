@@ -94,6 +94,7 @@ fun getGCD(val1: BigInteger, val2: BigInteger): BigInteger {
 }
 
 fun getGCD(val1: ExactFraction, val2: ExactFraction): ExactFraction {
+
     if (val1.denominator == val2.denominator) {
         val numGcd = getGCD(val1.numerator, val2.numerator)
         return ExactFraction(numGcd, val1.denominator)
@@ -103,6 +104,7 @@ fun getGCD(val1: ExactFraction, val2: ExactFraction): ExactFraction {
     val scaledNum2 = val2.numerator * val1.denominator
     val totalDenom = val1.denominator * val2.denominator
     val numGcd = getGCD(scaledNum1, scaledNum2)
+
     return ExactFraction(numGcd, totalDenom)
 }
 
