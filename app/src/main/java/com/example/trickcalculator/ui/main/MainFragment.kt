@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.MainActivity
@@ -76,6 +77,8 @@ class MainFragment : Fragment() {
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         initActionBar()
+
+        binding.piButton.isVisible = devMode
 
         return binding.root
     }
