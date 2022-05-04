@@ -3,6 +3,8 @@ package com.example.trickcalculator.utils
 import org.junit.Assert.*
 import java.math.BigInteger
 
+// TODO tests for EF
+
 fun runGetGCDTests() {
     // zero
     var b1 = BigInteger.ZERO

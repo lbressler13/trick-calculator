@@ -93,6 +93,13 @@ class Term : Comparable<Term> {
         return coefficient.compareTo(other.coefficient)
     }
 
+    // Untested operator!!!
+    // operator fun div(other: Term): Term {
+    //     val newCoeff = coefficient / other.coefficient
+    //     val newExp = exp - other.exp
+    //     return Term(newCoeff, newExp)
+    // }
+
     fun isZero(): Boolean = coefficient.isZero()
     fun isNotZero(): Boolean = !coefficient.isZero()
     fun isNegative(): Boolean = coefficient < 0

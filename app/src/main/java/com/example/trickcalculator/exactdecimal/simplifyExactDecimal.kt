@@ -19,32 +19,55 @@ fun simplify(ed: ExactDecimal): ExactDecimal {
         )
     }
 
-    val numGroups = currentNum.groupBy { it.isAllConstants() }
-    val denomGroups = currentDenom.groupBy { it.isAllConstants() }
-    val numConstant: Expression =
-        numGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
-    val denomConstant: Expression =
-        denomGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
+    currentNum = currentNum.map { combineByExp(it) }
+    currentDenom = currentDenom.map { combineByExp(it) }
 
-    println(numGroups)
-    println(numConstant)
+    var numConstant = ExactFraction.ONE
+    currentNum = currentNum.map {
+        val constIndex = it.terms.indexOfFirst { t -> t.exp == 0 }
+        if (constIndex != -1) {
+            numConstant *= it.terms[constIndex].coefficient
+            val termsStart = it.terms.subList(0, constIndex)
+            val termsEnd = if (constIndex == it.terms.lastIndex) listOf() else it.terms.subList(constIndex + 1, it.terms.size)
+            Expression(termsStart + termsEnd)
+        } else {
+            it
+        }
+    }.filterNot { it.isZero() }
 
-    val numResult = if (numGroups[false].isNullOrEmpty()) {
+    var denomConstant = ExactFraction.ONE
+    currentDenom = currentDenom.map {
+        val constIndex = it.terms.indexOfFirst { t -> t.exp == 0 }
+        if (constIndex != -1) {
+            denomConstant *= it.terms[constIndex].coefficient
+            val termsStart = it.terms.subList(0, constIndex)
+            val termsEnd = if (constIndex == it.terms.lastIndex) listOf() else it.terms.subList(constIndex + 1, it.terms.size)
+            Expression(termsStart + termsEnd)
+        } else {
+            it
+        }
+    }.filterNot { it.isZero() }
+
+    val constGcd = getGCD(numConstant, denomConstant)
+    numConstant /= constGcd
+    denomConstant /= constGcd
+
+    val numResult = if (currentNum.isNullOrEmpty()) {
         Pair(listOf(), ExactFraction.ONE)
     } else {
-        simplifyAllCoeffs(numGroups[false] ?: listOf(Expression.ONE))
+        simplifyAllCoeffs(currentNum ?: listOf(Expression.ONE))
     }
-    val denomResult = if (denomGroups[false].isNullOrEmpty()) {
+    val denomResult = if (currentDenom.isNullOrEmpty()) {
         Pair(listOf(), ExactFraction.ONE)
     } else {
-        simplifyAllCoeffs(denomGroups[false] ?: listOf(Expression.ONE))
+        simplifyAllCoeffs(currentDenom ?: listOf(Expression.ONE))
     }
 
     val result = removeCommon(numResult.first, denomResult.first)
-    currentNum = result.first + numConstant * Term(numResult.second)
-    currentDenom = result.second + denomConstant * Term(denomResult.second)
-    // currentNum = result.first + Expression(Term(numResult.second))
-    // currentDenom = result.second + Expression(Term(denomResult.second))
+    numConstant *= numResult.second
+    denomConstant *= denomResult.second
+    currentNum = result.first + Expression(Term(numResult.second))
+    currentDenom = result.second + Expression(Term(denomResult.second))
 
     return ExactDecimal(currentNum, currentDenom)
 }

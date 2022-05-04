@@ -42,6 +42,16 @@ class SimplifyExactDecimalTest {
         )
         assertEquals(expected, simplify(ExactDecimal(num, denom)))
 
+        num = listOf(listOf(Term(3, -1), Term(-9)).asExpression())
+        denom = listOf(Expression(Term(27, 2)))
+        expected = ExactDecimal(
+            listOf(
+                listOf(Term(1, -1), Term(-3)).asExpression()
+            ),
+            listOf(listOf(Term(9), Term(1, 2)).asExpression())
+        )
+        assertEquals(expected, simplify(ExactDecimal(num, denom)))
+
         // TODO
 
         // multiple expressions
