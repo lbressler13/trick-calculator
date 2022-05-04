@@ -3,9 +3,11 @@ package com.example.trickcalculator.exactdecimal
 import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.utils.ExprLPair
 import com.example.trickcalculator.utils.ExprList
+import com.example.trickcalculator.utils.getGCD
 import com.example.trickcalculator.utils.getListGCD
 import java.math.BigInteger
 
+// TODO don't include term w/ value 1,0
 // this needs to return a pair instead of an ED in order to avoid getting stuck in an infinite loop of constructor/simplify
 fun simplify(ed: ExactDecimal): ExactDecimal {
     var currentNum = ed.numerator
@@ -24,6 +26,9 @@ fun simplify(ed: ExactDecimal): ExactDecimal {
     val denomConstant: Expression =
         denomGroups[true]?.fold(Expression.ONE) { acc, expr -> acc * expr } ?: Expression.ONE
 
+    println(numGroups)
+    println(numConstant)
+
     val numResult = if (numGroups[false].isNullOrEmpty()) {
         Pair(listOf(), ExactFraction.ONE)
     } else {
@@ -38,8 +43,21 @@ fun simplify(ed: ExactDecimal): ExactDecimal {
     val result = removeCommon(numResult.first, denomResult.first)
     currentNum = result.first + numConstant * Term(numResult.second)
     currentDenom = result.second + denomConstant * Term(denomResult.second)
+    // currentNum = result.first + Expression(Term(numResult.second))
+    // currentDenom = result.second + Expression(Term(denomResult.second))
 
     return ExactDecimal(currentNum, currentDenom)
+}
+
+fun combineByExp(expr: Expression): Expression {
+    val groups = expr.terms.groupBy { it.exp }
+    val newTerms = groups.map {
+        val exp = it.key
+        val terms = it.value
+        val newCoeff = terms.fold(ExactFraction.ONE) { acc, t -> acc * t.coefficient }
+        Term(newCoeff, exp)
+    }
+    return Expression(newTerms)
 }
 
 fun removeCommon(num: ExprList, denom: ExprList): ExprLPair {
