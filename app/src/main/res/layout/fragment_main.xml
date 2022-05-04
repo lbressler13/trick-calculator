@@ -30,8 +30,8 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:textColor="?errorColor"
-        android:textStyle="bold"
         android:textSize="20sp"
+        android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/mainText" />
 
@@ -133,8 +133,8 @@
             android:layout_row="0"
             android:layout_column="3"
             android:background="@drawable/button_numpad"
-            android:src="@drawable/ic_plus"
             android:contentDescription="Plus button"
+            android:src="@drawable/ic_plus"
             tools:ignore="HardcodedText" />
 
         <ImageButton
@@ -143,8 +143,8 @@
             android:layout_row="1"
             android:layout_column="3"
             android:background="@drawable/button_numpad"
-            android:src="@drawable/ic_minus"
             android:contentDescription="Minus button"
+            android:src="@drawable/ic_minus"
             tools:ignore="HardcodedText" />
 
         <ImageButton
@@ -153,9 +153,9 @@
             android:layout_row="2"
             android:layout_column="3"
             android:background="@drawable/button_numpad"
+            android:contentDescription="Multiplication button"
             android:src="@drawable/ic_times"
-            tools:ignore="HardcodedText"
-            android:contentDescription="Multiplication button" />
+            tools:ignore="HardcodedText" />
 
         <ImageButton
             android:id="@+id/divideButton"
@@ -163,9 +163,9 @@
             android:layout_row="3"
             android:layout_column="3"
             android:background="@drawable/button_numpad"
+            android:contentDescription="Divide button"
             android:src="@drawable/ic_divide"
-            tools:ignore="HardcodedText"
-            android:contentDescription="Divide button" />
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/lparenButton"
@@ -197,8 +197,8 @@
             android:layout_row="4"
             android:layout_column="1"
             android:background="@drawable/button_numpad"
-            android:src="@drawable/ic_arrow_left"
             android:contentDescription="Backspace button"
+            android:src="@drawable/ic_arrow_left"
             tools:ignore="HardcodedText" />
 
         <Button
@@ -226,9 +226,20 @@
             android:layout_row="5"
             android:layout_column="3"
             android:background="@drawable/button_numpad"
-            android:src="@drawable/ic_equals"
             android:contentDescription="Equals button"
+            android:src="@drawable/ic_equals"
             tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/piButton"
+            style="@style/NumpadButton"
+            android:layout_row="5"
+            android:layout_column="2"
+            android:layout_gravity="top"
+            android:background="@drawable/button_numpad"
+            android:enabled="false"
+            android:text="@string/pi"
+            android:textSize="20sp" />
 
     </GridLayout>
 
@@ -237,13 +248,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:contentDescription="Info button"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:src="@drawable/ic_info"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
-        tools:ignore="HardcodedText,RtlSymmetry"
-        android:contentDescription="Info button" />
+        tools:ignore="HardcodedText,RtlSymmetry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

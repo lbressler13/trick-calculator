@@ -26,3 +26,6 @@ fun BigInteger.eq(other: Long): Boolean = other == toLong()
 // unary checks for BigInteger
 fun BigInteger.isNegative(): Boolean = this < BigInteger.ZERO
 fun BigInteger.isZero(): Boolean = this == BigInteger.ZERO
+
+fun min(val1: BigInteger, val2: BigInteger) = if (val1 < val2) val1 else val2
+fun max(val1: BigInteger, val2: BigInteger) = if (val2 < val1) val1 else val2

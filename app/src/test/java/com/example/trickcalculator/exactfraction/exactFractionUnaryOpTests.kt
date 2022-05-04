@@ -49,9 +49,9 @@ fun runUnaryPlusTests() {
 fun runNotTests() {
     assert(!ExactFraction(0))
     assert(!ExactFraction(0, -3))
-    assertEquals(false, !ExactFraction(1))
-    assertEquals(false, !ExactFraction(-1))
-    assertEquals(false, !ExactFraction(1, 3))
+    assertFalse(!ExactFraction(1))
+    assertFalse(!ExactFraction(-1))
+    assertFalse(!ExactFraction(1, 3))
 }
 
 fun runIncTests() {

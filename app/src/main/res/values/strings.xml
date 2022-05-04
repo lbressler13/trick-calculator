@@ -18,6 +18,7 @@
     <string name="decimal">.</string>
     <string name="exp">^</string>
     <string name="clear">CE</string>
+    <string name="pi">PI</string>
 
     <!-- Settings UI -->
     <string name="done">Done</string>
