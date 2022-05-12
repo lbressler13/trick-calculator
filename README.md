@@ -44,6 +44,7 @@ The list is also available within the app itself.
 | ![img](app/src/main/res/drawable-hdpi/ic_close.png)         | Ilham Fitrotul Hayat | <https://www.flaticon.com/premium-icon/cross_4421536>                 |
 | ![img](app/src/main/res/drawable-hdpi/ic_divide.png)        | Smashicons           | <https://www.flaticon.com/free-icon/divide_149702>                    |
 | ![img](app/src/main/res/drawable-hdpi/ic_equals.png)        | Freepik              | <https://www.flaticon.com/free-icon/equal_56751>                      |
+| ![img](app/src/main/res/drawable-hdpi/ic_history.png)       | IconKanan            | <www.flaticon.com/premium-icon/history_2901149>                       |
 | ![img](app/src/main/res/drawable-hdpi/ic_minus.png)         | Freepik              | <https://www.flaticon.com/free-icon/minus_56889>                      |
 | ![img](app/src/main/res/drawable-hdpi/ic_times.png)         | Freepik              | <https://www.flaticon.com/free-icon/multiply-mathematical-sign_43823> |
 | ![img](app/src/main/res/drawable-hdpi/ic_info.png)          | Freepik              | <https://www.flaticon.com/free-icon/info-button_64494>                |

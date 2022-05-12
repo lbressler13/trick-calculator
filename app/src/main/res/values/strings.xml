@@ -43,6 +43,10 @@
     <string name="show_link">Show link</string>
     <string name="hide_link">Hide link</string>
 
+    <!-- History -->
+    <string name="title_history">Computation History</string>
+    <string name="no_history">No history</string>
+
     <!-- Other -->
     <string name="dev_mode">Dev mode</string>
 </resources>

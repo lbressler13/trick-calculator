@@ -8,6 +8,20 @@
     android:background="?backgroundColor"
     tools:context=".ui.main.MainFragment">
 
+    <ImageButton
+        android:id="@+id/historyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:contentDescription="History button"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/ic_history"
+        app:layout_constraintBottom_toTopOf="@id/mainText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="?colorPrimary"
+        tools:ignore="HardcodedText,RtlSymmetry" />
+
     <TextView
         android:id="@+id/mainText"
         android:layout_width="match_parent"
@@ -238,6 +252,7 @@
             android:layout_gravity="top"
             android:background="@drawable/button_numpad"
             android:enabled="false"
+            android:visibility="gone"
             android:text="@string/pi"
             android:textSize="20sp" />
 

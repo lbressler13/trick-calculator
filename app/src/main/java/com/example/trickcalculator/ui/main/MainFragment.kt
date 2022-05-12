@@ -25,6 +25,7 @@ import com.example.trickcalculator.compute.runComputation
 import com.example.trickcalculator.ext.*
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
+import com.example.trickcalculator.ui.history.HistoryFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 
@@ -73,12 +74,11 @@ class MainFragment : Fragment() {
         viewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
         viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
-        initButtons()
+        initNumpad()
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
+        binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
-
-        binding.piButton.isVisible = devMode
 
         return binding.root
     }
@@ -111,7 +111,11 @@ class MainFragment : Fragment() {
     private val clearOnErrorObserver: Observer<Boolean> = Observer { clearOnError = it }
     private val applyDecimalsObserver: Observer<Boolean> = Observer { applyDecimals = it }
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
-    private val isDevModeObserver: Observer<Boolean> = Observer { devMode = it }
+    private val isDevModeObserver: Observer<Boolean> = Observer {
+        devMode = it
+        // binding.piButton.isVisible = it
+        binding.historyButton.isVisible = it
+    }
 
     /**
      * Launch AttributionsFragment
@@ -131,6 +135,18 @@ class MainFragment : Fragment() {
 
         val newFragment = AttributionsFragment.newInstance()
         newFragment.arguments = currentSettings
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, newFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    /**
+     * Launch HistoryFragment
+     */
+    private val historyButtonOnClick = {
+        val newFragment = HistoryFragment.newInstance()
 
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, newFragment)
@@ -196,8 +212,10 @@ class MainFragment : Fragment() {
                     )
 
                 viewModel.setComputedValue(computedValue)
-                viewModel.useComputedAsComputeText()
                 viewModel.setError(null)
+                viewModel.addCurrentToHistory()
+
+                viewModel.useComputedAsComputeText()
             } catch (e: Exception) {
                 viewModel.restoreComputeText()
 
@@ -214,6 +232,7 @@ class MainFragment : Fragment() {
                 }
 
                 viewModel.setError("Error: $error")
+                viewModel.addCurrentToHistory()
             }
         }
     }
@@ -233,7 +252,7 @@ class MainFragment : Fragment() {
     /**
      * Initialize all buttons in numpad
      */
-    private fun initButtons() {
+    private fun initNumpad() {
         binding.numpadLayout.children.forEach {
             if (it is Button && it.text != null && it != binding.clearButton) {
                 it.setOnClickListener { _ -> genericAddComputeOnClick(it.text.toString()) }
@@ -266,6 +285,10 @@ class MainFragment : Fragment() {
         actionBar.devModeSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setIsDevMode(isChecked)
         }
+
+        val isDevBuild = BuildOptions.buildType == "dev"
+        actionBar.devModeSwitch.isChecked = isDevBuild
+        viewModel.setIsDevMode(isDevBuild)
     }
 
     /**
