@@ -262,21 +262,14 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
             return numerator.toString()
         }
 
-        val numDecimal = numerator.toBigDecimal()
+        val whole: BigInteger = numerator / denominator
+        val remainder: BigInteger = numerator - denominator * whole
+
+        val mc = MathContext(digits, RoundingMode.HALF_UP)
+        val remainderDecimal = remainder.toBigDecimal()
         val denomDecimal = denominator.toBigDecimal()
-
-        var mc = MathContext(digits, RoundingMode.HALF_UP)
-        var decimal = numDecimal.divide(denomDecimal, mc)
-
-        // return non-exponential string, regardless of digits
-        val isExponentialString = decimal.toString().indexOf('E') != -1
-        if (isExponentialString) {
-            val precision = numerator.toString().length + digits
-            mc = MathContext(precision, RoundingMode.HALF_UP)
-            decimal = numDecimal.divide(denomDecimal, mc)
-        }
-
-        return decimal.toString().trimEnd('0')
+        val decimal = remainderDecimal.divide(denomDecimal, mc)
+        return (whole.toBigDecimal() + decimal).toString()
     }
 
     /**
