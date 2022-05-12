@@ -7,6 +7,7 @@ import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.ext.substringTo
+import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 import com.example.trickcalculator.utils.isPartialDecimal
@@ -44,6 +45,9 @@ class SharedViewModel : ViewModel() {
     private val mIsDevMode = MutableLiveData<Boolean>().apply { value = false }
     val isDevMode: LiveData<Boolean> = mIsDevMode
 
+    private val mHistory = MutableLiveData<List<HistoryItem>>().apply { value = listOf() }
+    val history: LiveData<List<HistoryItem>> = mHistory
+
     fun setError(newValue: String?) { mError.value = newValue }
 
     fun setShuffleNumbers(newValue: Boolean) { mShuffleNumbers.value = newValue }
@@ -55,6 +59,23 @@ class SharedViewModel : ViewModel() {
     fun setComputedValue(newValue: ExactFraction) { mComputedValue.value = newValue }
 
     fun setIsDevMode(newValue: Boolean) { mIsDevMode.value = newValue }
+
+    fun addCurrentToHistory() {
+        val error = error.value
+        val computed = computedValue.value
+        val currentHistory = history.value!!
+
+        when {
+            error != null -> {
+                val item = HistoryItem(computeText.value!!, error)
+                mHistory.value = currentHistory + item
+            }
+            computed != null -> {
+                val item = HistoryItem(computeText.value!!, computed)
+                mHistory.value = currentHistory + item
+            }
+        }
+    }
 
     // clear current computed values
     private fun clearComputeText() { mComputeText.value = listOf() }
