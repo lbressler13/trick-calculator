@@ -18,6 +18,7 @@ import com.example.trickcalculator.ui.main.MainFragment
  */
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    private var isDarkMode = true
 
     /**
      * Initialize activity
@@ -38,15 +39,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        val wasDarkMode = isDarkMode
+        assignTheme()
+        if (wasDarkMode != isDarkMode) {
+            recreate()
+        }
+    }
+
     /**
      * Assign theme based on night mode
      */
     private fun assignTheme() {
         val nightModeFlags: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         when (nightModeFlags) {
-            Configuration.UI_MODE_NIGHT_YES -> setTheme(R.style.CustomDark)
-            Configuration.UI_MODE_NIGHT_NO -> setTheme(R.style.CustomLight)
-            else -> setTheme(R.style.CustomDark)
+            Configuration.UI_MODE_NIGHT_YES -> {
+                setTheme(R.style.CustomDark)
+                isDarkMode = true
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                setTheme(R.style.CustomLight)
+                isDarkMode = false
+            }
+            else -> {
+                setTheme(R.style.CustomDark)
+                isDarkMode = true
+            }
         }
    }
 
