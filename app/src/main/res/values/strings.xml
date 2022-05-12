@@ -18,6 +18,7 @@
     <string name="decimal">.</string>
     <string name="exp">^</string>
     <string name="clear">CE</string>
+    <string name="pi">PI</string>
 
     <!-- Settings UI -->
     <string name="done">Done</string>
@@ -41,6 +42,10 @@
     <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. Images, creators, and links are listed below.</string>
     <string name="show_link">Show link</string>
     <string name="hide_link">Hide link</string>
+
+    <!-- History -->
+    <string name="title_history">Computation History</string>
+    <string name="no_history">No history</string>
 
     <!-- Other -->
     <string name="dev_mode">Dev mode</string>

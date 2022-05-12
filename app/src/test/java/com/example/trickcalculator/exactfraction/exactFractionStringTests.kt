@@ -214,11 +214,15 @@ fun runToDecimalStringTests() {
     expected = "-0.21053"
     assertEquals(expected, ef.toDecimalString(5))
 
+    ef = ExactFraction("45454.888888888888888")
+    expected = "45454.88889"
+    assertEquals(expected, ef.toDecimalString(5))
+
     val veryBig = "100000000000000000000"
     val bi = BigInteger(veryBig)
     ef = ExactFraction(bi, 3)
     expected = "33333333333333333333.333333"
-    assertEquals(expected, ef.toDecimalString(5))
+    assertEquals(expected, ef.toDecimalString(6))
 }
 
 fun runToFractionStringTests() {

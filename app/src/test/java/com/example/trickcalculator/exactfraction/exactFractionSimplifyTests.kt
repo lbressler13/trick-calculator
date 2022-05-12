@@ -82,4 +82,8 @@ private fun runSimplifyGCDTests() {
     ef = ExactFraction(10, 100)
     assert(ef.numerator.eq(1))
     assert(ef.denominator.eq(10))
+
+    ef = ExactFraction(2.toBigInteger(), 2.toBigInteger())
+    assert(ef.numerator.eq(1))
+    assert(ef.denominator.eq(1))
 }

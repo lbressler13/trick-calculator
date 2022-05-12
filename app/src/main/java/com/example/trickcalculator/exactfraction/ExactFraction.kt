@@ -1,6 +1,7 @@
 package com.example.trickcalculator.exactfraction
 
 import com.example.trickcalculator.ext.*
+import com.example.trickcalculator.utils.getGCD
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
@@ -10,7 +11,7 @@ import java.math.RoundingMode
  * Custom number implementation inspired by BigDecimal.
  * Exact representations of rational numbers, without specifying decimal precision.
  */
-class ExactFraction private constructor() : Number() {
+class ExactFraction private constructor() : Comparable<ExactFraction>, Number() {
     // These values are re-assigned in all public constructors
     var numerator: BigInteger = BigInteger.ZERO
     var denominator: BigInteger = BigInteger.ONE
@@ -142,7 +143,7 @@ class ExactFraction private constructor() : Number() {
     fun eq(other: Long): Boolean = numerator.eq(other) && denominator.eq(1)
     fun eq(other: BigInteger): Boolean = numerator == other && denominator.eq(1)
 
-    operator fun compareTo(other: ExactFraction): Int {
+    override operator fun compareTo(other: ExactFraction): Int {
         val difference = minus(other)
         return when {
             difference.isNegative() -> -1
@@ -237,26 +238,11 @@ class ExactFraction private constructor() : Number() {
     }
 
     /**
-     * Simplify using greatest common divisor using Euclidean algorithm
+     * Simplify using greatest common divisor
      */
     private fun simplifyGCD() {
         if (!numerator.isZero()) {
-            var sum = if (numerator > denominator) numerator else denominator
-            var value = if (numerator > denominator) denominator else numerator
-            var finished = false
-
-            while (!finished) {
-                val remainder = sum % value
-
-                if (remainder == BigInteger.ZERO) {
-                    finished = true
-                } else {
-                    sum = value
-                    value = remainder
-                }
-            }
-
-            val gcd = value
+            val gcd = getGCD(numerator, denominator)
             numerator /= gcd
             denominator /= gcd
         }
@@ -276,21 +262,14 @@ class ExactFraction private constructor() : Number() {
             return numerator.toString()
         }
 
-        val numDecimal = numerator.toBigDecimal()
+        val whole: BigInteger = numerator / denominator
+        val remainder: BigInteger = numerator - denominator * whole
+
+        val mc = MathContext(digits, RoundingMode.HALF_UP)
+        val remainderDecimal = remainder.toBigDecimal()
         val denomDecimal = denominator.toBigDecimal()
-
-        var mc = MathContext(digits, RoundingMode.HALF_UP)
-        var decimal = numDecimal.divide(denomDecimal, mc)
-
-        // return non-exponential string, regardless of digits
-        val isExponentialString = decimal.toString().indexOf('E') != -1
-        if (isExponentialString) {
-            val precision = numerator.toString().length + digits
-            mc = MathContext(precision, RoundingMode.HALF_UP)
-            decimal = numDecimal.divide(denomDecimal, mc)
-        }
-
-        return decimal.toString().trimEnd('0')
+        val decimal = remainderDecimal.divide(denomDecimal, mc)
+        return (whole.toBigDecimal() + decimal).toString()
     }
 
     /**
@@ -467,6 +446,7 @@ class ExactFraction private constructor() : Number() {
         val EIGHT = ExactFraction(8)
         val NINE = ExactFraction(9)
         val NEG_ONE = ExactFraction(-1)
+        val HALF = ExactFraction(1, 2)
 
         fun parse(s: String): ExactFraction {
             if (isEFString(s)) {
