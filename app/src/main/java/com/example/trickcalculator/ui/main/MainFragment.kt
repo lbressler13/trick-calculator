@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -46,7 +45,8 @@ class MainFragment : Fragment() {
         shuffleOperators = false,
         applyParens = true,
         clearOnError = false,
-        applyDecimals = true
+        applyDecimals = true,
+        showSettingsButton = false
     )
 
     private var devMode = false
@@ -73,6 +73,7 @@ class MainFragment : Fragment() {
         viewModel.applyParens.observe(viewLifecycleOwner, applyParensObserver)
         viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
         viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
+        viewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
         viewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
         viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
@@ -82,6 +83,10 @@ class MainFragment : Fragment() {
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
+
+        if (devMode) {
+            viewModel.setShowSettingsButton(true)
+        }
 
         initSettingsDialog(this, viewModel, settings, binding.settingsButton)
 
@@ -94,9 +99,13 @@ class MainFragment : Fragment() {
     private val clearOnErrorObserver: Observer<Boolean> = Observer { settings.clearOnError = it }
     private val applyDecimalsObserver: Observer<Boolean> = Observer { settings.applyDecimals = it }
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
+    private val showSettingsButtonObserver: Observer<Boolean> = Observer {
+        settings.showSettingsButton = it
+        binding.settingsButton.isVisible = it
+    }
     private val isDevModeObserver: Observer<Boolean> = Observer {
         devMode = it
-        binding.settingsButton.isVisible = it
+        // binding.settingsButton.isVisible = it
     }
 
     private val computeTextObserver: Observer<StringList> = Observer {

@@ -56,7 +56,8 @@ class AttributionsFragment : Fragment() {
         shuffleOperators = false,
         applyParens = true,
         clearOnError = false,
-        applyDecimals = true
+        applyDecimals = true,
+        showSettingsButton = false
     )
 
     companion object {

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.example.trickcalculator.R
+import com.example.trickcalculator.ui.main.MainFragment
 
 /**
  * Initialize handling of settings dialog
@@ -23,6 +24,8 @@ fun initSettingsDialog(
     val parensKey = context.getString(R.string.key_apply_parens)
     val clearOnErrorKey = context.getString(R.string.key_clear_on_error)
     val decimalsKey = context.getString(R.string.key_apply_decimals)
+    val settingsButtonKey = context.getString(R.string.key_settings_button)
+    val mainFragmentKey = context.getString(R.string.key_main_fragment)
     val requestKey = context.getString(R.string.key_settings_request)
 
     // update viewmodel with response from dialog
@@ -45,6 +48,9 @@ fun initSettingsDialog(
 
             val returnedApplyDecimals: Boolean = result.getBoolean(decimalsKey, settings.applyDecimals)
             viewModel.setApplyDecimals(returnedApplyDecimals)
+
+            val returnedShowSettingsButton: Boolean = result.getBoolean(settingsButtonKey, settings.showSettingsButton)
+            viewModel.setShowSettingsButton(returnedShowSettingsButton)
         }
     )
 
@@ -54,7 +60,8 @@ fun initSettingsDialog(
             operatorsKey to settings.shuffleOperators,
             parensKey to settings.applyParens,
             clearOnErrorKey to settings.clearOnError,
-            decimalsKey to settings.applyDecimals
+            decimalsKey to settings.applyDecimals,
+            mainFragmentKey to (fragment is MainFragment)
         )
         settingsDialog.show(fragment.childFragmentManager, SharedSettingsDialog.TAG)
     }

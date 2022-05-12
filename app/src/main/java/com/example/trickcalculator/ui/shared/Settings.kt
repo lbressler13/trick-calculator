@@ -5,5 +5,6 @@ data class Settings(
     var shuffleOperators: Boolean,
     var applyParens: Boolean,
     var clearOnError: Boolean,
-    var applyDecimals: Boolean
+    var applyDecimals: Boolean,
+    var showSettingsButton: Boolean
 )

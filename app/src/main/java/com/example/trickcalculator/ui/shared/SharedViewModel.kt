@@ -41,6 +41,8 @@ class SharedViewModel : ViewModel() {
     val clearOnError: LiveData<Boolean> = mClearOnError
     private val mApplyDecimals = MutableLiveData<Boolean>().apply { value = true }
     val applyDecimals: LiveData<Boolean> = mApplyDecimals
+    private val mShowSettingsButton = MutableLiveData<Boolean>().apply { value = false }
+    val showSettingsButton: LiveData<Boolean> = mShowSettingsButton
 
     private val mIsDevMode = MutableLiveData<Boolean>().apply { value = false }
     val isDevMode: LiveData<Boolean> = mIsDevMode
@@ -55,6 +57,7 @@ class SharedViewModel : ViewModel() {
     fun setApplyParens(newValue: Boolean) { mApplyParens.value = newValue }
     fun setClearOnError(newValue: Boolean) { mClearOnError.value = newValue }
     fun setApplyDecimals(newValue: Boolean) { mApplyDecimals.value = newValue }
+    fun setShowSettingsButton(newValue: Boolean) { mShowSettingsButton.value = newValue }
 
     fun setComputedValue(newValue: ExactFraction) { mComputedValue.value = newValue }
 
