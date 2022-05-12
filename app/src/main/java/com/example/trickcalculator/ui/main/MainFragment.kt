@@ -114,7 +114,6 @@ class MainFragment : Fragment() {
     private val isDevModeObserver: Observer<Boolean> = Observer {
         devMode = it
         // binding.piButton.isVisible = it
-        binding.historyButton.isVisible = it
     }
 
     /**

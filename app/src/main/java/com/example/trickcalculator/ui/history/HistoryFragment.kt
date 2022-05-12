@@ -35,7 +35,7 @@ class HistoryFragment : Fragment() {
 
         if (historyItems.isEmpty()) {
             binding.itemsRecycler.gone()
-            binding.noHistoryTextview.visible()
+            binding.noHistoryMessage.visible()
         } else {
             val recycler: RecyclerView = binding.itemsRecycler
             val adapter = HistoryItemsAdapter(historyItems)

@@ -17,9 +17,10 @@ class HistoryItem {
     }
 
     constructor(computation: StringList, result: ExactFraction) {
+        // parse EF-formatted value into decimal string
         if (computation.isNotEmpty() && checkIsEFString(computation[0])) {
-            val parsed = ExactFraction(computation[0]).toDecimalString(5)
-            val newComputation = computation.copyWithReplacement(0, parsed)
+            val decimal = ExactFraction(computation[0]).toDecimalString(5)
+            val newComputation = computation.copyWithReplacement(0, decimal)
             this.computation = newComputation.joinToString("")
         } else {
             this.computation = computation.joinToString("")
