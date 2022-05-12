@@ -48,7 +48,7 @@ class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
     private fun setTextView(textview: TextView, text: String, maxLines: Int) {
         textview.text = text
 
-        textview.doOnLayout {
+        textview.post {
             if (textview.lineCount > maxLines) {
                 val textEnd = textview.layout.getLineStart(maxLines) - 3
                 textview.text = text.substringTo(textEnd) + "..."
