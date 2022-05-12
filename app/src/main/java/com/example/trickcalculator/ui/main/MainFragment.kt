@@ -78,15 +78,10 @@ class MainFragment : Fragment() {
         viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initNumpad()
-        initDevModeSwitch()
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
-
-        if (devMode) {
-            viewModel.setShowSettingsButton(true)
-        }
 
         initSettingsDialog(this, viewModel, settings, binding.settingsButton)
 
@@ -103,10 +98,7 @@ class MainFragment : Fragment() {
         settings.showSettingsButton = it
         binding.settingsButton.isVisible = it
     }
-    private val isDevModeObserver: Observer<Boolean> = Observer {
-        devMode = it
-        // binding.settingsButton.isVisible = it
-    }
+    private val isDevModeObserver: Observer<Boolean> = Observer { devMode = it }
 
     private val computeTextObserver: Observer<StringList> = Observer {
         computeText = it
@@ -141,36 +133,6 @@ class MainFragment : Fragment() {
         // maxDigits = textview.text.length - 1
         // textview.text = ""
         maxDigits = 14
-    }
-
-    /**
-     * Set UI and onCheckChangeListener
-     */
-    private fun initDevModeSwitch() {
-        val switch = (requireActivity() as MainActivity).binding.actionBar.devModeSwitch
-        switch.setOnCheckedChangeListener { _, isChecked -> viewModel.setIsDevMode(isChecked) }
-
-        val checkedColor = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.actionBarSwitchTrackCheckedColor, checkedColor, true)
-        val uncheckedColor = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.actionBarSwitchTrackUncheckedColor, uncheckedColor, true)
-
-        val buttonStates = ColorStateList(
-            arrayOf(
-                intArrayOf(-android.R.attr.state_enabled),
-                intArrayOf(android.R.attr.state_checked),
-                intArrayOf()
-            ), intArrayOf(
-                uncheckedColor.data,
-                checkedColor.data,
-                uncheckedColor.data
-            )
-        )
-        switch.trackDrawable.setTintList(buttonStates)
-
-        val isDevBuild = BuildOptions.buildType == "dev"
-        switch.isChecked = isDevBuild
-        viewModel.setIsDevMode(BuildOptions.buildType == "dev")
     }
 
     /**
@@ -323,15 +285,6 @@ class MainFragment : Fragment() {
     private fun initActionBar() {
         val actionBar = (requireActivity() as MainActivity).binding.actionBar
         actionBar.root.setOnClickListener(null)
-
-        // only visible and enabled in dev flavor
-        actionBar.devModeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setIsDevMode(isChecked)
-        }
-
-        val isDevBuild = BuildOptions.buildType == "dev"
-        actionBar.devModeSwitch.isChecked = isDevBuild
-        viewModel.setIsDevMode(isDevBuild)
     }
 
     /**

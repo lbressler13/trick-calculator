@@ -6,12 +6,15 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
+import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ext.disable
 import com.example.trickcalculator.ext.enable
 import com.example.trickcalculator.ext.gone
 import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.main.MainFragment
+import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
  * Activity that contains all functionality of app
@@ -19,6 +22,7 @@ import com.example.trickcalculator.ui.main.MainFragment
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private var isDarkMode = true
+    private lateinit var viewModel: SharedViewModel
 
     /**
      * Initialize activity
@@ -31,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         initDevModeSwitch()
+
+        viewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -74,7 +80,7 @@ class MainActivity : AppCompatActivity() {
      * Initialize dev mode switch based on build type and theme
      */
     private fun initDevModeSwitch() {
-        val switch = binding.actionBar.devModeSwitch
+        val switch: SwitchCompat = binding.actionBar.devModeSwitch
 
         if (BuildOptions.buildType == "dev") {
             val checkedColor = TypedValue()
@@ -95,9 +101,13 @@ class MainActivity : AppCompatActivity() {
             )
             switch.trackDrawable.setTintList(buttonStates)
 
+            switch.isChecked = true
+            switch.setOnCheckedChangeListener { _, isChecked -> viewModel.setIsDevMode(isChecked) }
+
             switch.enable()
             switch.visible()
         } else {
+            switch.isChecked = false
             switch.disable()
             switch.gone()
         }
