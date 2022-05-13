@@ -31,8 +31,17 @@ class HistoryFragment : Fragment() {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        val historyItems: List<HistoryItem> = viewModel.history.value!!
+        // should only get called once
+        viewModel.history.observe(viewLifecycleOwner) { setUI(it) }
 
+        binding.closeButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
+        return binding.root
+    }
+
+    private fun setUI(historyItems: List<HistoryItem>) {
         if (historyItems.isEmpty()) {
             binding.itemsRecycler.gone()
             binding.noHistoryMessage.visible()
@@ -43,11 +52,5 @@ class HistoryFragment : Fragment() {
             recycler.adapter = adapter
             recycler.layoutManager = LinearLayoutManager(requireContext())
         }
-
-        binding.closeButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
-
-        return binding.root
     }
 }
