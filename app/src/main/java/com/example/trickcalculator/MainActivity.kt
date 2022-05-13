@@ -32,11 +32,10 @@ class MainActivity : AppCompatActivity() {
 
         assignTheme()
         binding = ActivityMainBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         setContentView(binding.root)
         initDevModeSwitch()
-
-        viewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -102,6 +101,7 @@ class MainActivity : AppCompatActivity() {
             switch.trackDrawable.setTintList(buttonStates)
 
             switch.isChecked = true
+            viewModel.setIsDevMode(true)
             switch.setOnCheckedChangeListener { _, isChecked -> viewModel.setIsDevMode(isChecked) }
 
             switch.enable()

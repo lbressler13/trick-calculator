@@ -3,7 +3,6 @@ package com.example.trickcalculator.ui.main
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
-import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +22,6 @@ import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.ui.history.HistoryFragment
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
-import android.content.res.ColorStateList
 import com.example.trickcalculator.ui.shared.Settings
 import com.example.trickcalculator.ui.shared.initSettingsDialog
 

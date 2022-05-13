@@ -82,7 +82,10 @@ class SharedViewModel : ViewModel() {
 
     // clear current computed values
     private fun clearComputeText() { mComputeText.value = listOf() }
-    private fun clearComputedValue() { mComputedValue.value = null }
+    private fun clearComputedValue() {
+        mComputedValue.value = null
+        mUsesComputedValue.value = false
+    }
 
     /**
      * Append new value to end of list, creating multi-digit number when possible
