@@ -57,7 +57,8 @@ class AttributionsFragment : Fragment() {
         applyParens = true,
         clearOnError = false,
         applyDecimals = true,
-        showSettingsButton = false
+        showSettingsButton = false,
+        historyRandomness = 0
     )
 
     companion object {
@@ -93,6 +94,8 @@ class AttributionsFragment : Fragment() {
         viewModel.applyParens.observe(viewLifecycleOwner, applyParensObserver)
         viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
         viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
+        viewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
+        viewModel.historyRandomness.observe(viewLifecycleOwner, historyRandomnessObserver)
 
         return binding.root
     }
@@ -102,4 +105,6 @@ class AttributionsFragment : Fragment() {
     private val applyParensObserver: Observer<Boolean> = Observer { settings.applyParens = it }
     private val clearOnErrorObserver: Observer<Boolean> = Observer { settings.clearOnError = it }
     private val applyDecimalsObserver: Observer<Boolean> = Observer { settings.applyDecimals = it }
+    private val showSettingsButtonObserver: Observer<Boolean> = Observer { settings.showSettingsButton = it }
+    private val historyRandomnessObserver: Observer<Int> = Observer { settings.historyRandomness = it }
 }

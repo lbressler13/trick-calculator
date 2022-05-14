@@ -29,6 +29,7 @@
     <string name="clear_on_error">Reset on Error</string>
     <string name="apply_decimals">Apply Decimals</string>
     <string name="show_settings_button">Show Settings Button</string>
+    <string name="history_label">History</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">settingsUpdateRequest</string>
@@ -39,6 +40,7 @@
     <string name="key_apply_decimals">applyDecimals</string>
     <string name="key_settings_button">showSettingsButton</string>
     <string name="key_main_fragment">isMainFragment</string>
+    <string name="key_history">randomHistory</string>
 
     <!-- Image Attributions -->
     <string name="link">Link</string>

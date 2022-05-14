@@ -52,6 +52,8 @@ class SharedSettingsDialog : DialogFragment() {
         val mainFragmentKey = requireContext().getString(R.string.key_main_fragment)
         val isMainFragment = this.arguments?.getBoolean(mainFragmentKey)
         binding.settingsButtonSwitch.isVisible = isMainFragment != true
+
+        setHistoryRadioGroup()
     }
 
     /**
@@ -68,6 +70,28 @@ class SharedSettingsDialog : DialogFragment() {
         }
     }
 
+    private fun setHistoryRadioGroup() {
+        val group = binding.historyRandomnessGroup
+        val key: String = requireContext().getString(R.string.key_history)
+        val value: Int = this.arguments?.getInt(key) ?: 0
+        when (value) {
+            0 -> group.check(binding.historyButton0.id)
+            1 -> group.check(binding.historyButton1.id)
+            2 -> group.check(binding.historyButton2.id)
+            3 -> group.check(binding.historyButton3.id)
+        }
+    }
+
+    private fun getHistoryGroupValue(): Int {
+        return when (binding.historyRandomnessGroup.checkedRadioButtonId) {
+            binding.historyButton0.id -> 0
+            binding.historyButton1.id -> 1
+            binding.historyButton2.id -> 2
+            binding.historyButton3.id -> 3
+            else -> 0
+        }
+    }
+
     /**
      * Create bundle of settings to pass in fragment result
      *
@@ -80,13 +104,15 @@ class SharedSettingsDialog : DialogFragment() {
         val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
         val decimalsKey = requireContext().getString(R.string.key_apply_decimals)
         val settingsButtonKey = requireContext().getString(R.string.key_settings_button)
+        val historyRandomnessKey = requireContext().getString(R.string.key_history)
         return bundleOf(
             numbersKey to binding.shuffleNumbersSwitch.isChecked,
             operatorsKey to binding.shuffleOperatorsSwitch.isChecked,
             parensKey to binding.applyParensSwitch.isChecked,
             clearOnErrorKey to binding.clearOnErrorSwitch.isChecked,
             decimalsKey to binding.applyDecimalsSwitch.isChecked,
-            settingsButtonKey to binding.settingsButtonSwitch.isChecked
+            settingsButtonKey to binding.settingsButtonSwitch.isChecked,
+            historyRandomnessKey to getHistoryGroupValue()
         )
     }
 

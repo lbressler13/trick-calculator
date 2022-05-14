@@ -45,7 +45,8 @@ class MainFragment : Fragment() {
         applyParens = true,
         clearOnError = false,
         applyDecimals = true,
-        showSettingsButton = false
+        showSettingsButton = false,
+        historyRandomness = 0
     )
 
     private var devMode = false
@@ -73,6 +74,7 @@ class MainFragment : Fragment() {
         viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
         viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
         viewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
+        viewModel.historyRandomness.observe(viewLifecycleOwner, historyRandomnessObserver)
         viewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
         viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
@@ -99,6 +101,7 @@ class MainFragment : Fragment() {
         settings.showSettingsButton = it
         binding.settingsButton.isVisible = it || devMode
     }
+    private val historyRandomnessObserver: Observer<Int> = Observer { settings.historyRandomness = it }
     private val isDevModeObserver: Observer<Boolean> = Observer {
         devMode = it
         binding.settingsButton.isVisible = it || settings.showSettingsButton
@@ -304,8 +307,9 @@ class MainFragment : Fragment() {
             }
 
             if (computeText.isNotEmpty() && usesComputedValue) {
-                val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
-                textview.text = spannableString
+                // val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
+                // textview.text = spannableString
+                textview.text = fullText
             } else {
                 textview.text = fullText
             }
