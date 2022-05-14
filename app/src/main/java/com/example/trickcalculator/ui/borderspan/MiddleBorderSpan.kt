@@ -2,6 +2,7 @@ package com.example.trickcalculator.ui.borderspan
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
 import com.example.trickcalculator.ext.drawLine
 
 class MiddleBorderSpan(private val textColor: Int, private val parentWidth: Int) : BorderSpan(textColor, parentWidth) {
@@ -18,7 +19,12 @@ class MiddleBorderSpan(private val textColor: Int, private val parentWidth: Int)
     ) {
         super.draw(canvas, text, start, end, x, top, y, bottom, paint)
 
-        canvas.drawLine(bounds.left, bounds.top, bounds.left, bounds.bottom, border)
-        canvas.drawLine(bounds.right, bounds.top, bounds.right, bounds.bottom, border)
+        val path = Path()
+        path.moveTo(bounds.left.toFloat(), bounds.top.toFloat())
+        path.lineTo(bounds.left.toFloat(), bounds.bottom.toFloat())
+        path.moveTo(bounds.right.toFloat(), bounds.top.toFloat())
+        path.lineTo(bounds.right.toFloat(), bounds.bottom.toFloat())
+
+        canvas.drawPath(path, borderPaint)
     }
 }

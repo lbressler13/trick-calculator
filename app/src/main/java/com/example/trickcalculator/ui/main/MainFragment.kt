@@ -94,9 +94,12 @@ class MainFragment : Fragment() {
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
         settings.showSettingsButton = it
-        binding.settingsButton.isVisible = it
+        binding.settingsButton.isVisible = it || devMode
     }
-    private val isDevModeObserver: Observer<Boolean> = Observer { devMode = it }
+    private val isDevModeObserver: Observer<Boolean> = Observer {
+        devMode = it
+        binding.settingsButton.isVisible = it || settings.showSettingsButton
+    }
 
     private val computeTextObserver: Observer<StringList> = Observer {
         computeText = it

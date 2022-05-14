@@ -2,8 +2,7 @@ package com.example.trickcalculator.ui.borderspan
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.text.style.ReplacementSpan
-import com.example.trickcalculator.ext.drawLine
+import android.graphics.Path
 
 class BottomBorderSpan(private val textColor: Int, private val parentWidth: Int) : BorderSpan(textColor, parentWidth) {
     override fun draw(
@@ -19,11 +18,15 @@ class BottomBorderSpan(private val textColor: Int, private val parentWidth: Int)
     ) {
         super.draw(canvas, text, start, end, x, top, y, bottom, paint)
 
-        canvas.drawLine(bounds.left, bounds.bottom, bounds.right, bounds.bottom, border)
-        canvas.drawLine(bounds.left, bounds.top, bounds.left, bounds.bottom, border)
-        canvas.drawLine(bounds.right, bounds.top, bounds.right, bounds.bottom, border)
+        val path = Path()
+        path.moveTo(bounds.left.toFloat(), bounds.top.toFloat())
+        path.lineTo(bounds.left.toFloat(), bounds.bottom.toFloat())
+        path.lineTo(bounds.right.toFloat(), bounds.bottom.toFloat())
+        path.lineTo(bounds.right.toFloat(), bounds.top.toFloat())
 
         val remainingBottom = parentWidth - bounds.width()
-        canvas.drawLine(bounds.right, bounds.top, bounds.right + remainingBottom, bounds.top, border)
+        path.lineTo(bounds.right.toFloat() + remainingBottom, bounds.top.toFloat())
+
+        canvas.drawPath(path, borderPaint)
     }
 }

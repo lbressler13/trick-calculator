@@ -7,7 +7,7 @@ import android.text.style.ReplacementSpan
 
 // adapted from https://stackoverflow.com/questions/16026577/border-in-clickable-object-in-spannablestring
 open class BorderSpan protected constructor(private val textColor: Int, private val parentWidth: Int) : ReplacementSpan() {
-    protected val border: Paint = Paint()
+    protected val borderPaint: Paint = Paint()
     protected var bounds = Rect()
 
     private val innerPadding = 12f
@@ -16,10 +16,10 @@ open class BorderSpan protected constructor(private val textColor: Int, private 
     private var width = 0
 
     init {
-        border.style = Paint.Style.STROKE
-        border.isAntiAlias = true
-        border.color = textColor
-        border.strokeWidth = 10f
+        borderPaint.style = Paint.Style.STROKE
+        borderPaint.isAntiAlias = true
+        borderPaint.color = textColor
+        borderPaint.strokeWidth = 10f
     }
 
     override fun getSize(

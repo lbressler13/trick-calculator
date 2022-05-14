@@ -3,6 +3,7 @@ package com.example.trickcalculator.ui.main
 import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.StaticLayout
 import android.util.TypedValue
 import android.widget.TextView
 import com.example.trickcalculator.R
@@ -23,6 +24,7 @@ fun addBorder(fullText: StringList, digitsPerLine: Int, context: Context, parent
     }
 
     val lines = firstTerm.chunked(digitsPerLine)
+    // val lines = listOf(firstTerm)
 
     when (lines.size) {
         1 -> {
