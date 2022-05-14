@@ -21,17 +21,20 @@ import com.example.trickcalculator.ext.*
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.ui.history.HistoryFragment
+import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.ui.shared.Settings
 import com.example.trickcalculator.ui.shared.initSettingsDialog
+import com.example.trickcalculator.ui.shared.initSettingsObservers
 
 /**
  * Fragment to display main calculator functionality
  */
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var computationViewModel: ComputationViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     private lateinit var computeText: StringList
     private var error: String? = null
@@ -63,20 +66,18 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        computationViewModel = ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        // observe changes in viewmodel
-        viewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
-        viewModel.error.observe(viewLifecycleOwner, errorObserver)
-        viewModel.shuffleNumbers.observe(viewLifecycleOwner, shuffleNumbersObserver)
-        viewModel.shuffleOperators.observe(viewLifecycleOwner, shuffleOperatorsObserver)
-        viewModel.applyParens.observe(viewLifecycleOwner, applyParensObserver)
-        viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
-        viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
-        viewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
-        viewModel.historyRandomness.observe(viewLifecycleOwner, historyRandomnessObserver)
-        viewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
-        viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
+        // observe changes in viewmodels
+        computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
+        computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
+        computationViewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
+        computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
+        initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
+        // additional observer to show/hide settings button
+        sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
+        sharedViewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initNumpad()
         binding.mainText.movementMethod = ScrollingMovementMethod()
@@ -84,24 +85,20 @@ class MainFragment : Fragment() {
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
 
-        initSettingsDialog(this, viewModel, settings, binding.settingsButton)
+        initSettingsDialog(this, sharedViewModel, settings, binding.settingsButton)
 
         return binding.root
     }
 
-    private val shuffleNumbersObserver: Observer<Boolean> =
-        Observer { settings.shuffleNumbers = it }
-    private val shuffleOperatorsObserver: Observer<Boolean> =
-        Observer { settings.shuffleOperators = it }
-    private val applyParensObserver: Observer<Boolean> = Observer { settings.applyParens = it }
-    private val clearOnErrorObserver: Observer<Boolean> = Observer { settings.clearOnError = it }
-    private val applyDecimalsObserver: Observer<Boolean> = Observer { settings.applyDecimals = it }
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
+    private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
+        if (it != null) {
+            sharedViewModel.addToHistory(it)
+        }
+    }
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
-        settings.showSettingsButton = it
         binding.settingsButton.isVisible = it || devMode
     }
-    private val historyRandomnessObserver: Observer<Int> = Observer { settings.historyRandomness = it }
     private val isDevModeObserver: Observer<Boolean> = Observer {
         devMode = it
         binding.settingsButton.isVisible = it || settings.showSettingsButton
@@ -122,7 +119,7 @@ class MainFragment : Fragment() {
             binding.errorText.visible()
 
             if (settings.clearOnError) {
-                viewModel.resetComputeData(clearError = false)
+                computationViewModel.resetComputeData(clearError = false)
             }
         } else {
             binding.errorText.gone()
@@ -172,7 +169,7 @@ class MainFragment : Fragment() {
      */
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
-            viewModel.finalizeComputeText()
+            computationViewModel.finalizeComputeText()
 
             // set action for each operator
             // only include exponent if exp is used
@@ -223,13 +220,13 @@ class MainFragment : Fragment() {
                         settings.applyDecimals
                     )
 
-                viewModel.setComputedValue(computedValue)
-                viewModel.setError(null)
-                viewModel.addCurrentToHistory()
+                computationViewModel.setComputedValue(computedValue)
+                computationViewModel.setError(null)
+                computationViewModel.setLastHistoryItem()
 
-                viewModel.useComputedAsComputeText()
+                computationViewModel.useComputedAsComputeText()
             } catch (e: Exception) {
-                viewModel.restoreComputeText()
+                computationViewModel.restoreComputeText()
 
                 val error: String = if (e.message == null) {
                     "Computation error"
@@ -243,8 +240,8 @@ class MainFragment : Fragment() {
                     message
                 }
 
-                viewModel.setError("Error: $error")
-                viewModel.addCurrentToHistory()
+                computationViewModel.setError("Error: $error")
+                computationViewModel.setLastHistoryItem()
             }
         }
     }
@@ -255,9 +252,9 @@ class MainFragment : Fragment() {
      * @param addText [String]: text to add
      */
     private fun genericAddComputeOnClick(addText: String) {
-        viewModel.appendComputeText(addText)
+        computationViewModel.appendComputeText(addText)
         if (error != null) {
-            viewModel.setError(null)
+            computationViewModel.setError(null)
         }
     }
 
@@ -278,11 +275,11 @@ class MainFragment : Fragment() {
         binding.divideButton.setOnClickListener { genericAddComputeOnClick("/") }
 
         // functional buttons
-        binding.clearButton.setOnClickListener { viewModel.resetComputeData() }
+        binding.clearButton.setOnClickListener { computationViewModel.resetComputeData() }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
         binding.backspaceButton.setOnClickListener {
-            viewModel.setError(null)
-            viewModel.backspaceComputeText()
+            computationViewModel.setError(null)
+            computationViewModel.backspaceComputeText()
         }
     }
 

@@ -15,6 +15,7 @@ import com.example.trickcalculator.databinding.FragmentImageAttributionsBinding
 import com.example.trickcalculator.ui.shared.Settings
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.shared.initSettingsDialog
+import com.example.trickcalculator.ui.shared.initSettingsObservers
 
 /**
  * Information about a single image attribution
@@ -49,7 +50,7 @@ private val allAttributions = listOf(
  */
 class AttributionsFragment : Fragment() {
     private lateinit var binding: FragmentImageAttributionsBinding
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     private val settings = Settings(
         shuffleNumbers = false,
@@ -74,7 +75,7 @@ class AttributionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentImageAttributionsBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         val recycler: RecyclerView = binding.attributionsRecycler
         val adapter = AttributionsAdapter(allAttributions)
@@ -86,25 +87,9 @@ class AttributionsFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
         val actionBar: View = (requireActivity() as MainActivity).binding.actionBar.root
-        initSettingsDialog(this, viewModel, settings, actionBar)
-
-        // observe changes in viewmodel
-        viewModel.shuffleNumbers.observe(viewLifecycleOwner, shuffleNumbersObserver)
-        viewModel.shuffleOperators.observe(viewLifecycleOwner, shuffleOperatorsObserver)
-        viewModel.applyParens.observe(viewLifecycleOwner, applyParensObserver)
-        viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
-        viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
-        viewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
-        viewModel.historyRandomness.observe(viewLifecycleOwner, historyRandomnessObserver)
+        initSettingsDialog(this, sharedViewModel, settings, actionBar)
+        initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
 
         return binding.root
     }
-
-    private val shuffleNumbersObserver: Observer<Boolean> = Observer { settings.shuffleNumbers = it }
-    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { settings.shuffleOperators = it }
-    private val applyParensObserver: Observer<Boolean> = Observer { settings.applyParens = it }
-    private val clearOnErrorObserver: Observer<Boolean> = Observer { settings.clearOnError = it }
-    private val applyDecimalsObserver: Observer<Boolean> = Observer { settings.applyDecimals = it }
-    private val showSettingsButtonObserver: Observer<Boolean> = Observer { settings.showSettingsButton = it }
-    private val historyRandomnessObserver: Observer<Int> = Observer { settings.historyRandomness = it }
 }
