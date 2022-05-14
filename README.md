@@ -3,22 +3,24 @@
 This calculator exists purely for fun and chaos, which are both worthy goals.
 
 Here are the settings:
-| Setting              | Default | Description                                                                    |
-|:---------------------|:--------|:-------------------------------------------------------------------------------|
-| Apply decimals       | true    | Apply decimals entered in textbox                                              |
-| Apply parentheses    | true    | Apply parentheses entered in textbox                                           |
-| Reset text on error  | false   | Clear textbox when error occurs. Error message is shown regardless of setting  |
-| Shuffle numbers      | false   | Shuffle value of numbers. No visual indication of new values                   |
-| Shuffle operator     | true    | Shuffle action of operators. No visual indication of new actions               |
+| Setting               | Default | Description                                                                         |
+|:----------------------|:--------|:------------------------------------------------------------------------------------|
+| Apply decimals        | true    | Apply decimals entered in textbox                                                   |
+| Apply parentheses     | true    | Apply parentheses entered in textbox                                                |
+| Reset text on error   | false   | Clear textbox when error occurs. Error message is shown regardless of setting       |
+| Show settings button  | false   | If settings button should be shown on main screen. Not accessible from main screen  |
+| Shuffle numbers       | false   | Shuffle value of numbers. No visual indication of new values                        |
+| Shuffle operator      | true    | Shuffle action of operators. No visual indication of new actions                    |
 
 For standard calculator function, use the following settings:
-| Setting              | Value  |
-|:---------------------|:-------|
-| Apply decimals       | true   |
-| Apply parentheses    | true   |
-| Clear text on error  | any    |
-| Shuffle numbers      | false  |
-| Shuffle operator     | false  |
+| Setting               | Value  |
+|:----------------------|:-------|
+| Apply decimals        | true   |
+| Apply parentheses     | true   |
+| Clear text on error   | any    |
+| Show settings button  | any    |
+| Shuffle numbers       | false  |
+| Shuffle operator      | false  |
 
 Access to the settings menu is unintuitive to create added difficulty.
 In the spirit of the app, this access is undocumented.
