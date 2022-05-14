@@ -49,7 +49,10 @@ class ComputationViewModel : ViewModel() {
             computed != null -> HistoryItem(computation, computed)
             else -> null
         }
+    }
 
+    fun removeLastHistory() {
+        mLastHistoryItem.value = null
     }
 
     /**

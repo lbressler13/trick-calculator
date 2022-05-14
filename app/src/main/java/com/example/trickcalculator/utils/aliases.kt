@@ -3,6 +3,7 @@ package com.example.trickcalculator.utils
 import com.example.trickcalculator.exactdecimal.Expression
 import com.example.trickcalculator.exactdecimal.Term
 import com.example.trickcalculator.exactfraction.ExactFraction
+import com.example.trickcalculator.ui.history.HistoryItem
 
 /**
  * Function to apply an operator to two numbers.
@@ -12,6 +13,8 @@ typealias OperatorFunction = (ExactFraction, ExactFraction, String) -> ExactFrac
 
 typealias IntList = List<Int>
 typealias StringList = List<String>
+
+typealias History = List<HistoryItem>
 
 typealias TermList = List<Term>
 typealias ExprList = List<Expression>

@@ -257,6 +257,7 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
      * Will be ignored if this number results in a string in exponential format
      * @return string representation in decimal format
      */
+    // TODO fix scientific notation
     fun toDecimalString(digits: Int = 8): String {
         if (denominator.eq(1)) {
             return numerator.toString()

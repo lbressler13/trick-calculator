@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
+import com.example.trickcalculator.utils.History
 
 /**
  * ViewModel to track history and settings that are shared across fragments
@@ -39,8 +40,8 @@ class SharedViewModel : ViewModel() {
     fun setIsDevMode(newValue: Boolean) { mIsDevMode.value = newValue }
 
     // history
-    private val mHistory = MutableLiveData<List<HistoryItem>>().apply { value = listOf() }
-    val history: LiveData<List<HistoryItem>> = mHistory
+    private val mHistory = MutableLiveData<History>().apply { value = listOf() }
+    val history: LiveData<History> = mHistory
 
     fun addToHistory(newItem: HistoryItem) {
         val currentHistory = history.value!!

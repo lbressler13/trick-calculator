@@ -94,6 +94,7 @@ class MainFragment : Fragment() {
     private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
             sharedViewModel.addToHistory(it)
+            computationViewModel.removeLastHistory()
         }
     }
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {

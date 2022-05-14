@@ -10,11 +10,20 @@ class HistoryItem {
     val result: ExactFraction?
     val error: String?
 
-    constructor(computation: StringList, error: String) {
-        this.computation = computation.joinToString("")
+    constructor(computation: String, result: ExactFraction) {
+        this.computation = computation
+        this.result = result
+        this.error = null
+    }
+
+    constructor(computation: String, error: String) {
+        this.computation = computation
         this.result = null
         this.error = error
     }
+
+    constructor(computation: StringList, error: String) :
+            this(computation.joinToString(""), error)
 
     constructor(computation: StringList, result: ExactFraction) {
         // parse EF-formatted value into decimal string
