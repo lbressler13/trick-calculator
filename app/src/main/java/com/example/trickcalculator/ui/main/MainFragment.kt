@@ -65,7 +65,9 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodel
+        viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
         viewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
+        viewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
         viewModel.error.observe(viewLifecycleOwner, errorObserver)
         viewModel.shuffleNumbers.observe(viewLifecycleOwner, shuffleNumbersObserver)
         viewModel.shuffleOperators.observe(viewLifecycleOwner, shuffleOperatorsObserver)
@@ -73,14 +75,13 @@ class MainFragment : Fragment() {
         viewModel.clearOnError.observe(viewLifecycleOwner, clearOnErrorObserver)
         viewModel.applyDecimals.observe(viewLifecycleOwner, applyDecimalsObserver)
         viewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
-        viewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
-        viewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initNumpad()
         binding.mainText.movementMethod = ScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
+        initDeveloperOptions()
 
         initSettingsDialog(this, viewModel, settings, binding.settingsButton)
 
@@ -102,6 +103,9 @@ class MainFragment : Fragment() {
     private val isDevModeObserver: Observer<Boolean> = Observer {
         devMode = it
         binding.settingsButton.isVisible = it || settings.showSettingsButton
+        if (this::computeText.isInitialized) {
+            setMainText()
+        }
     }
 
     private val computeTextObserver: Observer<StringList> = Observer {
@@ -126,18 +130,8 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setMaxDigits() {
-        // TODO make this work
-        // val textview = binding.mainText
-        // textview.text = "0"
-        // while (textview.layout.lineCount < 2) {
-        //     textview.text = textview.text.toString() + 'c'
-        // }
-
-        // maxDigits = textview.text.length - 1
-        // textview.text = ""
-        maxDigits = 14
-    }
+    // TODO get from textview
+    private fun setMaxDigits() { maxDigits = 14 }
 
     /**
      * Launch AttributionsFragment
@@ -311,6 +305,14 @@ class MainFragment : Fragment() {
             }
         } else {
             textview.text = fullText
+        }
+    }
+
+    private fun initDeveloperOptions() {
+        binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
+        val dialog = DeveloperToolsDialog()
+        binding.devToolsButton.setOnClickListener {
+            dialog.show(childFragmentManager, DeveloperToolsDialog.TAG)
         }
     }
 }

@@ -80,6 +80,10 @@ class SharedViewModel : ViewModel() {
         }
     }
 
+    fun clearHistory() {
+        mHistory.value = listOf()
+    }
+
     // clear current computed values
     private fun clearComputeText() { mComputeText.value = listOf() }
     private fun clearComputedValue() {
