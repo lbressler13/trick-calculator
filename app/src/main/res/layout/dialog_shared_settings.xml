@@ -45,4 +45,12 @@
         app:layout_constraintTop_toBottomOf="@id/clearOnErrorSwitch"
         tools:ignore="MissingConstraints" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/settingsButtonSwitch"
+        style="@style/SettingsSwitch"
+        android:checked="true"
+        android:text="@string/show_settings_button"
+        app:layout_constraintTop_toBottomOf="@id/applyDecimalsSwitch"
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

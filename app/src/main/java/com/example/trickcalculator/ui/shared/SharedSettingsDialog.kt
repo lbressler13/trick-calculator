@@ -6,9 +6,12 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogSharedSettingsBinding
+import com.example.trickcalculator.ext.gone
+import com.example.trickcalculator.ext.visible
 
 /**
  * DialogFragment to display all configuration options for calculator
@@ -44,6 +47,11 @@ class SharedSettingsDialog : DialogFragment() {
         setSwitchUiFromArgs(R.string.key_apply_parens, binding.applyParensSwitch)
         setSwitchUiFromArgs(R.string.key_clear_on_error, binding.clearOnErrorSwitch)
         setSwitchUiFromArgs(R.string.key_apply_decimals, binding.applyDecimalsSwitch)
+        setSwitchUiFromArgs(R.string.key_settings_button, binding.settingsButtonSwitch)
+
+        val mainFragmentKey = requireContext().getString(R.string.key_main_fragment)
+        val isMainFragment = this.arguments?.getBoolean(mainFragmentKey)
+        binding.settingsButtonSwitch.isVisible = isMainFragment != true
     }
 
     /**
@@ -71,12 +79,14 @@ class SharedSettingsDialog : DialogFragment() {
         val parensKey = requireContext().getString(R.string.key_apply_parens)
         val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
         val decimalsKey = requireContext().getString(R.string.key_apply_decimals)
+        val settingsButtonKey = requireContext().getString(R.string.key_settings_button)
         return bundleOf(
             numbersKey to binding.shuffleNumbersSwitch.isChecked,
             operatorsKey to binding.shuffleOperatorsSwitch.isChecked,
             parensKey to binding.applyParensSwitch.isChecked,
             clearOnErrorKey to binding.clearOnErrorSwitch.isChecked,
-            decimalsKey to binding.applyDecimalsSwitch.isChecked
+            decimalsKey to binding.applyDecimalsSwitch.isChecked,
+            settingsButtonKey to binding.settingsButtonSwitch.isChecked
         )
     }
 

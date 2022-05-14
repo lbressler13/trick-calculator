@@ -259,6 +259,22 @@
     </GridLayout>
 
     <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:paddingEnd="10dp"
+        android:paddingBottom="20dp"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintBottom_toTopOf="@id/infoButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="?colorPrimary"
+        tools:ignore="HardcodedText,RtlSymmetry"
+        android:visibility="gone"
+        android:contentDescription="Settings button" />
+
+
+    <ImageButton
         android:id="@+id/infoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
