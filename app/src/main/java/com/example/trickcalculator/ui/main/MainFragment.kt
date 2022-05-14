@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -86,8 +87,10 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    private val shuffleNumbersObserver: Observer<Boolean> = Observer { settings.shuffleNumbers = it }
-    private val shuffleOperatorsObserver: Observer<Boolean> = Observer { settings.shuffleOperators = it }
+    private val shuffleNumbersObserver: Observer<Boolean> =
+        Observer { settings.shuffleNumbers = it }
+    private val shuffleOperatorsObserver: Observer<Boolean> =
+        Observer { settings.shuffleOperators = it }
     private val applyParensObserver: Observer<Boolean> = Observer { settings.applyParens = it }
     private val clearOnErrorObserver: Observer<Boolean> = Observer { settings.clearOnError = it }
     private val applyDecimalsObserver: Observer<Boolean> = Observer { settings.applyDecimals = it }
@@ -292,7 +295,7 @@ class MainFragment : Fragment() {
      * Sets the text in the textbox, including ui modifications for first term
      */
     private fun setMainText() {
-        val textview = binding.mainText
+        val textview: TextView = binding.mainText
         val fullText = computeText.joinToString("")
 
         if (devMode) {
