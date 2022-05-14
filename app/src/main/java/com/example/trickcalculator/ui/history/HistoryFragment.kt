@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,10 @@ import com.example.trickcalculator.ext.gone
 import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.utils.History
+import android.view.animation.Animation
+import com.example.trickcalculator.ext.nextBoolean
+import kotlin.random.Random
+
 
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
@@ -86,23 +91,46 @@ class HistoryFragment : Fragment() {
     }
 
     private fun generateRandomHistory(): History? {
-        if (history.isNullOrEmpty()) {
-            return null // TODO create error ui
+        val probabilityError = if (history.isNullOrEmpty()) 1f else 0.2f
+
+        if (Random.Default.nextBoolean(probabilityError)) {
+            return null
         }
 
         return List(history!!.size) { generateRandomHistoryItem() }
     }
 
     private fun setUI() {
-        if (randomHistory.isNullOrEmpty()) {
-            binding.itemsRecycler.gone()
-            binding.noHistoryMessage.visible()
-        } else {
-            val recycler: RecyclerView = binding.itemsRecycler
-            val adapter = HistoryItemsAdapter(randomHistory!!)
+        when {
+            randomHistory == null -> {
+                val blinking: Animation = AlphaAnimation(0.0f, 1.0f)
+                blinking.duration = 200 // You can manage the blinking time with this parameter
 
-            recycler.adapter = adapter
-            recycler.layoutManager = LinearLayoutManager(requireContext())
+                blinking.startOffset = 10
+                blinking.repeatMode = Animation.REVERSE
+                blinking.repeatCount = Animation.INFINITE
+                binding.errorLayout.startAnimation(blinking)
+
+                binding.itemsRecycler.gone()
+                binding.noHistoryMessage.gone()
+                binding.errorLayout.visible()
+            }
+            randomHistory!!.isEmpty() -> {
+                binding.itemsRecycler.gone()
+                binding.noHistoryMessage.visible()
+                binding.errorLayout.gone()
+            }
+            else -> {
+                val recycler: RecyclerView = binding.itemsRecycler
+                val adapter = HistoryItemsAdapter(randomHistory!!)
+
+                recycler.adapter = adapter
+                recycler.layoutManager = LinearLayoutManager(requireContext())
+
+                binding.itemsRecycler.visible()
+                binding.noHistoryMessage.gone()
+                binding.errorLayout.gone()
+            }
         }
     }
 }

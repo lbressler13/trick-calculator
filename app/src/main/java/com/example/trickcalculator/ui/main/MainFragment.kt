@@ -116,7 +116,7 @@ class MainFragment : Fragment() {
     private val errorObserver: Observer<String?> = Observer {
         error = it
         if (it != null) {
-            binding.errorText.text = it
+            binding.errorText.text = "Error: $it"
             binding.errorText.visible()
 
             if (settings.clearOnError) {
@@ -241,7 +241,7 @@ class MainFragment : Fragment() {
                     message
                 }
 
-                computationViewModel.setError("Error: $error")
+                computationViewModel.setError(error)
                 computationViewModel.setLastHistoryItem()
             }
         }
