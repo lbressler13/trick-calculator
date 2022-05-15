@@ -35,7 +35,7 @@ The hours writing tests will be worth it.
 You will gain a huge appreciation for testing and TDD.
 
 ## Dependencies
-This app has a dependency on an [exact-fraction](https://github.com/lbressler13/exact-fraction) package.
+This app has a dependency on an [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
 This package must be built and placed in a local **libs** file in order for a gradle build to succeed.
 
 ## Serious Stuff
