@@ -34,6 +34,10 @@ The hours writing tests will be worth it.
 
 You will gain a huge appreciation for testing and TDD.
 
+## Dependencies
+This app has a dependency on an [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
+This package must be built and placed in a local **libs** file in order for a gradle build to succeed.
+
 ## Serious Stuff
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.
 This is the complete list of Flaticon images used within the app.

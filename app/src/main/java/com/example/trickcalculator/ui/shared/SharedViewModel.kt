@@ -3,7 +3,7 @@ package com.example.trickcalculator.ui.shared
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.ext.substringTo
@@ -78,6 +78,10 @@ class SharedViewModel : ViewModel() {
                 mHistory.value = currentHistory + item
             }
         }
+    }
+
+    fun clearHistory() {
+        mHistory.value = listOf()
     }
 
     // clear current computed values
