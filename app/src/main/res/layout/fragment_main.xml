@@ -288,4 +288,21 @@
         app:tint="?colorPrimary"
         tools:ignore="HardcodedText,RtlSymmetry" />
 
+    <TextView
+        android:id="@+id/devToolsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/dev_tools_button"
+        android:textSize="25sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="?colorPrimary"
+        android:visibility="gone"
+        tools:ignore="RtlSymmetry" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

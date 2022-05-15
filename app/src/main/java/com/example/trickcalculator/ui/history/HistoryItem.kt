@@ -1,7 +1,7 @@
 package com.example.trickcalculator.ui.history
 
-import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.exactfraction.checkIsEFString
+import exactfraction.ExactFraction
+import exactfraction.checkIsEFString
 import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.utils.StringList
 

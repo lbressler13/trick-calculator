@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.FragmentHistoryBinding
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.ext.gone
 import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.shared.SharedViewModel

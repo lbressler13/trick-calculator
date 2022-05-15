@@ -1,7 +1,6 @@
 package com.example.trickcalculator.ui.history
 
-import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.ext.eq
+import exactfraction.ExactFraction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.ext.nextBoolean
 import com.example.trickcalculator.ext.nextFromWeightedList

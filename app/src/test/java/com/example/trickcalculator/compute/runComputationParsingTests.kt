@@ -1,10 +1,9 @@
 package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.assertDivByZero
-import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.ext.toEF
-import com.example.trickcalculator.ext.toExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.utils.OperatorFunction
+import ext.toExactFraction
 import org.junit.Assert.*
 
 private val exp = listOf("^")
@@ -255,7 +254,7 @@ fun runParseSetOfOpsTests() {
 
     // changed
     text = "1 - 3 + 17".split(' ')
-    expected = listOf(15.toEF().toEFString())
+    expected = listOf(15.toExactFraction().toEFString())
     assertEquals(expected, parseSetOfOps(text, plusMinus, performOp))
 
     text = "1.3 x 2 / 10 x 20".split(' ')

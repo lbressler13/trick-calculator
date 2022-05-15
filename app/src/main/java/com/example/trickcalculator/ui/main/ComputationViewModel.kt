@@ -3,7 +3,6 @@ package com.example.trickcalculator.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.trickcalculator.exactfraction.ExactFraction
 import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.ext.substringTo
@@ -11,6 +10,7 @@ import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
 import com.example.trickcalculator.utils.isPartialDecimal
+import exactfraction.ExactFraction
 
 /**
  * ViewModel to track variables related to computation and computed values

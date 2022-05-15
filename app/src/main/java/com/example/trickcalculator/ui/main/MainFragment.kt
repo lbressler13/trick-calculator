@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
@@ -84,6 +84,7 @@ class MainFragment : Fragment() {
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
+        initDeveloperOptions()
 
         initSettingsDialog(this, sharedViewModel, settings, binding.settingsButton)
 
@@ -103,6 +104,9 @@ class MainFragment : Fragment() {
     private val isDevModeObserver: Observer<Boolean> = Observer {
         devMode = it
         binding.settingsButton.isVisible = it || settings.showSettingsButton
+        if (this::computeText.isInitialized) {
+            setMainText()
+        }
     }
 
     private val computeTextObserver: Observer<StringList> = Observer {
@@ -127,18 +131,8 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setMaxDigits() {
-        // TODO make this work
-        // val textview = binding.mainText
-        // textview.text = "0"
-        // while (textview.layout.lineCount < 2) {
-        //     textview.text = textview.text.toString() + 'c'
-        // }
-
-        // maxDigits = textview.text.length - 1
-        // textview.text = ""
-        maxDigits = 14
-    }
+    // TODO get from textview
+    private fun setMaxDigits() { maxDigits = 14 }
 
     /**
      * Launch AttributionsFragment
@@ -313,6 +307,14 @@ class MainFragment : Fragment() {
             }
         } else {
             textview.text = fullText
+        }
+    }
+
+    private fun initDeveloperOptions() {
+        binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
+        val dialog = DeveloperToolsDialog()
+        binding.devToolsButton.setOnClickListener {
+            dialog.show(childFragmentManager, DeveloperToolsDialog.TAG)
         }
     }
 }

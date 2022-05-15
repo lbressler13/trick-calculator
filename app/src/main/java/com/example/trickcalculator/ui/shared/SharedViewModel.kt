@@ -47,4 +47,8 @@ class SharedViewModel : ViewModel() {
         val currentHistory = history.value!!
         mHistory.value = currentHistory + newItem
     }
+
+    fun clearHistory() {
+        mHistory.value = listOf()
+    }
 }
