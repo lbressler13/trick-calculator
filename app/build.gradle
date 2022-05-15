@@ -82,4 +82,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation files('libs/exact-fraction-lib-0.1.0.jar')
 }

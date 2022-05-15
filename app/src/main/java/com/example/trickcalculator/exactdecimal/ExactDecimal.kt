@@ -1,6 +1,6 @@
 package com.example.trickcalculator.exactdecimal
 
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.ExprList
 import com.example.trickcalculator.utils.getGCD

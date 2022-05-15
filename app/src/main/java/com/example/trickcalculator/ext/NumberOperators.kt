@@ -1,6 +1,6 @@
 package com.example.trickcalculator.ext
 
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import java.math.BigInteger
 
 // Additional ext methods related to ExactFraction and BigInteger

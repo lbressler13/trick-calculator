@@ -1,7 +1,7 @@
 package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.assertDivByZero
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toEF
 import com.example.trickcalculator.ext.toExactFraction
 import com.example.trickcalculator.utils.OperatorFunction

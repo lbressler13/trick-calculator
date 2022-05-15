@@ -2,7 +2,7 @@ package com.example.trickcalculator.utils
 
 import com.example.trickcalculator.exactdecimal.Expression
 import com.example.trickcalculator.exactdecimal.Term
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 
 /**
  * Function to apply an operator to two numbers.

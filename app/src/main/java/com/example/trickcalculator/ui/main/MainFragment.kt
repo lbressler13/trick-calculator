@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding

@@ -1,8 +1,8 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.exactfraction.ExactFraction
-import com.example.trickcalculator.exactfraction.ExactFractionOverflowException
 import com.example.trickcalculator.utils.*
+import exactfraction.ExactFraction
+import exactfraction.ExactFractionOverflowException
 
 /**
  * Parse string list and compute as a mathematical expression, if possible.

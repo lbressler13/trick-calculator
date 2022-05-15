@@ -1,7 +1,7 @@
 package com.example.trickcalculator.exactdecimal
 
 import org.junit.Assert.*
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.utils.ExprLPair
 import com.example.trickcalculator.utils.ExprList
 

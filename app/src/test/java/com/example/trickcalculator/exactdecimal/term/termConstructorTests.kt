@@ -1,6 +1,6 @@
 package com.example.trickcalculator.exactdecimal
 
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.ext.toEF
 import org.junit.Assert.*
 import java.math.BigInteger

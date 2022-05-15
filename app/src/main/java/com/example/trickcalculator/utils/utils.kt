@@ -1,11 +1,10 @@
 package com.example.trickcalculator.utils
 
-import com.example.trickcalculator.exactfraction.ExactFraction
+import exactfraction.ExactFraction
 import com.example.trickcalculator.ext.isZero
 import com.example.trickcalculator.ext.max
 import com.example.trickcalculator.ext.min
 import java.math.BigInteger
-import kotlin.math.max
 
 /**
  * Determine if a string can be parsed to an Int

@@ -1,6 +1,6 @@
 package com.example.trickcalculator.ext
 
-import com.example.trickcalculator.exactfraction.*
+import exactfraction.*
 import org.junit.Assert.*
 import java.math.BigInteger
 import org.junit.Test
