@@ -20,6 +20,9 @@ import com.example.trickcalculator.ext.nextBoolean
 import kotlin.random.Random
 
 
+/**
+ * Fragment to display computation history, possibly with some level of randomness
+ */
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var sharedViewModel: SharedViewModel
@@ -32,6 +35,9 @@ class HistoryFragment : Fragment() {
         fun newInstance() = HistoryFragment()
     }
 
+    /**
+     * Initialize fragment
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +45,7 @@ class HistoryFragment : Fragment() {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        // should only get called once
+        // initialize ui and random history when history and randomness have both been observed
         sharedViewModel.history.observe(viewLifecycleOwner) {
             history = it
             if (history != null && randomness != null) {
@@ -62,6 +68,9 @@ class HistoryFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Generate history, using the degree of randomness specified in the viewmodel
+     */
     private fun setRandomHistory() {
         randomHistory = when (randomness) {
             0 -> history
@@ -72,6 +81,12 @@ class HistoryFragment : Fragment() {
         }
     }
 
+    /**
+     * Shuffle history computations and results/errors.
+     * Returns a list that contains all computations and results/errors, but not necessarily in their original pari.
+     *
+     * @return [History]: history where computations and values have been shuffled
+     */
     private fun shuffleValues(): History {
         val currentHistory = history!!
 
@@ -90,6 +105,12 @@ class HistoryFragment : Fragment() {
         return shuffledHistory
     }
 
+    /**
+     * Generate randomized history items based on the length of the input.
+     * Returns null randomly or if history is empty, to indicate an "error" in retrieving history.
+     *
+     * @return [History]: possibly null history of generated computations, with same length as real history (if not null)
+     */
     private fun generateRandomHistory(): History? {
         val probabilityError = if (history.isNullOrEmpty()) 1f else 0.2f
 
@@ -100,11 +121,16 @@ class HistoryFragment : Fragment() {
         return List(history!!.size) { generateRandomHistoryItem() }
     }
 
+    /**
+     * Set UI based on randomHistory
+     */
     private fun setUI() {
         when {
+            // error
             randomHistory == null -> {
+                // set error message to blink
                 val blinking: Animation = AlphaAnimation(0.0f, 1.0f)
-                blinking.duration = 200 // You can manage the blinking time with this parameter
+                blinking.duration = 200
 
                 blinking.startOffset = 10
                 blinking.repeatMode = Animation.REVERSE
@@ -115,11 +141,13 @@ class HistoryFragment : Fragment() {
                 binding.noHistoryMessage.gone()
                 binding.errorLayout.visible()
             }
+            // empty
             randomHistory!!.isEmpty() -> {
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.visible()
                 binding.errorLayout.gone()
             }
+            // non-empty
             else -> {
                 val recycler: RecyclerView = binding.itemsRecycler
                 val adapter = HistoryItemsAdapter(randomHistory!!)

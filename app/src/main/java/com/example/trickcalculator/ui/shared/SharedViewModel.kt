@@ -23,7 +23,7 @@ class SharedViewModel : ViewModel() {
     val applyDecimals: LiveData<Boolean> = mApplyDecimals
     private val mShowSettingsButton = MutableLiveData<Boolean>().apply { value = false }
     val showSettingsButton: LiveData<Boolean> = mShowSettingsButton
-    private val mHistoryRandomness = MutableLiveData<Int>().apply { value = 0 }
+    private val mHistoryRandomness = MutableLiveData<Int>().apply { value = 1 }
     val historyRandomness: LiveData<Int> = mHistoryRandomness
 
     fun setShuffleNumbers(newValue: Boolean) { mShuffleNumbers.value = newValue }

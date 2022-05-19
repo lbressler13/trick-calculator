@@ -14,6 +14,7 @@ private val illegalOperators = listOf("!", "&", "|", "#", "$", "%")
 
 private val random = Random.Default
 
+// generate a random history item
 fun generateRandomHistoryItem(): HistoryItem {
     val showError = random.nextBoolean(probabilityError)
 
@@ -27,6 +28,7 @@ fun generateRandomHistoryItem(): HistoryItem {
 }
 
 // TODO: decimals, parens, syntax issues
+// generate a random computation string, consisting of numbers and operators
 private fun generateComputation(length: Int): StringList {
     val probabilityWholeNumber = 0.85f
     val weightedRanges = listOf(
@@ -55,6 +57,7 @@ private fun generateComputation(length: Int): StringList {
     return computation
 }
 
+// generate a result ExactFraction
 private fun generateResult(): ExactFraction {
     val probabilityWholeNumber = 0.6f
     val weightedRanges = listOf(
@@ -67,6 +70,7 @@ private fun generateResult(): ExactFraction {
     return generateExactFraction(weightedRanges, probabilityWholeNumber)
 }
 
+// generate ExactFraction given weights and probabilities
 private fun generateExactFraction(
     weightedRanges: List<Pair<IntRange, Float>>,
     probabilityWholeNumber: Float,
@@ -89,6 +93,7 @@ private fun generateExactFraction(
     return ExactFraction(numerator, denominator)
 }
 
+// generate a random error
 private fun generateError(): String {
     val messages = listOf(
         "Syntax error",

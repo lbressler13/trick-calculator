@@ -5,9 +5,23 @@ import exactfraction.checkIsEFString
 import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.utils.StringList
 
+/**
+ * Information about a single computation and its result
+ */
 class HistoryItem {
+    /**
+     * Input computation
+     */
     val computation: String
+
+    /**
+     * Result of computation if no error was thrown
+     */
     val result: ExactFraction?
+
+    /**
+     * Error message if computation threw an error
+     */
     val error: String?
 
     constructor(computation: String, result: ExactFraction) {
