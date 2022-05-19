@@ -102,8 +102,7 @@ class MainFragment : Fragment() {
         binding.settingsButton.isVisible = it || devMode
     }
     private val isDevModeObserver: Observer<Boolean> = Observer {
-        devMode = it
-        binding.settingsButton.isVisible = it || settings.showSettingsButton
+        binding.settingsButton.isVisible = settings.showSettingsButton
         if (this::computeText.isInitialized) {
             setMainText()
         }

@@ -64,7 +64,7 @@ private fun generateResult(): ExactFraction {
         Pair((0 until 500), 0.2f),
         Pair((500 until 10000), 0.3f),
         Pair((10000 until Int.MAX_VALUE / 2), 0.25f),
-        Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.2f)
+        Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.25f)
     )
 
     return generateExactFraction(weightedRanges, probabilityWholeNumber)
