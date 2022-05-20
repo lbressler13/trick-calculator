@@ -33,8 +33,6 @@ class DeveloperToolsDialog : DialogFragment() {
         val doneText = requireContext().getString(R.string.done)
         val title = requireContext().getString(R.string.title_dev_tools)
 
-        // initUI()
-
         return AlertDialog.Builder(requireContext())
             .setView(root)
             .setMessage(title)
