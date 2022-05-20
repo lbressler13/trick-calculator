@@ -11,17 +11,53 @@ import kotlin.random.Random
 
 private typealias MStringList = MutableList<String>
 
+/**
+ * Maximum number of numbers in a generated computation
+ */
 private const val maxCompLength = 8
-private const val probabilityError = 0.1f
+
+/**
+ * Probabilities used in main generate function
+ */
+private const val probabilityShowsError = 0.1f
+private const val probabilitySyntaxError = 0.1f
+private const val probabilityParens = 0.2f
+
+/**
+ * Values for generating an ExactFraction to use as a the result in a HistoryItem
+ */
+private const val probabilityWholeNumberResult = 0.6f
+private val weightedRangesResult = listOf(
+    Pair((0 until 500), 0.2f),
+    Pair((500 until 10000), 0.3f),
+    Pair((10000 until Int.MAX_VALUE / 2), 0.25f),
+    Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.25f)
+)
+
+/**
+ * Values for generating an ExactFraction to use as a term in the generated computation
+ */
+private const val probabilityWholeNumberComputation = 0.85f
+private val weightedRangesComputation = listOf(
+    Pair((0 until 1000), 0.5f),
+    Pair((1000 until 100000), 0.2f),
+    Pair((100000 until Int.MAX_VALUE / 2), 0.2f),
+    Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.1f)
+)
 
 private val operators = listOf("+", "-", "x", "/", "^")
 private val illegalOperators = listOf("!", "&", "|", "#", "$", "%")
 
 private val random = Random(Date().time)
 
-// generate a random history item
+/**
+ * Generate a history item with a random computation string and result or error message
+ *
+ * @return [HistoryItem]: randomly generated item
+ */
 fun generateRandomHistoryItem(): HistoryItem {
-    val showError = random.nextBoolean(probabilityError)
+    // show error message instead of result
+    val showError = random.nextBoolean(probabilityShowsError)
 
     val length = (1..maxCompLength).random()
     val computation = generateComputation(length)
@@ -29,47 +65,38 @@ fun generateRandomHistoryItem(): HistoryItem {
     if (showError) {
         return HistoryItem(computation, generateError())
     }
-    return HistoryItem(computation, generateResult())
+
+    val result = generateExactFraction(weightedRangesResult, probabilityWholeNumberResult)
+    return HistoryItem(computation, result)
 }
 
-// TODO: parens, syntax issues
-// generate a random computation string, consisting of numbers and operators
-// assumes length > 0
+/**
+ * Generate a computation list, consisting of numbers, operators, and possibly parentheses.
+ * May also include a syntax error.
+ *
+ * @param length [Int]: how many numbers should be in the computation. Assumed to be greater than 0
+ * @return [StringList]
+ */
 private fun generateComputation(length: Int): StringList {
-    val probabilityWholeNumber = 0.85f
-    val weightedRanges = listOf(
-        Pair((0 until 1000), 0.5f),
-        Pair((1000 until 100000), 0.2f),
-        Pair((100000 until Int.MAX_VALUE / 2), 0.2f),
-        Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.1f)
-    )
-
     val totalLength = length * 2 - 1
-    val computation = mutableListOf<String>()
 
-    val getExactFraction = {
-        generateExactFraction(
-            weightedRanges,
-            probabilityWholeNumber,
-            allowNegative = false
-        )
-    }
-
-    for (i in (0 until totalLength)) {
-        if (i % 2 == 0) {
-            val ef = getExactFraction()
-            computation.add(ef.toDecimalString(5))
+    val computation = MutableList(totalLength) {
+        if (it % 2 == 0) {
+            val ef = generateExactFraction(
+                weightedRangesComputation,
+                probabilityWholeNumberComputation,
+                allowNegative = false
+            )
+            ef.toDecimalString(5)
         } else {
-            computation.add(operators.random())
+            operators.random()
         }
     }
 
-    val probabilityParens = 0.2f
     if (random.nextBoolean(probabilityParens)) {
         addParens(computation)
     }
 
-    val probabilitySyntaxError = 0.1f
     if (random.nextBoolean(probabilitySyntaxError)) {
         addSyntaxError(computation)
     }
@@ -77,22 +104,27 @@ private fun generateComputation(length: Int): StringList {
     return computation
 }
 
-// assumes input does not have any syntax errors
+/**
+ * Add a single set of parentheses to the given computation string, if string has size greater than 1
+ *
+ * @param computation [MStringList]: list of existing terms.
+ * Assumed to contain only numbers and operators, without any syntax errors.
+ */
 private fun addParens(computation: MStringList) {
     if (computation.size > 1) {
-        // must start and end w/ a number, which means numbers are at even indices
-        // insert before number
         var startIndex = (0 until computation.size - 1).random()
+        // must be inserted before a number
         if (isOperator(computation[startIndex], operators)) {
             startIndex--
         }
         computation.add(startIndex, "(")
 
-        // now need an odd index, to insert after a number
         var endIndex = (startIndex + 1 until computation.size).random()
+        // must be inserted after a number
         if (isNumber(computation[endIndex])) {
             endIndex++
         }
+        // avoid having parens around a single number, if possible
         if (endIndex == startIndex + 2) {
             if (endIndex + 2 <= computation.size) {
                 endIndex += 2
@@ -102,7 +134,11 @@ private fun addParens(computation: MStringList) {
     }
 }
 
-// if error count is 2 and 2 single parens are added, this may result in valid syntax
+/**
+ * Add a single syntax error to the computation
+ *
+ * @param computation [MStringList]: list of existing terms
+ */
 private fun addSyntaxError(computation: MStringList) {
     val errorType = listOf(
         "singleParen",
@@ -112,7 +148,7 @@ private fun addSyntaxError(computation: MStringList) {
     ).random()
 
     when (errorType) {
-        "singleParen" -> addSingleParen(computation)
+        "singleParen" -> addUnmatchedParen(computation)
         "extraOperator" -> addOperator(computation)
         "emptyParens" -> {
             val index = (0..computation.size).random()
@@ -122,13 +158,21 @@ private fun addSyntaxError(computation: MStringList) {
     }
 }
 
+/**
+ * Add an error to the computation string as a syntax error
+ *
+ * @param computation [MStringList]: existing computation
+ */
 private fun addOperator(computation: MStringList) {
     val index = (0..computation.size).random()
     var operator = operators.random()
+
+    // putting - at the start of the operation would look like a negative, not a syntax error
     if (index == 0 && operator == "-") {
         operator = listOf("+", "x", "/", "^").random()
     }
 
+    // check for same operator twice in a row
     if (index != 0 && index != computation.size) {
         val current = computation[index]
         val previous = computation[index - 1]
@@ -137,6 +181,8 @@ private fun addOperator(computation: MStringList) {
             isOperator(previous, operators) -> previous
             else -> ""
         }
+
+        // select new operator to avoid adjacent duplicates
         if (adjacentOperator == operator) {
             operator = operators.filter { it != operator }.random()
         }
@@ -144,6 +190,11 @@ private fun addOperator(computation: MStringList) {
     computation.add(index, operator)
 }
 
+/**
+ * Add a decimal point to the computation string as a syntax error
+ *
+ * @param computation [MStringList]: existing computation
+ */
 private fun addDecimal(computation: MStringList) {
     var index = (0..computation.size).random()
     if (index != computation.size) {
@@ -155,9 +206,16 @@ private fun addDecimal(computation: MStringList) {
     computation.add(index, ".")
 }
 
-private fun addSingleParen(computation: MStringList) {
+/**
+ * Add a single unmatched paren to the computation to create a syntax error
+ *
+ * @param computation [MStringList]: existing computation, which may already contain matched parentheses
+ */
+private fun addUnmatchedParen(computation: MStringList) {
     var index = (0..computation.size).random()
     var paren = listOf("(", ")").random()
+
+    // biased in favor of putting paren next to the existing paren, if possible
     val existingIndex = computation.indexOf(paren)
     if (existingIndex != -1) {
         val indices = listOf(
@@ -167,29 +225,26 @@ private fun addSingleParen(computation: MStringList) {
         index = random.nextFromWeightedList(indices)
     }
 
+    // place opening paren in front of a number
     if (index != existingIndex && index != computation.size && isNumber(computation[index])) {
         paren = "("
-    } else if (index != existingIndex) {
+    }
+    // place closing paren after a number
+    else if (index != existingIndex) {
         paren = ")"
     }
 
     computation.add(index, paren)
 }
 
-// generate a result ExactFraction
-private fun generateResult(): ExactFraction {
-    val probabilityWholeNumber = 0.6f
-    val weightedRanges = listOf(
-        Pair((0 until 500), 0.2f),
-        Pair((500 until 10000), 0.3f),
-        Pair((10000 until Int.MAX_VALUE / 2), 0.25f),
-        Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.25f)
-    )
-
-    return generateExactFraction(weightedRanges, probabilityWholeNumber)
-}
-
-// generate ExactFraction given weights and probabilities
+/**
+ * Generate an ExactFraction given weighted ranges and the probability of a whole number
+ *
+ * @param weightedRanges [List]: a list of ranges that which a numerator/denominator can be chosen from, with weights to indicate probability of choosing from each range
+ * @param probabilityWholeNumber [Float]: probability that the generated number will be a whole number, with denominator 1
+ * @param allowNegative [Boolean]: whether or not the number can be negative. Defaults to false
+ * @return [ExactFraction]: a number generated randomly using the specified parameters
+ */
 private fun generateExactFraction(
     weightedRanges: List<Pair<IntRange, Float>>,
     probabilityWholeNumber: Float,
@@ -212,7 +267,11 @@ private fun generateExactFraction(
     return ExactFraction(numerator, denominator)
 }
 
-// generate a random error
+/**
+ * Generates a random error message
+ *
+ * @return [String]: an error message
+ */
 private fun generateError(): String {
     val messages = listOf(
         "Syntax error",
