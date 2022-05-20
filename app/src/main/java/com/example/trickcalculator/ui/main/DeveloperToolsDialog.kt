@@ -19,7 +19,7 @@ import com.example.trickcalculator.ui.shared.initSettingsObservers
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
     private lateinit var viewModel: SharedViewModel
-    private val settings = Settings(false, false, false, false, false, false, 0)
+    private val settings = Settings()
 
     /**
      * Initialize dialog

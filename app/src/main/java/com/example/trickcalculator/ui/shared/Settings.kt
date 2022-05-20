@@ -8,4 +8,14 @@ data class Settings(
     var applyDecimals: Boolean,
     var showSettingsButton: Boolean,
     var historyRandomness: Int
-)
+) {
+    constructor() : this(
+        shuffleNumbers = false,
+        shuffleOperators = true,
+        applyParens = true,
+        clearOnError = false,
+        applyDecimals = true,
+        showSettingsButton =false,
+        historyRandomness = 1
+    )
+}
