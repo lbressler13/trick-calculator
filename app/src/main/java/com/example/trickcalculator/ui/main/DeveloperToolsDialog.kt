@@ -11,10 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogDeveloperToolsBinding
-import com.example.trickcalculator.ui.shared.Settings
+import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.shared.SharedViewModel
-import com.example.trickcalculator.ui.shared.initSettingsDialog
-import com.example.trickcalculator.ui.shared.initSettingsObservers
+import com.example.trickcalculator.ui.settings.initSettingsDialog
+import com.example.trickcalculator.ui.settings.initSettingsObservers
 
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding

@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?colorOnBackground"
         tools:ignore="HardcodedText,RtlSymmetry"
-        android:contentDescription="Button to close info fragment" />
+        android:contentDescription="Button to close history fragment" />
 
     <TextView
         android:id="@+id/title"

@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.shared
+package com.example.trickcalculator.ui.settings
 
 data class Settings(
     var shuffleNumbers: Boolean,

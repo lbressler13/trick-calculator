@@ -23,9 +23,10 @@ import com.example.trickcalculator.ui.history.HistoryFragment
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.ui.shared.Settings
-import com.example.trickcalculator.ui.shared.initSettingsDialog
-import com.example.trickcalculator.ui.shared.initSettingsObservers
+import com.example.trickcalculator.ui.settings.Settings
+import com.example.trickcalculator.ui.settings.initSettingsDialog
+import com.example.trickcalculator.ui.settings.initSettingsFragment
+import com.example.trickcalculator.ui.settings.initSettingsObservers
 
 /**
  * Fragment to display main calculator functionality
@@ -39,15 +40,7 @@ class MainFragment : Fragment() {
     private var error: String? = null
     private var usesComputedValue = false
 
-    private val settings = Settings(
-        shuffleNumbers = false,
-        shuffleOperators = false,
-        applyParens = true,
-        clearOnError = false,
-        applyDecimals = true,
-        showSettingsButton = false,
-        historyRandomness = 0
-    )
+    private val settings = Settings()
 
     companion object {
         fun newInstance() = MainFragment()
@@ -81,7 +74,7 @@ class MainFragment : Fragment() {
         initActionBar()
         initDeveloperOptions()
 
-        initSettingsDialog(this, sharedViewModel, settings, binding.settingsButton)
+        initSettingsFragment(this, sharedViewModel, settings, binding.settingsButton)
 
         return binding.root
     }

@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.shared
+package com.example.trickcalculator.ui.settings
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -14,7 +14,7 @@ import com.example.trickcalculator.databinding.DialogSharedSettingsBinding
 /**
  * DialogFragment to display all configuration options for calculator
  */
-class SharedSettingsDialog : DialogFragment() {
+class SettingsDialog : DialogFragment() {
     private lateinit var binding: DialogSharedSettingsBinding
 
     /**
@@ -130,6 +130,6 @@ class SharedSettingsDialog : DialogFragment() {
 
     companion object {
         // tag is required when showing fragment
-        const val TAG = "SharedSettingsDialog"
+        const val TAG = "SettingsDialog"
     }
 }

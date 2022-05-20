@@ -1,6 +1,7 @@
-package com.example.trickcalculator.ui.shared
+package com.example.trickcalculator.ui.settings
 
 import androidx.lifecycle.LifecycleOwner
+import com.example.trickcalculator.ui.shared.SharedViewModel
 
 fun initSettingsObservers(settings: Settings, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
     viewModel.shuffleNumbers.observe(lifecycleOwner) { settings.shuffleNumbers = it }
