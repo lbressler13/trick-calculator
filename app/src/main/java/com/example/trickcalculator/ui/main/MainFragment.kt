@@ -2,7 +2,6 @@ package com.example.trickcalculator.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -76,7 +75,7 @@ class MainFragment : Fragment() {
         sharedViewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initNumpad()
-        binding.mainText.movementMethod = ScrollingMovementMethod()
+        binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
@@ -84,6 +83,10 @@ class MainFragment : Fragment() {
 
         initSettingsDialog(this, sharedViewModel, settings, binding.settingsButton)
 
+        return binding.root
+    }
+
+    override fun getView(): View {
         return binding.root
     }
 
@@ -212,6 +215,9 @@ class MainFragment : Fragment() {
                 computationViewModel.setLastHistoryItem()
 
                 computationViewModel.useComputedAsComputeText()
+
+                val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
+                movement.goToTop(binding.mainText)
             } catch (e: Exception) {
                 computationViewModel.restoreComputeText()
 
@@ -243,6 +249,7 @@ class MainFragment : Fragment() {
         if (error != null) {
             computationViewModel.setError(null)
         }
+        scrollTextToBottom()
     }
 
     /**
@@ -267,6 +274,7 @@ class MainFragment : Fragment() {
         binding.backspaceButton.setOnClickListener {
             computationViewModel.setError(null)
             computationViewModel.backspaceComputeText()
+            scrollTextToBottom()
         }
     }
 
@@ -284,14 +292,12 @@ class MainFragment : Fragment() {
     private fun setMainText() {
         val textview: TextView = binding.mainText
         val fullText = computeText.joinToString("")
+        textview.text = fullText
+    }
 
-        if (computeText.isNotEmpty() && usesComputedValue) {
-            // val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
-            // textview.text = spannableString
-            textview.text = fullText
-        } else {
-            textview.text = fullText
-        }
+    private fun scrollTextToBottom() {
+        val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
+        movementMethod.goToBottom(binding.mainText)
     }
 
     private fun initDeveloperOptions() {
