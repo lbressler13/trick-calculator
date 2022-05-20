@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     private fun initDevModeSwitch() {
         val switch: SwitchCompat = binding.actionBar.devModeSwitch
 
-        if (BuildOptions.buildType == "dev") {
+        if (BuildOptions.buildType == "dev" && BuildOptions.devOptionsExist) {
             val checkedColor = TypedValue()
             theme.resolveAttribute(R.attr.actionBarSwitchTrackCheckedColor, checkedColor, true)
             val uncheckedColor = TypedValue()

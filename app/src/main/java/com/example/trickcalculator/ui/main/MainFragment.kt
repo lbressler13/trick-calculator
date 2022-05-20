@@ -50,8 +50,6 @@ class MainFragment : Fragment() {
         historyRandomness = 0
     )
 
-    private var devMode = false
-
     companion object {
         fun newInstance() = MainFragment()
     }
@@ -97,7 +95,7 @@ class MainFragment : Fragment() {
         }
     }
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
-        binding.settingsButton.isVisible = it || devMode
+        binding.settingsButton.isVisible = it
     }
     private val isDevModeObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = settings.showSettingsButton
