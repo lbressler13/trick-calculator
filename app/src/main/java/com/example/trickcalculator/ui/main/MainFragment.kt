@@ -24,7 +24,6 @@ import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.ui.settings.Settings
-import com.example.trickcalculator.ui.settings.initSettingsDialog
 import com.example.trickcalculator.ui.settings.initSettingsFragment
 import com.example.trickcalculator.ui.settings.initSettingsObservers
 

@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="25dp"
-    android:paddingTop="5dp">
+    android:background="?backgroundColor">
 
     <include layout="@layout/component_close_button" android:id="@+id/closeButton" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/shuffleOperatorsSwitch"
-        style="@style/SettingsItem"
+        style="@style/SettingsDialogItem"
         android:checked="true"
         android:text="@string/shuffle_operators"
         app:layout_constraintTop_toBottomOf="@id/closeButton"
@@ -19,14 +18,14 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/shuffleNumbersSwitch"
-        style="@style/SettingsItem"
+        style="@style/SettingsDialogItem"
         android:text="@string/shuffle_numbers"
         app:layout_constraintTop_toBottomOf="@id/shuffleOperatorsSwitch"
         tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/applyParensSwitch"
-        style="@style/SettingsItem"
+        style="@style/SettingsDialogItem"
         android:checked="true"
         android:text="@string/apply_parens"
         app:layout_constraintTop_toBottomOf="@id/shuffleNumbersSwitch"
@@ -34,14 +33,14 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/clearOnErrorSwitch"
-        style="@style/SettingsItem"
+        style="@style/SettingsDialogItem"
         android:text="@string/clear_on_error"
         app:layout_constraintTop_toBottomOf="@id/applyParensSwitch"
         tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/applyDecimalsSwitch"
-        style="@style/SettingsItem"
+        style="@style/SettingsDialogItem"
         android:checked="true"
         android:text="@string/apply_decimals"
         app:layout_constraintTop_toBottomOf="@id/clearOnErrorSwitch"
@@ -49,7 +48,7 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/settingsButtonSwitch"
-        style="@style/SettingsItem"
+        style="@style/SettingsDialogItem"
         android:checked="true"
         android:text="@string/show_settings_button"
         app:layout_constraintTop_toBottomOf="@id/applyDecimalsSwitch"
@@ -57,7 +56,7 @@
 
     <RadioGroup
         android:id="@+id/historyRandomnessGroup"
-        style="@style/SettingsItem"
+        style="@style/SettingsDialogItem"
         app:layout_constraintTop_toBottomOf="@id/settingsButtonSwitch"
         android:orientation="horizontal"
         android:checkedButton="@id/historyButton0"
