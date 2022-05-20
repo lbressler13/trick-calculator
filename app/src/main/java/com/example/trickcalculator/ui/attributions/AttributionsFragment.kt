@@ -77,12 +77,20 @@ class AttributionsFragment : Fragment() {
         binding.closeButton.root.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        val actionBar: View = (requireActivity() as MainActivity).binding.actionBar.root
 
-        initSettingsFragment(this, settings, actionBar)
+        initActionBar()
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
 
         return binding.root
+    }
+
+    /**
+     * Set functionality in action bar
+     */
+    private fun initActionBar() {
+        val actionBar = (requireActivity() as MainActivity).binding.actionBar
+        initSettingsFragment(this, settings, actionBar.root)
+        actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
 
 }

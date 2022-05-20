@@ -276,6 +276,7 @@ class MainFragment : Fragment() {
     private fun initActionBar() {
         val actionBar = (requireActivity() as MainActivity).binding.actionBar
         actionBar.root.setOnClickListener(null)
+        actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
 
     /**

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:gravity="start|center_vertical"
         android:paddingStart="15dp"
-        android:text="@string/action_bar_title"
+        android:text="@string/title_action_bar"
         android:textColor="?actionBarTextColor"
         android:textSize="20sp"
         android:textStyle="bold"

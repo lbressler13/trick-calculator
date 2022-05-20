@@ -46,4 +46,29 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="layout_constraintStart_toStartOf">parent</item>
     </style>
+
+    <style name="SettingsFragmentItem">
+        <!-- Layout -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">25dp</item>
+        <!-- Style -->
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?colorOnBackground</item>
+    </style>
+
+    <style name="SettingsSectionHeading">
+        <!-- Layout -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:paddingVertical">2dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <!-- Style -->
+        <item name="android:background">?colorPrimary</item>
+        <item name="android:textColor">?colorOnPrimary</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
 </resources>

@@ -1,66 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?backgroundColor">
 
+    <!-- TODO action bar title -->
+
     <include layout="@layout/component_close_button" android:id="@+id/closeButton" />
+
+    <TextView
+        style="@style/SettingsSectionHeading"
+        android:background="?colorPrimary"
+        android:text="@string/computation" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/shuffleOperatorsSwitch"
-        style="@style/SettingsDialogItem"
+        style="@style/SettingsFragmentItem"
         android:checked="true"
-        android:text="@string/shuffle_operators"
-        app:layout_constraintTop_toBottomOf="@id/closeButton"
-        tools:ignore="MissingConstraints" />
+        android:text="@string/shuffle_operators" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/shuffleNumbersSwitch"
-        style="@style/SettingsDialogItem"
-        android:text="@string/shuffle_numbers"
-        app:layout_constraintTop_toBottomOf="@id/shuffleOperatorsSwitch"
-        tools:ignore="MissingConstraints" />
+        style="@style/SettingsFragmentItem"
+        android:text="@string/shuffle_numbers" />
+
+    <TextView
+        style="@style/SettingsSectionHeading"
+        android:background="?colorPrimary"
+        android:text="@string/view" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/applyParensSwitch"
-        style="@style/SettingsDialogItem"
+        style="@style/SettingsFragmentItem"
         android:checked="true"
-        android:text="@string/apply_parens"
-        app:layout_constraintTop_toBottomOf="@id/shuffleNumbersSwitch"
-        tools:ignore="MissingConstraints" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/clearOnErrorSwitch"
-        style="@style/SettingsDialogItem"
-        android:text="@string/clear_on_error"
-        app:layout_constraintTop_toBottomOf="@id/applyParensSwitch"
-        tools:ignore="MissingConstraints" />
+        android:text="@string/apply_parens" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/applyDecimalsSwitch"
-        style="@style/SettingsDialogItem"
+        style="@style/SettingsFragmentItem"
         android:checked="true"
-        android:text="@string/apply_decimals"
-        app:layout_constraintTop_toBottomOf="@id/clearOnErrorSwitch"
-        tools:ignore="MissingConstraints" />
+        android:text="@string/apply_decimals" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/clearOnErrorSwitch"
+        style="@style/SettingsFragmentItem"
+        android:text="@string/clear_on_error" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/settingsButtonSwitch"
-        style="@style/SettingsDialogItem"
+        style="@style/SettingsFragmentItem"
         android:checked="true"
-        android:text="@string/show_settings_button"
-        app:layout_constraintTop_toBottomOf="@id/applyDecimalsSwitch"
-        tools:ignore="MissingConstraints" />
+        android:text="@string/show_settings_button" />
 
     <RadioGroup
         android:id="@+id/historyRandomnessGroup"
-        style="@style/SettingsDialogItem"
-        app:layout_constraintTop_toBottomOf="@id/settingsButtonSwitch"
+        style="@style/SettingsFragmentItem"
         android:orientation="horizontal"
-        android:checkedButton="@id/historyButton0"
-        tools:ignore="MissingConstraints">
+        android:checkedButton="@id/historyButton0" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,31 +67,40 @@
             android:paddingEnd="10dp"
             android:text="@string/random_history_label"
             android:textColor="?colorOnBackground"
+            android:textSize="15sp"
             tools:ignore="RtlSymmetry" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/historyButton0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?colorOnBackground"
+            android:textSize="15sp"
             android:text="@string/zero" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/historyButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?colorOnBackground"
+            android:textSize="15sp"
             android:text="@string/one" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/historyButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?colorOnBackground"
+            android:textSize="15sp"
             android:text="@string/two" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/historyButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?colorOnBackground"
+            android:textSize="15sp"
             android:text="@string/three" />
     </RadioGroup>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
