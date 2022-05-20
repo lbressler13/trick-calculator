@@ -12,11 +12,19 @@ import com.example.trickcalculator.databinding.DialogSettingsBinding
 import com.example.trickcalculator.databinding.FragmentSettingsBinding
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
+/**
+ * The settings package contains a [SettingsFragment] and [SettingsDialog], which contain similar UI elements and expose the same settings.
+ * Changes to the available settings will require changes in both the fragment and dialog.
+ * To keep the fragments in sync, the majority of the code is pushed into util functions.
+ * This ensures that any UI or logic changes must happen in both the dialog and fragment.
+ */
 
 /**
- * Get information from fragment args to set if a switch should be checked
+ * Check or uncheck a switch based on arguments
  *
- * @param keyId [Int]: resourceId of key to access argument
+ * @param context [Context]: application context
+ * @param args: [Bundle]: nullable field containing arguments of several types
+ * @param keyId [Int]: resourceId of key to access specified argument
  * @param switch [SwitchCompat]: switch to check
  */
 fun setSwitchUiFromArgs(context: Context, args: Bundle?, keyId: Int, switch: SwitchCompat) {
@@ -27,6 +35,13 @@ fun setSwitchUiFromArgs(context: Context, args: Bundle?, keyId: Int, switch: Swi
     }
 }
 
+/**
+ * Get history randomness value from radio group
+ *
+ * @param group [RadioGroup]
+ * @param buttons [List]: list of [RadioButton] within group
+ * @return [Int] the index of the checked button, corresponding to the history randomness
+ */
 fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
     val index = buttons.indexOfFirst { it.id == group.checkedRadioButtonId }
     if (index >= 0) {
@@ -36,6 +51,14 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
     return 0
 }
 
+/**
+ * Set the checked button in the history radio group based on args
+ *
+ * @param context [Context]: application context
+ * @param args: [Bundle]: nullable field containing arguments of several types
+ * @param group [RadioGroup]
+ * @param buttons [List]: list of [RadioButton] within group
+ */
 fun setHistoryRadioGroup(context: Context, args: Bundle?, group: RadioGroup, buttons: List<RadioButton>) {
     val key: String = context.getString(R.string.key_random_history)
     val value: Int = args?.getInt(key) ?: 0
@@ -43,9 +66,16 @@ fun setHistoryRadioGroup(context: Context, args: Bundle?, group: RadioGroup, but
 }
 
 /**
- * Get information from fragment args to set initial config in UI
+ * Initialize the UI binding based on information in an args object.
+ * Identifies binding as belonging to a [SettingsFragment] or [SettingsDialog], and identifies UI elements accordingly.
+ *
+ * @param binding [ViewBinding]: binding of the calling fragment.
+ * Expected to be either [FragmentSettingsBinding] or [DialogSettingsBinding]
+ * @param context [Context]: application context
+ * @param args: [Bundle]: nullable field containing arguments of several types
  */
 fun setUiFromArgs(binding: ViewBinding, context: Context, args: Bundle?) {
+    // create variables for UI elements
     val shuffleNumbersSwitch: SwitchCompat
     val shuffleOperatorsSwitch: SwitchCompat
     val applyParensSwitch: SwitchCompat
@@ -55,6 +85,7 @@ fun setUiFromArgs(binding: ViewBinding, context: Context, args: Bundle?) {
     val historyRadioGroup: RadioGroup
     val historyRadioButtons: List<RadioButton>
 
+    // assign elements for SettingsFragment
     if (binding is FragmentSettingsBinding) {
         shuffleNumbersSwitch = binding.shuffleNumbersSwitch
         shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
@@ -69,7 +100,9 @@ fun setUiFromArgs(binding: ViewBinding, context: Context, args: Bundle?) {
             binding.historyButton2,
             binding.historyButton3
         )
-    } else {
+    }
+    // assign elements for SettingsDialog
+    else {
         binding as DialogSettingsBinding
         shuffleNumbersSwitch = binding.shuffleNumbersSwitch
         shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
@@ -86,6 +119,7 @@ fun setUiFromArgs(binding: ViewBinding, context: Context, args: Bundle?) {
         )
     }
 
+    // set UI, for either fragment or dialog
     setSwitchUiFromArgs(context, args, R.string.key_shuffle_numbers, shuffleNumbersSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_shuffle_operators, shuffleOperatorsSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_apply_parens, applyParensSwitch)
@@ -100,7 +134,16 @@ fun setUiFromArgs(binding: ViewBinding, context: Context, args: Bundle?) {
     setHistoryRadioGroup(context, args, historyRadioGroup, historyRadioButtons)
 }
 
+/**
+ * Update ViewModel using values selected in UI.
+ * Should be called when at the end of the lifecycle of the calling fragment.
+ *
+ * @param viewModel [SharedViewModel]: ViewModel containing fields for all settings
+ * @param binding [ViewBinding]: binding of the calling fragment.
+ * Expected to be either [FragmentSettingsBinding] or [DialogSettingsBinding]
+ */
 fun saveToViewModel(viewModel: SharedViewModel, binding: ViewBinding) {
+    // create variables for UI elements
     val shuffleNumbersSwitch: SwitchCompat
     val shuffleOperatorsSwitch: SwitchCompat
     val applyParensSwitch: SwitchCompat
@@ -110,6 +153,7 @@ fun saveToViewModel(viewModel: SharedViewModel, binding: ViewBinding) {
     val historyRadioGroup: RadioGroup
     val historyRadioButtons: List<RadioButton>
 
+    // assign elements for SettingsFragment
     if (binding is FragmentSettingsBinding) {
         shuffleNumbersSwitch = binding.shuffleNumbersSwitch
         shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
@@ -124,7 +168,9 @@ fun saveToViewModel(viewModel: SharedViewModel, binding: ViewBinding) {
             binding.historyButton2,
             binding.historyButton3
         )
-    } else {
+    }
+    // assign elements for SettingsDialog
+    else {
         binding as DialogSettingsBinding
         shuffleNumbersSwitch = binding.shuffleNumbersSwitch
         shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
@@ -141,6 +187,7 @@ fun saveToViewModel(viewModel: SharedViewModel, binding: ViewBinding) {
         )
     }
 
+    // update ViewModel based on settings selected in UI, for either fragment or dialog
     viewModel.setShuffleNumbers(shuffleNumbersSwitch.isChecked)
     viewModel.setShuffleOperators(shuffleOperatorsSwitch.isChecked)
     viewModel.setApplyParens(applyParensSwitch.isChecked)
@@ -148,5 +195,4 @@ fun saveToViewModel(viewModel: SharedViewModel, binding: ViewBinding) {
     viewModel.setApplyDecimals(applyDecimalsSwitch.isChecked)
     viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
     viewModel.setHistoryRandomness(getHistoryGroupValue(historyRadioGroup, historyRadioButtons))
-
 }

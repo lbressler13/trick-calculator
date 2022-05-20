@@ -42,6 +42,9 @@ class SettingsDialog : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         saveToViewModel(sharedViewModel, binding)
+        if (parentFragment != null && parentFragment is DialogFragment) {
+            (parentFragment as DialogFragment).dismiss()
+        }
     }
 
     companion object {

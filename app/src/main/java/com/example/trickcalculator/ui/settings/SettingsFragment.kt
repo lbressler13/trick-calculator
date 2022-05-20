@@ -21,6 +21,8 @@ class SettingsFragment : Fragment() {
         fun newInstance() = SettingsFragment()
     }
 
+    // TODO fragment UI
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
