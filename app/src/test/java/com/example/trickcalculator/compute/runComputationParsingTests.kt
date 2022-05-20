@@ -3,8 +3,8 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.assertDivByZero
 import exactfraction.ExactFraction
 import com.example.trickcalculator.utils.OperatorFunction
-import ext.toExactFraction
 import org.junit.Assert.*
+import exactfraction.toExactFraction
 
 private val exp = listOf("^")
 private val plusMinus = listOf("+", "-")

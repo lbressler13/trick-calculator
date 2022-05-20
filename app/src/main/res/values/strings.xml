@@ -28,6 +28,7 @@
     <string name="clear_on_error">Reset on Error</string>
     <string name="apply_decimals">Apply Decimals</string>
     <string name="show_settings_button">Show Settings Button</string>
+    <string name="random_history_label">History Mode</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">settingsUpdateRequest</string>
@@ -38,6 +39,7 @@
     <string name="key_apply_decimals">applyDecimals</string>
     <string name="key_settings_button">showSettingsButton</string>
     <string name="key_main_fragment">isMainFragment</string>
+    <string name="key_random_history">randomHistory</string>
 
     <!-- Image Attributions -->
     <string name="link">Link</string>
@@ -48,12 +50,14 @@
     <!-- History -->
     <string name="title_history">Computation History</string>
     <string name="no_history">No history</string>
+    <string name="history_error">Error retrieving history</string>
 
     <!-- Developer Options -->
     <string name="title_dev_tools">Developer Tools</string>
     <string name="dev_tools_button">{ }</string>
     <string name="clear_history">Clear history</string>
     <string name="refresh_ui">Refresh UI</string>
+    <string name="show_settings_dialog">Show settings dialog</string>
 
     <!-- Other/Shared -->
     <string name="dev_mode">Dev mode</string>

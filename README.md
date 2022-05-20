@@ -7,7 +7,8 @@ Here are the settings:
 |:----------------------|:--------|:------------------------------------------------------------------------------------|
 | Apply decimals        | true    | Apply decimals entered in textbox                                                   |
 | Apply parentheses     | true    | Apply parentheses entered in textbox                                                |
-| Reset text on error   | false   | Clear textbox when error occurs. Error message is shown regardless of setting       |
+| Clear text on error   | false   | Clear textbox when error occurs. Error message is shown regardless of setting       |
+| History               | 1       | Degree of randomness in computation history                                         |
 | Show settings button  | false   | If settings button should be shown on main screen. Not accessible from main screen  |
 | Shuffle numbers       | false   | Shuffle value of numbers. No visual indication of new values                        |
 | Shuffle operator      | true    | Shuffle action of operators. No visual indication of new actions                    |
@@ -18,6 +19,7 @@ For standard calculator function, use the following settings:
 | Apply decimals        | true   |
 | Apply parentheses     | true   |
 | Clear text on error   | any    |
+| History               | 0      |
 | Show settings button  | any    |
 | Shuffle numbers       | false  |
 | Shuffle operator      | false  |
@@ -27,8 +29,8 @@ In the spirit of the app, this access is undocumented.
 But you can read the code or click around in the app until you find it.
 
 ## Testing
-**All** new logic needs unit tests.
-The logic in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
+**All** new computation needs unit tests.
+The computation in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
 There is a huge sense of relief from being able to press a button and know that everything still works.
 The hours writing tests will be worth it. 
 

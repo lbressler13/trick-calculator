@@ -6,5 +6,6 @@ data class Settings(
     var applyParens: Boolean,
     var clearOnError: Boolean,
     var applyDecimals: Boolean,
-    var showSettingsButton: Boolean
+    var showSettingsButton: Boolean,
+    var historyRandomness: Int
 )

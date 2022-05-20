@@ -5,16 +5,39 @@ import exactfraction.checkIsEFString
 import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.utils.StringList
 
+/**
+ * Information about a single computation and its result
+ */
 class HistoryItem {
+    /**
+     * Input computation
+     */
     val computation: String
+
+    /**
+     * Result of computation if no error was thrown
+     */
     val result: ExactFraction?
+
+    /**
+     * Error message if computation threw an error
+     */
     val error: String?
 
-    constructor(computation: StringList, error: String) {
-        this.computation = computation.joinToString("")
+    constructor(computation: String, result: ExactFraction) {
+        this.computation = computation
+        this.result = result
+        this.error = null
+    }
+
+    constructor(computation: String, error: String) {
+        this.computation = computation
         this.result = null
         this.error = error
     }
+
+    constructor(computation: StringList, error: String) :
+            this(computation.joinToString(""), error)
 
     constructor(computation: StringList, result: ExactFraction) {
         // parse EF-formatted value into decimal string

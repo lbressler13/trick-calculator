@@ -26,6 +26,7 @@ fun initSettingsDialog(
     val decimalsKey = context.getString(R.string.key_apply_decimals)
     val settingsButtonKey = context.getString(R.string.key_settings_button)
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
+    val historyRandomnessKey = context.getString(R.string.key_random_history)
     val requestKey = context.getString(R.string.key_settings_request)
 
     // update viewmodel with response from dialog
@@ -51,6 +52,9 @@ fun initSettingsDialog(
 
             val returnedShowSettingsButton: Boolean = result.getBoolean(settingsButtonKey, settings.showSettingsButton)
             viewModel.setShowSettingsButton(returnedShowSettingsButton)
+
+            val returnedHistoryRandomness: Int = result.getInt(historyRandomnessKey, settings.historyRandomness)
+            viewModel.setHistoryRandomness(returnedHistoryRandomness)
         }
     )
 
@@ -61,7 +65,8 @@ fun initSettingsDialog(
             parensKey to settings.applyParens,
             clearOnErrorKey to settings.clearOnError,
             decimalsKey to settings.applyDecimals,
-            mainFragmentKey to (fragment is MainFragment)
+            mainFragmentKey to (fragment is MainFragment),
+            historyRandomnessKey to settings.historyRandomness
         )
         settingsDialog.show(fragment.childFragmentManager, SharedSettingsDialog.TAG)
     }

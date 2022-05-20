@@ -7,25 +7,18 @@
 
     <Button
         android:id="@+id/clearHistoryButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="25dp"
-        android:background="?colorPrimaryDark"
-        android:textColor="?colorOnPrimary"
-        android:textSize="15sp"
-        android:textAllCaps="false"
+        style="@style/DeveloperToolsButton"
+        android:layout_marginTop="0dp"
         android:text="@string/clear_history" />
 
     <Button
         android:id="@+id/refreshUIButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:paddingHorizontal="25dp"
-        android:background="?colorPrimaryDark"
-        android:textColor="?colorOnPrimary"
-        android:textSize="15sp"
-        android:textAllCaps="false"
+        style="@style/DeveloperToolsButton"
         android:text="@string/refresh_ui" />
+
+    <Button
+        android:id="@+id/settingsDialogButton"
+        style="@style/DeveloperToolsButton"
+        android:text="@string/show_settings_dialog" />
 
 </LinearLayout>

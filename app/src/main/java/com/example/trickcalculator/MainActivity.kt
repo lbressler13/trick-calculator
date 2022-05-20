@@ -22,7 +22,7 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private var isDarkMode = true
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     /**
      * Initialize activity
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         assignTheme()
         binding = ActivityMainBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+        sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         setContentView(binding.root)
         initDevModeSwitch()
@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity() {
             switch.trackDrawable.setTintList(buttonStates)
 
             switch.isChecked = true
-            viewModel.setIsDevMode(true)
-            switch.setOnCheckedChangeListener { _, isChecked -> viewModel.setIsDevMode(isChecked) }
+            sharedViewModel.setIsDevMode(true)
+            switch.setOnCheckedChangeListener { _, isChecked -> sharedViewModel.setIsDevMode(isChecked) }
 
             switch.enable()
             switch.visible()

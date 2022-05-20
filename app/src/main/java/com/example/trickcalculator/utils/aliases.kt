@@ -1,5 +1,6 @@
 package com.example.trickcalculator.utils
 
+import com.example.trickcalculator.ui.history.HistoryItem
 import exactfraction.ExactFraction
 
 /**
@@ -10,3 +11,5 @@ typealias OperatorFunction = (ExactFraction, ExactFraction, String) -> ExactFrac
 
 typealias IntList = List<Int>
 typealias StringList = List<String>
+
+typealias History = List<HistoryItem>
