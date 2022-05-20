@@ -51,7 +51,7 @@ class ComputationViewModel : ViewModel() {
         }
     }
 
-    fun removeLastHistory() {
+    fun clearStoredHistoryItem() {
         mLastHistoryItem.value = null
     }
 

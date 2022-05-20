@@ -26,7 +26,7 @@ fun initSettingsDialog(
     val decimalsKey = context.getString(R.string.key_apply_decimals)
     val settingsButtonKey = context.getString(R.string.key_settings_button)
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
-    val historyRandomnessKey = context.getString(R.string.key_history)
+    val historyRandomnessKey = context.getString(R.string.key_random_history)
     val requestKey = context.getString(R.string.key_settings_request)
 
     // update viewmodel with response from dialog

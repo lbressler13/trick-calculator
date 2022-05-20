@@ -17,6 +17,7 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.utils.History
 import android.view.animation.Animation
 import com.example.trickcalculator.ext.nextBoolean
+import java.util.*
 import kotlin.random.Random
 
 
@@ -45,7 +46,6 @@ class HistoryFragment : Fragment() {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        // initialize ui and random history when history and randomness have both been observed
         sharedViewModel.history.observe(viewLifecycleOwner) {
             history = it
             if (history != null && randomness != null) {
@@ -73,10 +73,10 @@ class HistoryFragment : Fragment() {
      */
     private fun setRandomHistory() {
         randomHistory = when (randomness) {
-            0 -> history
-            1 -> history!!.shuffled()
-            2 -> shuffleValues()
-            3 -> generateRandomHistory()
+            0 -> history // no randomness
+            1 -> history!!.shuffled() // shuffled order
+            2 -> shuffleValues() // shuffled values
+            3 -> generateRandomHistory() // random generation
             else -> history
         }
     }
@@ -114,7 +114,7 @@ class HistoryFragment : Fragment() {
     private fun generateRandomHistory(): History? {
         val probabilityError = if (history.isNullOrEmpty()) 1f else 0.2f
 
-        if (Random.Default.nextBoolean(probabilityError)) {
+        if (Random(Date().time).nextBoolean(probabilityError)) {
             return null
         }
 
@@ -135,17 +135,17 @@ class HistoryFragment : Fragment() {
                 blinking.startOffset = 10
                 blinking.repeatMode = Animation.REVERSE
                 blinking.repeatCount = Animation.INFINITE
-                binding.errorLayout.startAnimation(blinking)
+                binding.errorMessage.startAnimation(blinking)
 
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.gone()
-                binding.errorLayout.visible()
+                binding.errorMessage.visible()
             }
             // empty
             randomHistory!!.isEmpty() -> {
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.visible()
-                binding.errorLayout.gone()
+                binding.errorMessage.gone()
             }
             // non-empty
             else -> {
@@ -157,7 +157,7 @@ class HistoryFragment : Fragment() {
 
                 binding.itemsRecycler.visible()
                 binding.noHistoryMessage.gone()
-                binding.errorLayout.gone()
+                binding.errorMessage.gone()
             }
         }
     }

@@ -19,7 +19,7 @@ private const val maxCompLength = 8
 /**
  * Probabilities used in main generate function
  */
-private const val probabilityShowsError = 0.1f
+private const val probabilityErrorMessage = 0.1f
 private const val probabilitySyntaxError = 0.1f
 private const val probabilityParens = 0.2f
 
@@ -57,13 +57,13 @@ private val random = Random(Date().time)
  */
 fun generateRandomHistoryItem(): HistoryItem {
     // show error message instead of result
-    val showError = random.nextBoolean(probabilityShowsError)
+    val showError = random.nextBoolean(probabilityErrorMessage)
 
     val length = (1..maxCompLength).random()
     val computation = generateComputation(length)
 
     if (showError) {
-        return HistoryItem(computation, generateError())
+        return HistoryItem(computation, generateErrorMessage())
     }
 
     val result = generateExactFraction(weightedRangesResult, probabilityWholeNumberResult)
@@ -105,9 +105,73 @@ private fun generateComputation(length: Int): StringList {
 }
 
 /**
+ * Generate an ExactFraction given weighted ranges and the probability of a whole number
+ *
+ * @param weightedRanges [List]: a list of ranges that which a numerator/denominator can be chosen from, with weights to indicate probability of choosing from each range
+ * @param probabilityWholeNumber [Float]: probability that the generated number will be a whole number, with denominator 1
+ * @param allowNegative [Boolean]: whether or not the number can be negative. Defaults to false
+ * @return [ExactFraction]: a number generated randomly using the specified parameters
+ */
+private fun generateExactFraction(
+    weightedRanges: List<Pair<IntRange, Float>>,
+    probabilityWholeNumber: Float,
+    allowNegative: Boolean = true
+): ExactFraction {
+    val wholeNumber = random.nextBoolean(probabilityWholeNumber)
+    val negative = allowNegative && random.nextBoolean()
+
+    val numeratorRange = random.nextFromWeightedList(weightedRanges)
+    var numerator = numeratorRange.random()
+    if (negative) {
+        numerator *= -1
+    }
+    if (wholeNumber) {
+        return ExactFraction(numerator)
+    }
+
+    val denominatorRange = random.nextFromWeightedList(weightedRanges)
+    val denominator = denominatorRange.random()
+    return ExactFraction(numerator, denominator)
+}
+
+/**
+ * Generates a random error message
+ *
+ * @return [String]: an error message
+ */
+private fun generateErrorMessage(): String {
+    val messages = listOf(
+        "Syntax error",
+        "Divide by zero",
+        "Number overflow exception",
+        "Illegal operator",
+        "Incorrect math"
+    )
+
+    val message = messages.random()
+
+    return when (message) {
+        "Number overflow exception" -> {
+            val overflow = (Long.MIN_VALUE..Long.MAX_VALUE).random()
+            "Number overflow exception on $overflow"
+        }
+        "Illegal operator" -> {
+            val allOperators = operators + illegalOperators
+            "Illegal operator: ${allOperators.random()}"
+        }
+        "Incorrect math" -> {
+            val length = (1..12).random()
+            val computation = generateComputation(length).joinToString("")
+            "Invalid math: $computation"
+        }
+        else -> message
+    }
+}
+
+/**
  * Add a single set of parentheses to the given computation string, if string has size greater than 1
  *
- * @param computation [MStringList]: list of existing terms.
+ * @param computation [MStringList]: existing computation.
  * Assumed to contain only numbers and operators, without any syntax errors.
  */
 private fun addParens(computation: MStringList) {
@@ -137,7 +201,7 @@ private fun addParens(computation: MStringList) {
 /**
  * Add a single syntax error to the computation
  *
- * @param computation [MStringList]: list of existing terms
+ * @param computation [MStringList]: existing computation
  */
 private fun addSyntaxError(computation: MStringList) {
     val errorType = listOf(
@@ -149,21 +213,21 @@ private fun addSyntaxError(computation: MStringList) {
 
     when (errorType) {
         "singleParen" -> addUnmatchedParen(computation)
-        "extraOperator" -> addOperator(computation)
+        "extraOperator" -> addOperatorSyntaxError(computation)
         "emptyParens" -> {
             val index = (0..computation.size).random()
             computation.add(index, "()")
         }
-        "extraDecimal" -> addDecimal(computation)
+        "extraDecimal" -> addDecimalSyntaxError(computation)
     }
 }
 
 /**
- * Add an error to the computation string as a syntax error
+ * Add an error to the computation string to create a syntax error
  *
  * @param computation [MStringList]: existing computation
  */
-private fun addOperator(computation: MStringList) {
+private fun addOperatorSyntaxError(computation: MStringList) {
     val index = (0..computation.size).random()
     var operator = operators.random()
 
@@ -191,11 +255,11 @@ private fun addOperator(computation: MStringList) {
 }
 
 /**
- * Add a decimal point to the computation string as a syntax error
+ * Add a decimal point to the computation string to create a syntax error
  *
  * @param computation [MStringList]: existing computation
  */
-private fun addDecimal(computation: MStringList) {
+private fun addDecimalSyntaxError(computation: MStringList) {
     var index = (0..computation.size).random()
     if (index != computation.size) {
         val item = computation[index]
@@ -236,68 +300,3 @@ private fun addUnmatchedParen(computation: MStringList) {
 
     computation.add(index, paren)
 }
-
-/**
- * Generate an ExactFraction given weighted ranges and the probability of a whole number
- *
- * @param weightedRanges [List]: a list of ranges that which a numerator/denominator can be chosen from, with weights to indicate probability of choosing from each range
- * @param probabilityWholeNumber [Float]: probability that the generated number will be a whole number, with denominator 1
- * @param allowNegative [Boolean]: whether or not the number can be negative. Defaults to false
- * @return [ExactFraction]: a number generated randomly using the specified parameters
- */
-private fun generateExactFraction(
-    weightedRanges: List<Pair<IntRange, Float>>,
-    probabilityWholeNumber: Float,
-    allowNegative: Boolean = true
-): ExactFraction {
-    val wholeNumber = random.nextBoolean(probabilityWholeNumber)
-    val negative = allowNegative && random.nextBoolean()
-
-    val numeratorRange = random.nextFromWeightedList(weightedRanges)
-    var numerator = numeratorRange.random()
-    if (negative) {
-        numerator *= -1
-    }
-    if (wholeNumber) {
-        return ExactFraction(numerator)
-    }
-
-    val denominatorRange = random.nextFromWeightedList(weightedRanges)
-    val denominator = denominatorRange.random()
-    return ExactFraction(numerator, denominator)
-}
-
-/**
- * Generates a random error message
- *
- * @return [String]: an error message
- */
-private fun generateError(): String {
-    val messages = listOf(
-        "Syntax error",
-        "Divide by zero",
-        "Number overflow exception",
-        "Illegal operator",
-        "Incorrect math"
-    )
-
-    val message = messages.random()
-
-    return when (message) {
-        "Number overflow exception" -> {
-            val overflow = (Long.MIN_VALUE..Long.MAX_VALUE).random()
-            "Number overflow exception on $overflow"
-        }
-        "Illegal operator" -> {
-            val allOperators = operators + illegalOperators
-            "Illegal operator: ${allOperators.random()}"
-        }
-        "Incorrect math" -> {
-            val length = (1..12).random()
-            val computation = generateComputation(length).joinToString("")
-            "Invalid math: $computation"
-        }
-        else -> message
-    }
-}
-

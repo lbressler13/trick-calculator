@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="10dp"
-            android:text="@string/history_label"
+            android:text="@string/random_history_label"
             android:textColor="?colorOnBackground"
             tools:ignore="RtlSymmetry" />
 

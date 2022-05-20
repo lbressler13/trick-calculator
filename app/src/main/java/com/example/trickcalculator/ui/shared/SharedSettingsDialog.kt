@@ -10,8 +10,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogSharedSettingsBinding
-import com.example.trickcalculator.ext.gone
-import com.example.trickcalculator.ext.visible
 
 /**
  * DialogFragment to display all configuration options for calculator
@@ -72,7 +70,7 @@ class SharedSettingsDialog : DialogFragment() {
 
     private fun setHistoryRadioGroup() {
         val group = binding.historyRandomnessGroup
-        val key: String = requireContext().getString(R.string.key_history)
+        val key: String = requireContext().getString(R.string.key_random_history)
         val value: Int = this.arguments?.getInt(key) ?: 0
         when (value) {
             0 -> group.check(binding.historyButton0.id)
@@ -104,7 +102,7 @@ class SharedSettingsDialog : DialogFragment() {
         val clearOnErrorKey = requireContext().getString(R.string.key_clear_on_error)
         val decimalsKey = requireContext().getString(R.string.key_apply_decimals)
         val settingsButtonKey = requireContext().getString(R.string.key_settings_button)
-        val historyRandomnessKey = requireContext().getString(R.string.key_history)
+        val historyRandomnessKey = requireContext().getString(R.string.key_random_history)
         return bundleOf(
             numbersKey to binding.shuffleNumbersSwitch.isChecked,
             operatorsKey to binding.shuffleOperatorsSwitch.isChecked,
