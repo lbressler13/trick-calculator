@@ -1,10 +1,15 @@
 package com.example.trickcalculator.ui.history
 
+import com.example.trickcalculator.compute.isOperator
 import exactfraction.ExactFraction
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.ext.nextBoolean
 import com.example.trickcalculator.ext.nextFromWeightedList
+import com.example.trickcalculator.utils.isNumber
+import java.util.*
 import kotlin.random.Random
+
+private typealias MStringList = MutableList<String>
 
 private const val maxCompLength = 8
 private const val probabilityError = 0.1f
@@ -12,7 +17,7 @@ private const val probabilityError = 0.1f
 private val operators = listOf("+", "-", "x", "/", "^")
 private val illegalOperators = listOf("!", "&", "|", "#", "$", "%")
 
-private val random = Random.Default
+private val random = Random(Date().time)
 
 // generate a random history item
 fun generateRandomHistoryItem(): HistoryItem {
@@ -27,8 +32,9 @@ fun generateRandomHistoryItem(): HistoryItem {
     return HistoryItem(computation, generateResult())
 }
 
-// TODO: decimals, parens, syntax issues
+// TODO: parens, syntax issues
 // generate a random computation string, consisting of numbers and operators
+// assumes length > 0
 private fun generateComputation(length: Int): StringList {
     val probabilityWholeNumber = 0.85f
     val weightedRanges = listOf(
@@ -41,20 +47,133 @@ private fun generateComputation(length: Int): StringList {
     val totalLength = length * 2 - 1
     val computation = mutableListOf<String>()
 
+    val getExactFraction = {
+        generateExactFraction(
+            weightedRanges,
+            probabilityWholeNumber,
+            allowNegative = false
+        )
+    }
+
     for (i in (0 until totalLength)) {
         if (i % 2 == 0) {
-            val ef = generateExactFraction(
-                weightedRanges,
-                probabilityWholeNumber,
-                allowNegative = false
-            )
+            val ef = getExactFraction()
             computation.add(ef.toDecimalString(5))
         } else {
             computation.add(operators.random())
         }
     }
 
+    val probabilityParens = 0.2f
+    if (random.nextBoolean(probabilityParens)) {
+        addParens(computation)
+    }
+
+    val probabilitySyntaxError = 0.1f
+    if (random.nextBoolean(probabilitySyntaxError)) {
+        addSyntaxError(computation)
+    }
+
     return computation
+}
+
+// assumes input does not have any syntax errors
+private fun addParens(computation: MStringList) {
+    if (computation.size > 1) {
+        // must start and end w/ a number, which means numbers are at even indices
+        // insert before number
+        var startIndex = (0 until computation.size - 1).random()
+        if (isOperator(computation[startIndex], operators)) {
+            startIndex--
+        }
+        computation.add(startIndex, "(")
+
+        // now need an odd index, to insert after a number
+        var endIndex = (startIndex + 1 until computation.size).random()
+        if (isNumber(computation[endIndex])) {
+            endIndex++
+        }
+        if (endIndex == startIndex + 2) {
+            if (endIndex + 2 <= computation.size) {
+                endIndex += 2
+            }
+        }
+        computation.add(endIndex, ")")
+    }
+}
+
+// if error count is 2 and 2 single parens are added, this may result in valid syntax
+private fun addSyntaxError(computation: MStringList) {
+    val errorType = listOf(
+        "singleParen",
+        "extraOperator",
+        "emptyParens",
+        "extraDecimal"
+    ).random()
+
+    when (errorType) {
+        "singleParen" -> addSingleParen(computation)
+        "extraOperator" -> addOperator(computation)
+        "emptyParens" -> {
+            val index = (0..computation.size).random()
+            computation.add(index, "()")
+        }
+        "extraDecimal" -> addDecimal(computation)
+    }
+}
+
+private fun addOperator(computation: MStringList) {
+    val index = (0..computation.size).random()
+    var operator = operators.random()
+    if (index == 0 && operator == "-") {
+        operator = listOf("+", "x", "/", "^").random()
+    }
+
+    if (index != 0 && index != computation.size) {
+        val current = computation[index]
+        val previous = computation[index - 1]
+        val adjacentOperator = when {
+            isOperator(current, operators) -> current
+            isOperator(previous, operators) -> previous
+            else -> ""
+        }
+        if (adjacentOperator == operator) {
+            operator = operators.filter { it != operator }.random()
+        }
+    }
+    computation.add(index, operator)
+}
+
+private fun addDecimal(computation: MStringList) {
+    var index = (0..computation.size).random()
+    if (index != computation.size) {
+        val item = computation[index]
+        if (isNumber(item) && item.indexOf(".") == -1) {
+            index++
+        }
+    }
+    computation.add(index, ".")
+}
+
+private fun addSingleParen(computation: MStringList) {
+    var index = (0..computation.size).random()
+    var paren = listOf("(", ")").random()
+    val existingIndex = computation.indexOf(paren)
+    if (existingIndex != -1) {
+        val indices = listOf(
+            Pair(existingIndex, 0.7f),
+            Pair(index, 0.3f)
+        )
+        index = random.nextFromWeightedList(indices)
+    }
+
+    if (index != existingIndex && index != computation.size && isNumber(computation[index])) {
+        paren = "("
+    } else if (index != existingIndex) {
+        paren = ")"
+    }
+
+    computation.add(index, paren)
 }
 
 // generate a result ExactFraction
