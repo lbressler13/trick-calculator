@@ -74,7 +74,7 @@ class MainFragment : Fragment() {
         initActionBar()
         initDeveloperOptions()
 
-        initSettingsFragment(this, sharedViewModel, settings, binding.settingsButton)
+        initSettingsFragment(this, settings, binding.settingsButton)
 
         return binding.root
     }

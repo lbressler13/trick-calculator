@@ -1,6 +1,5 @@
 package com.example.trickcalculator.ui.settings
 
-import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -10,7 +9,6 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 
 fun initSettingsFragment(
     fragment: Fragment,
-    viewModel: SharedViewModel,
     settings: Settings,
     viewToClick: View
 ) {
@@ -50,7 +48,6 @@ fun initSettingsFragment(
  */
 fun initSettingsDialog(
     fragment: Fragment,
-    viewModel: SharedViewModel,
     settings: Settings,
     viewToClick: View
 ) {
@@ -65,36 +62,6 @@ fun initSettingsDialog(
     val settingsButtonKey = context.getString(R.string.key_settings_button)
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
     val historyRandomnessKey = context.getString(R.string.key_random_history)
-    val requestKey = context.getString(R.string.key_settings_request)
-
-    // update viewmodel with response from dialog
-    fragment.childFragmentManager.setFragmentResultListener(
-        requestKey,
-        fragment.viewLifecycleOwner,
-        { _: String, result: Bundle ->
-            val returnedShuffleNumbers: Boolean = result.getBoolean(numbersKey, settings.shuffleNumbers)
-            viewModel.setShuffleNumbers(returnedShuffleNumbers)
-
-            val returnedShuffleOperators: Boolean =
-                result.getBoolean(operatorsKey, settings.shuffleOperators)
-            viewModel.setShuffleOperators(returnedShuffleOperators)
-
-            val returnedApplyParens: Boolean = result.getBoolean(parensKey, settings.applyParens)
-            viewModel.setApplyParens(returnedApplyParens)
-
-            val returnedClearOnError: Boolean = result.getBoolean(clearOnErrorKey, settings.clearOnError)
-            viewModel.setClearOnError(returnedClearOnError)
-
-            val returnedApplyDecimals: Boolean = result.getBoolean(decimalsKey, settings.applyDecimals)
-            viewModel.setApplyDecimals(returnedApplyDecimals)
-
-            val returnedShowSettingsButton: Boolean = result.getBoolean(settingsButtonKey, settings.showSettingsButton)
-            viewModel.setShowSettingsButton(returnedShowSettingsButton)
-
-            val returnedHistoryRandomness: Int = result.getInt(historyRandomnessKey, settings.historyRandomness)
-            viewModel.setHistoryRandomness(returnedHistoryRandomness)
-        }
-    )
 
     viewToClick.setOnClickListener {
         settingsDialog.arguments = bundleOf(
@@ -103,6 +70,7 @@ fun initSettingsDialog(
             parensKey to settings.applyParens,
             clearOnErrorKey to settings.clearOnError,
             decimalsKey to settings.applyDecimals,
+            settingsButtonKey to settings.showSettingsButton,
             mainFragmentKey to (fragment is MainFragment),
             historyRandomnessKey to settings.historyRandomness
         )

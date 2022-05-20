@@ -8,21 +8,24 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogSharedSettingsBinding
+import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
  * DialogFragment to display all configuration options for calculator
  */
 class SettingsDialog : DialogFragment() {
     private lateinit var binding: DialogSharedSettingsBinding
+    private lateinit var sharedViewModel: SharedViewModel
 
     /**
      * Initialize dialog
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogSharedSettingsBinding.inflate(layoutInflater)
-        val root = binding.root
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         setUiFromArgs()
 
@@ -30,7 +33,7 @@ class SettingsDialog : DialogFragment() {
         val title = requireContext().getString(R.string.title_settings)
 
         return AlertDialog.Builder(requireContext())
-            .setView(root)
+            .setView(binding.root)
             .setMessage(title)
             .setPositiveButton(doneText) { _, _ -> }
             .create()
@@ -118,14 +121,15 @@ class SettingsDialog : DialogFragment() {
      * Set fragment result to be seen by parent
      */
     override fun onDismiss(dialog: DialogInterface) {
-        val requestKey = requireContext().getString(R.string.key_settings_request)
-
-        parentFragmentManager.setFragmentResult(
-            requestKey,
-            bundleSettings()
-        )
-
         super.onDismiss(dialog)
+
+        sharedViewModel.setShuffleNumbers(binding.shuffleNumbersSwitch.isChecked)
+        sharedViewModel.setShuffleOperators(binding.shuffleOperatorsSwitch.isChecked)
+        sharedViewModel.setApplyParens(binding.applyParensSwitch.isChecked)
+        sharedViewModel.setClearOnError(binding.clearOnErrorSwitch.isChecked)
+        sharedViewModel.setApplyDecimals(binding.applyDecimalsSwitch.isChecked)
+        sharedViewModel.setShowSettingsButton(binding.settingsButtonSwitch.isChecked)
+        sharedViewModel.setHistoryRandomness(getHistoryGroupValue())
     }
 
     companion object {

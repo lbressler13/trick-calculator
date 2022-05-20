@@ -54,7 +54,7 @@ class DeveloperToolsDialog : DialogFragment() {
         }
 
         initSettingsObservers(settings, viewModel, viewLifecycleOwner)
-        initSettingsDialog(this, viewModel, settings, binding.settingsDialogButton)
+        initSettingsDialog(this, settings, binding.settingsDialogButton)
 
         return binding.root
     }

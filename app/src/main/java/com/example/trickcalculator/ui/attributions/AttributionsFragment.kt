@@ -74,11 +74,12 @@ class AttributionsFragment : Fragment() {
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.closeButton.setOnClickListener {
+        binding.closeButton.root.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
         val actionBar: View = (requireActivity() as MainActivity).binding.actionBar.root
-        initSettingsFragment(this, sharedViewModel, settings, actionBar)
+
+        initSettingsFragment(this, settings, actionBar)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
 
         return binding.root

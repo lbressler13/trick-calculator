@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentSettingsBinding
 import com.example.trickcalculator.ui.shared.SharedViewModel
@@ -29,9 +30,12 @@ class SettingsFragment : Fragment() {
 
         setUiFromArgs()
 
-        binding.closeButton.setOnClickListener {
+        binding.closeButton.root.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+
+        val actionBar = (requireActivity() as MainActivity).binding.actionBar
+        actionBar.root.setOnClickListener(null)
 
         return binding.root
     }
