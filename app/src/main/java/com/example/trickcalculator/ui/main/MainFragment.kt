@@ -40,8 +40,6 @@ class MainFragment : Fragment() {
     private var error: String? = null
     private var usesComputedValue = false
 
-    private var maxDigits = -1
-
     private val settings = Settings(
         shuffleNumbers = false,
         shuffleOperators = false,
@@ -116,7 +114,7 @@ class MainFragment : Fragment() {
     /**
      * Display current error message, and clear compute data depending on settings
      */
-    private val errorObserver: Observer<String?> = Observer {
+    private val errorObserver: Observer<String> = Observer {
         error = it
         if (it != null) {
             binding.errorText.text = "Error: $it"
@@ -129,9 +127,6 @@ class MainFragment : Fragment() {
             binding.errorText.gone()
         }
     }
-
-    // TODO get from textview
-    private fun setMaxDigits() { maxDigits = 14 }
 
     /**
      * Launch AttributionsFragment
@@ -292,18 +287,10 @@ class MainFragment : Fragment() {
         val textview: TextView = binding.mainText
         val fullText = computeText.joinToString("")
 
-        if (devMode) {
-            if (maxDigits == -1) {
-                setMaxDigits()
-            }
-
-            if (computeText.isNotEmpty() && usesComputedValue) {
-                // val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
-                // textview.text = spannableString
-                textview.text = fullText
-            } else {
-                textview.text = fullText
-            }
+        if (computeText.isNotEmpty() && usesComputedValue) {
+            // val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
+            // textview.text = spannableString
+            textview.text = fullText
         } else {
             textview.text = fullText
         }

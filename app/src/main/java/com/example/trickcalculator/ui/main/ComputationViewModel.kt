@@ -21,11 +21,11 @@ class ComputationViewModel : ViewModel() {
     val computeText: LiveData<StringList> = mComputeText
 
     // result of parsing computeText
-    private val mComputedValue = MutableLiveData<ExactFraction?>().apply { value = null }
-    val computedValue: LiveData<ExactFraction?> = mComputedValue
+    private val mComputedValue = MutableLiveData<ExactFraction>().apply { value = null }
+    val computedValue: LiveData<ExactFraction> = mComputedValue
 
-    private val mError = MutableLiveData<String?>().apply { value = null }
-    val error: LiveData<String?> = mError
+    private val mError = MutableLiveData<String>().apply { value = null }
+    val error: LiveData<String> = mError
 
     private val mUsesComputedValue = MutableLiveData<Boolean>().apply { value = false }
     val usesComputedValue: LiveData<Boolean> = mUsesComputedValue
@@ -42,7 +42,13 @@ class ComputationViewModel : ViewModel() {
     fun setLastHistoryItem() {
         val error = error.value
         val computed = computedValue.value
-        val computation = computeText.value!!
+        var computation = computeText.value!!
+
+        if (computation[0].startsWith('[')) {
+            val first = computation[0]
+            val updatedFirst = first.substring(1 until first.lastIndex)
+            computation = computation.copyWithReplacement(0, updatedFirst)
+        }
 
         mLastHistoryItem.value = when {
             error != null -> HistoryItem(computation, error)
@@ -116,7 +122,7 @@ class ComputationViewModel : ViewModel() {
         val computedVal = mComputedValue.value
         val currentText = mComputeText.value
 
-        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toDecimalString()
+        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == getBracketedValue()
 
         if (computedVal != null && computeMatch) {
             mComputeText.value = currentText?.copyWithReplacement(0, computedVal.toEFString())
@@ -133,7 +139,7 @@ class ComputationViewModel : ViewModel() {
         val firstIsEFString = currentText != null && currentText.isNotEmpty() && ExactFraction.isEFString(currentText[0])
 
         if (computedVal != null && firstIsEFString) {
-            mComputeText.value = currentText?.copyWithReplacement(0, computedVal.toDecimalString())
+            mComputeText.value = currentText?.copyWithReplacement(0, getBracketedValue()!!)
         }
     }
 
@@ -142,8 +148,16 @@ class ComputationViewModel : ViewModel() {
      */
     fun useComputedAsComputeText() {
         mUsesComputedValue.value = true
-        val computed: ExactFraction = mComputedValue.value!!
-        mComputeText.value = listOf(computed.toDecimalString())
+        mComputeText.value = listOf(getBracketedValue()!!)
+    }
+
+    private fun getBracketedValue(): String? {
+        val text = computedValue.value?.toDecimalString()
+        if (text == null) {
+            return null
+        }
+
+        return "[$text]"
     }
 
     /**
