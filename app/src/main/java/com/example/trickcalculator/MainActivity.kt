@@ -30,11 +30,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        assignTheme()
         binding = ActivityMainBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         setContentView(binding.root)
+        isDarkMode = isDarkMode()
         initDevModeSwitch()
 
         if (savedInstanceState == null) {
@@ -48,30 +48,21 @@ class MainActivity : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
 
         val wasDarkMode = isDarkMode
-        assignTheme()
+        isDarkMode = isDarkMode()
         if (wasDarkMode != isDarkMode) {
             recreate()
         }
     }
 
     /**
-     * Assign theme based on night mode
+     * Determine if phone is set to dark mode
      */
-    private fun assignTheme() {
+    private fun isDarkMode(): Boolean {
         val nightModeFlags: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (nightModeFlags) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                setTheme(R.style.CustomDark)
-                isDarkMode = true
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                setTheme(R.style.CustomLight)
-                isDarkMode = false
-            }
-            else -> {
-                setTheme(R.style.CustomDark)
-                isDarkMode = true
-            }
+        return when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> true
+            Configuration.UI_MODE_NIGHT_NO -> false
+            else -> true
         }
    }
 
