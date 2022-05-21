@@ -35,7 +35,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun runFragmentCode() {
-        binding.closeButton.root.setOnClickListener {
+        binding.closeButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 

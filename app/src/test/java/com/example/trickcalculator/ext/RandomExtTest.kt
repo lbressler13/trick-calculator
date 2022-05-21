@@ -64,8 +64,6 @@ class RandomExtTest {
 
     @Test
     fun testNextFromWeightedList() {
-        // TODO
-
         // errors
         val expectedError = "Weights must total 1"
         var error = assertThrows(java.lang.IllegalArgumentException::class.java) {

@@ -7,14 +7,37 @@
     android:layout_height="match_parent"
     android:background="?backgroundColor">
 
-    <!-- TODO action bar title -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?colorPrimary">
 
-    <include layout="@layout/component_close_button" android:id="@+id/closeButton" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingsSectionHeading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/computation" />
 
-    <TextView
-        style="@style/SettingsSectionHeading"
-        android:background="?colorPrimary"
-        android:text="@string/computation" />
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:paddingEnd="10dp"
+            app:tint="?colorOnPrimary"
+            android:contentDescription="Button to close fragment"
+            tools:ignore="HardcodedText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/shuffleOperatorsSwitch"
@@ -29,7 +52,7 @@
 
     <TextView
         style="@style/SettingsSectionHeading"
-        android:background="?colorPrimary"
+        android:layout_marginTop="15dp"
         android:text="@string/view" />
 
     <androidx.appcompat.widget.SwitchCompat
