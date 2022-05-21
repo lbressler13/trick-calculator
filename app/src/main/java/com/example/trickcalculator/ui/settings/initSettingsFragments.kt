@@ -23,7 +23,7 @@ fun initSettingsFragment(
 
     viewToClick.setOnClickListener {
         val newFragment = SettingsFragment.newInstance()
-        addArgsToFragment(context, settings, newFragment)
+        addArgsToFragment(context, settings, newFragment, fragment)
 
         fragment.requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, newFragment)
@@ -48,7 +48,7 @@ fun initSettingsDialog(
     val settingsDialog = SettingsDialog()
 
     viewToClick.setOnClickListener {
-        addArgsToFragment(context, settings, settingsDialog)
+        addArgsToFragment(context, settings, settingsDialog, fragment)
         settingsDialog.show(fragment.childFragmentManager, SettingsDialog.TAG)
     }
 }
@@ -60,7 +60,7 @@ fun initSettingsDialog(
  * @param settings [Settings]: object containing current settings
  * @param fragment [Fragment]: fragment to add arguments to
  */
-private fun addArgsToFragment(context: Context, settings: Settings, fragment: Fragment) {
+private fun addArgsToFragment(context: Context, settings: Settings, fragment: Fragment, parentFragment: Fragment) {
     val numbersKey = context.getString(R.string.key_shuffle_numbers)
     val operatorsKey = context.getString(R.string.key_shuffle_operators)
     val parensKey = context.getString(R.string.key_apply_parens)
@@ -77,7 +77,7 @@ private fun addArgsToFragment(context: Context, settings: Settings, fragment: Fr
         clearOnErrorKey to settings.clearOnError,
         decimalsKey to settings.applyDecimals,
         settingsButtonKey to settings.showSettingsButton,
-        mainFragmentKey to (fragment is MainFragment),
+        mainFragmentKey to (parentFragment is MainFragment),
         historyRandomnessKey to settings.historyRandomness
     )
 }
