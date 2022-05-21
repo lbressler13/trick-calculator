@@ -16,7 +16,10 @@ import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.utils.History
 import android.view.animation.Animation
+import com.example.trickcalculator.MainActivity
+import com.example.trickcalculator.R
 import com.example.trickcalculator.ext.nextBoolean
+import com.example.trickcalculator.ui.settings.initSettingsFragment
 import java.util.*
 import kotlin.random.Random
 
@@ -61,11 +64,21 @@ class HistoryFragment : Fragment() {
             }
         }
 
-        binding.closeButton.setOnClickListener {
+        binding.closeButton.root.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+        initActionBar()
 
         return binding.root
+    }
+
+    /**
+     * Set functionality in action bar
+     */
+    private fun initActionBar() {
+        val actionBar = (requireActivity() as MainActivity).binding.actionBar
+        actionBar.root.setOnClickListener(null)
+        actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
 
     /**

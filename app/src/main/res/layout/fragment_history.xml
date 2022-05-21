@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?backgroundColor">
 
-    <ImageButton
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:paddingTop="10dp"
-        android:paddingEnd="10dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:src="@drawable/ic_close"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?colorOnBackground"
-        tools:ignore="HardcodedText,RtlSymmetry"
-        android:contentDescription="Button to close info fragment" />
+    <include layout="@layout/component_close_button" android:id="@+id/closeButton" />
 
     <TextView
         android:id="@+id/title"

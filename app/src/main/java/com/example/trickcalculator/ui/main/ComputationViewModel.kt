@@ -9,6 +9,7 @@ import com.example.trickcalculator.ext.substringTo
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isInt
+import com.example.trickcalculator.utils.isNumber
 import com.example.trickcalculator.utils.isPartialDecimal
 import exactfraction.ExactFraction
 
@@ -19,13 +20,14 @@ class ComputationViewModel : ViewModel() {
     // list of numbers and operators
     private val mComputeText = MutableLiveData<StringList>().apply { value = listOf() }
     val computeText: LiveData<StringList> = mComputeText
+    private val mBackupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
-    private val mComputedValue = MutableLiveData<ExactFraction?>().apply { value = null }
-    val computedValue: LiveData<ExactFraction?> = mComputedValue
+    private val mComputedValue = MutableLiveData<ExactFraction>().apply { value = null }
+    val computedValue: LiveData<ExactFraction> = mComputedValue
 
-    private val mError = MutableLiveData<String?>().apply { value = null }
-    val error: LiveData<String?> = mError
+    private val mError = MutableLiveData<String>().apply { value = null }
+    val error: LiveData<String> = mError
 
     private val mUsesComputedValue = MutableLiveData<Boolean>().apply { value = false }
     val usesComputedValue: LiveData<Boolean> = mUsesComputedValue
@@ -42,7 +44,13 @@ class ComputationViewModel : ViewModel() {
     fun setLastHistoryItem() {
         val error = error.value
         val computed = computedValue.value
-        val computation = computeText.value!!
+        var computation = computeText.value!!
+
+        if (computation[0].startsWith('[')) {
+            val first = computation[0]
+            val updatedFirst = first.substring(1 until first.lastIndex)
+            computation = computation.copyWithReplacement(0, updatedFirst)
+        }
 
         mLastHistoryItem.value = when {
             error != null -> HistoryItem(computation, error)
@@ -115,11 +123,17 @@ class ComputationViewModel : ViewModel() {
     fun finalizeComputeText() {
         val computedVal = mComputedValue.value
         val currentText = mComputeText.value
+        mBackupComputeText.value = currentText
 
-        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == computedVal?.toDecimalString()
+        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == getBracketedValue()
 
-        if (computedVal != null && computeMatch) {
-            mComputeText.value = currentText?.copyWithReplacement(0, computedVal.toEFString())
+        if (computedVal != null && computeMatch && currentText != null) {
+            var updatedText = currentText.copyWithReplacement(0, computedVal.toEFString())
+            if (currentText.size > 1 && isNumber(currentText[1])) {
+                updatedText = listOf(updatedText[0], "x") + updatedText.subList(1, updatedText.size)
+            }
+
+            mComputeText.value = updatedText
         }
     }
 
@@ -127,14 +141,7 @@ class ComputationViewModel : ViewModel() {
      * Restore text to use initial value instead of EF string in case of error
      */
     fun restoreComputeText() {
-        val computedVal = mComputedValue.value
-        val currentText = mComputeText.value
-
-        val firstIsEFString = currentText != null && currentText.isNotEmpty() && ExactFraction.isEFString(currentText[0])
-
-        if (computedVal != null && firstIsEFString) {
-            mComputeText.value = currentText?.copyWithReplacement(0, computedVal.toDecimalString())
-        }
+        mComputeText.value = mBackupComputeText.value
     }
 
     /**
@@ -142,8 +149,19 @@ class ComputationViewModel : ViewModel() {
      */
     fun useComputedAsComputeText() {
         mUsesComputedValue.value = true
-        val computed: ExactFraction = mComputedValue.value!!
-        mComputeText.value = listOf(computed.toDecimalString())
+        mComputeText.value = listOf(getBracketedValue()!!)
+    }
+
+    /**
+     * Get currently computed item, surrounded by square brackets
+     */
+    private fun getBracketedValue(): String? {
+        val text = computedValue.value?.toDecimalString()
+        if (text == null) {
+            return null
+        }
+
+        return "[$text]"
     }
 
     /**

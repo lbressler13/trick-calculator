@@ -2,7 +2,6 @@ package com.example.trickcalculator.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +23,9 @@ import com.example.trickcalculator.ui.history.HistoryFragment
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.OperatorFunction
 import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.ui.shared.Settings
-import com.example.trickcalculator.ui.shared.initSettingsDialog
-import com.example.trickcalculator.ui.shared.initSettingsObservers
+import com.example.trickcalculator.ui.settings.Settings
+import com.example.trickcalculator.ui.settings.initSettingsFragment
+import com.example.trickcalculator.ui.settings.initSettingsObservers
 
 /**
  * Fragment to display main calculator functionality
@@ -40,19 +39,7 @@ class MainFragment : Fragment() {
     private var error: String? = null
     private var usesComputedValue = false
 
-    private var maxDigits = -1
-
-    private val settings = Settings(
-        shuffleNumbers = false,
-        shuffleOperators = false,
-        applyParens = true,
-        clearOnError = false,
-        applyDecimals = true,
-        showSettingsButton = false,
-        historyRandomness = 0
-    )
-
-    private var devMode = false
+    private val settings = Settings()
 
     companion object {
         fun newInstance() = MainFragment()
@@ -80,14 +67,18 @@ class MainFragment : Fragment() {
         sharedViewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initNumpad()
-        binding.mainText.movementMethod = ScrollingMovementMethod()
+        binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
         initDeveloperOptions()
 
-        initSettingsDialog(this, sharedViewModel, settings, binding.settingsButton)
+        initSettingsFragment(this, settings, binding.settingsButton)
 
+        return binding.root
+    }
+
+    override fun getView(): View {
         return binding.root
     }
 
@@ -99,7 +90,7 @@ class MainFragment : Fragment() {
         }
     }
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
-        binding.settingsButton.isVisible = it || devMode
+        binding.settingsButton.isVisible = it
     }
     private val isDevModeObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = settings.showSettingsButton
@@ -116,7 +107,7 @@ class MainFragment : Fragment() {
     /**
      * Display current error message, and clear compute data depending on settings
      */
-    private val errorObserver: Observer<String?> = Observer {
+    private val errorObserver: Observer<String> = Observer {
         error = it
         if (it != null) {
             binding.errorText.text = "Error: $it"
@@ -129,9 +120,6 @@ class MainFragment : Fragment() {
             binding.errorText.gone()
         }
     }
-
-    // TODO get from textview
-    private fun setMaxDigits() { maxDigits = 14 }
 
     /**
      * Launch AttributionsFragment
@@ -219,6 +207,9 @@ class MainFragment : Fragment() {
                 computationViewModel.setLastHistoryItem()
 
                 computationViewModel.useComputedAsComputeText()
+
+                val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
+                movement.goToTop(binding.mainText)
             } catch (e: Exception) {
                 computationViewModel.restoreComputeText()
 
@@ -250,6 +241,7 @@ class MainFragment : Fragment() {
         if (error != null) {
             computationViewModel.setError(null)
         }
+        scrollTextToBottom()
     }
 
     /**
@@ -274,6 +266,7 @@ class MainFragment : Fragment() {
         binding.backspaceButton.setOnClickListener {
             computationViewModel.setError(null)
             computationViewModel.backspaceComputeText()
+            scrollTextToBottom()
         }
     }
 
@@ -283,6 +276,7 @@ class MainFragment : Fragment() {
     private fun initActionBar() {
         val actionBar = (requireActivity() as MainActivity).binding.actionBar
         actionBar.root.setOnClickListener(null)
+        actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
 
     /**
@@ -291,22 +285,12 @@ class MainFragment : Fragment() {
     private fun setMainText() {
         val textview: TextView = binding.mainText
         val fullText = computeText.joinToString("")
+        textview.text = fullText
+    }
 
-        if (devMode) {
-            if (maxDigits == -1) {
-                setMaxDigits()
-            }
-
-            if (computeText.isNotEmpty() && usesComputedValue) {
-                // val spannableString = addBorder(computeText, maxDigits, requireContext(), textview)
-                // textview.text = spannableString
-                textview.text = fullText
-            } else {
-                textview.text = fullText
-            }
-        } else {
-            textview.text = fullText
-        }
+    private fun scrollTextToBottom() {
+        val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
+        movementMethod.goToBottom(binding.mainText)
     }
 
     private fun initDeveloperOptions() {

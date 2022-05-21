@@ -28,10 +28,10 @@ private const val probabilityParens = 0.2f
  */
 private const val probabilityWholeNumberResult = 0.6f
 private val weightedRangesResult = listOf(
-    Pair((0 until 500), 0.2f),
-    Pair((500 until 10000), 0.3f),
-    Pair((10000 until Int.MAX_VALUE / 2), 0.25f),
-    Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.25f)
+    Pair(0 until 500, 0.2f),
+    Pair(500 until 10000, 0.3f),
+    Pair(10000 until Int.MAX_VALUE / 2, 0.25f),
+    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.25f)
 )
 
 /**
@@ -39,10 +39,10 @@ private val weightedRangesResult = listOf(
  */
 private const val probabilityWholeNumberComputation = 0.85f
 private val weightedRangesComputation = listOf(
-    Pair((0 until 1000), 0.5f),
-    Pair((1000 until 100000), 0.2f),
-    Pair((100000 until Int.MAX_VALUE / 2), 0.2f),
-    Pair((Int.MAX_VALUE / 2..Int.MAX_VALUE), 0.1f)
+    Pair(0 until 1000, 0.5f),
+    Pair(1000 until 100000, 0.2f),
+    Pair(100000 until Int.MAX_VALUE / 2, 0.2f),
+    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.1f)
 )
 
 private val operators = listOf("+", "-", "x", "/", "^")

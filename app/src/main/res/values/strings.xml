@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Trick Calculator</string>
-    <string name="action_bar_title">Calculator</string>
+    <string name="title_action_bar">Calculator</string>
 
     <!-- Numpad -->
     <string name="zero">0</string>
@@ -29,6 +29,8 @@
     <string name="apply_decimals">Apply Decimals</string>
     <string name="show_settings_button">Show Settings Button</string>
     <string name="random_history_label">History Mode</string>
+    <string name="computation">Computation</string>
+    <string name="view">View</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">settingsUpdateRequest</string>

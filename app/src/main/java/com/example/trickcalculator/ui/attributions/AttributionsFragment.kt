@@ -5,17 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentImageAttributionsBinding
-import com.example.trickcalculator.ui.shared.Settings
+import com.example.trickcalculator.ui.settings.Settings
+import com.example.trickcalculator.ui.settings.initSettingsFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
-import com.example.trickcalculator.ui.shared.initSettingsDialog
-import com.example.trickcalculator.ui.shared.initSettingsObservers
+import com.example.trickcalculator.ui.settings.initSettingsObservers
 
 /**
  * Information about a single image attribution
@@ -52,15 +51,7 @@ class AttributionsFragment : Fragment() {
     private lateinit var binding: FragmentImageAttributionsBinding
     private lateinit var sharedViewModel: SharedViewModel
 
-    private val settings = Settings(
-        shuffleNumbers = false,
-        shuffleOperators = false,
-        applyParens = true,
-        clearOnError = false,
-        applyDecimals = true,
-        showSettingsButton = false,
-        historyRandomness = 0
-    )
+    private val settings = Settings()
 
     companion object {
         fun newInstance() = AttributionsFragment()
@@ -83,13 +74,22 @@ class AttributionsFragment : Fragment() {
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.closeButton.setOnClickListener {
+        binding.closeButton.root.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        val actionBar: View = (requireActivity() as MainActivity).binding.actionBar.root
-        initSettingsDialog(this, sharedViewModel, settings, actionBar)
+
+        initActionBar()
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
 
         return binding.root
+    }
+
+    /**
+     * Set functionality in action bar
+     */
+    private fun initActionBar() {
+        val actionBar = (requireActivity() as MainActivity).binding.actionBar
+        initSettingsFragment(this, settings, actionBar.root)
+        actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
 }
