@@ -152,6 +152,9 @@ class ComputationViewModel : ViewModel() {
         mComputeText.value = listOf(getBracketedValue()!!)
     }
 
+    /**
+     * Get currently computed item, surrounded by square brackets
+     */
     private fun getBracketedValue(): String? {
         val text = computedValue.value?.toDecimalString()
         if (text == null) {

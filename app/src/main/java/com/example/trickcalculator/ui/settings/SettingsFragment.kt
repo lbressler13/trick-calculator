@@ -34,11 +34,15 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Code that is specific to fragment and is not run in dialog
+     */
     private fun runFragmentCode() {
         binding.closeButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
+        // init action bar
         val actionBar = (requireActivity() as MainActivity).binding.actionBar
         actionBar.root.setOnClickListener(null)
         actionBar.title.text = requireActivity().getString(R.string.title_settings)

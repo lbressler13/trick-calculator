@@ -92,5 +92,4 @@ class AttributionsFragment : Fragment() {
         initSettingsFragment(this, settings, actionBar.root)
         actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
-
 }

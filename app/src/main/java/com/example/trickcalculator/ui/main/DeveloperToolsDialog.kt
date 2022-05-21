@@ -14,7 +14,6 @@ import com.example.trickcalculator.databinding.DialogDeveloperToolsBinding
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.settings.initSettingsDialog
-import com.example.trickcalculator.ui.settings.initSettingsObservers
 
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
@@ -40,7 +39,6 @@ class DeveloperToolsDialog : DialogFragment() {
             .create()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,7 +51,6 @@ class DeveloperToolsDialog : DialogFragment() {
             (requireActivity() as MainActivity).recreate()
         }
 
-        initSettingsObservers(settings, viewModel, viewLifecycleOwner)
         initSettingsDialog(this, settings, binding.settingsDialogButton)
 
         return binding.root
