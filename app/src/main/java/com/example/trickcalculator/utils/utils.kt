@@ -55,3 +55,5 @@ fun isPartialDecimal(value: String): Boolean {
 
     return positiveString.isNotEmpty() && positiveString.all { it.isDigit() || it == '.' }
 }
+
+fun isNumberChar(value: String): Boolean = value.length == 1 && (value == "." || value[0].isDigit())

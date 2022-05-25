@@ -25,25 +25,18 @@ import exactfraction.ExactFractionOverflowException
  * @throws Exception in case of issues with syntax, parsing, or number overflow
  */
 fun runComputation(
-    computeText: StringList,
+    initialValue: ExactFraction?,
+    initialText: StringList,
     operatorRounds: List<StringList>,
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
     checkParens: Boolean,
     useDecimals: Boolean
 ): ExactFraction {
-    if (!validateComputeText(computeText, operatorRounds.flatten())) {
-        throw Exception("Syntax error")
-    }
-
-    var currentState: StringList = computeText
+    var currentState: StringList = initialText
 
     if (!useDecimals) {
         currentState = stripDecimals(currentState)
-    }
-
-    if (validateNumbersOrder(numbersOrder)) {
-        currentState = replaceNumbers(currentState, numbersOrder)
     }
 
     // do this even when not checking parens to add mult operations
@@ -51,6 +44,16 @@ fun runComputation(
 
     if (!checkParens) {
         currentState = stripParens(currentState)
+    }
+
+    if (validateNumbersOrder(numbersOrder)) {
+        currentState = replaceNumbers(currentState, numbersOrder)
+    }
+
+    currentState = try {
+        buildAndValidateComputeText(initialValue, currentState, operatorRounds.flatten())
+    } catch (e: Exception) {
+        throw Exception("Syntax error")
     }
 
     return try {
@@ -252,7 +255,7 @@ fun addMultToParens(computeText: StringList): StringList {
 
     computeText.forEach {
         val currentType: String = when {
-            isNumber(it) -> "number"
+            it == "." || it[0].isDigit() -> "number"
             it == "(" -> "lparen"
             it == ")" -> "rparen"
             else -> ""
@@ -331,9 +334,7 @@ fun stripParens(computeText: StringList): StringList = computeText.filter { it !
  * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
  * @return modified list containing all operators and parens, with numbers modified to remove any decimal points
  */
-fun stripDecimals(computeText: StringList): StringList = computeText.map { element ->
-    element.filter { it != '.' }
-}
+fun stripDecimals(computeText: StringList): StringList = computeText.filter { it != "." }
 
 /**
  * Generate a specific error message after a NumberFormatException
