@@ -77,36 +77,32 @@ fun runStripDecimalsTests() {
 
     // decimals
 
-    computeText = listOf("5.0")
-    expected = listOf("50")
+    computeText = listOf("5", ".", "0")
+    expected = listOf("5", "0")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = listOf("5.123")
-    expected = listOf("5123")
+    computeText = "5.123".split("")
+    expected = "5123".split("")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = listOf(".123")
-    expected = listOf("123")
+    computeText = ".123".split("")
+    expected = "123".split("")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = "( 0.123 )".split(' ')
-    expected = "( 0123 )".split(' ')
+    computeText = "(0.123)".split("")
+    expected = "(0123)".split("")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = "5 + 1.234".split(' ')
-    expected = "5 + 1234".split(' ')
+    computeText = "5+1.234".split("")
+    expected = "5+1234".split("")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = "123.456 + 5".split(' ')
-    expected = "123456 + 5".split(' ')
+    computeText = ".345+6.78".split("")
+    expected = "345+678".split("")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = ".345 + 6.78".split(' ')
-    expected = "345 + 678".split(' ')
-    assertEquals(expected, stripDecimals(computeText))
-
-    computeText = "0.5 + ( 1.3 / 90.12 )".split(' ')
-    expected = "05 + ( 13 / 9012 )".split(' ')
+    computeText = "0.5+(1.3/90.12)".split("")
+    expected = "05+(13/9012)".split("")
     assertEquals(expected, stripDecimals(computeText))
 }
 

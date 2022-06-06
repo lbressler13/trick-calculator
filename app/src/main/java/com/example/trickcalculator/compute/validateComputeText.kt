@@ -2,67 +2,8 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.utils.IntList
 import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.utils.isNumber
 import com.example.trickcalculator.utils.isNumberChar
 import exactfraction.ExactFraction
-
-/**
- * Validate computation text before parsing
- *
- * Validations:
- * - Doesn't start or end with operator
- * - All values are number, operator, or paren
- * - Parentheses are matched
- * - No successive numbers or operators
- * - Operators are not the first or last value within a set of parens
- *
- * @param computeText [List]: list of string values to parse
- * @param ops [List]: list of string values recognized as operators
- * @return true if validation succeeds, false otherwise
- */
-fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
-    if (computeText.isEmpty()) {
-        return true
-    }
-
-    // cannot start or end with operator
-    if (isOperator(computeText.first(), ops) || isOperator(computeText.last(), ops)) {
-        return false
-    }
-
-    var lastType = ""
-    var openParenCount = 0
-
-    for (element in computeText) {
-        val currentType: String? = when {
-            isOperator(element, ops) -> "operator"
-            isNumber(element) -> "number"
-            element == "(" -> "lparen"
-            element == ")" -> "rparen"
-            else -> null
-        }
-
-        if (currentType == "lparen") {
-            openParenCount++
-        } else if (currentType == "rparen") {
-            openParenCount--
-        }
-
-        if (openParenCount < 0 ||
-            currentType == null || // unknown char
-            (lastType == "lparen" && currentType == "operator") || // operator next to parens
-            (lastType == "operator" && currentType == "rparen") ||
-            (lastType == currentType && !currentType.endsWith("paren")) || // repeated num or op
-            (lastType == "lparen" && currentType == "rparen") // empty parens
-        ) {
-            return false
-        }
-
-        lastType = currentType
-    }
-
-    return openParenCount == 0
-}
 
 /**
  * Validate that a number order contains only the numbers 0..9, not in the sorted order
@@ -80,13 +21,30 @@ fun validateNumbersOrder(order: IntList?): Boolean = order != null
         && order.sorted().joinToString("") == "0123456789"
 
 
+/**
+ * // TODO: this is copied from validate, update for build and validate
+ * Validate computation text before parsing
+ *
+ * Validations:
+ * - Doesn't start or end with operator
+ * - All values are number, operator, or paren
+ * - Parentheses are matched
+ * - No successive numbers or operators
+ * - Operators are not the first or last value within a set of parens
+ *
+ * @param computeText [List]: list of string values to parse
+ * @param ops [List]: list of string values recognized as operators
+ * @return true if validation succeeds, false otherwise
+ */
 // assumes number order has already been substituted
-fun buildAndValidateComputeText(initialValue: ExactFraction?, initialText: StringList, ops: StringList): StringList {
-    if (initialText.isEmpty() && initialValue == null) {
+fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringList, ops: StringList): StringList {
+    val syntaxError = Exception("Syntax error")
+
+    if (splitText.isEmpty() && initialValue == null) {
         return listOf()
     }
 
-    if (initialText.isEmpty()) {
+    if (splitText.isEmpty()) {
         return listOf(initialValue!!.toEFString())
     }
 
@@ -99,11 +57,17 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, initialText: Strin
     if (initialValue != null) {
         computeText.add(initialValue.toEFString())
         lastType = "number"
+
+        // can't start with number if initial value is set
+        if (splitText.isNotEmpty() && isNumberChar(splitText[0])) {
+            throw syntaxError
+        }
     }
 
-    val errorMessage = "Syntax error"
-
     val addNonNumber: (String) -> Unit = {
+        if (currentNumber == ".") {
+            throw syntaxError
+        }
         if (currentNumber.isNotEmpty()) {
             computeText.add(currentNumber)
             currentNumber = ""
@@ -113,20 +77,23 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, initialText: Strin
     }
 
     val addNumber: (String) -> Unit = {
-        if (it == "." && currentDecimal) {
-            throw Exception(errorMessage)
-        } else {
-            currentNumber += it
+        when {
+            it == "." && currentDecimal -> throw syntaxError
+            it == "." -> {
+                currentDecimal = true
+                currentNumber += it
+            }
+            else -> currentNumber += it
         }
     }
 
-    for (element in initialText) {
+    for (element in splitText) {
         val currentType: String = when {
             isOperator(element, ops) -> "operator"
             element == "(" -> "lparen"
             element == ")" -> "rparen"
             isNumberChar(element) -> "number"
-            else -> throw Exception(errorMessage)
+            else -> throw syntaxError
         }
 
         if (currentType == "lparen") {
@@ -141,7 +108,7 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, initialText: Strin
             (lastType == "operator" && currentType == "operator") || // double operators
             (lastType == "lparen" && currentType == "rparen") // empty parens
         ) {
-            throw Exception(errorMessage)
+            throw syntaxError
         }
 
         if (currentType == "number") {
@@ -153,12 +120,17 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, initialText: Strin
         lastType = currentType
     }
 
-    if (currentNumber.isNotEmpty()) {
-        computeText.add(currentNumber)
+    if (
+        currentNumber.endsWith(".")  ||
+        openParenCount != 0 ||
+        (computeText.isNotEmpty() && isOperator(computeText[0], ops)) || // starts with operator
+        (lastType == "operator" && currentNumber.isEmpty()) // ends in operator
+    ) {
+        throw syntaxError
     }
 
-    if (openParenCount != 0 || isOperator(computeText.last(), ops)) {
-        throw Exception(errorMessage)
+    if (currentNumber.isNotEmpty()) {
+        computeText.add(currentNumber)
     }
 
     return computeText
