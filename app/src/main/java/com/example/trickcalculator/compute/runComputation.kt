@@ -281,8 +281,9 @@ fun addMultToParens(computeText: StringList): StringList {
 /**
  * Update digits using values in number order.
  * Does not affect any symbols other in the string.
- * Numbers are mapped such that each digit is replaced by the value at the corresponding index in the number order.
- * For example, 0 is replaced by the 0th value in the number order
+ * Single-digit numbers are replaced by the value of the corresponding index in the number order.
+ * For example, 0 is replaced by the 0th value in the number order.
+ * Multi-digit numbers are not modified, as these will cause later validation to fail
  *
  * Assumptions:
  * - Numbers order has passed validation
@@ -294,17 +295,11 @@ fun addMultToParens(computeText: StringList): StringList {
  */
 fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
     return text.map {
-        if (!isNumber(it)) {
+        if (it.length > 1 || !it[0].isDigit()) {
             it
         } else {
-            it.map { c ->
-                if (c.isDigit()) {
-                    val index = Integer.parseInt(c.toString())
-                    numbersOrder[index].toString()
-                } else {
-                    c.toString()
-                }
-            }.joinToString("")
+            val index = Integer.parseInt(it)
+            numbersOrder[index].toString()
         }
     }
 }

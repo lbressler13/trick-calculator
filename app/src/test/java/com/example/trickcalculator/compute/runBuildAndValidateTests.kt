@@ -121,6 +121,19 @@ private fun testValidateErrors() {
     text = splitString("123+1 ")
     assertSyntaxError { buildAndValidateComputeText(null, text, ops) }
 
+    // multi-digit
+    text = listOf("12")
+    assertSyntaxError { buildAndValidateComputeText(null, text, ops) }
+
+    text = listOf("01")
+    assertSyntaxError { buildAndValidateComputeText(null, text, ops) }
+
+    text = "1 + 10".split(' ')
+    assertSyntaxError { buildAndValidateComputeText(null, text, ops) }
+
+    text = listOf("1.2")
+    assertSyntaxError { buildAndValidateComputeText(null, text, ops) }
+
     // number at start with initial value set
     val initialsValues = listOf(ExactFraction.ZERO, ExactFraction(-1234), ExactFraction(17, 56))
     val numbersFirstText = listOf(listOf("1"), "0.56".split(""), "(2-3)x1".split(""))

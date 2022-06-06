@@ -76,6 +76,10 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringL
     }
 
     for (element in splitText) {
+        if (element.length != 1) {
+            throw syntaxError
+        }
+
         val currentType: String = when {
             isOperator(element, ops) -> "operator"
             element == "(" -> "lparen"
