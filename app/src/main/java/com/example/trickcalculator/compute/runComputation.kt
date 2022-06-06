@@ -283,7 +283,7 @@ fun addMultToParens(computeText: StringList): StringList {
 }
 
 /**
- * Update digits using values in number order.
+ * Update digits using values in number order, and in the numerator/denominator of an ExactFraction.
  * Does not affect any symbols other in the string.
  * Single-digit numbers are replaced by the value of the corresponding index in the number order.
  * For example, 0 is replaced by the 0th value in the number order.
@@ -292,9 +292,11 @@ fun addMultToParens(computeText: StringList): StringList {
  * Assumptions:
  * - Numbers order has passed validation
  *
+ * @param ef [ExactFraction]
  * @param text [List]: string list of numbers, operators, and parens
  * @param numbersOrder [List]: list of numbers, containing the values 0..9 in any other order
- * @return a list which is identical to the initial text, in everything other than the values of numbers.
+ * @return [Pair] an ExactFraction where the digits in the numerator and denominator have been modified,
+ * and a list which is identical to the initial text, in everything other than the values of numbers.
  * Values of numbers have been modified as described above.
  */
 fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList): Pair<ExactFraction?, StringList> {
@@ -311,9 +313,10 @@ fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList):
         return Pair(null, newText)
     }
 
+    // modify digits in numerator
     val numerator = ef.numerator.toString()
     val newNumString = numerator.map {
-        if (it == '-') { // handle negative
+        if (it == '-') { // handle negative sign
             "-"
         } else {
             val index = Integer.parseInt(it.toString())
@@ -321,6 +324,7 @@ fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList):
         }
     }.joinToString("")
 
+    // modify digits in denominator
     val denominator = ef.denominator.toString()
     val newDenomString = denominator.map {
         val index = Integer.parseInt(it.toString())
