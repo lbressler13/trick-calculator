@@ -255,7 +255,7 @@ fun addMultToParens(computeText: StringList): StringList {
 
     computeText.forEach {
         val currentType: String = when {
-            it == "." || it[0].isDigit() -> "number"
+            it[0] == '.' || it[0].isDigit() -> "number"
             it == "(" -> "lparen"
             it == ")" -> "rparen"
             else -> ""

@@ -3,7 +3,7 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.utils.StringList
 import org.junit.Test
 
-class ComputeUtilsTest {
+class ComputeHelpersTest {
     @Test
     fun testIsOperator() {
         var element = "-"

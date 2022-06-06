@@ -68,7 +68,7 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Append new value to end of list, creating multi-digit number when possible
+     * Append new value to end of list
      *
      * @param addition [String]: new character to add
      */
@@ -78,7 +78,7 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Remove latest addition to compute text, possibly bt shortening a multi-digit number
+     * Remove latest addition to compute text
      */
     fun backspaceComputeText() {
         val currentText: StringList = computeText.value!!

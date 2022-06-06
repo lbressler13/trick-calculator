@@ -6,37 +6,23 @@ import com.example.trickcalculator.utils.isNumberChar
 import exactfraction.ExactFraction
 
 /**
- * Validate that a number order contains only the numbers 0..9, not in the sorted order
- *
- * Validations:
- * - Order is not null
- * - Order contains current digits
- * - Order is not already sorted
- *
- * @param order [List]: list of numbers, can be null
- * @return true if validation succeeds, false otherwise
- */
-fun validateNumbersOrder(order: IntList?): Boolean = order != null
-        && order.joinToString("") != "0123456789"
-        && order.sorted().joinToString("") == "0123456789"
-
-
-/**
- * // TODO: this is copied from validate, update for build and validate
- * Validate computation text before parsing
+ * Validate computation text, and combine adjacent digits/decimals to form numbers.
+ * Assumes number substitution has already happened, if necessary.
  *
  * Validations:
  * - Doesn't start or end with operator
  * - All values are number, operator, or paren
  * - Parentheses are matched
- * - No successive numbers or operators
+ * - No successive operators
  * - Operators are not the first or last value within a set of parens
  *
- * @param computeText [List]: list of string values to parse
+ * @param initialValue [ExactFraction]: the previously computed value, if being used as the start of the computation
+ * @param splitText [StringList]: list of single-character values to combine, excluding initialValue
  * @param ops [List]: list of string values recognized as operators
- * @return true if validation succeeds, false otherwise
+ * @return [StringList]: modified list with adjacent digits/decimals combined into single numbers,
+ * with the relative position of numbers, operators, and parens unchanged
+ * @throws Exception if validation fails
  */
-// assumes number order has already been substituted
 fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringList, ops: StringList): StringList {
     val syntaxError = Exception("Syntax error")
 
@@ -64,6 +50,7 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringL
         }
     }
 
+    // Add operator or paren to compute text
     val addNonNumber: (String) -> Unit = {
         if (currentNumber == ".") {
             throw syntaxError
@@ -76,7 +63,8 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringL
         computeText.add(it)
     }
 
-    val addNumber: (String) -> Unit = {
+    // Add digit or decimal to current number
+    val addDigit: (String) -> Unit = {
         when {
             it == "." && currentDecimal -> throw syntaxError
             it == "." -> {
@@ -112,7 +100,7 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringL
         }
 
         if (currentType == "number") {
-            addNumber(element)
+            addDigit(element)
         } else {
             addNonNumber(element)
         }
@@ -135,3 +123,19 @@ fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringL
 
     return computeText
 }
+
+/**
+ * Validate that a number order contains only the numbers 0..9, not in the sorted order
+ *
+ * Validations:
+ * - Order is not null
+ * - Order contains current digits
+ * - Order is not already sorted
+ *
+ * @param order [List]: list of numbers, can be null
+ * @return true if validation succeeds, false otherwise
+ */
+fun validateNumbersOrder(order: IntList?): Boolean = order != null
+        && order.joinToString("") != "0123456789"
+        && order.sorted().joinToString("") == "0123456789"
+

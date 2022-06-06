@@ -17,7 +17,6 @@ private fun testValidateErrors() {
     assertSyntaxError { buildAndValidateComputeText(null, text, ops) }
 
     text = splitString("-3")
-    println(text)
     assertSyntaxError { buildAndValidateComputeText(null, text, ops) }
 
     text = splitString("x3-4")
