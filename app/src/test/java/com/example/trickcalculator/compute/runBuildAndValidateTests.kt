@@ -1,5 +1,6 @@
 package com.example.trickcalculator.compute
 
+import com.example.trickcalculator.splitString
 import com.example.trickcalculator.utils.StringList
 import exactfraction.ExactFraction
 import org.junit.Assert.*
@@ -216,15 +217,3 @@ private fun assertSyntaxError(function: () -> Unit) {
     assertEquals("Syntax error", error.message)
 }
 
-// by default, splitting on empty space adds a character at start and end
-// this helper fixes that
-private fun splitString(s: String): StringList {
-    return when(s.length) {
-        0 -> listOf()
-        1 -> listOf(s)
-        else -> {
-            val split = s.split("")
-            split.subList(1, split.lastIndex)
-        }
-    }
-}
