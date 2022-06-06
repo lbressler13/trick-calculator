@@ -3,14 +3,9 @@ package com.example.trickcalculator.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.trickcalculator.ext.copyWithLastReplaced
 import com.example.trickcalculator.ext.copyWithReplacement
-import com.example.trickcalculator.ext.substringTo
 import com.example.trickcalculator.ui.history.HistoryItem
-import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.utils.isInt
-import com.example.trickcalculator.utils.isNumber
-import com.example.trickcalculator.utils.isPartialDecimal
+import com.example.trickcalculator.utils.*
 import exactfraction.ExactFraction
 
 /**
@@ -44,7 +39,7 @@ class ComputationViewModel : ViewModel() {
     fun setLastHistoryItem() {
         val error = error.value
         val computed = computedValue.value
-        var computation = computeText.value!!
+        var computation = mBackupComputeText.value!!
 
         if (computation[0].startsWith('[')) {
             val first = computation[0]
@@ -73,46 +68,27 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Append new value to end of list, creating multi-digit number when possible
+     * Append new value to end of list
      *
      * @param addition [String]: new character to add
      */
     fun appendComputeText(addition: String) {
-        val currentVal: StringList = mComputeText.value!!
-
-        if (currentVal.size == 1 && mComputedValue.value != null) {
-            mComputeText.value = currentVal + addition
-        } else if (currentVal.isNotEmpty() && (isInt(addition) || addition == ".") &&
-            // create multi-digit number
-            isPartialDecimal(currentVal.last())
-        ) {
-            val newAddition: String = currentVal.last() + addition
-            mComputeText.value = currentVal.copyWithLastReplaced(newAddition)
-        } else {
-            mComputeText.value = currentVal + addition
-        }
+        val currentVal: StringList = computeText.value!!
+        mComputeText.value = currentVal + addition
     }
 
     /**
-     * Remove latest addition to compute text, possibly bt shortening a multi-digit number
+     * Remove latest addition to compute text
      */
     fun backspaceComputeText() {
-        val currentText: StringList = mComputeText.value!!
+        val currentText: StringList = computeText.value!!
 
-        if (currentText.size == 1 && mComputedValue.value != null) {
+        if (currentText.size == 1 && computedValue.value != null) {
             mUsesComputedValue.value = false
             mComputeText.value = listOf()
             mComputedValue.value = null
         } else if (currentText.isNotEmpty()) {
-            val lastValue = currentText.last()
-
-            if (lastValue.length == 1) {
-                mComputeText.value = currentText.subList(0, currentText.lastIndex)
-            } else {
-                // delete last digit from multi-digit number
-                val newValue: String = lastValue.substringTo(lastValue.lastIndex)
-                mComputeText.value = currentText.copyWithLastReplaced(newValue)
-            }
+            mComputeText.value = currentText.subList(0, currentText.lastIndex)
         }
     }
 
@@ -121,18 +97,18 @@ class ComputationViewModel : ViewModel() {
      * Used before running computation to retain exact value of last computed
      */
     fun finalizeComputeText() {
-        val computedVal = mComputedValue.value
-        val currentText = mComputeText.value
+        val currentText = computeText.value
         mBackupComputeText.value = currentText
 
-        val computeMatch = currentText?.isNotEmpty() == true && currentText[0] == getBracketedValue()
+        if (usesComputedValue.value == true && currentText!!.size == 1) {
+            mComputeText.value = listOf()
+        } else if (usesComputedValue.value == true && currentText!!.size > 1) {
+            var updatedText = currentText.subList(1, currentText.size)
+            val nextValue = updatedText[0]
 
-        if (computedVal != null && computeMatch && currentText != null) {
-            var updatedText = currentText.copyWithReplacement(0, computedVal.toEFString())
-            if (currentText.size > 1 && isNumber(currentText[1])) {
-                updatedText = listOf(updatedText[0], "x") + updatedText.subList(1, updatedText.size)
+            if (nextValue == "(" || isNumberChar(nextValue)) {
+                updatedText = listOf("x") + updatedText
             }
-
             mComputeText.value = updatedText
         }
     }

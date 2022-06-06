@@ -1,6 +1,9 @@
 package com.example.trickcalculator.compute
 
+import com.example.trickcalculator.assertDivByZero
+import com.example.trickcalculator.splitString
 import com.example.trickcalculator.utils.StringList
+import exactfraction.ExactFraction
 import org.junit.Assert.*
 
 fun runStripParensTests() {
@@ -76,75 +79,94 @@ fun runStripDecimalsTests() {
     assertEquals(expected, stripDecimals(computeText))
 
     // decimals
-
-    computeText = listOf("5.0")
-    expected = listOf("50")
+    computeText = listOf("5", ".", "0")
+    expected = listOf("5", "0")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = listOf("5.123")
-    expected = listOf("5123")
+    computeText = splitString("5.123")
+    expected = splitString("5123")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = listOf(".123")
-    expected = listOf("123")
+    computeText = splitString(".123")
+    expected = splitString("123")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = "( 0.123 )".split(' ')
-    expected = "( 0123 )".split(' ')
+    computeText = splitString("(0.123)")
+    expected = splitString("(0123)")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = "5 + 1.234".split(' ')
-    expected = "5 + 1234".split(' ')
+    computeText = splitString("5+1.234")
+    expected = splitString("5+1234")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = "123.456 + 5".split(' ')
-    expected = "123456 + 5".split(' ')
+    computeText = splitString(".345+6.78")
+    expected = splitString("345+678")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = ".345 + 6.78".split(' ')
-    expected = "345 + 678".split(' ')
-    assertEquals(expected, stripDecimals(computeText))
-
-    computeText = "0.5 + ( 1.3 / 90.12 )".split(' ')
-    expected = "05 + ( 13 / 9012 )".split(' ')
+    computeText = splitString("0.5+(1.3/90.12)")
+    expected = splitString("05+(13/9012)")
     assertEquals(expected, stripDecimals(computeText))
 }
 
 fun runReplaceNumbersTests() {
     var text: StringList = listOf()
     var order = (9 downTo 0).toList()
-    var expected: StringList = listOf()
-    assertEquals(expected, replaceNumbers(text, order))
+    var expected: Pair<ExactFraction?, StringList> = Pair(null, listOf())
+    assertEquals(expected, replaceNumbers(null, text, order))
 
-    text = "( )".split(' ')
+    text = splitString("()")
     order = (9 downTo 0).toList()
-    expected = "( )".split(' ')
-    assertEquals(expected, replaceNumbers(text, order))
+    expected = Pair(null, splitString("()"))
+    assertEquals(expected, replaceNumbers(null, text, order))
 
-    text = "1 + 2 + 4".split(' ')
+    var initialValue: ExactFraction = ExactFraction.THREE
+    text = listOf()
+    order = (9 downTo 0).toList()
+    expected = Pair(ExactFraction(6, 8), listOf())
+    assertEquals(expected, replaceNumbers(initialValue, text, order))
+
+    initialValue = ExactFraction(-103, 27)
+    text = listOf()
+    order = (9 downTo 0).toList()
+    expected = Pair(ExactFraction(-896, 72), listOf())
+    assertEquals(expected, replaceNumbers(initialValue, text, order))
+
+    initialValue = ExactFraction.HALF
+    text = listOf()
+    order = listOf(1, 2, 0, 3, 4, 5, 6, 7, 8, 9)
+    assertDivByZero { replaceNumbers(initialValue, text, order) }
+
+    initialValue = ExactFraction.FIVE
+    text = splitString("1+2+4")
     order = (0..9).toList()
-    expected = "1 + 2 + 4".split(' ')
-    assertEquals(expected, replaceNumbers(text, order))
+    expected = Pair(ExactFraction.FIVE, splitString("1+2+4"))
+    assertEquals(expected, replaceNumbers(initialValue, text, order))
 
-    text = listOf("1357902468")
+    text = splitString("1357902468")
     order = listOf(4, 7, 6, 3, 9, 2, 8, 0, 1, 5)
-    expected = listOf("7320546981")
-    assertEquals(expected, replaceNumbers(text, order))
+    expected = Pair(null, splitString("7320546981"))
+    assertEquals(expected, replaceNumbers(null, text, order))
 
-    text = "37 + ( 45 - 74 ) x 83".split(' ')
+    text = splitString("37+(45-74)x83")
     order = (9 downTo 0).toList()
-    expected = "62 + ( 54 - 25 ) x 16".split(' ')
-    assertEquals(expected, replaceNumbers(text, order))
+    expected = Pair(null, splitString("62+(54-25)x16"))
+    assertEquals(expected, replaceNumbers(null, text, order))
 
-    text = listOf(".489")
+    text = splitString(".489")
     order = listOf(0, 1, 2, 3, 4, 5, 6, 7, 9, 8)
-    expected = listOf(".498")
-    assertEquals(expected, replaceNumbers(text, order))
+    expected = Pair(null, splitString(".498"))
+    assertEquals(expected, replaceNumbers(null, text, order))
 
-    text = "0.5 x 13 - 8.69".split(' ')
+    initialValue = ExactFraction(-289, 361)
+    text = splitString("0.5x13-8.69")
     order = listOf(8, 3, 0, 6, 2, 9, 5, 4, 1, 7)
-    expected = "8.9 x 36 - 1.57".split(' ')
-    assertEquals(expected, replaceNumbers(text, order))
+    expected = Pair(ExactFraction(-17, 653), splitString("8.9x36-1.57"))
+    assertEquals(expected, replaceNumbers(initialValue, text, order))
+
+    text = "22 / ( 1 - 2 )".split(' ')
+    order = (9 downTo 0).toList()
+    expected = Pair(null, "22 / ( 8 - 7 )".split(' '))
+    assertEquals(expected, replaceNumbers(null, text, order))
 }
 
 fun runAddMultToParensTests() {

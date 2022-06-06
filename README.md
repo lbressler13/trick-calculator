@@ -31,14 +31,14 @@ But you can read the code or click around in the app until you find it.
 ## Testing
 **All** new computation needs unit tests.
 The computation in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
-There is a huge sense of relief from being able to press a button and know that everything still works.
+There is a huge sense of relief from being able to press a button and know that everything still works after refactoring the most important functions.
 The hours writing tests will be worth it. 
 
 You will gain a huge appreciation for testing and TDD.
 
 ## Dependencies
 This app has a dependency on an [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
-This package must be built and placed in a local **libs** file in order for a gradle build to succeed.
+This package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
 
 ## Serious Stuff
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.

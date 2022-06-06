@@ -2,42 +2,91 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.utils.IntList
 import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.utils.isNumber
+import com.example.trickcalculator.utils.isNumberChar
+import exactfraction.ExactFraction
 
 /**
- * Validate computation text before parsing
+ * Validate computation text, and combine adjacent digits/decimals to form numbers.
+ * Assumes number substitution has already happened, if necessary.
  *
  * Validations:
+ * - Each element has length 1
  * - Doesn't start or end with operator
  * - All values are number, operator, or paren
  * - Parentheses are matched
- * - No successive numbers or operators
+ * - No successive operators
  * - Operators are not the first or last value within a set of parens
  *
- * @param computeText [List]: list of string values to parse
+ * @param initialValue [ExactFraction]: the previously computed value, if being used as the start of the computation
+ * @param splitText [StringList]: list of single-character values to combine, excluding initialValue
  * @param ops [List]: list of string values recognized as operators
- * @return true if validation succeeds, false otherwise
+ * @return [StringList]: modified list with adjacent digits/decimals combined into single numbers,
+ * with the relative position of numbers, operators, and parens unchanged
+ * @throws Exception if validation fails
  */
-fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
-    if (computeText.isEmpty()) {
-        return true
+fun buildAndValidateComputeText(initialValue: ExactFraction?, splitText: StringList, ops: StringList): StringList {
+    val syntaxError = Exception("Syntax error")
+
+    if (splitText.isEmpty() && initialValue == null) {
+        return listOf()
     }
 
-    // cannot start or end with operator
-    if (isOperator(computeText.first(), ops) || isOperator(computeText.last(), ops)) {
-        return false
+    if (splitText.isEmpty()) {
+        return listOf(initialValue!!.toEFString())
     }
 
+    val computeText = mutableListOf<String>()
     var lastType = ""
+    var currentNumber = ""
+    var currentDecimal = false
     var openParenCount = 0
 
-    for (element in computeText) {
-        val currentType: String? = when {
+    if (initialValue != null) {
+        computeText.add(initialValue.toEFString())
+        lastType = "number"
+
+        // can't start with number if initial value is set
+        if (splitText.isNotEmpty() && isNumberChar(splitText[0])) {
+            throw syntaxError
+        }
+    }
+
+    // Add operator or paren to compute text
+    val addNonNumber: (String) -> Unit = {
+        if (currentNumber == ".") {
+            throw syntaxError
+        }
+        if (currentNumber.isNotEmpty()) {
+            computeText.add(currentNumber)
+            currentNumber = ""
+            currentDecimal = false
+        }
+        computeText.add(it)
+    }
+
+    // Add digit or decimal to current number
+    val addDigit: (String) -> Unit = {
+        when {
+            it == "." && currentDecimal -> throw syntaxError
+            it == "." -> {
+                currentDecimal = true
+                currentNumber += it
+            }
+            else -> currentNumber += it
+        }
+    }
+
+    for (element in splitText) {
+        if (element.length != 1) {
+            throw syntaxError
+        }
+
+        val currentType: String = when {
             isOperator(element, ops) -> "operator"
-            isNumber(element) -> "number"
             element == "(" -> "lparen"
             element == ")" -> "rparen"
-            else -> null
+            isNumberChar(element) -> "number"
+            else -> throw syntaxError
         }
 
         if (currentType == "lparen") {
@@ -47,19 +96,37 @@ fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
         }
 
         if (openParenCount < 0 ||
-            currentType == null || // unknown char
             (lastType == "lparen" && currentType == "operator") || // operator next to parens
             (lastType == "operator" && currentType == "rparen") ||
-            (lastType == currentType && !currentType.endsWith("paren")) || // repeated num or op
+            (lastType == "operator" && currentType == "operator") || // double operators
             (lastType == "lparen" && currentType == "rparen") // empty parens
         ) {
-            return false
+            throw syntaxError
+        }
+
+        if (currentType == "number") {
+            addDigit(element)
+        } else {
+            addNonNumber(element)
         }
 
         lastType = currentType
     }
 
-    return openParenCount == 0
+    if (
+        currentNumber.endsWith(".")  ||
+        openParenCount != 0 ||
+        (computeText.isNotEmpty() && isOperator(computeText[0], ops)) || // starts with operator
+        (lastType == "operator" && currentNumber.isEmpty()) // ends in operator
+    ) {
+        throw syntaxError
+    }
+
+    if (currentNumber.isNotEmpty()) {
+        computeText.add(currentNumber)
+    }
+
+    return computeText
 }
 
 /**
@@ -76,3 +143,4 @@ fun validateComputeText(computeText: StringList, ops: StringList): Boolean {
 fun validateNumbersOrder(order: IntList?): Boolean = order != null
         && order.joinToString("") != "0123456789"
         && order.sorted().joinToString("") == "0123456789"
+

@@ -1,6 +1,7 @@
 package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.assertDivByZero
+import com.example.trickcalculator.splitString
 import exactfraction.ExactFraction
 import com.example.trickcalculator.utils.OperatorFunction
 import org.junit.Assert.*
@@ -41,95 +42,122 @@ private val performReduced: OperatorFunction = { lval, rval, op ->
 // relatively light, b/c functionality should all be tested in fn-specific tests
 fun runRunComputationTests() {
     // errors
-    var text = "1 + 3 3".split(' ')
+    var text = splitString("1+3-")
     var error = assertThrows(Exception::class.java) {
-        runComputation(text, allOps, performOp, (0..9).toList(), true, true)
+        runComputation(null, text, allOps, performOp, (0..9).toList(), true, true)
     }
     assertEquals("Syntax error", error.message)
 
-    text = "1 / 0".split(' ')
+    text = splitString("1/0")
     assertDivByZero {
-        runComputation(text, allOps, performOp, (0..9).toList(), true, true)
+        runComputation(null, text, allOps, performOp, (0..9).toList(), true, true)
     }
 
-    text = listOf("EF[1 2]")
-    val zeroOps = listOf(2, 1, 0, 3, 4, 5, 6, 7, 8, 9)
+    var initialValue = ExactFraction.HALF
+    text = listOf()
+    val divZeroOrder = listOf(1, 2, 0, 3, 4, 5, 6, 7, 8, 9)
     assertDivByZero {
-        runComputation(text, allOps, performOp, zeroOps, true, true)
+        runComputation(initialValue, text, allOps, performOp, divZeroOrder, true, true)
     }
 
-    text = "1 + 0".split(' ')
+    initialValue = ExactFraction.EIGHT
+    text = splitString("/0")
+    assertDivByZero {
+        runComputation(initialValue, text, allOps, performOp, (0..9).toList(), true, true)
+    }
+
+    text = splitString("1+0")
     error = assertThrows(Exception::class.java) {
-        runComputation(text, allOps, performReduced, (0..9).toList(), true, true)
+        runComputation(null, text, allOps, performReduced, (0..9).toList(), true, true)
     }
     assertEquals("Invalid operator +", error.message)
 
     // cannot test parsing and overflow errors b/c they should never happen
 
     // numbers order
-    text = "1 / 0".split(' ')
+    text = splitString("1/0")
     var nums = listOf(3, 8, 2, 6, 0, 1, 9, 7, 5, 4)
     var expected = ExactFraction(8, 3)
-    var result = runComputation(text, allOps, performOp, nums, true, true)
+    var result = runComputation(null, text, allOps, performOp, nums, true, true)
     assertEquals(expected, result)
 
-    text = "2 x ( 3 + 4 ) / 6.9".split(' ')
+    text = splitString("2x(3+4)/6.9")
     nums = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
     expected = ExactFraction(33, 9)
-    result = runComputation(text, allOps, performOp, nums, true, true)
+    result = runComputation(null, text, allOps, performOp, nums, true, true)
+    assertEquals(expected, result)
+
+    // initial value is impacted by num order
+    initialValue = ExactFraction.THREE
+    text = splitString("x2-31/0")
+    nums = listOf(5, 3, 8, 1, 7, 0, 6, 2, 4, 9)
+    expected = ExactFraction(1, 15)
+    result = runComputation(initialValue, text, allOps, performOp, nums, true, true)
     assertEquals(expected, result)
 
     // skip parens
-    text = "2 ( 3 + 4 ) - 6 / ( 7 - 5 )".split(' ')
+    text = splitString("2(3+4)-6/(7-5)")
     expected = ExactFraction(29, 7)
-    result = runComputation(text, allOps, performOp, (0..9).toList(), false, true)
+    result = runComputation(null, text, allOps, performOp, (0..9).toList(), false, true)
     assertEquals(expected, result)
 
-    text = "2 x ( 3 + 4 ) / ( 6.4 - .4 )".split(' ')
+    text = splitString("2x(3+4)/(6.4-.4)")
     nums = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
     expected = ExactFraction(685, 38)
-    result = runComputation(text, allOps, performOp, nums, false, true)
+    result = runComputation(null, text, allOps, performOp, nums, false, true)
     assertEquals(expected, result)
 
     // skip decimals
-    text = "0.5 x 2 + 7".split(' ')
+    text = splitString("0.5x2+7")
     expected = 17.toExactFraction()
-    result = runComputation(text, allOps, performOp, (0..9).toList(), true, false)
+    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false)
     assertEquals(expected, result)
 
-    text = "8.7 / ( 16 - 2 )".split(' ')
+    text =  splitString("8.7/(16-2)")
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(80, 51)
-    result = runComputation(text, allOps, performOp, nums, true, false)
+    result = runComputation(null, text, allOps, performOp, nums, true, false)
     assertEquals(expected, result)
 
-    text = "1.1 + 2.2 + 3.3".split(' ')
+    text =  splitString("1.1+2.2+3.3")
     expected = 66.toExactFraction()
-    result = runComputation(text, allOps, performOp, (0..9).toList(), true, false)
+    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false)
     assertEquals(expected, result)
 
     // skip parens + decimals
-    text = "8.7 / ( 16 - 2 )".split(' ')
+    text =  splitString("8.7/(16-2)")
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(28, 52)
-    result = runComputation(text, allOps, performOp, nums, false, false)
+    result = runComputation(null, text, allOps, performOp, nums, false, false)
     assertEquals(expected, result)
 
     // alternate ops
-    text = "2 ( 3 / 4 ) - 6 + ( 7 x 5 )".split(' ')
+    text = splitString("2(3/4)-6+(7x5)")
     expected = ExactFraction.ZERO
-    result = runComputation(text, listOf(plusMinus, timesDiv), performSwapped, (0..9).toList(), true, true)
+    result = runComputation(null, text, listOf(plusMinus, timesDiv), performSwapped, (0..9).toList(), true, true)
     assertEquals(expected, result)
 
     // normal
-    text = "( 17 + ( 12 - 90 ) ) / 3".split(' ')
+    text = splitString("(17+(12-90))/3")
     expected = ExactFraction(-61, 3)
-    result = runComputation(text, allOps, performOp, (0..9).toList(), true, true)
+    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, true)
     assertEquals(expected, result)
 
-    text = "2 ( 7 - 4 ) ^ ( 0 - 12 / 6 )".split(' ')
+    text = splitString("2(7-4)^(0-12/6)")
     expected = ExactFraction(2, 9)
-    result = runComputation(text, allOps, performOp, (0..9).toList(), true, true)
+    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, true)
+    assertEquals(expected, result)
+
+    initialValue = ExactFraction.ZERO
+    text = splitString("+(17+(12-90))/3")
+    expected = ExactFraction(-61, 3)
+    result = runComputation(initialValue, text, allOps, performOp, (0..9).toList(), true, true)
+    assertEquals(expected, result)
+
+    initialValue = -ExactFraction.HALF
+    text = splitString("x3-6")
+    expected = ExactFraction(-15, 2)
+    result = runComputation(initialValue, text, allOps, performOp, (0..9).toList(), true, true)
     assertEquals(expected, result)
 }
 

@@ -55,7 +55,7 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
  * Set the checked button in the history radio group based on args
  *
  * @param context [Context]: application context
- * @param args: [Bundle]: nullable field containing arguments of several types
+ * @param args [Bundle]: nullable field containing arguments of several types
  * @param group [RadioGroup]
  * @param buttons [List]: list of [RadioButton] within group
  */

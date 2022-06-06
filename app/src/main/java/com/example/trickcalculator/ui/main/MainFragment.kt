@@ -38,6 +38,7 @@ class MainFragment : Fragment() {
     private lateinit var computeText: StringList
     private var error: String? = null
     private var usesComputedValue = false
+    private var computedValue: ExactFraction? = null
 
     private val settings = Settings()
 
@@ -60,6 +61,7 @@ class MainFragment : Fragment() {
         computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
         computationViewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
+        computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
         computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button
@@ -83,6 +85,7 @@ class MainFragment : Fragment() {
     }
 
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
+    private val computedValueObserver: Observer<ExactFraction?> = Observer { computedValue = it }
     private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
             sharedViewModel.addToHistory(it)
@@ -194,6 +197,7 @@ class MainFragment : Fragment() {
             try {
                 val computedValue: ExactFraction =
                     runComputation(
+                        computedValue,
                         computeText,
                         operatorRounds,
                         performOperation,
