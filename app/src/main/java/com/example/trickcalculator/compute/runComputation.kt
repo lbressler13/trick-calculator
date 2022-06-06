@@ -3,6 +3,7 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.utils.*
 import exactfraction.ExactFraction
 import exactfraction.ExactFractionOverflowException
+import java.math.BigInteger
 
 /**
  * Parse string list and compute as a mathematical expression, if possible.
@@ -34,6 +35,7 @@ fun runComputation(
     useDecimals: Boolean
 ): ExactFraction {
     var currentState: StringList = initialText
+    var currentEF: ExactFraction? = initialValue
 
     if (!useDecimals) {
         currentState = stripDecimals(currentState)
@@ -47,11 +49,13 @@ fun runComputation(
     }
 
     if (validateNumbersOrder(numbersOrder)) {
-        currentState = replaceNumbers(currentState, numbersOrder)
+        val replaceResult = replaceNumbers(currentEF, currentState, numbersOrder)
+        currentEF = replaceResult.first
+        currentState = replaceResult.second
     }
 
     currentState = try {
-        buildAndValidateComputeText(initialValue, currentState, operatorRounds.flatten())
+        buildAndValidateComputeText(currentEF, currentState, operatorRounds.flatten())
     } catch (e: Exception) {
         throw Exception("Syntax error")
     }
@@ -293,8 +297,8 @@ fun addMultToParens(computeText: StringList): StringList {
  * @return a list which is identical to the initial text, in everything other than the values of numbers.
  * Values of numbers have been modified as described above.
  */
-fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
-    return text.map {
+fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList): Pair<ExactFraction?, StringList> {
+    val newText = text.map {
         if (it.length > 1 || !it[0].isDigit()) {
             it
         } else {
@@ -302,6 +306,29 @@ fun replaceNumbers(text: StringList, numbersOrder: IntList): StringList {
             numbersOrder[index].toString()
         }
     }
+
+    if (ef == null) {
+        return Pair(null, newText)
+    }
+
+    val numerator = ef.numerator.toString()
+    val newNumString = numerator.map {
+        if (it == '-') { // handle negative
+            "-"
+        } else {
+            val index = Integer.parseInt(it.toString())
+            numbersOrder[index].toString()
+        }
+    }.joinToString("")
+
+    val denominator = ef.denominator.toString()
+    val newDenomString = denominator.map {
+        val index = Integer.parseInt(it.toString())
+        numbersOrder[index].toString()
+    }.joinToString("")
+
+    val newEF = ExactFraction(BigInteger(newNumString), BigInteger(newDenomString))
+    return Pair(newEF, newText)
 }
 
 /**

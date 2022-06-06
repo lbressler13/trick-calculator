@@ -10,6 +10,7 @@ import exactfraction.ExactFraction
  * Assumes number substitution has already happened, if necessary.
  *
  * Validations:
+ * - Each element has length 1
  * - Doesn't start or end with operator
  * - All values are number, operator, or paren
  * - Parentheses are matched

@@ -53,9 +53,14 @@ fun runRunComputationTests() {
         runComputation(null, text, allOps, performOp, (0..9).toList(), true, true)
     }
 
-    // TODO divide by zero with 1/2 + numbers order
+    var initialValue = ExactFraction.HALF
+    text = listOf()
+    val divZeroOrder = listOf(1, 2, 0, 3, 4, 5, 6, 7, 8, 9)
+    assertDivByZero {
+        runComputation(initialValue, text, allOps, performOp, divZeroOrder, true, true)
+    }
 
-    var initialValue: ExactFraction? = ExactFraction.EIGHT
+    initialValue = ExactFraction.EIGHT
     text = splitString("/0")
     assertDivByZero {
         runComputation(initialValue, text, allOps, performOp, (0..9).toList(), true, true)
@@ -82,7 +87,13 @@ fun runRunComputationTests() {
     result = runComputation(null, text, allOps, performOp, nums, true, true)
     assertEquals(expected, result)
 
-    // TODO test that initial value is impacted
+    // initial value is impacted by num order
+    initialValue = ExactFraction.THREE
+    text = splitString("x2-31/0")
+    nums = listOf(5, 3, 8, 1, 7, 0, 6, 2, 4, 9)
+    expected = ExactFraction(1, 15)
+    result = runComputation(initialValue, text, allOps, performOp, nums, true, true)
+    assertEquals(expected, result)
 
     // skip parens
     text = splitString("2(3+4)-6/(7-5)")
