@@ -21,7 +21,12 @@
     <string name="pi">PI</string>
 
     <!-- Settings UI -->
+    <!-- Title/Section Headings -->
     <string name="title_settings">Settings</string>
+    <string name="computation">Computation</string>
+    <string name="view">View</string>
+    <string name="all_settings">Update All Settings</string>
+    <!-- Settings Labels -->
     <string name="shuffle_operators">Shuffle Operators</string>
     <string name="shuffle_numbers">Shuffle Numbers</string>
     <string name="apply_parens">Apply Parens</string>
@@ -29,8 +34,8 @@
     <string name="apply_decimals">Apply Decimals</string>
     <string name="show_settings_button">Show Settings Button</string>
     <string name="random_history_label">History Mode</string>
-    <string name="computation">Computation</string>
-    <string name="view">View</string>
+    <string name="reset_settings">Reset</string>
+    <string name="randomize_settings">Randomize</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">settingsUpdateRequest</string>

@@ -95,4 +95,14 @@
             android:text="@string/three" />
     </RadioGroup>
 
+    <Button
+        android:id="@+id/resetSettingsButton"
+        style="@style/DeveloperToolsButton"
+        android:text="@string/reset_settings" />
+
+    <Button
+        android:id="@+id/randomizeSettingsButton"
+        style="@style/DeveloperToolsButton"
+        android:text="@string/randomize_settings" />
+
 </LinearLayout>

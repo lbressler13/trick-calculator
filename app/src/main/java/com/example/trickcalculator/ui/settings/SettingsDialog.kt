@@ -19,6 +19,8 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 class SettingsDialog : DialogFragment() {
     private lateinit var binding: DialogSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
+    var resetPressed = false
+    var randomizePressed = false
 
     /**
      * Initialize dialog
@@ -27,7 +29,7 @@ class SettingsDialog : DialogFragment() {
         binding = DialogSettingsBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        setUiFromArgs(binding, requireContext(), arguments)
+        setUiFromArgs(this, sharedViewModel, binding)
 
         val doneText = requireContext().getString(R.string.done)
         val title = requireContext().getString(R.string.title_settings)
@@ -41,7 +43,14 @@ class SettingsDialog : DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        saveToViewModel(sharedViewModel, binding)
+        saveToViewModel(this, sharedViewModel, binding)
+        closeParentDialog()
+    }
+
+    /**
+     * Closes parent fragment if parent is also a dialog
+     */
+    private fun closeParentDialog() {
         if (parentFragment != null && parentFragment is DialogFragment) {
             (parentFragment as DialogFragment).dismiss()
         }

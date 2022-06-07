@@ -1,10 +1,14 @@
 package com.example.trickcalculator.ui.shared
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
+import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.utils.History
+import java.util.*
+import kotlin.random.Random
 
 /**
  * ViewModel to track history and settings that are shared across fragments
@@ -33,6 +37,29 @@ class SharedViewModel : ViewModel() {
     fun setApplyDecimals(newValue: Boolean) { mApplyDecimals.value = newValue }
     fun setShowSettingsButton(newValue: Boolean) { mShowSettingsButton.value = newValue }
     fun setHistoryRandomness(newValue: Int) { mHistoryRandomness.value = newValue }
+
+    // reset all settings other than settings button on main fragment
+    fun resetSettings() {
+        val defaults = Settings()
+        setShuffleNumbers(defaults.shuffleNumbers)
+        setShuffleOperators(defaults.shuffleOperators)
+        setApplyParens(defaults.applyParens)
+        setClearOnError(defaults.clearOnError)
+        setApplyDecimals(defaults.applyDecimals)
+        setHistoryRandomness(defaults.historyRandomness)
+    }
+
+    // select random values for settings and hide settings button
+    fun randomizeSettings() {
+        val r = Random(Date().time)
+        setShuffleNumbers(r.nextBoolean())
+        setShuffleOperators(r.nextBoolean())
+        setApplyParens(r.nextBoolean())
+        setClearOnError(r.nextBoolean())
+        setApplyDecimals(r.nextBoolean())
+        setHistoryRandomness((0..3).random())
+        setShowSettingsButton(false)
+    }
 
     // dev mode
     private val mIsDevMode = MutableLiveData<Boolean>().apply { value = false }
