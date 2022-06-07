@@ -1,9 +1,11 @@
 package com.example.trickcalculator.ui.shared
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
+import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.utils.History
 
 /**
@@ -33,6 +35,17 @@ class SharedViewModel : ViewModel() {
     fun setApplyDecimals(newValue: Boolean) { mApplyDecimals.value = newValue }
     fun setShowSettingsButton(newValue: Boolean) { mShowSettingsButton.value = newValue }
     fun setHistoryRandomness(newValue: Int) { mHistoryRandomness.value = newValue }
+
+    // reset all settings other than icon on main fragment
+    fun resetSettings() {
+        val defaults = Settings()
+        setShuffleNumbers(defaults.shuffleNumbers)
+        setShuffleOperators(defaults.shuffleOperators)
+        setApplyParens(defaults.applyParens)
+        setClearOnError(defaults.clearOnError)
+        setApplyDecimals(defaults.applyDecimals)
+        setHistoryRandomness(defaults.historyRandomness)
+    }
 
     // dev mode
     private val mIsDevMode = MutableLiveData<Boolean>().apply { value = false }

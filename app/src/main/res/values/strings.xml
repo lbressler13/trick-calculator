@@ -31,6 +31,7 @@
     <string name="random_history_label">History Mode</string>
     <string name="computation">Computation</string>
     <string name="view">View</string>
+    <string name="reset_settings">Reset Settings</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">settingsUpdateRequest</string>

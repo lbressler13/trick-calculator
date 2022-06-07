@@ -95,4 +95,9 @@
             android:text="@string/three" />
     </RadioGroup>
 
+    <Button
+        android:id="@+id/resetSettingsButton"
+        style="@style/DeveloperToolsButton"
+        android:text="@string/reset_settings" />
+
 </LinearLayout>

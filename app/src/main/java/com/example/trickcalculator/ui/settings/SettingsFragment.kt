@@ -16,6 +16,7 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
+    var resetPressed = false
 
     companion object {
         fun newInstance() = SettingsFragment()
@@ -29,7 +30,7 @@ class SettingsFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         runFragmentCode()
-        setUiFromArgs(binding, requireContext(), arguments)
+        setUiFromArgs(this, sharedViewModel, binding)
 
         return binding.root
     }
@@ -50,6 +51,6 @@ class SettingsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        saveToViewModel(sharedViewModel, binding)
+        saveToViewModel(this, sharedViewModel, binding)
     }
 }
