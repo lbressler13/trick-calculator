@@ -38,7 +38,7 @@ class SharedViewModel : ViewModel() {
     fun setShowSettingsButton(newValue: Boolean) { mShowSettingsButton.value = newValue }
     fun setHistoryRandomness(newValue: Int) { mHistoryRandomness.value = newValue }
 
-    // reset all settings other than icon on main fragment
+    // reset all settings other than settings button on main fragment
     fun resetSettings() {
         val defaults = Settings()
         setShuffleNumbers(defaults.shuffleNumbers)

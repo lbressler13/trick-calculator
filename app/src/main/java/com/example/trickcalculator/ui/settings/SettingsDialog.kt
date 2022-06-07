@@ -47,6 +47,9 @@ class SettingsDialog : DialogFragment() {
         closeParentDialog()
     }
 
+    /**
+     * Closes parent fragment if parent is also a dialog
+     */
     private fun closeParentDialog() {
         if (parentFragment != null && parentFragment is DialogFragment) {
             (parentFragment as DialogFragment).dismiss()
