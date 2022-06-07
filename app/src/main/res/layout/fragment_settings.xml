@@ -50,11 +50,6 @@
         style="@style/SettingsFragmentItem"
         android:text="@string/shuffle_numbers" />
 
-    <TextView
-        style="@style/SettingsSectionHeading"
-        android:layout_marginTop="15dp"
-        android:text="@string/view" />
-
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/applyParensSwitch"
         style="@style/SettingsFragmentItem"
@@ -66,6 +61,11 @@
         style="@style/SettingsFragmentItem"
         android:checked="true"
         android:text="@string/apply_decimals" />
+
+    <TextView
+        style="@style/SettingsSectionHeading"
+        android:layout_marginTop="15dp"
+        android:text="@string/view" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/clearOnErrorSwitch"
@@ -126,14 +126,31 @@
             android:text="@string/three" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/resetSettingsButton"
-        style="@style/DeveloperToolsButton"
-        android:text="@string/reset_settings" />
+    <TextView
+        style="@style/SettingsSectionHeading"
+        android:layout_marginTop="15dp"
+        android:text="@string/all_settings" />
 
-    <Button
-        android:id="@+id/randomizeSettingsButton"
-        style="@style/DeveloperToolsButton"
-        android:text="@string/randomize_settings" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/resetSettingsButton"
+            style="@style/SettingsFragmentItem.Button"
+            android:text="@string/reset_settings" />
+
+        <TextView
+            style="@style/SettingsFragmentItem.Button"
+            android:text="|" />
+
+        <TextView
+            android:id="@+id/randomizeSettingsButton"
+            style="@style/SettingsFragmentItem.Button"
+            android:text="@string/randomize_settings" />
+
+    </LinearLayout>
 
 </LinearLayout>

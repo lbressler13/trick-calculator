@@ -2,7 +2,7 @@ package com.example.trickcalculator.ui.settings
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.SwitchCompat
@@ -90,8 +90,8 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
     val settingsButtonSwitch: SwitchCompat
     val historyRadioGroup: RadioGroup
     val historyRadioButtons: List<RadioButton>
-    val resetSettingsButton: Button
-    val randomizeSettingsButton: Button
+    val resetSettingsButton: View
+    val randomizeSettingsButton: View
 
     // assign elements for SettingsFragment
     if (binding is FragmentSettingsBinding) {
