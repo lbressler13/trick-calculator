@@ -11,7 +11,7 @@ Here are the settings:
 | History               | 1       | Degree of randomness in computation history                                         |
 | Show settings button  | false   | If settings button should be shown on main screen. Not accessible from main screen  |
 | Shuffle numbers       | false   | Shuffle value of numbers. No visual indication of new values                        |
-| Shuffle operator      | true    | Shuffle action of operators. No visual indication of new actions                    |
+| Shuffle operators     | true    | Shuffle action of operators. No visual indication of new actions                    |
 
 For standard calculator function, use the following settings:
 | Setting               | Value  |
@@ -22,7 +22,7 @@ For standard calculator function, use the following settings:
 | History               | 0      |
 | Show settings button  | any    |
 | Shuffle numbers       | false  |
-| Shuffle operator      | false  |
+| Shuffle operators     | false  |
 
 Access to the settings menu is unintuitive to create added difficulty.
 In the spirit of the app, this access is undocumented.
