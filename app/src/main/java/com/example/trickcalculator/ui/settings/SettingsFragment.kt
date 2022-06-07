@@ -17,6 +17,7 @@ class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
     var resetPressed = false
+    var randomizePressed = false
 
     companion object {
         fun newInstance() = SettingsFragment()

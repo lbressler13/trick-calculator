@@ -131,4 +131,9 @@
         style="@style/DeveloperToolsButton"
         android:text="@string/reset_settings" />
 
+    <Button
+        android:id="@+id/randomizeSettingsButton"
+        style="@style/DeveloperToolsButton"
+        android:text="@string/randomize_settings" />
+
 </LinearLayout>

@@ -91,6 +91,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
     val historyRadioGroup: RadioGroup
     val historyRadioButtons: List<RadioButton>
     val resetSettingsButton: Button
+    val randomizeSettingsButton: Button
 
     // assign elements for SettingsFragment
     if (binding is FragmentSettingsBinding) {
@@ -108,6 +109,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
             binding.historyButton3
         )
         resetSettingsButton = binding.resetSettingsButton
+        randomizeSettingsButton = binding.randomizeSettingsButton
     }
     // assign elements for SettingsDialog
     else {
@@ -126,6 +128,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
             binding.historyButton3
         )
         resetSettingsButton = binding.resetSettingsButton
+        randomizeSettingsButton = binding.randomizeSettingsButton
     }
 
     // set UI, for either fragment or dialog
@@ -142,6 +145,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
 
     setHistoryRadioGroup(context, args, historyRadioGroup, historyRadioButtons)
     resetSettingsButton.setOnClickListener { resetSettingsOnClick(fragment) }
+    randomizeSettingsButton.setOnClickListener { randomizeSettingsOnClick(fragment) }
 }
 
 /**
@@ -155,77 +159,101 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
  * Expected to be either [FragmentSettingsBinding] or [DialogSettingsBinding]
  */
 fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: ViewBinding) {
+    val resetRandomizedPair = getResetAndRandomized(fragment)
+    val resetPressed = resetRandomizedPair.first
+    val randomizedPressed = resetRandomizedPair.second
+
+    when {
+        resetPressed -> viewModel.resetSettings()
+        randomizedPressed -> viewModel.randomizeSettings()
+        else -> {
+            // create variables for UI elements
+            val shuffleNumbersSwitch: SwitchCompat
+            val shuffleOperatorsSwitch: SwitchCompat
+            val applyParensSwitch: SwitchCompat
+            val clearOnErrorSwitch: SwitchCompat
+            val applyDecimalsSwitch: SwitchCompat
+            val settingsButtonSwitch: SwitchCompat
+            val historyRadioGroup: RadioGroup
+            val historyRadioButtons: List<RadioButton>
+
+            // assign elements for SettingsFragment
+            if (binding is FragmentSettingsBinding) {
+                shuffleNumbersSwitch = binding.shuffleNumbersSwitch
+                shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
+                applyParensSwitch = binding.applyParensSwitch
+                clearOnErrorSwitch = binding.clearOnErrorSwitch
+                applyDecimalsSwitch = binding.applyDecimalsSwitch
+                settingsButtonSwitch = binding.settingsButtonSwitch
+                historyRadioGroup = binding.historyRandomnessGroup
+                historyRadioButtons = listOf(
+                    binding.historyButton0,
+                    binding.historyButton1,
+                    binding.historyButton2,
+                    binding.historyButton3
+                )
+            }
+            // assign elements for SettingsDialog
+            else {
+                binding as DialogSettingsBinding
+                shuffleNumbersSwitch = binding.shuffleNumbersSwitch
+                shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
+                applyParensSwitch = binding.applyParensSwitch
+                clearOnErrorSwitch = binding.clearOnErrorSwitch
+                applyDecimalsSwitch = binding.applyDecimalsSwitch
+                settingsButtonSwitch = binding.settingsButtonSwitch
+                historyRadioGroup = binding.historyRandomnessGroup
+                historyRadioButtons = listOf(
+                    binding.historyButton0,
+                    binding.historyButton1,
+                    binding.historyButton2,
+                    binding.historyButton3
+                )
+            }
+
+            // update ViewModel based on settings selected in UI, for either fragment or dialog
+            viewModel.setShuffleNumbers(shuffleNumbersSwitch.isChecked)
+            viewModel.setShuffleOperators(shuffleOperatorsSwitch.isChecked)
+            viewModel.setApplyParens(applyParensSwitch.isChecked)
+            viewModel.setClearOnError(clearOnErrorSwitch.isChecked)
+            viewModel.setApplyDecimals(applyDecimalsSwitch.isChecked)
+            viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
+            viewModel.setHistoryRandomness(getHistoryGroupValue(historyRadioGroup, historyRadioButtons))
+        }
+    }
+
+    // reset button pressed
+    if (fragment is SettingsDialog) {
+        fragment.resetPressed = false
+        fragment.randomizePressed = false
+    } else {
+        fragment as SettingsFragment
+        fragment.resetPressed = false
+        fragment.randomizePressed = false
+    }
+}
+
+/**
+ * Get values of resetPressed and randomizePressed, based on fragment
+ *
+ * @param fragment [Fragment]: calling fragment.
+ * Expected to be either [SettingsFragment] or [SettingsDialog]
+ * @return [Pair]: pair of [Boolean], where first element is resetPressed and second is randomizedPressed
+ */
+private fun getResetAndRandomized(fragment: Fragment): Pair<Boolean, Boolean> {
     val resetPressed: Boolean
+    val randomizedPressed: Boolean
+
     if (fragment is SettingsDialog) {
         resetPressed = fragment.resetPressed
+        randomizedPressed = fragment.randomizePressed
     } else {
         fragment as SettingsFragment
         resetPressed = fragment.resetPressed
+        randomizedPressed = fragment.randomizePressed
     }
 
-    if (resetPressed) {
-        viewModel.resetSettings()
-    } else {
-        // create variables for UI elements
-        val shuffleNumbersSwitch: SwitchCompat
-        val shuffleOperatorsSwitch: SwitchCompat
-        val applyParensSwitch: SwitchCompat
-        val clearOnErrorSwitch: SwitchCompat
-        val applyDecimalsSwitch: SwitchCompat
-        val settingsButtonSwitch: SwitchCompat
-        val historyRadioGroup: RadioGroup
-        val historyRadioButtons: List<RadioButton>
-
-        // assign elements for SettingsFragment
-        if (binding is FragmentSettingsBinding) {
-            shuffleNumbersSwitch = binding.shuffleNumbersSwitch
-            shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
-            applyParensSwitch = binding.applyParensSwitch
-            clearOnErrorSwitch = binding.clearOnErrorSwitch
-            applyDecimalsSwitch = binding.applyDecimalsSwitch
-            settingsButtonSwitch = binding.settingsButtonSwitch
-            historyRadioGroup = binding.historyRandomnessGroup
-            historyRadioButtons = listOf(
-                binding.historyButton0,
-                binding.historyButton1,
-                binding.historyButton2,
-                binding.historyButton3
-            )
-        }
-        // assign elements for SettingsDialog
-        else {
-            binding as DialogSettingsBinding
-            shuffleNumbersSwitch = binding.shuffleNumbersSwitch
-            shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
-            applyParensSwitch = binding.applyParensSwitch
-            clearOnErrorSwitch = binding.clearOnErrorSwitch
-            applyDecimalsSwitch = binding.applyDecimalsSwitch
-            settingsButtonSwitch = binding.settingsButtonSwitch
-            historyRadioGroup = binding.historyRandomnessGroup
-            historyRadioButtons = listOf(
-                binding.historyButton0,
-                binding.historyButton1,
-                binding.historyButton2,
-                binding.historyButton3
-            )
-        }
-
-        // update ViewModel based on settings selected in UI, for either fragment or dialog
-        viewModel.setShuffleNumbers(shuffleNumbersSwitch.isChecked)
-        viewModel.setShuffleOperators(shuffleOperatorsSwitch.isChecked)
-        viewModel.setApplyParens(applyParensSwitch.isChecked)
-        viewModel.setClearOnError(clearOnErrorSwitch.isChecked)
-        viewModel.setApplyDecimals(applyDecimalsSwitch.isChecked)
-        viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
-        viewModel.setHistoryRandomness(getHistoryGroupValue(historyRadioGroup, historyRadioButtons))
-    }
-
-    if (fragment is SettingsDialog) {
-        fragment.resetPressed = false
-    } else {
-        fragment as SettingsFragment
-        fragment.resetPressed = false
-    }
+    return Pair(resetPressed, randomizedPressed)
 }
 
 /**
@@ -240,6 +268,22 @@ private fun resetSettingsOnClick(fragment: Fragment) {
         fragment.dismiss()
     } else if (fragment is SettingsFragment) {
         fragment.resetPressed = true
+        fragment.parentFragmentManager.popBackStack()
+    }
+}
+
+/**
+ * On click function for randomize settings button.
+ *
+ * @param fragment [Fragment]: the calling fragment.
+ * Expected to be either [SettingsFragment] or [SettingsDialog]
+ */
+private fun randomizeSettingsOnClick(fragment: Fragment) {
+    if (fragment is SettingsDialog)  {
+        fragment.randomizePressed = true
+        fragment.dismiss()
+    } else if (fragment is SettingsFragment) {
+        fragment.randomizePressed = true
         fragment.parentFragmentManager.popBackStack()
     }
 }

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.utils.History
+import java.util.*
+import kotlin.random.Random
 
 /**
  * ViewModel to track history and settings that are shared across fragments
@@ -45,6 +47,18 @@ class SharedViewModel : ViewModel() {
         setClearOnError(defaults.clearOnError)
         setApplyDecimals(defaults.applyDecimals)
         setHistoryRandomness(defaults.historyRandomness)
+    }
+
+    // select random values for settings and hide settings button
+    fun randomizeSettings() {
+        val r = Random(Date().time)
+        setShuffleNumbers(r.nextBoolean())
+        setShuffleOperators(r.nextBoolean())
+        setApplyParens(r.nextBoolean())
+        setClearOnError(r.nextBoolean())
+        setApplyDecimals(r.nextBoolean())
+        setHistoryRandomness((0..3).random())
+        setShowSettingsButton(false)
     }
 
     // dev mode

@@ -20,6 +20,7 @@ class SettingsDialog : DialogFragment() {
     private lateinit var binding: DialogSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
     var resetPressed = false
+    var randomizePressed = false
 
     /**
      * Initialize dialog
