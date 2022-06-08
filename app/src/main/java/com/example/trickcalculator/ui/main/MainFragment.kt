@@ -37,7 +37,6 @@ class MainFragment : Fragment() {
 
     private lateinit var computeText: StringList
     private var error: String? = null
-    private var usesComputedValue = false
     private var computedValue: ExactFraction? = null
 
     private val settings = Settings()
@@ -60,7 +59,6 @@ class MainFragment : Fragment() {
         // observe changes in viewmodels
         computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
-        computationViewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
         computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
@@ -84,7 +82,6 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
     private val computedValueObserver: Observer<ExactFraction?> = Observer {
         computedValue = it
         setMainText()

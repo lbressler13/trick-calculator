@@ -24,9 +24,6 @@ class ComputationViewModel : ViewModel() {
     private val mError = MutableLiveData<String>().apply { value = null }
     val error: LiveData<String> = mError
 
-    private val mUsesComputedValue = MutableLiveData<Boolean>().apply { value = false }
-    val usesComputedValue: LiveData<Boolean> = mUsesComputedValue
-
     private val mLastHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
     val lastHistoryItem: LiveData<HistoryItem> = mLastHistoryItem
 
@@ -54,18 +51,13 @@ class ComputationViewModel : ViewModel() {
         }
     }
 
-    fun clearStoredHistoryItem() {
-        mLastHistoryItem.value = null
-    }
+    fun clearStoredHistoryItem() { mLastHistoryItem.value = null }
 
     /**
      * Clear current computed values
      */
     private fun clearComputeText() { mComputeText.value = listOf() }
-    private fun clearComputedValue() {
-        mComputedValue.value = null
-        mUsesComputedValue.value = false
-    }
+    private fun clearComputedValue() { mComputedValue.value = null }
 
     /**
      * Append new value to end of list
@@ -84,7 +76,6 @@ class ComputationViewModel : ViewModel() {
         val currentText: StringList = computeText.value!!
 
         if (currentText.size == 1 && computedValue.value != null) {
-            mUsesComputedValue.value = false
             mComputeText.value = listOf()
             mComputedValue.value = null
         } else if (currentText.isNotEmpty()) {
@@ -109,10 +100,7 @@ class ComputationViewModel : ViewModel() {
     /**
      * Replace compute text list with the computed value
      */
-    fun useComputedAsComputeText() {
-        mUsesComputedValue.value = true
-        mComputeText.value = listOf()
-    }
+    fun useComputedAsComputeText() { mComputeText.value = listOf() }
 
     /**
      * Get currently computed item, surrounded by square brackets
