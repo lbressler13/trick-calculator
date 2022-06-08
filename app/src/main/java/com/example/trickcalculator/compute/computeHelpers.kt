@@ -6,6 +6,10 @@ import exactfraction.ExactFraction
 import java.math.BigInteger
 
 /**
+ * Functions that don't perform a main piece of functionality and are used by those that do
+ */
+
+/**
  * Determine if a given string is an operator
  *
  * @param element [String]: value to check
@@ -54,4 +58,67 @@ fun applyOrderToEF(numbersOrder: IntList?, ef: ExactFraction?): ExactFraction? {
     val newNum = BigInteger(newNumString)
     val newDenom = BigInteger(newDenomString)
     return ExactFraction(newNum, newDenom)
+}
+/**
+ * Given a list of text and the index of a left paren, find the index of the corresponding right paren
+ *
+ * Assumptions:
+ * - Validation succeeded, including matched parentheses
+ *
+ * @param openIndex [Int]: index of opening paren
+ * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
+ * @return index of closing paren, or -1 if it cannot be found
+ * @throws IndexOutOfBoundsException if openIndex is greater than lastIndex
+ */
+fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
+    var openCount = 0
+    val onlyParens = computeText.withIndex()
+        .toList()
+        .subList(openIndex, computeText.size)
+        .filter { it.value == "(" || it.value == ")" }
+
+    var closeIndex = -1
+
+    for (idxVal in onlyParens) {
+        if (idxVal.value == "(") {
+            openCount++
+        } else if (idxVal.value == ")") {
+            openCount--
+        }
+
+        if (openCount == 0) {
+            closeIndex = idxVal.index
+            break
+        }
+    }
+
+    return closeIndex
+}
+
+/**
+ * Generate a specific error message after a NumberFormatException
+ *
+ * @param error [String]: message from initial exception, can be null
+ * @return new error message with details about the parsing error that occurred
+ */
+fun getParsingError(error: String?): String {
+    if (error == null) {
+        return "Parse error"
+    }
+
+    val startIndex = error.indexOf("\"")
+    val endIndex = error.lastIndexOf("\"")
+
+    if (endIndex - startIndex <= 1) {
+        return "Parse error"
+    }
+
+    val symbol = error.substring(startIndex + 1, endIndex)
+
+    return try {
+        ExactFraction(symbol)
+        "Number overflow on value $symbol"
+    } catch (e: Exception) {
+        "Cannot parse symbol $symbol"
+    }
 }

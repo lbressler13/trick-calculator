@@ -41,7 +41,7 @@ fun runComputation(
 
     val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
 
-    val computeText = buildAndValidateComputeText(
+    val computeText = generateAndValidateComputeText(
         modifiedInitialValue,
         initialText,
         operatorRounds.flatten(),
@@ -72,10 +72,8 @@ fun runComputation(
  * - Any necessary modifications (i.e. number order, adding x for parens) have already occurred
  *
  * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
- * @param firstRoundOps [List]: list of string operators to be applied in the first round of computation.
- * Likely multiplication and division
- * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
- * Likely addition and subtraction
+ * @param operatorRounds [List]: list of lists, where each sublist contains a round of string operators.
+ * Each sublist is applied as a round of operators, starting with the first sublist and ending with the last.
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
  * @return ExactFraction containing the single computed value
  * @throws ArithmeticException in case of divide by zero
@@ -196,65 +194,16 @@ fun parseParens(
 }
 
 /**
- * Given a list of text and the index of a left paren, find the index of the corresponding right paren
+ * Validate that a number order contains only the numbers 0..9, not in the sorted order
  *
- * Assumptions:
- * - Validation succeeded, including matched parentheses
+ * Validations:
+ * - Order is not null
+ * - Order contains current digits
+ * - Order is not already sorted
  *
- * @param openIndex [Int]: index of opening paren
- * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
- * @return index of closing paren, or -1 if it cannot be found
- * @throws IndexOutOfBoundsException if openIndex is greater than lastIndex
+ * @param order [List]: list of numbers, can be null
+ * @return true if validation succeeds, false otherwise
  */
-fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
-    var openCount = 0
-    val onlyParens = computeText.withIndex()
-        .toList()
-        .subList(openIndex, computeText.size)
-        .filter { it.value == "(" || it.value == ")" }
-
-    var closeIndex = -1
-
-    for (idxVal in onlyParens) {
-        if (idxVal.value == "(") {
-            openCount++
-        } else if (idxVal.value == ")") {
-            openCount--
-        }
-
-        if (openCount == 0) {
-            closeIndex = idxVal.index
-            break
-        }
-    }
-
-    return closeIndex
-}
-
-/**
- * Generate a specific error message after a NumberFormatException
- *
- * @param error [String]: message from initial exception, can be null
- * @return new error message with details about the parsing error that occurred
- */
-fun getParsingError(error: String?): String {
-    if (error == null) {
-        return "Parse error"
-    }
-
-    val startIndex = error.indexOf("\"")
-    val endIndex = error.lastIndexOf("\"")
-
-    if (endIndex - startIndex <= 1) {
-        return "Parse error"
-    }
-
-    val symbol = error.substring(startIndex + 1, endIndex)
-
-    return try {
-        ExactFraction(symbol)
-        "Number overflow on value $symbol"
-    } catch (e: Exception) {
-        "Cannot parse symbol $symbol"
-    }
-}
+fun validateNumbersOrder(order: IntList?): Boolean = order != null
+        && order.joinToString("") != "0123456789"
+        && order.sorted().joinToString("") == "0123456789"

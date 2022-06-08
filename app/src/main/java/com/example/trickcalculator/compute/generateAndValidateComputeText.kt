@@ -6,21 +6,6 @@ import com.example.trickcalculator.utils.isNumberChar
 import exactfraction.ExactFraction
 
 /**
- * Validate that a number order contains only the numbers 0..9, not in the sorted order
- *
- * Validations:
- * - Order is not null
- * - Order contains current digits
- * - Order is not already sorted
- *
- * @param order [List]: list of numbers, can be null
- * @return true if validation succeeds, false otherwise
- */
-fun validateNumbersOrder(order: IntList?): Boolean = order != null
-        && order.joinToString("") != "0123456789"
-        && order.sorted().joinToString("") == "0123456789"
-
-/**
  * Validate computation text, combine adjacent digits/decimals to form numbers,
  * and perform modifications related to number order and application of parens and/or decimals.
  * Modifications including not applying parens, not applying decimals, or using a number substitution for the digits.
@@ -49,7 +34,7 @@ fun validateNumbersOrder(order: IntList?): Boolean = order != null
  * The relative position of numbers, operators, and parens is unchanged in the returned value.
  * @throws Exception: if validation fails
  */
-fun buildAndValidateComputeText(
+fun generateAndValidateComputeText(
     initialValue: ExactFraction?,
     splitText: StringList,
     ops: StringList,
