@@ -8,7 +8,6 @@ import exactfraction.ExactFraction
 /**
  * Validate computation text, combine adjacent digits/decimals to form numbers,
  * and perform modifications related to number order and application of parens and/or decimals.
- * Modifications including not applying parens, not applying decimals, or using a number substitution for the digits.
  *
  * Validations:
  * - Each element has length 1
