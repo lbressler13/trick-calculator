@@ -37,7 +37,6 @@ class MainFragment : Fragment() {
 
     private lateinit var computeText: StringList
     private var error: String? = null
-    private var usesComputedValue = false
     private var computedValue: ExactFraction? = null
 
     private val settings = Settings()
@@ -60,7 +59,6 @@ class MainFragment : Fragment() {
         // observe changes in viewmodels
         computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
-        computationViewModel.usesComputedValue.observe(viewLifecycleOwner, usesComputedValueObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
         computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
@@ -84,8 +82,7 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
-    private val computedValueObserver: Observer<ExactFraction?> = Observer { computedValue = it }
+
     private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
             sharedViewModel.addToHistory(it)
@@ -100,6 +97,11 @@ class MainFragment : Fragment() {
         if (this::computeText.isInitialized) {
             setMainText()
         }
+    }
+
+    private val computedValueObserver: Observer<ExactFraction?> = Observer {
+        computedValue = it
+        setMainText()
     }
 
     private val computeTextObserver: Observer<StringList> = Observer {
@@ -154,7 +156,7 @@ class MainFragment : Fragment() {
      */
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
-            computationViewModel.finalizeComputeText()
+            computationViewModel.saveComputeText()
 
             // set action for each operator
             // only include exponent if exp is used
@@ -215,8 +217,6 @@ class MainFragment : Fragment() {
                 val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
                 movement.goToTop(binding.mainText)
             } catch (e: Exception) {
-                computationViewModel.restoreComputeText()
-
                 val error: String = if (e.message == null) {
                     "Computation error"
                 } else {
@@ -288,7 +288,13 @@ class MainFragment : Fragment() {
      */
     private fun setMainText() {
         val textview: TextView = binding.mainText
-        val fullText = computeText.joinToString("")
+        var fullText = computeText.joinToString("")
+        // add computed value
+        val computedString = computedValue?.toDecimalString()
+        if (computedString != null) {
+            fullText = "[${computedString}]$fullText"
+        }
+
         textview.text = fullText
     }
 

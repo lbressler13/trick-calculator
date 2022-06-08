@@ -24,9 +24,6 @@ class ComputationViewModel : ViewModel() {
     private val mError = MutableLiveData<String>().apply { value = null }
     val error: LiveData<String> = mError
 
-    private val mUsesComputedValue = MutableLiveData<Boolean>().apply { value = false }
-    val usesComputedValue: LiveData<Boolean> = mUsesComputedValue
-
     private val mLastHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
     val lastHistoryItem: LiveData<HistoryItem> = mLastHistoryItem
 
@@ -54,18 +51,13 @@ class ComputationViewModel : ViewModel() {
         }
     }
 
-    fun clearStoredHistoryItem() {
-        mLastHistoryItem.value = null
-    }
+    fun clearStoredHistoryItem() { mLastHistoryItem.value = null }
 
     /**
      * Clear current computed values
      */
     private fun clearComputeText() { mComputeText.value = listOf() }
-    private fun clearComputedValue() {
-        mComputedValue.value = null
-        mUsesComputedValue.value = false
-    }
+    private fun clearComputedValue() { mComputedValue.value = null }
 
     /**
      * Append new value to end of list
@@ -84,7 +76,6 @@ class ComputationViewModel : ViewModel() {
         val currentText: StringList = computeText.value!!
 
         if (currentText.size == 1 && computedValue.value != null) {
-            mUsesComputedValue.value = false
             mComputeText.value = listOf()
             mComputedValue.value = null
         } else if (currentText.isNotEmpty()) {
@@ -93,52 +84,23 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Replace first value with EF string if it matched the computed value.
-     * Used before running computation to retain exact value of last computed
+     * Save the current compute text, including the computed value
      */
-    fun finalizeComputeText() {
-        val currentText = computeText.value
-        mBackupComputeText.value = currentText
-
-        if (usesComputedValue.value == true && currentText!!.size == 1) {
-            mComputeText.value = listOf()
-        } else if (usesComputedValue.value == true && currentText!!.size > 1) {
-            var updatedText = currentText.subList(1, currentText.size)
-            val nextValue = updatedText[0]
-
-            if (nextValue == "(" || isNumberChar(nextValue)) {
-                updatedText = listOf("x") + updatedText
-            }
-            mComputeText.value = updatedText
+    fun saveComputeText() {
+        val computedDecimal = computedValue.value?.toDecimalString()
+        val computedString = if (computedDecimal == null) {
+            listOf()
+        } else {
+            listOf(computedDecimal)
         }
-    }
-
-    /**
-     * Restore text to use initial value instead of EF string in case of error
-     */
-    fun restoreComputeText() {
-        mComputeText.value = mBackupComputeText.value
+        val currentComputeText = computeText.value!!
+        mBackupComputeText.value = computedString + currentComputeText
     }
 
     /**
      * Replace compute text list with the computed value
      */
-    fun useComputedAsComputeText() {
-        mUsesComputedValue.value = true
-        mComputeText.value = listOf(getBracketedValue()!!)
-    }
-
-    /**
-     * Get currently computed item, surrounded by square brackets
-     */
-    private fun getBracketedValue(): String? {
-        val text = computedValue.value?.toDecimalString()
-        if (text == null) {
-            return null
-        }
-
-        return "[$text]"
-    }
+    fun useComputedAsComputeText() { mComputeText.value = listOf() }
 
     /**
      * Reset data related to computation.
