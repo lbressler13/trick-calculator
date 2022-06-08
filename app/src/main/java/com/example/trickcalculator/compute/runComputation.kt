@@ -16,10 +16,10 @@ import java.math.BigInteger
  * Likely addition and subtraction
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
  * @param numbersOrder [List]: list of numbers, which can be used to reassign the values of digits
- * @param checkParens [Boolean]: if parentheses should be recognized.
+ * @param applyParens [Boolean]: if parentheses should be recognized.
  * If false, all parentheses will be removed before computation.
  * No numbers or operators will be affected.
- * @param useDecimals [Boolean]: if decimal points should be recognized.
+ * @param applyDecimals [Boolean]: if decimal points should be recognized.
  * If false, the decimal point will be removed from each number and numbers will be processed using only the digits.
  * @return ExactFraction containing the single computed value
  * @throws ArithmeticException in case of divide by zero
@@ -31,31 +31,25 @@ fun runComputation(
     operatorRounds: List<StringList>,
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
-    checkParens: Boolean,
-    useDecimals: Boolean
+    applyParens: Boolean,
+    applyDecimals: Boolean
 ): ExactFraction {
-    var currentState = Pair(initialText, initialValue)
-
-    if (!useDecimals) {
-        currentState = Pair(stripDecimals(currentState.first), currentState.second)
+    val validatedNumOrder = if (validateNumbersOrder(numbersOrder)) {
+        numbersOrder
+    } else {
+        null
     }
 
-    // do this even when not checking parens to add mult operations
-    currentState = Pair(addMultToParens(currentState.second, currentState.first), currentState.second)
+    val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
 
-    if (!checkParens) {
-        currentState = Pair(stripParens(currentState.first), currentState.second)
-    }
-
-    if (validateNumbersOrder(numbersOrder)) {
-         currentState = replaceNumbers(currentState.second, currentState.first, numbersOrder)
-    }
-
-    val finalText = try {
-        buildAndValidateComputeText(currentState.second, currentState.first, operatorRounds.flatten())
-    } catch (e: Exception) {
-        throw Exception("Syntax error")
-    }
+    val finalText = buildAndValidateComputeText(
+        modifiedInitialValue,
+        initialText,
+        operatorRounds.flatten(),
+        validatedNumOrder,
+        applyParens,
+        applyDecimals
+    )
 
     return try {
         parseText(finalText, operatorRounds, performSingleOp)
@@ -249,43 +243,43 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
  * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
  * @return a modified string list where no number or set of parentheses is directly adjacent to a set of parentheses
  */
-fun addMultToParens(firstValue: ExactFraction?, computeText: StringList): StringList {
-    val augmentedList: MutableList<String> = mutableListOf()
-
-    var lastType = ""
-
-    val getType: (String) -> String = {
-        when {
-            it[0] == '.' || it[0].isDigit() -> "number"
-            it == "(" -> "lparen"
-            it == ")" -> "rparen"
-            else -> ""
-        }
-    }
-
-    computeText.forEach {
-        val currentType = getType(it)
-
-        // check for number next to closed set of parens, or adjacent sets of parens
-        if ((lastType == "number" && currentType == "lparen") ||
-            (lastType == "rparen" && currentType == "number") ||
-            (lastType == "rparen" && currentType == "lparen")
-        ) {
-            augmentedList.add("x")
-            augmentedList.add(it)
-        } else {
-            augmentedList.add(it)
-        }
-
-        lastType = currentType
-    }
-
-    if (firstValue != null && augmentedList.isNotEmpty() && getType(augmentedList[0]) != "") {
-        augmentedList.add(0, "x")
-    }
-
-    return augmentedList
-}
+//fun addMultToParens(firstValue: ExactFraction?, computeText: StringList): StringList {
+//    val augmentedList: MutableList<String> = mutableListOf()
+//
+//    var lastType = ""
+//
+//    val getType: (String) -> String = {
+//        when {
+//            it[0] == '.' || it[0].isDigit() -> "number"
+//            it == "(" -> "lparen"
+//            it == ")" -> "rparen"
+//            else -> ""
+//        }
+//    }
+//
+//    computeText.forEach {
+//        val currentType = getType(it)
+//
+//        // check for number next to closed set of parens, or adjacent sets of parens
+//        if ((lastType == "number" && currentType == "lparen") ||
+//            (lastType == "rparen" && currentType == "number") ||
+//            (lastType == "rparen" && currentType == "lparen")
+//        ) {
+//            augmentedList.add("x")
+//            augmentedList.add(it)
+//        } else {
+//            augmentedList.add(it)
+//        }
+//
+//        lastType = currentType
+//    }
+//
+//    if (firstValue != null && augmentedList.isNotEmpty() && getType(augmentedList[0]) != "") {
+//        augmentedList.add(0, "x")
+//    }
+//
+//    return augmentedList
+//}
 
 /**
  * Update digits using values in number order, and in the numerator/denominator of an ExactFraction.
@@ -304,41 +298,45 @@ fun addMultToParens(firstValue: ExactFraction?, computeText: StringList): String
  * and a list which is identical to the initial text, in everything other than the values of numbers.
  * Values of numbers have been modified as described above.
  */
-fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList): Pair<StringList, ExactFraction?> {
-    val newText = text.map {
-        if (it.length > 1 || !it[0].isDigit()) {
-            it
-        } else {
-            val index = Integer.parseInt(it)
-            numbersOrder[index].toString()
-        }
-    }
-
-    if (ef == null) {
-        return Pair(newText, null)
-    }
-
-    // modify digits in numerator
-    val numerator = ef.numerator.toString()
-    val newNumString = numerator.map {
-        if (it == '-') { // handle negative sign
-            "-"
-        } else {
-            val index = Integer.parseInt(it.toString())
-            numbersOrder[index].toString()
-        }
-    }.joinToString("")
-
-    // modify digits in denominator
-    val denominator = ef.denominator.toString()
-    val newDenomString = denominator.map {
-        val index = Integer.parseInt(it.toString())
-        numbersOrder[index].toString()
-    }.joinToString("")
-
-    val newEF = ExactFraction(BigInteger(newNumString), BigInteger(newDenomString))
-    return Pair(newText, newEF)
-}
+//fun replaceNumbers(
+//    ef: ExactFraction?,
+//    text: StringList,
+//    numbersOrder: IntList
+//): Pair<StringList, ExactFraction?> {
+//    val newText = text.map {
+//        if (it.length > 1 || !it[0].isDigit()) {
+//            it
+//        } else {
+//            val index = Integer.parseInt(it)
+//            numbersOrder[index].toString()
+//        }
+//    }
+//
+//    if (ef == null) {
+//        return Pair(newText, null)
+//    }
+//
+//    // modify digits in numerator
+//    val numerator = ef.numerator.toString()
+//    val newNumString = numerator.map {
+//        if (it == '-') { // handle negative sign
+//            "-"
+//        } else {
+//            val index = Integer.parseInt(it.toString())
+//            numbersOrder[index].toString()
+//        }
+//    }.joinToString("")
+//
+//    // modify digits in denominator
+//    val denominator = ef.denominator.toString()
+//    val newDenomString = denominator.map {
+//        val index = Integer.parseInt(it.toString())
+//        numbersOrder[index].toString()
+//    }.joinToString("")
+//
+//    val newEF = ExactFraction(BigInteger(newNumString), BigInteger(newDenomString))
+//    return Pair(newText, newEF)
+//}
 
 /**
  * Given a list of text, remove all open and close parens.
@@ -351,7 +349,7 @@ fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList):
  * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
  * @return modified list containing all numbers and operators, without any parens
  */
-fun stripParens(computeText: StringList): StringList = computeText.filter { it != "(" && it != ")" }
+// fun stripParens(computeText: StringList): StringList = computeText.filter { it != "(" && it != ")" }
 
 /**
  * Given a list of text, remove decimals points from all numbers.
@@ -365,7 +363,7 @@ fun stripParens(computeText: StringList): StringList = computeText.filter { it !
  * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
  * @return modified list containing all operators and parens, with numbers modified to remove any decimal points
  */
-fun stripDecimals(computeText: StringList): StringList = computeText.filter { it != "." }
+// fun stripDecimals(computeText: StringList): StringList = computeText.filter { it != "." }
 
 /**
  * Generate a specific error message after a NumberFormatException

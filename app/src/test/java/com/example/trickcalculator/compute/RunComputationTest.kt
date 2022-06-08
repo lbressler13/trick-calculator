@@ -10,10 +10,10 @@ class RunComputationTest {
     @Test fun testParseParens() = runParseParensTests()
 
     // functions that modify compute text
-    @Test fun testStripParens() = runStripParensTests()
-    @Test fun testStripDecimals() = runStripDecimalsTests()
-    @Test fun testReplaceNumbers() = runReplaceNumbersTests()
-    @Test fun testAddMultToParens() = runAddMultToParensTests()
+    // @Test fun testStripParens() = runStripParensTests()
+    // @Test fun testStripDecimals() = runStripDecimalsTests()
+    // @Test fun testReplaceNumbers() = runReplaceNumbersTests()
+    // @Test fun testAddMultToParens() = runAddMultToParensTests()
 
     // helpers
     @Test fun testGetMatchingParenIndex() = runGetMatchingParenIndexTests()
