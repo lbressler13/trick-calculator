@@ -248,7 +248,6 @@ private fun testBuildText() {
 
     text = splitString("(7-1)45")
     expected = "( 7 - 1 ) x 45".split(" ")
-    // TODO
     assertEquals(expected, buildAndValidateComputeText(null, text, ops, null, true, true))
 
     text = splitString("15+(12-3.3)(18.5)(2/3(1-10))")

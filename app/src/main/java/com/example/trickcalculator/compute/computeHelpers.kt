@@ -14,7 +14,20 @@ import java.math.BigInteger
  */
 fun isOperator(element: String, ops: StringList): Boolean = element in ops
 
-// TODO write tests for this
+/**
+ * Modify the numerator and denominator of an ExactFraction based on a number substitution order.
+ * Each digit in the numerator/denominator will be replaced by the corresponding value in the order.
+ * For example, 0 is replaced by the 0th value in the number order.
+ * Negative signs are not affected.
+ *
+ * Assumptions:
+ * - If numbers order is not null, it has size of 10 and contains digits 0 through 9, in some order
+ *
+ * @param numbersOrder [IntList]: substitution order for digits, possibly null
+ * @param ef [ExactFraction]: number to modify, possibly null
+ * @return [ExactFraction]: number which has been modified as described above, or null if the ef param was null
+ * @throws ArithmeticException: divide by zero if the modified denominator has value 0
+ */
 fun applyOrderToEF(numbersOrder: IntList?, ef: ExactFraction?): ExactFraction? {
     if (numbersOrder == null || ef == null) {
         return ef
@@ -24,6 +37,7 @@ fun applyOrderToEF(numbersOrder: IntList?, ef: ExactFraction?): ExactFraction? {
     val denomString = ef.denominator.toString()
 
     val newNumString = numString.map {
+        // keep negative sign in numerator
         if (it == '-') {
             '-'
         } else {
