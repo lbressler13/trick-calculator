@@ -3,7 +3,6 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.utils.*
 import exactfraction.ExactFraction
 import exactfraction.ExactFractionOverflowException
-import java.math.BigInteger
 
 /**
  * Parse string list and compute as a mathematical expression, if possible.
@@ -42,7 +41,7 @@ fun runComputation(
 
     val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
 
-    val finalText = buildAndValidateComputeText(
+    val computeText = buildAndValidateComputeText(
         modifiedInitialValue,
         initialText,
         operatorRounds.flatten(),
@@ -52,7 +51,7 @@ fun runComputation(
     )
 
     return try {
-        parseText(finalText, operatorRounds, performSingleOp)
+        parseText(computeText, operatorRounds, performSingleOp)
     } catch (e: ExactFractionOverflowException) {
         if (e.overflowValue != null) {
             throw Exception("Number overflow on value ${e.overflowValue}")

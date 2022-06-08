@@ -82,10 +82,7 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    private val computedValueObserver: Observer<ExactFraction?> = Observer {
-        computedValue = it
-        setMainText()
-    }
+
     private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
             sharedViewModel.addToHistory(it)
@@ -100,6 +97,11 @@ class MainFragment : Fragment() {
         if (this::computeText.isInitialized) {
             setMainText()
         }
+    }
+
+    private val computedValueObserver: Observer<ExactFraction?> = Observer {
+        computedValue = it
+        setMainText()
     }
 
     private val computeTextObserver: Observer<StringList> = Observer {

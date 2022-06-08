@@ -4,9 +4,8 @@ import com.example.trickcalculator.assertDivByZero
 import com.example.trickcalculator.utils.IntList
 import com.example.trickcalculator.utils.StringList
 import exactfraction.ExactFraction
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Test
-import kotlin.math.exp
 
 class ComputeHelpersTest {
     @Test

@@ -24,9 +24,6 @@ fun validateNumbersOrder(order: IntList?): Boolean = order != null
  * Validate computation text, combine adjacent digits/decimals to form numbers,
  * and perform modifications related to number order and application of parens and/or decimals.
  * Modifications including not applying parens, not applying decimals, or using a number substitution for the digits.
- * In this case, single-digit numbers are replaced by the value of the corresponding index in the number order.
- * For example, 0 is replaced by the 0th value in the number order.
- * This substitution does not affect any symbols other than digits.
  *
  * Validations:
  * - Each element has length 1
@@ -82,19 +79,20 @@ fun buildAndValidateComputeText(
         computeText.add(initialValue.toEFString())
         lastType = "number"
 
-        // add multiplication before number
-        // also gets added before lparen, which is handled in loop
+        // add multiplication between initial val and first num
         if (splitText.isNotEmpty() && isNumberChar(splitText[0])) {
             computeText.add("x")
         }
     }
 
+    // add the current number to the compute text
     val addCurrentNumber: () -> Unit = {
         if (currentNumber.isNotEmpty() && currentNumber.last() == '.') {
             throw syntaxError
         }
 
         if (currentNumber.isNotEmpty()) {
+            // add multiplication between number and preceding paren
             if (lastType == "rparen") {
                 computeText.add("x")
             }
@@ -106,12 +104,13 @@ fun buildAndValidateComputeText(
         }
     }
 
-    // Add operator or paren to compute text
+    // add operator or paren to compute text
     val addNonNumber: (String) -> Unit = {
         if (currentNumber.isNotEmpty()) {
             addCurrentNumber()
         }
 
+        // add mult between preceding num and paren, or between adjacent parens
         if ((lastType == "number" && currentType == "lparen") ||
             (lastType == "rparen" && currentType == "lparen")
         ) {
@@ -125,7 +124,7 @@ fun buildAndValidateComputeText(
         lastType = currentType
     }
 
-    // Add digit or decimal to current number
+    // add digit or decimal to current number
     val addDigit: (String) -> Unit = {
         when {
             it == "." && currentDecimal -> throw syntaxError
@@ -145,6 +144,7 @@ fun buildAndValidateComputeText(
         }
     }
 
+    // loop over all elements
     for (element in splitText) {
         if (element.length != 1) {
             throw syntaxError
@@ -169,8 +169,8 @@ fun buildAndValidateComputeText(
         }
 
         if (openParenCount < 0 ||
-            (lastType == "lparen" && currentType == "operator") || // operator next to parens
-            (lastType == "operator" && currentType == "rparen") ||
+            (lastType == "lparen" && currentType == "operator") || // operator inside lparen
+            (lastType == "operator" && currentType == "rparen") || // operator inside rparen
             (lastType == "operator" && currentType == "operator") || // double operators
             (lastType == "lparen" && currentType == "rparen") // empty parens
         ) {

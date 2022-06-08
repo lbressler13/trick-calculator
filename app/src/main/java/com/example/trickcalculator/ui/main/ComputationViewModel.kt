@@ -88,31 +88,19 @@ class ComputationViewModel : ViewModel() {
      */
     fun saveComputeText() {
         val computedDecimal = computedValue.value?.toDecimalString()
-        val computedText = if (computedDecimal == null) {
+        val computedString = if (computedDecimal == null) {
             listOf()
         } else {
             listOf(computedDecimal)
         }
         val currentComputeText = computeText.value!!
-        mBackupComputeText.value = computedText + currentComputeText
+        mBackupComputeText.value = computedString + currentComputeText
     }
 
     /**
      * Replace compute text list with the computed value
      */
     fun useComputedAsComputeText() { mComputeText.value = listOf() }
-
-    /**
-     * Get currently computed item, surrounded by square brackets
-     */
-    private fun getBracketedValue(): String? {
-        val text = computedValue.value?.toDecimalString()
-        if (text == null) {
-            return null
-        }
-
-        return "[$text]"
-    }
 
     /**
      * Reset data related to computation.
