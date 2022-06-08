@@ -74,8 +74,8 @@ fun runStripDecimalsTests() {
     expected = listOf("5")
     assertEquals(expected, stripDecimals(computeText))
 
-    computeText = "( 2 - 3 )".split(' ')
-    expected = "( 2 - 3 )".split(' ')
+    computeText = splitString("(2-3)")
+    expected = splitString("(2-3)")
     assertEquals(expected, stripDecimals(computeText))
 
     // decimals
@@ -111,24 +111,24 @@ fun runStripDecimalsTests() {
 fun runReplaceNumbersTests() {
     var text: StringList = listOf()
     var order = (9 downTo 0).toList()
-    var expected: Pair<ExactFraction?, StringList> = Pair(null, listOf())
+    var expected: Pair<StringList, ExactFraction?> = Pair(listOf(), null)
     assertEquals(expected, replaceNumbers(null, text, order))
 
     text = splitString("()")
     order = (9 downTo 0).toList()
-    expected = Pair(null, splitString("()"))
+    expected = Pair(splitString("()"), null)
     assertEquals(expected, replaceNumbers(null, text, order))
 
     var initialValue: ExactFraction = ExactFraction.THREE
     text = listOf()
     order = (9 downTo 0).toList()
-    expected = Pair(ExactFraction(6, 8), listOf())
+    expected = Pair(listOf(), ExactFraction(6, 8))
     assertEquals(expected, replaceNumbers(initialValue, text, order))
 
     initialValue = ExactFraction(-103, 27)
     text = listOf()
     order = (9 downTo 0).toList()
-    expected = Pair(ExactFraction(-896, 72), listOf())
+    expected = Pair(listOf(), ExactFraction(-896, 72))
     assertEquals(expected, replaceNumbers(initialValue, text, order))
 
     initialValue = ExactFraction.HALF
@@ -139,74 +139,104 @@ fun runReplaceNumbersTests() {
     initialValue = ExactFraction.FIVE
     text = splitString("1+2+4")
     order = (0..9).toList()
-    expected = Pair(ExactFraction.FIVE, splitString("1+2+4"))
+    expected = Pair(splitString("1+2+4"), ExactFraction.FIVE)
     assertEquals(expected, replaceNumbers(initialValue, text, order))
 
     text = splitString("1357902468")
     order = listOf(4, 7, 6, 3, 9, 2, 8, 0, 1, 5)
-    expected = Pair(null, splitString("7320546981"))
+    expected = Pair(splitString("7320546981"), null)
     assertEquals(expected, replaceNumbers(null, text, order))
 
     text = splitString("37+(45-74)x83")
     order = (9 downTo 0).toList()
-    expected = Pair(null, splitString("62+(54-25)x16"))
+    expected = Pair(splitString("62+(54-25)x16"), null)
     assertEquals(expected, replaceNumbers(null, text, order))
 
     text = splitString(".489")
     order = listOf(0, 1, 2, 3, 4, 5, 6, 7, 9, 8)
-    expected = Pair(null, splitString(".498"))
+    expected = Pair(splitString(".498"), null)
     assertEquals(expected, replaceNumbers(null, text, order))
 
     initialValue = ExactFraction(-289, 361)
     text = splitString("0.5x13-8.69")
     order = listOf(8, 3, 0, 6, 2, 9, 5, 4, 1, 7)
-    expected = Pair(ExactFraction(-17, 653), splitString("8.9x36-1.57"))
+    expected = Pair(splitString("8.9x36-1.57"), ExactFraction(-17, 653))
     assertEquals(expected, replaceNumbers(initialValue, text, order))
 
     text = "22 / ( 1 - 2 )".split(' ')
     order = (9 downTo 0).toList()
-    expected = Pair(null, "22 / ( 8 - 7 )".split(' '))
+    expected = Pair("22 / ( 8 - 7 )".split(' '), null)
     assertEquals(expected, replaceNumbers(null, text, order))
 }
 
 fun runAddMultToParensTests() {
+    // empty string
     var text: StringList = listOf()
     var expected: StringList = listOf()
-    assertEquals(expected, addMultToParens(text))
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "5 + 3".split(' ')
-    expected = "5 + 3".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    // without exact fraction
+    text = splitString("5+3")
+    expected = splitString("5+3")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "2 x ( 5 + 3 )".split(' ')
-    expected = "2 x ( 5 + 3 )".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("2x(5+3)")
+    expected = splitString("2x(5+3)")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "2 ( 5 )".split(' ')
-    expected = "2 x ( 5 )".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("2(5)")
+    expected = splitString("2x(5)")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "( 5 ) 2".split(' ')
-    expected = "( 5 ) x 2".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("(5)2")
+    expected = splitString("(5)x2")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "( 5 ) ( 2 )".split(' ')
-    expected = "( 5 ) x ( 2 )".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("(5)(2)")
+    expected = splitString("(5)x(2)")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "( 5 ) - ( 2 )".split(' ')
-    expected = "( 5 ) - ( 2 )".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("(5)-(2)")
+    expected = splitString("(5)-(2)")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "( 5 - 3 ) ( 2 )".split(' ')
-    expected = "( 5 - 3 ) x ( 2 )".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("(5-3)(2)")
+    expected = splitString("(5-3)x(2)")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "3.10 ( 1 + 2 ) 5".split(' ')
-    expected = "3.10 x ( 1 + 2 ) x 5".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("3.10(1+2)5")
+    expected = splitString("3.10x(1+2)x5")
+    assertEquals(expected, addMultToParens(null, text))
 
-    text = "( 4 ( 5 + 2 ) + ( 7 ) ( 5 ( .1 ) ) 3 )".split(' ')
-    expected = "( 4 x ( 5 + 2 ) + ( 7 ) x ( 5 x ( .1 ) ) x 3 )".split(' ')
-    assertEquals(expected, addMultToParens(text))
+    text = splitString("(4(5+2)+(7)(5(.1))3)")
+    expected = splitString("(4x(5+2)+(7)x(5x(.1))x3)")
+    assertEquals(expected, addMultToParens(null, text))
+
+    // with exact fraction
+    var ef = ExactFraction(-14, 33)
+
+    text = listOf()
+    expected = listOf()
+    assertEquals(expected, addMultToParens(ef, text))
+
+    text = splitString("5(1-3)/2")
+    expected = splitString("x5x(1-3)/2")
+    assertEquals(expected, addMultToParens(ef, text))
+
+    text = splitString("+5(1-3)/2")
+    expected = splitString("+5x(1-3)/2")
+    assertEquals(expected, addMultToParens(ef, text))
+
+    text = splitString("^5(1-3)/2")
+    expected = splitString("^5x(1-3)/2")
+    assertEquals(expected, addMultToParens(ef, text))
+
+    text = splitString("(5-2)(2.5/3)")
+    expected = splitString("x(5-2)x(2.5/3)")
+    assertEquals(expected, addMultToParens(ef, text))
+
+    ef = ExactFraction.ZERO
+    text = splitString("(5-2)(2.5/3)")
+    expected = splitString("x(5-2)x(2.5/3)")
+    assertEquals(expected, addMultToParens(ef, text))
 }
