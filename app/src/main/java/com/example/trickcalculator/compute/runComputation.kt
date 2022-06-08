@@ -34,34 +34,31 @@ fun runComputation(
     checkParens: Boolean,
     useDecimals: Boolean
 ): ExactFraction {
-    var currentState: StringList = initialText
-    var currentEF: ExactFraction? = initialValue
+    var currentState = Pair(initialText, initialValue)
 
     if (!useDecimals) {
-        currentState = stripDecimals(currentState)
+        currentState = Pair(stripDecimals(currentState.first), currentState.second)
     }
 
     // do this even when not checking parens to add mult operations
-    currentState = addMultToParens(currentState)
+    currentState = Pair(addMultToParens(currentState.second, currentState.first), currentState.second)
 
     if (!checkParens) {
-        currentState = stripParens(currentState)
+        currentState = Pair(stripParens(currentState.first), currentState.second)
     }
 
     if (validateNumbersOrder(numbersOrder)) {
-        val replaceResult = replaceNumbers(currentEF, currentState, numbersOrder)
-        currentEF = replaceResult.first
-        currentState = replaceResult.second
+         currentState = replaceNumbers(currentState.second, currentState.first, numbersOrder)
     }
 
-    currentState = try {
-        buildAndValidateComputeText(currentEF, currentState, operatorRounds.flatten())
+    val finalText = try {
+        buildAndValidateComputeText(currentState.second, currentState.first, operatorRounds.flatten())
     } catch (e: Exception) {
         throw Exception("Syntax error")
     }
 
     return try {
-        parseText(currentState, operatorRounds, performSingleOp)
+        parseText(finalText, operatorRounds, performSingleOp)
     } catch (e: ExactFractionOverflowException) {
         if (e.overflowValue != null) {
             throw Exception("Number overflow on value ${e.overflowValue}")
@@ -252,18 +249,22 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
  * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
  * @return a modified string list where no number or set of parentheses is directly adjacent to a set of parentheses
  */
-fun addMultToParens(computeText: StringList): StringList {
+fun addMultToParens(firstValue: ExactFraction?, computeText: StringList): StringList {
     val augmentedList: MutableList<String> = mutableListOf()
 
     var lastType = ""
 
-    computeText.forEach {
-        val currentType: String = when {
+    val getType: (String) -> String = {
+        when {
             it[0] == '.' || it[0].isDigit() -> "number"
             it == "(" -> "lparen"
             it == ")" -> "rparen"
             else -> ""
         }
+    }
+
+    computeText.forEach {
+        val currentType = getType(it)
 
         // check for number next to closed set of parens, or adjacent sets of parens
         if ((lastType == "number" && currentType == "lparen") ||
@@ -277,6 +278,10 @@ fun addMultToParens(computeText: StringList): StringList {
         }
 
         lastType = currentType
+    }
+
+    if (firstValue != null && augmentedList.isNotEmpty() && getType(augmentedList[0]) != "") {
+        augmentedList.add(0, "x")
     }
 
     return augmentedList
@@ -299,7 +304,7 @@ fun addMultToParens(computeText: StringList): StringList {
  * and a list which is identical to the initial text, in everything other than the values of numbers.
  * Values of numbers have been modified as described above.
  */
-fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList): Pair<ExactFraction?, StringList> {
+fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList): Pair<StringList, ExactFraction?> {
     val newText = text.map {
         if (it.length > 1 || !it[0].isDigit()) {
             it
@@ -310,7 +315,7 @@ fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList):
     }
 
     if (ef == null) {
-        return Pair(null, newText)
+        return Pair(newText, null)
     }
 
     // modify digits in numerator
@@ -332,7 +337,7 @@ fun replaceNumbers(ef: ExactFraction?, text: StringList, numbersOrder: IntList):
     }.joinToString("")
 
     val newEF = ExactFraction(BigInteger(newNumString), BigInteger(newDenomString))
-    return Pair(newEF, newText)
+    return Pair(newText, newEF)
 }
 
 /**

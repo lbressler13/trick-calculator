@@ -85,7 +85,10 @@ class MainFragment : Fragment() {
     }
 
     private val usesComputedValueObserver: Observer<Boolean> = Observer { usesComputedValue = it }
-    private val computedValueObserver: Observer<ExactFraction?> = Observer { computedValue = it }
+    private val computedValueObserver: Observer<ExactFraction?> = Observer {
+        computedValue = it
+        setMainText()
+    }
     private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
             sharedViewModel.addToHistory(it)
@@ -154,7 +157,7 @@ class MainFragment : Fragment() {
      */
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
-            computationViewModel.finalizeComputeText()
+            computationViewModel.saveComputeText()
 
             // set action for each operator
             // only include exponent if exp is used
@@ -215,8 +218,6 @@ class MainFragment : Fragment() {
                 val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
                 movement.goToTop(binding.mainText)
             } catch (e: Exception) {
-                computationViewModel.restoreComputeText()
-
                 val error: String = if (e.message == null) {
                     "Computation error"
                 } else {
@@ -288,7 +289,13 @@ class MainFragment : Fragment() {
      */
     private fun setMainText() {
         val textview: TextView = binding.mainText
-        val fullText = computeText.joinToString("")
+        var fullText = computeText.joinToString("")
+        // add computed value
+        val computedString = computedValue?.toDecimalString()
+        if (computedString != null) {
+            fullText = "[${computedString}]$fullText"
+        }
+
         textview.text = fullText
     }
 

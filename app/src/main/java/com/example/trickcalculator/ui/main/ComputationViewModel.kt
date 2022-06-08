@@ -93,31 +93,17 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Replace first value with EF string if it matched the computed value.
-     * Used before running computation to retain exact value of last computed
+     * Save the current compute text, including the computed value
      */
-    fun finalizeComputeText() {
-        val currentText = computeText.value
-        mBackupComputeText.value = currentText
-
-        if (usesComputedValue.value == true && currentText!!.size == 1) {
-            mComputeText.value = listOf()
-        } else if (usesComputedValue.value == true && currentText!!.size > 1) {
-            var updatedText = currentText.subList(1, currentText.size)
-            val nextValue = updatedText[0]
-
-            if (nextValue == "(" || isNumberChar(nextValue)) {
-                updatedText = listOf("x") + updatedText
-            }
-            mComputeText.value = updatedText
+    fun saveComputeText() {
+        val computedDecimal = computedValue.value?.toDecimalString()
+        val computedText = if (computedDecimal == null) {
+            listOf()
+        } else {
+            listOf(computedDecimal)
         }
-    }
-
-    /**
-     * Restore text to use initial value instead of EF string in case of error
-     */
-    fun restoreComputeText() {
-        mComputeText.value = mBackupComputeText.value
+        val currentComputeText = computeText.value!!
+        mBackupComputeText.value = computedText + currentComputeText
     }
 
     /**
@@ -125,7 +111,7 @@ class ComputationViewModel : ViewModel() {
      */
     fun useComputedAsComputeText() {
         mUsesComputedValue.value = true
-        mComputeText.value = listOf(getBracketedValue()!!)
+        mComputeText.value = listOf()
     }
 
     /**
