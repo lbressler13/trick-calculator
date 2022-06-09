@@ -7,7 +7,6 @@ import com.example.trickcalculator.utils.isNumber
 import org.junit.Assert.*
 
 private val fullOps = listOf("+", "-", "x", "/", "^")
-private val iterations = 20
 
 fun runGetShuffledComputationTests() {
     // values that won't change
