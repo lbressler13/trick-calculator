@@ -2,7 +2,7 @@
 
 Settings allow the calculator to be configured in different ways, to increase or decrease the level of randomness.
 Values are stored in a SharedViewModel, which can be accessed by different fragments.
-Settings are changed through a settings menu, which contains switches, buttons, and other ui elements for modifying the values.
+Settings are changed through a settings menu, which contains switches, buttons, and other UI elements for modifying the values.
 
 ## Documentation
 A full list of settings and their definitions can be found in the [main README](https://github.com/lbressler13/trick-calculator/blob/main/README.md).
@@ -20,7 +20,7 @@ However, once the fragment has been opened from the primary location, there is a
 This settings button, if enabled, also opens the fragment.
 
 In order to manage 2 fragments with the same functionality, the vast majority of code is shared between fragments using util functions, which sometimes take the fragment and/or ViewBinding as parameters
-The shared code include initializing the fragments, setting the UI, and updating the SharedViewModel when the fragment closes.
+The shared code includes initializing the fragments, setting the UI, and updating the SharedViewModel when the fragment closes.
 
 A large portion of the functionality is in setting the UI based on the current settings, and updating values based on the final UI configuration.
 Because the fragment and the dialog have different layout files, they also have separate ViewBindings, which means all UI elements are separate.
@@ -35,7 +35,7 @@ To ensure that nothing is missed, add the setting in the following files:
   * As a field in the Settings object
   * With a new observer in initSettingsObservers
   * In the args passed in initSettingsFragments
-  * With an appropriate ui element in the settings fragment and dialog
+  * With an appropriate UI element in the settings fragment and dialog
   * In setUiFromArgs and saveToViewModel in settingsUtil
 * SharedViewModel
   * As a property
