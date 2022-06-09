@@ -199,7 +199,7 @@ fun generateAndValidateComputeText(
  * @param ops [StringList]: list of string values recognized as operators
  * @return [StringList]: a list containing the same elements as the computeText, with the orders of numbers and operators shuffled
  */
-private fun getShuffledComputation(computeText: StringList, ops: StringList): StringList {
+fun getShuffledComputation(computeText: StringList, ops: StringList): StringList {
     val numbers = computeText.filter { isNumber(it) }.toMutableList()
     val operators = computeText.filter { isOperator(it, ops) }.toMutableList()
 
