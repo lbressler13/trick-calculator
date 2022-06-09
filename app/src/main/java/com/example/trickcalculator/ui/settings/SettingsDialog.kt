@@ -4,9 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.appcompat.widget.SwitchCompat
-import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
@@ -44,16 +41,7 @@ class SettingsDialog : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         saveToViewModel(this, sharedViewModel, binding)
-        closeParentDialog()
-    }
-
-    /**
-     * Closes parent fragment if parent is also a dialog
-     */
-    private fun closeParentDialog() {
-        if (parentFragment != null && parentFragment is DialogFragment) {
-            (parentFragment as DialogFragment).dismiss()
-        }
+        closePreviousFragment(this)
     }
 
     companion object {

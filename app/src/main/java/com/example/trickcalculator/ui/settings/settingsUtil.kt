@@ -7,6 +7,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.example.trickcalculator.R
@@ -61,7 +62,12 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
  * @param group [RadioGroup]
  * @param buttons [List]: list of [RadioButton] within group
  */
-fun setHistoryRadioGroup(context: Context, args: Bundle?, group: RadioGroup, buttons: List<RadioButton>) {
+fun setHistoryRadioGroup(
+    context: Context,
+    args: Bundle?,
+    group: RadioGroup,
+    buttons: List<RadioButton>
+) {
     val key: String = context.getString(R.string.key_random_history)
     val value: Int = args?.getInt(key) ?: 0
     group.check(buttons[value].id)
@@ -226,7 +232,12 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
             viewModel.setApplyDecimals(applyDecimalsSwitch.isChecked)
             viewModel.setShuffleComputation(shuffleComputationSwitch.isChecked)
             viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
-            viewModel.setHistoryRandomness(getHistoryGroupValue(historyRadioGroup, historyRadioButtons))
+            viewModel.setHistoryRandomness(
+                getHistoryGroupValue(
+                    historyRadioGroup,
+                    historyRadioButtons
+                )
+            )
         }
     }
 
@@ -271,7 +282,7 @@ private fun getResetAndRandomized(fragment: Fragment): Pair<Boolean, Boolean> {
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
 private fun resetSettingsOnClick(fragment: Fragment) {
-    if (fragment is SettingsDialog)  {
+    if (fragment is SettingsDialog) {
         fragment.resetPressed = true
         fragment.dismiss()
     } else if (fragment is SettingsFragment) {
@@ -287,11 +298,26 @@ private fun resetSettingsOnClick(fragment: Fragment) {
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
 private fun randomizeSettingsOnClick(fragment: Fragment) {
-    if (fragment is SettingsDialog)  {
+    if (fragment is SettingsDialog) {
         fragment.randomizePressed = true
         fragment.dismiss()
     } else if (fragment is SettingsFragment) {
         fragment.randomizePressed = true
         fragment.parentFragmentManager.popBackStack()
+    }
+}
+
+/**
+ * If the current fragment is a [SettingsDialog] and its parent is a dialog, closes the parent dialog.
+ * If the current fragment is a [SettingsFragment], removes the previous fragment.
+ *
+ * @param currentFragment [Fragment]: the calling fragment.
+ * Expected to be either [SettingsFragment] or [SettingsDialog]
+ */
+fun closePreviousFragment(currentFragment: Fragment) {
+    if (currentFragment is SettingsDialog && currentFragment.requireParentFragment() is DialogFragment) {
+        (currentFragment.requireParentFragment() as DialogFragment).dismiss()
+    } else if (currentFragment is SettingsFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
+        currentFragment.parentFragmentManager.popBackStack()
     }
 }

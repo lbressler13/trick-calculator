@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.MainActivity
@@ -53,5 +51,6 @@ class SettingsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         saveToViewModel(this, sharedViewModel, binding)
+        closePreviousFragment(this)
     }
 }
