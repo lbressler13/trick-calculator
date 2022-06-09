@@ -20,6 +20,7 @@ import exactfraction.ExactFractionOverflowException
  * No numbers or operators will be affected.
  * @param applyDecimals [Boolean]: if decimal points should be recognized.
  * If false, the decimal point will be removed from each number and numbers will be processed using only the digits.
+ * @param shuffleComputation [Boolean]: if order of numbers and order of ops should be shuffled
  * @return ExactFraction containing the single computed value
  * @throws ArithmeticException in case of divide by zero
  * @throws Exception in case of issues with syntax, parsing, or number overflow
@@ -31,7 +32,8 @@ fun runComputation(
     performSingleOp: OperatorFunction,
     numbersOrder: IntList,
     applyParens: Boolean,
-    applyDecimals: Boolean
+    applyDecimals: Boolean,
+    shuffleComputation: Boolean
 ): ExactFraction {
     val validatedNumOrder = if (validateNumbersOrder(numbersOrder)) {
         numbersOrder
@@ -47,7 +49,8 @@ fun runComputation(
         operatorRounds.flatten(),
         validatedNumOrder,
         applyParens,
-        applyDecimals
+        applyDecimals,
+        shuffleComputation
     )
 
     return try {

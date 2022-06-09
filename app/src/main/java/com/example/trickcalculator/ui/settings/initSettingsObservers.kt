@@ -11,4 +11,5 @@ fun initSettingsObservers(settings: Settings, viewModel: SharedViewModel, lifecy
     viewModel.applyDecimals.observe(lifecycleOwner) { settings.applyDecimals = it }
     viewModel.showSettingsButton.observe(lifecycleOwner) { settings.showSettingsButton = it }
     viewModel.historyRandomness.observe(lifecycleOwner) { settings.historyRandomness = it }
+    viewModel.shuffleComputation.observe(lifecycleOwner) { settings.shuffleComputation = it }
 }

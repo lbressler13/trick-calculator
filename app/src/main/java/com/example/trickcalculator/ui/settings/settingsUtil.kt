@@ -87,6 +87,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
     val applyParensSwitch: SwitchCompat
     val clearOnErrorSwitch: SwitchCompat
     val applyDecimalsSwitch: SwitchCompat
+    val shuffleComputationSwitch: SwitchCompat
     val settingsButtonSwitch: SwitchCompat
     val historyRadioGroup: RadioGroup
     val historyRadioButtons: List<RadioButton>
@@ -100,6 +101,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
         applyParensSwitch = binding.applyParensSwitch
         clearOnErrorSwitch = binding.clearOnErrorSwitch
         applyDecimalsSwitch = binding.applyDecimalsSwitch
+        shuffleComputationSwitch = binding.shuffleComputationSwitch
         settingsButtonSwitch = binding.settingsButtonSwitch
         historyRadioGroup = binding.historyRandomnessGroup
         historyRadioButtons = listOf(
@@ -119,6 +121,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
         applyParensSwitch = binding.applyParensSwitch
         clearOnErrorSwitch = binding.clearOnErrorSwitch
         applyDecimalsSwitch = binding.applyDecimalsSwitch
+        shuffleComputationSwitch = binding.shuffleComputationSwitch
         settingsButtonSwitch = binding.settingsButtonSwitch
         historyRadioGroup = binding.historyRandomnessGroup
         historyRadioButtons = listOf(
@@ -138,6 +141,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
     setSwitchUiFromArgs(context, args, R.string.key_clear_on_error, clearOnErrorSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_apply_decimals, applyDecimalsSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_settings_button, settingsButtonSwitch)
+    setSwitchUiFromArgs(context, args, R.string.key_shuffle_computation, shuffleComputationSwitch)
 
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
     val isMainFragment = args?.getBoolean(mainFragmentKey)
@@ -173,6 +177,7 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
             val applyParensSwitch: SwitchCompat
             val clearOnErrorSwitch: SwitchCompat
             val applyDecimalsSwitch: SwitchCompat
+            val shuffleComputationSwitch: SwitchCompat
             val settingsButtonSwitch: SwitchCompat
             val historyRadioGroup: RadioGroup
             val historyRadioButtons: List<RadioButton>
@@ -184,6 +189,7 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
                 applyParensSwitch = binding.applyParensSwitch
                 clearOnErrorSwitch = binding.clearOnErrorSwitch
                 applyDecimalsSwitch = binding.applyDecimalsSwitch
+                shuffleComputationSwitch = binding.shuffleComputationSwitch
                 settingsButtonSwitch = binding.settingsButtonSwitch
                 historyRadioGroup = binding.historyRandomnessGroup
                 historyRadioButtons = listOf(
@@ -201,6 +207,7 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
                 applyParensSwitch = binding.applyParensSwitch
                 clearOnErrorSwitch = binding.clearOnErrorSwitch
                 applyDecimalsSwitch = binding.applyDecimalsSwitch
+                shuffleComputationSwitch = binding.shuffleComputationSwitch
                 settingsButtonSwitch = binding.settingsButtonSwitch
                 historyRadioGroup = binding.historyRandomnessGroup
                 historyRadioButtons = listOf(
@@ -217,6 +224,7 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
             viewModel.setApplyParens(applyParensSwitch.isChecked)
             viewModel.setClearOnError(clearOnErrorSwitch.isChecked)
             viewModel.setApplyDecimals(applyDecimalsSwitch.isChecked)
+            viewModel.setShuffleComputation(shuffleComputationSwitch.isChecked)
             viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
             viewModel.setHistoryRandomness(getHistoryGroupValue(historyRadioGroup, historyRadioButtons))
         }

@@ -49,15 +49,21 @@
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/settingsButtonSwitch"
         style="@style/SettingsDialogItem"
-        android:checked="true"
         android:text="@string/show_settings_button"
         app:layout_constraintTop_toBottomOf="@id/applyDecimalsSwitch"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/shuffleComputationSwitch"
+        style="@style/SettingsDialogItem"
+        android:text="@string/shuffle_computation"
+        app:layout_constraintTop_toBottomOf="@id/settingsButtonSwitch"
         tools:ignore="MissingConstraints" />
 
     <RadioGroup
         android:id="@+id/historyRandomnessGroup"
         style="@style/SettingsDialogItem"
-        app:layout_constraintTop_toBottomOf="@id/settingsButtonSwitch"
+        app:layout_constraintTop_toBottomOf="@id/shuffleComputationSwitch"
         android:orientation="horizontal"
         android:checkedButton="@id/historyButton0"
         tools:ignore="MissingConstraints">

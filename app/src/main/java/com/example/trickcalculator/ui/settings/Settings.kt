@@ -7,7 +7,8 @@ data class Settings(
     var clearOnError: Boolean,
     var applyDecimals: Boolean,
     var showSettingsButton: Boolean,
-    var historyRandomness: Int
+    var historyRandomness: Int,
+    var shuffleComputation: Boolean
 ) {
     constructor() : this(
         shuffleNumbers = false,
@@ -15,7 +16,8 @@ data class Settings(
         applyParens = true,
         clearOnError = false,
         applyDecimals = true,
-        showSettingsButton =false,
-        historyRandomness = 1
+        showSettingsButton = false,
+        historyRandomness = 1,
+        shuffleComputation = false
     )
 }

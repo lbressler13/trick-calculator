@@ -205,7 +205,8 @@ class MainFragment : Fragment() {
                         performOperation,
                         numberOrder,
                         settings.applyParens,
-                        settings.applyDecimals
+                        settings.applyDecimals,
+                        settings.shuffleComputation
                     )
 
                 computationViewModel.setComputedValue(computedValue)

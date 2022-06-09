@@ -1,7 +1,9 @@
 package com.example.trickcalculator.compute
 
+import com.example.trickcalculator.ext.popRandom
 import com.example.trickcalculator.utils.IntList
 import com.example.trickcalculator.utils.StringList
+import com.example.trickcalculator.utils.isNumber
 import com.example.trickcalculator.utils.isNumberChar
 import exactfraction.ExactFraction
 
@@ -28,6 +30,7 @@ import exactfraction.ExactFraction
  * @param applyParens [Boolean]: whether or not parentheses should be applied
  * @param applyDecimals [Boolean]: whether or not decimals points should be applied.
  * This does not impact any decimals in the initial value.
+ * @param shuffleComputation [Boolean]: whether or not the order of numbers and order of ops should be shuffled.
  * @return [StringList]: modified list with adjacent digits/decimals combined into single numbers,
  * and with any of the specified modifications for number order, applying parens, and applying decimals.
  * The relative position of numbers, operators, and parens is unchanged in the returned value.
@@ -39,7 +42,8 @@ fun generateAndValidateComputeText(
     ops: StringList,
     numbersOrder: IntList?, // make this nullable so we don't always have to get index
     applyParens: Boolean,
-    applyDecimals: Boolean
+    applyDecimals: Boolean,
+    shuffleComputation: Boolean
 ): StringList {
     val syntaxError = Exception("Syntax error")
 
@@ -180,5 +184,32 @@ fun generateAndValidateComputeText(
         throw syntaxError
     }
 
+    if (shuffleComputation) {
+        return getShuffledComputation(computeText, ops)
+    }
+
     return computeText
+}
+
+/**
+ * Shuffle the order of the numbers and order of ops in compute text.
+ * The relative positions of parens, numbers, and ops remains the same, but the values may change.
+ *
+ * @param computeText [StringList]: list of strings to shuffle, containing numbers, operators, and parens
+ * @param ops [StringList]: list of string values recognized as operators
+ * @return [StringList]: a list containing the same elements as the computeText, with the orders of numbers and operators shuffled
+ */
+private fun getShuffledComputation(computeText: StringList, ops: StringList): StringList {
+    val numbers = computeText.filter { isNumber(it) }.toMutableList()
+    val operators = computeText.filter { isOperator(it, ops) }.toMutableList()
+
+    val newText = computeText.map {
+        when {
+            isOperator(it, ops) -> operators.popRandom()!!
+            isNumber(it) -> numbers.popRandom()!!
+            else -> it
+        }
+    }
+
+    return newText
 }

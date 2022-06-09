@@ -69,6 +69,7 @@ private fun addArgsToFragment(context: Context, settings: Settings, fragment: Fr
     val settingsButtonKey = context.getString(R.string.key_settings_button)
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
     val historyRandomnessKey = context.getString(R.string.key_random_history)
+    val shuffleComputationKey = context.getString(R.string.key_shuffle_computation)
 
     fragment.arguments = bundleOf(
         numbersKey to settings.shuffleNumbers,
@@ -78,6 +79,7 @@ private fun addArgsToFragment(context: Context, settings: Settings, fragment: Fr
         decimalsKey to settings.applyDecimals,
         settingsButtonKey to settings.showSettingsButton,
         mainFragmentKey to (parentFragment is MainFragment),
-        historyRandomnessKey to settings.historyRandomness
+        historyRandomnessKey to settings.historyRandomness,
+        shuffleComputationKey to settings.shuffleComputation
     )
 }
