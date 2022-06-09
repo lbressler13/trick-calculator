@@ -16,6 +16,8 @@ import com.example.trickcalculator.ui.settings.initSettingsFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.settings.initSettingsObservers
 
+// TODO correct attributions
+
 /**
  * Information about a single image attribution
  *
