@@ -10,6 +10,7 @@ However, the explicit purpose of this app is to create chaos, so there are some 
 For example, there is no description of the history randomness values or what they correspond to.
 
 Even if information is not documented in a README, it will be available through comments in the code.
+Creating chaos does not excuse messy code.
 
 ## Settings menus
 There are 2 separate settings menus, a standard fragment and a dialog.
