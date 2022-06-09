@@ -36,6 +36,7 @@
     <string name="random_history_label">History Mode</string>
     <string name="reset_settings">Reset</string>
     <string name="randomize_settings">Randomize</string>
+    <string name="shuffle_computation">Shuffle Computation</string>
 
     <!-- Settings Keys -->
     <string name="key_settings_request">settingsUpdateRequest</string>
@@ -47,6 +48,7 @@
     <string name="key_settings_button">showSettingsButton</string>
     <string name="key_main_fragment">isMainFragment</string>
     <string name="key_random_history">randomHistory</string>
+    <string name="key_shuffle_computation">shuffleComputation</string>
 
     <!-- Image Attributions -->
     <string name="link">Link</string>

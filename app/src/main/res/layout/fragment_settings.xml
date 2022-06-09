@@ -62,6 +62,11 @@
         android:checked="true"
         android:text="@string/apply_decimals" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/shuffleComputationSwitch"
+        style="@style/SettingsFragmentItem"
+        android:text="@string/shuffle_computation" />
+
     <TextView
         style="@style/SettingsSectionHeading"
         android:layout_marginTop="15dp"

@@ -29,6 +29,8 @@ class SharedViewModel : ViewModel() {
     val showSettingsButton: LiveData<Boolean> = mShowSettingsButton
     private val mHistoryRandomness = MutableLiveData<Int>().apply { value = 1 }
     val historyRandomness: LiveData<Int> = mHistoryRandomness
+    private val mShuffleComputation = MutableLiveData<Boolean>().apply { value = false }
+    val shuffleComputation: LiveData<Boolean> = mShuffleComputation
 
     fun setShuffleNumbers(newValue: Boolean) { mShuffleNumbers.value = newValue }
     fun setShuffleOperators(newValue: Boolean) { mShuffleOperators.value = newValue }
@@ -37,6 +39,7 @@ class SharedViewModel : ViewModel() {
     fun setApplyDecimals(newValue: Boolean) { mApplyDecimals.value = newValue }
     fun setShowSettingsButton(newValue: Boolean) { mShowSettingsButton.value = newValue }
     fun setHistoryRandomness(newValue: Int) { mHistoryRandomness.value = newValue }
+    fun setShuffleComputation(newValue: Boolean) { mShuffleComputation.value = newValue }
 
     // reset all settings other than settings button on main fragment
     fun resetSettings() {
@@ -47,6 +50,7 @@ class SharedViewModel : ViewModel() {
         setClearOnError(defaults.clearOnError)
         setApplyDecimals(defaults.applyDecimals)
         setHistoryRandomness(defaults.historyRandomness)
+        setShuffleComputation(defaults.shuffleComputation)
     }
 
     // select random values for settings and hide settings button
@@ -57,6 +61,7 @@ class SharedViewModel : ViewModel() {
         setApplyParens(r.nextBoolean())
         setClearOnError(r.nextBoolean())
         setApplyDecimals(r.nextBoolean())
+        setShuffleComputation(r.nextBoolean())
         setHistoryRandomness((0..3).random())
         setShowSettingsButton(false)
     }

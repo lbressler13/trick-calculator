@@ -4,6 +4,8 @@ import com.example.trickcalculator.utils.StringList
 import org.junit.function.ThrowingRunnable
 import org.junit.Assert.*
 
+private val iterations = 20
+
 fun assertDivByZero(function: ThrowingRunnable) {
     val error = assertThrows(ArithmeticException::class.java) {
         function.run()
@@ -21,5 +23,27 @@ fun splitString(s: String): StringList {
             val split = s.split("")
             split.subList(1, split.lastIndex)
         }
+    }
+}
+
+// perform a random action repeatedly, checking to ensure that the result was randomized at least once
+// action should contain any other assertions about result
+fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
+    var checkPassed = false
+
+    for (i in 0 until iterations) {
+        val result = randomAction()
+        if (randomCheck(result)) {
+            checkPassed = true
+        }
+    }
+
+    assert(checkPassed)
+}
+
+// run a function several times
+fun repeat(function: () -> Unit) {
+    for (i in 0 until iterations) {
+        function()
     }
 }

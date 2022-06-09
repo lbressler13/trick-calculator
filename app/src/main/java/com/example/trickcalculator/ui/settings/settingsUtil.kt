@@ -7,6 +7,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.example.trickcalculator.R
@@ -61,7 +62,12 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
  * @param group [RadioGroup]
  * @param buttons [List]: list of [RadioButton] within group
  */
-fun setHistoryRadioGroup(context: Context, args: Bundle?, group: RadioGroup, buttons: List<RadioButton>) {
+fun setHistoryRadioGroup(
+    context: Context,
+    args: Bundle?,
+    group: RadioGroup,
+    buttons: List<RadioButton>
+) {
     val key: String = context.getString(R.string.key_random_history)
     val value: Int = args?.getInt(key) ?: 0
     group.check(buttons[value].id)
@@ -87,6 +93,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
     val applyParensSwitch: SwitchCompat
     val clearOnErrorSwitch: SwitchCompat
     val applyDecimalsSwitch: SwitchCompat
+    val shuffleComputationSwitch: SwitchCompat
     val settingsButtonSwitch: SwitchCompat
     val historyRadioGroup: RadioGroup
     val historyRadioButtons: List<RadioButton>
@@ -100,6 +107,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
         applyParensSwitch = binding.applyParensSwitch
         clearOnErrorSwitch = binding.clearOnErrorSwitch
         applyDecimalsSwitch = binding.applyDecimalsSwitch
+        shuffleComputationSwitch = binding.shuffleComputationSwitch
         settingsButtonSwitch = binding.settingsButtonSwitch
         historyRadioGroup = binding.historyRandomnessGroup
         historyRadioButtons = listOf(
@@ -119,6 +127,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
         applyParensSwitch = binding.applyParensSwitch
         clearOnErrorSwitch = binding.clearOnErrorSwitch
         applyDecimalsSwitch = binding.applyDecimalsSwitch
+        shuffleComputationSwitch = binding.shuffleComputationSwitch
         settingsButtonSwitch = binding.settingsButtonSwitch
         historyRadioGroup = binding.historyRandomnessGroup
         historyRadioButtons = listOf(
@@ -138,6 +147,7 @@ fun setUiFromArgs(fragment: Fragment, viewModel: SharedViewModel, binding: ViewB
     setSwitchUiFromArgs(context, args, R.string.key_clear_on_error, clearOnErrorSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_apply_decimals, applyDecimalsSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_settings_button, settingsButtonSwitch)
+    setSwitchUiFromArgs(context, args, R.string.key_shuffle_computation, shuffleComputationSwitch)
 
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
     val isMainFragment = args?.getBoolean(mainFragmentKey)
@@ -173,6 +183,7 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
             val applyParensSwitch: SwitchCompat
             val clearOnErrorSwitch: SwitchCompat
             val applyDecimalsSwitch: SwitchCompat
+            val shuffleComputationSwitch: SwitchCompat
             val settingsButtonSwitch: SwitchCompat
             val historyRadioGroup: RadioGroup
             val historyRadioButtons: List<RadioButton>
@@ -184,6 +195,7 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
                 applyParensSwitch = binding.applyParensSwitch
                 clearOnErrorSwitch = binding.clearOnErrorSwitch
                 applyDecimalsSwitch = binding.applyDecimalsSwitch
+                shuffleComputationSwitch = binding.shuffleComputationSwitch
                 settingsButtonSwitch = binding.settingsButtonSwitch
                 historyRadioGroup = binding.historyRandomnessGroup
                 historyRadioButtons = listOf(
@@ -201,6 +213,7 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
                 applyParensSwitch = binding.applyParensSwitch
                 clearOnErrorSwitch = binding.clearOnErrorSwitch
                 applyDecimalsSwitch = binding.applyDecimalsSwitch
+                shuffleComputationSwitch = binding.shuffleComputationSwitch
                 settingsButtonSwitch = binding.settingsButtonSwitch
                 historyRadioGroup = binding.historyRandomnessGroup
                 historyRadioButtons = listOf(
@@ -217,8 +230,14 @@ fun saveToViewModel(fragment: Fragment, viewModel: SharedViewModel, binding: Vie
             viewModel.setApplyParens(applyParensSwitch.isChecked)
             viewModel.setClearOnError(clearOnErrorSwitch.isChecked)
             viewModel.setApplyDecimals(applyDecimalsSwitch.isChecked)
+            viewModel.setShuffleComputation(shuffleComputationSwitch.isChecked)
             viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
-            viewModel.setHistoryRandomness(getHistoryGroupValue(historyRadioGroup, historyRadioButtons))
+            viewModel.setHistoryRandomness(
+                getHistoryGroupValue(
+                    historyRadioGroup,
+                    historyRadioButtons
+                )
+            )
         }
     }
 
@@ -263,7 +282,7 @@ private fun getResetAndRandomized(fragment: Fragment): Pair<Boolean, Boolean> {
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
 private fun resetSettingsOnClick(fragment: Fragment) {
-    if (fragment is SettingsDialog)  {
+    if (fragment is SettingsDialog) {
         fragment.resetPressed = true
         fragment.dismiss()
     } else if (fragment is SettingsFragment) {
@@ -279,11 +298,26 @@ private fun resetSettingsOnClick(fragment: Fragment) {
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
 private fun randomizeSettingsOnClick(fragment: Fragment) {
-    if (fragment is SettingsDialog)  {
+    if (fragment is SettingsDialog) {
         fragment.randomizePressed = true
         fragment.dismiss()
     } else if (fragment is SettingsFragment) {
         fragment.randomizePressed = true
         fragment.parentFragmentManager.popBackStack()
+    }
+}
+
+/**
+ * If the current fragment is a [SettingsDialog] and its parent is a dialog, closes the parent dialog.
+ * If the current fragment is a [SettingsFragment], removes the previous fragment.
+ *
+ * @param currentFragment [Fragment]: the calling fragment.
+ * Expected to be either [SettingsFragment] or [SettingsDialog]
+ */
+fun closePreviousFragment(currentFragment: Fragment) {
+    if (currentFragment is SettingsDialog && currentFragment.requireParentFragment() is DialogFragment) {
+        (currentFragment.requireParentFragment() as DialogFragment).dismiss()
+    } else if (currentFragment is SettingsFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
+        currentFragment.parentFragmentManager.popBackStack()
     }
 }

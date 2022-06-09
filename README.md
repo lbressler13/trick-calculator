@@ -10,6 +10,7 @@ Here are the settings:
 | Clear text on error   | false   | Clear textbox when error occurs. Error message is shown regardless of setting       |
 | History               | 1       | Degree of randomness in computation history                                         |
 | Show settings button  | false   | If settings button should be shown on main screen. Not accessible from main screen  |
+| Shuffle computation   | false   | If the order of numbers and order of ops should be shuffled                         |
 | Shuffle numbers       | false   | Shuffle value of numbers. No visual indication of new values                        |
 | Shuffle operators     | true    | Shuffle action of operators. No visual indication of new actions                    |
 
@@ -21,6 +22,7 @@ For standard calculator function, use the following settings:
 | Clear text on error   | any    |
 | History               | 0      |
 | Show settings button  | any    |
+| Shuffle computation   | false  |
 | Shuffle numbers       | false  |
 | Shuffle operators     | false  |
 
