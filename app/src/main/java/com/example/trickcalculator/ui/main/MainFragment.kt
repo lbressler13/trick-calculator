@@ -74,6 +74,7 @@ class MainFragment : Fragment() {
         initDeveloperOptions()
 
         initSettingsFragment(this, settings, binding.settingsButton)
+        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
 
         return binding.root
     }
@@ -305,10 +306,11 @@ class MainFragment : Fragment() {
     }
 
     private fun initDeveloperOptions() {
-        binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
-        val dialog = DeveloperToolsDialog()
-        binding.devToolsButton.setOnClickListener {
-            dialog.show(childFragmentManager, DeveloperToolsDialog.TAG)
-        }
+        binding.devToolsButton.gone()
+//        binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
+//        val dialog = DeveloperToolsDialog()
+//        binding.devToolsButton.setOnClickListener {
+//            dialog.show(childFragmentManager, DeveloperToolsDialog.TAG)
+//        }
     }
 }
