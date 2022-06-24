@@ -68,6 +68,7 @@ class HistoryFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
         initActionBar()
+        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
 
         return binding.root
     }

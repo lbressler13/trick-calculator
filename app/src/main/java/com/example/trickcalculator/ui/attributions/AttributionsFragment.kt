@@ -81,6 +81,7 @@ class AttributionsFragment : Fragment() {
         }
 
         initActionBar()
+        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
 
         return binding.root

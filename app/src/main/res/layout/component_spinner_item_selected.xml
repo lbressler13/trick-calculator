@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    style="@style/SpinnerItem"
+    android:textColor="?colorOnPrimary"
+    android:paddingStart="4dp"
+    android:paddingVertical="3dp"
+    android:fontFamily="sans-serif-medium" />
+<!-- some padding already exists at end due to hidden arrow -->

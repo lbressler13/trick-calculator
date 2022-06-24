@@ -46,6 +46,8 @@ class SettingsFragment : Fragment() {
         val actionBar = (requireActivity() as MainActivity).binding.actionBar
         actionBar.root.setOnClickListener(null)
         actionBar.title.text = requireActivity().getString(R.string.title_settings)
+        // init dev tools
+        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
     }
 
     override fun onDestroy() {

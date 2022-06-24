@@ -28,7 +28,7 @@
         android:layout_height="75dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="50dp"
-        android:background="@drawable/button_numpad"
+        android:background="@drawable/button_numpad_background"
         android:paddingHorizontal="10dp"
         android:scrollbars="vertical"
         android:textColor="?colorOnPrimary"
@@ -66,7 +66,7 @@
             style="@style/NumpadButton"
             android:layout_row="0"
             android:layout_column="0"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/one" />
 
         <Button
@@ -74,7 +74,7 @@
             style="@style/NumpadButton"
             android:layout_row="0"
             android:layout_column="1"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/two" />
 
         <Button
@@ -82,7 +82,7 @@
             style="@style/NumpadButton"
             android:layout_row="0"
             android:layout_column="2"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/three" />
 
         <Button
@@ -90,7 +90,7 @@
             style="@style/NumpadButton"
             android:layout_row="1"
             android:layout_column="0"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/four" />
 
         <Button
@@ -98,7 +98,7 @@
             style="@style/NumpadButton"
             android:layout_row="1"
             android:layout_column="1"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/five" />
 
         <Button
@@ -106,7 +106,7 @@
             style="@style/NumpadButton"
             android:layout_row="1"
             android:layout_column="2"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/six" />
 
         <Button
@@ -114,7 +114,7 @@
             style="@style/NumpadButton"
             android:layout_row="2"
             android:layout_column="0"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/seven" />
 
         <Button
@@ -122,7 +122,7 @@
             style="@style/NumpadButton"
             android:layout_row="2"
             android:layout_column="1"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/eight" />
 
         <Button
@@ -130,7 +130,7 @@
             style="@style/NumpadButton"
             android:layout_row="2"
             android:layout_column="2"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/nine" />
 
         <Button
@@ -138,7 +138,7 @@
             style="@style/NumpadButton"
             android:layout_row="3"
             android:layout_column="0"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/zero" />
 
         <ImageButton
@@ -146,7 +146,7 @@
             style="@style/NumpadButton.Image"
             android:layout_row="0"
             android:layout_column="3"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:contentDescription="Plus button"
             android:src="@drawable/ic_plus"
             tools:ignore="HardcodedText" />
@@ -156,7 +156,7 @@
             style="@style/NumpadButton.Image"
             android:layout_row="1"
             android:layout_column="3"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:contentDescription="Minus button"
             android:src="@drawable/ic_minus"
             tools:ignore="HardcodedText" />
@@ -166,7 +166,7 @@
             style="@style/NumpadButton.Image"
             android:layout_row="2"
             android:layout_column="3"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:contentDescription="Multiplication button"
             android:src="@drawable/ic_times"
             tools:ignore="HardcodedText" />
@@ -176,7 +176,7 @@
             style="@style/NumpadButton.Image"
             android:layout_row="3"
             android:layout_column="3"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:contentDescription="Divide button"
             android:src="@drawable/ic_divide"
             tools:ignore="HardcodedText" />
@@ -186,7 +186,7 @@
             style="@style/NumpadButton"
             android:layout_row="3"
             android:layout_column="1"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/lparen" />
 
         <Button
@@ -194,7 +194,7 @@
             style="@style/NumpadButton"
             android:layout_row="3"
             android:layout_column="2"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/rparen" />
 
         <Button
@@ -202,7 +202,7 @@
             style="@style/NumpadButton"
             android:layout_row="4"
             android:layout_column="0"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/decimal" />
 
         <ImageButton
@@ -210,7 +210,7 @@
             style="@style/NumpadButton.Image"
             android:layout_row="4"
             android:layout_column="1"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:contentDescription="Backspace button"
             android:src="@drawable/ic_arrow_left"
             tools:ignore="HardcodedText" />
@@ -221,7 +221,7 @@
             android:layout_row="4"
             android:layout_column="2"
             android:layout_gravity="top"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/clear"
             android:textSize="20sp" />
 
@@ -231,7 +231,7 @@
             android:layout_row="4"
             android:layout_column="3"
             android:layout_gravity="top"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:text="@string/exp" />
 
         <ImageButton
@@ -239,7 +239,7 @@
             style="@style/NumpadButton.Image"
             android:layout_row="5"
             android:layout_column="3"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:contentDescription="Equals button"
             android:src="@drawable/ic_equals"
             tools:ignore="HardcodedText" />
@@ -250,7 +250,7 @@
             android:layout_row="5"
             android:layout_column="2"
             android:layout_gravity="top"
-            android:background="@drawable/button_numpad"
+            android:background="@drawable/button_numpad_background"
             android:enabled="false"
             android:visibility="gone"
             android:text="@string/pi"
@@ -287,22 +287,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
         tools:ignore="HardcodedText,RtlSymmetry" />
-
-    <TextView
-        android:id="@+id/devToolsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/dev_tools_button"
-        android:textSize="25sp"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="?colorPrimary"
-        android:visibility="gone"
-        tools:ignore="RtlSymmetry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

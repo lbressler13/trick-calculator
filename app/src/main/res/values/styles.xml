@@ -80,4 +80,15 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
+
+    <style name="SpinnerItem">
+        <!-- Layout -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!-- Style -->
+        <item name="android:textSize">13sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textAlignment">inherit</item>
+    </style>
 </resources>
