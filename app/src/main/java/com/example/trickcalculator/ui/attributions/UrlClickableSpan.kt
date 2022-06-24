@@ -1,9 +1,7 @@
 package com.example.trickcalculator.ui.attributions
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
-import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.View
 import androidx.core.content.ContextCompat

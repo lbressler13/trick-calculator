@@ -15,7 +15,7 @@ class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>) :
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
 
         val binding = ViewHolderAuthorAttributionBinding.inflate(layoutInflater, parent, false)
-        return AuthorAttributionViewHolder(binding, parent.context)
+        return AuthorAttributionViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AuthorAttributionViewHolder, position: Int) {
