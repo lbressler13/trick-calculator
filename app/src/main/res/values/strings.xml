@@ -68,7 +68,7 @@
     <string name="refresh_ui">Refresh UI</string>
     <string name="show_settings_dialog">Show settings dialog</string>
     <string name="hide_dev_tools">Hide dev tools</string>
-    <string name="dev_tools_timer">Hide dev tools for:</string>
+    <string name="dev_tools_timer">Time to hide (ms):</string>
     <string-array name="dev_tools_time_options">
         <item>1000</item>
         <item>5000</item>

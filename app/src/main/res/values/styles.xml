@@ -83,10 +83,8 @@
 
     <style name="SpinnerItem">
         <!-- Layout -->
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingVertical">10dp</item>
-        <item name="android:paddingHorizontal">15dp</item>
         <!-- Style -->
         <item name="android:textSize">15sp</item>
         <item name="android:singleLine">true</item>

@@ -2,8 +2,6 @@ package com.example.trickcalculator.ui.main
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -82,7 +80,6 @@ class DeveloperToolsDialog : DialogFragment() {
             // Apply the adapter to the spinner
             spinner.adapter = adapter
         }
-
 
         binding.hideDevToolsButton.setOnClickListener { hideDevToolsOnClick() }
     }

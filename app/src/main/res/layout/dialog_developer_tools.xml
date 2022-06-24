@@ -29,27 +29,32 @@
         android:text="@string/hide_dev_tools" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:paddingHorizontal="15dp"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:background="?colorPrimary"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp">
 
         <TextView
+            android:id="@+id/devToolsTimeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dev_tools_timer" />
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/dev_tools_timer"
+            android:textColor="?colorOnPrimary"
+            android:textSize="15sp" />
 
         <Spinner
             android:id="@+id/devToolsTimeSpinner"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-            android:background="@drawable/spinner_background"
             android:layout_gravity="end"
-            android:textColor="?colorOnPrimary"
-            android:textSize="15sp" />
+            android:layout_marginStart="5dp"
+            android:background="@drawable/spinner_background" />
     </LinearLayout>
 
 </LinearLayout>

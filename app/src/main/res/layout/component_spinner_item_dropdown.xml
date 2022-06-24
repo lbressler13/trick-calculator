@@ -3,4 +3,6 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="@style/SpinnerItem"
+    android:paddingVertical="15dp"
+    android:paddingHorizontal="10dp"
     android:textColor="?colorOnBackground" />
