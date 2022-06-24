@@ -61,12 +61,19 @@
     <string name="no_history">No history</string>
     <string name="history_error">Error retrieving history</string>
 
-    <!-- Developer Options -->
+    <!-- Developer Tools -->
     <string name="title_dev_tools">Developer Tools</string>
     <string name="dev_tools_button">{ }</string>
     <string name="clear_history">Clear history</string>
     <string name="refresh_ui">Refresh UI</string>
     <string name="show_settings_dialog">Show settings dialog</string>
+    <string name="hide_dev_tools">Hide dev tools</string>
+    <string name="dev_tools_timer">Hide dev tools for:</string>
+    <string-array name="dev_tools_time_options">
+        <item>1000</item>
+        <item>5000</item>
+        <item>10000</item>
+    </string-array>
 
     <!-- Other/Shared -->
     <string name="dev_mode">Dev mode</string>

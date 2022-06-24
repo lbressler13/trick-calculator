@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingTop="5dp">
 
     <Button
@@ -20,5 +22,34 @@
         android:id="@+id/settingsDialogButton"
         style="@style/DeveloperToolsButton"
         android:text="@string/show_settings_dialog" />
+
+    <Button
+        android:id="@+id/hideDevToolsButton"
+        style="@style/DeveloperToolsButton"
+        android:text="@string/hide_dev_tools" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:paddingHorizontal="15dp"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dev_tools_timer" />
+
+        <Spinner
+            android:id="@+id/devToolsTimeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:background="@drawable/spinner_background"
+            android:layout_gravity="end"
+            android:textColor="?colorOnPrimary"
+            android:textSize="15sp" />
+    </LinearLayout>
 
 </LinearLayout>
