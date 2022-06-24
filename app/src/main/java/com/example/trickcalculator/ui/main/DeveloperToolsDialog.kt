@@ -59,7 +59,7 @@ class DeveloperToolsDialog : DialogFragment() {
             (requireActivity() as MainActivity).recreate()
         }
 
-        initHideDevTools()
+        initHideDevToolsSpinner()
 
         initSettingsObservers(settings, viewModel, viewLifecycleOwner)
         initSettingsDialog(this, settings, binding.settingsDialogButton)
@@ -67,7 +67,10 @@ class DeveloperToolsDialog : DialogFragment() {
         return binding.root
     }
 
-    private fun initHideDevTools() {
+    /**
+     * Initialize the spinner used to set the time to hide the dev tools button.
+     */
+    private fun initHideDevToolsSpinner() {
         val spinner: Spinner = binding.devToolsTimeSpinner
         ArrayAdapter.createFromResource(
             requireContext(),
@@ -75,7 +78,6 @@ class DeveloperToolsDialog : DialogFragment() {
             R.layout.component_spinner_item_selected
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
-            // adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             adapter.setDropDownViewResource(R.layout.component_spinner_item_dropdown)
             // Apply the adapter to the spinner
             spinner.adapter = adapter
@@ -84,6 +86,10 @@ class DeveloperToolsDialog : DialogFragment() {
         binding.hideDevToolsButton.setOnClickListener { hideDevToolsOnClick() }
     }
 
+    /**
+     * On click for the hide dev tools button.
+     * Hides the button for an amount of time based on the current value of the spinner.
+     */
     private fun hideDevToolsOnClick() {
         val button = (requireActivity() as MainActivity).binding.devToolsButton
         button.gone()

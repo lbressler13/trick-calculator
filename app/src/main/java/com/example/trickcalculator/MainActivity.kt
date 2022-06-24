@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private var isDarkMode = true
     private lateinit var sharedViewModel: SharedViewModel
+
+    // fragment manager used to show/hide dev tools dialog, set by the current fragment
     var fragmentManager: FragmentManager? = null
 
     /**
@@ -49,6 +51,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Perform updates when dark mode is toggled
+     */
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
@@ -72,7 +77,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initDevToolsDialog() {
+    /**
+     * Show or hide the dev tools button, and set the on click for it
+     */
+    private fun initDevToolsDialog() {
         binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
 
         val dialog = DeveloperToolsDialog()
