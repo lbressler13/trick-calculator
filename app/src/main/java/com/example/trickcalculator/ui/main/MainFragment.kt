@@ -71,9 +71,9 @@ class MainFragment : Fragment() {
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         initActionBar()
-        initDeveloperOptions()
 
         initSettingsFragment(this, settings, binding.settingsButton)
+        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
 
         return binding.root
     }
@@ -302,13 +302,5 @@ class MainFragment : Fragment() {
     private fun scrollTextToBottom() {
         val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
         movementMethod.goToBottom(binding.mainText)
-    }
-
-    private fun initDeveloperOptions() {
-        binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
-        val dialog = DeveloperToolsDialog()
-        binding.devToolsButton.setOnClickListener {
-            dialog.show(childFragmentManager, DeveloperToolsDialog.TAG)
-        }
     }
 }

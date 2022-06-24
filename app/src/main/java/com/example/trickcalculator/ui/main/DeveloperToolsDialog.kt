@@ -11,10 +11,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogDeveloperToolsBinding
+import com.example.trickcalculator.ext.gone
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.settings.initSettingsDialog
 import com.example.trickcalculator.ui.settings.initSettingsObservers
+import android.os.Handler
+import android.os.Looper
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import com.example.trickcalculator.ext.visible
+
 
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
@@ -52,10 +59,52 @@ class DeveloperToolsDialog : DialogFragment() {
             (requireActivity() as MainActivity).recreate()
         }
 
+        initHideDevToolsSpinner()
+
         initSettingsObservers(settings, viewModel, viewLifecycleOwner)
         initSettingsDialog(this, settings, binding.settingsDialogButton)
 
         return binding.root
+    }
+
+    /**
+     * Initialize the spinner used to set the time to hide the dev tools button.
+     */
+    private fun initHideDevToolsSpinner() {
+        val spinner: Spinner = binding.devToolsTimeSpinner
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.dev_tools_time_options,
+            R.layout.component_spinner_item_selected
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(R.layout.component_spinner_item_dropdown)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+
+        binding.hideDevToolsButton.setOnClickListener { hideDevToolsOnClick() }
+    }
+
+    /**
+     * On click for the hide dev tools button.
+     * Hides the button for an amount of time based on the current value of the spinner.
+     */
+    private fun hideDevToolsOnClick() {
+        val button = (requireActivity() as MainActivity).binding.devToolsButton
+        button.gone()
+
+        val timerString = binding.devToolsTimeSpinner.selectedItem.toString()
+        val numString = timerString.substring(0, timerString.length - 2) // remove ms from end
+        val timer = Integer.parseInt(numString).toLong()
+
+        // unhide dev tools button
+        Handler(Looper.getMainLooper()).postDelayed({
+            button.visible()
+        }, timer)
+
+
+        dismiss()
     }
 
     companion object {
