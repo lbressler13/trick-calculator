@@ -55,6 +55,8 @@
     <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. Images, creators, and links are listed below.</string>
     <string name="show_link">Show link</string>
     <string name="hide_link">Hide link</string>
+    <string name="show_icons">Show icons</string>
+    <string name="hide_icons">Hide icons</string>
 
     <!-- History -->
     <string name="title_history">Computation History</string>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentImageAttributionsBinding
+import com.example.trickcalculator.ui.attributions.authorattribution.AuthorAttributionAdapter
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.settings.initSettingsFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
@@ -71,7 +72,7 @@ class AttributionsFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         val recycler: RecyclerView = binding.attributionsRecycler
-        val adapter = AttributionsAdapter(allAttributions)
+        val adapter = AuthorAttributionAdapter(authorAttributions)
 
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(requireContext())
