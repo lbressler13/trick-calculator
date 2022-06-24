@@ -13,14 +13,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:contentDescription="History button"
+        android:contentDescription="@string/history_cd"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:src="@drawable/ic_history"
         app:layout_constraintBottom_toTopOf="@id/mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
-        tools:ignore="HardcodedText,RtlSymmetry" />
+        tools:ignore="RtlSymmetry" />
 
     <TextView
         android:id="@+id/mainText"
@@ -147,7 +147,7 @@
             android:layout_row="0"
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
-            android:contentDescription="Plus button"
+            android:contentDescription="@string/plus_cd"
             android:src="@drawable/ic_plus"
             tools:ignore="HardcodedText" />
 
@@ -157,7 +157,7 @@
             android:layout_row="1"
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
-            android:contentDescription="Minus button"
+            android:contentDescription="@string/minus_cd"
             android:src="@drawable/ic_minus"
             tools:ignore="HardcodedText" />
 
@@ -167,7 +167,7 @@
             android:layout_row="2"
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
-            android:contentDescription="Multiplication button"
+            android:contentDescription="@string/times_cd"
             android:src="@drawable/ic_times"
             tools:ignore="HardcodedText" />
 
@@ -177,7 +177,7 @@
             android:layout_row="3"
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
-            android:contentDescription="Divide button"
+            android:contentDescription="@string/divide_cd"
             android:src="@drawable/ic_divide"
             tools:ignore="HardcodedText" />
 
@@ -211,7 +211,7 @@
             android:layout_row="4"
             android:layout_column="1"
             android:background="@drawable/button_numpad_background"
-            android:contentDescription="Backspace button"
+            android:contentDescription="@string/backspace_cd"
             android:src="@drawable/ic_arrow_left"
             tools:ignore="HardcodedText" />
 
@@ -240,7 +240,7 @@
             android:layout_row="5"
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
-            android:contentDescription="Equals button"
+            android:contentDescription="@string/equals_cd"
             android:src="@drawable/ic_equals"
             tools:ignore="HardcodedText" />
 
@@ -269,9 +269,9 @@
         app:layout_constraintBottom_toTopOf="@id/infoButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
-        tools:ignore="HardcodedText,RtlSymmetry"
+        tools:ignore="RtlSymmetry"
         android:visibility="gone"
-        android:contentDescription="Settings button" />
+        android:contentDescription="@string/settings_cd" />
 
 
     <ImageButton
@@ -279,13 +279,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:contentDescription="Info button"
+        android:contentDescription="@string/info_cd"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:src="@drawable/ic_info"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
-        tools:ignore="HardcodedText,RtlSymmetry" />
+        tools:ignore="RtlSymmetry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

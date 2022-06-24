@@ -50,7 +50,8 @@
     <string name="key_random_history">randomHistory</string>
     <string name="key_shuffle_computation">shuffleComputation</string>
 
-    <!-- Image Attributions -->
+    <!-- Attributions -->
+    <string name="title_attributions">Image Attributions</string>
     <string name="link">Link</string>
     <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies.</string>
     <string name="author_attr_template">Icon made by %s from %s</string>

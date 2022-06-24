@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBinding
+import com.example.trickcalculator.ext.gone
+import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.attributions.*
 import com.example.trickcalculator.ui.attributions.imageattribution.ImageAttributionAdapter
 
@@ -20,6 +22,32 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
     ) {
         initializeAttributionText(author, itemView.context)
         initializeAdapter(author.images)
+
+        var showingIcons = initialShowingIcons
+        if (initialShowingIcons) {
+            showIcons()
+        } else {
+            hideIcons()
+        }
+        binding.showHideIcons.setOnClickListener {
+            if (showingIcons) {
+                hideIcons()
+            } else {
+                showIcons()
+            }
+            showingIcons = !showingIcons
+            setShowingIcons(showingIcons)
+        }
+    }
+
+    private fun showIcons() {
+        binding.showHideIcons.text = itemView.context.getString(R.string.hide_icons)
+        binding.imagesRecycler.visible()
+    }
+
+    private fun hideIcons() {
+        binding.showHideIcons.text = itemView.context.getString(R.string.show_icons)
+        binding.imagesRecycler.gone()
     }
 
     private fun initializeAttributionText(author: AuthorAttribution, context: Context) {
