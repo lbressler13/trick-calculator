@@ -89,7 +89,8 @@ class DeveloperToolsDialog : DialogFragment() {
         button.gone()
 
         val timerString = binding.devToolsTimeSpinner.selectedItem.toString()
-        val timer = Integer.parseInt(timerString).toLong()
+        val numString = timerString.substring(0, timerString.length - 2) // remove ms from end
+        val timer = Integer.parseInt(numString).toLong()
 
         // unhide dev tools button
         Handler(Looper.getMainLooper()).postDelayed({

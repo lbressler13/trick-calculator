@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -23,38 +22,32 @@
         style="@style/DeveloperToolsButton"
         android:text="@string/show_settings_dialog" />
 
-    <Button
-        android:id="@+id/hideDevToolsButton"
-        style="@style/DeveloperToolsButton"
-        android:text="@string/hide_dev_tools" />
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="?colorPrimary"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="5dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/devToolsTimeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/dev_tools_timer"
-            android:textColor="?colorOnPrimary"
-            android:textSize="15sp" />
+        <Button
+            android:id="@+id/hideDevToolsButton"
+            style="@style/DeveloperToolsButton"
+            android:text="@string/hide_dev_tools"
+            android:translationZ="0dp"
+            android:elevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
             android:id="@+id/devToolsTimeSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             style="@style/Base.Widget.AppCompat.Spinner.Underlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="5dp"
+            android:translationZ="100dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/spinner_background" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

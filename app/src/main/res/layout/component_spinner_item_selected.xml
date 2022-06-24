@@ -4,5 +4,7 @@
     android:id="@android:id/text1"
     style="@style/SpinnerItem"
     android:textColor="?colorOnPrimary"
-    android:padding="8dp"
+    android:paddingStart="4dp"
+    android:paddingVertical="3dp"
     android:fontFamily="sans-serif-medium" />
+<!-- some padding already exists at end due to hidden arrow -->
