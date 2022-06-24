@@ -16,6 +16,26 @@ data class ImageAttribution(
 
 private val freepikImages = listOf(
     ImageAttribution(
+        R.drawable.ic_chevron_down,
+        R.string.chevron_down_cd,
+        "https://www.flaticon.com/premium-icon/down-chevron_1633716"
+    ),
+    ImageAttribution(
+        R.drawable.ic_chevron_left,
+        R.string.chevron_left_cd,
+        "https://www.flaticon.com/premium-icon/left-chevron_1633718"
+    ),
+    ImageAttribution(
+        R.drawable.ic_chevron_right,
+        R.string.chevron_right_cd,
+        "https://www.flaticon.com/premium-icon/right-chevron_1633719"
+    ),
+    ImageAttribution(
+        R.drawable.ic_chevron_up,
+        R.string.chevron_up_cd,
+        "https://www.flaticon.com/premium-icon/up-chevron_1633717"
+    ),
+    ImageAttribution(
         R.drawable.ic_equals,
         R.string.equals_cd,
         "https://www.flaticon.com/free-icon/equal_56751"

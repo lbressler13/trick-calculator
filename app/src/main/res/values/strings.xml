@@ -94,4 +94,10 @@
     <string name="plus_cd">Plus symbol</string>
     <string name="settings_cd">Settings</string>
     <string name="times_cd">Times symbol</string>
+    <string name="expand_dropdown_cd">Show icons</string>
+    <string name="collapse_dropdown_cd">Hide icons</string>
+    <string name="chevron_down_cd">Down chevron</string>
+    <string name="chevron_left_cd">Left chevron</string>
+    <string name="chevron_right_cd">Right chevron</string>
+    <string name="chevron_up_cd">Up chevron</string>
 </resources>
