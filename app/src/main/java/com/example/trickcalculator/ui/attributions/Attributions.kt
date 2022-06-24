@@ -9,58 +9,69 @@ data class AuthorAttribution(
 )
 
 data class ImageAttribution(
-    val iconRedId: Int,
+    val iconResId: Int,
+    val contentDescriptionId: Int,
     val url: String
 )
 
 private val freepikImages = listOf(
     ImageAttribution(
         R.drawable.ic_equals,
-        "www.flaticon.com/free-icon/equal_56751"
+        R.string.equals_cd,
+        "https://www.flaticon.com/free-icon/equal_56751"
     ),
     ImageAttribution(
         R.drawable.ic_info,
-        "www.flaticon.com/free-icon/info-button_64494"
+        R.string.info_cd,
+        "https://www.flaticon.com/free-icon/info-button_64494"
     ),
     ImageAttribution(
         R.drawable.ic_minus,
-        "www.flaticon.com/free-icon/minus_56889"
+        R.string.minus_cd,
+        "https://www.flaticon.com/free-icon/minus_56889"
     ),
     ImageAttribution(
         R.drawable.ic_plus,
-        "www.flaticon.com/premium-icon/plus_3524388"
+        R.string.plus_cd,
+        "https://www.flaticon.com/premium-icon/plus_3524388"
     ),
     ImageAttribution(
         R.drawable.ic_settings,
+        R.string.settings_cd,
         "https://www.flaticon.com/premium-icon/gear_484613"
     ),
     ImageAttribution(
         R.drawable.ic_times,
-        "www.flaticon.com/free-icon/multiply-mathematical-sign_43823"
+        R.string.times_cd,
+        "https://www.flaticon.com/free-icon/multiply-mathematical-sign_43823"
     )
 )
 
 private val iconKananImages = listOf(
     ImageAttribution(
         R.drawable.ic_history,
-        "www.flaticon.com/premium-icon/history_2901149"
+        R.string.history_cd,
+        "https://www.flaticon.com/premium-icon/history_2901149"
     )
 )
 
 private val ilhamFitrotulHayatImages = listOf(
     ImageAttribution(
         R.drawable.ic_arrow_left,
-        "www.flaticon.com/premium-icon/left_3416141"
+        R.string.backspace_cd,
+        "https://www.flaticon.com/premium-icon/left_3416141"
     ),
     ImageAttribution(
         R.drawable.ic_close,
-        "www.flaticon.com/premium-icon/cross_4421536"
+        R.string.close_cd,
+        "https://www.flaticon.com/premium-icon/cross_4421536"
     )
 )
 
 private val pixelPerfectImages = listOf(
     ImageAttribution(
         R.drawable.launcher,
+        R.string.launcher_cd,
         "https://www.flaticon.com/free-icon/keys_2891382"
     ),
 )
@@ -68,7 +79,8 @@ private val pixelPerfectImages = listOf(
 private val smashiconsImages = listOf(
     ImageAttribution(
         R.drawable.ic_divide,
-        "www.flaticon.com/free-icon/divide_149702"
+        R.string.divide_cd,
+        "https://www.flaticon.com/free-icon/divide_149702"
     )
 )
 
@@ -99,4 +111,3 @@ val authorAttributions = listOf(
         smashiconsImages
     )
 )
-

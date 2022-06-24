@@ -3,41 +3,23 @@ package com.example.trickcalculator.ui.attributions.authorattribution
 import android.content.Context
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBinding
-import com.example.trickcalculator.ui.attributions.AuthorAttribution
-import com.example.trickcalculator.ui.attributions.UrlClickableSpan
-import com.example.trickcalculator.ui.attributions.flaticonDisplayUrl
-import com.example.trickcalculator.ui.attributions.flaticonUrl
+import com.example.trickcalculator.ui.attributions.*
+import com.example.trickcalculator.ui.attributions.imageattribution.ImageAttributionAdapter
 
-class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributionBinding) : RecyclerView.ViewHolder(binding.root) {
+class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributionBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun update(
         author: AuthorAttribution,
         initialShowingIcons: Boolean,
         setShowingIcons: (Boolean) -> Unit
     ) {
-        var showingIcons = initialShowingIcons
-
         initializeAttributionText(author, itemView.context)
-
-        if (initialShowingIcons) {
-            showIcons()
-        } else {
-            hideIcons()
-        }
-
-        binding.root.setOnClickListener {
-            showingIcons = !showingIcons
-            if (showingIcons) {
-                showIcons()
-            } else {
-                hideIcons()
-            }
-
-            setShowingIcons(showingIcons)
-        }
+        initializeAdapter(author.images)
     }
 
     private fun initializeAttributionText(author: AuthorAttribution, context: Context) {
@@ -45,6 +27,7 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
         val text = template.format(author.name, flaticonDisplayUrl)
         val spannableText = SpannableString(text)
 
+        // link to Flaticon site
         val flaticonStart = text.length - flaticonDisplayUrl.length
         spannableText.setSpan(
             UrlClickableSpan(flaticonUrl),
@@ -53,6 +36,7 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
             SpannableString.SPAN_EXCLUSIVE_INCLUSIVE
         )
 
+        // link to creator
         val authorStart = text.indexOf(author.name)
         val authorEnd = authorStart + author.name.length
         spannableText.setSpan(
@@ -66,13 +50,11 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
         binding.attribution.text = spannableText
     }
 
-    private fun showIcons() {
-        // binding.imagesRecycler.visible()
-        // binding.showHideIcons.text = context.getString(R.string.hide_icons)
-    }
+    private fun initializeAdapter(images: List<ImageAttribution>) {
+        val recycler: RecyclerView = binding.imagesRecycler
+        val adapter = ImageAttributionAdapter(images)
 
-    private fun hideIcons() {
-        // binding.imagesRecycler.gone()
-        // binding.showHideIcons.text = context.getString(R.string.show_icons)
+        recycler.adapter = adapter
+        recycler.layoutManager = LinearLayoutManager(itemView.context)
     }
 }

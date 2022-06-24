@@ -80,4 +80,17 @@
     <!-- Other/Shared -->
     <string name="dev_mode">Dev mode</string>
     <string name="done">Done</string>
+
+    <!-- Content Descriptions -->
+    <string name="launcher_cd">Calculator symbol</string>
+    <string name="backspace_cd">Backspace</string>
+    <string name="close_cd">Close</string>
+    <string name="divide_cd">Divide symbol</string>
+    <string name="equals_cd">Equals symbol</string>
+    <string name="history_cd">History</string>
+    <string name="minus_cd">Minus symbol</string>
+    <string name="info_cd">Additional information</string>
+    <string name="plus_cd">Plus symbol</string>
+    <string name="settings_cd">Settings</string>
+    <string name="times_cd">Times symbol</string>
 </resources>
