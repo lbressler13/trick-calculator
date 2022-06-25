@@ -54,6 +54,7 @@
     <string name="title_attributions">Image Attributions</string>
     <string name="link">Link</string>
     <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies.</string>
+    <string name="flaticon_message_short">All icons are taken from Flaticon. Expand for details of their attribution policies.</string>
     <string name="author_attr_template">Icon made by %s from %s</string>
     <string name="show_link">Show link</string>
     <string name="hide_link">Hide link</string>

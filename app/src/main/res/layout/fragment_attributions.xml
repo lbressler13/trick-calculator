@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="?backgroundColor">
 
-    <include layout="@layout/component_close_button" android:id="@+id/closeButton" />
+    <include
+        android:id="@+id/closeButton"
+        layout="@layout/component_close_button" />
 
     <TextView
         android:id="@+id/topText"
@@ -15,25 +17,37 @@
         android:layout_marginTop="10dp"
         android:paddingHorizontal="15dp"
         android:scrollbars="vertical"
-        android:text="@string/flaticon_message"
+        android:text="@string/flaticon_message_short"
         android:textColor="?colorOnBackground"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/closeButton" />
 
+    <ImageView
+        android:id="@+id/expandCollapseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/expand_dropdown_cd"
+        android:paddingTop="8dp"
+        android:paddingEnd="10dp"
+        android:src="@drawable/ic_chevron_down"
+        app:layout_constraintEnd_toEndOf="@id/topText"
+        app:layout_constraintTop_toBottomOf="@id/topText"
+        app:tint="?colorOnBackground" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
         android:background="?colorOnBackground"
-        app:layout_constraintTop_toBottomOf="@id/topText" />
+        app:layout_constraintTop_toBottomOf="@id/expandCollapseButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attributionsRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintVertical_bias="0"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,48 +3,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="20dp">
 
-    <TextView
-        android:id="@+id/attribution"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?colorOnBackground"
-        android:textSize="15sp"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/showHideIcons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="5dp"
-        android:paddingStart="20dp"
-        android:text="@string/show_icons"
-        android:textColor="?colorOnBackground"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/attribution"
-        tools:ignore="RtlSymmetry" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:visibility="gone"
-        android:id="@+id/imagesRecycler"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/attribution"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingHorizontal="15dp" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/expandCollapseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/expand_dropdown_cd"
+            android:paddingStart="10dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            android:src="@drawable/ic_chevron_right"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?colorOnBackground" />
+
+        <TextView
+            android:id="@+id/attribution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="15dp"
+            android:textColor="?colorOnBackground"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/expandCollapseButton"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/imagesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/topLayout">
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="?colorOnBackground"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesRecycler"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingStart="40dp"
+            android:paddingEnd="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="15dp"
         android:background="?colorOnBackground"
-        app:layout_constraintTop_toBottomOf="@id/imagesRecycler" />
+        app:layout_constraintTop_toBottomOf="@id/imagesLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

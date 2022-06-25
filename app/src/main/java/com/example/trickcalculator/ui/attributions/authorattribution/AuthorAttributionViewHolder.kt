@@ -3,6 +3,7 @@ package com.example.trickcalculator.ui.attributions.authorattribution
 import android.content.Context
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.R
@@ -14,6 +15,10 @@ import com.example.trickcalculator.ui.attributions.imageattribution.ImageAttribu
 
 class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributionBinding) :
     RecyclerView.ViewHolder(binding.root) {
+    private val expandedIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_down)
+    private val collapsedIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_right)
+    private val expandedContentDescription = itemView.context.getString(R.string.expand_dropdown_cd)
+    private val collapsedContentDescription = itemView.context.getString(R.string.collapse_dropdown_cd)
 
     fun update(
         author: AuthorAttribution,
@@ -22,60 +27,42 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
     ) {
         initializeAttributionText(author, itemView.context)
         initializeAdapter(author.images)
-
         var showingIcons = initialShowingIcons
-        if (initialShowingIcons) {
-            showIcons()
-        } else {
-            hideIcons()
-        }
-        binding.showHideIcons.setOnClickListener {
-            if (showingIcons) {
-                hideIcons()
-            } else {
-                showIcons()
-            }
+
+        setIconsDisplay(initialShowingIcons)
+
+        binding.expandCollapseButton.setOnClickListener {
             showingIcons = !showingIcons
             setShowingIcons(showingIcons)
+            setIconsDisplay(showingIcons)
         }
     }
 
-    private fun showIcons() {
-        binding.showHideIcons.text = itemView.context.getString(R.string.hide_icons)
-        binding.imagesRecycler.visible()
-    }
-
-    private fun hideIcons() {
-        binding.showHideIcons.text = itemView.context.getString(R.string.show_icons)
-        binding.imagesRecycler.gone()
+    private fun setIconsDisplay(visible: Boolean) {
+        if (visible) {
+            // show icons
+            binding.expandCollapseButton.setImageDrawable(expandedIcon)
+            binding.expandCollapseButton.contentDescription = expandedContentDescription
+            binding.imagesLayout.visible()
+        } else {
+            // hide icons
+            binding.expandCollapseButton.setImageDrawable(collapsedIcon)
+            binding.expandCollapseButton.contentDescription = collapsedContentDescription
+            binding.imagesLayout.gone()
+        }
     }
 
     private fun initializeAttributionText(author: AuthorAttribution, context: Context) {
-        val template = context.getString(R.string.author_attr_template)
-        val text = template.format(author.name, flaticonDisplayUrl)
-        val spannableText = SpannableString(text)
+        val text = context.getString(R.string.author_attr_template, author.name, flaticonDisplayUrl)
+        val spannableString = SpannableString(text)
 
-        // link to Flaticon site
-        val flaticonStart = text.length - flaticonDisplayUrl.length
-        spannableText.setSpan(
-            UrlClickableSpan(flaticonUrl),
-            flaticonStart,
-            text.length,
-            SpannableString.SPAN_EXCLUSIVE_INCLUSIVE
-        )
-
+        // link to flaticon site
+        UrlClickableSpan.addToFirstWord(spannableString, flaticonDisplayUrl, flaticonUrl)
         // link to creator
-        val authorStart = text.indexOf(author.name)
-        val authorEnd = authorStart + author.name.length
-        spannableText.setSpan(
-            UrlClickableSpan(author.url),
-            authorStart,
-            authorEnd,
-            SpannableString.SPAN_EXCLUSIVE_INCLUSIVE
-        )
+        UrlClickableSpan.addToFirstWord(spannableString, author.name, author.url)
 
         binding.attribution.movementMethod = LinkMovementMethod()
-        binding.attribution.text = spannableText
+        binding.attribution.text = spannableString
     }
 
     private fun initializeAdapter(images: List<ImageAttribution>) {

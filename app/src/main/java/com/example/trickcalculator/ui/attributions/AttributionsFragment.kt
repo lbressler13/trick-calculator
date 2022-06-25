@@ -1,12 +1,12 @@
 package com.example.trickcalculator.ui.attributions
 
 import android.os.Bundle
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +54,8 @@ class AttributionsFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        initFlaticonMessage()
+        initDropdown()
+        addFlaticonLinks()
         initActionBar()
         (requireActivity() as MainActivity).fragmentManager = childFragmentManager
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
@@ -71,27 +72,38 @@ class AttributionsFragment : Fragment() {
         actionBar.title.text = requireContext().getString(R.string.title_attributions)
     }
 
-    private fun initFlaticonMessage() {
+    private fun initDropdown() {
+        val expandedIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_chevron_up)
+        val collapsedIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_chevron_down)
+        val expandedContentDescription = requireContext().getString(R.string.expand_dropdown_cd)
+        val collapsedContentDescription = requireContext().getString(R.string.collapse_dropdown_cd)
+        val expandedText = requireContext().getString(R.string.flaticon_message)
+        val collapsedText = requireContext().getString(R.string.flaticon_message_short)
+        var textExpanded = false
+
+        binding.expandCollapseButton.setOnClickListener {
+            if (textExpanded) {
+                // collapse text
+                binding.topText.text = collapsedText
+                binding.expandCollapseButton.setImageDrawable(collapsedIcon)
+                binding.expandCollapseButton.contentDescription = collapsedContentDescription
+            } else {
+                // expand text
+                binding.topText.text = expandedText
+                binding.expandCollapseButton.setImageDrawable(expandedIcon)
+                binding.expandCollapseButton.contentDescription = expandedContentDescription
+            }
+            textExpanded = !textExpanded
+            addFlaticonLinks()
+        }
+    }
+
+    private fun addFlaticonLinks() {
         val text = binding.topText.text.toString()
         val spannableString = SpannableString(text)
 
-        val flaticonStart = text.indexOf("Flaticon")
-        val flaticonEnd = flaticonStart + "Flaticon".length
-        spannableString.setSpan(
-            UrlClickableSpan(flaticonUrl),
-            flaticonStart,
-            flaticonEnd,
-            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-        )
-
-        val policyStart = text.indexOf("here")
-        val policyEnd = policyStart + "here".length
-        spannableString.setSpan(
-            UrlClickableSpan(flaticonAttrPolicyUrl),
-            policyStart,
-            policyEnd,
-            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-        )
+        UrlClickableSpan.addToFirstWord(spannableString, "Flaticon", flaticonUrl)
+        UrlClickableSpan.addToFirstWord(spannableString, "here", flaticonAttrPolicyUrl)
 
         binding.topText.movementMethod = LinkMovementMethod()
         binding.topText.text = spannableString
