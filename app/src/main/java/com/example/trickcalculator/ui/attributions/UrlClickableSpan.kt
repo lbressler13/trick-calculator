@@ -18,10 +18,8 @@ class UrlClickableSpan(private val url: String) : ClickableSpan() {
     companion object {
         fun addToFirstWord(text: SpannableString, word: String, url: String) {
             val start = text.indexOf(word)
-            if (start >= 0) {
-                val end = start + word.length
-                text.setSpan(UrlClickableSpan(url), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
-            }
+            val end = start + word.length
+            text.setSpan(UrlClickableSpan(url), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         }
     }
 }
