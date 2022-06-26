@@ -35,8 +35,7 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
 
 /**
  * Observe changes to settings in view model and update ui based on changes.
- * Without this, changes from SettingsDialog will not be saved if dialog is opened on top of fragment.
- * Will not cause a loop of updates because settings aren't saved until fragment is closed.
+ * This means updates will be preserved if the settings dialog makes changes on top of the fragment.
  *
  * @param settingsUi [SettingsUI]: UI of calling fragment
  * @param viewModel [SharedViewModel]: view model with settings fields
