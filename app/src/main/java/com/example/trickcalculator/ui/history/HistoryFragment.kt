@@ -19,6 +19,7 @@ import android.view.animation.Animation
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.ext.nextBoolean
+import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.settings.initSettingsFragment
 import java.util.*
 import kotlin.random.Random
@@ -27,7 +28,7 @@ import kotlin.random.Random
 /**
  * Fragment to display computation history, possibly with some level of randomness
  */
-class HistoryFragment : Fragment() {
+class HistoryFragment : ActivityFragment() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var sharedViewModel: SharedViewModel
 
@@ -67,19 +68,8 @@ class HistoryFragment : Fragment() {
         binding.closeButton.root.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        initActionBar()
-        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
 
         return binding.root
-    }
-
-    /**
-     * Set functionality in action bar
-     */
-    private fun initActionBar() {
-        val actionBar = (requireActivity() as MainActivity).binding.actionBar
-        actionBar.root.setOnClickListener(null)
-        actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
 
     /**

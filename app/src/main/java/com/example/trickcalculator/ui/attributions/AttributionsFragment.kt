@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentAttributionsBinding
+import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.attributions.authorattribution.AuthorAttributionAdapter
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.settings.initSettingsFragment
@@ -24,7 +23,7 @@ import com.example.trickcalculator.ui.settings.initSettingsObservers
 /**
  * Fragment to display image attributions for all Flaticon images used in the app, as required by Flaticon
  */
-class AttributionsFragment : Fragment() {
+class AttributionsFragment : ActivityFragment() {
     private lateinit var binding: FragmentAttributionsBinding
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var viewModel: AttributionsViewModel
@@ -32,6 +31,9 @@ class AttributionsFragment : Fragment() {
     private val settings = Settings()
 
     private var textExpanded = false
+
+    override var titleResId: Int = R.string.title_attributions
+    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, settings, it) }
 
     companion object {
         fun newInstance() = AttributionsFragment()
@@ -47,22 +49,15 @@ class AttributionsFragment : Fragment() {
     ): View {
         binding = FragmentAttributionsBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        // view model is tied to the fragment, not activity
         viewModel = ViewModelProvider(this)[AttributionsViewModel::class.java]
-
-        val recycler: RecyclerView = binding.attributionsRecycler
-        val adapter = AuthorAttributionAdapter(authorAttributions, viewModel, viewLifecycleOwner)
-
-        recycler.adapter = adapter
-        recycler.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.setAttributionCount(authorAttributions.size)
 
         binding.closeButton.root.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
+        initializeAttributionsList()
         addFlaticonLinks()
-        initActionBar()
-        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
 
         binding.expandCollapseButton.setOnClickListener { viewModel.setTextExpanded(!textExpanded) }
@@ -71,18 +66,18 @@ class AttributionsFragment : Fragment() {
         return binding.root
     }
 
+    private fun initializeAttributionsList() {
+        val recycler: RecyclerView = binding.attributionsRecycler
+        val adapter = AuthorAttributionAdapter(authorAttributions, viewModel, viewLifecycleOwner)
+
+        recycler.adapter = adapter
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        viewModel.setAttributionCount(authorAttributions.size)
+    }
+
     private val textExpandedObserver: Observer<Boolean> = Observer {
         textExpanded = it
         setTopText()
-    }
-
-    /**
-     * Set functionality in action bar
-     */
-    private fun initActionBar() {
-        val actionBar = (requireActivity() as MainActivity).binding.actionBar
-        initSettingsFragment(this, settings, actionBar.root)
-        actionBar.title.text = requireContext().getString(R.string.title_attributions)
     }
 
     private fun setTopText() {

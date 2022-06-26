@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentSettingsBinding
+import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : ActivityFragment() {
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
+    override var titleResId: Int = R.string.title_settings
+
     var resetPressed = false
     var randomizePressed = false
 
@@ -41,13 +42,6 @@ class SettingsFragment : Fragment() {
         binding.closeButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-
-        // init action bar
-        val actionBar = (requireActivity() as MainActivity).binding.actionBar
-        actionBar.root.setOnClickListener(null)
-        actionBar.title.text = requireActivity().getString(R.string.title_settings)
-        // init dev tools
-        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
     }
 
     override fun onDestroy() {

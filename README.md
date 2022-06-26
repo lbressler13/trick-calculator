@@ -2,9 +2,17 @@
 
 This calculator exists purely for fun and chaos.
 Instead of performing the expected computations, it can change the actions of the operators, the values of the numbers, and several other aspects of computation.
-The full list of settings is below.
 
-## Settings
+Find more information in the below sections:
+* [Functionality](#functionality)
+* [Project structure](#project-structure)
+* [Build](#build)
+* [Testing](#testing)
+* [Serious stuff](#serious-stuff)
+
+## Functionality
+
+### Available Settings
 Several settings are available to make the calculator more/less chaotic and difficult to use.
 Here is the complete list:
 | Setting               | Default | Description                                                                         |
@@ -37,33 +45,10 @@ In the spirit of the app, this access is undocumented.
 Additional information about developing settings can be found [here](https://github.com/lbressler13/trick-calculator/blob/main/app/src/main/java/com/example/trickcalculator/ui/settings/README.md).
 However, this documentation does not provide any additional insight into the settings or how to access them.
 
-## Available Operators
+### Available Operators
 The calculator currently supports addition, subtraction, multiplication, and division of rational numbers.
 It also supports exponentiation, using whole numbers as exponents.
 Fractional exponents are not currently supported.
-
-## Testing
-**All** new computation needs unit tests.
-The computation in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
-There is a huge sense of relief from being able to press a button and know that everything still works after refactoring the most important functions.
-The hours writing tests will be worth it. 
-
-You will gain a huge appreciation for testing and TDD.
-
-## Dependencies
-This app has a dependency on an [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
-This package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
-
-## Build Types
-The app has 2 build types: a dev build, and a final/complete build.
-The dev build should be used for pieces of functionality that are still under development and may not be fully functional.
-The final build should be used for functionality that has been fully tested and merged into the main branch.
-
-To aid in the development and debugging process, a menu of developer tools is available in the dev build.
-This can be launched using the icon in the bottom left corner of the main screen.
-This menu is unavailable in the final build.
-
-See [here](https://developer.android.com/studio/build/build-variants) for information about configuring build variants in an Android app.
 
 ## Project Structure
 ```project
@@ -88,6 +73,36 @@ See [here](https://developer.android.com/studio/build/build-variants) for inform
 ├── gradle.properties
 └── settings.gradle
 ```
+
+## Build
+
+### Build Types
+The app has 2 build types: a dev build, and a final/complete build.
+The dev build should be used for pieces of functionality that are still under development and may not be fully functional.
+The final build should be used for functionality that has been fully tested and merged into the main branch.
+
+To aid in the development and debugging process, a menu of developer tools is available in the dev build.
+This can be launched using the icon in the bottom left corner of the main screen.
+This menu is unavailable in the final build.
+
+See [here](https://developer.android.com/studio/build/build-variants) for information about configuring build variants in an Android app.
+
+### Dependencies
+This app has a dependency on an [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
+This package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
+
+## Testing
+
+### Unit Tests
+**All** new computation needs unit tests.
+The computation in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
+There is a huge sense of relief from being able to press a button and know that everything still works after refactoring the most important functions.
+The hours writing tests will be worth it. 
+
+You will gain a huge appreciation for testing and TDD.
+
+### UI Tests
+Not yet implemented
 
 ## Serious Stuff
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.

@@ -8,6 +8,12 @@ import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBindin
 import com.example.trickcalculator.ui.attributions.AttributionsViewModel
 import com.example.trickcalculator.ui.attributions.AuthorAttribution
 
+/**
+ * Adapter for author attributions for the RecyclerView in the AttributionsFragment
+ *
+ * @param authors [List<AuthorAttribution>]: list of AuthorAttribution objects
+ * @param viewModel [AttributionsViewModel]: view model containing information about which attributions are expanded
+ */
 class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel, private val lifecycleOwner: LifecycleOwner) :
     RecyclerView.Adapter<AuthorAttributionViewHolder>() {
     // whether or not icons are visible for each author attribution

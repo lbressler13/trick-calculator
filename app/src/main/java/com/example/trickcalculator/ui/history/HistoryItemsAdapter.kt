@@ -25,7 +25,5 @@ class HistoryItemsAdapter(private val items: History) :
         holder.update(item)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 }

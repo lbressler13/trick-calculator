@@ -6,6 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.ViewHolderImageAttributionBinding
 import com.example.trickcalculator.ui.attributions.ImageAttribution
 
+/**
+ * Adapter for image attribution views for the RecyclerView in an author attribution
+ *
+ * @param images [List<ImageAttribution>]: list of ImageAttribution objects
+ */
 class ImageAttributionAdapter(private val images: List<ImageAttribution>) :
     RecyclerView.Adapter<ImageAttributionViewHolder>() {
 
