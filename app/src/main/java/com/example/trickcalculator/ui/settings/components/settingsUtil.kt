@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.settings
+package com.example.trickcalculator.ui.settings.components
 
 import android.content.Context
 import android.os.Bundle
@@ -10,9 +10,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.trickcalculator.R
-import com.example.trickcalculator.ui.settings.components.SettingsDialog
-import com.example.trickcalculator.ui.settings.components.SettingsFragment
-import com.example.trickcalculator.ui.settings.components.SettingsUI
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -84,7 +81,7 @@ fun setUiFromArgs(settingsUi: SettingsUI, viewModel: SharedViewModel) {
     val context = settingsUi.fragment.requireContext()
     val args = settingsUi.fragment.arguments
 
-    // set UI, for either fragment or dialog
+    // set UI
     setSwitchUiFromArgs(context, args, R.string.key_shuffle_numbers, settingsUi.shuffleNumbersSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_shuffle_operators, settingsUi.shuffleOperatorsSwitch)
     setSwitchUiFromArgs(context, args, R.string.key_apply_parens, settingsUi.applyParensSwitch)
@@ -98,99 +95,80 @@ fun setUiFromArgs(settingsUi: SettingsUI, viewModel: SharedViewModel) {
     settingsUi.settingsButtonSwitch.isVisible = isMainFragment != true
 
     setHistoryRadioGroup(context, args, settingsUi.historyRadioGroup, settingsUi.historyRadioButtons)
-    settingsUi.resetSettingsButton.setOnClickListener { resetSettingsOnClick(settingsUi.fragment) }
-    settingsUi.randomizeSettingsButton.setOnClickListener { randomizeSettingsOnClick(settingsUi.fragment) }
+    settingsUi.resetSettingsButton.setOnClickListener { resetSettingsOnClick(settingsUi) }
+    settingsUi.randomizeSettingsButton.setOnClickListener { randomizeSettingsOnClick(settingsUi) }
 }
 
 /**
  * Update ViewModel using values selected in UI.
  * Should be called when at the end of the lifecycle of the calling fragment.
  *
- * @param fragment [Fragment]: calling fragment.
- * Expected to be either [SettingsFragment] or [SettingsDialog]
+ * @param settingsUi [SettingsUI]: UI of calling fragment.
  * @param viewModel [SharedViewModel]: ViewModel containing fields for all settings
  */
-fun saveToViewModel(settingUi: SettingsUI, viewModel: SharedViewModel) {
-    val resetRandomizedPair = getResetAndRandomized(settingUi.fragment)
-    val resetPressed = resetRandomizedPair.first
-    val randomizedPressed = resetRandomizedPair.second
+fun saveToViewModel(settingsUi: SettingsUI, viewModel: SharedViewModel) {
+    val resetPressed = settingsUi.resetPressed
+    val randomizedPressed = settingsUi.randomizePressed
 
     when {
-        resetPressed -> viewModel.resetSettings()
         randomizedPressed -> viewModel.randomizeSettings()
+        resetPressed -> {
+            // save changes to visibility of show settings
+            viewModel.setShowSettingsButton(settingsUi.settingsButtonSwitch.isChecked)
+            viewModel.resetSettings()
+        }
         else -> {
-            // update ViewModel based on settings selected in UI, for either fragment or dialog
-            viewModel.setShuffleNumbers(settingUi.shuffleNumbersSwitch.isChecked)
-            viewModel.setShuffleOperators(settingUi.shuffleOperatorsSwitch.isChecked)
-            viewModel.setApplyParens(settingUi.applyParensSwitch.isChecked)
-            viewModel.setClearOnError(settingUi.clearOnErrorSwitch.isChecked)
-            viewModel.setApplyDecimals(settingUi.applyDecimalsSwitch.isChecked)
-            viewModel.setShuffleComputation(settingUi.shuffleComputationSwitch.isChecked)
-            viewModel.setShowSettingsButton(settingUi.settingsButtonSwitch.isChecked)
+            // update ViewModel based on settings selected in UI
+            viewModel.setShuffleNumbers(settingsUi.shuffleNumbersSwitch.isChecked)
+            viewModel.setShuffleOperators(settingsUi.shuffleOperatorsSwitch.isChecked)
+            viewModel.setApplyParens(settingsUi.applyParensSwitch.isChecked)
+            viewModel.setClearOnError(settingsUi.clearOnErrorSwitch.isChecked)
+            viewModel.setApplyDecimals(settingsUi.applyDecimalsSwitch.isChecked)
+            viewModel.setShuffleComputation(settingsUi.shuffleComputationSwitch.isChecked)
+            viewModel.setShowSettingsButton(settingsUi.settingsButtonSwitch.isChecked)
             viewModel.setHistoryRandomness(
                 getHistoryGroupValue(
-                    settingUi.historyRadioGroup,
-                    settingUi.historyRadioButtons
+                    settingsUi.historyRadioGroup,
+                    settingsUi.historyRadioButtons
                 )
             )
         }
     }
 
-    settingUi.resetPressed = false
-    settingUi.randomizePressed = false
-}
-
-/**
- * Get values of resetPressed and randomizePressed, based on fragment
- *
- * @param fragment [Fragment]: calling fragment.
- * Expected to be either [SettingsFragment] or [SettingsDialog]
- * @return [Pair]: pair of [Boolean], where first element is resetPressed and second is randomizedPressed
- */
-private fun getResetAndRandomized(fragment: Fragment): Pair<Boolean, Boolean> {
-    val resetPressed: Boolean
-    val randomizedPressed: Boolean
-
-    if (fragment is SettingsDialog) {
-        resetPressed = fragment.resetPressed
-        randomizedPressed = fragment.randomizePressed
-    } else {
-        fragment as SettingsFragment
-        resetPressed = fragment.resetPressed
-        randomizedPressed = fragment.randomizePressed
-    }
-
-    return Pair(resetPressed, randomizedPressed)
+    settingsUi.resetPressed = false
+    settingsUi.randomizePressed = false
 }
 
 /**
  * On click function for reset settings button.
  *
- * @param fragment [Fragment]: the calling fragment.
- * Expected to be either [SettingsFragment] or [SettingsDialog]
+ * @param settingsUi [SettingsUI]: UI and info about calling fragment
  */
-private fun resetSettingsOnClick(fragment: Fragment) {
-    if (fragment is SettingsDialog) {
-        fragment.resetPressed = true
-        fragment.dismiss()
-    } else if (fragment is SettingsFragment) {
-        fragment.resetPressed = true
-        fragment.parentFragmentManager.popBackStack()
-    }
+private fun resetSettingsOnClick(settingsUi: SettingsUI) {
+    settingsUi.resetPressed = true
+    closeFragment(settingsUi.fragment)
 }
 
 /**
  * On click function for randomize settings button.
  *
- * @param fragment [Fragment]: the calling fragment.
+ * @param settingsUi [SettingsUI]: UI and info about calling fragment
+ */
+private fun randomizeSettingsOnClick(settingsUi: SettingsUI) {
+    settingsUi.randomizePressed = true
+    closeFragment(settingsUi.fragment)
+}
+
+/**
+ * Close or dismiss the current fragment
+ *
+ * @param fragment [Fragment]: the current fragment.
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
-private fun randomizeSettingsOnClick(fragment: Fragment) {
-    if (fragment is SettingsDialog) {
-        fragment.randomizePressed = true
+private fun closeFragment(fragment: Fragment) {
+    if (fragment is DialogFragment) {
         fragment.dismiss()
-    } else if (fragment is SettingsFragment) {
-        fragment.randomizePressed = true
+    } else {
         fragment.parentFragmentManager.popBackStack()
     }
 }
@@ -204,9 +182,9 @@ private fun randomizeSettingsOnClick(fragment: Fragment) {
  */
 fun closePreviousFragment(currentFragment: Fragment) {
     try {
-        if (currentFragment is SettingsDialog && currentFragment.requireParentFragment() is DialogFragment) {
+        if (currentFragment is DialogFragment && currentFragment.requireParentFragment() is DialogFragment) {
             (currentFragment.requireParentFragment() as DialogFragment).dismiss()
-        } else if (currentFragment is SettingsFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
+        } else if (currentFragment !is DialogFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
             currentFragment.parentFragmentManager.popBackStack()
         }
     } catch (e: Exception) {

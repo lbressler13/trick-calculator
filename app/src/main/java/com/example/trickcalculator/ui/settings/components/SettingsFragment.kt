@@ -11,9 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentSettingsBinding
 import com.example.trickcalculator.ui.ActivityFragment
-import com.example.trickcalculator.ui.settings.closePreviousFragment
-import com.example.trickcalculator.ui.settings.saveToViewModel
-import com.example.trickcalculator.ui.settings.setUiFromArgs
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 class SettingsFragment : ActivityFragment(), SettingsUI {
