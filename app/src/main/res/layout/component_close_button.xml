@@ -15,5 +15,5 @@
     app:layout_constraintTop_toTopOf="parent"
     android:layout_gravity="center_vertical|end"
     app:tint="?colorOnBackground"
-    tools:ignore="HardcodedText,RtlSymmetry"
-    android:contentDescription="Button to close fragment" />
+    tools:ignore="RtlSymmetry"
+    android:contentDescription="@string/close_cd" />

@@ -1,31 +1,25 @@
 package com.example.trickcalculator.ui.settings
 
-import android.content.Context
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.example.trickcalculator.R
 import com.example.trickcalculator.ui.main.MainFragment
+import com.example.trickcalculator.ui.settings.components.SettingsDialog
+import com.example.trickcalculator.ui.settings.components.SettingsFragment
 
 /**
- * Initialize listener to launch settings fragment
+ * Initialize onClick listener to launch settings fragment
  *
- * @param fragment [Fragment]: calling fragment
- * @param settings [Settings]: object containing current settings
+ * @param parentFragment [Fragment]: calling fragment
  * @param viewToClick [View]: view which should launch settings fragment when clicked
  */
-fun initSettingsFragment(
-    fragment: Fragment,
-    settings: Settings,
-    viewToClick: View
-) {
-    val context = fragment.requireContext()
-
+fun initSettingsFragment(parentFragment: Fragment, viewToClick: View) {
     viewToClick.setOnClickListener {
         val newFragment = SettingsFragment.newInstance()
-        addArgsToFragment(context, settings, newFragment, fragment)
+        setIsMainFragment(newFragment, parentFragment)
 
-        fragment.requireActivity().supportFragmentManager.beginTransaction()
+        parentFragment.requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, newFragment)
             .addToBackStack(null)
             .commit()
@@ -33,53 +27,29 @@ fun initSettingsFragment(
 }
 
 /**
- * Initialize listener to launch settings dialog
+ * Initialize onClick listener to launch settings dialog
  *
- * @param fragment [Fragment]: calling fragment
- * @param settings [Settings]: object containing current settings
+ * @param parentFragment [Fragment]: calling fragment
  * @param viewToClick [View]: view which should launch settings dialog when clicked
  */
-fun initSettingsDialog(
-    fragment: Fragment,
-    settings: Settings,
-    viewToClick: View
-) {
-    val context = fragment.requireContext()
+fun initSettingsDialog(parentFragment: Fragment, viewToClick: View) {
     val settingsDialog = SettingsDialog()
 
     viewToClick.setOnClickListener {
-        addArgsToFragment(context, settings, settingsDialog, fragment)
-        settingsDialog.show(fragment.childFragmentManager, SettingsDialog.TAG)
+        setIsMainFragment(settingsDialog, parentFragment)
+        settingsDialog.show(parentFragment.childFragmentManager, SettingsDialog.TAG)
     }
 }
 
 /**
- * Add settings arguments to fragment
+ * Modify the fragment args to indicate if the parent is a MainFragment
  *
- * @param context [Context]: activity context, used to retrieve string keys
- * @param settings [Settings]: object containing current settings
- * @param fragment [Fragment]: fragment to add arguments to
+ * @param fragment [Fragment]: fragment to add args to
+ * @param parentFragment [Fragment]: calling fragment
  */
-private fun addArgsToFragment(context: Context, settings: Settings, fragment: Fragment, parentFragment: Fragment) {
-    val numbersKey = context.getString(R.string.key_shuffle_numbers)
-    val operatorsKey = context.getString(R.string.key_shuffle_operators)
-    val parensKey = context.getString(R.string.key_apply_parens)
-    val clearOnErrorKey = context.getString(R.string.key_clear_on_error)
-    val decimalsKey = context.getString(R.string.key_apply_decimals)
-    val settingsButtonKey = context.getString(R.string.key_settings_button)
+private fun setIsMainFragment(fragment: Fragment, parentFragment: Fragment) {
+    val context = parentFragment.requireContext()
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
-    val historyRandomnessKey = context.getString(R.string.key_random_history)
-    val shuffleComputationKey = context.getString(R.string.key_shuffle_computation)
 
-    fragment.arguments = bundleOf(
-        numbersKey to settings.shuffleNumbers,
-        operatorsKey to settings.shuffleOperators,
-        parensKey to settings.applyParens,
-        clearOnErrorKey to settings.clearOnError,
-        decimalsKey to settings.applyDecimals,
-        settingsButtonKey to settings.showSettingsButton,
-        mainFragmentKey to (parentFragment is MainFragment),
-        historyRandomnessKey to settings.historyRandomness,
-        shuffleComputationKey to settings.shuffleComputation
-    )
+    fragment.arguments = bundleOf(mainFragmentKey to (parentFragment is MainFragment))
 }

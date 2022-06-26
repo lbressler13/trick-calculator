@@ -2,7 +2,6 @@ package com.example.trickcalculator.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +11,11 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import exactfraction.ExactFraction
-import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
 import com.example.trickcalculator.compute.runComputation
 import com.example.trickcalculator.ext.*
+import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.ui.history.HistoryFragment
@@ -30,7 +29,7 @@ import com.example.trickcalculator.ui.settings.initSettingsObservers
 /**
  * Fragment to display main calculator functionality
  */
-class MainFragment : Fragment() {
+class MainFragment : ActivityFragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
@@ -64,24 +63,16 @@ class MainFragment : Fragment() {
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button
         sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
-        sharedViewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
-        initActionBar()
 
-        initSettingsFragment(this, settings, binding.settingsButton)
-        (requireActivity() as MainActivity).fragmentManager = childFragmentManager
+        initSettingsFragment(this, binding.settingsButton)
 
         return binding.root
     }
-
-    override fun getView(): View {
-        return binding.root
-    }
-
 
     private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
@@ -91,12 +82,6 @@ class MainFragment : Fragment() {
     }
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = it
-    }
-    private val isDevModeObserver: Observer<Boolean> = Observer {
-        binding.settingsButton.isVisible = settings.showSettingsButton
-        if (this::computeText.isInitialized) {
-            setMainText()
-        }
     }
 
     private val computedValueObserver: Observer<ExactFraction?> = Observer {
@@ -156,7 +141,7 @@ class MainFragment : Fragment() {
      */
     private val equalsButtonOnClick = {
         if (computeText.isNotEmpty()) {
-            computationViewModel.saveComputeText()
+            computationViewModel.saveComputation()
 
             // set action for each operator
             // only include exponent if exp is used
@@ -213,7 +198,7 @@ class MainFragment : Fragment() {
                 computationViewModel.setError(null)
                 computationViewModel.setLastHistoryItem()
 
-                computationViewModel.useComputedAsComputeText()
+                computationViewModel.clearComputeText()
 
                 val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
                 movement.goToTop(binding.mainText)
@@ -273,15 +258,6 @@ class MainFragment : Fragment() {
             computationViewModel.backspaceComputeText()
             scrollTextToBottom()
         }
-    }
-
-    /**
-     * Set functionality in action bar
-     */
-    private fun initActionBar() {
-        val actionBar = (requireActivity() as MainActivity).binding.actionBar
-        actionBar.root.setOnClickListener(null)
-        actionBar.title.text = requireContext().getString(R.string.title_action_bar)
     }
 
     /**

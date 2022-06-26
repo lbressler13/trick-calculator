@@ -35,8 +35,9 @@
             android:scaleY="1.5"
             android:paddingEnd="10dp"
             app:tint="?colorOnPrimary"
-            android:contentDescription="Button to close fragment"
-            tools:ignore="HardcodedText" />
+            android:contentDescription="@string/close_cd"
+            tools:ignore="RtlSymmetry" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.SwitchCompat
@@ -86,8 +87,7 @@
     <RadioGroup
         android:id="@+id/historyRandomnessGroup"
         style="@style/SettingsFragmentItem"
-        android:orientation="horizontal"
-        android:checkedButton="@id/historyButton0" >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -149,7 +149,8 @@
 
         <TextView
             style="@style/SettingsFragmentItem.Button"
-            android:text="|" />
+            android:text="|"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/randomizeSettingsButton"
