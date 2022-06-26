@@ -3,7 +3,6 @@ package com.example.trickcalculator.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.trickcalculator.ext.copyWithReplacement
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.*
 import exactfraction.ExactFraction
@@ -15,7 +14,6 @@ class ComputationViewModel : ViewModel() {
     // list of numbers and operators
     private val mComputeText = MutableLiveData<StringList>().apply { value = listOf() }
     val computeText: LiveData<StringList> = mComputeText
-    private val mBackupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
 
     // result of parsing computeText
     private val mComputedValue = MutableLiveData<ExactFraction>().apply { value = null }
@@ -26,6 +24,9 @@ class ComputationViewModel : ViewModel() {
 
     private val mLastHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
     val lastHistoryItem: LiveData<HistoryItem> = mLastHistoryItem
+    // backup values to use when generating history item
+    private val mBackupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
+    private val mBackupComputed = MutableLiveData<ExactFraction>().apply { value = null }
 
     fun setError(newValue: String?) { mError.value = newValue }
     fun setComputedValue(newValue: ExactFraction) { mComputedValue.value = newValue }
@@ -35,13 +36,17 @@ class ComputationViewModel : ViewModel() {
      */
     fun setLastHistoryItem() {
         val error = error.value
-        val computed = computedValue.value
+        val computed = mBackupComputed.value
         var computation = mBackupComputeText.value!!
 
-        if (computation[0].startsWith('[')) {
-            val first = computation[0]
-            val updatedFirst = first.substring(1 until first.lastIndex)
-            computation = computation.copyWithReplacement(0, updatedFirst)
+        if (
+            computation.size > 1 &&
+            computed != null &&
+            computation[0] == computed.toDecimalString() &&
+            isNumberChar(computation[1])
+        ) {
+            val start = listOf(computation[0], "x")
+            computation = start + computation.subList(1, computation.size)
         }
 
         mLastHistoryItem.value = when {
@@ -51,7 +56,10 @@ class ComputationViewModel : ViewModel() {
         }
     }
 
-    fun clearStoredHistoryItem() { mLastHistoryItem.value = null }
+    fun clearStoredHistoryItem() {
+        mLastHistoryItem.value = null
+        clearBackups()
+    }
 
     /**
      * Clear current computed values
@@ -86,7 +94,7 @@ class ComputationViewModel : ViewModel() {
     /**
      * Save the current compute text, including the computed value
      */
-    fun saveComputeText() {
+    fun saveComputation() {
         val computedDecimal = computedValue.value?.toDecimalString()
         val computedString = if (computedDecimal == null) {
             listOf()
@@ -95,12 +103,18 @@ class ComputationViewModel : ViewModel() {
         }
         val currentComputeText = computeText.value!!
         mBackupComputeText.value = computedString + currentComputeText
+        mBackupComputed.value = computedValue.value
     }
 
     /**
      * Replace compute text list with the computed value
      */
     fun useComputedAsComputeText() { mComputeText.value = listOf() }
+
+    private fun clearBackups() {
+        mBackupComputeText.value = null
+        mBackupComputed.value = null
+    }
 
     /**
      * Reset data related to computation.
@@ -112,6 +126,7 @@ class ComputationViewModel : ViewModel() {
     fun resetComputeData(clearError: Boolean = true) {
         clearComputeText()
         clearComputedValue()
+        clearBackups()
 
         if (clearError) {
             mError.value = null
