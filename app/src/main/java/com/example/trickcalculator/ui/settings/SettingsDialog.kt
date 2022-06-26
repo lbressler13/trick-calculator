@@ -4,6 +4,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
@@ -13,11 +17,25 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
 /**
  * DialogFragment to display all configuration options for calculator
  */
-class SettingsDialog : DialogFragment() {
+class SettingsDialog : DialogFragment(), SettingsUI {
     private lateinit var binding: DialogSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
-    var resetPressed = false
-    var randomizePressed = false
+
+    override val fragment = this
+    override var resetPressed = false
+    override var randomizePressed = false
+
+    override lateinit var shuffleNumbersSwitch: SwitchCompat
+    override lateinit var shuffleOperatorsSwitch: SwitchCompat
+    override lateinit var applyParensSwitch: SwitchCompat
+    override lateinit var clearOnErrorSwitch: SwitchCompat
+    override lateinit var applyDecimalsSwitch: SwitchCompat
+    override lateinit var shuffleComputationSwitch: SwitchCompat
+    override lateinit var settingsButtonSwitch: SwitchCompat
+    override lateinit var historyRadioGroup: RadioGroup
+    override lateinit var historyRadioButtons: List<RadioButton>
+    override lateinit var resetSettingsButton: View
+    override lateinit var randomizeSettingsButton: View
 
     /**
      * Initialize dialog
@@ -26,7 +44,8 @@ class SettingsDialog : DialogFragment() {
         binding = DialogSettingsBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        setUiFromArgs(this, sharedViewModel, binding)
+        initUiElements()
+        setUiFromArgs(this, sharedViewModel)
 
         val doneText = requireContext().getString(R.string.done)
         val title = requireContext().getString(R.string.title_settings)
@@ -38,9 +57,29 @@ class SettingsDialog : DialogFragment() {
             .create()
     }
 
+    private fun initUiElements() {
+        shuffleNumbersSwitch = binding.shuffleNumbersSwitch
+        shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
+        applyParensSwitch = binding.applyParensSwitch
+        clearOnErrorSwitch = binding.clearOnErrorSwitch
+        applyDecimalsSwitch = binding.applyDecimalsSwitch
+        shuffleComputationSwitch = binding.shuffleComputationSwitch
+        settingsButtonSwitch = binding.settingsButtonSwitch
+        resetSettingsButton = binding.resetSettingsButton
+        randomizeSettingsButton = binding.randomizeSettingsButton
+
+        historyRadioGroup = binding.historyRandomnessGroup
+        historyRadioButtons = listOf(
+            binding.historyButton0,
+            binding.historyButton1,
+            binding.historyButton2,
+            binding.historyButton3
+        )
+    }
+
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        saveToViewModel(this, sharedViewModel, binding)
+        saveToViewModel(this, sharedViewModel)
         closePreviousFragment(this)
     }
 

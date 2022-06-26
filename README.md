@@ -12,6 +12,14 @@ Find more information in the below sections:
 
 ## Functionality
 
+### Available Operators
+The calculator currently supports addition, subtraction, multiplication, and division of rational numbers.
+It also supports exponentiation, using whole numbers as exponents.
+Fractional exponents are not currently supported.
+
+Only rational numbers are supported. 
+Support for irrational numbers is planned for the future.
+
 ### Available Settings
 Several settings are available to make the calculator more/less chaotic and difficult to use.
 Here is the complete list:
@@ -44,11 +52,6 @@ In the spirit of the app, this access is undocumented.
 
 Additional information about developing settings can be found [here](https://github.com/lbressler13/trick-calculator/blob/main/app/src/main/java/com/example/trickcalculator/ui/settings/README.md).
 However, this documentation does not provide any additional insight into the settings or how to access them.
-
-### Available Operators
-The calculator currently supports addition, subtraction, multiplication, and division of rational numbers.
-It also supports exponentiation, using whole numbers as exponents.
-Fractional exponents are not currently supported.
 
 ## Project Structure
 ```project
@@ -108,6 +111,8 @@ Not yet implemented
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.
 This is the complete list of Flaticon images used within the app.
 The list is also available within the app itself.
+
+TODO: Correct calc url
 
 | Icon                                                        | Creator                                                                                                                    | Link                                                                  |
 |:------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------|

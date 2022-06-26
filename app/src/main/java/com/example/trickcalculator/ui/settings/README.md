@@ -24,8 +24,8 @@ The shared code includes initializing the fragments, setting the UI, and updatin
 
 A large portion of the functionality is in setting the UI based on the current settings, and updating values based on the final UI configuration.
 Because the fragment and the dialog have different layout files, they also have separate ViewBindings, which means all UI elements are separate.
-In order to resolve this issue, the same names are used for elements in both layout files.
-When the element is accessed in the code, a single variable is defined, and the value is pulled from the appropriate ViewBinding.
+This is managed via a SettingsUI interface, which is implemented by both fragments and has arguments for all the necessary UI elements.
+Values in the interface are set within the individual fragments, and accessed by the shared code.
 
 ## Adding a setting
 Settings are referenced, modified, and observed in various places throughout the app.
@@ -36,7 +36,8 @@ To ensure that nothing is missed, add the setting in the following files:
   * With a new observer in initSettingsObservers
   * In the args passed in initSettingsFragments
   * With an appropriate UI element in the settings fragment and dialog
-  * In setUiFromArgs and saveToViewModel in settingsUtil
+  * As a field in the SettingsUI interface
+  * In setUiFromArgs and saveToViewModel, in settingsUtil
 * SharedViewModel
   * As a property
   * In resetSettings and randomizeSettings

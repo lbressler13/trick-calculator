@@ -126,6 +126,9 @@ private val smashiconsImages = listOf(
  * Constant list of author attributions, including the above image attributions
  */
 
+
+// TODO calculator url is incorrect
+
 val authorAttributions = listOf(
     AuthorAttribution(
         "Freepik",
