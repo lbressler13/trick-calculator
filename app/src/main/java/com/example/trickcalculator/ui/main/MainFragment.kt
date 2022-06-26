@@ -63,22 +63,16 @@ class MainFragment : ActivityFragment() {
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button
         sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
-        sharedViewModel.isDevMode.observe(viewLifecycleOwner, isDevModeObserver)
 
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
 
-        initSettingsFragment(this, settings, binding.settingsButton)
+        initSettingsFragment(this, binding.settingsButton)
 
         return binding.root
     }
-
-    override fun getView(): View {
-        return binding.root
-    }
-
 
     private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
@@ -88,12 +82,6 @@ class MainFragment : ActivityFragment() {
     }
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = it
-    }
-    private val isDevModeObserver: Observer<Boolean> = Observer {
-        binding.settingsButton.isVisible = settings.showSettingsButton
-        if (this::computeText.isInitialized) {
-            setMainText()
-        }
     }
 
     private val computedValueObserver: Observer<ExactFraction?> = Observer {

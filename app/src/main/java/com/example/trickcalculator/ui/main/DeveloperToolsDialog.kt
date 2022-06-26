@@ -12,10 +12,8 @@ import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogDeveloperToolsBinding
 import com.example.trickcalculator.ext.gone
-import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.settings.initSettingsDialog
-import com.example.trickcalculator.ui.settings.initSettingsObservers
 import android.os.Handler
 import android.os.Looper
 import android.widget.ArrayAdapter
@@ -26,7 +24,6 @@ import com.example.trickcalculator.ext.visible
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
     private lateinit var viewModel: SharedViewModel
-    private val settings = Settings()
 
     /**
      * Initialize dialog
@@ -60,9 +57,7 @@ class DeveloperToolsDialog : DialogFragment() {
         }
 
         initHideDevToolsSpinner()
-
-        initSettingsObservers(settings, viewModel, viewLifecycleOwner)
-        initSettingsDialog(this, settings, binding.settingsDialogButton)
+        initSettingsDialog(this, binding.settingsDialogButton)
 
         return binding.root
     }

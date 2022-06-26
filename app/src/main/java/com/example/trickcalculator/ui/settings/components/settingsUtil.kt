@@ -1,14 +1,12 @@
 package com.example.trickcalculator.ui.settings.components
 
-import android.content.Context
-import android.os.Bundle
 import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import com.example.trickcalculator.R
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
@@ -18,22 +16,6 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
  * To keep the fragments in sync, the majority of the code is pushed into util functions.
  * This ensures that any UI or logic changes must happen in both the dialog and fragment.
  */
-
-/**
- * Check or uncheck a switch based on arguments
- *
- * @param context [Context]: application context
- * @param args: [Bundle]: nullable field containing arguments of several types
- * @param keyId [Int]: resourceId of key to access specified argument
- * @param switch [SwitchCompat]: switch to check
- */
-fun setSwitchUiFromArgs(context: Context, args: Bundle?, keyId: Int, switch: SwitchCompat) {
-    val key: String = context.getString(keyId)
-    val value: Boolean? = args?.getBoolean(key)
-    if (value != null) {
-        switch.isChecked = value
-    }
-}
 
 /**
  * Get history randomness value from radio group
@@ -52,51 +34,41 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
 }
 
 /**
- * Set the checked button in the history radio group based on args
+ * Observe changes to settings in view model and update ui based on changes.
+ * Required to keep changes from SettingsDialog if dialog is opened on top of fragment.
+ * Will not cause a loop of updates because settings aren't saved until fragment is closed.
  *
- * @param context [Context]: application context
- * @param args [Bundle]: nullable field containing arguments of several types
- * @param group [RadioGroup]
- * @param buttons [List]: list of [RadioButton] within group
+ * @param settingsUi [SettingsUI]: UI of calling fragment
+ * @param viewModel [SharedViewModel]: view model with settings fields
+ * @param lifecycleOwner [LifecycleOwner]
  */
-fun setHistoryRadioGroup(
-    context: Context,
-    args: Bundle?,
-    group: RadioGroup,
-    buttons: List<RadioButton>
-) {
-    val key: String = context.getString(R.string.key_random_history)
-    val value: Int = args?.getInt(key) ?: 0
-    group.check(buttons[value].id)
+fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
+    viewModel.applyDecimals.observe(lifecycleOwner) { settingsUi.applyDecimalsSwitch.isChecked = it }
+    viewModel.applyParens.observe(lifecycleOwner) { settingsUi.applyParensSwitch.isChecked = it }
+    viewModel.clearOnError.observe(lifecycleOwner) { settingsUi.clearOnErrorSwitch.isChecked = it }
+    viewModel.showSettingsButton.observe(lifecycleOwner) { settingsUi.settingsButtonSwitch.isChecked = it }
+    viewModel.shuffleComputation.observe(lifecycleOwner) { settingsUi.shuffleComputationSwitch.isChecked = it }
+    viewModel.shuffleNumbers.observe(lifecycleOwner) { settingsUi.shuffleNumbersSwitch.isChecked = it }
+    viewModel.shuffleOperators.observe(lifecycleOwner) { settingsUi.shuffleOperatorsSwitch.isChecked = it }
+
+    viewModel.historyRandomness.observe(lifecycleOwner) { settingsUi.historyRadioButtons[it].isChecked = true }
 }
 
 /**
  * Initialize the UI based on information in an args object.
  *
- * @param settingsUi [SettingsUI]: calling fragment.
- * Expected to be either [SettingsFragment] or [SettingsDialog]
- * @param viewModel [SharedViewModel]: ViewModel containing fields for all settings
+ * @param settingsUi [SettingsUI]: UI of calling fragment
  */
-fun setUiFromArgs(settingsUi: SettingsUI, viewModel: SharedViewModel) {
+fun initUi(settingsUi: SettingsUI) {
     val context = settingsUi.fragment.requireContext()
     val args = settingsUi.fragment.arguments
-
-    // set UI
-    setSwitchUiFromArgs(context, args, R.string.key_shuffle_numbers, settingsUi.shuffleNumbersSwitch)
-    setSwitchUiFromArgs(context, args, R.string.key_shuffle_operators, settingsUi.shuffleOperatorsSwitch)
-    setSwitchUiFromArgs(context, args, R.string.key_apply_parens, settingsUi.applyParensSwitch)
-    setSwitchUiFromArgs(context, args, R.string.key_clear_on_error, settingsUi.clearOnErrorSwitch)
-    setSwitchUiFromArgs(context, args, R.string.key_apply_decimals, settingsUi.applyDecimalsSwitch)
-    setSwitchUiFromArgs(context, args, R.string.key_settings_button, settingsUi.settingsButtonSwitch)
-    setSwitchUiFromArgs(context, args, R.string.key_shuffle_computation, settingsUi.shuffleComputationSwitch)
 
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
     val isMainFragment = args?.getBoolean(mainFragmentKey)
     settingsUi.settingsButtonSwitch.isVisible = isMainFragment != true
 
-    setHistoryRadioGroup(context, args, settingsUi.historyRadioGroup, settingsUi.historyRadioButtons)
-    settingsUi.resetSettingsButton.setOnClickListener { resetSettingsOnClick(settingsUi) }
     settingsUi.randomizeSettingsButton.setOnClickListener { randomizeSettingsOnClick(settingsUi) }
+    settingsUi.resetSettingsButton.setOnClickListener { resetSettingsOnClick(settingsUi) }
 }
 
 /**
@@ -107,8 +79,8 @@ fun setUiFromArgs(settingsUi: SettingsUI, viewModel: SharedViewModel) {
  * @param viewModel [SharedViewModel]: ViewModel containing fields for all settings
  */
 fun saveToViewModel(settingsUi: SettingsUI, viewModel: SharedViewModel) {
-    val resetPressed = settingsUi.resetPressed
     val randomizedPressed = settingsUi.randomizePressed
+    val resetPressed = settingsUi.resetPressed
 
     when {
         randomizedPressed -> viewModel.randomizeSettings()
@@ -119,13 +91,14 @@ fun saveToViewModel(settingsUi: SettingsUI, viewModel: SharedViewModel) {
         }
         else -> {
             // update ViewModel based on settings selected in UI
-            viewModel.setShuffleNumbers(settingsUi.shuffleNumbersSwitch.isChecked)
-            viewModel.setShuffleOperators(settingsUi.shuffleOperatorsSwitch.isChecked)
+            viewModel.setApplyDecimals(settingsUi.applyDecimalsSwitch.isChecked)
             viewModel.setApplyParens(settingsUi.applyParensSwitch.isChecked)
             viewModel.setClearOnError(settingsUi.clearOnErrorSwitch.isChecked)
-            viewModel.setApplyDecimals(settingsUi.applyDecimalsSwitch.isChecked)
-            viewModel.setShuffleComputation(settingsUi.shuffleComputationSwitch.isChecked)
             viewModel.setShowSettingsButton(settingsUi.settingsButtonSwitch.isChecked)
+            viewModel.setShuffleComputation(settingsUi.shuffleComputationSwitch.isChecked)
+            viewModel.setShuffleNumbers(settingsUi.shuffleNumbersSwitch.isChecked)
+            viewModel.setShuffleOperators(settingsUi.shuffleOperatorsSwitch.isChecked)
+
             viewModel.setHistoryRandomness(
                 getHistoryGroupValue(
                     settingsUi.historyRadioGroup,
@@ -135,8 +108,8 @@ fun saveToViewModel(settingsUi: SettingsUI, viewModel: SharedViewModel) {
         }
     }
 
-    settingsUi.resetPressed = false
     settingsUi.randomizePressed = false
+    settingsUi.resetPressed = false
 }
 
 /**

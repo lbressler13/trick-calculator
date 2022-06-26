@@ -15,25 +15,19 @@ import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentAttributionsBinding
 import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.attributions.authorattribution.AuthorAttributionAdapter
-import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.settings.initSettingsFragment
-import com.example.trickcalculator.ui.shared.SharedViewModel
-import com.example.trickcalculator.ui.settings.initSettingsObservers
 
 /**
  * Fragment to display image attributions for all Flaticon images used in the app, as required by Flaticon
  */
 class AttributionsFragment : ActivityFragment() {
     private lateinit var binding: FragmentAttributionsBinding
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var viewModel: AttributionsViewModel
-
-    private val settings = Settings()
 
     private var textExpanded = false
 
     override var titleResId: Int = R.string.title_attributions
-    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, settings, it) }
+    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, it) }
 
     companion object {
         fun newInstance() = AttributionsFragment()
@@ -48,7 +42,6 @@ class AttributionsFragment : ActivityFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAttributionsBinding.inflate(layoutInflater)
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         // view model is tied to the fragment, not activity
         viewModel = ViewModelProvider(this)[AttributionsViewModel::class.java]
 
@@ -58,7 +51,6 @@ class AttributionsFragment : ActivityFragment() {
 
         initializeAttributionsList()
         addFlaticonLinks()
-        initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
 
         binding.expandCollapseButton.setOnClickListener { viewModel.setTextExpanded(!textExpanded) }
         viewModel.textExpanded.observe(viewLifecycleOwner, textExpandedObserver)

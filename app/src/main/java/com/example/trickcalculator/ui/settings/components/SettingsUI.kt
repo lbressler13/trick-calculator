@@ -18,15 +18,20 @@ interface SettingsUI {
     var randomizePressed: Boolean
 
     // UI elements related to settings
-    var shuffleNumbersSwitch: SwitchCompat
-    var shuffleOperatorsSwitch: SwitchCompat
+    // switches
+    var applyDecimalsSwitch: SwitchCompat
     var applyParensSwitch: SwitchCompat
     var clearOnErrorSwitch: SwitchCompat
-    var applyDecimalsSwitch: SwitchCompat
-    var shuffleComputationSwitch: SwitchCompat
     var settingsButtonSwitch: SwitchCompat
+    var shuffleComputationSwitch: SwitchCompat
+    var shuffleNumbersSwitch: SwitchCompat
+    var shuffleOperatorsSwitch: SwitchCompat
+
+    // radio group
     var historyRadioGroup: RadioGroup
     var historyRadioButtons: List<RadioButton>
-    var resetSettingsButton: View
+
+    // all settings buttons
     var randomizeSettingsButton: View
+    var resetSettingsButton: View
 }

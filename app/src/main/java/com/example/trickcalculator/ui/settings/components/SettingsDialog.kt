@@ -4,7 +4,9 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.SwitchCompat
@@ -44,9 +46,6 @@ class SettingsDialog : DialogFragment(), SettingsUI {
         binding = DialogSettingsBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        initUiElements()
-        setUiFromArgs(this, sharedViewModel)
-
         val doneText = requireContext().getString(R.string.done)
         val title = requireContext().getString(R.string.title_settings)
 
@@ -57,16 +56,24 @@ class SettingsDialog : DialogFragment(), SettingsUI {
             .create()
     }
 
-    private fun initUiElements() {
-        shuffleNumbersSwitch = binding.shuffleNumbersSwitch
-        shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        collectUiElements()
+        initObservers(this, sharedViewModel, viewLifecycleOwner)
+        initUi(this)
+
+        return binding.root
+    }
+
+    private fun collectUiElements() {
+        applyDecimalsSwitch = binding.applyDecimalsSwitch
         applyParensSwitch = binding.applyParensSwitch
         clearOnErrorSwitch = binding.clearOnErrorSwitch
-        applyDecimalsSwitch = binding.applyDecimalsSwitch
-        shuffleComputationSwitch = binding.shuffleComputationSwitch
-        settingsButtonSwitch = binding.settingsButtonSwitch
-        resetSettingsButton = binding.resetSettingsButton
         randomizeSettingsButton = binding.randomizeSettingsButton
+        resetSettingsButton = binding.resetSettingsButton
+        settingsButtonSwitch = binding.settingsButtonSwitch
+        shuffleComputationSwitch = binding.shuffleComputationSwitch
+        shuffleNumbersSwitch = binding.shuffleNumbersSwitch
+        shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
 
         historyRadioGroup = binding.historyRandomnessGroup
         historyRadioButtons = listOf(
@@ -77,8 +84,8 @@ class SettingsDialog : DialogFragment(), SettingsUI {
         )
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
+    override fun onDestroy() {
+        super.onDestroy()
         saveToViewModel(this, sharedViewModel)
         closePreviousFragment(this)
     }

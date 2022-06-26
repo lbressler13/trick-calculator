@@ -1,23 +1,23 @@
 package com.example.trickcalculator.ui.settings
 
 data class Settings(
-    var shuffleNumbers: Boolean,
-    var shuffleOperators: Boolean,
+    var applyDecimals: Boolean,
     var applyParens: Boolean,
     var clearOnError: Boolean,
-    var applyDecimals: Boolean,
-    var showSettingsButton: Boolean,
     var historyRandomness: Int,
-    var shuffleComputation: Boolean
+    var showSettingsButton: Boolean,
+    var shuffleComputation: Boolean,
+    var shuffleNumbers: Boolean,
+    var shuffleOperators: Boolean,
 ) {
     constructor() : this(
-        shuffleNumbers = false,
-        shuffleOperators = true,
+        applyDecimals = true,
         applyParens = true,
         clearOnError = false,
-        applyDecimals = true,
-        showSettingsButton = false,
         historyRandomness = 1,
-        shuffleComputation = false
+        showSettingsButton = false,
+        shuffleComputation = false,
+        shuffleNumbers = false,
+        shuffleOperators = true
     )
 }

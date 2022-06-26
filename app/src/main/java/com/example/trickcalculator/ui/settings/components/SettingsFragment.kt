@@ -38,31 +38,29 @@ class SettingsFragment : ActivityFragment(), SettingsUI {
         fun newInstance() = SettingsFragment()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        initUiElements()
-
         specializedFragmentCode()
-        setUiFromArgs(this, sharedViewModel)
+
+        collectUiElements()
+        initObservers(this, sharedViewModel, viewLifecycleOwner)
+        initUi(this)
 
         return binding.root
     }
 
-    private fun initUiElements() {
-        shuffleNumbersSwitch = binding.shuffleNumbersSwitch
-        shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
+    private fun collectUiElements() {
+        applyDecimalsSwitch = binding.applyDecimalsSwitch
         applyParensSwitch = binding.applyParensSwitch
         clearOnErrorSwitch = binding.clearOnErrorSwitch
-        applyDecimalsSwitch = binding.applyDecimalsSwitch
-        shuffleComputationSwitch = binding.shuffleComputationSwitch
-        settingsButtonSwitch = binding.settingsButtonSwitch
-        resetSettingsButton = binding.resetSettingsButton
         randomizeSettingsButton = binding.randomizeSettingsButton
+        resetSettingsButton = binding.resetSettingsButton
+        settingsButtonSwitch = binding.settingsButtonSwitch
+        shuffleComputationSwitch = binding.shuffleComputationSwitch
+        shuffleNumbersSwitch = binding.shuffleNumbersSwitch
+        shuffleOperatorsSwitch = binding.shuffleOperatorsSwitch
 
         historyRadioGroup = binding.historyRandomnessGroup
         historyRadioButtons = listOf(

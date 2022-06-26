@@ -37,10 +37,16 @@ To ensure that nothing is missed, add the setting in the following files:
   * In the args passed in initSettingsFragments
   * With an appropriate UI element in the settings fragment and dialog
   * As a field in the SettingsUI interface
-  * In setUiFromArgs and saveToViewModel, in settingsUtil
+  * In setUiFromArgs, saveToViewModel, and settingsUtil, in settingsUtil
 * SharedViewModel
   * As a property
   * In resetSettings and randomizeSettings
 * Other  
   * With a key and label in the string resources
   * In both tables in the main README
+  
+^ TODO I think that changed
+
+Settings should be added in alphabetical order in the code whenever possible.
+It may occasionally make sense to separate out some elements, such as settings with different types of UI elements, but groups of settings should remain alphabetized.
+This ordering does not need to be strictly followed in the layout files, as it may make sense to have settings in a different order.
