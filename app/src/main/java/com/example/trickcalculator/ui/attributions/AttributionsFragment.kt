@@ -6,7 +6,6 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +15,7 @@ import com.example.trickcalculator.databinding.FragmentAttributionsBinding
 import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.attributions.authorattribution.AuthorAttributionAdapter
 import com.example.trickcalculator.ui.settings.initSettingsFragment
+import com.example.trickcalculator.utils.createUnderlineText
 
 /**
  * Fragment to display image attributions for all Flaticon images used in the app, as required by Flaticon
@@ -52,7 +52,7 @@ class AttributionsFragment : ActivityFragment() {
         initializeAttributionsList()
         addFlaticonLinks()
 
-        binding.expandCollapseButton.setOnClickListener { viewModel.setTextExpanded(!textExpanded) }
+        binding.expandCollapseMessage.setOnClickListener { viewModel.setTextExpanded(!textExpanded) }
         viewModel.textExpanded.observe(viewLifecycleOwner, textExpandedObserver)
 
         return binding.root
@@ -73,23 +73,20 @@ class AttributionsFragment : ActivityFragment() {
     }
 
     private fun setTopText() {
-        val expandedIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_chevron_up)
-        val collapsedIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_chevron_down)
-        val expandedContentDescription = requireContext().getString(R.string.expand_dropdown_cd)
-        val collapsedContentDescription = requireContext().getString(R.string.collapse_dropdown_cd)
-        val expandedText = requireContext().getString(R.string.flaticon_message)
-        val collapsedText = requireContext().getString(R.string.flaticon_message_short)
+        val fullMessage = requireContext().getString(R.string.flaticon_message)
+        val shortMessage = requireContext().getString(R.string.flaticon_message_short)
+
+        val expandString = requireContext().getString(R.string.expand)
+        val collapseString = requireContext().getString(R.string.collapse)
 
         if (textExpanded) {
             // expand text
-            binding.topText.text = expandedText
-            binding.expandCollapseButton.setImageDrawable(expandedIcon)
-            binding.expandCollapseButton.contentDescription = expandedContentDescription
+            binding.topText.text = fullMessage
+            binding.expandCollapseMessage.text = createUnderlineText(collapseString)
         } else {
             // collapse text
-            binding.topText.text = collapsedText
-            binding.expandCollapseButton.setImageDrawable(collapsedIcon)
-            binding.expandCollapseButton.contentDescription = collapsedContentDescription
+            binding.topText.text = shortMessage
+            binding.expandCollapseMessage.text = createUnderlineText(expandString)
         }
         addFlaticonLinks()
     }
