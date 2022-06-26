@@ -5,7 +5,7 @@ Values are stored in a SharedViewModel, which can be accessed by different fragm
 
 ## Documentation
 This README does not explain the settings or their meanings. 
-It is a guide to the settings UI components, and an explanation of how the pieces fit together.
+It is a guide to how the settings are represented, viewed, and modified in the code.
 
 A full list of settings and their basic definitions can be found in the [main README](https://github.com/lbressler13/trick-calculator/blob/main/README.md).
 However, the explicit purpose of this app is to create chaos, so there are some specifics that are not documented in any README files.
@@ -29,7 +29,7 @@ This interface includes properties for all UI elements that are necessary when v
 ## Adding a setting
 Settings are referenced, modified, and observed in various places throughout the app.
 When a new setting is added, it must be added in all of these places.
-To ensure that nothing is missed, add the setting in the following files:
+To ensure that nothing is missed, add the setting in the following places:
 * Settings class: both constructors
 * SettingsUI: property
 * settingsUtil: initObservers, saveToViewModel

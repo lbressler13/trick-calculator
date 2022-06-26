@@ -150,7 +150,7 @@ class HistoryFragment : ActivityFragment() {
             // non-empty
             else -> {
                 val recycler: RecyclerView = binding.itemsRecycler
-                val adapter = HistoryItemsAdapter(randomHistory!!)
+                val adapter = HistoryItemAdapter(randomHistory!!)
 
                 recycler.adapter = adapter
                 recycler.layoutManager = LinearLayoutManager(requireContext())

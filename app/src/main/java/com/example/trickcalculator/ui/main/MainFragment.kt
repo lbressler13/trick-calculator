@@ -198,7 +198,7 @@ class MainFragment : ActivityFragment() {
                 computationViewModel.setError(null)
                 computationViewModel.setLastHistoryItem()
 
-                computationViewModel.useComputedAsComputeText()
+                computationViewModel.clearComputeText()
 
                 val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
                 movement.goToTop(binding.mainText)

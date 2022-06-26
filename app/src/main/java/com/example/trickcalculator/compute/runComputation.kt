@@ -8,11 +8,9 @@ import exactfraction.ExactFractionOverflowException
  * Parse string list and compute as a mathematical expression, if possible.
  * Includes list validation, modifying the list based on parameters, and running the computation itself.
  *
- * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
- * @param firstRoundOps [List]: list of string operators to be applied in the first round of computation.
- * Likely multiplication and division
- * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
- * Likely addition and subtraction
+ * @param initialValue [ExactFraction]: the previously computed value, if being used as the start of the computation
+ * @param initialText [StringList]: list of string values to parse, consisting of operators, numbers, and parens
+ * @param operatorRounds [List<StringList>]: list of string values recognized as operators, separated into "rounds" that should be applied in the same passthrough
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
  * @param numbersOrder [List]: list of numbers, which can be used to reassign the values of digits
  * @param applyParens [Boolean]: if parentheses should be recognized.
@@ -162,10 +160,7 @@ fun parseSetOfOps(
  * - Any necessary modifications have already occurred, including add multiplication around parens as needed
  *
  * @param computeText [List]: list of string values to parse, consisting of operators, numbers, and parens
- * @param firstRoundOps [List]: list of string operators to be applied in the first round of computation.
- * Likely multiplication and division
- * @param secondRoundOps [List]: list of string operators to be applied in the second round of computation.
- * Likely addition and subtraction
+ * @param operatorRounds [List<StringList>]: list of string values recognized as operators, separated into "rounds" that should be applied in the same passthrough
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
  * @return a modified string list where all pairs of parentheses have been simplified to a single ExactFraction, represented as a EF string
  */

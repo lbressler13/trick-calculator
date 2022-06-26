@@ -29,21 +29,25 @@ class ComputationViewModel : ViewModel() {
     private val mBackupComputed = MutableLiveData<ExactFraction>().apply { value = null }
 
     fun setError(newValue: String?) { mError.value = newValue }
-    fun setComputedValue(newValue: ExactFraction) { mComputedValue.value = newValue }
+    fun setComputedValue(newValue: ExactFraction) {
+        mBackupComputed.value = mComputedValue.value
+        mComputedValue.value = newValue
+    }
 
     /**
      * Store last history value based on most recent error or computation
      */
     fun setLastHistoryItem() {
         val error = error.value
-        val computed = mBackupComputed.value
+        val lastComputed = mBackupComputed.value
+        val computed = computedValue.value
         var computation = mBackupComputeText.value!!
 
         // if computed val was used and next item is a number, pad with times symbol
         if (
             computation.size > 1 &&
-            computed != null &&
-            computation[0] == computed.toDecimalString() &&
+            lastComputed != null &&
+            computation[0] == lastComputed.toDecimalString() &&
             isNumberChar(computation[1])
         ) {
             val start = listOf(computation[0], "x")
@@ -65,7 +69,7 @@ class ComputationViewModel : ViewModel() {
     /**
      * Clear computed values
      */
-    private fun clearComputeText() { mComputeText.value = listOf() }
+    fun clearComputeText() { mComputeText.value = listOf() }
     private fun clearComputedValue() { mComputedValue.value = null }
     private fun clearBackups() {
         mBackupComputeText.value = null
@@ -108,13 +112,7 @@ class ComputationViewModel : ViewModel() {
         }
         val currentComputeText = computeText.value!!
         mBackupComputeText.value = computedString + currentComputeText
-        mBackupComputed.value = computedValue.value
     }
-
-    /**
-     * Replace compute text list with the computed value
-     */
-    fun useComputedAsComputeText() { mComputeText.value = listOf() }
 
     /**
      * Reset data related to computation.

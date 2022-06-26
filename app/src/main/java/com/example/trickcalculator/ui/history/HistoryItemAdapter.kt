@@ -11,7 +11,7 @@ import com.example.trickcalculator.utils.History
  *
  * @param items [History]: list of HistoryItem objects
  */
-class HistoryItemsAdapter(private val items: History) :
+class HistoryItemAdapter(private val items: History) :
     RecyclerView.Adapter<HistoryItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryItemViewHolder {
