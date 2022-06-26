@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.settings
+package com.example.trickcalculator.ui.settings.components
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -12,6 +12,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogSettingsBinding
+import com.example.trickcalculator.ui.settings.closePreviousFragment
+import com.example.trickcalculator.ui.settings.saveToViewModel
+import com.example.trickcalculator.ui.settings.setUiFromArgs
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**

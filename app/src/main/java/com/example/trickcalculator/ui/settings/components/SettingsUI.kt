@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.settings
+package com.example.trickcalculator.ui.settings.components
 
 import android.view.View
 import android.widget.RadioButton

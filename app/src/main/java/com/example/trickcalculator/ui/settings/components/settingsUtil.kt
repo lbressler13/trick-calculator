@@ -10,6 +10,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.trickcalculator.R
+import com.example.trickcalculator.ui.settings.components.SettingsDialog
+import com.example.trickcalculator.ui.settings.components.SettingsFragment
+import com.example.trickcalculator.ui.settings.components.SettingsUI
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
