@@ -5,7 +5,7 @@ Values are stored in a SharedViewModel, which can be accessed by different fragm
 
 ## Documentation
 This README does not explain the settings or their meanings. 
-It is a guide to how the different UI components involved in the settings and how they fit together.
+It is a guide to the different UI components involved in the settings and how they fit together.
 
 A full list of settings and their basic definitions can be found in the [main README](https://github.com/lbressler13/trick-calculator/blob/main/README.md).
 However, the explicit purpose of this app is to create chaos, so there are some specifics that are not documented in any README files.
