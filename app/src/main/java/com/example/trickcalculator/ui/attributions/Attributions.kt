@@ -64,6 +64,11 @@ private val freepikImages = listOf(
         "https://www.flaticon.com/free-icon/info-button_64494"
     ),
     ImageAttribution(
+        R.drawable.launcher,
+        R.string.launcher_cd,
+        "https://www.flaticon.com/premium-icon/calculator_2838917"
+    ),
+    ImageAttribution(
         R.drawable.ic_minus,
         R.string.minus_cd,
         "https://www.flaticon.com/free-icon/minus_56889"
@@ -106,14 +111,6 @@ private val ilhamFitrotulHayatImages = listOf(
     )
 )
 
-private val pixelPerfectImages = listOf(
-    ImageAttribution(
-        R.drawable.launcher,
-        R.string.launcher_cd,
-        "https://www.flaticon.com/free-icon/keys_2891382"
-    ),
-)
-
 private val smashiconsImages = listOf(
     ImageAttribution(
         R.drawable.ic_divide,
@@ -125,9 +122,6 @@ private val smashiconsImages = listOf(
 /**
  * Constant list of author attributions, including the above image attributions
  */
-
-
-// TODO calculator url is incorrect
 
 val authorAttributions = listOf(
     AuthorAttribution(
@@ -144,11 +138,6 @@ val authorAttributions = listOf(
         "Ilham Fitrotul Hayat",
         "https://www.flaticon.com/authors/ilham-fitrotul-hayat",
         ilhamFitrotulHayatImages
-    ),
-    AuthorAttribution(
-        "Pixel perfect",
-        "https://www.flaticon.com/authors/pixel-perfect",
-        pixelPerfectImages
     ),
     AuthorAttribution(
         "Smashicons",

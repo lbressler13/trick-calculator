@@ -112,15 +112,13 @@ All images are taken from [Flaticon](https://www.flaticon.com/), which allows fr
 This is the complete list of Flaticon images used within the app.
 The list is also available within the app itself.
 
-TODO: Correct calc url
-
 | Icon                                                        | Creator                                                                                                                    | Link                                                                  |
 |:------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------|
 | ![img](app/src/main/res/drawable-hdpi/ic_chevron_down.png)  | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/premium-icon/down-chevron_1633716>          |
 | ![img](app/src/main/res/drawable-hdpi/ic_chevron_left.png)  | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/premium-icon/left-chevron_1633718>          |
 | ![img](app/src/main/res/drawable-hdpi/ic_chevron_right.png) | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/premium-icon/right-chevron_1633719>         |
 | ![img](app/src/main/res/drawable-hdpi/ic_chevron_up.png)    | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/premium-icon/up-chevron_1633717>            |
-| ![img](app/src/main/res/drawable-hdpi/launcher.png)         | Icon made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from <https://www.flaticon.com>               | <https://www.flaticon.com/free-icon/keys_2891382>                     |
+| ![img](app/src/main/res/drawable-hdpi/launcher.png)         | Icon made by [Freepik](https://www.flaticon.com/authors/freepik)  from <https://www.flaticon.com>                          | <https://www.flaticon.com/premium-icon/calculator_2838917>            |
 | ![img](app/src/main/res/drawable-hdpi/ic_arrow_left.png)    | Icon made by [Ilham Fitrotul Hayat](https://www.flaticon.com/authors/ilham-fitrotul-hayat) from <https://www.flaticon.com> | <https://www.flaticon.com/premium-icon/left_3416141>                  |
 | ![img](app/src/main/res/drawable-hdpi/ic_close.png)         | Icon made by [Ilham Fitrotul Hayat](https://www.flaticon.com/authors/ilham-fitrotul-hayat) from <https://www.flaticon.com> | <https://www.flaticon.com/premium-icon/cross_4421536>                 |
 | ![img](app/src/main/res/drawable-hdpi/ic_divide.png)        | Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from <https://www.flaticon.com>                     | <https://www.flaticon.com/free-icon/divide_149702>                    |
