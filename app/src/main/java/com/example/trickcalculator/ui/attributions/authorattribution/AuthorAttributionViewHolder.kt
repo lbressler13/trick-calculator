@@ -10,8 +10,8 @@ import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBindin
 import com.example.trickcalculator.ext.gone
 import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.attributions.*
-import com.example.trickcalculator.ui.attributions.constants.AuthorAttribution
-import com.example.trickcalculator.ui.attributions.constants.ImageAttribution
+import com.example.trickcalculator.ui.attributions.AuthorAttribution
+import com.example.trickcalculator.ui.attributions.ImageAttribution
 import com.example.trickcalculator.ui.attributions.constants.flaticonDisplayUrl
 import com.example.trickcalculator.ui.attributions.constants.flaticonUrl
 import com.example.trickcalculator.ui.attributions.imageattribution.ImageAttributionAdapter
@@ -40,17 +40,17 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
         initializeAdapter(author.images)
         var showingIcons = initialShowingIcons
 
-        setIconsDisplay(initialShowingIcons)
+        showHideIcons(initialShowingIcons)
 
         binding.expandCollapseButton.setOnClickListener {
             showingIcons = !showingIcons
             setShowingIcons(showingIcons) // update viewmodel
-            setIconsDisplay(showingIcons) // update ui
+            showHideIcons(showingIcons) // update ui
         }
     }
 
     // show or hide icons
-    private fun setIconsDisplay(visible: Boolean) {
+    private fun showHideIcons(visible: Boolean) {
         if (visible) {
             // show icons + update dropdown icon
             binding.expandCollapseButton.setImageDrawable(collapseIcon)
@@ -79,7 +79,7 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
         binding.attribution.text = spannableString
     }
 
-    // initialize adapter for images dropdown
+    // initialize images dropdown
     private fun initializeAdapter(images: List<ImageAttribution>) {
         val recycler: RecyclerView = binding.imagesRecycler
         val adapter = ImageAttributionAdapter(images)

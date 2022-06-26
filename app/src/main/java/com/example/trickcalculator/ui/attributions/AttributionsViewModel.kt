@@ -15,15 +15,13 @@ class AttributionsViewModel : ViewModel() {
     fun setFlaticonMessageExpanded(newValue: Boolean) { mFlaticonMessageExpanded.value = newValue }
 
     // information about attributions
-    private var attributionCount: Int? = null
     private val mAttributionsExpanded = MutableLiveData<List<Boolean>>().apply { value = listOf() }
     val attributionsExpanded: LiveData<List<Boolean>> = mAttributionsExpanded
 
-    // set current number of attributions and init attributionsExpanded list
-    fun setAttributionCount(newValue: Int) {
-        if (attributionCount != newValue) {
-            attributionCount = newValue
-            mAttributionsExpanded.value = List(newValue) { false }
+    // if attributionsExpanded isn't already set, initialize to all closed
+    fun initAttributionsExpanded(numAttributions: Int) {
+        if (attributionsExpanded.value?.size != numAttributions) {
+            mAttributionsExpanded.value = List(numAttributions) { false }
         }
     }
 

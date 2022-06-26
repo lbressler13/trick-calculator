@@ -17,12 +17,11 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
  * DialogFragment to display all configuration options for calculator
  */
 class SettingsFragment : ActivityFragment(), SettingsUI {
+    override var titleResId: Int = R.string.title_settings // fragment-specific value
+
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
 
-    override var titleResId: Int = R.string.title_settings // fragment-specific value
-
-    override val fragment = this
     override var randomizePressed = false
     override var resetPressed = false
 
@@ -49,8 +48,7 @@ class SettingsFragment : ActivityFragment(), SettingsUI {
         specializedFragmentCode()
 
         collectUiElements()
-        initObservers(this, sharedViewModel, viewLifecycleOwner)
-        initUi(this)
+        initUi(this, sharedViewModel, viewLifecycleOwner)
 
         return binding.root
     }

@@ -11,10 +11,7 @@ import com.example.trickcalculator.R
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
- * The settings package contains a [SettingsFragment] and [SettingsDialog], which contain similar UI elements and expose the same settings.
- * Changes to the available settings will require changes in both the fragment and dialog.
- * To keep the fragments in sync, the majority of the code is pushed into util functions.
- * This ensures that any UI or logic changes must happen in both the dialog and fragment.
+ * Util functions to perform functionality in SettingsFragment or SettingsDialog
  */
 
 /**
@@ -41,7 +38,7 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
  * @param viewModel [SharedViewModel]: view model with settings fields
  * @param lifecycleOwner [LifecycleOwner]
  */
-fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
+private fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
     viewModel.applyDecimals.observe(lifecycleOwner) { settingsUi.applyDecimalsSwitch.isChecked = it }
     viewModel.applyParens.observe(lifecycleOwner) { settingsUi.applyParensSwitch.isChecked = it }
     viewModel.clearOnError.observe(lifecycleOwner) { settingsUi.clearOnErrorSwitch.isChecked = it }
@@ -54,13 +51,18 @@ fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleO
 }
 
 /**
- * Initialize the UI. Majority of items are set based on view model observers
+ * Initialize the UI, including observers to update switches and radio group.
  *
  * @param settingsUi [SettingsUI]: UI of calling fragment
+ * @param viewModel [SharedViewModel]: view model with settings fields
+ * @param lifecycleOwner [LifecycleOwner]
  */
-fun initUi(settingsUi: SettingsUI) {
-    val context = settingsUi.fragment.requireContext()
-    val args = settingsUi.fragment.arguments
+fun initUi(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
+    val fragment = settingsUi as Fragment
+    val context = fragment.requireContext()
+    val args = fragment.arguments
+
+    initObservers(settingsUi, viewModel, lifecycleOwner)
 
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
     val isMainFragment = args?.getBoolean(mainFragmentKey)
@@ -118,7 +120,7 @@ fun saveToViewModel(settingsUi: SettingsUI, viewModel: SharedViewModel) {
  */
 private fun randomizeSettingsOnClick(settingsUi: SettingsUI) {
     settingsUi.randomizePressed = true
-    closeCurrentFragment(settingsUi.fragment)
+    closeCurrentFragment(settingsUi as Fragment)
 }
 
 /**
@@ -128,7 +130,7 @@ private fun randomizeSettingsOnClick(settingsUi: SettingsUI) {
  */
 private fun resetSettingsOnClick(settingsUi: SettingsUI) {
     settingsUi.resetPressed = true
-    closeCurrentFragment(settingsUi.fragment)
+    closeCurrentFragment(settingsUi as Fragment)
 }
 
 /**

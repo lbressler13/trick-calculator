@@ -6,17 +6,18 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBinding
 import com.example.trickcalculator.ui.attributions.AttributionsViewModel
-import com.example.trickcalculator.ui.attributions.constants.AuthorAttribution
+import com.example.trickcalculator.ui.attributions.AuthorAttribution
 
 /**
  * Adapter for author attributions for the RecyclerView in the AttributionsFragment
  *
  * @param authors [List<AuthorAttribution>]: list of AuthorAttribution objects
  * @param viewModel [AttributionsViewModel]: view model containing information about which attributions are expanded
+ * @param lifecycleOwner [LifecycleOwner]
  */
-class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel, private val lifecycleOwner: LifecycleOwner) :
+class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel, lifecycleOwner: LifecycleOwner) :
     RecyclerView.Adapter<AuthorAttributionViewHolder>() {
-    // whether or not icons are visible for each author attribution
+    // whether or not icons are visible for each author attribution, observed from viewmodel
     private var showingIcons = List(authors.size) { false }
 
     init {

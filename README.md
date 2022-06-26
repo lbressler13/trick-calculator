@@ -47,7 +47,7 @@ Here are the necessary configurations:
 | Shuffle numbers       | false  |
 | Shuffle operators     | false  |
 
-With the exception of showing the settings button, no visual indication is given of which settings are being applied.
+With the exception of showing the settings button, no visual indication is given in the calculator of which settings are applied.
 
 Access to the settings menu is unintuitive to create added difficulty.
 In the spirit of the app, this access is undocumented.
@@ -82,7 +82,7 @@ However, this documentation does not provide any additional insight into the set
 ## Build
 
 ### Build variants
-The app has 2 build variants: a dev variant, and a final/complete variant.
+The app has 2 build variants: a dev variant, and a final variant.
 The dev variant should be used for pieces of functionality that are still under development and may not be fully functional.
 The final variant should be used for functionality that has been fully tested and merged into the main branch.
 
@@ -93,7 +93,7 @@ This menu is unavailable in the final variant.
 See [here](https://developer.android.com/studio/build/build-variants) for information about configuring build variants in an Android app.
 
 ### Dependencies
-This app has a dependency on an [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
+This app has a dependency on the [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
 This package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
 
 ## Testing

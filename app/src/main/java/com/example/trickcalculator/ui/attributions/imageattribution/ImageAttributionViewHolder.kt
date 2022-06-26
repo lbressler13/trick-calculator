@@ -4,7 +4,7 @@ import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.ViewHolderImageAttributionBinding
-import com.example.trickcalculator.ui.attributions.constants.ImageAttribution
+import com.example.trickcalculator.ui.attributions.ImageAttribution
 import com.example.trickcalculator.ui.attributions.URLClickableSpan
 
 /**

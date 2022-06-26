@@ -48,9 +48,7 @@ class AttributionsFragment : ActivityFragment() {
         // view model is tied to fragment, so expansions are reset for each instance of fragment
         viewModel = ViewModelProvider(this)[AttributionsViewModel::class.java]
 
-
         initializeAttributionsRecycler()
-        // addFlaticonLinks()
 
         viewModel.flaticonMessageExpanded.observe(viewLifecycleOwner, flaticonMessageExpandedObserver)
         binding.expandCollapseMessage.setOnClickListener { viewModel.setFlaticonMessageExpanded(!flaticonMessageExpanded) }
@@ -65,7 +63,7 @@ class AttributionsFragment : ActivityFragment() {
 
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.setAttributionCount(authorAttributions.size)
+        viewModel.initAttributionsExpanded(authorAttributions.size)
     }
 
     private val flaticonMessageExpandedObserver: Observer<Boolean> = Observer {

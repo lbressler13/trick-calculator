@@ -9,7 +9,7 @@ import com.example.trickcalculator.ui.settings.components.SettingsDialog
 import com.example.trickcalculator.ui.settings.components.SettingsFragment
 
 /**
- * Initialize listener to launch settings fragment
+ * Initialize onClick listener to launch settings fragment
  *
  * @param parentFragment [Fragment]: calling fragment
  * @param viewToClick [View]: view which should launch settings fragment when clicked
@@ -27,15 +27,12 @@ fun initSettingsFragment(parentFragment: Fragment, viewToClick: View) {
 }
 
 /**
- * Initialize listener to launch settings dialog
+ * Initialize onClick listener to launch settings dialog
  *
  * @param parentFragment [Fragment]: calling fragment
  * @param viewToClick [View]: view which should launch settings dialog when clicked
  */
-fun initSettingsDialog(
-    parentFragment: Fragment,
-    viewToClick: View
-) {
+fun initSettingsDialog(parentFragment: Fragment, viewToClick: View) {
     val settingsDialog = SettingsDialog()
 
     viewToClick.setOnClickListener {
@@ -54,7 +51,5 @@ private fun setIsMainFragment(fragment: Fragment, parentFragment: Fragment) {
     val context = parentFragment.requireContext()
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
 
-    fragment.arguments = bundleOf(
-        mainFragmentKey to (parentFragment is MainFragment),
-    )
+    fragment.arguments = bundleOf(mainFragmentKey to (parentFragment is MainFragment))
 }

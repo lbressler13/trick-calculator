@@ -22,7 +22,6 @@ class SettingsDialog : DialogFragment(), SettingsUI {
     private lateinit var binding: DialogSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
 
-    override val fragment = this
     override var randomizePressed = false
     override var resetPressed = false
 
@@ -56,12 +55,11 @@ class SettingsDialog : DialogFragment(), SettingsUI {
     }
 
     /**
-     * Continue initialization after fragment is connected to context
+     * Continue initialization after view is connected to context
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         collectUiElements()
-        initObservers(this, sharedViewModel, viewLifecycleOwner)
-        initUi(this)
+        initUi(this, sharedViewModel, viewLifecycleOwner)
 
         return binding.root
     }

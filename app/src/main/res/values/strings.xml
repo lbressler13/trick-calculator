@@ -27,16 +27,16 @@
     <string name="view">View</string>
     <string name="all_settings">Update All Settings</string>
     <!-- Settings Labels -->
-    <string name="shuffle_operators">Shuffle Operators</string>
-    <string name="shuffle_numbers">Shuffle Numbers</string>
+    <string name="apply_decimals">Apply Decimals</string>
     <string name="apply_parens">Apply Parens</string>
     <string name="clear_on_error">Reset on Error</string>
-    <string name="apply_decimals">Apply Decimals</string>
-    <string name="show_settings_button">Show Settings Button</string>
     <string name="random_history_label">History Mode</string>
-    <string name="reset_settings">Reset</string>
     <string name="randomize_settings">Randomize</string>
+    <string name="reset_settings">Reset</string>
+    <string name="show_settings_button">Show Settings Button</string>
     <string name="shuffle_computation">Shuffle Computation</string>
+    <string name="shuffle_numbers">Shuffle Numbers</string>
+    <string name="shuffle_operators">Shuffle Operators</string>
     <!-- Settings Keys -->
     <string name="key_main_fragment">isMainFragment</string>
 
@@ -67,25 +67,24 @@
     </string-array>
 
     <!-- Other/Shared -->
-    <string name="dev_mode">Dev mode</string>
     <string name="done">Done</string>
 
     <!-- Content Descriptions -->
-    <string name="launcher_cd">Calculator symbol</string>
     <string name="backspace_cd">Backspace</string>
-    <string name="close_cd">Close</string>
-    <string name="divide_cd">Divide symbol</string>
-    <string name="equals_cd">Equals symbol</string>
-    <string name="history_cd">History</string>
-    <string name="minus_cd">Minus symbol</string>
-    <string name="info_cd">Additional information</string>
-    <string name="plus_cd">Plus symbol</string>
-    <string name="settings_cd">Settings</string>
-    <string name="times_cd">Times symbol</string>
-    <string name="expand_images_dropdown_cd">Show icons</string>
-    <string name="collapse_images_dropdown_cd">Hide icons</string>
     <string name="chevron_down_cd">Down chevron</string>
     <string name="chevron_left_cd">Left chevron</string>
     <string name="chevron_right_cd">Right chevron</string>
     <string name="chevron_up_cd">Up chevron</string>
+    <string name="collapse_images_dropdown_cd">Hide icons</string>
+    <string name="close_cd">Close</string>
+    <string name="divide_cd">Divide symbol</string>
+    <string name="equals_cd">Equals symbol</string>
+    <string name="expand_images_dropdown_cd">Show icons</string>
+    <string name="info_cd">Additional information</string>
+    <string name="history_cd">History</string>
+    <string name="launcher_cd">Calculator symbol</string>
+    <string name="minus_cd">Minus symbol</string>
+    <string name="plus_cd">Plus symbol</string>
+    <string name="settings_cd">Settings</string>
+    <string name="times_cd">Times symbol</string>
 </resources>

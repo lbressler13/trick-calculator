@@ -5,7 +5,7 @@ Values are stored in a SharedViewModel, which can be accessed by different fragm
 
 ## Documentation
 This README does not explain the settings or their meanings. 
-It is a guide to how the settings are represented, viewed, and modified in the code.
+It is a guide to how the different UI components involved in the settings and how they fit together.
 
 A full list of settings and their basic definitions can be found in the [main README](https://github.com/lbressler13/trick-calculator/blob/main/README.md).
 However, the explicit purpose of this app is to create chaos, so there are some specifics that are not documented in any README files.
@@ -35,7 +35,7 @@ To ensure that nothing is missed, add the setting in the following places:
 * settingsUtil: initObservers, saveToViewModel
 * initSettingsObservers: new observer
 * SharedViewModel: property, randomizeSettings, resetSettings
-* Layouts: fragment_setting and dialog_settings
+* Layouts: fragment_settings and dialog_settings
 * String resources: label
 * Main README: both tables
 

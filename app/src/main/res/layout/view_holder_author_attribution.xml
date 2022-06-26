@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@id/topLayout">
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/internalDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="15dp"
@@ -61,7 +61,7 @@
             android:paddingEnd="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider" />
+            app:layout_constraintTop_toBottomOf="@id/internalDivider" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Divider at end -->

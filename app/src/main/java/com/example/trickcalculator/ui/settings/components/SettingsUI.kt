@@ -4,17 +4,11 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.SwitchCompat
-import androidx.fragment.app.Fragment
 
 /**
- * Interface with values that must be present in both SettingsFragment and SettingsDialog
+ * Interface with values that must be present in a fragment that contains a menu to modify settings
  */
 interface SettingsUI {
-    /**
-     * Implementing fragment
-     */
-    val fragment: Fragment
-
     /**
      * Flags for events in fragment
      */
