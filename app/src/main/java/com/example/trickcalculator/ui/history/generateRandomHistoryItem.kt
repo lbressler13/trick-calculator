@@ -2,10 +2,10 @@ package com.example.trickcalculator.ui.history
 
 import com.example.trickcalculator.compute.isOperator
 import exactfraction.ExactFraction
-import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.ext.nextBoolean
-import com.example.trickcalculator.ext.nextFromWeightedList
+import kotlinutils.random.ext.nextBoolean
 import com.example.trickcalculator.utils.isNumber
+import kotlinutils.list.StringList
+import kotlinutils.random.ext.nextFromWeightedList
 import java.util.*
 import kotlin.random.Random
 

@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.FragmentHistoryBinding
 import exactfraction.ExactFraction
-import com.example.trickcalculator.ext.gone
-import com.example.trickcalculator.ext.visible
+import com.example.trickcalculator.utils.gone
+import com.example.trickcalculator.utils.visible
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.utils.History
 import android.view.animation.Animation
-import com.example.trickcalculator.ext.nextBoolean
+import kotlinutils.random.ext.nextBoolean
 import com.example.trickcalculator.ui.ActivityFragment
 import java.util.*
 import kotlin.random.Random

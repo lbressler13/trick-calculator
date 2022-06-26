@@ -93,8 +93,12 @@ This menu is unavailable in the final variant.
 See [here](https://developer.android.com/studio/build/build-variants) for information about configuring build variants in an Android app.
 
 ### Dependencies
-This app has a dependency on the [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
-This package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
+This app has dependencies on the following packages:
+* [exact-fraction](https://github.com/lbressler13/exact-numbers) v0.1.0-dev
+* [kotlin-utils](https://github.com/lbressler13/kotlin-utils) v0.0.1
+
+These package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
+Package versions can be updated in the module-level build.gradle.
 
 ## Testing
 

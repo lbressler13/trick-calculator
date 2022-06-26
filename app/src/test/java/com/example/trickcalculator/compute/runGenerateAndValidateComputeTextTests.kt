@@ -3,8 +3,8 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.repeat
 import com.example.trickcalculator.runRandomTest
 import com.example.trickcalculator.splitString
-import com.example.trickcalculator.utils.IntList
-import com.example.trickcalculator.utils.StringList
+import kotlinutils.list.IntList
+import kotlinutils.list.StringList
 import com.example.trickcalculator.utils.isNumber
 import exactfraction.ExactFraction
 import org.junit.Assert.*

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.*
 import exactfraction.ExactFraction
+import kotlinutils.list.StringList
 
 /**
  * ViewModel to track variables related to computation and computed values

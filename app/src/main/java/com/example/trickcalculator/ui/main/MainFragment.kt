@@ -14,17 +14,18 @@ import exactfraction.ExactFraction
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
 import com.example.trickcalculator.compute.runComputation
-import com.example.trickcalculator.ext.*
 import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.ui.history.HistoryFragment
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.OperatorFunction
-import com.example.trickcalculator.utils.StringList
+import kotlinutils.list.StringList
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.settings.initSettingsFragment
 import com.example.trickcalculator.ui.settings.initSettingsObservers
+import com.example.trickcalculator.utils.gone
+import com.example.trickcalculator.utils.visible
 
 /**
  * Fragment to display main calculator functionality

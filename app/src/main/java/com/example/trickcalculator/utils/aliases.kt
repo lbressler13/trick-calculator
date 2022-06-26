@@ -9,7 +9,4 @@ import exactfraction.ExactFraction
  */
 typealias OperatorFunction = (ExactFraction, ExactFraction, String) -> ExactFraction
 
-typealias IntList = List<Int>
-typealias StringList = List<String>
-
 typealias History = List<HistoryItem>

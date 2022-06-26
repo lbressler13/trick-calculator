@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ext
+package com.example.trickcalculator.utils
 
 import android.view.View
 

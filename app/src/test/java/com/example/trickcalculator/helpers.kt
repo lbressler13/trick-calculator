@@ -1,6 +1,6 @@
 package com.example.trickcalculator
 
-import com.example.trickcalculator.utils.StringList
+import kotlinutils.list.StringList
 import org.junit.function.ThrowingRunnable
 import org.junit.Assert.*
 

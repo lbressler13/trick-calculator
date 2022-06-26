@@ -2,7 +2,7 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.runRandomTest
 import com.example.trickcalculator.repeat
-import com.example.trickcalculator.utils.StringList
+import kotlinutils.list.StringList
 import com.example.trickcalculator.utils.isNumber
 import org.junit.Assert.*
 

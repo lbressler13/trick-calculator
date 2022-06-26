@@ -2,8 +2,8 @@ package com.example.trickcalculator.ui.history
 
 import exactfraction.ExactFraction
 import exactfraction.checkIsEFString
-import com.example.trickcalculator.ext.copyWithReplacement
-import com.example.trickcalculator.utils.StringList
+import kotlinutils.list.ext.copyWithReplacement
+import kotlinutils.list.StringList
 
 /**
  * Information about a single computation and its result

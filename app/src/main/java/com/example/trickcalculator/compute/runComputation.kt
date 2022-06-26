@@ -3,6 +3,8 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.utils.*
 import exactfraction.ExactFraction
 import exactfraction.ExactFractionOverflowException
+import kotlinutils.list.IntList
+import kotlinutils.list.StringList
 
 /**
  * Parse string list and compute as a mathematical expression, if possible.

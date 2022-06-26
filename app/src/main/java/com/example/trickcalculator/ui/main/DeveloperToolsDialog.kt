@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogDeveloperToolsBinding
-import com.example.trickcalculator.ext.gone
+import com.example.trickcalculator.utils.gone
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.settings.initSettingsDialog
 import android.os.Handler
 import android.os.Looper
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.example.trickcalculator.ext.visible
+import com.example.trickcalculator.utils.visible
 
 
 class DeveloperToolsDialog : DialogFragment() {
