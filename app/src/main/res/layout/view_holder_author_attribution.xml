@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="20dp">
 
+    <!-- Author attribution + dropdown arrow -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topLayout"
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
             android:id="@+id/expandCollapseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/expand_dropdown_cd"
+            android:contentDescription="@string/expand_images_dropdown_cd"
             android:paddingStart="10dp"
             android:scaleX="0.9"
             android:scaleY="0.9"
@@ -36,6 +37,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Dropdown -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/imagesLayout"
         android:layout_width="match_parent"
@@ -62,6 +64,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Divider at end -->
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

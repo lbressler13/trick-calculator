@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBinding
 import com.example.trickcalculator.ui.attributions.AttributionsViewModel
-import com.example.trickcalculator.ui.attributions.AuthorAttribution
+import com.example.trickcalculator.ui.attributions.constants.AuthorAttribution
 
 /**
  * Adapter for author attributions for the RecyclerView in the AttributionsFragment

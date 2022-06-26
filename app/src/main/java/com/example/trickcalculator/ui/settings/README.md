@@ -1,52 +1,44 @@
 # Settings
 
 Settings allow the calculator to be configured in different ways, to increase or decrease the level of randomness.
-Values are stored in a SharedViewModel, which can be accessed by different fragments.
-Settings are changed through a settings menu, which contains switches, buttons, and other UI elements for modifying the values.
+Values are stored in a SharedViewModel, which can be accessed by different fragments, and can be viewed/changed via a settings menu.
 
 ## Documentation
-A full list of settings and their definitions can be found in the [main README](https://github.com/lbressler13/trick-calculator/blob/main/README.md).
+This README does not explain the settings or their meanings. 
+It is a guide to the settings UI components, and an explanation of how the pieces fit together.
+
+A full list of settings and their basic definitions can be found in the [main README](https://github.com/lbressler13/trick-calculator/blob/main/README.md).
 However, the explicit purpose of this app is to create chaos, so there are some specifics that are not documented in any README files.
-For example, there is no description of the history randomness values or what they correspond to.
+For example, there is no description of the history values or what they mean.
 
 Even if information is not documented in a README, it will be available through comments in the code.
 Creating chaos does not excuse messy code.
 
 ## Settings menus
-There are 2 separate settings menus, a standard fragment and a dialog.
-The dialog can only be accessed through the developer tools, and the fragment can be accessed through two locations.
-The primary access will remain undocumented.
-However, once the fragment has been opened from the primary location, there is an option to display a settings button on the main screen.
-This settings button, if enabled, also opens the fragment.
+There are 2 different settings menus: the SettingsFragment and SettingsDialog, which extend the Fragment and DialogFragment classes.
+The dialog can only be launched from the developer tools menu in the dev build variant.
+The fragment can be accessed from the main screen, if the settings button is enabled. By default, it is not.
+There is another way to access the fragment, but it will remain undocumented.
 
-In order to manage 2 fragments with the same functionality, the vast majority of code is shared between fragments using util functions, which sometimes take the fragment and/or ViewBinding as parameters
-The shared code includes initializing the fragments, setting the UI, and updating the SharedViewModel when the fragment closes.
+In order to maintain 2 completely separate fragments with identical functionality, the vast majority of code is shared using util functions.
+The shared code includes functions to initialize the fragments, modify the UI, and update the SharedViewModel when the fragment closes.
 
-A large portion of the functionality is in setting the UI based on the current settings, and updating values based on the final UI configuration.
-Because the fragment and the dialog have different layout files, they also have separate ViewBindings, which means all UI elements are separate.
-This is managed via a SettingsUI interface, which is implemented by both fragments and has arguments for all the necessary UI elements.
-Values in the interface are set within the individual fragments, and accessed by the shared code.
+Because the shared code frequently interacts with the UI, both fragments implement a SettingsUI interface.
+This interface includes properties for all UI elements that are necessary when viewing and modifying settings.
 
 ## Adding a setting
 Settings are referenced, modified, and observed in various places throughout the app.
 When a new setting is added, it must be added in all of these places.
 To ensure that nothing is missed, add the setting in the following files:
-* Settings
-  * As a field in the Settings object
-  * With a new observer in initSettingsObservers
-  * In the args passed in initSettingsFragments
-  * With an appropriate UI element in the settings fragment and dialog
-  * As a field in the SettingsUI interface
-  * In setUiFromArgs, saveToViewModel, and settingsUtil, in settingsUtil
-* SharedViewModel
-  * As a property
-  * In resetSettings and randomizeSettings
-* Other  
-  * With a key and label in the string resources
-  * In both tables in the main README
-  
-^ TODO I think that changed
+* Settings class: both constructors
+* SettingsUI: property
+* settingsUtil: initObservers, saveToViewModel
+* initSettingsObservers: new observer
+* SharedViewModel: property, randomizeSettings, resetSettings
+* Layouts: fragment_setting and dialog_settings
+* String resources: label
+* Main README: both tables
 
-Settings should be added in alphabetical order in the code whenever possible.
-It may occasionally make sense to separate out some elements, such as settings with different types of UI elements, but groups of settings should remain alphabetized.
-This ordering does not need to be strictly followed in the layout files, as it may make sense to have settings in a different order.
+When multiple settings are referenced in the code, they should be listed in alphabetical order.
+In some cases, it may make sense to separate settings into groups (i.e. settings with the same type of UI element), but elements within each group should remain alphebetized.
+This ordering does not need to be followed in layout files.

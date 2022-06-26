@@ -1,6 +1,5 @@
 package com.example.trickcalculator.ui.attributions.authorattribution
 
-import android.content.Context
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import androidx.appcompat.content.res.AppCompatResources
@@ -11,6 +10,10 @@ import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBindin
 import com.example.trickcalculator.ext.gone
 import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.attributions.*
+import com.example.trickcalculator.ui.attributions.constants.AuthorAttribution
+import com.example.trickcalculator.ui.attributions.constants.ImageAttribution
+import com.example.trickcalculator.ui.attributions.constants.flaticonDisplayUrl
+import com.example.trickcalculator.ui.attributions.constants.flaticonUrl
 import com.example.trickcalculator.ui.attributions.imageattribution.ImageAttributionAdapter
 
 /**
@@ -21,13 +24,13 @@ import com.example.trickcalculator.ui.attributions.imageattribution.ImageAttribu
 class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributionBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    // constant resources that are used in the code
-    private val expandedIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_down)
-    private val collapsedIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_right)
-    private val expandedContentDescription = itemView.context.getString(R.string.expand_dropdown_cd)
-    private val collapsedContentDescription = itemView.context.getString(R.string.collapse_dropdown_cd)
+    // constant icons and content descriptions
+    private val expandIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_right)
+    private val collapseIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_down)
+    private val expandContentDescription = itemView.context.getString(R.string.expand_images_dropdown_cd)
+    private val collapseContentDescription = itemView.context.getString(R.string.collapse_images_dropdown_cd)
 
-    // update UI to show information about current author, including whether or not their images should be visible
+    // update UI to show information about current author
     fun update(
         author: AuthorAttribution,
         initialShowingIcons: Boolean,
@@ -41,8 +44,8 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
 
         binding.expandCollapseButton.setOnClickListener {
             showingIcons = !showingIcons
-            setShowingIcons(showingIcons)
-            setIconsDisplay(showingIcons)
+            setShowingIcons(showingIcons) // update viewmodel
+            setIconsDisplay(showingIcons) // update ui
         }
     }
 
@@ -50,27 +53,27 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
     private fun setIconsDisplay(visible: Boolean) {
         if (visible) {
             // show icons + update dropdown icon
-            binding.expandCollapseButton.setImageDrawable(expandedIcon)
-            binding.expandCollapseButton.contentDescription = expandedContentDescription
+            binding.expandCollapseButton.setImageDrawable(collapseIcon)
+            binding.expandCollapseButton.contentDescription = collapseContentDescription
             binding.imagesLayout.visible()
         } else {
             // hide icons + update dropdown icon
-            binding.expandCollapseButton.setImageDrawable(collapsedIcon)
-            binding.expandCollapseButton.contentDescription = collapsedContentDescription
+            binding.expandCollapseButton.setImageDrawable(expandIcon)
+            binding.expandCollapseButton.contentDescription = expandContentDescription
             binding.imagesLayout.gone()
         }
     }
 
-    // initialize text with author's name and url + relevant links
+    // initialize text with author's name and add links
     private fun initializeAttributionText(author: AuthorAttribution) {
         // get text template and format with URLs
         val text = itemView.context.getString(R.string.author_attr_template, author.name, flaticonDisplayUrl)
         val spannableString = SpannableString(text)
 
         // link to flaticon site
-        UrlClickableSpan.addToFirstWord(spannableString, flaticonDisplayUrl, flaticonUrl)
+        URLClickableSpan.addToFirstWord(spannableString, flaticonDisplayUrl, flaticonUrl)
         // link to creator
-        UrlClickableSpan.addToFirstWord(spannableString, author.name, author.url)
+        URLClickableSpan.addToFirstWord(spannableString, author.name, author.url)
 
         binding.attribution.movementMethod = LinkMovementMethod()
         binding.attribution.text = spannableString

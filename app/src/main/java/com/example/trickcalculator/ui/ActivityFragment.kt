@@ -6,7 +6,7 @@ import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 
 /**
- * Abstract fragment to run initialization code that is required for every fragment in the app
+ * Abstract fragment to handle common functionality involving the MainActivity
  */
 abstract class ActivityFragment : Fragment() {
     /**
@@ -30,7 +30,7 @@ abstract class ActivityFragment : Fragment() {
         val mainActivity = requireActivity() as MainActivity
         val actionBar = mainActivity.binding.actionBar
 
-        // set onclick
+        // set onClick
         if (setActionBarOnClick == null) {
             actionBar.root.setOnClickListener(null)
         } else {

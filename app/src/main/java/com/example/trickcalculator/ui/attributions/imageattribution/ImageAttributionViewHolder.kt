@@ -1,13 +1,11 @@
 package com.example.trickcalculator.ui.attributions.imageattribution
 
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import androidx.recyclerview.widget.RecyclerView
-import com.example.trickcalculator.databinding.ViewHolderAuthorAttributionBinding
 import com.example.trickcalculator.databinding.ViewHolderImageAttributionBinding
-import com.example.trickcalculator.ui.attributions.ImageAttribution
-import com.example.trickcalculator.ui.attributions.UrlClickableSpan
+import com.example.trickcalculator.ui.attributions.constants.ImageAttribution
+import com.example.trickcalculator.ui.attributions.URLClickableSpan
 
 /**
  * ViewHolder for a single image attribution
@@ -24,9 +22,9 @@ class ImageAttributionViewHolder(private val binding: ViewHolderImageAttribution
         binding.image.contentDescription = contentDescription
         binding.image.setImageResource(image.iconResId)
 
-        // initialize link to icon
+        // initialize link
         val spannableString = SpannableString(image.url)
-        UrlClickableSpan.addToFirstWord(spannableString, image.url, image.url)
+        URLClickableSpan.addToFirstWord(spannableString, image.url, image.url)
         binding.link.movementMethod = LinkMovementMethod()
         binding.link.text = spannableString
     }

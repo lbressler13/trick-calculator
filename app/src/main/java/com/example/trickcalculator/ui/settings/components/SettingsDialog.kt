@@ -2,7 +2,6 @@ package com.example.trickcalculator.ui.settings.components
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,23 +23,23 @@ class SettingsDialog : DialogFragment(), SettingsUI {
     private lateinit var sharedViewModel: SharedViewModel
 
     override val fragment = this
-    override var resetPressed = false
     override var randomizePressed = false
+    override var resetPressed = false
 
-    override lateinit var shuffleNumbersSwitch: SwitchCompat
-    override lateinit var shuffleOperatorsSwitch: SwitchCompat
+    override lateinit var applyDecimalsSwitch: SwitchCompat
     override lateinit var applyParensSwitch: SwitchCompat
     override lateinit var clearOnErrorSwitch: SwitchCompat
-    override lateinit var applyDecimalsSwitch: SwitchCompat
-    override lateinit var shuffleComputationSwitch: SwitchCompat
-    override lateinit var settingsButtonSwitch: SwitchCompat
     override lateinit var historyRadioGroup: RadioGroup
     override lateinit var historyRadioButtons: List<RadioButton>
-    override lateinit var resetSettingsButton: View
     override lateinit var randomizeSettingsButton: View
+    override lateinit var resetSettingsButton: View
+    override lateinit var settingsButtonSwitch: SwitchCompat
+    override lateinit var shuffleComputationSwitch: SwitchCompat
+    override lateinit var shuffleNumbersSwitch: SwitchCompat
+    override lateinit var shuffleOperatorsSwitch: SwitchCompat
 
     /**
-     * Initialize dialog
+     * Build dialog, comes before onCreateView and dialog is not connected to context
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogSettingsBinding.inflate(layoutInflater)
@@ -56,6 +55,9 @@ class SettingsDialog : DialogFragment(), SettingsUI {
             .create()
     }
 
+    /**
+     * Continue initialization after fragment is connected to context
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         collectUiElements()
         initObservers(this, sharedViewModel, viewLifecycleOwner)
@@ -64,6 +66,7 @@ class SettingsDialog : DialogFragment(), SettingsUI {
         return binding.root
     }
 
+    // assign UI elements for SettingsUI, after binding has been initialized
     private fun collectUiElements() {
         applyDecimalsSwitch = binding.applyDecimalsSwitch
         applyParensSwitch = binding.applyParensSwitch

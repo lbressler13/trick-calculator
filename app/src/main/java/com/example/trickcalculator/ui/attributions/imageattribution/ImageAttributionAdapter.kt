@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.ViewHolderImageAttributionBinding
-import com.example.trickcalculator.ui.attributions.ImageAttribution
+import com.example.trickcalculator.ui.attributions.constants.ImageAttribution
 
 /**
  * Adapter for image attribution views for the RecyclerView in an author attribution

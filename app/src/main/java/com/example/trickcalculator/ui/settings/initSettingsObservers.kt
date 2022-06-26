@@ -3,6 +3,13 @@ package com.example.trickcalculator.ui.settings
 import androidx.lifecycle.LifecycleOwner
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
+/**
+ * Initialize basic observers to update a settings object when settings change in the ViewModel
+ *
+ * @param settings [Settings]: settings object to update
+ * @param viewModel [SharedViewModel]: view model to observe
+ * @param lifecycleOwner [LifecycleOwner]
+ */
 fun initSettingsObservers(settings: Settings, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
     viewModel.applyDecimals.observe(lifecycleOwner) { settings.applyDecimals = it }
     viewModel.applyParens.observe(lifecycleOwner) { settings.applyParens = it }

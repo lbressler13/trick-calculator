@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.attributions
+package com.example.trickcalculator.ui.attributions.constants
 
 /**
  * Constant URLs used in the attributions

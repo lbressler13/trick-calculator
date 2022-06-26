@@ -1,4 +1,4 @@
-package com.example.trickcalculator.ui.attributions
+package com.example.trickcalculator.ui.attributions.constants
 
 import com.example.trickcalculator.R
 
@@ -7,7 +7,7 @@ import com.example.trickcalculator.R
  *
  * @param name [String]: the author's display name in Flaticon
  * @param url [String]: link to author's page on Flaticon
- * @param images [List]: list of images created by the author
+ * @param images [List<ImageAttribution>]: list of images created by the author
  */
 data class AuthorAttribution(
     val name: String,

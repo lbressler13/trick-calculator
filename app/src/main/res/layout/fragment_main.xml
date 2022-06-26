@@ -148,8 +148,7 @@
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
             android:contentDescription="@string/plus_cd"
-            android:src="@drawable/ic_plus"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/ic_plus" />
 
         <ImageButton
             android:id="@+id/minusButton"
@@ -158,8 +157,7 @@
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
             android:contentDescription="@string/minus_cd"
-            android:src="@drawable/ic_minus"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/ic_minus" />
 
         <ImageButton
             android:id="@+id/timesButton"
@@ -168,8 +166,7 @@
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
             android:contentDescription="@string/times_cd"
-            android:src="@drawable/ic_times"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/ic_times" />
 
         <ImageButton
             android:id="@+id/divideButton"
@@ -178,8 +175,7 @@
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
             android:contentDescription="@string/divide_cd"
-            android:src="@drawable/ic_divide"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/ic_divide" />
 
         <Button
             android:id="@+id/lparenButton"
@@ -212,8 +208,7 @@
             android:layout_column="1"
             android:background="@drawable/button_numpad_background"
             android:contentDescription="@string/backspace_cd"
-            android:src="@drawable/ic_arrow_left"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/ic_arrow_left" />
 
         <Button
             android:id="@+id/clearButton"
@@ -241,8 +236,7 @@
             android:layout_column="3"
             android:background="@drawable/button_numpad_background"
             android:contentDescription="@string/equals_cd"
-            android:src="@drawable/ic_equals"
-            tools:ignore="HardcodedText" />
+            android:src="@drawable/ic_equals" />
 
         <Button
             android:id="@+id/piButton"

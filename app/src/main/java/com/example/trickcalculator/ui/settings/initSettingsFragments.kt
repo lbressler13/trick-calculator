@@ -14,10 +14,7 @@ import com.example.trickcalculator.ui.settings.components.SettingsFragment
  * @param parentFragment [Fragment]: calling fragment
  * @param viewToClick [View]: view which should launch settings fragment when clicked
  */
-fun initSettingsFragment(
-    parentFragment: Fragment,
-    viewToClick: View
-) {
+fun initSettingsFragment(parentFragment: Fragment, viewToClick: View) {
     viewToClick.setOnClickListener {
         val newFragment = SettingsFragment.newInstance()
         setIsMainFragment(newFragment, parentFragment)
@@ -47,6 +44,12 @@ fun initSettingsDialog(
     }
 }
 
+/**
+ * Modify the fragment args to indicate if the parent is a MainFragment
+ *
+ * @param fragment [Fragment]: fragment to add args to
+ * @param parentFragment [Fragment]: calling fragment
+ */
 private fun setIsMainFragment(fragment: Fragment, parentFragment: Fragment) {
     val context = parentFragment.requireContext()
     val mainFragmentKey = context.getString(R.string.key_main_fragment)

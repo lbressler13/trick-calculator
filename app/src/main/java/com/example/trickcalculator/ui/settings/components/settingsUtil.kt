@@ -26,7 +26,7 @@ import com.example.trickcalculator.ui.shared.SharedViewModel
  */
 fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
     val index = buttons.indexOfFirst { it.id == group.checkedRadioButtonId }
-    if (index >= 0) {
+    if (index in buttons.indices) {
         return index
     }
 
@@ -35,7 +35,7 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
 
 /**
  * Observe changes to settings in view model and update ui based on changes.
- * Required to keep changes from SettingsDialog if dialog is opened on top of fragment.
+ * Without this, changes from SettingsDialog will not be saved if dialog is opened on top of fragment.
  * Will not cause a loop of updates because settings aren't saved until fragment is closed.
  *
  * @param settingsUi [SettingsUI]: UI of calling fragment
@@ -55,7 +55,7 @@ fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleO
 }
 
 /**
- * Initialize the UI based on information in an args object.
+ * Initialize the UI. Majority of items are set based on view model observers
  *
  * @param settingsUi [SettingsUI]: UI of calling fragment
  */
@@ -113,23 +113,23 @@ fun saveToViewModel(settingsUi: SettingsUI, viewModel: SharedViewModel) {
 }
 
 /**
- * On click function for reset settings button.
- *
- * @param settingsUi [SettingsUI]: UI and info about calling fragment
- */
-private fun resetSettingsOnClick(settingsUi: SettingsUI) {
-    settingsUi.resetPressed = true
-    closeFragment(settingsUi.fragment)
-}
-
-/**
  * On click function for randomize settings button.
  *
  * @param settingsUi [SettingsUI]: UI and info about calling fragment
  */
 private fun randomizeSettingsOnClick(settingsUi: SettingsUI) {
     settingsUi.randomizePressed = true
-    closeFragment(settingsUi.fragment)
+    closeCurrentFragment(settingsUi.fragment)
+}
+
+/**
+ * On click function for reset settings button.
+ *
+ * @param settingsUi [SettingsUI]: UI and info about calling fragment
+ */
+private fun resetSettingsOnClick(settingsUi: SettingsUI) {
+    settingsUi.resetPressed = true
+    closeCurrentFragment(settingsUi.fragment)
 }
 
 /**
@@ -138,7 +138,7 @@ private fun randomizeSettingsOnClick(settingsUi: SettingsUI) {
  * @param fragment [Fragment]: the current fragment.
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
-private fun closeFragment(fragment: Fragment) {
+private fun closeCurrentFragment(fragment: Fragment) {
     if (fragment is DialogFragment) {
         fragment.dismiss()
     } else {
@@ -161,7 +161,7 @@ fun closePreviousFragment(currentFragment: Fragment) {
             currentFragment.parentFragmentManager.popBackStack()
         }
     } catch (e: Exception) {
-        // expected to fail after recreating ui through developer tools
+        // expected to fail when ui is recreating due to configuration changes or via dev tools
         Log.e("Failed to close parent fragment:", e.message.toString())
     }
 }

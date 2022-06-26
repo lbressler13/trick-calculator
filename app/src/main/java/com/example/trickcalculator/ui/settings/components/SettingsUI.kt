@@ -10,14 +10,20 @@ import androidx.fragment.app.Fragment
  * Interface with values that must be present in both SettingsFragment and SettingsDialog
  */
 interface SettingsUI {
-    // implementing fragment
+    /**
+     * Implementing fragment
+     */
     val fragment: Fragment
 
-    // flags for reset and randomize being pressed
+    /**
+     * Flags for events in fragment
+     */
     var resetPressed: Boolean
     var randomizePressed: Boolean
 
-    // UI elements related to settings
+    /**
+     * UI elements to represent settings
+     */
     // switches
     var applyDecimalsSwitch: SwitchCompat
     var applyParensSwitch: SwitchCompat

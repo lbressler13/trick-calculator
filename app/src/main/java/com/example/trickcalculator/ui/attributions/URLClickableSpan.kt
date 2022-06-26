@@ -13,9 +13,9 @@ import androidx.core.content.ContextCompat
  *
  * @param url [String]: the url to open when text is clicked
  */
-class UrlClickableSpan(private val url: String) : ClickableSpan() {
+class URLClickableSpan(private val url: String) : ClickableSpan() {
     /**
-     * Open the specified url
+     * Open the specified url in a browser window
      */
     override fun onClick(widget: View) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -34,7 +34,7 @@ class UrlClickableSpan(private val url: String) : ClickableSpan() {
         fun addToFirstWord(text: SpannableString, word: String, url: String) {
             val start = text.indexOf(word)
             val end = start + word.length
-            text.setSpan(UrlClickableSpan(url), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            text.setSpan(URLClickableSpan(url), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         }
     }
 }

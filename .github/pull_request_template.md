@@ -1,5 +1,5 @@
 ## Details
-What did you do?
+* What did you do?
 
 ## Checklists
 * [ ] New and existing unit tests pass

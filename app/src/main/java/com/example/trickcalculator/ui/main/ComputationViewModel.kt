@@ -39,6 +39,7 @@ class ComputationViewModel : ViewModel() {
         val computed = mBackupComputed.value
         var computation = mBackupComputeText.value!!
 
+        // if computed val was used and next item is a number, pad with times symbol
         if (
             computation.size > 1 &&
             computed != null &&
@@ -62,10 +63,14 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Clear current computed values
+     * Clear computed values
      */
     private fun clearComputeText() { mComputeText.value = listOf() }
     private fun clearComputedValue() { mComputedValue.value = null }
+    private fun clearBackups() {
+        mBackupComputeText.value = null
+        mBackupComputed.value = null
+    }
 
     /**
      * Append new value to end of list
@@ -110,11 +115,6 @@ class ComputationViewModel : ViewModel() {
      * Replace compute text list with the computed value
      */
     fun useComputedAsComputeText() { mComputeText.value = listOf() }
-
-    private fun clearBackups() {
-        mBackupComputeText.value = null
-        mBackupComputed.value = null
-    }
 
     /**
      * Reset data related to computation.

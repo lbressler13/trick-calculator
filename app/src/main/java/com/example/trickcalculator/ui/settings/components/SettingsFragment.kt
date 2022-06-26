@@ -13,26 +13,30 @@ import com.example.trickcalculator.databinding.FragmentSettingsBinding
 import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
+/**
+ * DialogFragment to display all configuration options for calculator
+ */
 class SettingsFragment : ActivityFragment(), SettingsUI {
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
-    override var titleResId: Int = R.string.title_settings
+
+    override var titleResId: Int = R.string.title_settings // fragment-specific value
 
     override val fragment = this
-    override var resetPressed = false
     override var randomizePressed = false
+    override var resetPressed = false
 
-    override lateinit var shuffleNumbersSwitch: SwitchCompat
-    override lateinit var shuffleOperatorsSwitch: SwitchCompat
+    override lateinit var applyDecimalsSwitch: SwitchCompat
     override lateinit var applyParensSwitch: SwitchCompat
     override lateinit var clearOnErrorSwitch: SwitchCompat
-    override lateinit var applyDecimalsSwitch: SwitchCompat
-    override lateinit var shuffleComputationSwitch: SwitchCompat
-    override lateinit var settingsButtonSwitch: SwitchCompat
     override lateinit var historyRadioGroup: RadioGroup
     override lateinit var historyRadioButtons: List<RadioButton>
-    override lateinit var resetSettingsButton: View
     override lateinit var randomizeSettingsButton: View
+    override lateinit var resetSettingsButton: View
+    override lateinit var settingsButtonSwitch: SwitchCompat
+    override lateinit var shuffleComputationSwitch: SwitchCompat
+    override lateinit var shuffleNumbersSwitch: SwitchCompat
+    override lateinit var shuffleOperatorsSwitch: SwitchCompat
 
     companion object {
         fun newInstance() = SettingsFragment()
@@ -51,6 +55,7 @@ class SettingsFragment : ActivityFragment(), SettingsUI {
         return binding.root
     }
 
+    // assign UI elements for SettingsUI, after binding has been initialized
     private fun collectUiElements() {
         applyDecimalsSwitch = binding.applyDecimalsSwitch
         applyParensSwitch = binding.applyParensSwitch

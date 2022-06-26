@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ext.copyWithReplacement
 
 /**
- * ViewModel to track information about view in the Attributions fragment UI
+ * ViewModel to track information about expanded/collapsed views in the Attributions fragment UI
  */
 class AttributionsViewModel : ViewModel() {
-    // whether or not the top text is expanded
-    private val mTextExpanded = MutableLiveData<Boolean>().apply { value = false }
-    val textExpanded: LiveData<Boolean> = mTextExpanded
-    fun setTextExpanded(newValue: Boolean) { mTextExpanded.value = newValue }
+    // whether or not the Flaticon message at top of screen is expanded
+    private val mFlaticonMessageExpanded = MutableLiveData<Boolean>().apply { value = false }
+    val flaticonMessageExpanded: LiveData<Boolean> = mFlaticonMessageExpanded
+    fun setFlaticonMessageExpanded(newValue: Boolean) { mFlaticonMessageExpanded.value = newValue }
 
     // information about attributions
     private var attributionCount: Int? = null

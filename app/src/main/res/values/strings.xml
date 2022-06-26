@@ -20,7 +20,7 @@
     <string name="clear">CE</string>
     <string name="pi">PI</string>
 
-    <!-- Settings UI -->
+    <!-- Settings -->
     <!-- Title/Section Headings -->
     <string name="title_settings">Settings</string>
     <string name="computation">Computation</string>
@@ -37,18 +37,8 @@
     <string name="reset_settings">Reset</string>
     <string name="randomize_settings">Randomize</string>
     <string name="shuffle_computation">Shuffle Computation</string>
-
     <!-- Settings Keys -->
-    <string name="key_settings_request">settingsUpdateRequest</string>
-    <string name="key_shuffle_numbers">shuffleNumbers</string>
-    <string name="key_shuffle_operators">shuffleOperators</string>
-    <string name="key_apply_parens">applyParens</string>
-    <string name="key_clear_on_error">clearOnError</string>
-    <string name="key_apply_decimals">applyDecimals</string>
-    <string name="key_settings_button">showSettingsButton</string>
     <string name="key_main_fragment">isMainFragment</string>
-    <string name="key_random_history">randomHistory</string>
-    <string name="key_shuffle_computation">shuffleComputation</string>
 
     <!-- Attributions -->
     <string name="title_attributions">Image Attributions</string>
@@ -92,8 +82,8 @@
     <string name="plus_cd">Plus symbol</string>
     <string name="settings_cd">Settings</string>
     <string name="times_cd">Times symbol</string>
-    <string name="expand_dropdown_cd">Show icons</string>
-    <string name="collapse_dropdown_cd">Hide icons</string>
+    <string name="expand_images_dropdown_cd">Show icons</string>
+    <string name="collapse_images_dropdown_cd">Hide icons</string>
     <string name="chevron_down_cd">Down chevron</string>
     <string name="chevron_left_cd">Left chevron</string>
     <string name="chevron_right_cd">Right chevron</string>
