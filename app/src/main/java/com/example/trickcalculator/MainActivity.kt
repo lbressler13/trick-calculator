@@ -1,20 +1,13 @@
 package com.example.trickcalculator
 
 import BuildOptions
-import android.content.res.ColorStateList
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.TypedValue
-import androidx.appcompat.widget.SwitchCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.databinding.ActivityMainBinding
-import com.example.trickcalculator.ext.disable
-import com.example.trickcalculator.ext.enable
-import com.example.trickcalculator.ext.gone
-import com.example.trickcalculator.ext.visible
 import com.example.trickcalculator.ui.main.DeveloperToolsDialog
 import com.example.trickcalculator.ui.main.MainFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel

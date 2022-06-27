@@ -1,11 +1,11 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.ext.popRandom
-import com.example.trickcalculator.utils.IntList
-import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.utils.isNumber
 import com.example.trickcalculator.utils.isNumberChar
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
+import kotlinutils.list.IntList
+import kotlinutils.list.StringList
+import kotlinutils.list.mutablelist.ext.popRandom
 
 /**
  * Validate computation text, combine adjacent digits/decimals to form numbers,

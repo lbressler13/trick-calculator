@@ -1,10 +1,12 @@
 package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.assertDivByZero
-import com.example.trickcalculator.utils.IntList
-import com.example.trickcalculator.utils.StringList
-import exactfraction.ExactFraction
-import org.junit.Assert.*
+import exactnumbers.exactfraction.ExactFraction
+import kotlinutils.list.IntList
+import kotlinutils.list.StringList
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ComputeHelpersTest {
@@ -15,62 +17,62 @@ class ComputeHelpersTest {
     fun testIsOperator() {
         var element = "-"
         var ops: StringList = listOf("-")
-        assert(isOperator(element, ops))
+        assertTrue(isOperator(element, ops))
 
         element = "+"
         ops = listOf("/", "+", "-")
-        assert(isOperator(element, ops))
+        assertTrue(isOperator(element, ops))
 
         element = "*"
         ops = listOf("/", "+", "-")
-        assert(!isOperator(element, ops))
+        assertFalse(isOperator(element, ops))
 
         element = "+"
         ops = listOf()
-        assert(!isOperator(element, ops))
+        assertFalse(isOperator(element, ops))
 
         element = "abc"
         ops = listOf("abc", "def", "+")
-        assert(isOperator(element, ops))
+        assertTrue(isOperator(element, ops))
 
         element = "ab"
         ops = listOf("abc", "def", "+")
-        assert(!isOperator(element, ops))
+        assertFalse(isOperator(element, ops))
 
         element = "ABC"
         ops = listOf("abc", "def", "+")
-        assert(!isOperator(element, ops))
+        assertFalse(isOperator(element, ops))
     }
 
     @Test
     fun testValidateNumbersOrder() {
         var order: IntList? = null
-        assert(!validateNumbersOrder(order))
+        assertFalse(validateNumbersOrder(order))
 
         order = listOf()
-        assert(!validateNumbersOrder(order))
+        assertFalse(validateNumbersOrder(order))
 
         order = listOf(0)
-        assert(!validateNumbersOrder(order))
+        assertFalse(validateNumbersOrder(order))
 
         order = (1..9).toList()
-        assert(!validateNumbersOrder(order))
+        assertFalse(validateNumbersOrder(order))
 
         order = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 8)
-        assert(!validateNumbersOrder(order))
+        assertFalse(validateNumbersOrder(order))
 
         // sorted list should fail validation
         order = (0..9).toList()
-        assert(!validateNumbersOrder(order))
+        assertFalse(validateNumbersOrder(order))
 
         order = listOf(0, 2, 1, 3, 4, 5, 6, 7, 8, 9)
-        assert(validateNumbersOrder(order))
+        assertTrue(validateNumbersOrder(order))
 
         order = (9 downTo 0).toList()
-        assert(validateNumbersOrder(order))
+        assertTrue(validateNumbersOrder(order))
 
         order = listOf(3, 7, 2, 0, 5, 8, 9, 1, 6, 4)
-        assert(validateNumbersOrder(order))
+        assertTrue(validateNumbersOrder(order))
     }
 
     @Test
@@ -127,4 +129,3 @@ class ComputeHelpersTest {
         assertDivByZero { applyOrderToEF(order, ef) }
     }
 }
-

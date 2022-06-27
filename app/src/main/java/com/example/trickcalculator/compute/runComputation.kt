@@ -1,8 +1,10 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.utils.*
-import exactfraction.ExactFraction
-import exactfraction.ExactFractionOverflowException
+import com.example.trickcalculator.utils.OperatorFunction
+import exactnumbers.exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFractionOverflowException
+import kotlinutils.list.IntList
+import kotlinutils.list.StringList
 
 /**
  * Parse string list and compute as a mathematical expression, if possible.
@@ -203,6 +205,6 @@ fun parseParens(
  * @param order [List]: list of numbers, can be null
  * @return true if validation succeeds, false otherwise
  */
-fun validateNumbersOrder(order: IntList?): Boolean = order != null
-        && order.joinToString("") != "0123456789"
-        && order.sorted().joinToString("") == "0123456789"
+fun validateNumbersOrder(order: IntList?): Boolean = order != null &&
+    order.joinToString("") != "0123456789" &&
+    order.sorted().joinToString("") == "0123456789"

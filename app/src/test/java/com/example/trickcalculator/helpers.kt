@@ -1,8 +1,10 @@
 package com.example.trickcalculator
 
-import com.example.trickcalculator.utils.StringList
+import kotlinutils.list.StringList
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.function.ThrowingRunnable
-import org.junit.Assert.*
 
 private val iterations = 20
 
@@ -16,7 +18,7 @@ fun assertDivByZero(function: ThrowingRunnable) {
 // by default, splitting on empty space adds a character at start and end
 // this helper fixes that
 fun splitString(s: String): StringList {
-    return when(s.length) {
+    return when (s.length) {
         0 -> listOf()
         1 -> listOf(s)
         else -> {
@@ -38,7 +40,7 @@ fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
         }
     }
 
-    assert(checkPassed)
+    assertTrue(checkPassed)
 }
 
 // run a function several times

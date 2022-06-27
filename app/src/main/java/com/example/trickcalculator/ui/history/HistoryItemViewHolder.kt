@@ -2,8 +2,8 @@ package com.example.trickcalculator.ui.history
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.ViewHolderHistoryItemBinding
-import com.example.trickcalculator.ext.gone
-import com.example.trickcalculator.ext.visible
+import com.example.trickcalculator.utils.gone
+import com.example.trickcalculator.utils.visible
 
 /**
  * ViewHolder for a single history item view
@@ -26,6 +26,5 @@ class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
             binding.resultText.gone()
             binding.errorText.visible()
         }
-
     }
 }

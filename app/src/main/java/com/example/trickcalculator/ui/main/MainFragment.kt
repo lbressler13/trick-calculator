@@ -1,6 +1,5 @@
 package com.example.trickcalculator.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,21 +9,23 @@ import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import exactfraction.ExactFraction
+import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
-import com.example.trickcalculator.databinding.FragmentMainBinding
 import com.example.trickcalculator.compute.runComputation
-import com.example.trickcalculator.ext.*
+import com.example.trickcalculator.databinding.FragmentMainBinding
 import com.example.trickcalculator.ui.ActivityFragment
-import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.attributions.AttributionsFragment
 import com.example.trickcalculator.ui.history.HistoryFragment
 import com.example.trickcalculator.ui.history.HistoryItem
-import com.example.trickcalculator.utils.OperatorFunction
-import com.example.trickcalculator.utils.StringList
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.settings.initSettingsFragment
 import com.example.trickcalculator.ui.settings.initSettingsObservers
+import com.example.trickcalculator.ui.shared.SharedViewModel
+import com.example.trickcalculator.utils.OperatorFunction
+import com.example.trickcalculator.utils.gone
+import com.example.trickcalculator.utils.visible
+import exactnumbers.exactfraction.ExactFraction
+import kotlinutils.list.StringList
 
 /**
  * Fragment to display main calculator functionality
@@ -48,7 +49,8 @@ class MainFragment : ActivityFragment() {
      * Initialize fragment
      */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
@@ -269,7 +271,7 @@ class MainFragment : ActivityFragment() {
         // add computed value
         val computedString = computedValue?.toDecimalString()
         if (computedString != null) {
-            fullText = "[${computedString}]$fullText"
+            fullText = "[$computedString]$fullText"
         }
 
         textview.text = fullText

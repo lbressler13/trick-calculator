@@ -1,12 +1,13 @@
 package com.example.trickcalculator.ui.history
 
 import com.example.trickcalculator.compute.isOperator
-import exactfraction.ExactFraction
-import com.example.trickcalculator.utils.StringList
-import com.example.trickcalculator.ext.nextBoolean
-import com.example.trickcalculator.ext.nextFromWeightedList
 import com.example.trickcalculator.utils.isNumber
-import java.util.*
+import exactnumbers.exactfraction.ExactFraction
+import kotlinutils.list.StringList
+import kotlinutils.list.WeightedList
+import kotlinutils.random.ext.nextBoolean
+import kotlinutils.random.ext.nextFromWeightedList
+import java.util.Date
 import kotlin.random.Random
 
 private typealias MStringList = MutableList<String>
@@ -46,7 +47,6 @@ private val weightedRangesComputation = listOf(
 )
 
 private val operators = listOf("+", "-", "x", "/", "^")
-private val illegalOperators = listOf("!", "&", "|", "#", "$", "%")
 
 private val random = Random(Date().time)
 
@@ -113,7 +113,7 @@ private fun generateComputation(length: Int): StringList {
  * @return [ExactFraction]: a number generated randomly using the specified parameters
  */
 private fun generateExactFraction(
-    weightedRanges: List<Pair<IntRange, Float>>,
+    weightedRanges: WeightedList<IntRange>,
     probabilityWholeNumber: Float,
     allowNegative: Boolean = true
 ): ExactFraction {
@@ -143,29 +143,17 @@ private fun generateErrorMessage(): String {
     val messages = listOf(
         "Syntax error",
         "Divide by zero",
-        "Number overflow exception",
-        "Illegal operator",
-        "Incorrect math"
+        "Number overflow exception"
     )
 
     val message = messages.random()
 
-    return when (message) {
-        "Number overflow exception" -> {
-            val overflow = (Long.MIN_VALUE..Long.MAX_VALUE).random()
-            "Number overflow exception on $overflow"
-        }
-        "Illegal operator" -> {
-            val allOperators = operators + illegalOperators
-            "Illegal operator: ${allOperators.random()}"
-        }
-        "Incorrect math" -> {
-            val length = (1..12).random()
-            val computation = generateComputation(length).joinToString("")
-            "Invalid math: $computation"
-        }
-        else -> message
+    if (message == "Number overflow exception") {
+        val overflow = (Long.MIN_VALUE..Long.MAX_VALUE).random()
+        return "Number overflow exception on $overflow"
     }
+
+    return message
 }
 
 /**

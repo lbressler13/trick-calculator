@@ -2,10 +2,10 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.assertDivByZero
 import com.example.trickcalculator.splitString
-import exactfraction.ExactFraction
 import com.example.trickcalculator.utils.OperatorFunction
-import org.junit.Assert.*
-import exactfraction.toExactFraction
+import exactnumbers.exactfraction.ExactFraction
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 
 private val exp = listOf("^")
 private val plusMinus = listOf("+", "-")
@@ -109,23 +109,23 @@ fun runRunComputationTests() {
 
     // skip decimals
     text = splitString("0.5x2+7")
-    expected = 17.toExactFraction()
+    expected = ExactFraction(17)
     result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false, false)
     assertEquals(expected, result)
 
-    text =  splitString("8.7/(16-2)")
+    text = splitString("8.7/(16-2)")
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(80, 51)
     result = runComputation(null, text, allOps, performOp, nums, true, false, false)
     assertEquals(expected, result)
 
-    text =  splitString("1.1+2.2+3.3")
-    expected = 66.toExactFraction()
+    text = splitString("1.1+2.2+3.3")
+    expected = ExactFraction(66)
     result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false, false)
     assertEquals(expected, result)
 
     // skip parens + decimals
-    text =  splitString("8.7/(16-2)")
+    text = splitString("8.7/(16-2)")
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(28, 52)
     result = runComputation(null, text, allOps, performOp, nums, false, false, false)
@@ -182,7 +182,7 @@ fun runParseTextTests() {
 
     // individual ops
     text = "4 + 7".split(' ')
-    expected = 11.toExactFraction()
+    expected = ExactFraction(11)
     assertEquals(expected, parseText(text, allOps, performOp))
 
     text = "4 - 7".split(' ')
@@ -190,7 +190,7 @@ fun runParseTextTests() {
     assertEquals(expected, parseText(text, allOps, performOp))
 
     text = "4 x 7".split(' ')
-    expected = 28.toExactFraction()
+    expected = ExactFraction(28)
     assertEquals(expected, parseText(text, allOps, performOp))
 
     text = "4 / 7".split(' ')
@@ -219,11 +219,11 @@ fun runParseTextTests() {
 
     // multiple ops + parens
     text = "5 + 3 x 2".split(' ')
-    expected = 11.toExactFraction()
+    expected = ExactFraction(11)
     assertEquals(expected, parseText(text, allOps, performOp))
 
     text = "0402 / 2 + 3".split(' ')
-    expected = 204.toExactFraction()
+    expected = ExactFraction(204)
     assertEquals(expected, parseText(text, allOps, performOp))
 
     text = "5 / ( 0.5 + 2 ) / ( 9 x ( 4 - 2 ) )".split(' ')
@@ -282,7 +282,7 @@ fun runParseSetOfOpsTests() {
 
     // changed
     text = "1 - 3 + 17".split(' ')
-    expected = listOf(15.toExactFraction().toEFString())
+    expected = listOf(ExactFraction(15).toEFString())
     assertEquals(expected, parseSetOfOps(text, plusMinus, performOp))
 
     text = "1.3 x 2 / 10 x 20".split(' ')

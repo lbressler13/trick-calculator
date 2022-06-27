@@ -1,9 +1,9 @@
 package com.example.trickcalculator.ui.history
 
-import exactfraction.ExactFraction
-import exactfraction.checkIsEFString
-import com.example.trickcalculator.ext.copyWithReplacement
-import com.example.trickcalculator.utils.StringList
+import exactnumbers.exactfraction.ExactFraction
+import exactnumbers.exactfraction.checkIsEFString
+import kotlinutils.list.StringList
+import kotlinutils.list.ext.copyWithReplacement
 
 /**
  * Information about a single computation and its result
@@ -37,7 +37,7 @@ class HistoryItem {
     }
 
     constructor(computation: StringList, error: String) :
-            this(computation.joinToString(""), error)
+        this(computation.joinToString(""), error)
 
     constructor(computation: StringList, result: ExactFraction) {
         // parse EF-formatted value into decimal string

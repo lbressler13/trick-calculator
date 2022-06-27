@@ -93,8 +93,12 @@ This menu is unavailable in the final variant.
 See [here](https://developer.android.com/studio/build/build-variants) for information about configuring build variants in an Android app.
 
 ### Dependencies
-This app has a dependency on the [exact-fraction](https://github.com/lbressler13/exact-numbers) package.
-This package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
+This app has dependencies on the following packages:
+* [exact-numbers](https://github.com/lbressler13/exact-numbers)
+* [kotlin-utils](https://github.com/lbressler13/kotlin-utils)
+
+These package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
+Package versions can be updated in the module-level build.gradle.
 
 ## Testing
 
@@ -108,6 +112,10 @@ You will gain a huge appreciation for testing and TDD.
 
 ### UI tests
 Not yet implemented
+
+## Linting
+Linting is done using [ktlint](https://ktlint.github.io/), using [this](https://github.com/jlleitschuh/ktlint-gradle) plugin.
+See [here](https://github.com/pinterest/ktlint#standard-rules) for a list of standard rules.
 
 ## Serious stuff
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.
