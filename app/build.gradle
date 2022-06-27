@@ -69,7 +69,7 @@ dependencies {
     def mockito_version = "4.3.1"
     def mockito_kotlin_version = "4.0.0"
 
-    def exact_fraction_version = "0.1.0-dev"
+    def exact_numbers_version = "0.0.3"
     def kotlin_utils_version = "0.0.2"
 
     implementation "androidx.core:core-ktx:1.7.0"
@@ -86,6 +86,6 @@ dependencies {
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation files("libs/exact-fraction-${exact_fraction_version}.jar")
+    implementation files("libs/exact-numbers-${exact_numbers_version}.jar")
     implementation files("libs/kotlin-utils-${kotlin_utils_version}.jar")
 }

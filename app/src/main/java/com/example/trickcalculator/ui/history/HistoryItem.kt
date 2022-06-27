@@ -1,7 +1,7 @@
 package com.example.trickcalculator.ui.history
 
-import exactfraction.ExactFraction
-import exactfraction.checkIsEFString
+import exactnumbers.exactfraction.ExactFraction
+import exactnumbers.exactfraction.checkIsEFString
 import kotlinutils.list.ext.copyWithReplacement
 import kotlinutils.list.StringList
 

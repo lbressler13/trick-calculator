@@ -1,7 +1,7 @@
 package com.example.trickcalculator.utils
 
 import com.example.trickcalculator.ui.history.HistoryItem
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 
 /**
  * Function to apply an operator to two numbers.

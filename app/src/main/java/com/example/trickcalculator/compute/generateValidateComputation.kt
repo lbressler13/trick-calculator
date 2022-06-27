@@ -4,7 +4,7 @@ import kotlinutils.list.IntList
 import kotlinutils.list.StringList
 import com.example.trickcalculator.utils.isNumber
 import com.example.trickcalculator.utils.isNumberChar
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 import kotlinutils.list.mutablelist.ext.popRandom
 
 /**

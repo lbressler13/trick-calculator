@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.utils.*
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 import kotlinutils.list.StringList
 
 /**

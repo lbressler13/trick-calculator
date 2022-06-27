@@ -2,7 +2,7 @@ package com.example.trickcalculator.compute
 
 import kotlinutils.list.IntList
 import kotlinutils.list.StringList
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 import java.math.BigInteger
 
 /**

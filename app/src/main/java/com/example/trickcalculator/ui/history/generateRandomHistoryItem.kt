@@ -1,7 +1,7 @@
 package com.example.trickcalculator.ui.history
 
 import com.example.trickcalculator.compute.isOperator
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 import kotlinutils.random.ext.nextBoolean
 import com.example.trickcalculator.utils.isNumber
 import kotlinutils.list.StringList

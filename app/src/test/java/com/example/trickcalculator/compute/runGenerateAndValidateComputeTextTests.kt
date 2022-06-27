@@ -6,7 +6,7 @@ import com.example.trickcalculator.splitString
 import kotlinutils.list.IntList
 import kotlinutils.list.StringList
 import com.example.trickcalculator.utils.isNumber
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 import org.junit.Assert.*
 
 private val ops = listOf("+", "-", "x", "/")

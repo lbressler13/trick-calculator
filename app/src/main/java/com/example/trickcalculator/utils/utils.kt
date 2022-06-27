@@ -1,6 +1,6 @@
 package com.example.trickcalculator.utils
 
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 
 /**
  * Determine if a string can be parsed to a number.

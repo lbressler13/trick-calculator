@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentMainBinding
 import com.example.trickcalculator.compute.runComputation

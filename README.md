@@ -94,8 +94,8 @@ See [here](https://developer.android.com/studio/build/build-variants) for inform
 
 ### Dependencies
 This app has dependencies on the following packages:
-* [exact-fraction](https://github.com/lbressler13/exact-numbers) v0.1.0-dev
-* [kotlin-utils](https://github.com/lbressler13/kotlin-utils) v0.0.1
+* [exact-numbers](https://github.com/lbressler13/exact-numbers)
+* [kotlin-utils](https://github.com/lbressler13/kotlin-utils)
 
 These package must be built and placed in a local **libs** folder in order for a gradle build to succeed.
 Package versions can be updated in the module-level build.gradle.

@@ -1,8 +1,8 @@
 package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.utils.*
-import exactfraction.ExactFraction
-import exactfraction.ExactFractionOverflowException
+import exactnumbers.exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFractionOverflowException
 import kotlinutils.list.IntList
 import kotlinutils.list.StringList
 

@@ -3,7 +3,7 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.assertDivByZero
 import kotlinutils.list.IntList
 import kotlinutils.list.StringList
-import exactfraction.ExactFraction
+import exactnumbers.exactfraction.ExactFraction
 import org.junit.Assert.*
 import org.junit.Test
 
