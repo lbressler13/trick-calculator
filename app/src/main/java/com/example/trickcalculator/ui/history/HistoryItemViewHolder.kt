@@ -26,6 +26,5 @@ class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
             binding.resultText.gone()
             binding.errorText.visible()
         }
-
     }
 }

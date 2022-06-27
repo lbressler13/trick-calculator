@@ -1,8 +1,8 @@
 package com.example.trickcalculator.compute
 
+import exactnumbers.exactfraction.ExactFraction
 import kotlinutils.list.IntList
 import kotlinutils.list.StringList
-import exactnumbers.exactfraction.ExactFraction
 import java.math.BigInteger
 
 /**

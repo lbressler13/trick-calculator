@@ -3,23 +3,22 @@ package com.example.trickcalculator.ui.main
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.DialogDeveloperToolsBinding
-import com.example.trickcalculator.utils.gone
-import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.ui.settings.initSettingsDialog
-import android.os.Handler
-import android.os.Looper
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import com.example.trickcalculator.ui.shared.SharedViewModel
+import com.example.trickcalculator.utils.gone
 import com.example.trickcalculator.utils.visible
-
 
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
@@ -97,7 +96,6 @@ class DeveloperToolsDialog : DialogFragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             button.visible()
         }, timer)
-
 
         dismiss()
     }

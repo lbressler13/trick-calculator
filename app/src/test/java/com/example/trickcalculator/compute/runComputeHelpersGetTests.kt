@@ -1,6 +1,6 @@
 package com.example.trickcalculator.compute
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 
 fun runGetMatchingParenIndexTests() {
     var text = "( )".split(' ')

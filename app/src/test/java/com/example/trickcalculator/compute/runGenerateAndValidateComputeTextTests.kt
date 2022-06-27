@@ -3,11 +3,12 @@ package com.example.trickcalculator.compute
 import com.example.trickcalculator.repeat
 import com.example.trickcalculator.runRandomTest
 import com.example.trickcalculator.splitString
-import kotlinutils.list.IntList
-import kotlinutils.list.StringList
 import com.example.trickcalculator.utils.isNumber
 import exactnumbers.exactfraction.ExactFraction
-import org.junit.Assert.*
+import kotlinutils.list.IntList
+import kotlinutils.list.StringList
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 
 private val ops = listOf("+", "-", "x", "/")
 
@@ -196,7 +197,6 @@ private fun testValidateErrors() {
     text = listOf("1.2")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 }
-
 
 private fun testBuildText() {
     // initial text is empty and initial value is not set
@@ -542,15 +542,20 @@ private fun testBuildTextWithMods() {
 
 private fun testBuildTextWithShuffle() {
     var text: StringList = listOf()
-    repeat { assertEquals(text, generateAndValidateComputeText(
-        null,
-        text,
-        ops,
-        null,
-        true,
-        true,
-        true
-    ))}
+    repeat {
+        assertEquals(
+            text,
+            generateAndValidateComputeText(
+                null,
+                text,
+                ops,
+                null,
+                true,
+                true,
+                true
+            )
+        )
+    }
 
     // no modifications
     text = splitString("1+3(4-7.5)")

@@ -12,6 +12,7 @@
   * This includes documentation in the main README
 * [ ] Any new uses of settings have been documented in the settings README
 * [ ] If function signatures changed, the docstrings have been updated
+* [ ] ktlint has run successfully
 
 ## Comments
 Fun but optional

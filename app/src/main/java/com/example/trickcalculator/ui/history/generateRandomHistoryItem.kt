@@ -1,13 +1,13 @@
 package com.example.trickcalculator.ui.history
 
 import com.example.trickcalculator.compute.isOperator
-import exactnumbers.exactfraction.ExactFraction
-import kotlinutils.random.ext.nextBoolean
 import com.example.trickcalculator.utils.isNumber
+import exactnumbers.exactfraction.ExactFraction
 import kotlinutils.list.StringList
 import kotlinutils.list.WeightedList
+import kotlinutils.random.ext.nextBoolean
 import kotlinutils.random.ext.nextFromWeightedList
-import java.util.*
+import java.util.Date
 import kotlin.random.Random
 
 private typealias MStringList = MutableList<String>

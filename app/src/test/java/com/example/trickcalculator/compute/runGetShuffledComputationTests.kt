@@ -1,10 +1,10 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.runRandomTest
 import com.example.trickcalculator.repeat
-import kotlinutils.list.StringList
+import com.example.trickcalculator.runRandomTest
 import com.example.trickcalculator.utils.isNumber
-import org.junit.Assert.*
+import kotlinutils.list.StringList
+import org.junit.Assert.assertEquals
 
 private val fullOps = listOf("+", "-", "x", "/", "^")
 
@@ -29,7 +29,7 @@ fun runGetShuffledComputationTests() {
     text = "1 + 3".split(' ') // just shuffle numbers
     runSingleGetShuffledComputationTest(text)
 
-    text = "12 + 12 ^ 12 - 12 x 12".split(' ') //just shuffle ops
+    text = "12 + 12 ^ 12 - 12 x 12".split(' ') // just shuffle ops
     runSingleGetShuffledComputationTest(text)
 
     text = "1.5 - 2 / 1000 ^ 3 x 18".split(' ') // shuffle both

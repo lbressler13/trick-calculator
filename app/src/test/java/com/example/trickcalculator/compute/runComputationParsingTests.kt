@@ -2,9 +2,10 @@ package com.example.trickcalculator.compute
 
 import com.example.trickcalculator.assertDivByZero
 import com.example.trickcalculator.splitString
-import exactnumbers.exactfraction.ExactFraction
 import com.example.trickcalculator.utils.OperatorFunction
-import org.junit.Assert.*
+import exactnumbers.exactfraction.ExactFraction
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 
 private val exp = listOf("^")
 private val plusMinus = listOf("+", "-")
@@ -112,19 +113,19 @@ fun runRunComputationTests() {
     result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false, false)
     assertEquals(expected, result)
 
-    text =  splitString("8.7/(16-2)")
+    text = splitString("8.7/(16-2)")
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(80, 51)
     result = runComputation(null, text, allOps, performOp, nums, true, false, false)
     assertEquals(expected, result)
 
-    text =  splitString("1.1+2.2+3.3")
+    text = splitString("1.1+2.2+3.3")
     expected = ExactFraction(66)
     result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false, false)
     assertEquals(expected, result)
 
     // skip parens + decimals
-    text =  splitString("8.7/(16-2)")
+    text = splitString("8.7/(16-2)")
     nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(28, 52)
     result = runComputation(null, text, allOps, performOp, nums, false, false, false)
