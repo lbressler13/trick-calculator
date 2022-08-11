@@ -70,8 +70,8 @@ dependencies {
     def mockito_version = "4.3.1"
     def mockito_kotlin_version = "4.0.0"
 
-    def exact_numbers_version = "0.0.3"
-    def kotlin_utils_version = "0.0.2"
+    def exact_numbers_version = "0.0.9"
+    def kotlin_utils_version = "0.0.5"
 
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.appcompat:appcompat:1.4.1"

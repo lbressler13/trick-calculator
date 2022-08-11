@@ -8,6 +8,16 @@ import com.example.trickcalculator.ui.attributions.ImageAttribution
  * Constant lists of image attributions
  */
 
+// TODO figure out why some groups have extra padding at start
+
+private val beariconsImages = listOf(
+    ImageAttribution(
+        R.drawable.ic_pi,
+        R.string.pi_cd,
+        "https://www.flaticon.com/free-icon/pi_7288716"
+    )
+)
+
 private val freepikImages = listOf(
     ImageAttribution(
         R.drawable.ic_chevron_down,
@@ -100,6 +110,11 @@ private val smashiconsImages = listOf(
  */
 
 val authorAttributions = listOf(
+    AuthorAttribution(
+        "bearicons",
+        "https://www.flaticon.com/authors/bearicons",
+        beariconsImages
+    ),
     AuthorAttribution(
         "Freepik",
         "https://www.flaticon.com/authors/freepik",

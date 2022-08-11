@@ -18,7 +18,7 @@
     <string name="decimal">.</string>
     <string name="exp">^</string>
     <string name="clear">CE</string>
-    <string name="pi">PI</string>
+    <string name="pi">π</string>
 
     <!-- Settings -->
     <!-- Title/Section Headings -->
@@ -84,6 +84,7 @@
     <string name="history_cd">History</string>
     <string name="launcher_cd">Calculator symbol</string>
     <string name="minus_cd">Minus symbol</string>
+    <string name="pi_cd">Pi symbol</string>
     <string name="plus_cd">Plus symbol</string>
     <string name="settings_cd">Settings</string>
     <string name="times_cd">Times symbol</string>

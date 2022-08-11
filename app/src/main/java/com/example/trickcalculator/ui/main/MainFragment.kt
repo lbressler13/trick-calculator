@@ -246,6 +246,9 @@ class MainFragment : ActivityFragment() {
             }
         }
 
+        // irrational value buttons
+        binding.piButton.setOnClickListener { genericAddComputeOnClick(pi) }
+
         // operation buttons
         binding.plusButton.setOnClickListener { genericAddComputeOnClick("+") }
         binding.minusButton.setOnClickListener { genericAddComputeOnClick("-") }
