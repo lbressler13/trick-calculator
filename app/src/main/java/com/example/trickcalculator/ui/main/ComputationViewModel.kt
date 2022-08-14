@@ -93,7 +93,7 @@ class ComputationViewModel : ViewModel() {
     fun backspaceComputeText() {
         val currentText: StringList = computeText.value!!
 
-        if (currentText.size == 1 && computedValue.value != null) {
+        if (currentText.isEmpty() && computedValue.value != null) {
             mComputeText.value = listOf()
             mComputedValue.value = null
         } else if (currentText.isNotEmpty()) {
