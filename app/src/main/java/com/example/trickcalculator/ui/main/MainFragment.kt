@@ -10,6 +10,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.R
 import com.example.trickcalculator.compute.runComputation
 import com.example.trickcalculator.databinding.FragmentMainBinding
@@ -71,7 +72,7 @@ class MainFragment : ActivityFragment() {
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
 
-        initSettingsFragment(this, binding.settingsButton)
+        initSettingsFragment(this, binding.settingsButton, R.id.navigateMainToSettings)
 
         return binding.root
     }
@@ -117,24 +118,14 @@ class MainFragment : ActivityFragment() {
      * Launch AttributionsFragment
      */
     private val infoButtonOnClick: () -> Unit = {
-        val newFragment = AttributionsFragment.newInstance()
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, newFragment)
-            .addToBackStack(null)
-            .commit()
+        runNavAction(R.id.navigateMainToAttribution)
     }
 
     /**
      * Launch HistoryFragment
      */
     private val historyButtonOnClick = {
-        val newFragment = HistoryFragment.newInstance()
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, newFragment)
-            .addToBackStack(null)
-            .commit()
+        runNavAction(R.id.navigateMainToHistory)
     }
 
     /**

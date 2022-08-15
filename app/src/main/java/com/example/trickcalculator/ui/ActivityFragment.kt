@@ -1,14 +1,16 @@
 package com.example.trickcalculator.ui
 
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 
 /**
  * Abstract fragment to handle common functionality involving the MainActivity
  */
-abstract class ActivityFragment : Fragment() {
+abstract class ActivityFragment : NavHostFragment() {
     /**
      * Resource ID for the title in the action bar.
      * Default is the ID for "Calculator"
@@ -42,5 +44,17 @@ abstract class ActivityFragment : Fragment() {
         actionBar.title.text = title
 
         mainActivity.fragmentManager = childFragmentManager
+    }
+
+    fun runNavAction(actionResId: Int, args: Bundle? = null) {
+        val navHostFragment =
+            requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        if (args == null) {
+            navController.navigate(actionResId)
+        } else {
+            navController.navigate(actionResId, args)
+        }
     }
 }

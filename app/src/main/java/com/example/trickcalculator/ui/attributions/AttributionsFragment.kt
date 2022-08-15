@@ -30,7 +30,7 @@ class AttributionsFragment : ActivityFragment() {
     private var flaticonMessageExpanded = false
 
     override var titleResId: Int = R.string.title_attributions
-    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, it) }
+    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, it, R.id.navigateAttributionsToSettings) }
 
     companion object {
         fun newInstance() = AttributionsFragment()

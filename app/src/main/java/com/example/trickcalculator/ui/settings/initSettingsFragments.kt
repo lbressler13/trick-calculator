@@ -1,9 +1,11 @@
 package com.example.trickcalculator.ui.settings
 
+import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.example.trickcalculator.R
+import com.example.trickcalculator.ui.ActivityFragment
 import com.example.trickcalculator.ui.main.MainFragment
 import com.example.trickcalculator.ui.settings.components.SettingsDialog
 import com.example.trickcalculator.ui.settings.components.SettingsFragment
@@ -14,15 +16,16 @@ import com.example.trickcalculator.ui.settings.components.SettingsFragment
  * @param parentFragment [Fragment]: calling fragment
  * @param viewToClick [View]: view which should launch settings fragment when clicked
  */
-fun initSettingsFragment(parentFragment: Fragment, viewToClick: View) {
+fun initSettingsFragment(parentFragment: Fragment, viewToClick: View, navResId: Int) {
     viewToClick.setOnClickListener {
         val newFragment = SettingsFragment.newInstance()
-        setIsMainFragment(newFragment, parentFragment)
+        // setIsMainFragment(newFragment, parentFragment)
+        (parentFragment as ActivityFragment).runNavAction(navResId, getFragmentArgs(parentFragment))
 
-        parentFragment.requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, newFragment)
-            .addToBackStack(null)
-            .commit()
+//        parentFragment.requireActivity().supportFragmentManager.beginTransaction()
+//            .replace(R.id.container, newFragment)
+//            .addToBackStack(null)
+//            .commit()
     }
 }
 
@@ -36,7 +39,8 @@ fun initSettingsDialog(parentFragment: Fragment, viewToClick: View) {
     val settingsDialog = SettingsDialog()
 
     viewToClick.setOnClickListener {
-        setIsMainFragment(settingsDialog, parentFragment)
+        // setIsMainFragment(settingsDialog, parentFragment)
+        settingsDialog.arguments = getFragmentArgs(parentFragment)
         settingsDialog.show(parentFragment.childFragmentManager, SettingsDialog.TAG)
     }
 }
@@ -44,12 +48,12 @@ fun initSettingsDialog(parentFragment: Fragment, viewToClick: View) {
 /**
  * Modify the fragment args to indicate if the parent is a MainFragment
  *
- * @param fragment [Fragment]: fragment to add args to
  * @param parentFragment [Fragment]: calling fragment
  */
-private fun setIsMainFragment(fragment: Fragment, parentFragment: Fragment) {
+private fun getFragmentArgs(parentFragment: Fragment): Bundle {
     val context = parentFragment.requireContext()
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
 
-    fragment.arguments = bundleOf(mainFragmentKey to (parentFragment is MainFragment))
+    // fragment.arguments = bundleOf(mainFragmentKey to (parentFragment is MainFragment))
+    return bundleOf(mainFragmentKey to (parentFragment is MainFragment))
 }

@@ -78,7 +78,8 @@ class SettingsFragment : ActivityFragment(), SettingsUI {
     private fun specializedFragmentCode() {
         // close button
         binding.closeButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            // requireActivity().supportFragmentManager.popBackStack()
+            navController.popBackStack()
         }
 
         // save settings when another fragment is opened
