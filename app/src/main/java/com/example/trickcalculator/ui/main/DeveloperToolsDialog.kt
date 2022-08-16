@@ -19,6 +19,7 @@ import com.example.trickcalculator.ui.settings.initSettingsDialog
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.utils.gone
 import com.example.trickcalculator.utils.visible
+import kotlin.system.exitProcess
 
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
@@ -49,13 +50,12 @@ class DeveloperToolsDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+
         binding.clearHistoryButton.setOnClickListener { viewModel.clearHistory() }
+        binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
+        binding.crashAppButton.setOnClickListener { exitProcess(2) }
 
-        binding.refreshUIButton.setOnClickListener {
-            (requireActivity() as MainActivity).recreate()
-        }
-
-        initHideDevToolsSpinner()
+        initHideDevTools()
         initSettingsDialog(this, binding.settingsDialogButton)
 
         return binding.root
@@ -64,7 +64,7 @@ class DeveloperToolsDialog : DialogFragment() {
     /**
      * Initialize the spinner used to set the time to hide the dev tools button.
      */
-    private fun initHideDevToolsSpinner() {
+    private fun initHideDevTools() {
         val spinner: Spinner = binding.devToolsTimeSpinner
         ArrayAdapter.createFromResource(
             requireContext(),
