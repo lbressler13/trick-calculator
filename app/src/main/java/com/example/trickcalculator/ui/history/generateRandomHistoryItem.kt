@@ -3,6 +3,7 @@ package com.example.trickcalculator.ui.history
 import com.example.trickcalculator.compute.isOperator
 import com.example.trickcalculator.utils.isNumber
 import exactnumbers.exactfraction.ExactFraction
+import kotlinutils.int.ext.isZero
 import kotlinutils.list.StringList
 import kotlinutils.list.WeightedList
 import kotlinutils.random.ext.nextBoolean
@@ -220,12 +221,12 @@ private fun addOperatorSyntaxError(computation: MStringList) {
     var operator = operators.random()
 
     // putting - at the start of the operation would look like a negative, not a syntax error
-    if (index == 0 && operator == "-") {
+    if (index.isZero() && operator == "-") {
         operator = listOf("+", "x", "/", "^").random()
     }
 
     // check for same operator twice in a row
-    if (index != 0 && index != computation.size) {
+    if (!index.isZero() && index != computation.size) {
         val current = computation[index]
         val previous = computation[index - 1]
         val adjacentOperator = when {

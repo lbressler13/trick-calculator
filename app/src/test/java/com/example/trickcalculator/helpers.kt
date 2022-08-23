@@ -33,7 +33,7 @@ fun splitString(s: String): StringList {
 fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
     var checkPassed = false
 
-    for (i in 0 until iterations) {
+    repeat(iterations) {
         val result = randomAction()
         if (randomCheck(result)) {
             checkPassed = true
@@ -41,11 +41,4 @@ fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
     }
 
     assertTrue(checkPassed)
-}
-
-// run a function several times
-fun repeat(function: () -> Unit) {
-    for (i in 0 until iterations) {
-        function()
-    }
 }

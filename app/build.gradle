@@ -78,7 +78,7 @@ dependencies {
     def espressoVersion = "3.4.0"
 
     def exactNumbersVersion = "0.0.9"
-    def kotlinUtilsVersion = "0.0.5"
+    def kotlinUtilsVersion = "0.0.8"
 
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
     //noinspection GradleDependency
