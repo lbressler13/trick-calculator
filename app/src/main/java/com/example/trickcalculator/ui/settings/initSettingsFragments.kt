@@ -8,7 +8,6 @@ import com.example.trickcalculator.R
 import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.main.MainFragment
 import com.example.trickcalculator.ui.settings.components.SettingsDialog
-import com.example.trickcalculator.ui.settings.components.SettingsFragment
 
 /**
  * Initialize onClick listener to launch settings fragment

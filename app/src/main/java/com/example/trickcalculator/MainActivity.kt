@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ui.main.DeveloperToolsDialog
-import com.example.trickcalculator.ui.main.MainFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**

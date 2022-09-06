@@ -39,10 +39,6 @@ class MainFragment : BaseFragment() {
 
     private val settings = Settings()
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     /**
      * Initialize fragment
      */

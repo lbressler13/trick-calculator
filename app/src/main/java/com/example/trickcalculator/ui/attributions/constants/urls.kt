@@ -34,4 +34,3 @@ const val infoUrl = "https://www.flaticon.com/free-icon/info-button_64494"
 const val plusUrl = "https://www.flaticon.com/premium-icon/plus_3524388"
 const val settingsUrl = "https://www.flaticon.com/premium-icon/gear_484613"
 const val timesUrl = "https://www.flaticon.com/free-icon/multiply-mathematical-sign_43823"
-

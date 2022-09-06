@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
-import com.example.trickcalculator.utils.*
+import com.example.trickcalculator.utils.isNumberChar
 import exactnumbers.exactfraction.ExactFraction
 import kotlinutils.list.StringList
 

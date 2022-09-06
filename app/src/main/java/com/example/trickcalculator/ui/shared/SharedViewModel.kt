@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.utils.History
-import java.util.*
+import java.util.Date
 import kotlin.random.Random
 
 /**

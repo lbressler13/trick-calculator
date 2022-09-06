@@ -37,10 +37,6 @@ class SettingsFragment : BaseFragment(), SettingsUI {
     override lateinit var shuffleNumbersSwitch: SwitchCompat
     override lateinit var shuffleOperatorsSwitch: SwitchCompat
 
-    companion object {
-        fun newInstance() = SettingsFragment()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]

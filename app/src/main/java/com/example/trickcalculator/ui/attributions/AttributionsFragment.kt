@@ -32,10 +32,6 @@ class AttributionsFragment : BaseFragment() {
     override var titleResId: Int = R.string.title_attributions
     override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, it, R.id.navigateAttributionsToSettings) }
 
-    companion object {
-        fun newInstance() = AttributionsFragment()
-    }
-
     /**
      * Initialize fragment
      */

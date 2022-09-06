@@ -31,10 +31,6 @@ class HistoryFragment : BaseFragment() {
     private var history: History? = null
     private var randomHistory: History? = null
 
-    companion object {
-        fun newInstance() = HistoryFragment()
-    }
-
     /**
      * Initialize fragment
      */

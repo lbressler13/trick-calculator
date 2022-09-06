@@ -19,7 +19,6 @@ import com.example.trickcalculator.ui.settings.initSettingsDialog
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.utils.gone
 import com.example.trickcalculator.utils.visible
-import kotlin.system.exitProcess
 
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
