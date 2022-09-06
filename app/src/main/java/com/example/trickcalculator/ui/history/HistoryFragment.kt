@@ -61,9 +61,7 @@ class HistoryFragment : BaseFragment() {
             }
         }
 
-        binding.closeButton.root.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+        binding.closeButton.root.setOnClickListener { popBackStack() }
 
         return binding.root
     }

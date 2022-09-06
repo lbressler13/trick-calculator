@@ -25,6 +25,5 @@
         <item name="disabledBackground">@color/dark_disabled_background_gray</item>
         <item name="disabledForeground">@color/dark_disabled_foreground_gray</item>
         <item name="errorColor">@color/dark_error_color</item>
-        <item name="firstTermColor">@color/dark_first_term_color</item>
     </style>
 </resources>

@@ -77,10 +77,7 @@ class SettingsFragment : BaseFragment(), SettingsUI {
     // code that is run in fragment but not dialog
     private fun specializedFragmentCode() {
         // close button
-        binding.closeButton.setOnClickListener {
-            // requireActivity().supportFragmentManager.popBackStack()
-            navController.popBackStack()
-        }
+        binding.closeButton.setOnClickListener { popBackStack() }
 
         // save settings when another fragment is opened
         // preserves current settings when dialog is opened

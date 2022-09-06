@@ -144,7 +144,7 @@ private fun closeCurrentFragment(fragment: Fragment) {
     if (fragment is DialogFragment) {
         fragment.dismiss()
     } else {
-        fragment.parentFragmentManager.popBackStack()
+        (fragment as BaseFragment).popBackStack()
     }
 }
 
@@ -161,9 +161,7 @@ fun closePreviousFragment(currentFragment: Fragment) {
             (currentFragment.requireParentFragment() as DialogFragment).dismiss()
         } else if (currentFragment !is DialogFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
             currentFragment as BaseFragment
-            Log.e(null, currentFragment.navController.backQueue.size.toString())
-            currentFragment.navController.popBackStack()
-            // currentFragment.parentFragmentManager.popBackStack()
+            currentFragment.popBackStack()
         }
     } catch (e: Exception) {
         // expected to fail when ui is recreating due to configuration changes or via dev tools

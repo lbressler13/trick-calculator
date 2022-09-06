@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- Selected item displayed at top of spinner -->
+<!-- No end padding due to padding from hidden arrow -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@android:id/text1"
     style="@style/SpinnerItem"
-    android:textColor="?colorOnPrimary"
-    android:paddingStart="4dp"
+    android:fontFamily="sans-serif-medium"
     android:paddingVertical="3dp"
-    android:fontFamily="sans-serif-medium" />
-<!-- some padding already exists at end due to hidden arrow -->
+    android:paddingStart="4dp"
+    android:textColor="?colorOnPrimary"
+    tools:ignore="RtlSymmetry" />

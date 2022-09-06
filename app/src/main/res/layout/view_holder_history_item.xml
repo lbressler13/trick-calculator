@@ -8,13 +8,13 @@
         android:id="@+id/computeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?colorOnBackground"
-        android:paddingHorizontal="20dp"
-        android:textAlignment="viewEnd"
-        android:textSize="20sp"
-        android:paddingTop="20dp"
-        android:maxLines="2"
         android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="20dp"
+        android:textAlignment="viewEnd"
+        android:textColor="?colorOnBackground"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,33 +23,34 @@
         android:id="@+id/resultLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/computeText"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintTop_toBottomOf="@id/computeText">
 
         <TextView
             android:id="@+id/resultText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:maxLines="3"
             android:ellipsize="end"
-            android:textColor="?colorOnBackground" />
+            android:maxLines="3"
+            android:textColor="?colorOnBackground"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/errorText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?errorColor"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:visibility="gone"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:textColor="?errorColor" />
+            android:visibility="gone" />
     </LinearLayout>
 
+    <!-- Divider after last item -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

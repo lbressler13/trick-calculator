@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?backgroundColor" >
+    android:background="?backgroundColor">
 
     <ImageButton
         android:id="@+id/historyButton"
@@ -13,14 +13,15 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:contentDescription="@string/history_cd"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp"
+        android:paddingEnd="@dimen/corner_icon_padding"
+        android:paddingBottom="@dimen/corner_icon_padding"
         android:src="@drawable/ic_history"
         app:layout_constraintBottom_toTopOf="@id/mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
         tools:ignore="RtlSymmetry" />
 
+    <!-- Text where input and computed values are displayed -->
     <TextView
         android:id="@+id/mainText"
         android:layout_width="match_parent"
@@ -48,6 +49,7 @@
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/mainText" />
 
+    <!-- All number and operator buttons -->
     <GridLayout
         android:id="@+id/numpadLayout"
         android:layout_width="wrap_content"
@@ -245,9 +247,9 @@
             android:layout_gravity="top"
             android:background="@drawable/button_numpad_background"
             android:enabled="false"
-            android:visibility="gone"
             android:text="@string/pi"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone" />
 
     </GridLayout>
 
@@ -256,15 +258,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:paddingEnd="10dp"
+        android:contentDescription="@string/settings_cd"
+        android:paddingEnd="@dimen/corner_icon_padding"
         android:paddingBottom="20dp"
         android:src="@drawable/ic_settings"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/infoButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?colorPrimary"
-        tools:ignore="RtlSymmetry"
-        android:visibility="gone"
-        android:contentDescription="@string/settings_cd" />
+        tools:ignore="RtlSymmetry" />
 
 
     <ImageButton
@@ -273,8 +275,8 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:contentDescription="@string/info_cd"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp"
+        android:paddingEnd="@dimen/corner_icon_padding"
+        android:paddingBottom="@dimen/corner_icon_padding"
         android:src="@drawable/ic_info"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -18,14 +18,7 @@ import com.example.trickcalculator.ui.settings.components.SettingsFragment
  */
 fun initSettingsFragment(parentFragment: Fragment, viewToClick: View, navResId: Int) {
     viewToClick.setOnClickListener {
-        val newFragment = SettingsFragment.newInstance()
-        // setIsMainFragment(newFragment, parentFragment)
         (parentFragment as BaseFragment).runNavAction(navResId, getFragmentArgs(parentFragment))
-
-//        parentFragment.requireActivity().supportFragmentManager.beginTransaction()
-//            .replace(R.id.container, newFragment)
-//            .addToBackStack(null)
-//            .commit()
     }
 }
 
@@ -39,7 +32,6 @@ fun initSettingsDialog(parentFragment: Fragment, viewToClick: View) {
     val settingsDialog = SettingsDialog()
 
     viewToClick.setOnClickListener {
-        // setIsMainFragment(settingsDialog, parentFragment)
         settingsDialog.arguments = getFragmentArgs(parentFragment)
         settingsDialog.show(parentFragment.childFragmentManager, SettingsDialog.TAG)
     }
@@ -54,6 +46,5 @@ private fun getFragmentArgs(parentFragment: Fragment): Bundle {
     val context = parentFragment.requireContext()
     val mainFragmentKey = context.getString(R.string.key_main_fragment)
 
-    // fragment.arguments = bundleOf(mainFragmentKey to (parentFragment is MainFragment))
     return bundleOf(mainFragmentKey to (parentFragment is MainFragment))
 }

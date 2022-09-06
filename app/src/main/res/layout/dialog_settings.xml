@@ -8,6 +8,7 @@
     android:paddingHorizontal="25dp"
     android:paddingTop="5dp">
 
+    <!-- Switches -->
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/shuffleOperatorsSwitch"
         style="@style/SettingsDialogItem"
@@ -60,12 +61,13 @@
         app:layout_constraintTop_toBottomOf="@id/settingsButtonSwitch"
         tools:ignore="MissingConstraints" />
 
+    <!-- RadioGroup for history randomness -->
     <RadioGroup
         android:id="@+id/historyRandomnessGroup"
         style="@style/SettingsDialogItem"
-        app:layout_constraintTop_toBottomOf="@id/shuffleComputationSwitch"
-        android:orientation="horizontal"
         android:checkedButton="@id/historyButton0"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/shuffleComputationSwitch"
         tools:ignore="MissingConstraints">
 
         <TextView
@@ -101,14 +103,15 @@
             android:text="@string/three" />
     </RadioGroup>
 
+    <!-- Buttons that affect all settings -->
     <Button
         android:id="@+id/resetSettingsButton"
-        style="@style/DeveloperToolsButton"
+        style="@style/DialogButton"
         android:text="@string/reset_settings" />
 
     <Button
         android:id="@+id/randomizeSettingsButton"
-        style="@style/DeveloperToolsButton"
+        style="@style/DialogButton"
         android:text="@string/randomize_settings" />
 
 </LinearLayout>
