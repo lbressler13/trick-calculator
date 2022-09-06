@@ -8,29 +8,31 @@
 
     <include android:id="@+id/actionBar" layout="@layout/action_bar" />
 
-    <FrameLayout
-        android:id="@+id/container"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionBar"
-        tools:context=".MainActivity" />
+        app:navGraph="@navigation/nav_graph" />
 
     <TextView
         android:id="@+id/devToolsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dev_tools_button"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/button_dev_tools_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="25sp"
-        android:paddingBottom="5dp"
-        android:textAlignment="center"
         android:gravity="center"
+        android:paddingBottom="5dp"
+        android:text="@string/dev_tools_button"
+        android:textAlignment="center"
+        android:textColor="?colorOnBackground"
+        android:textSize="25sp"
         android:textStyle="bold"
-        android:textColor="?colorOnBackground" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

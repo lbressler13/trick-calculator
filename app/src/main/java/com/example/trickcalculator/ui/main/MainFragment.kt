@@ -13,9 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
 import com.example.trickcalculator.compute.runComputation
 import com.example.trickcalculator.databinding.FragmentMainBinding
-import com.example.trickcalculator.ui.ActivityFragment
-import com.example.trickcalculator.ui.attributions.AttributionsFragment
-import com.example.trickcalculator.ui.history.HistoryFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.settings.initSettingsFragment
@@ -30,7 +28,7 @@ import kotlinutils.list.StringList
 /**
  * Fragment to display main calculator functionality
  */
-class MainFragment : ActivityFragment() {
+class MainFragment : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
@@ -40,10 +38,6 @@ class MainFragment : ActivityFragment() {
     private var computedValue: ExactFraction? = null
 
     private val settings = Settings()
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
 
     /**
      * Initialize fragment
@@ -63,7 +57,7 @@ class MainFragment : ActivityFragment() {
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
         computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
-        // additional observer to show/hide settings button
+        // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
         sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
 
         initNumpad()
@@ -71,7 +65,7 @@ class MainFragment : ActivityFragment() {
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
 
-        initSettingsFragment(this, binding.settingsButton)
+        initSettingsFragment(this, binding.settingsButton, R.id.navigateMainToSettings)
 
         return binding.root
     }
@@ -117,24 +111,14 @@ class MainFragment : ActivityFragment() {
      * Launch AttributionsFragment
      */
     private val infoButtonOnClick: () -> Unit = {
-        val newFragment = AttributionsFragment.newInstance()
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, newFragment)
-            .addToBackStack(null)
-            .commit()
+        requireMainActivity().runNavAction(R.id.navigateMainToAttribution)
     }
 
     /**
      * Launch HistoryFragment
      */
     private val historyButtonOnClick = {
-        val newFragment = HistoryFragment.newInstance()
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, newFragment)
-            .addToBackStack(null)
-            .commit()
+        requireMainActivity().runNavAction(R.id.navigateMainToHistory)
     }
 
     /**

@@ -6,10 +6,9 @@
     android:layout_height="match_parent"
     android:background="?backgroundColor">
 
-    <include
-        android:id="@+id/closeButton"
-        layout="@layout/component_close_button" />
+    <include android:id="@+id/closeButton" layout="@layout/component_close_button" />
 
+    <!-- Flaticon info -->
     <TextView
         android:id="@+id/flaticonPolicyMessage"
         android:layout_width="match_parent"
@@ -43,6 +42,7 @@
         android:background="?colorOnBackground"
         app:layout_constraintTop_toBottomOf="@id/expandCollapseMessage" />
 
+    <!-- Attributions -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attributionsRecycler"
         android:layout_width="match_parent"

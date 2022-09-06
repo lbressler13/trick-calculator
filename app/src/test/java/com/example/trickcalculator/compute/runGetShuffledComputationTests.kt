@@ -1,29 +1,29 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.repeat
 import com.example.trickcalculator.runRandomTest
 import com.example.trickcalculator.utils.isNumber
 import kotlinutils.list.StringList
 import org.junit.Assert.assertEquals
 
 private val fullOps = listOf("+", "-", "x", "/", "^")
+private const val iterations = 20
 
 fun runGetShuffledComputationTests() {
     // values that won't change
     var text: StringList = listOf()
-    repeat { assertEquals(text, getShuffledComputation(text, fullOps)) }
+    repeat(iterations) { assertEquals(text, getShuffledComputation(text, fullOps)) }
 
     text = listOf("123")
-    repeat { assertEquals(text, getShuffledComputation(text, fullOps)) }
+    repeat(iterations) { assertEquals(text, getShuffledComputation(text, fullOps)) }
 
     text = "( 100.5 )".split(' ')
-    repeat { assertEquals(text, getShuffledComputation(text, fullOps)) }
+    repeat(iterations) { assertEquals(text, getShuffledComputation(text, fullOps)) }
 
     text = listOf("+")
-    repeat { assertEquals(text, getShuffledComputation(text, fullOps)) }
+    repeat(iterations) { assertEquals(text, getShuffledComputation(text, fullOps)) }
 
     text = "5 + 5 + 5 + ( 5 + 5 ) + 5".split(' ')
-    repeat { assertEquals(text, getShuffledComputation(text, fullOps)) }
+    repeat(iterations) { assertEquals(text, getShuffledComputation(text, fullOps)) }
 
     // tests with full set of ops
     text = "1 + 3".split(' ') // just shuffle numbers
@@ -42,10 +42,10 @@ fun runGetShuffledComputationTests() {
     val partialOps = listOf("+", "-")
 
     text = "( 20 x 20 ) / 20".split(' ') // no operators
-    repeat { assertEquals(text, getShuffledComputation(text, partialOps)) }
+    repeat(iterations) { assertEquals(text, getShuffledComputation(text, partialOps)) }
 
     text = "9.8 x 9.8 / 9.8 + 9.8".split(' ') // one operator
-    repeat { assertEquals(text, getShuffledComputation(text, partialOps)) }
+    repeat(iterations) { assertEquals(text, getShuffledComputation(text, partialOps)) }
 
     text = "100 + 27 / 15".split(' ') // just shuffle numbers
     runSingleGetShuffledComputationTest(text, partialOps)

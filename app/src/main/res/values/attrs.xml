@@ -3,13 +3,8 @@
     <attr name="actionBarBackground" format="reference" />
     <attr name="actionBarTextColor" format="reference" />
 
-    <attr name="actionBarSwitchThumbColor" format="reference" />
-    <attr name="actionBarSwitchTrackCheckedColor" format="reference" />
-    <attr name="actionBarSwitchTrackUncheckedColor" format="reference" />
-
     <attr name="disabledForeground" format="reference" />
     <attr name="disabledBackground" format="reference" />
 
     <attr name="errorColor" format="reference" />
-    <attr name="firstTermColor" format="reference" />
 </resources>

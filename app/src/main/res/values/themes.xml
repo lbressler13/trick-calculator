@@ -18,13 +18,9 @@
         <!-- Action bar -->
         <item name="actionBarBackground">@color/purple_700</item>
         <item name="actionBarTextColor">@color/white</item>
-        <item name="actionBarSwitchThumbColor">@color/white</item>
-        <item name="actionBarSwitchTrackCheckedColor">@color/teal_200</item>
-        <item name="actionBarSwitchTrackUncheckedColor">@color/teal_700</item>
-        <!-- Other -->
+        <!-- Other custom values -->
         <item name="disabledBackground">@color/light_disabled_background_gray</item>
         <item name="disabledForeground">@color/light_disabled_foreground_gray</item>
         <item name="errorColor">@color/light_error_color</item>
-        <item name="firstTermColor">@color/light_first_term_color</item>
     </style>
 </resources>

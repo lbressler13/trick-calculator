@@ -1,6 +1,5 @@
 package com.example.trickcalculator.compute
 
-import com.example.trickcalculator.repeat
 import com.example.trickcalculator.runRandomTest
 import com.example.trickcalculator.splitString
 import com.example.trickcalculator.utils.isNumber
@@ -542,7 +541,7 @@ private fun testBuildTextWithMods() {
 
 private fun testBuildTextWithShuffle() {
     var text: StringList = listOf()
-    repeat {
+    repeat(20) {
         assertEquals(
             text,
             generateAndValidateComputeText(

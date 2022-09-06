@@ -28,7 +28,7 @@
 
     <!-- Settings -->
 
-    <style name="DeveloperToolsButton" parent="Widget.AppCompat.Button">
+    <style name="DialogButton" parent="Widget.AppCompat.Button">
         <!-- Layout -->
         <item name="android:layout_width" >match_parent</item>
         <item name="android:layout_height">wrap_content</item>

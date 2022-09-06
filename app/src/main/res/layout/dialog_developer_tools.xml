@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,46 +9,48 @@
 
     <Button
         android:id="@+id/clearHistoryButton"
-        style="@style/DeveloperToolsButton"
+        style="@style/DialogButton"
         android:layout_marginTop="0dp"
         android:text="@string/clear_history" />
 
     <Button
         android:id="@+id/refreshUIButton"
-        style="@style/DeveloperToolsButton"
+        style="@style/DialogButton"
         android:text="@string/refresh_ui" />
 
     <Button
         android:id="@+id/settingsDialogButton"
-        style="@style/DeveloperToolsButton"
+        style="@style/DialogButton"
         android:text="@string/show_settings_dialog" />
 
+    <!-- Options for hiding dev tools button -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/hideDevToolsButton"
-            style="@style/DeveloperToolsButton"
+            style="@style/DialogButton"
+            android:elevation="0dp"
             android:text="@string/hide_dev_tools"
             android:translationZ="0dp"
-            android:elevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
 
         <Spinner
             android:id="@+id/devToolsTimeSpinner"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             style="@style/Base.Widget.AppCompat.Spinner.Underlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="5dp"
-            android:translationZ="100dp"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="2dp"
-            android:background="@drawable/spinner_background" />
+            android:background="@drawable/spinner_background"
+            android:translationZ="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

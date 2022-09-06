@@ -25,7 +25,7 @@ class DeveloperToolsDialog : DialogFragment() {
     private lateinit var viewModel: SharedViewModel
 
     /**
-     * Initialize dialog
+     * Build dialog, comes before onCreateView and dialog is not connected to context
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogDeveloperToolsBinding.inflate(layoutInflater)
@@ -43,19 +43,20 @@ class DeveloperToolsDialog : DialogFragment() {
             .create()
     }
 
+    /**
+     * Continue initialization after view is connected to context
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+
         binding.clearHistoryButton.setOnClickListener { viewModel.clearHistory() }
+        binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
 
-        binding.refreshUIButton.setOnClickListener {
-            (requireActivity() as MainActivity).recreate()
-        }
-
-        initHideDevToolsSpinner()
+        initHideDevTools()
         initSettingsDialog(this, binding.settingsDialogButton)
 
         return binding.root
@@ -64,7 +65,7 @@ class DeveloperToolsDialog : DialogFragment() {
     /**
      * Initialize the spinner used to set the time to hide the dev tools button.
      */
-    private fun initHideDevToolsSpinner() {
+    private fun initHideDevTools() {
         val spinner: Spinner = binding.devToolsTimeSpinner
         ArrayAdapter.createFromResource(
             requireContext(),

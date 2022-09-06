@@ -2,44 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?backgroundColor">
+    android:background="?backgroundColor"
+    android:orientation="vertical">
 
+    <!-- Display close button in line with the top title -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="?colorPrimary">
+        android:background="?colorPrimary"
+        android:orientation="horizontal">
 
         <TextView
+            style="@style/SettingsSectionHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/SettingsSectionHeading"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/computation"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/computation" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Can't use close button component due to difference in layout constraints -->
         <ImageButton
             android:id="@+id/closeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:src="@drawable/ic_close"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/close_cd"
+            android:paddingEnd="@dimen/corner_icon_padding"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:paddingEnd="10dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:tint="?colorOnPrimary"
-            android:contentDescription="@string/close_cd"
             tools:ignore="RtlSymmetry" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Computation-related settings -->
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/shuffleOperatorsSwitch"
         style="@style/SettingsFragmentItem"
@@ -68,11 +71,13 @@
         style="@style/SettingsFragmentItem"
         android:text="@string/shuffle_computation" />
 
+    <!-- View-related title -->
     <TextView
         style="@style/SettingsSectionHeading"
         android:layout_marginTop="15dp"
         android:text="@string/view" />
 
+    <!-- View-related settings -->
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/clearOnErrorSwitch"
         style="@style/SettingsFragmentItem"
@@ -102,45 +107,47 @@
             android:id="@+id/historyButton0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/zero"
             android:textColor="?colorOnBackground"
-            android:textSize="15sp"
-            android:text="@string/zero" />
+            android:textSize="15sp" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/historyButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/one"
             android:textColor="?colorOnBackground"
-            android:textSize="15sp"
-            android:text="@string/one" />
+            android:textSize="15sp" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/historyButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/two"
             android:textColor="?colorOnBackground"
-            android:textSize="15sp"
-            android:text="@string/two" />
+            android:textSize="15sp" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/historyButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/three"
             android:textColor="?colorOnBackground"
-            android:textSize="15sp"
-            android:text="@string/three" />
+            android:textSize="15sp" />
     </RadioGroup>
 
+    <!-- Title for options that affect all settings -->
     <TextView
         style="@style/SettingsSectionHeading"
         android:layout_marginTop="15dp"
         android:text="@string/all_settings" />
 
+    <!-- Horizontal layout for buttons that affect all settings -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
 
         <TextView
             android:id="@+id/resetSettingsButton"

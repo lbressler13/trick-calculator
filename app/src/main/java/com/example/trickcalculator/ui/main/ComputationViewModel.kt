@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.trickcalculator.ui.history.HistoryItem
-import com.example.trickcalculator.utils.*
+import com.example.trickcalculator.utils.isNumberChar
 import exactnumbers.exactfraction.ExactFraction
 import kotlinutils.list.StringList
 
@@ -93,7 +93,7 @@ class ComputationViewModel : ViewModel() {
     fun backspaceComputeText() {
         val currentText: StringList = computeText.value!!
 
-        if (currentText.size == 1 && computedValue.value != null) {
+        if (currentText.isEmpty() && computedValue.value != null) {
             mComputeText.value = listOf()
             mComputedValue.value = null
         } else if (currentText.isNotEmpty()) {

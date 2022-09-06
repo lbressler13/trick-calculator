@@ -10,13 +10,13 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentSettingsBinding
-import com.example.trickcalculator.ui.ActivityFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
  * DialogFragment to display all configuration options for calculator
  */
-class SettingsFragment : ActivityFragment(), SettingsUI {
+class SettingsFragment : BaseFragment(), SettingsUI {
     override var titleResId: Int = R.string.title_settings // fragment-specific value
 
     private lateinit var binding: FragmentSettingsBinding
@@ -36,10 +36,6 @@ class SettingsFragment : ActivityFragment(), SettingsUI {
     override lateinit var shuffleComputationSwitch: SwitchCompat
     override lateinit var shuffleNumbersSwitch: SwitchCompat
     override lateinit var shuffleOperatorsSwitch: SwitchCompat
-
-    companion object {
-        fun newInstance() = SettingsFragment()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
@@ -77,9 +73,7 @@ class SettingsFragment : ActivityFragment(), SettingsUI {
     // code that is run in fragment but not dialog
     private fun specializedFragmentCode() {
         // close button
-        binding.closeButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+        binding.closeButton.setOnClickListener { requireMainActivity().popBackStack() }
 
         // save settings when another fragment is opened
         // preserves current settings when dialog is opened

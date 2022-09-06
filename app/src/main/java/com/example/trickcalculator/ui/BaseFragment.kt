@@ -1,14 +1,14 @@
 package com.example.trickcalculator.ui
 
 import android.view.View
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
 
 /**
  * Abstract fragment to handle common functionality involving the MainActivity
  */
-abstract class ActivityFragment : Fragment() {
+abstract class BaseFragment : NavHostFragment() {
     /**
      * Resource ID for the title in the action bar.
      * Default is the ID for "Calculator"
@@ -21,14 +21,19 @@ abstract class ActivityFragment : Fragment() {
      */
     protected open var setActionBarOnClick: ((View) -> Unit)? = null
 
+    /**
+     * Re-add action bar settings when fragment is shown.
+     */
     override fun onResume() {
         super.onResume()
         runSetup()
     }
 
+    /**
+     * Run initial setup of action bar.
+     */
     private fun runSetup() {
-        val mainActivity = requireActivity() as MainActivity
-        val actionBar = mainActivity.binding.actionBar
+        val actionBar = requireMainActivity().binding.actionBar
 
         // set onClick
         if (setActionBarOnClick == null) {
@@ -41,6 +46,13 @@ abstract class ActivityFragment : Fragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        mainActivity.fragmentManager = childFragmentManager
+        requireMainActivity().fragmentManager = childFragmentManager
     }
+
+    /**
+     * Get current activity as [MainActivity].
+     *
+     * @return [MainActivity]
+     */
+    fun requireMainActivity(): MainActivity = requireActivity() as MainActivity
 }

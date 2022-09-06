@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.databinding.FragmentHistoryBinding
-import com.example.trickcalculator.ui.ActivityFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 import com.example.trickcalculator.utils.History
 import com.example.trickcalculator.utils.gone
@@ -23,17 +23,13 @@ import kotlin.random.Random
 /**
  * Fragment to display computation history, possibly with some level of randomness
  */
-class HistoryFragment : ActivityFragment() {
+class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var sharedViewModel: SharedViewModel
 
     private var randomness: Int? = null
     private var history: History? = null
     private var randomHistory: History? = null
-
-    companion object {
-        fun newInstance() = HistoryFragment()
-    }
 
     /**
      * Initialize fragment
@@ -61,9 +57,7 @@ class HistoryFragment : ActivityFragment() {
             }
         }
 
-        binding.closeButton.root.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+        binding.closeButton.root.setOnClickListener { requireMainActivity().popBackStack() }
 
         return binding.root
     }

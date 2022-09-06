@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentAttributionsBinding
-import com.example.trickcalculator.ui.ActivityFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.attributions.authorattribution.AuthorAttributionAdapter
 import com.example.trickcalculator.ui.attributions.constants.authorAttributions
 import com.example.trickcalculator.ui.attributions.constants.flaticonAttrPolicyUrl
@@ -23,18 +23,14 @@ import com.example.trickcalculator.utils.createUnderlineText
 /**
  * Fragment to display image attributions for all Flaticon images used in the app, as required by Flaticon
  */
-class AttributionsFragment : ActivityFragment() {
+class AttributionsFragment : BaseFragment() {
     private lateinit var binding: FragmentAttributionsBinding
     private lateinit var viewModel: AttributionsViewModel
 
     private var flaticonMessageExpanded = false
 
     override var titleResId: Int = R.string.title_attributions
-    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, it) }
-
-    companion object {
-        fun newInstance() = AttributionsFragment()
-    }
+    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, it, R.id.navigateAttributionsToSettings) }
 
     /**
      * Initialize fragment
@@ -52,7 +48,7 @@ class AttributionsFragment : ActivityFragment() {
 
         viewModel.flaticonMessageExpanded.observe(viewLifecycleOwner, flaticonMessageExpandedObserver)
         binding.expandCollapseMessage.setOnClickListener { viewModel.setFlaticonMessageExpanded(!flaticonMessageExpanded) }
-        binding.closeButton.root.setOnClickListener { requireActivity().supportFragmentManager.popBackStack() }
+        binding.closeButton.root.setOnClickListener { requireMainActivity().popBackStack() }
 
         return binding.root
     }

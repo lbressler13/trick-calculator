@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ui.main.DeveloperToolsDialog
-import com.example.trickcalculator.ui.main.MainFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -36,11 +36,33 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         isDarkMode = isDarkMode()
+    }
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.container.id, MainFragment.newInstance())
-                .commitNow()
+    /**
+     * Pop most recent fragment from backstack.
+     */
+    fun popBackStack() {
+        val navHostFragment: NavHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.popBackStack()
+    }
+
+    /**
+     * Run navigation action.
+     *
+     * @param actionResId [Int]: resource ID of action to run
+     * @param args [Bundle?]: arguments to pass with action
+     */
+    fun runNavAction(actionResId: Int, args: Bundle? = null) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        if (args == null) {
+            navController.navigate(actionResId)
+        } else {
+            navController.navigate(actionResId, args)
         }
     }
 
@@ -74,7 +96,7 @@ class MainActivity : AppCompatActivity() {
      * Show or hide the dev tools button, and set the on click for it
      */
     private fun initDevToolsDialog() {
-        binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
+        binding.devToolsButton.isVisible = BuildOptions.isDevMode
 
         val dialog = DeveloperToolsDialog()
         binding.devToolsButton.setOnClickListener {

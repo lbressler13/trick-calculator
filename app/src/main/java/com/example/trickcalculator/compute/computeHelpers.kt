@@ -1,6 +1,7 @@
 package com.example.trickcalculator.compute
 
 import exactnumbers.exactfraction.ExactFraction
+import kotlinutils.int.ext.isZero
 import kotlinutils.list.IntList
 import kotlinutils.list.StringList
 import java.math.BigInteger
@@ -86,7 +87,7 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
             openCount--
         }
 
-        if (openCount == 0) {
+        if (openCount.isZero()) {
             closeIndex = idxVal.index
             break
         }

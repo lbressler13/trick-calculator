@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.example.trickcalculator.R
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -39,6 +40,7 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
  * @param lifecycleOwner [LifecycleOwner]
  */
 private fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
+    // update switches
     viewModel.applyDecimals.observe(lifecycleOwner) { settingsUi.applyDecimalsSwitch.isChecked = it }
     viewModel.applyParens.observe(lifecycleOwner) { settingsUi.applyParensSwitch.isChecked = it }
     viewModel.clearOnError.observe(lifecycleOwner) { settingsUi.clearOnErrorSwitch.isChecked = it }
@@ -47,6 +49,7 @@ private fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, li
     viewModel.shuffleNumbers.observe(lifecycleOwner) { settingsUi.shuffleNumbersSwitch.isChecked = it }
     viewModel.shuffleOperators.observe(lifecycleOwner) { settingsUi.shuffleOperatorsSwitch.isChecked = it }
 
+    // update radio group
     viewModel.historyRandomness.observe(lifecycleOwner) { settingsUi.historyRadioButtons[it].isChecked = true }
 }
 
@@ -140,10 +143,9 @@ private fun resetSettingsOnClick(settingsUi: SettingsUI) {
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
 private fun closeCurrentFragment(fragment: Fragment) {
-    if (fragment is DialogFragment) {
-        fragment.dismiss()
-    } else {
-        fragment.parentFragmentManager.popBackStack()
+    when (fragment) {
+        is DialogFragment -> fragment.dismiss()
+        is BaseFragment -> fragment.requireMainActivity().popBackStack()
     }
 }
 
@@ -159,7 +161,8 @@ fun closePreviousFragment(currentFragment: Fragment) {
         if (currentFragment is DialogFragment && currentFragment.requireParentFragment() is DialogFragment) {
             (currentFragment.requireParentFragment() as DialogFragment).dismiss()
         } else if (currentFragment !is DialogFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
-            currentFragment.parentFragmentManager.popBackStack()
+            currentFragment as BaseFragment
+            currentFragment.requireMainActivity().popBackStack()
         }
     } catch (e: Exception) {
         // expected to fail when ui is recreating due to configuration changes or via dev tools
