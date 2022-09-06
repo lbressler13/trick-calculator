@@ -14,10 +14,12 @@ import com.example.trickcalculator.ui.settings.components.SettingsDialog
  *
  * @param parentFragment [Fragment]: calling fragment
  * @param viewToClick [View]: view which should launch settings fragment when clicked
+ * @param navResId [Int]: resource ID of action to navigate from [parentFragment] to settings fragment
  */
 fun initSettingsFragment(parentFragment: Fragment, viewToClick: View, navResId: Int) {
     viewToClick.setOnClickListener {
-        (parentFragment as BaseFragment).runNavAction(navResId, getFragmentArgs(parentFragment))
+        val activity = (parentFragment as BaseFragment).requireMainActivity()
+        activity.runNavAction(navResId, getFragmentArgs(parentFragment))
     }
 }
 

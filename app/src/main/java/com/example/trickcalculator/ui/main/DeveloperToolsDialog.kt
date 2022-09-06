@@ -25,7 +25,7 @@ class DeveloperToolsDialog : DialogFragment() {
     private lateinit var viewModel: SharedViewModel
 
     /**
-     * Initialize dialog
+     * Build dialog, comes before onCreateView and dialog is not connected to context
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogDeveloperToolsBinding.inflate(layoutInflater)
@@ -43,6 +43,9 @@ class DeveloperToolsDialog : DialogFragment() {
             .create()
     }
 
+    /**
+     * Continue initialization after view is connected to context
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

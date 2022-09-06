@@ -111,14 +111,14 @@ class MainFragment : BaseFragment() {
      * Launch AttributionsFragment
      */
     private val infoButtonOnClick: () -> Unit = {
-        runNavAction(R.id.navigateMainToAttribution)
+        requireMainActivity().runNavAction(R.id.navigateMainToAttribution)
     }
 
     /**
      * Launch HistoryFragment
      */
     private val historyButtonOnClick = {
-        runNavAction(R.id.navigateMainToHistory)
+        requireMainActivity().runNavAction(R.id.navigateMainToHistory)
     }
 
     /**

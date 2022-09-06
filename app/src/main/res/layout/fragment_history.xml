@@ -5,9 +5,7 @@
     android:layout_height="match_parent"
     android:background="?backgroundColor">
 
-    <include
-        android:id="@+id/closeButton"
-        layout="@layout/component_close_button" />
+    <include android:id="@+id/closeButton" layout="@layout/component_close_button" />
 
     <TextView
         android:id="@+id/title"

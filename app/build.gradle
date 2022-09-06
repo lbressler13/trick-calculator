@@ -67,7 +67,7 @@ android {
 
 dependencies {
     def androidxCoreVersion = "1.8.0"
-    def appcompatVersion = "1.4.1" // sdk 31 does not support higher
+    def appCompatVersion = "1.4.1" // sdk 31 does not support higher
     def constraintLayoutVersion = "2.1.4"
     def lifecycleVersion = "2.5.1"
     def materialVersion = "1.6.1"
@@ -82,7 +82,7 @@ dependencies {
 
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
     //noinspection GradleDependency
-    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"

@@ -18,10 +18,7 @@
         <!-- Action bar-->
         <item name="actionBarBackground">@color/dark_action_bar</item>
         <item name="actionBarTextColor">@color/black</item>
-        <item name="actionBarSwitchThumbColor">@color/black</item>
-        <item name="actionBarSwitchTrackCheckedColor">@color/purple_500</item>
-        <item name="actionBarSwitchTrackUncheckedColor">@color/purple_900</item>
-        <!-- Other -->
+        <!-- Other custom values -->
         <item name="disabledBackground">@color/dark_disabled_background_gray</item>
         <item name="disabledForeground">@color/dark_disabled_foreground_gray</item>
         <item name="errorColor">@color/dark_error_color</item>

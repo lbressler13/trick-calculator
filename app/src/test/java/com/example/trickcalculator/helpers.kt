@@ -6,8 +6,13 @@ import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.function.ThrowingRunnable
 
-private val iterations = 20
+private const val iterations = 20
 
+/**
+ * Assert that a function throws a divide by zero error.
+ *
+ * @param function [ThrowingRunnable]: function that throws exception
+ */
 fun assertDivByZero(function: ThrowingRunnable) {
     val error = assertThrows(ArithmeticException::class.java) {
         function.run()
@@ -15,8 +20,13 @@ fun assertDivByZero(function: ThrowingRunnable) {
     assertEquals("divide by zero", error.message)
 }
 
-// by default, splitting on empty space adds a character at start and end
-// this helper fixes that
+/**
+ * Split a string into individual characters.
+ * By default, splitting adds a space at the beginning and end, which this helper does not do.
+ *
+ * @param s [String]: string to split
+ * @return [StringList]: list of characters in [s], without any added spaces at start or end
+ */
 fun splitString(s: String): StringList {
     return when (s.length) {
         0 -> listOf()
@@ -28,8 +38,13 @@ fun splitString(s: String): StringList {
     }
 }
 
-// perform a random action repeatedly, checking to ensure that the result was randomized at least once
-// action should contain any other assertions about result
+/**
+ * Perform a random action repeatedly, checking to ensure that the result that was randomized.
+ * The action should also contain any assertions about a single result.
+ *
+ * @param randomAction [() -> T]: generate a single result, and perform any assertions about that result
+ * @param randomCheck [(T) -> Boolean]: check if a result meets criteria for randomization
+ */
 fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
     var checkPassed = false
 

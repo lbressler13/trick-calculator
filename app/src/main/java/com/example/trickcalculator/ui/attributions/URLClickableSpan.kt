@@ -29,6 +29,7 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
          * @param text [SpannableString]: the string to add a span to
          * @param word [String]: the word to be made clickable
          * @param url [String]: the url to open when the word is clicked
+         * @throws IndexOutOfBoundsException if word is not in text
          */
         fun addToFirstWord(text: SpannableString, word: String, url: String) {
             val start = text.indexOf(word)
