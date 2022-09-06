@@ -52,7 +52,7 @@ class AttributionsFragment : BaseFragment() {
 
         viewModel.flaticonMessageExpanded.observe(viewLifecycleOwner, flaticonMessageExpandedObserver)
         binding.expandCollapseMessage.setOnClickListener { viewModel.setFlaticonMessageExpanded(!flaticonMessageExpanded) }
-        binding.closeButton.root.setOnClickListener { popBackStack() }
+        binding.closeButton.root.setOnClickListener { requireMainActivity().popBackStack() }
 
         return binding.root
     }

@@ -61,7 +61,7 @@ class MainFragment : BaseFragment() {
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
         computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
-        // additional observer to show/hide settings button
+        // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
         sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
 
         initNumpad()

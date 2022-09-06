@@ -39,16 +39,32 @@ fun getHistoryGroupValue(group: RadioGroup, buttons: List<RadioButton>): Int {
  * @param viewModel [SharedViewModel]: view model with settings fields
  * @param lifecycleOwner [LifecycleOwner]
  */
-private fun initObservers(settingsUi: SettingsUI, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
-    viewModel.applyDecimals.observe(lifecycleOwner) { settingsUi.applyDecimalsSwitch.isChecked = it }
+private fun initObservers(
+    settingsUi: SettingsUI,
+    viewModel: SharedViewModel,
+    lifecycleOwner: LifecycleOwner
+) {
+    viewModel.applyDecimals.observe(lifecycleOwner) {
+        settingsUi.applyDecimalsSwitch.isChecked = it
+    }
     viewModel.applyParens.observe(lifecycleOwner) { settingsUi.applyParensSwitch.isChecked = it }
     viewModel.clearOnError.observe(lifecycleOwner) { settingsUi.clearOnErrorSwitch.isChecked = it }
-    viewModel.showSettingsButton.observe(lifecycleOwner) { settingsUi.settingsButtonSwitch.isChecked = it }
-    viewModel.shuffleComputation.observe(lifecycleOwner) { settingsUi.shuffleComputationSwitch.isChecked = it }
-    viewModel.shuffleNumbers.observe(lifecycleOwner) { settingsUi.shuffleNumbersSwitch.isChecked = it }
-    viewModel.shuffleOperators.observe(lifecycleOwner) { settingsUi.shuffleOperatorsSwitch.isChecked = it }
+    viewModel.showSettingsButton.observe(lifecycleOwner) {
+        settingsUi.settingsButtonSwitch.isChecked = it
+    }
+    viewModel.shuffleComputation.observe(lifecycleOwner) {
+        settingsUi.shuffleComputationSwitch.isChecked = it
+    }
+    viewModel.shuffleNumbers.observe(lifecycleOwner) {
+        settingsUi.shuffleNumbersSwitch.isChecked = it
+    }
+    viewModel.shuffleOperators.observe(lifecycleOwner) {
+        settingsUi.shuffleOperatorsSwitch.isChecked = it
+    }
 
-    viewModel.historyRandomness.observe(lifecycleOwner) { settingsUi.historyRadioButtons[it].isChecked = true }
+    viewModel.historyRandomness.observe(lifecycleOwner) {
+        settingsUi.historyRadioButtons[it].isChecked = true
+    }
 }
 
 /**
@@ -141,10 +157,9 @@ private fun resetSettingsOnClick(settingsUi: SettingsUI) {
  * Expected to be either [SettingsFragment] or [SettingsDialog]
  */
 private fun closeCurrentFragment(fragment: Fragment) {
-    if (fragment is DialogFragment) {
-        fragment.dismiss()
-    } else {
-        (fragment as BaseFragment).popBackStack()
+    when (fragment) {
+        is DialogFragment -> fragment.dismiss()
+        is BaseFragment -> fragment.requireMainActivity().popBackStack()
     }
 }
 
@@ -161,7 +176,7 @@ fun closePreviousFragment(currentFragment: Fragment) {
             (currentFragment.requireParentFragment() as DialogFragment).dismiss()
         } else if (currentFragment !is DialogFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
             currentFragment as BaseFragment
-            currentFragment.popBackStack()
+            currentFragment.requireMainActivity().popBackStack()
         }
     } catch (e: Exception) {
         // expected to fail when ui is recreating due to configuration changes or via dev tools

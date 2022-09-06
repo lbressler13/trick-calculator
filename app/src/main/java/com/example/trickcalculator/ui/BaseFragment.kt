@@ -27,8 +27,11 @@ abstract class BaseFragment : NavHostFragment() {
         runSetup()
     }
 
+    /**
+     * Run initial setup of action bar.
+     */
     private fun runSetup() {
-        val actionBar = getMainActivity().binding.actionBar
+        val actionBar = requireMainActivity().binding.actionBar
 
         // set onClick
         if (setActionBarOnClick == null) {
@@ -41,9 +44,15 @@ abstract class BaseFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        getMainActivity().fragmentManager = childFragmentManager
+        requireMainActivity().fragmentManager = childFragmentManager
     }
 
+    /**
+     * Run navigation action.
+     *
+     * @param actionResId [Int]: resource ID of action to run
+     * @param args [Bundle?]: arguments to pass with action
+     */
     fun runNavAction(actionResId: Int, args: Bundle? = null) {
         val navHostFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -56,12 +65,5 @@ abstract class BaseFragment : NavHostFragment() {
         }
     }
 
-    fun popBackStack() {
-        val navHostFragment =
-            requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        navController.popBackStack()
-    }
-
-    fun getMainActivity(): MainActivity = requireActivity() as MainActivity
+    fun requireMainActivity(): MainActivity = requireActivity() as MainActivity
 }

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.databinding.ActivityMainBinding
 import com.example.trickcalculator.ui.main.DeveloperToolsDialog
 import com.example.trickcalculator.ui.main.MainFragment
@@ -36,6 +37,13 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         isDarkMode = isDarkMode()
+    }
+
+    fun popBackStack() {
+        val navHostFragment: NavHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.popBackStack()
     }
 
     /**
