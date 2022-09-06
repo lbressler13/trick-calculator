@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
      * Show or hide the dev tools button, and set the on click for it
      */
     private fun initDevToolsDialog() {
-        binding.devToolsButton.isVisible = BuildOptions.buildType == "dev"
+        binding.devToolsButton.isVisible = BuildOptions.isDevMode
 
         val dialog = DeveloperToolsDialog()
         binding.devToolsButton.setOnClickListener {
