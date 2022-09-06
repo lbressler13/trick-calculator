@@ -53,7 +53,6 @@ class DeveloperToolsDialog : DialogFragment() {
 
         binding.clearHistoryButton.setOnClickListener { viewModel.clearHistory() }
         binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
-        binding.crashAppButton.setOnClickListener { exitProcess(2) }
 
         initHideDevTools()
         initSettingsDialog(this, binding.settingsDialogButton)

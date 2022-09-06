@@ -5,7 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.example.trickcalculator.R
-import com.example.trickcalculator.ui.ActivityFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.main.MainFragment
 import com.example.trickcalculator.ui.settings.components.SettingsDialog
 import com.example.trickcalculator.ui.settings.components.SettingsFragment
@@ -20,7 +20,7 @@ fun initSettingsFragment(parentFragment: Fragment, viewToClick: View, navResId: 
     viewToClick.setOnClickListener {
         val newFragment = SettingsFragment.newInstance()
         // setIsMainFragment(newFragment, parentFragment)
-        (parentFragment as ActivityFragment).runNavAction(navResId, getFragmentArgs(parentFragment))
+        (parentFragment as BaseFragment).runNavAction(navResId, getFragmentArgs(parentFragment))
 
 //        parentFragment.requireActivity().supportFragmentManager.beginTransaction()
 //            .replace(R.id.container, newFragment)

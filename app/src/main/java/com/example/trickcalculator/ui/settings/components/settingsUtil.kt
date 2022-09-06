@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.example.trickcalculator.R
-import com.example.trickcalculator.ui.ActivityFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -160,7 +160,7 @@ fun closePreviousFragment(currentFragment: Fragment) {
         if (currentFragment is DialogFragment && currentFragment.requireParentFragment() is DialogFragment) {
             (currentFragment.requireParentFragment() as DialogFragment).dismiss()
         } else if (currentFragment !is DialogFragment && currentFragment.parentFragmentManager.backStackEntryCount > 0) {
-            currentFragment as ActivityFragment
+            currentFragment as BaseFragment
             Log.e(null, currentFragment.navController.backQueue.size.toString())
             currentFragment.navController.popBackStack()
             // currentFragment.parentFragmentManager.popBackStack()

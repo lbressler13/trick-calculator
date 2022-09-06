@@ -10,13 +10,13 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.trickcalculator.R
 import com.example.trickcalculator.databinding.FragmentSettingsBinding
-import com.example.trickcalculator.ui.ActivityFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.shared.SharedViewModel
 
 /**
  * DialogFragment to display all configuration options for calculator
  */
-class SettingsFragment : ActivityFragment(), SettingsUI {
+class SettingsFragment : BaseFragment(), SettingsUI {
     override var titleResId: Int = R.string.title_settings // fragment-specific value
 
     private lateinit var binding: FragmentSettingsBinding

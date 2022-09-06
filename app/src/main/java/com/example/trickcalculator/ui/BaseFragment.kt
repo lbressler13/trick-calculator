@@ -2,7 +2,6 @@ package com.example.trickcalculator.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.MainActivity
 import com.example.trickcalculator.R
@@ -10,7 +9,7 @@ import com.example.trickcalculator.R
 /**
  * Abstract fragment to handle common functionality involving the MainActivity
  */
-abstract class ActivityFragment : NavHostFragment() {
+abstract class BaseFragment : NavHostFragment() {
     /**
      * Resource ID for the title in the action bar.
      * Default is the ID for "Calculator"
@@ -29,8 +28,7 @@ abstract class ActivityFragment : NavHostFragment() {
     }
 
     private fun runSetup() {
-        val mainActivity = requireActivity() as MainActivity
-        val actionBar = mainActivity.binding.actionBar
+        val actionBar = getMainActivity().binding.actionBar
 
         // set onClick
         if (setActionBarOnClick == null) {
@@ -43,7 +41,7 @@ abstract class ActivityFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        mainActivity.fragmentManager = childFragmentManager
+        getMainActivity().fragmentManager = childFragmentManager
     }
 
     fun runNavAction(actionResId: Int, args: Bundle? = null) {
@@ -57,4 +55,13 @@ abstract class ActivityFragment : NavHostFragment() {
             navController.navigate(actionResId, args)
         }
     }
+
+    fun popBackStack() {
+        val navHostFragment =
+            requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.popBackStack()
+    }
+
+    fun getMainActivity(): MainActivity = requireActivity() as MainActivity
 }

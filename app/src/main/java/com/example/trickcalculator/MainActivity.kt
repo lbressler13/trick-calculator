@@ -36,13 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         isDarkMode = isDarkMode()
-
-        // TODO handle this
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(binding.container.id, MainFragment.newInstance())
-//                .commitNow()
-//        }
     }
 
     /**

@@ -10,13 +10,10 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
 import com.example.trickcalculator.R
 import com.example.trickcalculator.compute.runComputation
 import com.example.trickcalculator.databinding.FragmentMainBinding
-import com.example.trickcalculator.ui.ActivityFragment
-import com.example.trickcalculator.ui.attributions.AttributionsFragment
-import com.example.trickcalculator.ui.history.HistoryFragment
+import com.example.trickcalculator.ui.BaseFragment
 import com.example.trickcalculator.ui.history.HistoryItem
 import com.example.trickcalculator.ui.settings.Settings
 import com.example.trickcalculator.ui.settings.initSettingsFragment
@@ -31,7 +28,7 @@ import kotlinutils.list.StringList
 /**
  * Fragment to display main calculator functionality
  */
-class MainFragment : ActivityFragment() {
+class MainFragment : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
