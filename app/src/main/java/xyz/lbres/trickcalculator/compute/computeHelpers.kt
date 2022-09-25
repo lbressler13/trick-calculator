@@ -1,9 +1,9 @@
 package xyz.lbres.trickcalculator.compute
 
-import exactnumbers.exactfraction.ExactFraction
-import kotlinutils.int.ext.isZero
-import kotlinutils.list.IntList
-import kotlinutils.list.StringList
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.int.ext.isZero
+import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.StringList
 import java.math.BigInteger
 
 /**

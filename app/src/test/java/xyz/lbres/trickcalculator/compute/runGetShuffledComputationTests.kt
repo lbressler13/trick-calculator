@@ -2,7 +2,7 @@ package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.utils.isNumber
-import kotlinutils.list.StringList
+import xyz.lbres.kotlinutils.list.StringList
 import org.junit.Assert.assertEquals
 
 private val fullOps = listOf("+", "-", "x", "/", "^")

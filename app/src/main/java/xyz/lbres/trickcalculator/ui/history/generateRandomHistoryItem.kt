@@ -2,12 +2,12 @@ package xyz.lbres.trickcalculator.ui.history
 
 import xyz.lbres.trickcalculator.compute.isOperator
 import xyz.lbres.trickcalculator.utils.isNumber
-import exactnumbers.exactfraction.ExactFraction
-import kotlinutils.int.ext.isZero
-import kotlinutils.list.StringList
-import kotlinutils.list.WeightedList
-import kotlinutils.random.ext.nextBoolean
-import kotlinutils.random.ext.nextFromWeightedList
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.int.ext.isZero
+import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.kotlinutils.list.WeightedList
+import xyz.lbres.kotlinutils.random.ext.nextBoolean
+import xyz.lbres.kotlinutils.random.ext.nextFromWeightedList
 import java.util.Date
 import kotlin.random.Random
 

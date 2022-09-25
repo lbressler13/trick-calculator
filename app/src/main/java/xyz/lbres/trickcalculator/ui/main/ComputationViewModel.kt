@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.utils.isNumberChar
-import exactnumbers.exactfraction.ExactFraction
-import kotlinutils.list.StringList
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.list.StringList
 
 /**
  * ViewModel to track variables related to computation and computed values

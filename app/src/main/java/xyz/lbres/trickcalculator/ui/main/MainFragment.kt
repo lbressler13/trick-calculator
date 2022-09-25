@@ -22,8 +22,8 @@ import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
-import exactnumbers.exactfraction.ExactFraction
-import kotlinutils.list.StringList
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.list.StringList
 
 /**
  * Fragment to display main calculator functionality

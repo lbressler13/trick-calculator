@@ -3,7 +3,7 @@ package xyz.lbres.trickcalculator.compute
 import xyz.lbres.trickcalculator.assertDivByZero
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.OperatorFunction
-import exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 

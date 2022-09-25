@@ -15,8 +15,8 @@ import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
-import exactnumbers.exactfraction.ExactFraction
-import kotlinutils.random.ext.nextBoolean
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import java.util.Date
 import kotlin.random.Random
 

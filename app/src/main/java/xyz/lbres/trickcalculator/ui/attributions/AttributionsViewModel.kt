@@ -3,7 +3,7 @@ package xyz.lbres.trickcalculator.ui.attributions
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinutils.list.ext.copyWithReplacement
+import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 
 /**
  * ViewModel to track information about expanded/collapsed views in the Attributions fragment UI

@@ -1,10 +1,10 @@
 package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.trickcalculator.utils.OperatorFunction
-import exactnumbers.exactfraction.ExactFraction
-import exactnumbers.exactfraction.ExactFractionOverflowException
-import kotlinutils.list.IntList
-import kotlinutils.list.StringList
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.exactfraction.ExactFractionOverflowException
+import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.StringList
 
 /**
  * Parse string list and compute as a mathematical expression, if possible.

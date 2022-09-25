@@ -1,9 +1,9 @@
 package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.trickcalculator.assertDivByZero
-import exactnumbers.exactfraction.ExactFraction
-import kotlinutils.list.IntList
-import kotlinutils.list.StringList
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.StringList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

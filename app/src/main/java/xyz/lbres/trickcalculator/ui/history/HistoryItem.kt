@@ -1,9 +1,9 @@
 package xyz.lbres.trickcalculator.ui.history
 
-import exactnumbers.exactfraction.ExactFraction
-import exactnumbers.exactfraction.checkIsEFString
-import kotlinutils.list.StringList
-import kotlinutils.list.ext.copyWithReplacement
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
+import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 
 /**
  * Information about a single computation and its result

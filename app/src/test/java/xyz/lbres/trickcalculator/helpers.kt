@@ -1,6 +1,6 @@
 package xyz.lbres.trickcalculator
 
-import kotlinutils.list.StringList
+import xyz.lbres.kotlinutils.list.StringList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue

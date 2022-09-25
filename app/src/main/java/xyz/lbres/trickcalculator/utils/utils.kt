@@ -1,6 +1,6 @@
 package xyz.lbres.trickcalculator.utils
 
-import exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 
 /**
  * Determine if a string can be parsed to a number.
