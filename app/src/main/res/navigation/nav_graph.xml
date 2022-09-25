@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.trickcalculator.ui.main.MainFragment"
+        android:name="xyz.lbres.trickcalculator.ui.main.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/navigateMainToAttribution"
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/attributionsFragment"
-        android:name="com.example.trickcalculator.ui.attributions.AttributionsFragment"
+        android:name="xyz.lbres.trickcalculator.ui.attributions.AttributionsFragment"
         android:label="AttributionsFragment" >
         <action
             android:id="@+id/navigateAttributionsToSettings"
@@ -28,10 +28,10 @@
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.example.trickcalculator.ui.history.HistoryFragment"
+        android:name="xyz.lbres.trickcalculator.ui.history.HistoryFragment"
         android:label="HistoryFragment" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.trickcalculator.ui.settings.components.SettingsFragment"
+        android:name="xyz.lbres.trickcalculator.ui.settings.components.SettingsFragment"
         android:label="SettingsFragment" />
 </navigation>

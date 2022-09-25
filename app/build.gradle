@@ -9,7 +9,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.trickcalculator"
+        applicationId "xyz.lbres.trickcalculator"
         minSdk 30
         targetSdk 31
         versionCode 1
@@ -23,7 +23,7 @@ android {
         dev {
             dimension "type"
             versionNameSuffix "-dev"
-            applicationId "com.example.trickcalculator.dev"
+            applicationId "xyz.lbres.trickcalculator.dev"
         }
 
         // labelled as complete b/c final can't be used
