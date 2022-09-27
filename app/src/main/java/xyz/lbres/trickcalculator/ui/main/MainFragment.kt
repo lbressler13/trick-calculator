@@ -24,12 +24,7 @@ import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.OperatorFunction
-import xyz.lbres.trickcalculator.utils.disable
-import xyz.lbres.trickcalculator.utils.enable
-import xyz.lbres.trickcalculator.utils.getColorOnPrimary
-import xyz.lbres.trickcalculator.utils.getDisabledForeground
 import xyz.lbres.trickcalculator.utils.gone
-import xyz.lbres.trickcalculator.utils.setImageButtonTint
 import xyz.lbres.trickcalculator.utils.visible
 
 /**
@@ -46,7 +41,6 @@ class MainFragment : BaseFragment() {
 
     private val settings = Settings()
     private var lastHistoryItem: HistoryItem? = null
-    // TODO there are 2 different lastHistoryItem values
 
     /**
      * Initialize fragment
@@ -65,7 +59,7 @@ class MainFragment : BaseFragment() {
         computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
-        computationViewModel.generatedHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
+        computationViewModel.generatedHistoryItem.observe(viewLifecycleOwner, generatedHistoryItemObserver)
         sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
@@ -83,7 +77,10 @@ class MainFragment : BaseFragment() {
         return binding.root
     }
 
-    private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
+    /**
+     * Save generated history value in shared view model and delete
+     */
+    private val generatedHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
             sharedViewModel.addToHistory(it)
             computationViewModel.clearStoredHistoryItem()
@@ -105,11 +102,17 @@ class MainFragment : BaseFragment() {
         binding.settingsButton.isVisible = it
     }
 
+    /**
+     * Save computed value in local variable and update textbox
+     */
     private val computedValueObserver: Observer<ExactFraction?> = Observer {
         computedValue = it
         setMainText()
     }
 
+    /**
+     * Save compute text in local variable and update textbox
+     */
     private val computeTextObserver: Observer<StringList> = Observer {
         computeText = it
         setMainText()
@@ -135,7 +138,7 @@ class MainFragment : BaseFragment() {
     /**
      * Launch AttributionsFragment
      */
-    private val infoButtonOnClick: () -> Unit = {
+    private val infoButtonOnClick = {
         requireMainActivity().runNavAction(R.id.navigateMainToAttribution)
     }
 
@@ -146,6 +149,9 @@ class MainFragment : BaseFragment() {
         requireMainActivity().runNavAction(R.id.navigateMainToHistory)
     }
 
+    /**
+     * Use last history item as current computation
+     */
     private val lastHistoryItemOnClick = {
         if (lastHistoryItem != null) {
             val item = lastHistoryItem!!
@@ -210,12 +216,11 @@ class MainFragment : BaseFragment() {
 
                 computationViewModel.setComputedValue(computedValue)
                 computationViewModel.setError(null)
-                computationViewModel.setGeneratedHistoryItem()
+                computationViewModel.generateHistoryItem()
 
                 computationViewModel.clearComputeText()
 
-                val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
-                movement.goToTop(binding.mainText)
+                scrollTextToTop()
             } catch (e: Exception) {
                 val error: String = if (e.message == null) {
                     "Computation error"
@@ -230,7 +235,7 @@ class MainFragment : BaseFragment() {
                 }
 
                 computationViewModel.setError(error)
-                computationViewModel.setGeneratedHistoryItem()
+                computationViewModel.generateHistoryItem()
             }
         }
     }
@@ -252,6 +257,7 @@ class MainFragment : BaseFragment() {
      * Initialize all buttons in numpad
      */
     private fun initNumpad() {
+        // text buttons, except clear
         binding.numpadLayout.children.forEach {
             if (it is Button && it.text != null && it != binding.clearButton) {
                 it.setOnClickListener { _ -> genericAddComputeOnClick(it.text.toString()) }
@@ -264,7 +270,7 @@ class MainFragment : BaseFragment() {
         binding.timesButton.setOnClickListener { genericAddComputeOnClick("x") }
         binding.divideButton.setOnClickListener { genericAddComputeOnClick("/") }
 
-        // functional buttons
+        // functional buttons, including clear
         binding.clearButton.setOnClickListener { computationViewModel.resetComputeData() }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
         binding.backspaceButton.setOnClickListener {
@@ -289,30 +295,19 @@ class MainFragment : BaseFragment() {
         textview.text = fullText
     }
 
+    /**
+     * Scroll main text to top of text box
+     */
+    private fun scrollTextToTop() {
+        val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
+        movement.goToTop(binding.mainText)
+    }
+
+    /**
+     * Scroll main text to bottom of text box
+     */
     private fun scrollTextToBottom() {
         val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
         movementMethod.goToBottom(binding.mainText)
-    }
-
-    /**
-     * Enable a view and update its UI to appear enabled
-     *
-     * @param view [View]
-     */
-    private fun enableViewAndUi(view: View) {
-        val colorOnPrimary = getColorOnPrimary(requireContext())
-        view.enable()
-        setImageButtonTint(view, colorOnPrimary)
-    }
-
-    /**
-     * Disable a view and update its UI to appear disabled
-     *
-     * @param view [View]
-     */
-    private fun disableViewAndUi(view: View) {
-        val disabledForeground = getDisabledForeground(requireContext())
-        view.disable()
-        setImageButtonTint(view, disabledForeground)
     }
 }

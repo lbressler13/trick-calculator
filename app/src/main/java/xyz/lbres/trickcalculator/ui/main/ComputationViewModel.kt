@@ -30,6 +30,9 @@ class ComputationViewModel : ViewModel() {
     private val mError = MutableLiveData<String>().apply { value = null }
     val error: LiveData<String> = mError
 
+    /**
+     * History item generated from most recent computation
+     */
     private val mGeneratedHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
     val generatedHistoryItem: LiveData<HistoryItem> = mGeneratedHistoryItem
 
@@ -48,7 +51,7 @@ class ComputationViewModel : ViewModel() {
     /**
      * Store last history value based on most recent error or computation
      */
-    fun setGeneratedHistoryItem() {
+    fun generateHistoryItem() {
         val error = error.value
         val lastComputed = mBackupComputed.value
         val computed = computedValue.value
@@ -72,6 +75,9 @@ class ComputationViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Remove the generated history item and historical value
+     */
     fun clearStoredHistoryItem() {
         mGeneratedHistoryItem.value = null
         clearBackups()
