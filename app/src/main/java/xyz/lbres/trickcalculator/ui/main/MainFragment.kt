@@ -65,8 +65,7 @@ class MainFragment : BaseFragment() {
         computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
-        computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
-        computationViewModel.showingHistoryItem.observe(viewLifecycleOwner, showingHistoryItemObserver)
+        computationViewModel.generatedHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
         sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
@@ -91,16 +90,17 @@ class MainFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Save most recent history item and enable/disable the last item button
+     */
     private val historyObserver: Observer<History> = Observer {
-        lastHistoryItem = if (it.isEmpty()) {
-            null
-        } else {
-            it.last()
-        }
-
-        binding.useLastHistoryButton.isEnabled = it.isNotEmpty()
+        lastHistoryItem = it.lastOrNull()
+        binding.useLastHistoryButton.isVisible = it.isNotEmpty()
     }
 
+    /**
+     * Show or hide settings button
+     */
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = it
     }
@@ -150,16 +150,6 @@ class MainFragment : BaseFragment() {
         if (lastHistoryItem != null) {
             val item = lastHistoryItem!!
             computationViewModel.useHistoryItemAsComputeText(item)
-        }
-    }
-
-    private val showingHistoryItemObserver: Observer<Boolean> = Observer {
-        if (it) {
-            binding.numpadLayout.children.forEach { button -> disableViewAndUi(button) }
-            enableViewAndUi(binding.equalsButton)
-            enableViewAndUi(binding.clearButton)
-        } else {
-            binding.numpadLayout.children.forEach { button -> enableViewAndUi(button) }
         }
     }
 
@@ -220,7 +210,7 @@ class MainFragment : BaseFragment() {
 
                 computationViewModel.setComputedValue(computedValue)
                 computationViewModel.setError(null)
-                computationViewModel.setLastHistoryItem()
+                computationViewModel.setGeneratedHistoryItem()
 
                 computationViewModel.clearComputeText()
 
@@ -240,7 +230,7 @@ class MainFragment : BaseFragment() {
                 }
 
                 computationViewModel.setError(error)
-                computationViewModel.setLastHistoryItem()
+                computationViewModel.setGeneratedHistoryItem()
             }
         }
     }

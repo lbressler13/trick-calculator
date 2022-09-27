@@ -19,6 +19,9 @@ class HistoryItem {
      */
     val result: ExactFraction?
 
+    /**
+     * Result that is used as the first term of the computation
+     */
     val previousResult: ExactFraction?
 
     /**
@@ -26,6 +29,9 @@ class HistoryItem {
      */
     val error: String?
 
+    /**
+     * Constructor for HistoryItem resulting from an error
+     */
     constructor(computation: StringList, error: String, previousResult: ExactFraction? = null) {
         this.computation = computation
         this.result = null
@@ -33,6 +39,9 @@ class HistoryItem {
         this.previousResult = previousResult
     }
 
+    /**
+     * Constructor for HistoryItem for a successful computation
+     */
     constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) {
         // parse EF-formatted value into decimal string
         if (computation.isNotEmpty() && checkIsEFString(computation[0])) {
@@ -49,9 +58,9 @@ class HistoryItem {
 
     override fun toString(): String {
         if (error != null) {
-            return "HI[$computation, err: $error]"
+            return "HistoryItem[$computation, err: $error]"
         }
 
-        return "HI[$computation, res: $result]"
+        return "HistoryItem[$computation, res: $result]"
     }
 }
