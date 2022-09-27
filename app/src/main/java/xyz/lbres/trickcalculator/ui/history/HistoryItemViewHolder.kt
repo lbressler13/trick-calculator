@@ -15,7 +15,7 @@ class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
 
     // update UI to show information about current history item
     fun update(item: HistoryItem) {
-        binding.computeText.text = item.computation
+        binding.computeText.text = item.computation.joinToString("")
         binding.resultText.text = item.result?.toDecimalString(5) ?: ""
         binding.errorText.text = item.error ?: ""
 

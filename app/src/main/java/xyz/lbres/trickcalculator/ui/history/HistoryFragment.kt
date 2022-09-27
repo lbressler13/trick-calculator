@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
@@ -84,7 +85,7 @@ class HistoryFragment : BaseFragment() {
     private fun shuffleValues(): History {
         val currentHistory = history!!
 
-        val computations: List<String> = currentHistory.map { it.computation }.shuffled()
+        val computations: List<StringList> = currentHistory.map { it.computation }.shuffled()
         val values: List<Pair<ExactFraction?, String?>> = currentHistory.map { Pair(it.result, it.error) }.shuffled()
 
         val shuffledHistory = computations.mapIndexed { index, comp ->

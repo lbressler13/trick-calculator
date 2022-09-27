@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
@@ -21,6 +22,7 @@ import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -29,6 +31,8 @@ import xyz.lbres.trickcalculator.utils.visible
  * Fragment to display main calculator functionality
  */
 class MainFragment : BaseFragment() {
+    // TODO disabled buttons on error??? why isn't this already done
+
     private lateinit var binding: FragmentMainBinding
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
@@ -38,6 +42,8 @@ class MainFragment : BaseFragment() {
     private var computedValue: ExactFraction? = null
 
     private val settings = Settings()
+    private var lastHistoryItem: HistoryItem? =
+        null // TODO there are 2 different lastHistoryItem values
 
     /**
      * Initialize fragment
@@ -48,7 +54,8 @@ class MainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
-        computationViewModel = ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
+        computationViewModel =
+            ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodels
@@ -56,14 +63,17 @@ class MainFragment : BaseFragment() {
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
         computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
+        sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
         sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
 
+        // init UI
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
+        binding.useLastHistoryButton.setOnClickListener { lastHistoryItemOnClick() }
 
         initSettingsFragment(this, binding.settingsButton, R.id.navigateMainToSettings)
 
@@ -76,6 +86,17 @@ class MainFragment : BaseFragment() {
             computationViewModel.clearStoredHistoryItem()
         }
     }
+
+    private val historyObserver: Observer<History> = Observer {
+        lastHistoryItem = if (it.isEmpty()) {
+            null
+        } else {
+            it.last()
+        }
+
+        binding.useLastHistoryButton.isEnabled = it.isNotEmpty()
+    }
+
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = it
     }
@@ -121,6 +142,13 @@ class MainFragment : BaseFragment() {
         requireMainActivity().runNavAction(R.id.navigateMainToHistory)
     }
 
+    private val lastHistoryItemOnClick = {
+        if (lastHistoryItem != null) {
+            val item = lastHistoryItem!!
+            computationViewModel.useHistoryItemAsComputeText(item)
+        }
+    }
+
     /**
      * Sets operation order and number order, and runs computation.
      * Updates viewmodel with resulting computed value or error message
@@ -160,11 +188,7 @@ class MainFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = if (settings.shuffleNumbers) {
-                (0..9).shuffled()
-            } else {
-                (0..9).toList()
-            }
+            val numberOrder = ternaryIf(settings.shuffleNumbers, (0..9).shuffled(), (0..9).toList())
 
             // try to run computation, and update compute text and error message
             try {

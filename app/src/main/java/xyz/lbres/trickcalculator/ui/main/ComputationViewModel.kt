@@ -56,8 +56,8 @@ class ComputationViewModel : ViewModel() {
         }
 
         mLastHistoryItem.value = when {
-            error != null -> HistoryItem(computation, error)
-            computed != null -> HistoryItem(computation, computed)
+            error != null -> HistoryItem(computation, error, lastComputed)
+            computed != null -> HistoryItem(computation, computed, lastComputed)
             else -> null
         }
     }
@@ -113,6 +113,21 @@ class ComputationViewModel : ViewModel() {
         }
         val currentComputeText = computeText.value!!
         mBackupComputeText.value = computedString + currentComputeText
+    }
+
+    fun useHistoryItemAsComputeText(item: HistoryItem) {
+        resetComputeData()
+        var text = item.computation
+        val result = item.previousResult
+
+        if (result != null && text.isNotEmpty()) {
+            text = text.subList(1, text.size)
+        }
+
+        mComputeText.value = text
+        if (result != null) {
+            mComputedValue.value = result
+        }
     }
 
     /**

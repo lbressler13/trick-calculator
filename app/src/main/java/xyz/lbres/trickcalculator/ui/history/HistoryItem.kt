@@ -12,44 +12,39 @@ class HistoryItem {
     /**
      * Input computation
      */
-    val computation: String
+    val computation: StringList
 
     /**
      * Result of computation if no error was thrown
      */
     val result: ExactFraction?
 
+    val previousResult: ExactFraction?
+
     /**
      * Error message if computation threw an error
      */
     val error: String?
 
-    constructor(computation: String, result: ExactFraction) {
-        this.computation = computation
-        this.result = result
-        this.error = null
-    }
-
-    constructor(computation: String, error: String) {
+    constructor(computation: StringList, error: String, previousResult: ExactFraction? = null) {
         this.computation = computation
         this.result = null
         this.error = error
+        this.previousResult = previousResult
     }
 
-    constructor(computation: StringList, error: String) :
-        this(computation.joinToString(""), error)
-
-    constructor(computation: StringList, result: ExactFraction) {
+    constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) {
         // parse EF-formatted value into decimal string
         if (computation.isNotEmpty() && checkIsEFString(computation[0])) {
             val decimal = ExactFraction(computation[0]).toDecimalString(5)
             val newComputation = computation.copyWithReplacement(0, decimal)
-            this.computation = newComputation.joinToString("")
+            this.computation = newComputation
         } else {
-            this.computation = computation.joinToString("")
+            this.computation = computation
         }
         this.result = result
         this.error = null
+        this.previousResult = previousResult
     }
 
     override fun toString(): String {
