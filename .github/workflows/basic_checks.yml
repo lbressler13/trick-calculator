@@ -1,0 +1,25 @@
+name: Basic Checks
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: "Unit Tests"
+
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      TOKEN: ${{ secrets.TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Linting
+        run: gradle ktlintCheck
+
+      - name: Unit Tests
+        run: gradle test
