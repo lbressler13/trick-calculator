@@ -11,14 +11,14 @@
     <color name="white">#ffffff</color>
 
     <color name="light_background">#ececec</color>
-    <color name="light_disabled_foreground_gray">#888</color>
-    <color name="light_disabled_background_gray">#ddd</color>
+    <color name="light_disabled_foreground_gray">#777</color>
+    <color name="light_disabled_background_gray">#ccc</color>
     <color name="light_error_color">#d00</color>
     <color name="light_first_term_color">#a2ffffff</color>
 
     <color name="dark_action_bar">#aaafaf</color>
-    <color name="dark_disabled_foreground_gray">#999</color>
-    <color name="dark_disabled_background_gray">#333</color>
+    <color name="dark_disabled_foreground_gray">#7a7a7a</color>
+    <color name="dark_disabled_background_gray">#222</color>
     <color name="dark_error_color">#ff958e</color>
     <color name="dark_first_term_color">#a2000000</color>
 </resources>

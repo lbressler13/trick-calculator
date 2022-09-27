@@ -29,6 +29,9 @@ class ComputationViewModel : ViewModel() {
     private val mBackupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
     private val mBackupComputed = MutableLiveData<ExactFraction>().apply { value = null }
 
+    private val mShowingHistoryItem = MutableLiveData<Boolean>().apply { value = false }
+    val showingHistoryItem: LiveData<Boolean> = mShowingHistoryItem
+
     fun setError(newValue: String?) { mError.value = newValue }
     fun setComputedValue(newValue: ExactFraction) {
         mBackupComputed.value = mComputedValue.value
@@ -70,7 +73,10 @@ class ComputationViewModel : ViewModel() {
     /**
      * Clear computed values
      */
-    fun clearComputeText() { mComputeText.value = listOf() }
+    fun clearComputeText() {
+        mComputeText.value = listOf()
+        mShowingHistoryItem.value = false
+    }
     private fun clearComputedValue() { mComputedValue.value = null }
     private fun clearBackups() {
         mBackupComputeText.value = null
@@ -113,6 +119,7 @@ class ComputationViewModel : ViewModel() {
         }
         val currentComputeText = computeText.value!!
         mBackupComputeText.value = computedString + currentComputeText
+        mShowingHistoryItem.value = false
     }
 
     fun useHistoryItemAsComputeText(item: HistoryItem) {
@@ -128,6 +135,7 @@ class ComputationViewModel : ViewModel() {
         if (result != null) {
             mComputedValue.value = result
         }
+        mShowingHistoryItem.value = true
     }
 
     /**

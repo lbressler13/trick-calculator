@@ -1,5 +1,6 @@
 package xyz.lbres.trickcalculator.ui.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +23,7 @@ import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
-import xyz.lbres.trickcalculator.utils.History
-import xyz.lbres.trickcalculator.utils.OperatorFunction
-import xyz.lbres.trickcalculator.utils.gone
-import xyz.lbres.trickcalculator.utils.visible
+import xyz.lbres.trickcalculator.utils.*
 
 /**
  * Fragment to display main calculator functionality
@@ -63,6 +61,7 @@ class MainFragment : BaseFragment() {
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
         computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
+        computationViewModel.showingHistoryItem.observe(viewLifecycleOwner, showingHistoryItemObserver)
         sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
@@ -146,6 +145,16 @@ class MainFragment : BaseFragment() {
         if (lastHistoryItem != null) {
             val item = lastHistoryItem!!
             computationViewModel.useHistoryItemAsComputeText(item)
+        }
+    }
+
+    private val showingHistoryItemObserver: Observer<Boolean> = Observer {
+        if (it) {
+            binding.numpadLayout.children.forEach { button -> disableViewAndUi(button) }
+            enableViewAndUi(binding.equalsButton)
+            enableViewAndUi(binding.clearButton)
+        } else {
+            binding.numpadLayout.children.forEach { button -> enableViewAndUi(button) }
         }
     }
 
@@ -288,5 +297,27 @@ class MainFragment : BaseFragment() {
     private fun scrollTextToBottom() {
         val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
         movementMethod.goToBottom(binding.mainText)
+    }
+
+    /**
+     * Enable a view and update its UI to appear enabled
+     *
+     * @param view [View]
+     */
+    private fun enableViewAndUi(view: View) {
+        val colorOnPrimary = getColorOnPrimary(requireContext())
+        view.enable()
+        setImageButtonTint(view, colorOnPrimary)
+    }
+
+    /**
+     * Disable a view and update its UI to appear disabled
+     *
+     * @param view [View]
+     */
+    private fun disableViewAndUi(view: View) {
+        val disabledForeground = getDisabledForeground(requireContext())
+        view.disable()
+        setImageButtonTint(view, disabledForeground)
     }
 }
