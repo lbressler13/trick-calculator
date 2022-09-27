@@ -1,13 +1,13 @@
 package xyz.lbres.trickcalculator.compute
 
-import xyz.lbres.trickcalculator.assertDivByZero
-import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.kotlinutils.list.IntList
-import xyz.lbres.kotlinutils.list.StringList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.trickcalculator.assertDivByZero
 
 class ComputeHelpersTest {
     @Test fun testGetMatchingParenIndex() = runGetMatchingParenIndexTests()

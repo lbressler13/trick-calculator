@@ -1,13 +1,13 @@
 package xyz.lbres.trickcalculator.compute
 
-import xyz.lbres.trickcalculator.runRandomTest
-import xyz.lbres.trickcalculator.splitString
-import xyz.lbres.trickcalculator.utils.isNumber
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
+import xyz.lbres.trickcalculator.runRandomTest
+import xyz.lbres.trickcalculator.splitString
+import xyz.lbres.trickcalculator.utils.isNumber
 
 private val ops = listOf("+", "-", "x", "/")
 

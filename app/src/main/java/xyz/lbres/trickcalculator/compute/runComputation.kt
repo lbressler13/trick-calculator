@@ -1,10 +1,10 @@
 package xyz.lbres.trickcalculator.compute
 
-import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.exactfraction.ExactFractionOverflowException
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.trickcalculator.utils.OperatorFunction
 
 /**
  * Parse string list and compute as a mathematical expression, if possible.

@@ -1,7 +1,7 @@
 package xyz.lbres.trickcalculator.utils
 
-import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.trickcalculator.ui.history.HistoryItem
 
 /**
  * Function to apply an operator to two numbers.

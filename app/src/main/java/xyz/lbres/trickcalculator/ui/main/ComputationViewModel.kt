@@ -3,10 +3,10 @@ package xyz.lbres.trickcalculator.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import xyz.lbres.trickcalculator.ui.history.HistoryItem
-import xyz.lbres.trickcalculator.utils.isNumberChar
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.trickcalculator.ui.history.HistoryItem
+import xyz.lbres.trickcalculator.utils.isNumberChar
 
 /**
  * ViewModel to track variables related to computation and computed values

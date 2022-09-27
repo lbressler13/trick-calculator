@@ -1,11 +1,11 @@
 package xyz.lbres.trickcalculator.compute
 
-import xyz.lbres.trickcalculator.utils.isNumber
-import xyz.lbres.trickcalculator.utils.isNumberChar
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
+import xyz.lbres.trickcalculator.utils.isNumber
+import xyz.lbres.trickcalculator.utils.isNumberChar
 
 /**
  * Validate computation text, combine adjacent digits/decimals to form numbers,

@@ -1,10 +1,10 @@
 package xyz.lbres.trickcalculator
 
-import xyz.lbres.kotlinutils.list.StringList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.function.ThrowingRunnable
+import xyz.lbres.kotlinutils.list.StringList
 
 private const val iterations = 20
 
