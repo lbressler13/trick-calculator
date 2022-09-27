@@ -1,6 +1,5 @@
 package xyz.lbres.trickcalculator.ui.main
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,14 +22,20 @@ import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
-import xyz.lbres.trickcalculator.utils.*
+import xyz.lbres.trickcalculator.utils.History
+import xyz.lbres.trickcalculator.utils.OperatorFunction
+import xyz.lbres.trickcalculator.utils.disable
+import xyz.lbres.trickcalculator.utils.enable
+import xyz.lbres.trickcalculator.utils.getColorOnPrimary
+import xyz.lbres.trickcalculator.utils.getDisabledForeground
+import xyz.lbres.trickcalculator.utils.gone
+import xyz.lbres.trickcalculator.utils.setImageButtonTint
+import xyz.lbres.trickcalculator.utils.visible
 
 /**
  * Fragment to display main calculator functionality
  */
 class MainFragment : BaseFragment() {
-    // TODO disabled buttons on error??? why isn't this already done
-
     private lateinit var binding: FragmentMainBinding
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
@@ -40,8 +45,8 @@ class MainFragment : BaseFragment() {
     private var computedValue: ExactFraction? = null
 
     private val settings = Settings()
-    private var lastHistoryItem: HistoryItem? =
-        null // TODO there are 2 different lastHistoryItem values
+    private var lastHistoryItem: HistoryItem? = null
+    // TODO there are 2 different lastHistoryItem values
 
     /**
      * Initialize fragment
