@@ -8,7 +8,11 @@ on:
 jobs:
   build:
     name: "Unit Tests"
+
     runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout
