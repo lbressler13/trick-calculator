@@ -6,9 +6,11 @@ plugins {
 apply plugin: 'kotlin-android'
 
 repositories {
+    // general repositories
     google()
     mavenCentral()
 
+    // kotlin utils
     exclusiveContent {
         forRepository {
             maven {
@@ -24,6 +26,7 @@ repositories {
         }
     }
 
+    // exact numbers
     exclusiveContent {
         forRepository {
             maven {
