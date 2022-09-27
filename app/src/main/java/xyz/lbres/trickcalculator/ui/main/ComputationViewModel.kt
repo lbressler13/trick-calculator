@@ -76,7 +76,7 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Remove the generated history item and historical value
+     * Remove the generated history item and historical values
      */
     fun clearStoredHistoryItem() {
         mGeneratedHistoryItem.value = null

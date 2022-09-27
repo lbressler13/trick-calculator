@@ -156,6 +156,8 @@ class MainFragment : BaseFragment() {
         if (lastHistoryItem != null) {
             val item = lastHistoryItem!!
             computationViewModel.useHistoryItemAsComputeText(item)
+
+            scrollTextToTop()
         }
     }
 
