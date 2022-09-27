@@ -1,6 +1,5 @@
 package xyz.lbres.trickcalculator
 
-import BuildOptions
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
