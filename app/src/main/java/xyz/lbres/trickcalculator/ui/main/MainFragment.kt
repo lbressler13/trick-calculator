@@ -51,8 +51,7 @@ class MainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
-        computationViewModel =
-            ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
+        computationViewModel = ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodels
@@ -70,7 +69,7 @@ class MainFragment : BaseFragment() {
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
-        binding.useLastHistoryButton.setOnClickListener { lastHistoryItemOnClick() }
+        binding.useLastHistoryButton.setOnClickListener { useLastHistoryItemOnClick() }
 
         initSettingsFragment(this, binding.settingsButton, R.id.navigateMainToSettings)
 
@@ -152,7 +151,7 @@ class MainFragment : BaseFragment() {
     /**
      * Use last history item as current computation
      */
-    private val lastHistoryItemOnClick = {
+    private val useLastHistoryItemOnClick = {
         if (lastHistoryItem != null) {
             val item = lastHistoryItem!!
             computationViewModel.useHistoryItemAsComputeText(item)
@@ -259,7 +258,7 @@ class MainFragment : BaseFragment() {
      * Initialize all buttons in numpad
      */
     private fun initNumpad() {
-        // text buttons, except clear
+        // text buttons
         binding.numpadLayout.children.forEach {
             if (it is Button && it.text != null && it != binding.clearButton) {
                 it.setOnClickListener { _ -> genericAddComputeOnClick(it.text.toString()) }
@@ -272,7 +271,7 @@ class MainFragment : BaseFragment() {
         binding.timesButton.setOnClickListener { genericAddComputeOnClick("x") }
         binding.divideButton.setOnClickListener { genericAddComputeOnClick("/") }
 
-        // functional buttons, including clear
+        // functional buttons
         binding.clearButton.setOnClickListener { computationViewModel.resetComputeData() }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
         binding.backspaceButton.setOnClickListener {
