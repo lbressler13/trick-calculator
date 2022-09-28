@@ -12,20 +12,33 @@ import xyz.lbres.trickcalculator.utils.isNumberChar
  * ViewModel to track variables related to computation and computed values
  */
 class ComputationViewModel : ViewModel() {
-    // list of numbers and operators
+    /**
+     * List of numbers and operators
+     */
     private val mComputeText = MutableLiveData<StringList>().apply { value = listOf() }
     val computeText: LiveData<StringList> = mComputeText
 
-    // result of parsing computeText
+    /**
+     * Result of parsing compute text
+     */
     private val mComputedValue = MutableLiveData<ExactFraction>().apply { value = null }
     val computedValue: LiveData<ExactFraction> = mComputedValue
 
+    /**
+     * Error generated in computation
+     */
     private val mError = MutableLiveData<String>().apply { value = null }
     val error: LiveData<String> = mError
 
-    private val mLastHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
-    val lastHistoryItem: LiveData<HistoryItem> = mLastHistoryItem
-    // backup values to use when generating history item
+    /**
+     * History item generated from most recent computation
+     */
+    private val mGeneratedHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
+    val generatedHistoryItem: LiveData<HistoryItem> = mGeneratedHistoryItem
+
+    /**
+     * Backup values to use when generating history item
+     */
     private val mBackupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
     private val mBackupComputed = MutableLiveData<ExactFraction>().apply { value = null }
 
@@ -38,7 +51,7 @@ class ComputationViewModel : ViewModel() {
     /**
      * Store last history value based on most recent error or computation
      */
-    fun setLastHistoryItem() {
+    fun generateHistoryItem() {
         val error = error.value
         val lastComputed = mBackupComputed.value
         val computed = computedValue.value
@@ -55,15 +68,18 @@ class ComputationViewModel : ViewModel() {
             computation = start + computation.subList(1, computation.size)
         }
 
-        mLastHistoryItem.value = when {
-            error != null -> HistoryItem(computation, error)
-            computed != null -> HistoryItem(computation, computed)
+        mGeneratedHistoryItem.value = when {
+            error != null -> HistoryItem(computation, error, lastComputed)
+            computed != null -> HistoryItem(computation, computed, lastComputed)
             else -> null
         }
     }
 
+    /**
+     * Remove the generated history item and historical values
+     */
     fun clearStoredHistoryItem() {
-        mLastHistoryItem.value = null
+        mGeneratedHistoryItem.value = null
         clearBackups()
     }
 
@@ -113,6 +129,27 @@ class ComputationViewModel : ViewModel() {
         }
         val currentComputeText = computeText.value!!
         mBackupComputeText.value = computedString + currentComputeText
+    }
+
+    /**
+     * Set the compute text and last computed value based on a history item
+     *
+     * @param item [HistoryItem]: item containing compute text and previous computed value
+     */
+    fun useHistoryItemAsComputeText(item: HistoryItem) {
+        resetComputeData()
+        var text = item.computation
+        val result = item.previousResult
+
+        if (result != null) {
+            // first value of text is the computed value
+            if (text.isNotEmpty()) {
+                text = text.subList(1, text.size)
+            }
+
+            mComputedValue.value = result
+        }
+        mComputeText.value = text
     }
 
     /**

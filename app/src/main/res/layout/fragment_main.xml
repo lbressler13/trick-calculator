@@ -8,6 +8,20 @@
     android:background="?backgroundColor">
 
     <ImageButton
+        android:id="@+id/useLastHistoryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:contentDescription="@string/last_history_cd"
+        android:paddingEnd="@dimen/corner_icon_padding"
+        android:paddingBottom="@dimen/corner_icon_padding"
+        android:src="@drawable/ic_download"
+        app:layout_constraintBottom_toTopOf="@id/mainText"
+        app:layout_constraintEnd_toStartOf="@id/historyButton"
+        app:tint="?colorPrimary"
+        tools:ignore="RtlSymmetry" />
+
+    <ImageButton
         android:id="@+id/historyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

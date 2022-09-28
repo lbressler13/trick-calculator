@@ -82,6 +82,7 @@
     <string name="expand_images_dropdown_cd">Show icons</string>
     <string name="info_cd">Additional information</string>
     <string name="history_cd">History</string>
+    <string name="last_history_cd">Show last history item</string>
     <string name="launcher_cd">Calculator symbol</string>
     <string name="minus_cd">Minus symbol</string>
     <string name="plus_cd">Plus symbol</string>

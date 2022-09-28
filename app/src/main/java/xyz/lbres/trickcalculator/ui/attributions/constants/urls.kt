@@ -14,6 +14,7 @@ const val flaticonAttrPolicyUrl = "https://support.flaticon.com/s/article/Attrib
 const val freepikUrl = "https://www.flaticon.com/authors/freepik"
 const val ilhamFitrotulHayatUrl = "https://www.flaticon.com/authors/ilham-fitrotul-hayat"
 const val iconKananUrl = "https://www.flaticon.com/authors/iconkanan"
+const val joalfaUrl = "https://www.flaticon.com/authors/joalfa"
 const val smashiconsUrl = "https://www.flaticon.com/authors/smashicons"
 
 /**
@@ -23,6 +24,7 @@ const val chevronDownUrl = "https://www.flaticon.com/premium-icon/down-chevron_1
 const val chevronLeftUrl = "https://www.flaticon.com/premium-icon/left-chevron_1633718"
 const val chevronRightUrl = "https://www.flaticon.com/premium-icon/right-chevron_1633719"
 const val chevronUpUrl = "https://www.flaticon.com/premium-icon/up-chevron_1633717"
+const val downloadUrl = "https://www.flaticon.com/free-icon/download_3502477"
 const val launcherUrl = "https://www.flaticon.com/premium-icon/calculator_2838917"
 const val arrowLeftUrl = "https://www.flaticon.com/premium-icon/left_3416141"
 const val closeUrl = "https://www.flaticon.com/premium-icon/cross_4421536"

@@ -26,6 +26,10 @@ private val iconKananImages = listOf(
     ImageAttribution(R.drawable.ic_history, R.string.history_cd, historyUrl)
 )
 
+private val joalfaIcons = listOf(
+    ImageAttribution(R.drawable.ic_download, R.string.last_history_cd, downloadUrl)
+)
+
 private val ilhamFitrotulHayatImages = listOf(
     ImageAttribution(R.drawable.ic_arrow_left, R.string.backspace_cd, arrowLeftUrl),
     ImageAttribution(R.drawable.ic_close, R.string.close_cd, closeUrl)
@@ -41,6 +45,7 @@ private val smashiconsImages = listOf(
 
 val authorAttributions = listOf(
     AuthorAttribution("Freepik", freepikUrl, freepikImages),
+    AuthorAttribution("joalfa", joalfaUrl, joalfaIcons),
     AuthorAttribution("IconKanan", iconKananUrl, iconKananImages),
     AuthorAttribution("Ilham Fitrotul Hayat", ilhamFitrotulHayatUrl, ilhamFitrotulHayatImages),
     AuthorAttribution("Smashicons", smashiconsUrl, smashiconsImages)

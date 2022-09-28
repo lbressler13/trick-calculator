@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
@@ -21,6 +22,7 @@ import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -38,6 +40,7 @@ class MainFragment : BaseFragment() {
     private var computedValue: ExactFraction? = null
 
     private val settings = Settings()
+    private var lastHistoryItem: HistoryItem? = null
 
     /**
      * Initialize fragment
@@ -55,36 +58,60 @@ class MainFragment : BaseFragment() {
         computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
-        computationViewModel.lastHistoryItem.observe(viewLifecycleOwner, lastHistoryItemObserver)
+        computationViewModel.generatedHistoryItem.observe(viewLifecycleOwner, generatedHistoryItemObserver)
+        sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
         sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
 
+        // init UI
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
+        binding.useLastHistoryButton.setOnClickListener { useLastHistoryItemOnClick() }
 
         initSettingsFragment(this, binding.settingsButton, R.id.navigateMainToSettings)
 
         return binding.root
     }
 
-    private val lastHistoryItemObserver: Observer<HistoryItem> = Observer {
+    /**
+     * Save generated history value in shared view model and delete
+     */
+    private val generatedHistoryItemObserver: Observer<HistoryItem> = Observer {
         if (it != null) {
             sharedViewModel.addToHistory(it)
             computationViewModel.clearStoredHistoryItem()
         }
     }
+
+    /**
+     * Save most recent history item and enable/disable the last item button
+     */
+    private val historyObserver: Observer<History> = Observer {
+        lastHistoryItem = it.lastOrNull()
+        binding.useLastHistoryButton.isVisible = it.isNotEmpty()
+    }
+
+    /**
+     * Show or hide settings button
+     */
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = it
     }
 
+    /**
+     * Save computed value in local variable and update textbox
+     */
     private val computedValueObserver: Observer<ExactFraction?> = Observer {
         computedValue = it
         setMainText()
     }
 
+    /**
+     * Save compute text in local variable and update textbox
+     */
     private val computeTextObserver: Observer<StringList> = Observer {
         computeText = it
         setMainText()
@@ -110,7 +137,7 @@ class MainFragment : BaseFragment() {
     /**
      * Launch AttributionsFragment
      */
-    private val infoButtonOnClick: () -> Unit = {
+    private val infoButtonOnClick = {
         requireMainActivity().runNavAction(R.id.navigateMainToAttribution)
     }
 
@@ -119,6 +146,18 @@ class MainFragment : BaseFragment() {
      */
     private val historyButtonOnClick = {
         requireMainActivity().runNavAction(R.id.navigateMainToHistory)
+    }
+
+    /**
+     * Use last history item as current computation
+     */
+    private val useLastHistoryItemOnClick = {
+        if (lastHistoryItem != null) {
+            val item = lastHistoryItem!!
+            computationViewModel.useHistoryItemAsComputeText(item)
+
+            scrollTextToTop()
+        }
     }
 
     /**
@@ -160,11 +199,7 @@ class MainFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = if (settings.shuffleNumbers) {
-                (0..9).shuffled()
-            } else {
-                (0..9).toList()
-            }
+            val numberOrder = ternaryIf(settings.shuffleNumbers, (0..9).shuffled(), (0..9).toList())
 
             // try to run computation, and update compute text and error message
             try {
@@ -182,12 +217,11 @@ class MainFragment : BaseFragment() {
 
                 computationViewModel.setComputedValue(computedValue)
                 computationViewModel.setError(null)
-                computationViewModel.setLastHistoryItem()
+                computationViewModel.generateHistoryItem()
 
                 computationViewModel.clearComputeText()
 
-                val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
-                movement.goToTop(binding.mainText)
+                scrollTextToTop()
             } catch (e: Exception) {
                 val error: String = if (e.message == null) {
                     "Computation error"
@@ -202,7 +236,7 @@ class MainFragment : BaseFragment() {
                 }
 
                 computationViewModel.setError(error)
-                computationViewModel.setLastHistoryItem()
+                computationViewModel.generateHistoryItem()
             }
         }
     }
@@ -224,6 +258,7 @@ class MainFragment : BaseFragment() {
      * Initialize all buttons in numpad
      */
     private fun initNumpad() {
+        // text buttons
         binding.numpadLayout.children.forEach {
             if (it is Button && it.text != null && it != binding.clearButton) {
                 it.setOnClickListener { _ -> genericAddComputeOnClick(it.text.toString()) }
@@ -261,6 +296,17 @@ class MainFragment : BaseFragment() {
         textview.text = fullText
     }
 
+    /**
+     * Scroll main text to top of text box
+     */
+    private fun scrollTextToTop() {
+        val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
+        movement.goToTop(binding.mainText)
+    }
+
+    /**
+     * Scroll main text to bottom of text box
+     */
     private fun scrollTextToBottom() {
         val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
         movementMethod.goToBottom(binding.mainText)
