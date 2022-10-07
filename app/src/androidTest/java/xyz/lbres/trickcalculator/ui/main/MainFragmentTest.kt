@@ -15,13 +15,14 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.checkVisibleWithText
 
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
     lateinit var mainText: ViewInteraction
+
     @Rule
     @JvmField
     val rule = ActivityScenarioRule(MainActivity::class.java)
@@ -77,7 +78,7 @@ class MainFragmentTest {
 
     @Test
     fun typeInMainText() {
-        onView(withId(R.id.mainText)).check(matches(withText("")))
+        mainText.check(matches(withText("")))
 
         // digits
         onView(withId(R.id.oneButton)).perform(click())
@@ -138,11 +139,51 @@ class MainFragmentTest {
 
     @Test
     fun useClear() {
-        // TODO (with text, with computed, with error, while blank)
+        val clearButton = onView(withId(R.id.clearButton))
+
+        // empty
+        mainText.check(matches(withText("")))
+        clearButton.perform(click())
+        mainText.check(matches(withText("")))
+
+        // with text
+        typeText("123")
+        mainText.check(matches(not(withText(""))))
+        clearButton.perform(click())
+        mainText.check(matches(withText("")))
+
+        typeText("(.7-45+55/5)^3(4.3)")
+        mainText.check(matches(not(withText(""))))
+        clearButton.perform(click())
+        mainText.check(matches(withText("")))
+
+        // with computed
+        typeText("123")
+        equals()
+        mainText.check(matches(not(withText(""))))
+        clearButton.perform(click())
+        mainText.check(matches(withText("")))
+
+        typeText("100x44-3")
+        equals()
+        mainText.check(matches(not(withText(""))))
+        clearButton.perform(click())
+        mainText.check(matches(withText("")))
+
+        // with error
+        typeText("100..3")
+        equals()
+        mainText.check(matches(not(withText(""))))
+        onView(withId(R.id.errorText))
+            .check(matches(isDisplayed()))
+            .check(matches(not(withText(""))))
+        clearButton.perform(click())
+        mainText.check(matches(withText("")))
+        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
     }
 
     @Test
-    fun useEquals() {
+    fun useEqualsResult() {
         // blank
         mainText.check(matches(withText("")))
         equals()
@@ -164,33 +205,38 @@ class MainFragmentTest {
         equals()
         mainText.check(matches(withText("[0.05]")))
 
+        clearText()
+        typeText("(000.05)")
+        equals()
+        mainText.check(matches(withText("[0.05]")))
+
         // one operator
         repeat(10) {
             clearText()
             typeText("12+10")
             equals()
-            checkMainTextOptions(listOf("[22]", "[2]", "[120]", "[1.2]"))
+            checkMainTextOptions(setOf("[22]", "[2]", "[120]", "[1.2]"))
         }
 
         repeat(10) {
             clearText()
             typeText("2^3") // exponent
             equals()
-            checkMainTextOptions(listOf("[5]", "[-1]", "[6]", "[0.66666667]", "[8]"))
+            checkMainTextOptions(setOf("[5]", "[-1]", "[6]", "[0.66666667]", "[8]"))
         }
 
         repeat(10) {
             clearText()
             typeText("1.5x4") // decimal
             equals()
-            checkMainTextOptions(listOf("[5.5]", "[-2.5]", "[6]", "[0.375]"))
+            checkMainTextOptions(setOf("[5.5]", "[-2.5]", "[6]", "[0.375]"))
         }
 
         repeat(10) {
             clearText()
             typeText("2x5x4") // several same op
             equals()
-            checkMainTextOptions(listOf("[11]", "[-7]", "[40]", "[0.1]"))
+            checkMainTextOptions(setOf("[11]", "[-7]", "[40]", "[0.1]"))
         }
 
         // several operators
@@ -199,7 +245,7 @@ class MainFragmentTest {
             typeText("2+5-4")
             equals()
             checkMainTextOptions(
-                listOf(
+                setOf(
                     "[3]", "[22]", "[3.25]", // + = +
                     "[1]", "[-18]", "[0.75]", // + = -
                     "[14]", "[6]", "[2.5]", // + = x
@@ -213,7 +259,7 @@ class MainFragmentTest {
             typeText("5^2-4") // exponent
             equals()
             checkMainTextOptions(
-                listOf(
+                setOf(
                     "[3]", "[13]", "[5.5]", "[21]", // + = +
                     "[7]", "[-3]", "[4.5]", "[-11]", // + = -
                     "[14]", "[6]", "[2.5]", "[80]", // + = x
@@ -228,7 +274,7 @@ class MainFragmentTest {
             typeText("10-.5x4/2+16")
             equals()
             checkMainTextOptions(
-                listOf(
+                setOf(
                     "[10]", "[-21.5]", "[11.875]", "[-5]", "[-21.875]", "[-5.75]", // + = +
                     "[10]", "[41.5]", "[8.125]", "[25]", "[41.875]", "[25.75]", // + = -
                     "[8.875]", "[-9]", "[1.125]", "[19]", "[-12.75]", "[15.25]", // + = *
@@ -237,16 +283,70 @@ class MainFragmentTest {
             )
         }
 
+        // parens
+        repeat(10) {
+            clearText()
+            typeText("2(5-4)")
+            equals()
+            checkMainTextOptions(
+                setOf(
+                    "[3]", "[22]", "[3.25]", // + = +
+                    "[1]", "[-18]", "[0.75]", // + = -
+                    "[14]", "[6]", "[2.5]", // + = x
+                    "[4.4]", "[-3.6]", "[1.6]" // + = /
+                )
+            )
+        }
+
         // with previous computed
+        repeat(10) {
+            clearText()
+            typeText("123")
+            equals()
+            typeText("+2")
+            equals()
+            checkMainTextOptions(setOf("[125]", "[121]", "[246]", "[61.5]"))
+        }
 
-        // error
-
-        // TODO
+        repeat(10) {
+            clearText()
+            typeText("123")
+            equals()
+            typeText("2") // add times between values
+            equals()
+            checkMainTextOptions(setOf("[125]", "[121]", "[246]", "[61.5]"))
+        }
     }
 
     @Test
-    fun useComputedValue() {
-        // TODO
+    fun useEqualsError() {
+        // syntax errors
+        typeText("+")
+        equals()
+        checkVisibleWithText(R.id.errorText, "Error: Syntax error")
+
+        clearText()
+        typeText("1+")
+        equals()
+        checkVisibleWithText(R.id.errorText, "Error: Syntax error")
+        typeText("2")
+        equals()
+        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+
+        clearText()
+        typeText("()")
+        equals()
+        checkVisibleWithText(R.id.errorText, "Error: Syntax error")
+
+        // divide by zero
+        repeat(10) {
+            clearText()
+            typeText("1/0")
+            equals()
+            onView(withId(R.id.errorText)).check(
+                matches(anyOf(not(isDisplayed()), withText("Error: Divide by zero")))
+            )
+        }
     }
 
     @Test
@@ -269,20 +369,13 @@ class MainFragmentTest {
 
         clearText()
         typeText("123+0.1")
-        backspace()
-        mainText.check(matches(withText("123+0.")))
-        backspace()
-        mainText.check(matches(withText("123+0")))
-        backspace()
-        mainText.check(matches(withText("123+")))
-        backspace()
-        mainText.check(matches(withText("123")))
-        backspace()
-        mainText.check(matches(withText("12")))
-        backspace()
-        mainText.check(matches(withText("1")))
-        backspace()
-        mainText.check(matches(withText("")))
+        backspaceTo("123+0.")
+        backspaceTo("123+0")
+        backspaceTo("123+")
+        backspaceTo("123")
+        backspaceTo("12")
+        backspaceTo("1")
+        backspaceTo("")
 
         // with computed value
         clearText()
@@ -323,8 +416,6 @@ class MainFragmentTest {
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
         equals()
         mainText.check(matches(withText("[1]")))
-
-        // TODO with clear on error
     }
 
     @Test
@@ -333,28 +424,103 @@ class MainFragmentTest {
         historyButton.check(matches(isDisplayed()))
         historyButton.perform(click())
         onView(withText("Computation History")).check(matches(isDisplayed()))
-        // TODO
     }
 
     @Test
     fun useLastHistoryItem() {
         val useLastButton = onView(withId(R.id.useLastHistoryButton))
-        var lastComputation = ""
 
         // none
+        useLastButton.check(matches(not(isDisplayed())))
 
         // one value
+        clearText()
+        typeText("123")
+        equals()
+        mainText.check(matches(withText("[123]")))
+        useLastButton.perform(click())
+        mainText.check(matches(withText("123")))
+
+        clearText()
+        typeText("(1234)")
+        equals()
+        mainText.check(matches(withText("[1234]")))
+        useLastButton.perform(click())
+        mainText.check(matches(withText("(1234)")))
+        // doesn't pull previous item
+        useLastButton.perform(click())
+        mainText.check(matches(withText("(1234)")))
+
+        clearText()
+        typeText("00001.50000")
+        equals()
+        mainText.check(matches(withText("[1.5]")))
+        useLastButton.perform(click())
+        mainText.check(matches(withText("00001.50000")))
 
         // multiple values
+        clearText()
+        var computation = "123+456"
+        typeText(computation)
+        equals()
+        mainText.check(matches(not(withText(computation))))
+        useLastButton.perform(click())
+        mainText.check(matches(withText(computation)))
 
-        // error
+        clearText()
+        computation = ".5(66+99/33)x22x2+0.001"
+        typeText(computation)
+        equals()
+        mainText.check(matches(not(withText(computation))))
+        useLastButton.perform(click())
+        mainText.check(matches(withText(computation)))
 
-        // TODO
+        // with computed value
+        clearText()
+        typeText("1234")
+        equals()
+        typeText("+2")
+        useLastButton.perform(click())
+        mainText.check(matches(withText("1234")))
+
+        clearText()
+        typeText("1234")
+        equals()
+        typeText("+2")
+        equals()
+        useLastButton.perform(click())
+        mainText.check(matches(withText("[1234]+2")))
+
+        clearText()
+        typeText("3+2")
+        equals()
+        computation = "(5.4+2)-3"
+        typeText(computation)
+        equals()
+        useLastButton.perform(click())
+        checkMainTextOptions(
+            setOf(
+                "[5]$computation", "[1]$computation", "[6]$computation", "[1.5]$computation"
+            )
+        )
+
+        // after error
+        clearText()
+        typeText("(1")
+        equals() // set error
+        mainText.check(matches(withText("(1")))
+        onView(withId(R.id.errorText)).check(matches(isDisplayed()))
+        useLastButton.perform(click())
+        mainText.check(matches(withText("(1"))) // pulls computation without error
+        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
     }
 
     @Test
     fun openInfoFragment() {
-        // TODO
+        val infoButton = onView(withId(R.id.infoButton))
+        infoButton.check(matches(isDisplayed()))
+        infoButton.perform(click())
+        onView(withText("Image Attributions")).check(matches(isDisplayed()))
     }
 
     private fun clearText() {
@@ -365,11 +531,16 @@ class MainFragmentTest {
         onView(withId(R.id.backspaceButton)).perform(click())
     }
 
+    private fun backspaceTo(newText: String) {
+        backspace()
+        mainText.check(matches(withText(newText)))
+    }
+
     private fun equals() {
         onView(withId(R.id.equalsButton)).perform(click())
     }
 
-    private fun checkMainTextOptions(options: StringList) {
+    private fun checkMainTextOptions(options: Set<String>) {
         val matchers = options.map { withText(it) }.toMutableList()
         mainText.check(matches(anyOf(matchers)))
     }
