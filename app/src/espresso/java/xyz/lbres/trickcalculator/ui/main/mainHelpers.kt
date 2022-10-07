@@ -5,6 +5,11 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.trickcalculator.R
 
+/**
+ * Type text in main textview by clicking appropriate button for each character.
+ *
+ * @param text [String]: text to type
+ */
 fun typeText(text: String) {
     for (c in text) {
         val buttonId = when (c) {

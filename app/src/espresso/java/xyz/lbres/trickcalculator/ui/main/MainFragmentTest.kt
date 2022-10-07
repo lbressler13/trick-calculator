@@ -293,7 +293,7 @@ class MainFragmentTest {
                     "[3]", "[22]", "[3.25]", // + = +
                     "[1]", "[-18]", "[0.75]", // + = -
                     "[18]", "[2]", "[25]", // + = x
-                    "[0.11111111]", "[2]", "[0.1]" // + = /
+                    "[0.22222222]", "[2]", "[0.1]" // + = /
                 )
             )
         }
@@ -382,8 +382,7 @@ class MainFragmentTest {
         typeText("123")
         equals()
         mainText.check(matches(withText("[123]")))
-        backspace()
-        mainText.check(matches(withText("")))
+        backspaceTo("")
 
         clearText()
         typeText("123")
@@ -391,10 +390,8 @@ class MainFragmentTest {
         typeText("+5")
         mainText.check(matches(withText("[123]+5")))
         backspace()
-        backspace()
-        mainText.check(matches(withText("[123]")))
-        backspace()
-        mainText.check(matches(withText("")))
+        backspaceTo("[123]")
+        backspaceTo("")
 
         // with error
         clearText()
@@ -523,27 +520,44 @@ class MainFragmentTest {
         onView(withText("Image Attributions")).check(matches(isDisplayed()))
     }
 
+    /**
+     * Click clear button
+     */
     private fun clearText() {
         onView(withId(R.id.clearButton)).perform(click())
     }
 
+    /**
+     * Click backspace button
+     */
     private fun backspace() {
         onView(withId(R.id.backspaceButton)).perform(click())
     }
 
+    /**
+     * Click backspace button and validate the result
+     *
+     * @param newText [String]: expected text in main textview after clicking backspace
+     */
     private fun backspaceTo(newText: String) {
         backspace()
         mainText.check(matches(withText(newText)))
     }
 
+    /**
+     * Click equals button
+     */
     private fun equals() {
         onView(withId(R.id.equalsButton)).perform(click())
     }
 
+    /**
+     * Check that the main textview matches one out of a list of options
+     *
+     * @param options [Set]<[String]>: list of valid values for main textview
+     */
     private fun checkMainTextOptions(options: Set<String>) {
         val matchers = options.map { withText(it) }.toMutableList()
         mainText.check(matches(anyOf(matchers)))
     }
-
-    // TODO test settings button
 }
