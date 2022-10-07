@@ -2,8 +2,8 @@ package xyz.lbres.trickcalculator.ui.main
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import org.junit.Test
@@ -11,15 +11,25 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.MainActivity
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
+import org.junit.Before
 
 import org.junit.Rule
+import xyz.lbres.kotlinutils.list.StringList
 
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
+    lateinit var mainText: ViewInteraction
     @Rule
     @JvmField
     val rule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Before
+    fun setupTest() {
+        mainText = onView(withId(R.id.mainText))
+        clearText()
+    }
 
     @Test
     fun loadActionBarWithTitle() {
@@ -32,40 +42,20 @@ class MainFragmentTest {
         // top of screen
         onView(withId(R.id.useLastHistoryButton)).check(matches(not(isDisplayed())))
         onView(withId(R.id.historyButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.mainText)).check(matches(isDisplayed())).check(matches(withText("")))
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+        checkVisibleWithText(R.id.mainText, "")
 
         // numpad layout
-        onView(withId(R.id.oneButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("1")))
-        onView(withId(R.id.twoButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("2")))
-        onView(withId(R.id.threeButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("3")))
-        onView(withId(R.id.fourButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("4")))
-        onView(withId(R.id.fiveButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("5")))
-        onView(withId(R.id.sixButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("6")))
-        onView(withId(R.id.sevenButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("7")))
-        onView(withId(R.id.eightButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("8")))
-        onView(withId(R.id.nineButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("9")))
-        onView(withId(R.id.zeroButton))
-            .check(matches(isDisplayed()))
-            .check(matches(withText("0")))
+        checkVisibleWithText(R.id.oneButton, "1")
+        checkVisibleWithText(R.id.twoButton, "2")
+        checkVisibleWithText(R.id.threeButton, "3")
+        checkVisibleWithText(R.id.fourButton, "4")
+        checkVisibleWithText(R.id.fiveButton, "5")
+        checkVisibleWithText(R.id.sixButton, "6")
+        checkVisibleWithText(R.id.sevenButton, "7")
+        checkVisibleWithText(R.id.eightButton, "8")
+        checkVisibleWithText(R.id.nineButton, "9")
+        checkVisibleWithText(R.id.zeroButton, "0")
 
         onView(withId(R.id.plusButton)).check(matches(isDisplayed()))
         onView(withId(R.id.minusButton)).check(matches(isDisplayed()))
@@ -90,64 +80,161 @@ class MainFragmentTest {
 
         // digits
         onView(withId(R.id.oneButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1")))
+        mainText.check(matches(withText("1")))
 
         onView(withId(R.id.twoButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("12")))
+        mainText.check(matches(withText("12")))
 
         onView(withId(R.id.threeButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("123")))
+        mainText.check(matches(withText("123")))
 
         onView(withId(R.id.fourButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234")))
+        mainText.check(matches(withText("1234")))
 
         onView(withId(R.id.fiveButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("12345")))
+        mainText.check(matches(withText("12345")))
 
         onView(withId(R.id.sixButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("123456")))
+        mainText.check(matches(withText("123456")))
 
         onView(withId(R.id.sevenButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567")))
+        mainText.check(matches(withText("1234567")))
 
         onView(withId(R.id.eightButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("12345678")))
+        mainText.check(matches(withText("12345678")))
 
         onView(withId(R.id.nineButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("123456789")))
+        mainText.check(matches(withText("123456789")))
 
         onView(withId(R.id.zeroButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890")))
+        mainText.check(matches(withText("1234567890")))
 
         // operators
         onView(withId(R.id.plusButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+")))
+        mainText.check(matches(withText("1234567890+")))
 
         onView(withId(R.id.minusButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+-")))
+        mainText.check(matches(withText("1234567890+-")))
 
         onView(withId(R.id.timesButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+-x")))
+        mainText.check(matches(withText("1234567890+-x")))
 
         onView(withId(R.id.divideButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+-x/")))
+        mainText.check(matches(withText("1234567890+-x/")))
 
         onView(withId(R.id.expButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+-x/^")))
+        mainText.check(matches(withText("1234567890+-x/^")))
 
         onView(withId(R.id.lparenButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+-x/^(")))
+        mainText.check(matches(withText("1234567890+-x/^(")))
 
         onView(withId(R.id.rparenButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+-x/^()")))
+        mainText.check(matches(withText("1234567890+-x/^()")))
 
         onView(withId(R.id.decimalButton)).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("1234567890+-x/^().")))
+        mainText.check(matches(withText("1234567890+-x/^().")))
+    }
+
+    @Test
+    fun useClear() {
+        // TODO (with text, with computed, with error, while blank)
     }
 
     @Test
     fun useEquals() {
-        // TODO (computed value and errors)
+        // blank
+        mainText.check(matches(withText("")))
+        equals()
+        mainText.check(matches(withText("")))
+
+        // one number
+        clearText()
+        typeText("123")
+        equals()
+        mainText.check(matches(withText("[123]")))
+
+        clearText()
+        typeText("9.876")
+        equals()
+        mainText.check(matches(withText("[9.876]")))
+
+        clearText()
+        typeText("000.05")
+        equals()
+        mainText.check(matches(withText("[0.05]")))
+
+        // one operator
+        repeat(10) {
+            clearText()
+            typeText("12+10")
+            equals()
+            checkMainTextOptions(listOf("[22]", "[2]", "[120]", "[1.2]"))
+        }
+
+        repeat(10) {
+            clearText()
+            typeText("2^3") // exponent
+            equals()
+            checkMainTextOptions(listOf("[5]", "[-1]", "[6]", "[0.66666667]", "[8]"))
+        }
+
+        repeat(10) {
+            clearText()
+            typeText("1.5x4") // decimal
+            equals()
+            checkMainTextOptions(listOf("[5.5]", "[-2.5]", "[6]", "[0.375]"))
+        }
+
+        repeat(10) {
+            clearText()
+            typeText("2x5x4") // several same op
+            equals()
+            checkMainTextOptions(listOf("[11]", "[-7]", "[40]", "[0.1]"))
+        }
+
+        // several operators
+        repeat(10) {
+            clearText()
+            typeText("2+5-4")
+            equals()
+            checkMainTextOptions(listOf(
+                "[3]",   "[22]",   "[3.25]", // + = +
+                "[1]",   "[-18]",  "[0.75]", // + = -
+                "[14]",  "[6]",    "[2.5]",  // + = x
+                "[4.4]", "[-3.6]", "[1.6]"   // + = /
+            ))
+        }
+
+        repeat(10) {
+            clearText()
+            typeText("5^2-4") // exponent
+            equals()
+            checkMainTextOptions(listOf(
+                "[3]",   "[13]",   "[5.5]", "[21]",     // + = +
+                "[7]",   "[-3]",   "[4.5]", "[-11]",    // + = -
+                "[14]",  "[6]",    "[2.5]", "[80]",     // + = x
+                "[6.5]", "[-1.5]", "[10]",  "[0.3125]", // + = /
+                "[29]",  "[21]",   "[100]", "[6.25]"    // + = ^
+            ))
+        }
+
+        repeat(10) {
+            clearText()
+            typeText("10-.5x4/2+16")
+            equals()
+            checkMainTextOptions(listOf(
+                "[10]",    "[-21.5]", "[11.875]", "[-5]", "[-21.875]", "[-5.75]",  // + = +
+                "[10]",    "[41.5]", "[8.125]",  "[25]", "[41.875]",  "[25.75]",  // + = -
+                "[8.875]", "[-9]",    "[1.125]",  "[19]", "[-12.75]",  "[15.25]",  // + = *
+                "[-8]",    "[12]",    "[48]",     "[28]", "[66]",      "[94]"      // + = /
+            ))
+        }
+
+        // with previous computed
+
+        // error
+
+        // TODO
     }
 
     @Test
@@ -157,21 +244,104 @@ class MainFragmentTest {
 
     @Test
     fun useBackspace() {
-        // TODO (regular, empty, computed)
-    }
+        // blank
+        mainText.check(matches(withText("")))
+        backspace()
+        mainText.check(matches(withText("")))
 
-    @Test
-    fun useClear() {
-        // TODO (with text, with computed, with error, while blank)
+        // with text
+        clearText()
+        typeText("1")
+        backspace()
+        mainText.check(matches(withText("")))
+
+        clearText()
+        typeText("123")
+        backspace()
+        mainText.check(matches(withText("12")))
+
+        clearText()
+        typeText("123+0.1")
+        backspace()
+        mainText.check(matches(withText("123+0.")))
+        backspace()
+        mainText.check(matches(withText("123+0")))
+        backspace()
+        mainText.check(matches(withText("123+")))
+        backspace()
+        mainText.check(matches(withText("123")))
+        backspace()
+        mainText.check(matches(withText("12")))
+        backspace()
+        mainText.check(matches(withText("1")))
+        backspace()
+        mainText.check(matches(withText("")))
+
+        // with computed value
+        clearText()
+        typeText("123")
+        equals()
+        mainText.check(matches(withText("[123]")))
+        backspace()
+        mainText.check(matches(withText("")))
+
+        clearText()
+        typeText("123")
+        equals()
+        typeText("+5")
+        mainText.check(matches(withText("[123]+5")))
+        backspace()
+        backspace()
+        mainText.check(matches(withText("[123]")))
+        backspace()
+        mainText.check(matches(withText("")))
+
+        // with error
+        clearText()
+        typeText("+")
+        mainText.check(matches(withText("+")))
+        equals()
+        onView(withId(R.id.errorText)).check(matches(isDisplayed()))
+        backspace()
+        mainText.check(matches(withText("")))
+        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+
+        clearText()
+        typeText("1+")
+        mainText.check(matches(withText("1+")))
+        equals()
+        onView(withId(R.id.errorText)).check(matches(isDisplayed()))
+        backspace()
+        mainText.check(matches(withText("1")))
+        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+        equals()
+        mainText.check(matches(withText("[1]")))
+
+        // TODO with clear on error
     }
 
     @Test
     fun openHistoryFragment() {
+        val historyButton = onView(withId(R.id.historyButton))
+        historyButton.check(matches(isDisplayed()))
+        historyButton.perform(click())
+        onView(withText("Computation History")).check(matches(isDisplayed()))
         // TODO
     }
 
     @Test
     fun useLastHistoryItem() {
+        val useLastButton = onView(withId(R.id.useLastHistoryButton))
+        var lastComputation = ""
+
+        // none
+
+        // one value
+
+        // multiple values
+
+        // error
+
         // TODO
     }
 
@@ -179,6 +349,24 @@ class MainFragmentTest {
     fun openInfoFragment() {
         // TODO
     }
+
+    private fun clearText() {
+        onView(withId(R.id.clearButton)).perform(click())
+    }
+
+    private fun backspace() {
+        onView(withId(R.id.backspaceButton)).perform(click())
+    }
+
+    private fun equals() {
+        onView(withId(R.id.equalsButton)).perform(click())
+    }
+
+    private fun checkMainTextOptions(options: StringList) {
+        val matchers = options.map { withText(it) }.toMutableList()
+        mainText.check(matches(anyOf(matchers)))
+    }
+
 
     // TODO test settings button
 }
