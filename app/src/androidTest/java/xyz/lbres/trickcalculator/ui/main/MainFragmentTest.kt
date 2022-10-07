@@ -1,22 +1,23 @@
 package xyz.lbres.trickcalculator.ui.main
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
-import org.junit.Test
-import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.MainActivity
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.Before
-
 import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.R
 
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
@@ -197,37 +198,43 @@ class MainFragmentTest {
             clearText()
             typeText("2+5-4")
             equals()
-            checkMainTextOptions(listOf(
-                "[3]",   "[22]",   "[3.25]", // + = +
-                "[1]",   "[-18]",  "[0.75]", // + = -
-                "[14]",  "[6]",    "[2.5]",  // + = x
-                "[4.4]", "[-3.6]", "[1.6]"   // + = /
-            ))
+            checkMainTextOptions(
+                listOf(
+                    "[3]", "[22]", "[3.25]", // + = +
+                    "[1]", "[-18]", "[0.75]", // + = -
+                    "[14]", "[6]", "[2.5]", // + = x
+                    "[4.4]", "[-3.6]", "[1.6]" // + = /
+                )
+            )
         }
 
         repeat(10) {
             clearText()
             typeText("5^2-4") // exponent
             equals()
-            checkMainTextOptions(listOf(
-                "[3]",   "[13]",   "[5.5]", "[21]",     // + = +
-                "[7]",   "[-3]",   "[4.5]", "[-11]",    // + = -
-                "[14]",  "[6]",    "[2.5]", "[80]",     // + = x
-                "[6.5]", "[-1.5]", "[10]",  "[0.3125]", // + = /
-                "[29]",  "[21]",   "[100]", "[6.25]"    // + = ^
-            ))
+            checkMainTextOptions(
+                listOf(
+                    "[3]", "[13]", "[5.5]", "[21]", // + = +
+                    "[7]", "[-3]", "[4.5]", "[-11]", // + = -
+                    "[14]", "[6]", "[2.5]", "[80]", // + = x
+                    "[6.5]", "[-1.5]", "[10]", "[0.3125]", // + = /
+                    "[29]", "[21]", "[100]", "[6.25]" // + = ^
+                )
+            )
         }
 
         repeat(10) {
             clearText()
             typeText("10-.5x4/2+16")
             equals()
-            checkMainTextOptions(listOf(
-                "[10]",    "[-21.5]", "[11.875]", "[-5]", "[-21.875]", "[-5.75]",  // + = +
-                "[10]",    "[41.5]", "[8.125]",  "[25]", "[41.875]",  "[25.75]",  // + = -
-                "[8.875]", "[-9]",    "[1.125]",  "[19]", "[-12.75]",  "[15.25]",  // + = *
-                "[-8]",    "[12]",    "[48]",     "[28]", "[66]",      "[94]"      // + = /
-            ))
+            checkMainTextOptions(
+                listOf(
+                    "[10]", "[-21.5]", "[11.875]", "[-5]", "[-21.875]", "[-5.75]", // + = +
+                    "[10]", "[41.5]", "[8.125]", "[25]", "[41.875]", "[25.75]", // + = -
+                    "[8.875]", "[-9]", "[1.125]", "[19]", "[-12.75]", "[15.25]", // + = *
+                    "[-8]", "[12]", "[48]", "[28]", "[66]", "[94]" // + = /
+                )
+            )
         }
 
         // with previous computed
@@ -366,7 +373,6 @@ class MainFragmentTest {
         val matchers = options.map { withText(it) }.toMutableList()
         mainText.check(matches(anyOf(matchers)))
     }
-
 
     // TODO test settings button
 }
