@@ -28,5 +28,5 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          profile: 'Pixel 4'
+          profile: 'Nexus 6'
           script: ./gradlew connectedCheck --info --stacktrace
