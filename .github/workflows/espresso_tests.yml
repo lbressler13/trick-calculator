@@ -24,9 +24,6 @@ jobs:
           java-version: '11'
           cache: 'gradle'
 
-      - name: Get Devices
-        run: avdmanager list device
-
       - name: Run Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
