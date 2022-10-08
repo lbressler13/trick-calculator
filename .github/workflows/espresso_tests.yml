@@ -2,6 +2,7 @@ name: Espresso Tests
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   test:
