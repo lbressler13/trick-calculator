@@ -9,6 +9,9 @@ jobs:
     name: "Run Tests"
 
     runs-on: macos-latest
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout
