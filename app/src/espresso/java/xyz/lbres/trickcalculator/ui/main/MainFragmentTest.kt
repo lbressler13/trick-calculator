@@ -21,7 +21,7 @@ import xyz.lbres.trickcalculator.checkVisibleWithText
 
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
-    lateinit var mainText: ViewInteraction
+    private lateinit var mainText: ViewInteraction
 
     @Rule
     @JvmField
@@ -183,140 +183,7 @@ class MainFragmentTest {
     }
 
     @Test
-    fun useEqualsResult() {
-        // blank
-        mainText.check(matches(withText("")))
-        equals()
-        mainText.check(matches(withText("")))
-
-        // one number
-        clearText()
-        typeText("123")
-        equals()
-        mainText.check(matches(withText("[123]")))
-
-        clearText()
-        typeText("9.876")
-        equals()
-        mainText.check(matches(withText("[9.876]")))
-
-        clearText()
-        typeText("000.05")
-        equals()
-        mainText.check(matches(withText("[0.05]")))
-
-        clearText()
-        typeText("(000.05)")
-        equals()
-        mainText.check(matches(withText("[0.05]")))
-
-        // one operator
-        repeat(10) {
-            clearText()
-            typeText("12+10")
-            equals()
-            checkMainTextOptions(setOf("[22]", "[2]", "[120]", "[1.2]"))
-        }
-
-        repeat(10) {
-            clearText()
-            typeText("2^3") // exponent
-            equals()
-            checkMainTextOptions(setOf("[5]", "[-1]", "[6]", "[0.66666667]", "[8]"))
-        }
-
-        repeat(10) {
-            clearText()
-            typeText("1.5x4") // decimal
-            equals()
-            checkMainTextOptions(setOf("[5.5]", "[-2.5]", "[6]", "[0.375]"))
-        }
-
-        repeat(10) {
-            clearText()
-            typeText("2x5x4") // several same op
-            equals()
-            checkMainTextOptions(setOf("[11]", "[-7]", "[40]", "[0.1]"))
-        }
-
-        // several operators
-        repeat(10) {
-            clearText()
-            typeText("2+5-4")
-            equals()
-            checkMainTextOptions(
-                setOf(
-                    "[3]", "[22]", "[3.25]", // + = +
-                    "[1]", "[-18]", "[0.75]", // + = -
-                    "[14]", "[6]", "[2.5]", // + = x
-                    "[4.4]", "[-3.6]", "[1.6]" // + = /
-                )
-            )
-        }
-
-        repeat(10) {
-            clearText()
-            typeText("5^2-4") // exponent
-            equals()
-            checkMainTextOptions(
-                setOf(
-                    "[3]", "[13]", "[5.5]", "[21]", // + = +
-                    "[7]", "[-3]", "[4.5]", "[-11]", // + = -
-                    "[14]", "[6]", "[2.5]", "[80]", // + = x
-                    "[6.5]", "[-1.5]", "[10]", "[0.3125]", // + = /
-                    "[29]", "[21]", "[100]", "[6.25]" // + = ^
-                )
-            )
-        }
-
-        repeat(10) {
-            clearText()
-            typeText("10-.5x4/2+16")
-            equals()
-            checkMainTextOptions(
-                setOf(
-                    "[10]", "[-21.5]", "[11.875]", "[-5]", "[-21.875]", "[-5.75]", // + = +
-                    "[10]", "[41.5]", "[8.125]", "[25]", "[41.875]", "[25.75]", // + = -
-                    "[8.875]", "[-9]", "[1.125]", "[19]", "[-12.75]", "[15.25]", // + = *
-                    "[-8]", "[12]", "[48]", "[28]", "[66]", "[94]" // + = /
-                )
-            )
-        }
-
-        // parens
-        repeat(10) {
-            clearText()
-            typeText("2(5-4)")
-            equals()
-            checkMainTextOptions(
-                setOf(
-                    "[3]", "[22]", "[3.25]", // + = +
-                    "[-7]", "[-18]", "[0.75]", // + = -
-                    "[18]", "[2]", "[2.5]", // + = x
-                    "[0.22222222]", "[2]", "[0.1]" // + = /
-                )
-            )
-        }
-
-        // with previous computed
-        repeat(10) {
-            clearText()
-            typeText("123")
-            equals()
-            typeText("+2")
-            equals()
-            checkMainTextOptions(setOf("[125]", "[121]", "[246]", "[61.5]"))
-        }
-
-        repeat(10) {
-            clearText()
-            typeText("123")
-            equals()
-            typeText("2") // add times between values
-            equals()
-            checkMainTextOptions(setOf("[125]", "[121]", "[246]", "[61.5]"))
-        }
-    }
+    fun useEqualsResult() = testEqualsResult(mainText)
 
     @Test
     fun useEqualsError() {
@@ -424,93 +291,7 @@ class MainFragmentTest {
     }
 
     @Test
-    fun useLastHistoryItem() {
-        val useLastButton = onView(withId(R.id.useLastHistoryButton))
-
-        // none
-        useLastButton.check(matches(not(isDisplayed())))
-
-        // one value
-        clearText()
-        typeText("123")
-        equals()
-        mainText.check(matches(withText("[123]")))
-        useLastButton.perform(click())
-        mainText.check(matches(withText("123")))
-
-        clearText()
-        typeText("(1234)")
-        equals()
-        mainText.check(matches(withText("[1234]")))
-        useLastButton.perform(click())
-        mainText.check(matches(withText("(1234)")))
-        // doesn't pull previous item
-        useLastButton.perform(click())
-        mainText.check(matches(withText("(1234)")))
-
-        clearText()
-        typeText("00001.50000")
-        equals()
-        mainText.check(matches(withText("[1.5]")))
-        useLastButton.perform(click())
-        mainText.check(matches(withText("00001.50000")))
-
-        // multiple values
-        clearText()
-        var computation = "123+456"
-        typeText(computation)
-        equals()
-        mainText.check(matches(not(withText(computation))))
-        useLastButton.perform(click())
-        mainText.check(matches(withText(computation)))
-
-        clearText()
-        computation = ".5(66+99/33)x22x2+0.001"
-        typeText(computation)
-        equals()
-        mainText.check(matches(not(withText(computation))))
-        useLastButton.perform(click())
-        mainText.check(matches(withText(computation)))
-
-        // with computed value
-        clearText()
-        typeText("1234")
-        equals()
-        typeText("+2")
-        useLastButton.perform(click())
-        mainText.check(matches(withText("1234")))
-
-        clearText()
-        typeText("1234")
-        equals()
-        typeText("+2")
-        equals()
-        useLastButton.perform(click())
-        mainText.check(matches(withText("[1234]+2")))
-
-        clearText()
-        typeText("3+2")
-        equals()
-        computation = "(5.4+2)-3"
-        typeText(computation)
-        equals()
-        useLastButton.perform(click())
-        checkMainTextOptions(
-            setOf(
-                "[5]$computation", "[1]$computation", "[6]$computation", "[1.5]$computation"
-            )
-        )
-
-        // after error
-        clearText()
-        typeText("(1")
-        equals() // set error
-        mainText.check(matches(withText("(1")))
-        onView(withId(R.id.errorText)).check(matches(isDisplayed()))
-        useLastButton.perform(click())
-        mainText.check(matches(withText("(1"))) // pulls computation without error
-        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
-    }
+    fun useLastHistoryItem() = testLastHistoryItem(mainText)
 
     @Test
     fun openInfoFragment() {
@@ -518,46 +299,5 @@ class MainFragmentTest {
         infoButton.check(matches(isDisplayed()))
         infoButton.perform(click())
         onView(withText("Image Attributions")).check(matches(isDisplayed()))
-    }
-
-    /**
-     * Click clear button
-     */
-    private fun clearText() {
-        onView(withId(R.id.clearButton)).perform(click())
-    }
-
-    /**
-     * Click backspace button
-     */
-    private fun backspace() {
-        onView(withId(R.id.backspaceButton)).perform(click())
-    }
-
-    /**
-     * Click backspace button and validate the result
-     *
-     * @param newText [String]: expected text in main textview after clicking backspace
-     */
-    private fun backspaceTo(newText: String) {
-        backspace()
-        mainText.check(matches(withText(newText)))
-    }
-
-    /**
-     * Click equals button
-     */
-    private fun equals() {
-        onView(withId(R.id.equalsButton)).perform(click())
-    }
-
-    /**
-     * Check that the main textview matches one out of a list of options
-     *
-     * @param options [Set]<[String]>: list of valid values for main textview
-     */
-    private fun checkMainTextOptions(options: Set<String>) {
-        val matchers = options.map { withText(it) }.toMutableList()
-        mainText.check(matches(anyOf(matchers)))
     }
 }
