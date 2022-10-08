@@ -26,6 +26,8 @@ import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
+import java.util.Date
+import java.util.Random
 
 /**
  * Fragment to display main calculator functionality
@@ -34,6 +36,7 @@ class MainFragment : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
+    private val random = Random(Date().time)
 
     private lateinit var computeText: StringList
     private var error: String? = null
@@ -51,14 +54,18 @@ class MainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
-        computationViewModel = ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
+        computationViewModel =
+            ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodels
         computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
         computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
         computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
-        computationViewModel.generatedHistoryItem.observe(viewLifecycleOwner, generatedHistoryItemObserver)
+        computationViewModel.generatedHistoryItem.observe(
+            viewLifecycleOwner,
+            generatedHistoryItemObserver
+        )
         sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
@@ -177,8 +184,8 @@ class MainFragment : BaseFragment() {
                     "-",
                     "x",
                     "/"
-                ).shuffled() + listOf("^")
-                else -> listOf("+", "-", "x", "/", "^").shuffled()
+                ).shuffled(random) + listOf("^")
+                else -> listOf("+", "-", "x", "/", "^").shuffled(random)
             }
 
             // maps operator symbols to their given functions
@@ -199,7 +206,8 @@ class MainFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = ternaryIf(settings.shuffleNumbers, (0..9).shuffled(), (0..9).toList())
+            val numberOrder =
+                ternaryIf(settings.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
 
             // try to run computation, and update compute text and error message
             try {
