@@ -1,21 +1,21 @@
-name: Espresso Tests
-
-on:
-  workflow_dispatch:
-  push:
-
-jobs:
-  test:
-    name: "Run Tests"
-
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Run Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          script: gradle connectedTest
+#name: Espresso Tests
+#
+#on:
+#  workflow_dispatch:
+#  push:
+#
+#jobs:
+#  test:
+#    name: "Run Tests"
+#
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Run Tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 31
+#          script: gradle connectedTest
