@@ -80,6 +80,10 @@ android {
         complete {
             java.srcDirs = ['src/final/java']
         }
+
+        androidTest {
+            java.srcDirs = ['src/espresso/java']
+        }
     }
 
     buildTypes {
