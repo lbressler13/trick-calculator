@@ -15,7 +15,7 @@ private val mainText = onView(withId(R.id.mainText))
  *
  * @param text [String]: text to type
  */
-internal fun typeText(text: String) {
+fun typeText(text: String) {
     for (c in text) {
         val buttonId = when (c) {
             '1' -> R.id.oneButton
@@ -48,14 +48,14 @@ internal fun typeText(text: String) {
 /**
  * Click clear button
  */
-internal fun clearText() {
+fun clearText() {
     onView(withId(R.id.clearButton)).perform(ViewActions.click())
 }
 
 /**
  * Click backspace button
  */
-internal fun backspace() {
+fun backspace() {
     onView(withId(R.id.backspaceButton)).perform(ViewActions.click())
 }
 
@@ -64,7 +64,7 @@ internal fun backspace() {
  *
  * @param newText [String]: expected text in main textview after clicking backspace
  */
-internal fun backspaceTo(newText: String) {
+fun backspaceTo(newText: String) {
     backspace()
     mainText.check(ViewAssertions.matches(ViewMatchers.withText(newText)))
 }
@@ -72,7 +72,7 @@ internal fun backspaceTo(newText: String) {
 /**
  * Click equals button
  */
-internal fun equals() {
+fun equals() {
     onView(withId(R.id.equalsButton)).perform(ViewActions.click())
 }
 
@@ -81,7 +81,7 @@ internal fun equals() {
  *
  * @param options [Set]<[String]>: list of valid values for main textview
  */
-internal fun checkMainTextOptions(options: Set<String>) {
+fun checkMainTextOptions(options: Set<String>) {
     val matchers = options.map { ViewMatchers.withText(it) }.toMutableList()
     mainText.check(ViewAssertions.matches(Matchers.anyOf(matchers)))
 }

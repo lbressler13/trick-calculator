@@ -4,7 +4,7 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
 
-internal fun testEqualsResult(mainText: ViewInteraction) {
+fun testEqualsResult(mainText: ViewInteraction) {
     // blank
     mainText.check(matches(withText("")))
     equals()
