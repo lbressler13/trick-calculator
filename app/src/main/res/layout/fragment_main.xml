@@ -69,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:columnCount="4"
+        android:columnCount="5"
         android:rowCount="6"
         android:useDefaultMargins="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -247,8 +247,8 @@
         <ImageButton
             android:id="@+id/equalsButton"
             style="@style/NumpadButton.Image"
-            android:layout_row="5"
-            android:layout_column="3"
+            android:layout_row="4"
+            android:layout_column="4"
             android:background="@drawable/button_numpad_background"
             android:contentDescription="@string/equals_cd"
             android:src="@drawable/ic_equals" />

@@ -76,7 +76,7 @@ fun backspaceTo(newText: String) {
  * Click equals button
  */
 fun equals() {
-    onView(withId(R.id.equalsButton)).perform(scrollTo(), click())
+    onView(withId(R.id.equalsButton)).perform(click())
 }
 
 /**
