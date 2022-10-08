@@ -2,7 +2,9 @@ name: Espresso Tests
 
 on:
   workflow_dispatch:
-  push: # TODO remove this
+  push:
+    branches:
+      - main
 
 jobs:
   test:
