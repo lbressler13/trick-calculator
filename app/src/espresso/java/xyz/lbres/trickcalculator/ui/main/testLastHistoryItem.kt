@@ -2,7 +2,7 @@ package xyz.lbres.trickcalculator.ui.main
 
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -21,24 +21,24 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     typeText("123")
     equals()
     mainText.check(matches(withText("[123]")))
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText("123")))
 
     clearText()
     typeText("(1234)")
     equals()
     mainText.check(matches(withText("[1234]")))
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText("(1234)")))
     // doesn't pull previous item
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText("(1234)")))
 
     clearText()
     typeText("00001.50000")
     equals()
     mainText.check(matches(withText("[1.5]")))
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText("00001.50000")))
 
     // multiple values
@@ -47,7 +47,7 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     typeText(computation)
     equals()
     mainText.check(matches(not(withText(computation))))
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText(computation)))
 
     clearText()
@@ -55,7 +55,7 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     typeText(computation)
     equals()
     mainText.check(matches(not(withText(computation))))
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText(computation)))
 
     // with computed value
@@ -63,7 +63,7 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     typeText("1234")
     equals()
     typeText("+2")
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText("1234")))
 
     clearText()
@@ -71,7 +71,7 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     equals()
     typeText("+2")
     equals()
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText("[1234]+2")))
 
     clearText()
@@ -80,7 +80,7 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     computation = "(5.4+2)-3"
     typeText(computation)
     equals()
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     checkMainTextOptions(
         setOf(
             "[5]$computation", "[1]$computation", "[6]$computation", "[1.5]$computation"
@@ -94,7 +94,7 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     mainText.check(matches(withText("(1")))
     Espresso.onView(withId(R.id.errorText))
         .check(matches(isDisplayed()))
-    useLastButton.perform(ViewActions.click())
+    useLastButton.perform(click())
     mainText.check(matches(withText("(1"))) // pulls computation without error
     Espresso.onView(withId(R.id.errorText))
         .check(matches(not(isDisplayed())))

@@ -1,10 +1,8 @@
 package xyz.lbres.trickcalculator.ui.main
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers
@@ -42,7 +40,7 @@ fun typeText(text: String) {
         }
 
         if (buttonId != null) {
-            onView(withId(buttonId)).perform(ViewActions.click())
+            onView(withId(buttonId)).perform(click())
         }
     }
 }
@@ -68,7 +66,7 @@ fun backspace() {
  */
 fun backspaceTo(newText: String) {
     backspace()
-    mainText.check(ViewAssertions.matches(withText(newText)))
+    mainText.check(matches(withText(newText)))
 }
 
 /**
@@ -84,6 +82,6 @@ fun equals() {
  * @param options [Set]<[String]>: list of valid values for main textview
  */
 fun checkMainTextOptions(options: Set<String>) {
-    val matchers = options.map { ViewMatchers.withText(it) }.toMutableList()
-    mainText.check(ViewAssertions.matches(Matchers.anyOf(matchers)))
+    val matchers = options.map { withText(it) }.toMutableList()
+    mainText.check(matches(Matchers.anyOf(matchers)))
 }
