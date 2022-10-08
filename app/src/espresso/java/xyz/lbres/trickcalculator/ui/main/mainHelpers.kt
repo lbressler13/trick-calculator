@@ -2,9 +2,12 @@ package xyz.lbres.trickcalculator.ui.main
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers
 import xyz.lbres.trickcalculator.R
 
@@ -49,14 +52,14 @@ fun typeText(text: String) {
  * Click clear button
  */
 fun clearText() {
-    onView(withId(R.id.clearButton)).perform(ViewActions.click())
+    onView(withId(R.id.clearButton)).perform(click())
 }
 
 /**
  * Click backspace button
  */
 fun backspace() {
-    onView(withId(R.id.backspaceButton)).perform(ViewActions.click())
+    onView(withId(R.id.backspaceButton)).perform(click())
 }
 
 /**
@@ -66,14 +69,14 @@ fun backspace() {
  */
 fun backspaceTo(newText: String) {
     backspace()
-    mainText.check(ViewAssertions.matches(ViewMatchers.withText(newText)))
+    mainText.check(ViewAssertions.matches(withText(newText)))
 }
 
 /**
  * Click equals button
  */
 fun equals() {
-    onView(withId(R.id.equalsButton)).perform(ViewActions.click())
+    onView(withId(R.id.equalsButton)).perform(scrollTo(), click())
 }
 
 /**
