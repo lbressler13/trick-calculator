@@ -1,49 +1,46 @@
 package xyz.lbres.trickcalculator.ui.attributions
 
-import org.junit.Assert.assertEquals
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.intent.Intents.getIntents
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
+import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.After
+import org.hamcrest.Matchers.not
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import android.app.Activity
-import android.app.Instrumentation
-import android.content.Intent
-import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.intent.Intents.*
-
-import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
-
-import org.hamcrest.Matchers.*
-import xyz.lbres.kotlinutils.generic.ext.ifNull
 import java.lang.AssertionError
-
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
+    private var expectedLinkClicks = 0
+
     @Rule
     @JvmField
-    val rule = IntentsTestRule(MainActivity::class.java)
+    val rule = IntentsTestRule(MainActivity::class.java) // TODO non-deprecated class
 
     @Before
     fun setupTest() {
         val infoButton = onView(withId(R.id.infoButton))
         infoButton.check(matches(isDisplayed()))
         infoButton.perform(click())
-    }
 
-    @After
-    fun cleanupTest() {
-        // Intents.release()
+        expectedLinkClicks = 0
     }
 
     @Test
@@ -86,7 +83,7 @@ class AttributionsFragmentTest {
     fun closeButton() {
         onData(withId(R.id.closeButton))
             .check(matches(isDisplayed()))
-            .perform(scrollTo(), click())
+            .perform(click())
 
         onView(withText("Calculator")).check(matches(isDisplayed()))
     }
@@ -106,16 +103,20 @@ class AttributionsFragmentTest {
             )
         )
 
-        onView(withId(R.id.flaticonPolicyMessage)).perform(clickClickableSpan("Flaticon"))
+        // click link while collapsed
+        onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("Flaticon"))
+        expectedLinkClicks++
         assertLinkOpened("https://www.flaticon.com")
 
         onView(withId(R.id.expandCollapseMessage)).perform(click())
 
         // click both links after expanding
-        onView(withId(R.id.flaticonPolicyMessage)).perform(clickClickableSpan("Flaticon"))
+        onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("Flaticon"))
+        expectedLinkClicks++
         assertLinkOpened("https://www.flaticon.com")
 
-        onView(withId(R.id.flaticonPolicyMessage)).perform(clickClickableSpan("here"))
+        onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("here"))
+        expectedLinkClicks++
         assertLinkOpened("https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE")
     }
 
@@ -126,12 +127,13 @@ class AttributionsFragmentTest {
     }
 
     private fun assertLinkOpened(url: String) {
-        val intents = getIntents()
+        val intents = getIntents().filter { it.action == Intent.ACTION_VIEW }
 
-        val intent = intents.lastOrNull().ifNull {
-            throw AssertionError("No intents found")
+        if (intents.size != expectedLinkClicks) {
+            throw AssertionError("Expected $expectedLinkClicks link clicks, found ${intents.size}")
         }
 
+        val intent = intents.last()
         assertEquals(Intent.ACTION_VIEW, intent.action)
         assertEquals(url, intent.dataString)
     }
