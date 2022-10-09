@@ -32,7 +32,7 @@ class AttributionsFragmentTest {
 
     @Rule
     @JvmField
-    val rule = IntentsTestRule(MainActivity::class.java) // TODO non-deprecated class
+    val rule = IntentsTestRule(MainActivity::class.java)
 
     @Before
     fun setupTest() {
@@ -89,10 +89,7 @@ class AttributionsFragmentTest {
     }
 
     @Test
-    fun expandCollapseAttributions() {
-        // TODO
-        // with link for author/image
-    }
+    fun expandCollapseAttributions() = testExpandCollapseAttributions()
 
     @Test
     fun flaticonPolicyLinks() {
@@ -119,6 +116,9 @@ class AttributionsFragmentTest {
         expectedLinkClicks++
         assertLinkOpened("https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE")
     }
+
+    @Test
+    fun attributionsLinks() = testAttributionLinks()
 
     @Test
     fun openSettingsFragment() {

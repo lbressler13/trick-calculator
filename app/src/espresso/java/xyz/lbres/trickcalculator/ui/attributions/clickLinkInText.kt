@@ -17,7 +17,7 @@ fun clickLinkInText(textToClick: String): ViewAction {
     return object : ViewAction {
 
         override fun getConstraints(): Matcher<View> = Matchers.instanceOf(TextView::class.java)
-        override fun getDescription(): String = "Clicking a ClickableSpan"
+        override fun getDescription(): String = "Clicking a URLClickableSpan"
 
         override fun perform(uiController: UiController, view: View) {
             view as TextView
@@ -32,9 +32,9 @@ fun clickLinkInText(textToClick: String): ViewAction {
                     .build()
             }
 
-            // get all clickable spans in text
+            // get all url clickable spans in text
             val spans: Array<URLClickableSpan> = fullText.getSpans(0, fullText.length, URLClickableSpan::class.java)
-            // find span matching text
+            // find matching span
             val span = spans.firstOrNull {
                 val start = fullText.getSpanStart(it)
                 val end = fullText.getSpanEnd(it)

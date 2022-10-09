@@ -21,7 +21,7 @@ import xyz.lbres.trickcalculator.utils.visible
  *
  * @param binding [ViewHolderAuthorAttributionBinding]: view binding for the view holder
  */
-class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributionBinding) :
+class AuthorAttributionViewHolder(val binding: ViewHolderAuthorAttributionBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     // constant icons and content descriptions
