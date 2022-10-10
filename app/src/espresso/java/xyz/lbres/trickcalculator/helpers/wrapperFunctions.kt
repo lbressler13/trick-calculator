@@ -11,6 +11,7 @@ import xyz.lbres.trickcalculator.helpers.matchers.RecyclerViewMatcher
 import xyz.lbres.trickcalculator.helpers.viewactions.ActionOnItemViewAtPositionViewAction
 import xyz.lbres.trickcalculator.helpers.viewactions.ActionOnNestedItemViewAtPositionViewAction
 import xyz.lbres.trickcalculator.helpers.viewactions.ClickLinkInTextViewAction
+import xyz.lbres.trickcalculator.helpers.viewactions.ClickViewViewAction
 
 fun actionOnItemViewAtPosition(
     position: Int,
@@ -45,6 +46,8 @@ fun withRecyclerView(id: Int) = RecyclerViewMatcher(id)
 fun withNestedRecyclerView(id: Int, nestedId: Int) = NestedRecyclerViewMatcher(id, nestedId)
 
 fun clickLinkInText(textToClick: String) = ClickLinkInTextViewAction(textToClick)
+
+fun clickView() = ClickViewViewAction()
 
 // adapted from responses on this StackOverflow post: https://stackoverflow.com/questions/41297524/espresso-check-view-either-doesnotexist-or-not-isdisplayed
 fun notPresented(): ViewAssertion {

@@ -2,10 +2,8 @@ package xyz.lbres.trickcalculator.ui.attributions
 
 import android.app.Activity
 import android.app.Instrumentation
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intending
@@ -15,7 +13,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
@@ -25,6 +22,7 @@ import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
+import xyz.lbres.trickcalculator.helpers.clickView
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
@@ -86,9 +84,7 @@ class AttributionsFragmentTest {
 
     @Test
     fun closeButton() {
-        // TODO fix this
-        onView(withId(R.id.closeButton)).perform(scrollTo(), click())
-        Thread.sleep(2000)
+        onView(withId(R.id.closeButton)).perform(clickView())
         onView(withText("Calculator")).check(matches(isDisplayed()))
     }
 
