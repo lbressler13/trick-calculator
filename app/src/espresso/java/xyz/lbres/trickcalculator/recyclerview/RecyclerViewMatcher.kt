@@ -11,50 +11,37 @@ import org.hamcrest.TypeSafeMatcher
  */
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
     fun atPosition(position: Int): TypeSafeMatcher<View?> {
-        return atPositionOnView(position, -1)
-    }
-
-    fun atPositionOnView(position: Int, targetViewId: Int): TypeSafeMatcher<View?> {
         return object : TypeSafeMatcher<View?>() {
             var resources: Resources? = null
             var childView: View? = null
 
             override fun describeTo(description: Description) {
-                var idDescription = Integer.toString(recyclerViewId)
+                var idInfo = recyclerViewId.toString()
                 if (resources != null) {
-                    idDescription = try {
+                    idInfo = try {
                         resources!!.getResourceName(recyclerViewId)
-                    } catch (var4: Resources.NotFoundException) {
-                        String.format(
-                            "%s (resource name not found)",
-                            *arrayOf<Any>(Integer.valueOf(recyclerViewId))
-                        )
+                    } catch (_: Resources.NotFoundException) {
+                        "%d (resource name not found)".format(recyclerViewId)
                     }
                 }
-                description.appendText("with id: $idDescription")
+
+                description.appendText("with id: $idInfo")
             }
 
             override fun matchesSafely(view: View?): Boolean {
-                if (view == null) {
-                    return false
-                }
-
-                resources = view.resources
-                if (childView == null) {
-                    val recyclerView = view.rootView.findViewById(
-                        recyclerViewId
-                    ) as RecyclerView?
-                    childView = if (recyclerView != null && recyclerView.id == recyclerViewId) {
-                        recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
-                    } else {
-                        return false
+                return when {
+                    view == null -> false
+                    childView != null -> view == childView
+                    else -> {
+                        resources = view.resources
+                        val recyclerView = view.rootView.findViewById<RecyclerView>(recyclerViewId)
+                        if (recyclerView != null && recyclerView.id == recyclerViewId) {
+                            childView = recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
+                            view == childView
+                        } else {
+                            false
+                        }
                     }
-                }
-                return if (targetViewId == -1) {
-                    view === childView
-                } else {
-                    val targetView: View = childView!!.findViewById(targetViewId)
-                    view === targetView
                 }
             }
         }

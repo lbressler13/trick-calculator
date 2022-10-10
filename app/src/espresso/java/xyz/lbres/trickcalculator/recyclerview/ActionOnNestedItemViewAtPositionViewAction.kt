@@ -12,7 +12,7 @@ import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
-class ActionOnNestedItemViewAtPositionViewAction<VH : RecyclerView.ViewHolder?>(
+class ActionOnNestedItemViewAtPositionViewAction(
     private val recyclerPosition: Int,
     private val nestedViewPosition: Int,
     @param:IdRes private val nestedRecyclerId: Int,

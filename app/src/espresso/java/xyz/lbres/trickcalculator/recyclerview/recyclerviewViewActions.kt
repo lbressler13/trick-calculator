@@ -1,29 +1,28 @@
 package xyz.lbres.trickcalculator.recyclerview
 
 import androidx.annotation.IdRes
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.ViewAction
 
-fun <VH : RecyclerView.ViewHolder?> actionOnItemViewAtPosition(
+fun actionOnItemViewAtPosition(
     position: Int,
     @IdRes viewId: Int,
     viewAction: ViewAction
 ): ViewAction {
-    return ActionOnItemViewAtPositionViewAction<RecyclerView.ViewHolder?>(
+    return ActionOnItemViewAtPositionViewAction(
         position,
         viewId,
         viewAction
     )
 }
 
-fun <VH : RecyclerView.ViewHolder?> actionOnNestedItemViewAtPosition(
+fun actionOnNestedItemViewAtPosition(
     recyclerPosition: Int,
     nestedViewPosition: Int,
     @IdRes nestedRecyclerId: Int,
     @IdRes viewId: Int,
     viewAction: ViewAction
 ): ViewAction {
-    return ActionOnNestedItemViewAtPositionViewAction<RecyclerView.ViewHolder?>(
+    return ActionOnNestedItemViewAtPositionViewAction(
         recyclerPosition,
         nestedViewPosition,
         nestedRecyclerId,
@@ -33,3 +32,5 @@ fun <VH : RecyclerView.ViewHolder?> actionOnNestedItemViewAtPosition(
 }
 
 fun withRecyclerView(id: Int) = RecyclerViewMatcher(id)
+
+fun withNestedRecyclerView(id: Int, nestedId: Int) = NestedRecyclerViewMatcher(id, nestedId)

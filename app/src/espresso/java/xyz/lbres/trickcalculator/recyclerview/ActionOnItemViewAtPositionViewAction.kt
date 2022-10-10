@@ -12,7 +12,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 
 // code adapted from this sample: https://github.com/dannyroa/espresso-samples/tree/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview
-class ActionOnItemViewAtPositionViewAction<VH : RecyclerView.ViewHolder?>(
+class ActionOnItemViewAtPositionViewAction(
     private val position: Int,
     @param:IdRes private val viewId: Int,
     private val viewAction: ViewAction
