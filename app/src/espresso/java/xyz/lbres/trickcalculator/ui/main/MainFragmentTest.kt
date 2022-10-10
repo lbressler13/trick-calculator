@@ -17,7 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.checkVisibleWithText
+import xyz.lbres.trickcalculator.helpers.checkVisibleWithText
 
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {

@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.recyclerview
+package xyz.lbres.trickcalculator.helpers.viewactions
 
 import android.view.View
 import androidx.annotation.IdRes

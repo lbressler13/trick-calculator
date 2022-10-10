@@ -13,11 +13,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.assertLinkOpened
-import xyz.lbres.trickcalculator.recyclerview.actionOnItemViewAtPosition
-import xyz.lbres.trickcalculator.recyclerview.actionOnNestedItemViewAtPosition
-import xyz.lbres.trickcalculator.recyclerview.withNestedRecyclerView
-import xyz.lbres.trickcalculator.recyclerview.withRecyclerView
+import xyz.lbres.trickcalculator.helpers.actionOnItemViewAtPosition
+import xyz.lbres.trickcalculator.helpers.actionOnNestedItemViewAtPosition
+import xyz.lbres.trickcalculator.helpers.assertLinkOpened
+import xyz.lbres.trickcalculator.helpers.clickLinkInText
+import xyz.lbres.trickcalculator.helpers.notPresented
+import xyz.lbres.trickcalculator.helpers.withNestedRecyclerView
+import xyz.lbres.trickcalculator.helpers.withRecyclerView
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 private val authorTitles =
@@ -45,21 +47,50 @@ fun testExpandCollapseAttributions() {
     // expand all
     expandCollapseAttribution(0)
     checkImagesDisplayed(listOf(0))
+    checkImagesDoNotExist(listOf(1, 2, 3, 4))
 
     expandCollapseAttribution(1)
     checkImagesDisplayed(listOf(0, 1))
+    checkImagesDoNotExist(listOf(2, 3, 4))
 
     expandCollapseAttribution(2)
     checkImagesDisplayed(listOf(0, 1, 2))
+    checkImagesDoNotExist(listOf(3, 4))
 
     expandCollapseAttribution(3)
     checkImagesDisplayed(listOf(0, 1, 2, 3))
+    checkImagesDoNotExist(listOf(4))
 
     expandCollapseAttribution(4)
     checkImagesDisplayed(listOf(0, 1, 2, 3, 4))
 
     // collapse
-    // TODO
+    expandCollapseAttribution(3)
+    checkImagesDisplayed(listOf(0, 1, 2, 4))
+    checkImagesDoNotExist(listOf(3))
+
+    expandCollapseAttribution(1)
+    checkImagesDisplayed(listOf(0, 2, 4))
+    checkImagesDoNotExist(listOf(1, 3))
+
+    expandCollapseAttribution(0)
+    checkImagesDisplayed(listOf(2, 4))
+    checkImagesDoNotExist(listOf(0, 1, 3))
+
+    expandCollapseAttribution(4)
+    checkImagesDisplayed(listOf(2))
+    checkImagesDoNotExist(listOf(0, 1, 3, 4))
+
+    expandCollapseAttribution(2)
+    checkImagesDoNotExist(listOf(0, 1, 2, 3, 4))
+}
+
+private fun checkImagesDoNotExist(positions: IntList) {
+    for (position in positions) {
+        for (url in imageUrls[position]) {
+            onView(withText(url)).check(notPresented())
+        }
+    }
 }
 
 private fun expandCollapseAttribution(position: Int) {
@@ -139,4 +170,19 @@ fun testAttributionLinks() {
             assertLinkOpened(url, expectedLinkClicks)
         }
     }
+
+    // check link with attributions open
+    onView(withId(recyclerId)).perform(
+        actionOnItemViewAtPosition(0, R.id.attribution, clickLinkInText("www.flaticon.com"))
+    )
+    expectedLinkClicks++
+    assertLinkOpened("https://www.flaticon.com", expectedLinkClicks)
+
+    // author link
+    val author = authorAttributions[0]
+    onView(withId(recyclerId)).perform(
+        actionOnItemViewAtPosition(0, R.id.attribution, clickLinkInText(author.name))
+    )
+    expectedLinkClicks++
+    assertLinkOpened(author.url, expectedLinkClicks)
 }

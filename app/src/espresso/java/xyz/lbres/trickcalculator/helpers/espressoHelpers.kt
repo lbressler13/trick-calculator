@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator
+package xyz.lbres.trickcalculator.helpers
 
 import android.content.Intent
 import androidx.test.espresso.Espresso.onView
