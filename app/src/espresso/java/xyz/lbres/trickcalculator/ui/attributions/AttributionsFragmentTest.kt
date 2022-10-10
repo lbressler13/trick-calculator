@@ -2,13 +2,11 @@ package xyz.lbres.trickcalculator.ui.attributions
 
 import android.app.Activity
 import android.app.Instrumentation
-import android.content.Intent
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents.getIntents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
 import androidx.test.espresso.intent.rule.IntentsTestRule
@@ -17,30 +15,34 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.not
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import java.lang.AssertionError
+import xyz.lbres.trickcalculator.assertLinkOpened
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
-    private var expectedLinkClicks = 0
-
     @Rule
     @JvmField
     val rule = IntentsTestRule(MainActivity::class.java)
 
     @Before
     fun setupTest() {
+        // open fragment
         val infoButton = onView(withId(R.id.infoButton))
         infoButton.check(matches(isDisplayed()))
         infoButton.perform(click())
 
-        expectedLinkClicks = 0
+        // setup intents
+        intending(not(isInternal())).respondWith(
+            Instrumentation.ActivityResult(
+                Activity.RESULT_OK,
+                null
+            )
+        )
     }
 
     @Test
@@ -93,28 +95,23 @@ class AttributionsFragmentTest {
 
     @Test
     fun flaticonPolicyLinks() {
-        intending(not(isInternal())).respondWith(
-            Instrumentation.ActivityResult(
-                Activity.RESULT_OK,
-                null
-            )
-        )
+        var expectedLinkClicks = 0
 
         // click link while collapsed
         onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("Flaticon"))
         expectedLinkClicks++
-        assertLinkOpened("https://www.flaticon.com")
+        assertLinkOpened("https://www.flaticon.com", expectedLinkClicks)
 
         onView(withId(R.id.expandCollapseMessage)).perform(click())
 
         // click both links after expanding
         onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("Flaticon"))
         expectedLinkClicks++
-        assertLinkOpened("https://www.flaticon.com")
+        assertLinkOpened("https://www.flaticon.com", expectedLinkClicks)
 
         onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("here"))
         expectedLinkClicks++
-        assertLinkOpened("https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE")
+        assertLinkOpened("https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE", expectedLinkClicks)
     }
 
     @Test
@@ -124,17 +121,5 @@ class AttributionsFragmentTest {
     fun openSettingsFragment() {
         onView(withId(R.id.title)).perform(click())
         onView(withText("Settings")).check(matches(isDisplayed()))
-    }
-
-    private fun assertLinkOpened(url: String) {
-        val intents = getIntents().filter { it.action == Intent.ACTION_VIEW }
-
-        if (intents.size != expectedLinkClicks) {
-            throw AssertionError("Expected $expectedLinkClicks link clicks, found ${intents.size}")
-        }
-
-        val intent = intents.last()
-        assertEquals(Intent.ACTION_VIEW, intent.action)
-        assertEquals(url, intent.dataString)
     }
 }
