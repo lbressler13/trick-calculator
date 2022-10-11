@@ -14,7 +14,7 @@ import org.hamcrest.Matchers.allOf
 
 /**
  * [ViewAction] similar to [ActionOnItemViewAtPositionViewAction], using nested RecyclerViews.
- * The positions in the initial RecyclerView and nested RecyclerView are both passed as parameters,
+ * The positions in the outer RecyclerView and nested RecyclerView are both passed as parameters,
  * and the action is taken on the view in the nested RecyclerView
  *
  * @param recyclerPosition [Int]: position of first ViewHolder in outer RecyclerView
@@ -32,7 +32,7 @@ class ActionOnNestedItemViewAtPositionViewAction(
 ) : ViewAction {
     override fun getConstraints(): Matcher<View> = allOf(isAssignableFrom(RecyclerView::class.java), isDisplayed())
     override fun getDescription(): String =
-        "actionOnNestedItemViewAtPosition performing ViewAction: ${viewAction.description} on item at position $nestedViewPosition in recycler with position $recyclerPosition"
+        "actionOnNestedItemViewAtPosition performing ViewAction: ${viewAction.description} on item at position $nestedViewPosition in RecyclerView with position $recyclerPosition"
 
     /**
      * Take an action on the specified view in the nested ViewHolder.

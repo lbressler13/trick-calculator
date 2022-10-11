@@ -9,7 +9,7 @@ import org.hamcrest.TypeSafeMatcher
 
 /**
  * [TypeSafeMatcher] similar to [RecyclerViewMatcher], using nested RecyclerViews.
- * The positions in the initial RecyclerView and nested RecyclerView are both passed as parameters,
+ * The positions in the outer RecyclerView and nested RecyclerView are both passed as parameters,
  * and the view in the nested RecyclerView is matched.
  *
  * @param recyclerViewId [IdRes]: view ID of outer RecyclerView
@@ -48,7 +48,7 @@ class NestedRecyclerViewMatcher(
     }
 
     /**
-     * Matches item at index [position] in the main RecyclerView and [nestedPosition] in the nested RecyclerView
+     * Matches item at index [position] in the outer RecyclerView and [nestedPosition] in the nested RecyclerView
      *
      * @param view [View]?: view to check
      * @return [Boolean] true if view is at index [nestedPosition] in the RecyclerView with ID [nestedRecyclerViewId],

@@ -2,18 +2,22 @@ package xyz.lbres.trickcalculator.ui.attributions
 
 import android.app.Activity
 import android.app.Instrumentation
+import android.content.Intent
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.not
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -26,9 +30,11 @@ import xyz.lbres.trickcalculator.helpers.forceClick
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
+    private val intent = Intent(ApplicationProvider.getApplicationContext(), MainActivity::class.java)
+
     @Rule
     @JvmField
-    val rule = IntentsTestRule(MainActivity::class.java)
+    val rule = ActivityScenarioRule<MainActivity>(intent)
 
     @Before
     fun setupTest() {
@@ -38,12 +44,18 @@ class AttributionsFragmentTest {
         infoButton.perform(click())
 
         // setup intents
+        Intents.init()
         intending(not(isInternal())).respondWith(
             Instrumentation.ActivityResult(
                 Activity.RESULT_OK,
                 null
             )
         )
+    }
+
+    @After
+    fun cleanupTest() {
+        Intents.release()
     }
 
     @Test

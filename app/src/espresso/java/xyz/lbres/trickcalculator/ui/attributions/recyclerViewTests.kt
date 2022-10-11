@@ -4,7 +4,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -39,9 +38,7 @@ fun testExpandCollapseAttributions() {
     onView(withViewHolder(recyclerId, 4))
         .check(matches(allOf(isDisplayed(), hasDescendant(withText(authorTitles[4])))))
 
-    for (url in imageUrls.flatten()) {
-        onView(withText(url)).check(doesNotExist())
-    }
+    checkImagesNotPresented(listOf(0, 1, 2, 3, 4))
 
     // expand all
     expandCollapseAttribution(0)

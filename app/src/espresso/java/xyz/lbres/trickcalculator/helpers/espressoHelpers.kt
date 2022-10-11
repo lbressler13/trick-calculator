@@ -8,6 +8,7 @@ import androidx.test.espresso.intent.Intents.getIntents
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matchers.allOf
 import org.junit.Assert.assertEquals
 import java.lang.AssertionError
 
@@ -18,9 +19,7 @@ import java.lang.AssertionError
  * @param text [String]: text that view is expected to have
  */
 fun checkVisibleWithText(@IdRes id: Int, text: String) {
-    onView(withId(id))
-        .check(matches(isDisplayed()))
-        .check(matches(withText(text)))
+    onView(withId(id)).check(matches(allOf(isDisplayed(), withText(text))))
 }
 
 /**
@@ -37,6 +36,5 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
     }
 
     val intent = intents.last()
-    assertEquals(Intent.ACTION_VIEW, intent.action)
     assertEquals(url, intent.dataString)
 }
