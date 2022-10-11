@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import xyz.lbres.kotlinutils.generic.ext.ifNull
 
 /**
  * [ViewAction] similar to [ActionOnItemViewAtPositionViewAction], using nested RecyclerViews.
@@ -45,7 +46,18 @@ class ActionOnNestedItemViewAtPositionViewAction(
         ScrollToPositionViewAction(recyclerPosition).perform(uiController, view)
         uiController.loopMainThreadUntilIdle()
 
-        val nestedRecycler = view.getChildAt(recyclerPosition).findViewById<RecyclerView>(nestedRecyclerId)
+        val viewholder = view.getChildAt(recyclerPosition).ifNull {
+            throw PerformException.Builder().withActionDescription(this.toString())
+                .withViewDescription(HumanReadables.describe(view))
+                .withCause(
+                    IllegalStateException(
+                        "Could not find VH at position $recyclerPosition in RecyclerView with id ${view.id}"
+                    )
+                )
+                .build()
+        }
+
+        val nestedRecycler = viewholder.findViewById<RecyclerView>(nestedRecyclerId)
         ScrollToPositionViewAction(nestedViewPosition).perform(uiController, nestedRecycler)
         uiController.loopMainThreadUntilIdle()
 
