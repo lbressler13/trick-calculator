@@ -22,7 +22,7 @@ import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
-import xyz.lbres.trickcalculator.helpers.clickView
+import xyz.lbres.trickcalculator.helpers.forceClick
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
@@ -84,7 +84,7 @@ class AttributionsFragmentTest {
 
     @Test
     fun closeButton() {
-        onView(withId(R.id.closeButton)).perform(clickView())
+        onView(withId(R.id.closeButton)).perform(forceClick())
         onView(withText("Calculator")).check(matches(isDisplayed()))
     }
 

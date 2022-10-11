@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers.viewactions
+package xyz.lbres.trickcalculator.helpers.viewaction
 
 import android.text.SpannableString
 import android.view.View
@@ -6,17 +6,30 @@ import android.widget.TextView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
 import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
 
+/**
+ * Click the first [URLClickableSpan] in a TextView that matches the specified textToClick.
+ *
+ * Adapted from solution on this StackOverflow post:
+ * https://stackoverflow.com/questions/38314077/how-to-click-a-clickablespan-using-espresso
+ *
+ * @param textToClick [String]: text of span
+ */
 class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
-    override fun getConstraints(): Matcher<View> = Matchers.instanceOf(TextView::class.java)
-    override fun getDescription(): String = "Clicking a URLClickableSpan"
+    override fun getConstraints(): Matcher<View> = ViewMatchers.isAssignableFrom(TextView::class.java)
+    override fun getDescription(): String = "clicking a URLClickableSpan"
 
+    /**
+     * Click the first [URLClickableSpan] with specified text
+     *
+     * @param uiController [UiController]
+     * @param view [View]
+     */
     override fun perform(uiController: UiController, view: View) {
         view as TextView
-        // val textview = view as TextView
         val fullText = view.text as SpannableString
 
         // nothing to click if textview is empty

@@ -18,26 +18,25 @@ import xyz.lbres.trickcalculator.helpers.actionOnNestedItemViewAtPosition
 import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
 import xyz.lbres.trickcalculator.helpers.notPresented
-import xyz.lbres.trickcalculator.helpers.withNestedRecyclerView
-import xyz.lbres.trickcalculator.helpers.withRecyclerView
+import xyz.lbres.trickcalculator.helpers.withNestedViewHolder
+import xyz.lbres.trickcalculator.helpers.withViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
-private val authorTitles =
-    authorAttributions.map { "Icon made by ${it.name} from www.flaticon.com" }
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
 private const val recyclerId = R.id.attributionsRecycler
 private const val nestedRecyclerId = R.id.imagesRecycler
 
 fun testExpandCollapseAttributions() {
-    onView(withRecyclerView(recyclerId).atPosition(0))
+    val authorTitles = authorAttributions.map { "Icon made by ${it.name} from www.flaticon.com" }
+    onView(withViewHolder(recyclerId, 0))
         .check(matches(allOf(isDisplayed(), hasDescendant(withText(authorTitles[0])))))
-    onView(withRecyclerView(recyclerId).atPosition(1))
+    onView(withViewHolder(recyclerId, 1))
         .check(matches(allOf(isDisplayed(), hasDescendant(withText(authorTitles[1])))))
-    onView(withRecyclerView(recyclerId).atPosition(2))
+    onView(withViewHolder(recyclerId, 2))
         .check(matches(allOf(isDisplayed(), hasDescendant(withText(authorTitles[2])))))
-    onView(withRecyclerView(recyclerId).atPosition(3))
+    onView(withViewHolder(recyclerId, 3))
         .check(matches(allOf(isDisplayed(), hasDescendant(withText(authorTitles[3])))))
-    onView(withRecyclerView(recyclerId).atPosition(4))
+    onView(withViewHolder(recyclerId, 4))
         .check(matches(allOf(isDisplayed(), hasDescendant(withText(authorTitles[4])))))
 
     for (url in imageUrls.flatten()) {
@@ -47,19 +46,19 @@ fun testExpandCollapseAttributions() {
     // expand all
     expandCollapseAttribution(0)
     checkImagesDisplayed(listOf(0))
-    checkImagesDoNotExist(listOf(1, 2, 3, 4))
+    checkImagesNotPresented(listOf(1, 2, 3, 4))
 
     expandCollapseAttribution(1)
     checkImagesDisplayed(listOf(0, 1))
-    checkImagesDoNotExist(listOf(2, 3, 4))
+    checkImagesNotPresented(listOf(2, 3, 4))
 
     expandCollapseAttribution(2)
     checkImagesDisplayed(listOf(0, 1, 2))
-    checkImagesDoNotExist(listOf(3, 4))
+    checkImagesNotPresented(listOf(3, 4))
 
     expandCollapseAttribution(3)
     checkImagesDisplayed(listOf(0, 1, 2, 3))
-    checkImagesDoNotExist(listOf(4))
+    checkImagesNotPresented(listOf(4))
 
     expandCollapseAttribution(4)
     checkImagesDisplayed(listOf(0, 1, 2, 3, 4))
@@ -67,65 +66,22 @@ fun testExpandCollapseAttributions() {
     // collapse
     expandCollapseAttribution(3)
     checkImagesDisplayed(listOf(0, 1, 2, 4))
-    checkImagesDoNotExist(listOf(3))
+    checkImagesNotPresented(listOf(3))
 
     expandCollapseAttribution(1)
     checkImagesDisplayed(listOf(0, 2, 4))
-    checkImagesDoNotExist(listOf(1, 3))
+    checkImagesNotPresented(listOf(1, 3))
 
     expandCollapseAttribution(0)
     checkImagesDisplayed(listOf(2, 4))
-    checkImagesDoNotExist(listOf(0, 1, 3))
+    checkImagesNotPresented(listOf(0, 1, 3))
 
     expandCollapseAttribution(4)
     checkImagesDisplayed(listOf(2))
-    checkImagesDoNotExist(listOf(0, 1, 3, 4))
+    checkImagesNotPresented(listOf(0, 1, 3, 4))
 
     expandCollapseAttribution(2)
-    checkImagesDoNotExist(listOf(0, 1, 2, 3, 4))
-}
-
-private fun checkImagesDoNotExist(positions: IntList) {
-    for (position in positions) {
-        for (url in imageUrls[position]) {
-            onView(withText(url)).check(notPresented())
-        }
-    }
-}
-
-private fun expandCollapseAttribution(position: Int) {
-    onView(withId(recyclerId)).perform(
-        actionOnItemViewAtPosition(position, R.id.expandCollapseButton, click())
-    )
-}
-
-private fun checkImagesDisplayed(positions: IntList) {
-    for (position in positions) {
-        for (pair in imageUrls[position].withIndex()) {
-            val nestedPosition = pair.index
-            val url = pair.value
-
-            nestedItemAction(position, nestedPosition, scrollTo())
-            onView(
-                withNestedRecyclerView(recyclerId, nestedRecyclerId).atNestedPosition(
-                    position,
-                    nestedPosition
-                )
-            ).check(matches(allOf(isDisplayed(), hasDescendant(withText(url)))))
-        }
-    }
-}
-
-private fun nestedItemAction(position: Int, nestedPosition: Int, action: ViewAction) {
-    onView(withId(recyclerId)).perform(
-        actionOnNestedItemViewAtPosition(
-            recyclerPosition = position,
-            nestedViewPosition = nestedPosition,
-            nestedRecyclerId = R.id.imagesRecycler,
-            viewId = R.id.link,
-            action
-        )
-    )
+    checkImagesNotPresented(listOf(0, 1, 2, 3, 4))
 }
 
 fun testAttributionLinks() {
@@ -138,7 +94,11 @@ fun testAttributionLinks() {
 
         // flaticon link
         onView(withId(recyclerId)).perform(
-            actionOnItemViewAtPosition(position, R.id.attribution, clickLinkInText("www.flaticon.com"))
+            actionOnItemViewAtPosition(
+                position,
+                R.id.attribution,
+                clickLinkInText("www.flaticon.com")
+            )
         )
         expectedLinkClicks++
         assertLinkOpened("https://www.flaticon.com", expectedLinkClicks)
@@ -164,8 +124,8 @@ fun testAttributionLinks() {
             val nestedPosition = pair.index
             val url = pair.value
 
-            nestedItemAction(position, nestedPosition, scrollTo())
-            nestedItemAction(position, nestedPosition, clickLinkInText(url))
+            imageLinkAction(position, nestedPosition, scrollTo())
+            imageLinkAction(position, nestedPosition, clickLinkInText(url))
             expectedLinkClicks++
             assertLinkOpened(url, expectedLinkClicks)
         }
@@ -185,4 +145,66 @@ fun testAttributionLinks() {
     )
     expectedLinkClicks++
     assertLinkOpened(author.url, expectedLinkClicks)
+}
+
+/**
+ * Check that image urls for specified dropdowns are not visible
+ *
+ * @param positions [IntList]: list of positions where image urls should not be visible
+ */
+private fun checkImagesNotPresented(positions: IntList) {
+    for (position in positions) {
+        for (url in imageUrls[position]) {
+            onView(withText(url)).check(notPresented())
+        }
+    }
+}
+
+/**
+ * Click the expand/collapse button for an element in the main RecyclerView
+ *
+ * @param position [Int]: position of item to click
+ */
+private fun expandCollapseAttribution(position: Int) {
+    onView(withId(recyclerId)).perform(
+        actionOnItemViewAtPosition(position, R.id.expandCollapseButton, click())
+    )
+}
+
+/**
+ * Check that image urls for specified dropdowns are visible
+ *
+ * @param positions [IntList]: list of positions where image urls should be visible
+ */
+private fun checkImagesDisplayed(positions: IntList) {
+    for (position in positions) {
+        for (pair in imageUrls[position].withIndex()) {
+            val nestedPosition = pair.index
+            val url = pair.value
+
+            imageLinkAction(position, nestedPosition, scrollTo())
+            onView(
+                withNestedViewHolder(recyclerId, nestedRecyclerId, position, nestedPosition)
+            ).check(matches(allOf(isDisplayed(), hasDescendant(withText(url)))))
+        }
+    }
+}
+
+/**
+ * Wrapper function to take action on a link in an item in the nested RecyclerView
+ *
+ * @param position [Int]: position in main RecyclerView
+ * @param nestedPosition [Int]: position in nested RecyclerView
+ * @param action [ViewAction]: action to perform
+ */
+private fun imageLinkAction(position: Int, nestedPosition: Int, action: ViewAction) {
+    onView(withId(recyclerId)).perform(
+        actionOnNestedItemViewAtPosition(
+            recyclerPosition = position,
+            nestedViewPosition = nestedPosition,
+            nestedRecyclerId = R.id.imagesRecycler,
+            viewId = R.id.link,
+            action
+        )
+    )
 }
