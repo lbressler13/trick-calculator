@@ -9,6 +9,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.Matcher
 import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
+import java.lang.Exception
 
 /**
  * Click the first [URLClickableSpan] in a TextView that matches the specified textToClick.
@@ -53,6 +54,7 @@ class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
         if (span != null) {
             span.onClick(view)
         } else {
+            throw Exception(Pair(textToClick, fullText).toString())
             // text not present in textview
             throw NoMatchingViewException.Builder()
                 .includeViewHierarchy(true)

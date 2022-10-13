@@ -6,12 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.generic.ext.ifNull
+import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 
 /**
  * [ViewAction] similar to [ActionOnItemViewAtPositionViewAction], using nested RecyclerViews.
@@ -43,10 +45,12 @@ class ActionOnNestedItemViewAtPositionViewAction(
      */
     override fun perform(uiController: UiController, view: View) {
         view as RecyclerView
+        // RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(recyclerPosition)
         ScrollToPositionViewAction(recyclerPosition).perform(uiController, view)
         uiController.loopMainThreadUntilIdle()
 
-        val viewholder = view.getChildAt(recyclerPosition).ifNull {
+        val vhPosition = recyclerPosition % view.childCount
+        val viewholder = view.getChildAt(vhPosition).ifNull {
             throw PerformException.Builder().withActionDescription(this.toString())
                 .withViewDescription(HumanReadables.describe(view))
                 .withCause(

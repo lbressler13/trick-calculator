@@ -45,7 +45,8 @@ class ActionOnItemViewAtPositionViewAction(
         ScrollToPositionViewAction(position).perform(uiController, view)
         uiController.loopMainThreadUntilIdle()
 
-        val targetView: View? = view.getChildAt(position).findViewById(viewId)
+        val vhPosition = position % view.childCount
+        val targetView: View? = view.getChildAt(vhPosition).findViewById(viewId)
         if (targetView == null) {
             throw PerformException.Builder().withActionDescription(this.toString())
                 .withViewDescription(HumanReadables.describe(view))

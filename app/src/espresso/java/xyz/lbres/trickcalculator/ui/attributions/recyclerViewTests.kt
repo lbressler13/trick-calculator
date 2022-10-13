@@ -5,11 +5,13 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.actionOnItemViewAtPosition
@@ -19,6 +21,7 @@ import xyz.lbres.trickcalculator.helpers.clickLinkInText
 import xyz.lbres.trickcalculator.helpers.notPresented
 import xyz.lbres.trickcalculator.helpers.withNestedViewHolder
 import xyz.lbres.trickcalculator.helpers.withViewHolder
+import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
@@ -115,14 +118,11 @@ fun testAttributionLinks() {
     expandCollapseAttribution(3)
     expandCollapseAttribution(4)
     for (position in imageUrls.indices) {
+        onView(withId(recyclerId)).perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(position))
         val urls = imageUrls[position]
 
-        for (pair in urls.withIndex()) {
-            val nestedPosition = pair.index
-            val url = pair.value
-
-            imageLinkAction(position, nestedPosition, scrollTo())
-            imageLinkAction(position, nestedPosition, clickLinkInText(url))
+        for (url in urls) {
+            onView(withText(containsString(url))).perform(clickLinkInText(url))
             expectedLinkClicks++
             assertLinkOpened(url, expectedLinkClicks)
         }
@@ -163,6 +163,7 @@ private fun checkImagesNotPresented(positions: IntList) {
  * @param position [Int]: position of item to click
  */
 private fun expandCollapseAttribution(position: Int) {
+    onView(withId(recyclerId)).perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(0))
     onView(withId(recyclerId)).perform(
         actionOnItemViewAtPosition(position, R.id.expandCollapseButton, click())
     )
