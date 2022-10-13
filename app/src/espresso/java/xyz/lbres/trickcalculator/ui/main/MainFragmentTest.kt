@@ -19,6 +19,8 @@ import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.checkVisibleWithText
 
+// TODO verify that values are saved when leaving/returning
+
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
     private lateinit var mainText: ViewInteraction

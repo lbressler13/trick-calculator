@@ -28,6 +28,8 @@ import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
 import xyz.lbres.trickcalculator.helpers.forceClick
 
+// TODO verify that values are not saved when leaving/returning
+
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
     private val intent = Intent(ApplicationProvider.getApplicationContext(), MainActivity::class.java)
