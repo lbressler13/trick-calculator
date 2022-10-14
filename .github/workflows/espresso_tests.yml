@@ -31,4 +31,4 @@ jobs:
         with:
           api-level: 29
           profile: 'Nexus 6'
-          script: ./gradlew connectedCheck --info --stacktrace
+          script: ./gradlew connectedCompleteDebugAndroidTest --info --stacktrace
