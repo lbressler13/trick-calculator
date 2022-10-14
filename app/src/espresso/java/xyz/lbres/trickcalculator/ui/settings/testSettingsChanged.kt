@@ -144,7 +144,7 @@ fun testResetButton() {
 
     // validate that settings button still exists
     settingsButton.check(matches(isDisplayed())).perform(click())
-    checkInitialSettings()
+    checkInitialSettings(checkSettingsButton = false)
 
     // modify settings through settings button + reset
     applyDecimalsSwitch.perform(click())
@@ -153,7 +153,7 @@ fun testResetButton() {
 
     // validate that settings button is still checked
     openFragment()
-    checkInitialSettings()
+    checkInitialSettings(checkSettingsButton = false)
     settingsButtonSwitch.check(matches(isChecked()))
 
     // reset through regular method + validate settings still exists

@@ -28,7 +28,7 @@ class SettingsModifiedViewAssertion : ViewAssertion {
                 R.id.historyButton1 -> 1
                 R.id.historyButton2 -> 2
                 R.id.historyButton3 -> 3
-                else -> -1
+                else -> initialSettings.historyRandomness
             }
 
             val viewSettings = Settings(

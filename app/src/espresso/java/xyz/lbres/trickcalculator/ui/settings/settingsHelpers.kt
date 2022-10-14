@@ -35,9 +35,12 @@ fun settingsRandomized() = SettingsModifiedViewAssertion()
 
 /**
  * Check that settings match initial settings.
- * Checks all settings except setting to show/hide the settings button on the main screen.
+ * Optionally checks switch to show/hide settings button.
+ *
+ * @param checkSettingsButton [Boolean]: if the setting for showing settings button should be checked.
+ * Defaults to true.
  */
-fun checkInitialSettings() {
+fun checkInitialSettings(checkSettingsButton: Boolean = true) {
     onView(withId(R.id.applyParensSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
     onView(withId(R.id.applyDecimalsSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
     onView(withId(R.id.shuffleComputationSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
@@ -48,4 +51,8 @@ fun checkInitialSettings() {
 
     onView(withId(R.id.historyRandomnessGroup)).check(matches(isDisplayed()))
     onView(withId(R.id.historyButton1)).check(matches(isChecked()))
+
+    if (checkSettingsButton) {
+        onView(withId(R.id.settingsButtonSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+    }
 }
