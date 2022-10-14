@@ -20,4 +20,19 @@ data class Settings(
         shuffleNumbers = false,
         shuffleOperators = true
     )
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other !is Settings) {
+            return false
+        }
+
+        return applyDecimals == other.applyDecimals
+                && applyParens == other.applyParens
+                && clearOnError == other.clearOnError
+                && historyRandomness == other.historyRandomness
+                && showSettingsButton == other.showSettingsButton
+                && shuffleComputation == other.shuffleComputation
+                && shuffleNumbers == other.shuffleNumbers
+                && shuffleOperators == other.shuffleOperators
+    }
 }

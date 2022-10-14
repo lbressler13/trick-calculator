@@ -18,7 +18,7 @@ class NotPresentedViewAssertion : ViewAssertion {
      */
     override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
         if (view != null && view.isVisible) {
-            assertThat("View is present in hierarchy and visible", true)
+            throw AssertionError("View is present in hierarchy and visible")
         }
     }
 }
