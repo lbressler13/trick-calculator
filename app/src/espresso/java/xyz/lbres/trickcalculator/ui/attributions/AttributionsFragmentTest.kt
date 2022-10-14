@@ -8,6 +8,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
@@ -27,6 +28,9 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
 import xyz.lbres.trickcalculator.helpers.forceClick
+import xyz.lbres.trickcalculator.helpers.isNotPresented
+import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
+import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 // TODO verify that values are not saved when leaving/returning
 
@@ -124,6 +128,30 @@ class AttributionsFragmentTest {
         onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("here"))
         expectedLinkClicks++
         assertLinkOpened("https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE", expectedLinkClicks)
+    }
+
+    @Test
+    fun valuesResetOnClose() {
+        val recycler = onView(withId(R.id.attributionsRecycler))
+
+        // expand attributions
+        for (author in authorAttributions.withIndex()) {
+            expandCollapseAttribution(author.index)
+            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(author.index))
+            val image = author.value.images[0]
+            onView(withText(image.url)).check(matches(isDisplayed()))
+        }
+
+        // close and reopen fragment
+        onView(withId(R.id.closeButton)).perform(forceClick())
+        onView(withId(R.id.infoButton)).perform(click())
+
+        // check image attributions no longer displayed
+        for (author in authorAttributions.withIndex()) {
+            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(author.index))
+            val image = author.value.images[0]
+            onView(withText(image.url)).check(isNotPresented())
+        }
     }
 
     @Test

@@ -108,8 +108,7 @@ android {
     }
 
     testOptions {
-        animationsDisabled = true
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled true
     }
 }
 
@@ -147,7 +146,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test:runner:$androidxTestVersion"
     androidTestImplementation "androidx.test:rules:$androidxTestVersion"
-    androidTestUtil "androidx.test:orchestrator:$androidxTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
