@@ -123,6 +123,12 @@ class SettingsFragmentTest {
     @Test
     fun randomizeButton() = testRandomizeButton()
 
+    /**
+     * Run basic tests on a switch by checking and unchecking
+     *
+     * @param id [IdRes]: view ID of the switch
+     * @param initialChecked [Boolean]: if the switch is expected to be checked initially, before any interaction
+     */
     private fun testSwitch(@IdRes id: Int, initialChecked: Boolean) {
         val switch = onView(withId(id))
         val firstCheck = ternaryIf(initialChecked, isChecked(), isNotChecked())
@@ -137,6 +143,12 @@ class SettingsFragmentTest {
         switch.check(matches(allOf(isDisplayed(), firstCheck)))
     }
 
+    /**
+     * Check the history radio group to ensure that the correct button is checked, and all others are unchecked.
+     * Checks all buttons because some radio groups may allow multiple buttons to be checked.
+     *
+     * @param checked [Int]: index of button expected to be checked
+     */
     private fun checkHistoryChecked(checked: Int) {
         val buttons = listOf(
             onView(withId(R.id.historyButton0)),

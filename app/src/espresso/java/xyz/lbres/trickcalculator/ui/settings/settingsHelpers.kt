@@ -3,11 +3,17 @@ package xyz.lbres.trickcalculator.ui.settings
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.forceClick
 
+/**
+ * Open settings fragment through attributions fragment
+ */
 fun openFragment() {
     val infoButton = onView(withId(R.id.infoButton))
     infoButton.check(matches(isDisplayed()))
@@ -15,13 +21,22 @@ fun openFragment() {
     onView(withId(R.id.title)).perform(click())
 }
 
+/**
+ * Click close button
+ */
 fun closeFragment() {
     onView(withId(R.id.closeButton)).perform(forceClick())
 }
 
-fun settingsRandomized() = SettingsRandomizedViewAssertion()
+/**
+ * Wrapper function for create a [SettingsModifiedViewAssertion]
+ */
+fun settingsRandomized() = SettingsModifiedViewAssertion()
 
-// check all initial settings other than settings button
+/**
+ * Check that settings match initial settings.
+ * Checks all settings except setting to show/hide the settings button on the main screen.
+ */
 fun checkInitialSettings() {
     onView(withId(R.id.applyParensSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
     onView(withId(R.id.applyDecimalsSwitch)).check(matches(allOf(isDisplayed(), isChecked())))

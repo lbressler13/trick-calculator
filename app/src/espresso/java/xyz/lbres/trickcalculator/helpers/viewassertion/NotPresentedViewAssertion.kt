@@ -4,7 +4,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAssertion
-import org.hamcrest.MatcherAssert.assertThat
+import androidx.test.espresso.util.HumanReadables
 
 /**
  * [ViewAssertion] to assert that view is not presented on screen, due to not existing or not being visible.
@@ -18,7 +18,8 @@ class NotPresentedViewAssertion : ViewAssertion {
      */
     override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
         if (view != null && view.isVisible) {
-            throw AssertionError("View is present in hierarchy and visible")
+            val viewText = HumanReadables.describe(view)
+            throw AssertionError("View is present in hierarchy and visible: $viewText")
         }
     }
 }

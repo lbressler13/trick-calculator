@@ -26,13 +26,13 @@ data class Settings(
             return false
         }
 
-        return applyDecimals == other.applyDecimals
-                && applyParens == other.applyParens
-                && clearOnError == other.clearOnError
-                && historyRandomness == other.historyRandomness
-                && showSettingsButton == other.showSettingsButton
-                && shuffleComputation == other.shuffleComputation
-                && shuffleNumbers == other.shuffleNumbers
-                && shuffleOperators == other.shuffleOperators
+        return applyDecimals == other.applyDecimals &&
+            applyParens == other.applyParens &&
+            clearOnError == other.clearOnError &&
+            historyRandomness == other.historyRandomness &&
+            showSettingsButton == other.showSettingsButton &&
+            shuffleComputation == other.shuffleComputation &&
+            shuffleNumbers == other.shuffleNumbers &&
+            shuffleOperators == other.shuffleOperators
     }
 }

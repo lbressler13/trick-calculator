@@ -7,7 +7,13 @@ import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAssertion
 import xyz.lbres.trickcalculator.R
 
-class SettingsRandomizedViewAssertion : ViewAssertion {
+/**
+ * [ViewAssertion] to assert that settings displayed in settings fragment do not match initial settings
+ */
+class SettingsModifiedViewAssertion : ViewAssertion {
+    /**
+     * Assert that a the settings do not match the initial settings
+     */
     override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
         if (view == null) {
             throw AssertionError("Settings view is null")
