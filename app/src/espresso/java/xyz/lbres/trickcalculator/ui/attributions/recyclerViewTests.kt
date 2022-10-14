@@ -151,6 +151,7 @@ fun testAttributionLinks() {
  */
 private fun checkImagesNotPresented(positions: IntList) {
     for (position in positions) {
+        onView(withId(recyclerId)).perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(0))
         for (url in imageUrls[position]) {
             onView(withText(url)).check(isNotPresented())
         }
