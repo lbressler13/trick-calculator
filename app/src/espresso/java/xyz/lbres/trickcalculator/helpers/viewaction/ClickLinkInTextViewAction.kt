@@ -54,7 +54,6 @@ class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
         if (span != null) {
             span.onClick(view)
         } else {
-            throw Exception(Pair(textToClick, fullText).toString())
             // text not present in textview
             throw NoMatchingViewException.Builder()
                 .includeViewHierarchy(true)

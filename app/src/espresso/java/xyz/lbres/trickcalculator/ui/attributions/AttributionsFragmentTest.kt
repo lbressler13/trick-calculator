@@ -131,7 +131,7 @@ class AttributionsFragmentTest {
     }
 
     @Test
-    fun valuesResetOnClose() {
+    fun dataNotPersistedOnClose() {
         val recycler = onView(withId(R.id.attributionsRecycler))
 
         // expand attributions

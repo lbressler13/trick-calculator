@@ -2,8 +2,10 @@ package xyz.lbres.trickcalculator.helpers
 
 import androidx.annotation.IdRes
 import androidx.test.espresso.ViewAction
-import xyz.lbres.trickcalculator.helpers.matchers.NestedRecyclerViewMatcher
-import xyz.lbres.trickcalculator.helpers.matchers.RecyclerViewMatcher
+import xyz.lbres.trickcalculator.helpers.matcher.BlankStringViewMatcher
+import xyz.lbres.trickcalculator.helpers.matcher.NestedRecyclerViewMatcher
+import xyz.lbres.trickcalculator.helpers.matcher.NotBlankStringViewMatcher
+import xyz.lbres.trickcalculator.helpers.matcher.RecyclerViewMatcher
 import xyz.lbres.trickcalculator.helpers.viewaction.ActionOnItemViewAtPositionViewAction
 import xyz.lbres.trickcalculator.helpers.viewaction.ActionOnNestedItemViewAtPositionViewAction
 import xyz.lbres.trickcalculator.helpers.viewaction.ClickLinkInTextViewAction
@@ -70,6 +72,16 @@ fun withNestedViewHolder(
 ): NestedRecyclerViewMatcher {
     return NestedRecyclerViewMatcher(recyclerId, nestedRecyclerId, position, nestedPosition)
 }
+
+/**
+ * Wrapper function for creating a [BlankStringViewMatcher]
+ */
+fun isBlankString() = BlankStringViewMatcher()
+
+/**
+ * Wrapper function for creating a [NotBlankStringViewMatcher]
+ */
+fun isNotBlankString() = NotBlankStringViewMatcher()
 
 /**
  * VIEW ASSERTIONS

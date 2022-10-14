@@ -1,5 +1,6 @@
 package xyz.lbres.trickcalculator.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -128,6 +129,7 @@ class ComputationViewModel : ViewModel() {
             listOf(computedDecimal)
         }
         val currentComputeText = computeText.value!!
+        Log.e("viewmodel", Pair(computedString, currentComputeText).toString())
         mBackupComputeText.value = computedString + currentComputeText
     }
 
