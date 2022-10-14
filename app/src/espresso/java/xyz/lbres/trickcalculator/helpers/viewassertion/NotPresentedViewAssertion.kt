@@ -1,10 +1,9 @@
 package xyz.lbres.trickcalculator.helpers.viewassertion
 
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAssertion
-import org.hamcrest.MatcherAssert.assertThat
+import androidx.test.espresso.util.HumanReadables
 
 /**
  * [ViewAssertion] to assert that view is not presented on screen, due to not existing or not being visible.
@@ -15,10 +14,13 @@ import org.hamcrest.MatcherAssert.assertThat
 class NotPresentedViewAssertion : ViewAssertion {
     /**
      * Assert that a view is not in the view hierarchy or is not visible
+     *
+     * @param view [View]?: view to check
      */
     override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
-        if (view != null && view.isVisible) {
-            assertThat("View is present in hierarchy and visible", true)
+        if (view != null && view.isShown) {
+            val viewText = HumanReadables.describe(view)
+            throw AssertionError("View is present in hierarchy and visible: $viewText")
         }
     }
 }

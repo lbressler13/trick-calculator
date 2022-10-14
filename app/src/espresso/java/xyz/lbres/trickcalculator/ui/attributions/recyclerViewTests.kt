@@ -18,7 +18,7 @@ import xyz.lbres.trickcalculator.helpers.actionOnItemViewAtPosition
 import xyz.lbres.trickcalculator.helpers.actionOnNestedItemViewAtPosition
 import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
-import xyz.lbres.trickcalculator.helpers.notPresented
+import xyz.lbres.trickcalculator.helpers.isNotPresented
 import xyz.lbres.trickcalculator.helpers.withNestedViewHolder
 import xyz.lbres.trickcalculator.helpers.withViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
@@ -151,8 +151,9 @@ fun testAttributionLinks() {
  */
 private fun checkImagesNotPresented(positions: IntList) {
     for (position in positions) {
+        onView(withId(recyclerId)).perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(0))
         for (url in imageUrls[position]) {
-            onView(withText(url)).check(notPresented())
+            onView(withText(url)).check(isNotPresented())
         }
     }
 }

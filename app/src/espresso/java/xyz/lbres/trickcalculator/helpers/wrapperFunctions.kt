@@ -78,4 +78,4 @@ fun withNestedViewHolder(
 /**
  * Wrapper function for creating a [NotPresentedViewAssertion]
  */
-fun notPresented() = NotPresentedViewAssertion()
+fun isNotPresented() = NotPresentedViewAssertion()
