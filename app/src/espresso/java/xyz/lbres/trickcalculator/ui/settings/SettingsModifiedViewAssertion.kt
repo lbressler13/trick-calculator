@@ -13,6 +13,8 @@ import xyz.lbres.trickcalculator.R
 class SettingsModifiedViewAssertion : ViewAssertion {
     /**
      * Assert that a the settings do not match the initial settings
+     *
+     * @param view [View]?: view to check, expected to be root of a settings fragment
      */
     override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
         if (view == null) {

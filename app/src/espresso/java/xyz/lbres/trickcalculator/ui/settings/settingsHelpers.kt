@@ -29,7 +29,7 @@ fun closeFragment() {
 }
 
 /**
- * Wrapper function for create a [SettingsModifiedViewAssertion]
+ * Wrapper function to create a [SettingsModifiedViewAssertion]
  */
 fun settingsRandomized() = SettingsModifiedViewAssertion()
 

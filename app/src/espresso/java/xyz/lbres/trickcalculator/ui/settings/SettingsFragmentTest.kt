@@ -58,24 +58,19 @@ class SettingsFragmentTest {
         testSwitch(R.id.settingsButtonSwitch, false)
 
         // history group
-        val button0 = onView(withId(R.id.historyButton0))
-        val button1 = onView(withId(R.id.historyButton1))
-        val button2 = onView(withId(R.id.historyButton2))
-        val button3 = onView(withId(R.id.historyButton3))
-
         onView(withId(R.id.historyRandomnessGroup)).check(matches(isDisplayed()))
         checkHistoryChecked(1)
 
-        button0.perform(click())
+        onView(withId(R.id.historyButton0)).perform(click())
         checkHistoryChecked(0)
 
-        button2.perform(click())
+        onView(withId(R.id.historyButton2)).perform(click())
         checkHistoryChecked(2)
 
-        button3.perform(click())
+        onView(withId(R.id.historyButton3)).perform(click())
         checkHistoryChecked(3)
 
-        button1.perform(click())
+        onView(withId(R.id.historyButton1)).perform(click())
         checkHistoryChecked(1)
     }
 
@@ -131,16 +126,16 @@ class SettingsFragmentTest {
      */
     private fun testSwitch(@IdRes id: Int, initialChecked: Boolean) {
         val switch = onView(withId(id))
-        val firstCheck = ternaryIf(initialChecked, isChecked(), isNotChecked())
-        val secondCheck = ternaryIf(initialChecked, isNotChecked(), isChecked())
+        val inititalCheck = ternaryIf(initialChecked, isChecked(), isNotChecked())
+        val oppositeCheck = ternaryIf(initialChecked, isNotChecked(), isChecked())
 
-        switch.check(matches(allOf(isDisplayed(), firstCheck)))
-
-        switch.perform(click())
-        switch.check(matches(allOf(isDisplayed(), secondCheck)))
+        switch.check(matches(allOf(isDisplayed(), inititalCheck)))
 
         switch.perform(click())
-        switch.check(matches(allOf(isDisplayed(), firstCheck)))
+        switch.check(matches(allOf(isDisplayed(), oppositeCheck)))
+
+        switch.perform(click())
+        switch.check(matches(allOf(isDisplayed(), inititalCheck)))
     }
 
     /**

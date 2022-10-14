@@ -14,6 +14,8 @@ import androidx.test.espresso.util.HumanReadables
 class NotPresentedViewAssertion : ViewAssertion {
     /**
      * Assert that a view is not in the view hierarchy or is not visible
+     *
+     * @param view [View]?: view to check
      */
     override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
         if (view != null && view.isShown) {
