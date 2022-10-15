@@ -32,8 +32,6 @@ import xyz.lbres.trickcalculator.helpers.isNotPresented
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
-// TODO verify that values are not saved when leaving/returning
-
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
     private val intent = Intent(ApplicationProvider.getApplicationContext(), MainActivity::class.java)
