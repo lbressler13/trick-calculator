@@ -9,7 +9,6 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.Matcher
 import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
-import java.lang.Exception
 
 /**
  * Click the first [URLClickableSpan] in a TextView that matches the specified textToClick.

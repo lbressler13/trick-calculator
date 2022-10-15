@@ -17,11 +17,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.helpers.checkVisibleWithText
-import xyz.lbres.trickcalculator.helpers.isBlankString
-import xyz.lbres.trickcalculator.helpers.isNotBlankString
-import xyz.lbres.trickcalculator.helpers.isNotPresented
-import xyz.lbres.trickcalculator.helpers.matcher.PreviousTextViewMatcher
+import xyz.lbres.trickcalculator.helpers.isEmptyString
+import xyz.lbres.trickcalculator.helpers.isNotEmptyString
+import xyz.lbres.trickcalculator.helpers.saveText
+import xyz.lbres.trickcalculator.helpers.withSavedText
 
 // TODO tests for settings
 
@@ -51,19 +50,19 @@ class MainFragmentTest {
         onView(withId(R.id.useLastHistoryButton)).check(matches(not(isDisplayed())))
         onView(withId(R.id.historyButton)).check(matches(isDisplayed()))
         errorText.check(matches(not(isDisplayed())))
-        checkVisibleWithText(R.id.mainText, "")
+        mainText.check(matches(allOf(isDisplayed(), isEmptyString())))
 
         // numpad layout
-        checkVisibleWithText(R.id.oneButton, "1")
-        checkVisibleWithText(R.id.twoButton, "2")
-        checkVisibleWithText(R.id.threeButton, "3")
-        checkVisibleWithText(R.id.fourButton, "4")
-        checkVisibleWithText(R.id.fiveButton, "5")
-        checkVisibleWithText(R.id.sixButton, "6")
-        checkVisibleWithText(R.id.sevenButton, "7")
-        checkVisibleWithText(R.id.eightButton, "8")
-        checkVisibleWithText(R.id.nineButton, "9")
-        checkVisibleWithText(R.id.zeroButton, "0")
+        onView(withId(R.id.oneButton)).check(matches(allOf(isDisplayed(), withText("1"))))
+        onView(withId(R.id.twoButton)).check(matches(allOf(isDisplayed(), withText("2"))))
+        onView(withId(R.id.threeButton)).check(matches(allOf(isDisplayed(), withText("3"))))
+        onView(withId(R.id.fourButton)).check(matches(allOf(isDisplayed(), withText("4"))))
+        onView(withId(R.id.fiveButton)).check(matches(allOf(isDisplayed(), withText("5"))))
+        onView(withId(R.id.sixButton)).check(matches(allOf(isDisplayed(), withText("6"))))
+        onView(withId(R.id.sevenButton)).check(matches(allOf(isDisplayed(), withText("7"))))
+        onView(withId(R.id.eightButton)).check(matches(allOf(isDisplayed(), withText("8"))))
+        onView(withId(R.id.nineButton)).check(matches(allOf(isDisplayed(), withText("9"))))
+        onView(withId(R.id.zeroButton)).check(matches(allOf(isDisplayed(), withText("0"))))
 
         onView(withId(R.id.plusButton)).check(matches(isDisplayed()))
         onView(withId(R.id.minusButton)).check(matches(isDisplayed()))
@@ -172,17 +171,17 @@ class MainFragmentTest {
 
         typeText("100x44-3")
         equals()
-        mainText.check(matches((isNotBlankString())))
+        mainText.check(matches((isNotEmptyString())))
         clearButton.perform(click())
-        mainText.check(matches(isBlankString()))
+        mainText.check(matches(isEmptyString()))
 
         // with error
         typeText("100..3")
         equals()
-        mainText.check(matches(isNotBlankString()))
+        mainText.check(matches(isNotEmptyString()))
         errorText
             .check(matches(isDisplayed()))
-            .check(matches(isNotBlankString()))
+            .check(matches(isNotEmptyString()))
         clearButton.perform(click())
         mainText.check(matches(withText("")))
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
@@ -196,12 +195,12 @@ class MainFragmentTest {
         // syntax errors
         typeText("+")
         equals()
-        checkVisibleWithText(R.id.errorText, "Error: Syntax error")
+        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
 
         clearText()
         typeText("1+")
         equals()
-        checkVisibleWithText(R.id.errorText, "Error: Syntax error")
+        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
         typeText("2")
         equals()
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
@@ -209,7 +208,7 @@ class MainFragmentTest {
         clearText()
         typeText("()")
         equals()
-        checkVisibleWithText(R.id.errorText, "Error: Syntax error")
+        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
 
         // divide by zero
         repeat(10) {
@@ -349,16 +348,13 @@ class MainFragmentTest {
         checkMainTextMatches("[123]")
         clearText()
 
-        val previousMatcher = PreviousTextViewMatcher()
-
         typeText("1+4")
         equals()
         checkMainTextMatchesAny(setOf("[5]", "[-3]", "[4]", "[0.25]"))
-        mainText.check(matches(previousMatcher))
+        mainText.perform(saveText())
         leaveAndReturn()
-        mainText.check(matches(previousMatcher))
+        mainText.check(matches(withSavedText()))
         clearText()
-        previousMatcher.reset()
 
         typeText("2+5-4")
         equals()
@@ -370,11 +366,10 @@ class MainFragmentTest {
                 "[4.4]", "[-3.6]", "[1.6]" // + = /
             )
         )
-        mainText.check(matches(previousMatcher))
+        mainText.perform(saveText())
         leaveAndReturn()
-        mainText.check(matches(previousMatcher))
+        mainText.check(matches(withSavedText()))
         clearText()
-        previousMatcher.reset()
 
         typeText("10-.5x4/2+16")
         equals()
@@ -386,11 +381,10 @@ class MainFragmentTest {
                 "[-8]", "[12]", "[48]", "[28]", "[66]", "[94]" // + = /
             )
         )
-        mainText.check(matches(previousMatcher))
+        mainText.perform(saveText())
         leaveAndReturn()
-        mainText.check(matches(previousMatcher))
+        mainText.check(matches(withSavedText()))
         clearText()
-        previousMatcher.reset()
 
         // error
         typeText("+")

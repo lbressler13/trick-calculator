@@ -8,7 +8,6 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.actionOnItemViewAtPosition
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 
-
 /**
  * Click the expand/collapse button for an element in the main RecyclerView
  *
