@@ -133,10 +133,13 @@ class AttributionsFragmentTest {
         val recycler = onView(withId(R.id.attributionsRecycler))
 
         // expand attributions
-        for (author in authorAttributions.withIndex()) {
-            expandCollapseAttribution(author.index)
-            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(author.index))
-            val image = author.value.images[0]
+        for (pair in authorAttributions.withIndex()) {
+            val index = pair.index
+            val author = pair.value
+
+            expandCollapseAttribution(index)
+            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(index))
+            val image = author.images[0]
             onView(withText(image.url)).check(matches(isDisplayed()))
         }
 
@@ -145,9 +148,12 @@ class AttributionsFragmentTest {
         onView(withId(R.id.infoButton)).perform(click())
 
         // check image attributions no longer displayed
-        for (author in authorAttributions.withIndex()) {
-            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(author.index))
-            val image = author.value.images[0]
+        for (pair in authorAttributions.withIndex()) {
+            val index = pair.index
+            val author = pair.value
+
+            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(index))
+            val image = author.images[0]
             onView(withText(image.url)).check(isNotPresented())
         }
     }

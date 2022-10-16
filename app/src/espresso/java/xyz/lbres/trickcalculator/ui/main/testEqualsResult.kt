@@ -3,12 +3,13 @@ package xyz.lbres.trickcalculator.ui.main
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import xyz.lbres.trickcalculator.helpers.isEmptyString
 
 fun testEqualsResult(mainText: ViewInteraction) {
     // blank
-    mainText.check(matches(withText("")))
+    mainText.check(matches(isEmptyString()))
     equals()
-    mainText.check(matches(withText("")))
+    mainText.check(matches(isEmptyString()))
 
     // one number
     clearText()

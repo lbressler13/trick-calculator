@@ -97,7 +97,7 @@ fun checkMainTextMatchesAny(options: Set<String>) {
 }
 
 /**
- * Leave main fragment by opening attributions fragment, then return by closing other fragment
+ * Leave main fragment by opening attributions fragment, then return by closing attributions fragment
  */
 fun leaveAndReturn() {
     onView(withId(R.id.infoButton)).perform(click())

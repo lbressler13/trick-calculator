@@ -12,7 +12,7 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
 
 /**
- * Class designed to check if two TextView ViewInteractions contain the safe texts.
+ * Class designed to check if two TextView ViewInteractions contain the same text values.
  * Includes a [SaveTextViewAction] to save the text from the initial TextView,
  * and a [PreviousTextViewMatcher] to match the text from a different TextView against the saved value.
  * Can also be use to validate that text in a single TextView has not changed over time.

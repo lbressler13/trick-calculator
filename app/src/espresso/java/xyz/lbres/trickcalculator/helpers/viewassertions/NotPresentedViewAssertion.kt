@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers.viewassertion
+package xyz.lbres.trickcalculator.helpers.viewassertions
 
 import android.view.View
 import androidx.test.espresso.NoMatchingViewException

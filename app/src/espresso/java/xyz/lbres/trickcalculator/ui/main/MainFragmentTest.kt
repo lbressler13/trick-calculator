@@ -83,7 +83,7 @@ class MainFragmentTest {
 
     @Test
     fun typeInMainText() {
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
 
         // digits
         onView(withId(R.id.oneButton)).perform(click())
@@ -147,27 +147,27 @@ class MainFragmentTest {
         val clearButton = onView(withId(R.id.clearButton))
 
         // empty
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
 
         // with text
         typeText("123")
-        mainText.check(matches(not(withText(""))))
+        mainText.check(matches(isNotEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
 
         typeText("(.7-45+55/5)^3(4.3)")
-        mainText.check(matches(not(withText(""))))
+        mainText.check(matches(isNotEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
 
         // with computed
         typeText("123")
         equals()
-        mainText.check(matches(not(withText(""))))
+        mainText.check(matches(isNotEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
 
         typeText("100x44-3")
         equals()
@@ -179,11 +179,9 @@ class MainFragmentTest {
         typeText("100..3")
         equals()
         mainText.check(matches(isNotEmptyString()))
-        errorText
-            .check(matches(isDisplayed()))
-            .check(matches(isNotEmptyString()))
+        errorText.check(matches(allOf(isDisplayed(), isNotEmptyString())))
         clearButton.perform(click())
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
     }
 
@@ -224,15 +222,15 @@ class MainFragmentTest {
     @Test
     fun useBackspace() {
         // blank
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
         backspace()
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
 
         // with text
         clearText()
         typeText("1")
         backspace()
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
 
         clearText()
         typeText("123")
@@ -272,7 +270,7 @@ class MainFragmentTest {
         equals()
         onView(withId(R.id.errorText)).check(matches(isDisplayed()))
         backspace()
-        mainText.check(matches(withText("")))
+        mainText.check(matches(isEmptyString()))
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
 
         clearText()
@@ -313,49 +311,50 @@ class MainFragmentTest {
         checkMainTextMatches("")
         errorText.check(matches(not(isDisplayed())))
 
+        clearText()
         typeText("1")
         leaveAndReturn()
         checkMainTextMatches("1")
-        clearText()
 
+        clearText()
         typeText("1.003(8-9+2)/(1.5)^4")
         leaveAndReturn()
         checkMainTextMatches("1.003(8-9+2)/(1.5)^4")
-        clearText()
 
+        clearText()
         typeText("1+2")
         leaveAndReturn()
         typeText("x4")
         leaveAndReturn()
         checkMainTextMatches("1+2x4")
-        clearText()
 
+        clearText()
         typeText("3+") // would give error
         leaveAndReturn()
         checkMainTextMatches("3+")
-        clearText()
 
         // computed value
+        clearText()
         typeText("1.003")
         equals()
         leaveAndReturn()
         checkMainTextMatches("[1.003]")
-        clearText()
 
+        clearText()
         typeText("(0000000123)")
         equals()
         leaveAndReturn()
         checkMainTextMatches("[123]")
-        clearText()
 
+        clearText()
         typeText("1+4")
         equals()
         checkMainTextMatchesAny(setOf("[5]", "[-3]", "[4]", "[0.25]"))
         mainText.perform(saveText())
         leaveAndReturn()
         mainText.check(matches(withSavedText()))
-        clearText()
 
+        clearText()
         typeText("2+5-4")
         equals()
         checkMainTextMatchesAny(
@@ -369,8 +368,8 @@ class MainFragmentTest {
         mainText.perform(saveText())
         leaveAndReturn()
         mainText.check(matches(withSavedText()))
-        clearText()
 
+        clearText()
         typeText("10-.5x4/2+16")
         equals()
         checkMainTextMatchesAny(
@@ -384,18 +383,18 @@ class MainFragmentTest {
         mainText.perform(saveText())
         leaveAndReturn()
         mainText.check(matches(withSavedText()))
-        clearText()
 
         // error
+        clearText()
         typeText("+")
         equals()
         errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
         leaveAndReturn()
         errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
         checkMainTextMatches("+")
-        clearText()
 
         // TODO fix bug that causes this
+        // clearText()
         // openSettingsFragment()
         // onView(withId(R.id.clearOnErrorSwitch)).perform(click())
         // closeSettingsFragment()
