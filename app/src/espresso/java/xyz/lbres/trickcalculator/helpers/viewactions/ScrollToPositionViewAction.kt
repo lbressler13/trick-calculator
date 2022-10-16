@@ -1,10 +1,11 @@
-package xyz.lbres.trickcalculator.helpers.viewaction
+package xyz.lbres.trickcalculator.helpers.viewactions
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
@@ -18,8 +19,8 @@ import org.hamcrest.Matchers.allOf
  */
 class ScrollToPositionViewAction(private val position: Int) : ViewAction {
     override fun getConstraints(): Matcher<View> = allOf(
-        ViewMatchers.isAssignableFrom(RecyclerView::class.java),
-        ViewMatchers.isDisplayed()
+        isAssignableFrom(RecyclerView::class.java),
+        isDisplayed()
     )
     override fun getDescription(): String = "scroll RecyclerView to position: $position"
 

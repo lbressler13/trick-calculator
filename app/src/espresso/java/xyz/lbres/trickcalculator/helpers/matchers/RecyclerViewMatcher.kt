@@ -18,8 +18,8 @@ import org.hamcrest.TypeSafeMatcher
  */
 class RecyclerViewMatcher(@param:IdRes private val recyclerViewId: Int, private val position: Int) :
     TypeSafeMatcher<View?>() {
-    var resources: Resources? = null
-    var childView: View? = null
+    private var resources: Resources? = null
+    private var childView: View? = null
 
     override fun describeTo(description: Description) {
         var idInfo = recyclerViewId.toString()

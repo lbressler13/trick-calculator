@@ -3,12 +3,13 @@ package xyz.lbres.trickcalculator.ui.main
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import xyz.lbres.trickcalculator.helpers.isEmptyString
 
 fun testEqualsResult(mainText: ViewInteraction) {
     // blank
-    mainText.check(matches(withText("")))
+    mainText.check(matches(isEmptyString()))
     equals()
-    mainText.check(matches(withText("")))
+    mainText.check(matches(isEmptyString()))
 
     // one number
     clearText()
@@ -36,28 +37,28 @@ fun testEqualsResult(mainText: ViewInteraction) {
         clearText()
         typeText("12+10")
         equals()
-        checkMainTextOptions(setOf("[22]", "[2]", "[120]", "[1.2]"))
+        checkMainTextMatchesAny(setOf("[22]", "[2]", "[120]", "[1.2]"))
     }
 
     repeat(10) {
         clearText()
         typeText("2^3") // exponent
         equals()
-        checkMainTextOptions(setOf("[5]", "[-1]", "[6]", "[0.66666667]", "[8]"))
+        checkMainTextMatchesAny(setOf("[5]", "[-1]", "[6]", "[0.66666667]", "[8]"))
     }
 
     repeat(10) {
         clearText()
         typeText("1.5x4") // decimal
         equals()
-        checkMainTextOptions(setOf("[5.5]", "[-2.5]", "[6]", "[0.375]"))
+        checkMainTextMatchesAny(setOf("[5.5]", "[-2.5]", "[6]", "[0.375]"))
     }
 
     repeat(10) {
         clearText()
         typeText("2x5x4") // several same op
         equals()
-        checkMainTextOptions(setOf("[11]", "[-7]", "[40]", "[0.1]"))
+        checkMainTextMatchesAny(setOf("[11]", "[-7]", "[40]", "[0.1]"))
     }
 
     // several operators
@@ -65,7 +66,7 @@ fun testEqualsResult(mainText: ViewInteraction) {
         clearText()
         typeText("2+5-4")
         equals()
-        checkMainTextOptions(
+        checkMainTextMatchesAny(
             setOf(
                 "[3]", "[22]", "[3.25]", // + = +
                 "[1]", "[-18]", "[0.75]", // + = -
@@ -79,7 +80,7 @@ fun testEqualsResult(mainText: ViewInteraction) {
         clearText()
         typeText("5^2-4") // exponent
         equals()
-        checkMainTextOptions(
+        checkMainTextMatchesAny(
             setOf(
                 "[3]", "[13]", "[5.5]", "[21]", // + = +
                 "[7]", "[-3]", "[4.5]", "[-11]", // + = -
@@ -94,7 +95,7 @@ fun testEqualsResult(mainText: ViewInteraction) {
         clearText()
         typeText("10-.5x4/2+16")
         equals()
-        checkMainTextOptions(
+        checkMainTextMatchesAny(
             setOf(
                 "[10]", "[-21.5]", "[11.875]", "[-5]", "[-21.875]", "[-5.75]", // + = +
                 "[10]", "[41.5]", "[8.125]", "[25]", "[41.875]", "[25.75]", // + = -
@@ -109,7 +110,7 @@ fun testEqualsResult(mainText: ViewInteraction) {
         clearText()
         typeText("2(5-4)")
         equals()
-        checkMainTextOptions(
+        checkMainTextMatchesAny(
             setOf(
                 "[3]", "[22]", "[3.25]", // + = +
                 "[-7]", "[-18]", "[0.75]", // + = -
@@ -126,7 +127,7 @@ fun testEqualsResult(mainText: ViewInteraction) {
         equals()
         typeText("+2")
         equals()
-        checkMainTextOptions(setOf("[125]", "[121]", "[246]", "[61.5]"))
+        checkMainTextMatchesAny(setOf("[125]", "[121]", "[246]", "[61.5]"))
     }
 
     repeat(10) {
@@ -135,6 +136,6 @@ fun testEqualsResult(mainText: ViewInteraction) {
         equals()
         typeText("2") // add times between values
         equals()
-        checkMainTextOptions(setOf("[125]", "[121]", "[246]", "[61.5]"))
+        checkMainTextMatchesAny(setOf("[125]", "[121]", "[246]", "[61.5]"))
     }
 }

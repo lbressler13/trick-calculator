@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers.viewaction
+package xyz.lbres.trickcalculator.helpers.viewactions
 
 import android.view.View
 import androidx.annotation.IdRes
@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.allOf
 
 /**
  * [ViewAction] to take an action on a view within a single ViewHolder in a RecyclerView
@@ -26,10 +27,9 @@ class ActionOnItemViewAtPositionViewAction(
     @param:IdRes private val viewId: Int,
     private val viewAction: ViewAction
 ) : ViewAction {
-    override fun getConstraints(): Matcher<View> = Matchers.allOf(
-        ViewMatchers.isAssignableFrom(RecyclerView::class.java),
-        ViewMatchers.isDisplayed()
-    )
+    override fun getConstraints(): Matcher<View> =
+        allOf(isAssignableFrom(RecyclerView::class.java), isDisplayed())
+
     override fun getDescription(): String =
         "actionOnItemAtPosition performing ViewAction: ${viewAction.description} on item at position $position"
 

@@ -1,14 +1,20 @@
 package xyz.lbres.trickcalculator.helpers
 
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Description
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers.not
+import org.hamcrest.TypeSafeMatcher
 import xyz.lbres.trickcalculator.helpers.matchers.NestedRecyclerViewMatcher
 import xyz.lbres.trickcalculator.helpers.matchers.RecyclerViewMatcher
-import xyz.lbres.trickcalculator.helpers.viewaction.ActionOnItemViewAtPositionViewAction
-import xyz.lbres.trickcalculator.helpers.viewaction.ActionOnNestedItemViewAtPositionViewAction
-import xyz.lbres.trickcalculator.helpers.viewaction.ClickLinkInTextViewAction
-import xyz.lbres.trickcalculator.helpers.viewaction.ForceClickViewAction
-import xyz.lbres.trickcalculator.helpers.viewassertion.NotPresentedViewAssertion
+import xyz.lbres.trickcalculator.helpers.viewactions.ActionOnItemViewAtPositionViewAction
+import xyz.lbres.trickcalculator.helpers.viewactions.ActionOnNestedItemViewAtPositionViewAction
+import xyz.lbres.trickcalculator.helpers.viewactions.ClickLinkInTextViewAction
+import xyz.lbres.trickcalculator.helpers.viewactions.ForceClickViewAction
+import xyz.lbres.trickcalculator.helpers.viewassertions.NotPresentedViewAssertion
 
 /**
  * VIEW ACTIONS
@@ -72,6 +78,16 @@ fun withNestedViewHolder(
 }
 
 /**
+ * Wrapper function for creating a [Matcher] for text with an empty string
+ */
+fun isEmptyString(): Matcher<View> = withText("")
+
+/**
+ * Wrapper function for creating a [Matcher] for text with a non-empty string
+ */
+fun isNotEmptyString(): Matcher<View> = not(withText(""))
+
+/**
  * VIEW ASSERTIONS
  */
 
@@ -79,3 +95,40 @@ fun withNestedViewHolder(
  * Wrapper function for creating a [NotPresentedViewAssertion]
  */
 fun isNotPresented() = NotPresentedViewAssertion()
+
+/**
+ * TEXT SAVER
+ */
+
+/**
+ * Most recently created [TextSaver], or null if none has been created
+ */
+private var lastSaver: TextSaver? = null
+
+/**
+ * Wrapper function for a [ViewAction] that saves the text of TextView.
+ * Creates a new [TextSaver], and uses it to save text from TextView.
+ * TextSaver is also stored in a local variable.
+ *
+ * @return [ViewAction]: the [TextSaver.SaveTextViewAction] associated with the new [TextSaver]
+ */
+fun saveText(): ViewAction {
+    val saver = TextSaver()
+    lastSaver = saver
+    return saver.SaveTextViewAction()
+}
+
+/**
+ * Wrapper function to get a matcher that checks if the text in a view matches the most recent saved text
+ *
+ * @return [Matcher]<[View]?>: the [TextSaver.PreviousTextViewMatcher] associated with the current [TextSaver],
+ * or a matcher that always returns false if there is no saved matcher
+ */
+fun withSavedText(): Matcher<View?> {
+    val falseMatcher = object : TypeSafeMatcher<View?>() {
+        override fun describeTo(description: Description?) {}
+        override fun matchesSafely(item: View?): Boolean = false
+    }
+
+    return lastSaver?.PreviousTextViewMatcher() ?: falseMatcher
+}

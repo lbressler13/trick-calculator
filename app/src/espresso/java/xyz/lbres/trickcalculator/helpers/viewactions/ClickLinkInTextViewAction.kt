@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers.viewaction
+package xyz.lbres.trickcalculator.helpers.viewactions
 
 import android.text.SpannableString
 import android.view.View
@@ -6,10 +6,9 @@ import android.widget.TextView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import org.hamcrest.Matcher
 import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
-import java.lang.Exception
 
 /**
  * Click the first [URLClickableSpan] in a TextView that matches the specified textToClick.
@@ -20,7 +19,7 @@ import java.lang.Exception
  * @param textToClick [String]: text of span
  */
 class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
-    override fun getConstraints(): Matcher<View> = ViewMatchers.isAssignableFrom(TextView::class.java)
+    override fun getConstraints(): Matcher<View> = isAssignableFrom(TextView::class.java)
     override fun getDescription(): String = "clicking a URLClickableSpan with text $textToClick"
 
     /**
@@ -54,7 +53,6 @@ class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
         if (span != null) {
             span.onClick(view)
         } else {
-            throw Exception(Pair(textToClick, fullText).toString())
             // text not present in textview
             throw NoMatchingViewException.Builder()
                 .includeViewHierarchy(true)

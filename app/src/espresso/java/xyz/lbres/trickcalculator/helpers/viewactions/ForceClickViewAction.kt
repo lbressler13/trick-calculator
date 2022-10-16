@@ -1,10 +1,10 @@
-package xyz.lbres.trickcalculator.helpers.viewaction
+package xyz.lbres.trickcalculator.helpers.viewactions
 
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import org.hamcrest.Matcher
 
 /**
@@ -12,7 +12,7 @@ import org.hamcrest.Matcher
  * Allows click to occur even if isDisplayed() check would fail
  */
 class ForceClickViewAction : ViewAction {
-    override fun getConstraints(): Matcher<View> = ViewMatchers.isClickable()
+    override fun getConstraints(): Matcher<View> = isClickable()
     override fun getDescription(): String = "Clicking a View"
 
     /**
