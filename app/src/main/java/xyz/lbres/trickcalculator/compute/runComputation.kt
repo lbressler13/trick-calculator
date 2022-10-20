@@ -2,6 +2,7 @@ package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.exactfraction.ExactFractionOverflowException
+import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.utils.OperatorFunction
@@ -35,12 +36,7 @@ fun runComputation(
     applyDecimals: Boolean,
     shuffleComputation: Boolean
 ): ExactFraction {
-    val validatedNumOrder = if (validateNumbersOrder(numbersOrder)) {
-        numbersOrder
-    } else {
-        null
-    }
-
+    val validatedNumOrder = ternaryIf(validateNumbersOrder(numbersOrder), numbersOrder, null)
     val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
 
     val computeText = generateAndValidateComputeText(
@@ -89,13 +85,13 @@ fun parseText(
 ): ExactFraction {
     var currentState = computeText
 
-    if (currentState.indexOf("(") != -1) {
+    if (currentState.contains("(")) {
         currentState = parseParens(computeText, operatorRounds, performSingleOp)
     }
 
     for (round in operatorRounds) {
         if (round.isNotEmpty()) {
-            currentState = parseSetOfOps(currentState, round, performSingleOp)
+            currentState = parseOperatorRound(currentState, round, performSingleOp)
         }
     }
 
@@ -121,7 +117,7 @@ fun parseText(
  * @throws ArithmeticException in case of divide by zero
  * @throws Exception in case of issues with parsing
  */
-fun parseSetOfOps(
+fun parseOperatorRound(
     computeText: StringList,
     ops: StringList,
     performSingleOp: OperatorFunction

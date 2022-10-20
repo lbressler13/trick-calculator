@@ -183,7 +183,7 @@ fun testRandomizeButton() {
 
     try {
         onView(isRoot()).check(settingsRandomized())
-    } catch (e: AssertionError) {
+    } catch (_: AssertionError) {
         // one retry, in case of rare event where randomized = initial settings
         randomizeButton.perform(click())
         openFragment()

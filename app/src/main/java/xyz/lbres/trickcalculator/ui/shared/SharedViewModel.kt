@@ -17,37 +17,37 @@ class SharedViewModel : ViewModel() {
      * Individual settings
      */
 
-    private val mApplyDecimals = MutableLiveData<Boolean>().apply { value = true }
-    val applyDecimals: LiveData<Boolean> = mApplyDecimals
-    fun setApplyDecimals(newValue: Boolean) { mApplyDecimals.value = newValue }
+    private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
+    val applyDecimals: LiveData<Boolean> = _applyDecimals
+    fun setApplyDecimals(newValue: Boolean) { _applyDecimals.value = newValue }
 
-    private val mApplyParens = MutableLiveData<Boolean>().apply { value = true }
-    val applyParens: LiveData<Boolean> = mApplyParens
-    fun setApplyParens(newValue: Boolean) { mApplyParens.value = newValue }
+    private val _applyParens = MutableLiveData<Boolean>().apply { value = true }
+    val applyParens: LiveData<Boolean> = _applyParens
+    fun setApplyParens(newValue: Boolean) { _applyParens.value = newValue }
 
-    private val mClearOnError = MutableLiveData<Boolean>().apply { value = false }
-    val clearOnError: LiveData<Boolean> = mClearOnError
-    fun setClearOnError(newValue: Boolean) { mClearOnError.value = newValue }
+    private val _clearOnError = MutableLiveData<Boolean>().apply { value = false }
+    val clearOnError: LiveData<Boolean> = _clearOnError
+    fun setClearOnError(newValue: Boolean) { _clearOnError.value = newValue }
 
-    private val mHistoryRandomness = MutableLiveData<Int>().apply { value = 1 }
-    val historyRandomness: LiveData<Int> = mHistoryRandomness
-    fun setHistoryRandomness(newValue: Int) { mHistoryRandomness.value = newValue }
+    private val _historyRandomness = MutableLiveData<Int>().apply { value = 1 }
+    val historyRandomness: LiveData<Int> = _historyRandomness
+    fun setHistoryRandomness(newValue: Int) { _historyRandomness.value = newValue }
 
-    private val mShowSettingsButton = MutableLiveData<Boolean>().apply { value = false }
-    val showSettingsButton: LiveData<Boolean> = mShowSettingsButton
-    fun setShowSettingsButton(newValue: Boolean) { mShowSettingsButton.value = newValue }
+    private val _showSettingsButton = MutableLiveData<Boolean>().apply { value = false }
+    val showSettingsButton: LiveData<Boolean> = _showSettingsButton
+    fun setShowSettingsButton(newValue: Boolean) { _showSettingsButton.value = newValue }
 
-    private val mShuffleComputation = MutableLiveData<Boolean>().apply { value = false }
-    val shuffleComputation: LiveData<Boolean> = mShuffleComputation
-    fun setShuffleComputation(newValue: Boolean) { mShuffleComputation.value = newValue }
+    private val _shuffleComputation = MutableLiveData<Boolean>().apply { value = false }
+    val shuffleComputation: LiveData<Boolean> = _shuffleComputation
+    fun setShuffleComputation(newValue: Boolean) { _shuffleComputation.value = newValue }
 
-    private val mShuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
-    val shuffleNumbers: LiveData<Boolean> = mShuffleNumbers
-    fun setShuffleNumbers(newValue: Boolean) { mShuffleNumbers.value = newValue }
+    private val _shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
+    val shuffleNumbers: LiveData<Boolean> = _shuffleNumbers
+    fun setShuffleNumbers(newValue: Boolean) { _shuffleNumbers.value = newValue }
 
-    private val mShuffleOperators = MutableLiveData<Boolean>().apply { value = true }
-    val shuffleOperators: LiveData<Boolean> = mShuffleOperators
-    fun setShuffleOperators(newValue: Boolean) { mShuffleOperators.value = newValue }
+    private val _shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
+    val shuffleOperators: LiveData<Boolean> = _shuffleOperators
+    fun setShuffleOperators(newValue: Boolean) { _shuffleOperators.value = newValue }
 
     /**
      * All settings
@@ -83,15 +83,15 @@ class SharedViewModel : ViewModel() {
      * History
      */
 
-    private val mHistory = MutableLiveData<History>().apply { value = listOf() }
-    val history: LiveData<History> = mHistory
+    private val _history = MutableLiveData<History>().apply { value = listOf() }
+    val history: LiveData<History> = _history
 
     fun addToHistory(newItem: HistoryItem) {
         val currentHistory = history.value!!
-        mHistory.value = currentHistory + newItem
+        _history.value = currentHistory + newItem
     }
 
     fun clearHistory() {
-        mHistory.value = listOf()
+        _history.value = listOf()
     }
 }

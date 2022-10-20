@@ -15,37 +15,37 @@ class ComputationViewModel : ViewModel() {
     /**
      * List of numbers and operators
      */
-    private val mComputeText = MutableLiveData<StringList>().apply { value = listOf() }
-    val computeText: LiveData<StringList> = mComputeText
+    private val _computeText = MutableLiveData<StringList>().apply { value = listOf() }
+    val computeText: LiveData<StringList> = _computeText
 
     /**
      * Result of parsing compute text
      */
-    private val mComputedValue = MutableLiveData<ExactFraction>().apply { value = null }
-    val computedValue: LiveData<ExactFraction> = mComputedValue
+    private val _computedValue = MutableLiveData<ExactFraction>().apply { value = null }
+    val computedValue: LiveData<ExactFraction> = _computedValue
 
     /**
      * Error generated in computation
      */
-    private val mError = MutableLiveData<String>().apply { value = null }
-    val error: LiveData<String> = mError
+    private val _error = MutableLiveData<String>().apply { value = null }
+    val error: LiveData<String> = _error
 
     /**
      * History item generated from most recent computation
      */
-    private val mGeneratedHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
-    val generatedHistoryItem: LiveData<HistoryItem> = mGeneratedHistoryItem
+    private val _generatedHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
+    val generatedHistoryItem: LiveData<HistoryItem> = _generatedHistoryItem
 
     /**
      * Backup values to use when generating history item
      */
-    private val mBackupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
-    private val mBackupComputed = MutableLiveData<ExactFraction>().apply { value = null }
+    private val backupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
+    private val backupComputed = MutableLiveData<ExactFraction>().apply { value = null }
 
-    fun setError(newValue: String?) { mError.value = newValue }
+    fun setError(newValue: String?) { _error.value = newValue }
     fun setComputedValue(newValue: ExactFraction) {
-        mBackupComputed.value = mComputedValue.value
-        mComputedValue.value = newValue
+        backupComputed.value = _computedValue.value
+        _computedValue.value = newValue
     }
 
     /**
@@ -53,9 +53,9 @@ class ComputationViewModel : ViewModel() {
      */
     fun generateHistoryItem() {
         val error = error.value
-        val lastComputed = mBackupComputed.value
+        val lastComputed = backupComputed.value
         val computed = computedValue.value
-        var computation = mBackupComputeText.value!!
+        var computation = backupComputeText.value!!
 
         // if computed val was used and next item is a number, pad with times symbol
         if (
@@ -68,7 +68,7 @@ class ComputationViewModel : ViewModel() {
             computation = start + computation.subList(1, computation.size)
         }
 
-        mGeneratedHistoryItem.value = when {
+        _generatedHistoryItem.value = when {
             error != null -> HistoryItem(computation, error, lastComputed)
             computed != null -> HistoryItem(computation, computed, lastComputed)
             else -> null
@@ -79,18 +79,18 @@ class ComputationViewModel : ViewModel() {
      * Remove the generated history item and historical values
      */
     fun clearStoredHistoryItem() {
-        mGeneratedHistoryItem.value = null
+        _generatedHistoryItem.value = null
         clearBackups()
     }
 
     /**
      * Clear computed values
      */
-    fun clearComputeText() { mComputeText.value = listOf() }
-    private fun clearComputedValue() { mComputedValue.value = null }
+    fun clearComputeText() { _computeText.value = listOf() }
+    private fun clearComputedValue() { _computedValue.value = null }
     private fun clearBackups() {
-        mBackupComputeText.value = null
-        mBackupComputed.value = null
+        backupComputeText.value = null
+        backupComputed.value = null
     }
 
     /**
@@ -100,7 +100,7 @@ class ComputationViewModel : ViewModel() {
      */
     fun appendComputeText(addition: String) {
         val currentVal: StringList = computeText.value!!
-        mComputeText.value = currentVal + addition
+        _computeText.value = currentVal + addition
     }
 
     /**
@@ -110,10 +110,10 @@ class ComputationViewModel : ViewModel() {
         val currentText: StringList = computeText.value!!
 
         if (currentText.isEmpty() && computedValue.value != null) {
-            mComputeText.value = listOf()
-            mComputedValue.value = null
+            _computeText.value = listOf()
+            _computedValue.value = null
         } else if (currentText.isNotEmpty()) {
-            mComputeText.value = currentText.subList(0, currentText.lastIndex)
+            _computeText.value = currentText.subList(0, currentText.lastIndex)
         }
     }
 
@@ -128,7 +128,7 @@ class ComputationViewModel : ViewModel() {
             listOf(computedDecimal)
         }
         val currentComputeText = computeText.value!!
-        mBackupComputeText.value = computedString + currentComputeText
+        backupComputeText.value = computedString + currentComputeText
     }
 
     /**
@@ -147,9 +147,9 @@ class ComputationViewModel : ViewModel() {
                 text = text.subList(1, text.size)
             }
 
-            mComputedValue.value = result
+            _computedValue.value = result
         }
-        mComputeText.value = text
+        _computeText.value = text
     }
 
     /**
@@ -165,7 +165,7 @@ class ComputationViewModel : ViewModel() {
         clearBackups()
 
         if (clearError) {
-            mError.value = null
+            _error.value = null
         }
     }
 }

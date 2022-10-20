@@ -252,7 +252,7 @@ private fun addDecimalSyntaxError(computation: MStringList) {
     var index = (0..computation.size).random()
     if (index != computation.size) {
         val item = computation[index]
-        if (isNumber(item) && item.indexOf(".") == -1) {
+        if (isNumber(item) && !item.contains(".")) {
             index++
         }
     }

@@ -17,7 +17,7 @@ fun isNumber(value: String): Boolean {
             ExactFraction(value)
             true
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         false
     }
 }

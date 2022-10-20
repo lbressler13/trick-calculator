@@ -179,7 +179,7 @@ class MainFragment : BaseFragment() {
             // only include exponent if exp is used
             val operators = when {
                 !settings.shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                computeText.indexOf("^") == -1 -> listOf(
+                !computeText.contains("^") -> listOf(
                     "+",
                     "-",
                     "x",
@@ -236,10 +236,11 @@ class MainFragment : BaseFragment() {
                 } else {
                     var message: String = e.message!!.trim()
 
-                    val firstChar = message[0]
-                    if (firstChar.isLowerCase()) {
+                    if (message.isNotEmpty() && message[0].isLowerCase()) {
+                        val firstChar = message[0]
                         message = message.replaceFirst(firstChar, firstChar.uppercaseChar())
                     }
+
                     message
                 }
 

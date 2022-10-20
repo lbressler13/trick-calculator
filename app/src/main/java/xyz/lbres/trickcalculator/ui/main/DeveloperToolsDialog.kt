@@ -86,12 +86,12 @@ class DeveloperToolsDialog : DialogFragment() {
      * Hides the button for an amount of time based on the current value of the spinner.
      */
     private fun hideDevToolsOnClick() {
-        val button = (requireActivity() as MainActivity).binding.devToolsButton
-        button.gone()
-
         val timerString = binding.devToolsTimeSpinner.selectedItem.toString()
         val numString = timerString.substring(0, timerString.length - 2) // remove ms from end
         val timer = Integer.parseInt(numString).toLong()
+
+        val button = (requireActivity() as MainActivity).binding.devToolsButton
+        button.gone()
 
         // unhide dev tools button
         Handler(Looper.getMainLooper()).postDelayed({
