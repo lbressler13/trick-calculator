@@ -14,30 +14,26 @@ class ComputationViewModel : ViewModel() {
     /**
      * List of numbers and operators
      */
-    private var _computeText: StringList = emptyList()
-    val computeText: StringList
-        get() = _computeText
+    var computeText: StringList = emptyList()
+        private set
 
     /**
      * Result of parsing compute text
      */
-    private var _computedValue: ExactFraction? = null
-    val computedValue: ExactFraction?
-        get() = _computedValue
+    var computedValue: ExactFraction? = null
+        private set
 
     /**
      * Error generated in computation
      */
-    private var _error: String? = null
-    val error: String?
-        get() = _error
+    var error: String? = null
+        private set
 
     /**
      * History item generated from most recent computation
      */
-    private var _generatedHistoryItem: HistoryItem? = null
-    val generatedHistoryItem: HistoryItem?
-        get() = _generatedHistoryItem
+    var generatedHistoryItem: HistoryItem? = null
+        private set
 
     /**
      * Backup values to use when generating history item
@@ -45,21 +41,19 @@ class ComputationViewModel : ViewModel() {
     private var backupComputeText: StringList = emptyList()
     private var backupComputed: ExactFraction? = null
 
-    private fun clearError() { _error = null }
-
     fun setResult(newError: String?, newComputed: ExactFraction?, clearOnError: Boolean = false) {
         backupComputeText = computeText
         backupComputed = computedValue
-        _error = newError
+        error = newError
         if (newComputed != null) {
-            _computedValue = newComputed
-            _computeText = emptyList()
+            computedValue = newComputed
+            computeText = emptyList()
         }
 
         generateHistoryItem()
 
         when {
-            newComputed != null -> _computeText = emptyList()
+            newComputed != null -> computeText = emptyList()
             newError != null && clearOnError -> resetComputeData(clearError = false)
         }
     }
@@ -88,7 +82,7 @@ class ComputationViewModel : ViewModel() {
             computation = listOf(decimalString) + computation
         }
 
-        _generatedHistoryItem = when {
+        generatedHistoryItem = when {
             error != null -> HistoryItem(computation, error!!, lastComputed)
             computed != null -> HistoryItem(computation, computed, lastComputed)
             else -> null
@@ -99,16 +93,13 @@ class ComputationViewModel : ViewModel() {
      * Remove the generated history item and historical values
      */
     fun clearStoredHistoryItem() {
-        _generatedHistoryItem = null
+        generatedHistoryItem = null
         clearBackups()
     }
 
     /**
-     * Clear computed values
+     * Clear backup values
      */
-    fun clearComputeText() { _computeText = emptyList() }
-    private fun clearComputedValue() { _computedValue = null }
-
     private fun clearBackups() {
         backupComputeText = emptyList()
         backupComputed = null
@@ -121,9 +112,9 @@ class ComputationViewModel : ViewModel() {
      */
     fun appendComputeText(addition: String) {
         if (error != null) {
-            clearError()
+            error = null
         }
-        _computeText = computeText + addition
+        computeText = computeText + addition
     }
 
     /**
@@ -131,28 +122,14 @@ class ComputationViewModel : ViewModel() {
      */
     fun backspaceComputeText() {
         if (computeText.isEmpty() && computedValue != null) {
-            _computedValue = null
+            computedValue = null
         } else if (computeText.isNotEmpty()) {
-            _computeText = computeText.copyWithoutLast()
+            computeText = computeText.copyWithoutLast()
         }
 
         if (error != null) {
-            clearError()
+            error = null
         }
-    }
-
-    /**
-     * Save the current compute text, including the computed value
-     */
-    fun saveComputation() {
-        val computedDecimal = computedValue?.toDecimalString()
-        val computedString = if (computedDecimal == null) {
-            emptyList()
-        } else {
-            listOf(computedDecimal)
-        }
-
-        backupComputeText = computedString + computeText
     }
 
     /**
@@ -166,11 +143,11 @@ class ComputationViewModel : ViewModel() {
         var computation = item.computation
 
         if (item.previousResult != null) {
-            _computedValue = item.previousResult
+            computedValue = item.previousResult
             computation = computation.subList(1, computation.size)
         }
 
-        _computeText = computation
+        computeText = computation
     }
 
     /**
@@ -181,12 +158,12 @@ class ComputationViewModel : ViewModel() {
      * If false, error is not reset with other computation data.
      */
     fun resetComputeData(clearError: Boolean = true) {
-        clearComputeText()
-        clearComputedValue()
+        computeText = listOf()
+        computedValue = null
         clearBackups()
 
         if (clearError) {
-            clearError()
+            error = null
         }
     }
 }

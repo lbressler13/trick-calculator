@@ -117,8 +117,6 @@ class MainFragment : BaseFragment() {
      */
     private val equalsButtonOnClick = {
         if (computationViewModel.computeText.isNotEmpty()) {
-            computationViewModel.saveComputation()
-
             // set action for each operator
             // only include exponent if exp is used
             val operators = when {
