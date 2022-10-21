@@ -393,17 +393,16 @@ class MainFragmentTest {
         errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
         checkMainTextMatches("+")
 
-        // TODO fix bug that causes this
-        // clearText()
-        // openSettingsFragment()
-        // onView(withId(R.id.clearOnErrorSwitch)).perform(click())
-        // closeSettingsFragment()
-        // typeText("1+1..0")
-        // equals()
-        // errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
-        // checkMainTextMatches("")
-        // leaveAndReturn()
-        // errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
-        // checkMainTextMatches("")
+        clearText()
+        openSettingsFragment()
+        onView(withId(R.id.clearOnErrorSwitch)).perform(click())
+        closeSettingsFragment()
+        typeText("1+1..0")
+        equals()
+        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
+        checkMainTextMatches("")
+        leaveAndReturn()
+        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
+        checkMainTextMatches("")
     }
 }
