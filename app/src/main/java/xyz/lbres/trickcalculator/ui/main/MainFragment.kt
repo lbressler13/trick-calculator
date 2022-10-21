@@ -17,7 +17,6 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentMainBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
@@ -37,9 +36,7 @@ class MainFragment : BaseFragment() {
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private val random = Random(Date().time)
-
     private val settings = Settings()
-    private var lastHistoryItem: HistoryItem? = null
 
     /**
      * Initialize fragment
@@ -55,10 +52,6 @@ class MainFragment : BaseFragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodels
-        computationViewModel.generatedHistoryItem.observe(
-            viewLifecycleOwner,
-            generatedHistoryItemObserver
-        )
         sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
@@ -78,20 +71,9 @@ class MainFragment : BaseFragment() {
     }
 
     /**
-     * Save generated history value in shared view model and delete
-     */
-    private val generatedHistoryItemObserver: Observer<HistoryItem> = Observer {
-        if (it != null) {
-            sharedViewModel.addToHistory(it)
-            computationViewModel.clearStoredHistoryItem()
-        }
-    }
-
-    /**
-     * Save most recent history item and enable/disable the last item button
+     * Enable/disable the last item button
      */
     private val historyObserver: Observer<History> = Observer {
-        lastHistoryItem = it.lastOrNull()
         binding.useLastHistoryButton.isVisible = it.isNotEmpty()
     }
 
@@ -185,12 +167,7 @@ class MainFragment : BaseFragment() {
                         settings.shuffleComputation
                     )
 
-                computationViewModel.setComputedValue(computedValue)
-                computationViewModel.clearError()
-                computationViewModel.generateHistoryItem()
-
-                computationViewModel.clearComputeText()
-
+                computationViewModel.setResult(null, computedValue)
                 updateUI()
                 scrollTextToTop()
             } catch (e: Exception) {
@@ -207,13 +184,12 @@ class MainFragment : BaseFragment() {
                     message
                 }
 
-                computationViewModel.setError(error)
-                computationViewModel.generateHistoryItem()
-                if (settings.clearOnError) {
-                    computationViewModel.resetComputeData(clearError = false)
-                }
+                computationViewModel.setResult(error, null, settings.clearOnError)
                 updateUI()
             }
+
+            sharedViewModel.addToHistory(computationViewModel.generatedHistoryItem!!)
+            computationViewModel.clearStoredHistoryItem()
         }
     }
 

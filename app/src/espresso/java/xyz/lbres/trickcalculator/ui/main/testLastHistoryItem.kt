@@ -1,6 +1,6 @@
 package xyz.lbres.trickcalculator.ui.main
 
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -11,7 +11,7 @@ import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
 
 fun testLastHistoryItem(mainText: ViewInteraction) {
-    val useLastButton = Espresso.onView(withId(R.id.useLastHistoryButton))
+    val useLastButton = onView(withId(R.id.useLastHistoryButton))
 
     // none
     useLastButton.check(matches(not(isDisplayed())))
@@ -92,10 +92,21 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     typeText("(1")
     equals() // set error
     mainText.check(matches(withText("(1")))
-    Espresso.onView(withId(R.id.errorText))
-        .check(matches(isDisplayed()))
+    onView(withId(R.id.errorText)).check(matches(isDisplayed()))
     useLastButton.perform(click())
     mainText.check(matches(withText("(1"))) // pulls computation without error
-    Espresso.onView(withId(R.id.errorText))
-        .check(matches(not(isDisplayed())))
+    onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+
+    clearText()
+    typeText("6x3")
+    equals() // set result
+    checkMainTextMatchesAny(setOf("[9]", "[3]", "[18]", "[2]"))
+    typeText("+")
+    equals() // set error
+    onView(withId(R.id.errorText)).check(matches(isDisplayed()))
+    clearText()
+    onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+    useLastButton.perform(click()) // pull in previous result
+    onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+    checkMainTextMatchesAny(setOf("[9]+", "[3]+", "[18]+", "[2]+"))
 }

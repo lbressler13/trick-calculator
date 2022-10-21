@@ -1,10 +1,7 @@
 package xyz.lbres.trickcalculator.ui.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.ext.copyWithoutLast
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
@@ -38,8 +35,9 @@ class ComputationViewModel : ViewModel() {
     /**
      * History item generated from most recent computation
      */
-    private val _generatedHistoryItem = MutableLiveData<HistoryItem>().apply { value = null }
-    val generatedHistoryItem: LiveData<HistoryItem> = _generatedHistoryItem
+    private var _generatedHistoryItem: HistoryItem? = null
+    val generatedHistoryItem: HistoryItem?
+        get() = _generatedHistoryItem
 
     /**
      * Backup values to use when generating history item
@@ -47,19 +45,29 @@ class ComputationViewModel : ViewModel() {
     private var backupComputeText: StringList = emptyList()
     private var backupComputed: ExactFraction? = null
 
-    fun setError(newValue: String) { _error = newValue }
-    fun clearError() { _error = null }
+    private fun clearError() { _error = null }
 
-    fun setComputedValue(newValue: ExactFraction) {
+    fun setResult(newError: String?, newComputed: ExactFraction?, clearOnError: Boolean = false) {
         backupComputeText = computeText
         backupComputed = computedValue
-        _computedValue = newValue
+        _error = newError
+        if (newComputed != null) {
+            _computedValue = newComputed
+            _computeText = emptyList()
+        }
+
+        generateHistoryItem()
+
+        when {
+            newComputed != null -> _computeText = emptyList()
+            newError != null && clearOnError -> resetComputeData(clearError = false)
+        }
     }
 
     /**
      * Store last history value based on most recent error or computation
      */
-    fun generateHistoryItem() {
+    private fun generateHistoryItem() {
         val lastComputed = backupComputed
         val computed = computedValue
         var computation = backupComputeText
@@ -75,7 +83,12 @@ class ComputationViewModel : ViewModel() {
             computation = start + computation.subList(1, computation.size)
         }
 
-        _generatedHistoryItem.value = when {
+        if (lastComputed != null) {
+            val decimalString = lastComputed.toDecimalString()
+            computation = listOf(decimalString) + computation
+        }
+
+        _generatedHistoryItem = when {
             error != null -> HistoryItem(computation, error!!, lastComputed)
             computed != null -> HistoryItem(computation, computed, lastComputed)
             else -> null
@@ -86,7 +99,7 @@ class ComputationViewModel : ViewModel() {
      * Remove the generated history item and historical values
      */
     fun clearStoredHistoryItem() {
-        _generatedHistoryItem.value = null
+        _generatedHistoryItem = null
         clearBackups()
     }
 
@@ -133,7 +146,11 @@ class ComputationViewModel : ViewModel() {
      */
     fun saveComputation() {
         val computedDecimal = computedValue?.toDecimalString()
-        val computedString = ternaryIf(computedDecimal == null, emptyList(), listOf(computedDecimal!!))
+        val computedString = if (computedDecimal == null) {
+            emptyList()
+        } else {
+            listOf(computedDecimal)
+        }
 
         backupComputeText = computedString + computeText
     }
@@ -146,10 +163,14 @@ class ComputationViewModel : ViewModel() {
     fun useHistoryItemAsComputeText(item: HistoryItem) {
         resetComputeData()
 
-        _computeText = item.computation
+        var computation = item.computation
+
         if (item.previousResult != null) {
             _computedValue = item.previousResult
+            computation = computation.subList(1, computation.size)
         }
+
+        _computeText = computation
     }
 
     /**

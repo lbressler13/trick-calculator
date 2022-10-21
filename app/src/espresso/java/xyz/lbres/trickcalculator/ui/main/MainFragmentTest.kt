@@ -186,10 +186,22 @@ class MainFragmentTest {
     }
 
     @Test
-    fun useEqualsResult() = testEqualsResult(mainText)
+    fun equalsSingleNumber() = testEqualsSingleNumber()
 
     @Test
-    fun useEqualsError() {
+    fun equalsWithSingleOperator() = testEqualsWithSingleOperator()
+
+    @Test
+    fun equalsWithSeveralOperators() = testEqualsWithSeveralOperators()
+
+    @Test
+    fun equalsWithParens() = testEqualsWithParens()
+
+    @Test
+    fun equalsWithPreviouslyComputed() = testEqualsWithPreviouslyComputed()
+
+    @Test
+    fun equalsWithError() {
         // syntax errors
         typeText("+")
         equals()
