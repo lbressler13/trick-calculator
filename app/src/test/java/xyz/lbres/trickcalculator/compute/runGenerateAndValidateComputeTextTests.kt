@@ -200,15 +200,15 @@ private fun testValidateErrors() {
 private fun testBuildText() {
     // initial text is empty and initial value is not set
     var initialValue: ExactFraction? = null
-    var text: StringList = listOf()
-    var expected: StringList = listOf()
+    var text: StringList = emptyList()
+    var expected: StringList = emptyList()
     assertEquals(
         expected,
         generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
     )
 
     // initial text is empty and initial value is set
-    text = listOf()
+    text = emptyList()
 
     initialValue = ExactFraction.EIGHT
     expected = listOf(initialValue.toEFString())
@@ -364,8 +364,8 @@ private fun testBuildTextWithMods() {
         generateAndValidateComputeText(null, text, ops, order, true, true, false)
     )
 
-    text = listOf()
-    expected = listOf()
+    text = emptyList()
+    expected = emptyList()
     assertEquals(
         expected,
         generateAndValidateComputeText(null, text, ops, order, true, true, false)
@@ -388,8 +388,8 @@ private fun testBuildTextWithMods() {
     )
 
     // not apply parens
-    text = listOf()
-    expected = listOf()
+    text = emptyList()
+    expected = emptyList()
     assertEquals(
         expected,
         generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
@@ -424,8 +424,8 @@ private fun testBuildTextWithMods() {
     )
 
     // not apply decimals
-    text = listOf()
-    expected = listOf()
+    text = emptyList()
+    expected = emptyList()
     assertEquals(
         expected,
         generateAndValidateComputeText(null, text, ops, null, false, applyDecimals = false, false)
@@ -540,7 +540,7 @@ private fun testBuildTextWithMods() {
 }
 
 private fun testBuildTextWithShuffle() {
-    var text: StringList = listOf()
+    var text: StringList = emptyList()
     repeat(20) {
         assertEquals(
             text,

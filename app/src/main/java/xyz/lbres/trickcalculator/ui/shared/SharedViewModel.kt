@@ -83,7 +83,7 @@ class SharedViewModel : ViewModel() {
      * History
      */
 
-    private val _history = MutableLiveData<History>().apply { value = listOf() }
+    private val _history = MutableLiveData<History>().apply { value = emptyList() }
     val history: LiveData<History> = _history
 
     fun addToHistory(newItem: HistoryItem) {
@@ -92,6 +92,6 @@ class SharedViewModel : ViewModel() {
     }
 
     fun clearHistory() {
-        _history.value = listOf()
+        _history.value = emptyList()
     }
 }

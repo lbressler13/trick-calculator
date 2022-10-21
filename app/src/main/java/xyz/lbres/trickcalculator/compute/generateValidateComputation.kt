@@ -49,7 +49,7 @@ fun generateAndValidateComputeText(
 
     // empty compute text
     if (splitText.isEmpty() && initialValue == null) {
-        return listOf()
+        return emptyList()
     }
 
     if (splitText.isEmpty()) {

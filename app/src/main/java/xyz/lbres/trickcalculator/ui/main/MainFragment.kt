@@ -224,9 +224,6 @@ class MainFragment : BaseFragment() {
      */
     private fun genericAddComputeOnClick(addText: String) {
         computationViewModel.appendComputeText(addText)
-        if (computationViewModel.error != null) {
-            computationViewModel.clearError()
-        }
         updateUI()
         scrollTextToBottom()
     }
@@ -255,8 +252,6 @@ class MainFragment : BaseFragment() {
         }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
         binding.backspaceButton.setOnClickListener {
-            // computationViewModel.setError(null)
-            computationViewModel.clearError()
             computationViewModel.backspaceComputeText()
             updateUI()
             scrollTextToBottom()

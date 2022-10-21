@@ -15,7 +15,7 @@ class AttributionsViewModel : ViewModel() {
     fun setFlaticonMessageExpanded(newValue: Boolean) { mFlaticonMessageExpanded.value = newValue }
 
     // information about attributions
-    private val mAttributionsExpanded = MutableLiveData<List<Boolean>>().apply { value = listOf() }
+    private val mAttributionsExpanded = MutableLiveData<List<Boolean>>().apply { value = emptyList() }
     val attributionsExpanded: LiveData<List<Boolean>> = mAttributionsExpanded
 
     // if attributionsExpanded isn't already set, initialize to all closed

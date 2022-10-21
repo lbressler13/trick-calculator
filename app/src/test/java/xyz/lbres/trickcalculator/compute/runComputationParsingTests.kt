@@ -54,7 +54,7 @@ fun runRunComputationTests() {
     }
 
     var initialValue = ExactFraction.HALF
-    text = listOf()
+    text = emptyList()
     val divZeroOrder = listOf(1, 2, 0, 3, 4, 5, 6, 7, 8, 9)
     assertDivByZero {
         runComputation(initialValue, text, allOps, performOp, divZeroOrder, true, true, false)
@@ -246,15 +246,15 @@ fun runParseTextTests() {
 
     text = "5 + 3 - 6".split(' ')
     expected = ExactFraction.TWO
-    assertEquals(expected, parseText(text, listOf(listOf(), plusMinus), performOp))
+    assertEquals(expected, parseText(text, listOf(emptyList(), plusMinus), performOp))
 
     text = "5 x 3 / 6".split(' ')
     expected = ExactFraction(15, 6)
-    assertEquals(expected, parseText(text, listOf(timesDiv, listOf()), performOp))
+    assertEquals(expected, parseText(text, listOf(timesDiv, emptyList()), performOp))
 
     text = "5 x 3 / 6 + 2".split(' ')
     var error = assertThrows(Exception::class.java) {
-        parseText(text, listOf(timesDiv, listOf()), performOp)
+        parseText(text, listOf(timesDiv, emptyList()), performOp)
     }
     assertEquals(error.message, "Parse error")
 

@@ -28,7 +28,7 @@ class ComputeHelpersTest {
         assertFalse(isOperator(element, ops))
 
         element = "+"
-        ops = listOf()
+        ops = emptyList()
         assertFalse(isOperator(element, ops))
 
         element = "abc"
@@ -49,7 +49,7 @@ class ComputeHelpersTest {
         var order: IntList? = null
         assertFalse(validateNumbersOrder(order))
 
-        order = listOf()
+        order = emptyList()
         assertFalse(validateNumbersOrder(order))
 
         order = listOf(0)

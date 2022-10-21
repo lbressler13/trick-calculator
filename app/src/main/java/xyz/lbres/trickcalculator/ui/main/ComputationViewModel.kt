@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.ext.copyWithoutLast
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
@@ -43,11 +44,12 @@ class ComputationViewModel : ViewModel() {
     /**
      * Backup values to use when generating history item
      */
-    private var backupComputeText: StringList = listOf()
+    private var backupComputeText: StringList = emptyList()
     private var backupComputed: ExactFraction? = null
 
     fun setError(newValue: String) { _error = newValue }
     fun clearError() { _error = null }
+
     fun setComputedValue(newValue: ExactFraction) {
         backupComputeText = computeText
         backupComputed = computedValue
@@ -93,8 +95,9 @@ class ComputationViewModel : ViewModel() {
      */
     fun clearComputeText() { _computeText = emptyList() }
     private fun clearComputedValue() { _computedValue = null }
+
     private fun clearBackups() {
-        backupComputeText = listOf()
+        backupComputeText = emptyList()
         backupComputed = null
     }
 
@@ -104,6 +107,9 @@ class ComputationViewModel : ViewModel() {
      * @param addition [String]: new character to add
      */
     fun appendComputeText(addition: String) {
+        if (error != null) {
+            clearError()
+        }
         _computeText = computeText + addition
     }
 
@@ -116,6 +122,10 @@ class ComputationViewModel : ViewModel() {
         } else if (computeText.isNotEmpty()) {
             _computeText = computeText.copyWithoutLast()
         }
+
+        if (error != null) {
+            clearError()
+        }
     }
 
     /**
@@ -123,12 +133,7 @@ class ComputationViewModel : ViewModel() {
      */
     fun saveComputation() {
         val computedDecimal = computedValue?.toDecimalString()
-
-        val computedString = if (computedDecimal == null) {
-            listOf()
-        } else {
-            listOf(computedDecimal)
-        }
+        val computedString = ternaryIf(computedDecimal == null, emptyList(), listOf(computedDecimal!!))
 
         backupComputeText = computedString + computeText
     }
