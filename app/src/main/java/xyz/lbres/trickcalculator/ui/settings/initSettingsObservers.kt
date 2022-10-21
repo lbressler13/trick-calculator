@@ -10,6 +10,7 @@ import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
  * @param viewModel [SharedViewModel]: view model to observe
  * @param lifecycleOwner [LifecycleOwner]
  */
+// NOTE: need to use observers b/c settings can change from dialog at any time
 fun initSettingsObservers(settings: Settings, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
     viewModel.applyDecimals.observe(lifecycleOwner) { settings.applyDecimals = it }
     viewModel.applyParens.observe(lifecycleOwner) { settings.applyParens = it }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.kotlinutils.list.ext.copyWithoutLast
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.utils.isNumberChar
 
@@ -15,20 +16,23 @@ class ComputationViewModel : ViewModel() {
     /**
      * List of numbers and operators
      */
-    private val _computeText = MutableLiveData<StringList>().apply { value = listOf() }
-    val computeText: LiveData<StringList> = _computeText
+    private var _computeText: StringList = emptyList()
+    val computeText: StringList
+        get() = _computeText
 
     /**
      * Result of parsing compute text
      */
-    private val _computedValue = MutableLiveData<ExactFraction>().apply { value = null }
-    val computedValue: LiveData<ExactFraction> = _computedValue
+    private var _computedValue: ExactFraction? = null
+    val computedValue: ExactFraction?
+        get() = _computedValue
 
     /**
      * Error generated in computation
      */
-    private val _error = MutableLiveData<String>().apply { value = null }
-    val error: LiveData<String> = _error
+    private var _error: String? = null
+    val error: String?
+        get() = _error
 
     /**
      * History item generated from most recent computation
@@ -39,23 +43,24 @@ class ComputationViewModel : ViewModel() {
     /**
      * Backup values to use when generating history item
      */
-    private val backupComputeText = MutableLiveData<StringList>().apply { value = listOf() }
-    private val backupComputed = MutableLiveData<ExactFraction>().apply { value = null }
+    private var backupComputeText: StringList = listOf()
+    private var backupComputed: ExactFraction? = null
 
-    fun setError(newValue: String?) { _error.value = newValue }
+    fun setError(newValue: String) { _error = newValue }
+    fun clearError() { _error = null }
     fun setComputedValue(newValue: ExactFraction) {
-        backupComputed.value = _computedValue.value
-        _computedValue.value = newValue
+        backupComputeText = computeText
+        backupComputed = computedValue
+        _computedValue = newValue
     }
 
     /**
      * Store last history value based on most recent error or computation
      */
     fun generateHistoryItem() {
-        val error = error.value
-        val lastComputed = backupComputed.value
-        val computed = computedValue.value
-        var computation = backupComputeText.value!!
+        val lastComputed = backupComputed
+        val computed = computedValue
+        var computation = backupComputeText
 
         // if computed val was used and next item is a number, pad with times symbol
         if (
@@ -69,7 +74,7 @@ class ComputationViewModel : ViewModel() {
         }
 
         _generatedHistoryItem.value = when {
-            error != null -> HistoryItem(computation, error, lastComputed)
+            error != null -> HistoryItem(computation, error!!, lastComputed)
             computed != null -> HistoryItem(computation, computed, lastComputed)
             else -> null
         }
@@ -86,11 +91,11 @@ class ComputationViewModel : ViewModel() {
     /**
      * Clear computed values
      */
-    fun clearComputeText() { _computeText.value = listOf() }
-    private fun clearComputedValue() { _computedValue.value = null }
+    fun clearComputeText() { _computeText = emptyList() }
+    private fun clearComputedValue() { _computedValue = null }
     private fun clearBackups() {
-        backupComputeText.value = null
-        backupComputed.value = null
+        backupComputeText = listOf()
+        backupComputed = null
     }
 
     /**
@@ -99,21 +104,17 @@ class ComputationViewModel : ViewModel() {
      * @param addition [String]: new character to add
      */
     fun appendComputeText(addition: String) {
-        val currentVal: StringList = computeText.value!!
-        _computeText.value = currentVal + addition
+        _computeText = computeText + addition
     }
 
     /**
      * Remove latest addition to compute text
      */
     fun backspaceComputeText() {
-        val currentText: StringList = computeText.value!!
-
-        if (currentText.isEmpty() && computedValue.value != null) {
-            _computeText.value = listOf()
-            _computedValue.value = null
-        } else if (currentText.isNotEmpty()) {
-            _computeText.value = currentText.subList(0, currentText.lastIndex)
+        if (computeText.isEmpty() && computedValue != null) {
+            _computedValue = null
+        } else if (computeText.isNotEmpty()) {
+            _computeText = computeText.copyWithoutLast()
         }
     }
 
@@ -121,14 +122,15 @@ class ComputationViewModel : ViewModel() {
      * Save the current compute text, including the computed value
      */
     fun saveComputation() {
-        val computedDecimal = computedValue.value?.toDecimalString()
+        val computedDecimal = computedValue?.toDecimalString()
+
         val computedString = if (computedDecimal == null) {
             listOf()
         } else {
             listOf(computedDecimal)
         }
-        val currentComputeText = computeText.value!!
-        backupComputeText.value = computedString + currentComputeText
+
+        backupComputeText = computedString + computeText
     }
 
     /**
@@ -138,18 +140,11 @@ class ComputationViewModel : ViewModel() {
      */
     fun useHistoryItemAsComputeText(item: HistoryItem) {
         resetComputeData()
-        var text = item.computation
-        val result = item.previousResult
 
-        if (result != null) {
-            // first value of text is the computed value
-            if (text.isNotEmpty()) {
-                text = text.subList(1, text.size)
-            }
-
-            _computedValue.value = result
+        _computeText = item.computation
+        if (item.previousResult != null) {
+            _computedValue = item.previousResult
         }
-        _computeText.value = text
     }
 
     /**
@@ -165,7 +160,7 @@ class ComputationViewModel : ViewModel() {
         clearBackups()
 
         if (clearError) {
-            _error.value = null
+            clearError()
         }
     }
 }
