@@ -266,7 +266,7 @@ fun runParseTextTests() {
 }
 
 // should not include parens
-fun runParseSetOfOpsTests() {
+fun runParseOperatorRoundTests() {
     // unchanged
     var text = listOf("-1.00")
     var expected = listOf("-1.00")
