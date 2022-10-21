@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.databinding.ActivityMainBinding
-import xyz.lbres.trickcalculator.ui.main.DeveloperToolsDialog
+import xyz.lbres.trickcalculator.ui.shared.DeveloperToolsDialog
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**

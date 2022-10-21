@@ -143,6 +143,13 @@ class AttributionsFragmentTest {
             onView(withText(image.url)).check(matches(isDisplayed()))
         }
 
+        // expand flaticon message
+        onView(withText("Expand")).check(matches(isDisplayed()))
+        onView(withText("Collapse")).check(doesNotExist())
+        onView(withText("Expand")).perform(click())
+        onView(withText("Expand")).check(doesNotExist())
+        onView(withText("Collapse")).check(matches(isDisplayed()))
+
         // close and reopen fragment
         onView(withId(R.id.closeButton)).perform(forceClick())
         onView(withId(R.id.infoButton)).perform(click())
@@ -156,6 +163,10 @@ class AttributionsFragmentTest {
             val image = author.images[0]
             onView(withText(image.url)).check(isNotPresented())
         }
+
+        // check flaticon message collapsed
+        onView(withText("Expand")).check(matches(isDisplayed()))
+        onView(withText("Collapse")).check(doesNotExist())
     }
 
     @Test

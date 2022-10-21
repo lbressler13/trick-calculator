@@ -78,8 +78,6 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
         .subList(openIndex, computeText.size)
         .filter { it.value == "(" || it.value == ")" }
 
-    var closeIndex = -1
-
     for (idxVal in onlyParens) {
         if (idxVal.value == "(") {
             openCount++
@@ -88,12 +86,11 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
         }
 
         if (openCount.isZero()) {
-            closeIndex = idxVal.index
-            break
+            return idxVal.index
         }
     }
 
-    return closeIndex
+    return -1
 }
 
 /**
@@ -119,7 +116,7 @@ fun getParsingError(error: String?): String {
     return try {
         ExactFraction(symbol)
         "Number overflow on value $symbol"
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         "Cannot parse symbol $symbol"
     }
 }

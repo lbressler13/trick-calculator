@@ -10,7 +10,7 @@ private const val iterations = 20
 
 fun runGetShuffledComputationTests() {
     // values that won't change
-    var text: StringList = listOf()
+    var text: StringList = emptyList()
     repeat(iterations) { assertEquals(text, getShuffledComputation(text, fullOps)) }
 
     text = listOf("123")

@@ -5,6 +5,6 @@ import org.junit.Test
 class RunComputationTest {
     @Test fun testRunComputation() = runRunComputationTests()
     @Test fun testParseText() = runParseTextTests()
-    @Test fun testParseSetOfOps() = runParseSetOfOpsTests()
+    @Test fun testParseOperatorRound() = runParseOperatorRoundTests()
     @Test fun testParseParens() = runParseParensTests()
 }

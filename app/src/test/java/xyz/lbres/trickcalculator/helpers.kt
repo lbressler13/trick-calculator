@@ -29,7 +29,7 @@ fun assertDivByZero(function: ThrowingRunnable) {
  */
 fun splitString(s: String): StringList {
     return when (s.length) {
-        0 -> listOf()
+        0 -> emptyList()
         1 -> listOf(s)
         else -> {
             val split = s.split("")

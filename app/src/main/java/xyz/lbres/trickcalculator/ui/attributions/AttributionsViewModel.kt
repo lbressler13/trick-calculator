@@ -1,7 +1,5 @@
 package xyz.lbres.trickcalculator.ui.attributions
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 
@@ -10,25 +8,23 @@ import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
  */
 class AttributionsViewModel : ViewModel() {
     // whether or not the Flaticon message at top of screen is expanded
-    private val mFlaticonMessageExpanded = MutableLiveData<Boolean>().apply { value = false }
-    val flaticonMessageExpanded: LiveData<Boolean> = mFlaticonMessageExpanded
-    fun setFlaticonMessageExpanded(newValue: Boolean) { mFlaticonMessageExpanded.value = newValue }
+    var flaticonMessageExpanded = false
+        private set
+    fun setFlaticonMessageExpanded(newValue: Boolean) { flaticonMessageExpanded = newValue }
 
     // information about attributions
-    private val mAttributionsExpanded = MutableLiveData<List<Boolean>>().apply { value = listOf() }
-    val attributionsExpanded: LiveData<List<Boolean>> = mAttributionsExpanded
+    var attributionsExpanded: List<Boolean> = emptyList()
+        private set
 
     // if attributionsExpanded isn't already set, initialize to all closed
     fun initAttributionsExpanded(numAttributions: Int) {
-        if (attributionsExpanded.value?.size != numAttributions) {
-            mAttributionsExpanded.value = List(numAttributions) { false }
+        if (attributionsExpanded.size != numAttributions) {
+            attributionsExpanded = List(numAttributions) { false }
         }
     }
 
     // set if a specific attribution is expanded
     fun setExpandedAt(newValue: Boolean, index: Int) {
-        val currentList = attributionsExpanded.value!!
-        val newList = currentList.copyWithReplacement(index, newValue)
-        mAttributionsExpanded.value = newList
+        attributionsExpanded = attributionsExpanded.copyWithReplacement(index, newValue)
     }
 }

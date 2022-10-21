@@ -50,7 +50,10 @@ fun checkInitialSettings(checkSettingsButton: Boolean = true) {
     onView(withId(R.id.clearOnErrorSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
 
     onView(withId(R.id.historyRandomnessGroup)).check(matches(isDisplayed()))
+    onView(withId(R.id.historyButton0)).check(matches(isNotChecked()))
     onView(withId(R.id.historyButton1)).check(matches(isChecked()))
+    onView(withId(R.id.historyButton2)).check(matches(isNotChecked()))
+    onView(withId(R.id.historyButton3)).check(matches(isNotChecked()))
 
     if (checkSettingsButton) {
         onView(withId(R.id.settingsButtonSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))

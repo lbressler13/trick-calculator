@@ -54,7 +54,7 @@ fun runRunComputationTests() {
     }
 
     var initialValue = ExactFraction.HALF
-    text = listOf()
+    text = emptyList()
     val divZeroOrder = listOf(1, 2, 0, 3, 4, 5, 6, 7, 8, 9)
     assertDivByZero {
         runComputation(initialValue, text, allOps, performOp, divZeroOrder, true, true, false)
@@ -246,15 +246,15 @@ fun runParseTextTests() {
 
     text = "5 + 3 - 6".split(' ')
     expected = ExactFraction.TWO
-    assertEquals(expected, parseText(text, listOf(listOf(), plusMinus), performOp))
+    assertEquals(expected, parseText(text, listOf(emptyList(), plusMinus), performOp))
 
     text = "5 x 3 / 6".split(' ')
     expected = ExactFraction(15, 6)
-    assertEquals(expected, parseText(text, listOf(timesDiv, listOf()), performOp))
+    assertEquals(expected, parseText(text, listOf(timesDiv, emptyList()), performOp))
 
     text = "5 x 3 / 6 + 2".split(' ')
     var error = assertThrows(Exception::class.java) {
-        parseText(text, listOf(timesDiv, listOf()), performOp)
+        parseText(text, listOf(timesDiv, emptyList()), performOp)
     }
     assertEquals(error.message, "Parse error")
 
@@ -266,42 +266,42 @@ fun runParseTextTests() {
 }
 
 // should not include parens
-fun runParseSetOfOpsTests() {
+fun runParseOperatorRoundTests() {
     // unchanged
     var text = listOf("-1.00")
     var expected = listOf("-1.00")
-    assertEquals(expected, parseSetOfOps(text, plusMinus, performOp))
+    assertEquals(expected, parseOperatorRound(text, plusMinus, performOp))
 
     text = "1 x 3 / 17".split(' ')
     expected = "1 x 3 / 17".split(' ')
-    assertEquals(expected, parseSetOfOps(text, plusMinus, performOp))
+    assertEquals(expected, parseOperatorRound(text, plusMinus, performOp))
 
     text = "1 - 3 + 17".split(' ')
     expected = "1 - 3 + 17".split(' ')
-    assertEquals(expected, parseSetOfOps(text, timesDiv, performOp))
+    assertEquals(expected, parseOperatorRound(text, timesDiv, performOp))
 
     // changed
     text = "1 - 3 + 17".split(' ')
     expected = listOf(ExactFraction(15).toEFString())
-    assertEquals(expected, parseSetOfOps(text, plusMinus, performOp))
+    assertEquals(expected, parseOperatorRound(text, plusMinus, performOp))
 
     text = "1.3 x 2 / 10 x 20".split(' ')
     var ef = ExactFraction("5.2").toEFString()
     expected = listOf(ef)
-    assertEquals(expected, parseSetOfOps(text, timesDiv, performOp))
+    assertEquals(expected, parseOperatorRound(text, timesDiv, performOp))
 
     text = "1.3 x 2 + 10 x 20".split(' ')
     ef = ExactFraction("2.6").toEFString()
     var ef2 = ExactFraction(200).toEFString()
     expected = listOf(ef, "+", ef2)
-    assertEquals(expected, parseSetOfOps(text, timesDiv, performOp))
+    assertEquals(expected, parseOperatorRound(text, timesDiv, performOp))
 
     text = "1000000000000 - 87 x 10000000000000000 + 33 / 11 + 6 x 40".split(' ')
     ef = ExactFraction("870000000000000000").toEFString()
     ef2 = ExactFraction.THREE.toEFString()
     val ef3 = ExactFraction(240).toEFString()
     expected = listOf("1000000000000", "-", ef, "+", ef2, "+", ef3)
-    assertEquals(expected, parseSetOfOps(text, timesDiv, performOp))
+    assertEquals(expected, parseOperatorRound(text, timesDiv, performOp))
 
     val fakeOps = listOf("a", "b", "c")
     val performFake: OperatorFunction = { lval, rval, op ->
@@ -317,7 +317,7 @@ fun runParseSetOfOpsTests() {
     ef = ExactFraction(112).toEFString()
     ef2 = ExactFraction.ONE.toEFString()
     expected = listOf(ef, "+", ef2)
-    assertEquals(expected, parseSetOfOps(text, fakeOps, performFake))
+    assertEquals(expected, parseOperatorRound(text, fakeOps, performFake))
 }
 
 fun runParseParensTests() {

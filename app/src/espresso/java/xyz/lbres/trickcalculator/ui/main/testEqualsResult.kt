@@ -1,17 +1,19 @@
 package xyz.lbres.trickcalculator.ui.main
 
-import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.isEmptyString
 
-fun testEqualsResult(mainText: ViewInteraction) {
-    // blank
+private val mainText = onView(withId(R.id.mainText))
+
+fun testEqualsSingleNumber() {
     mainText.check(matches(isEmptyString()))
     equals()
     mainText.check(matches(isEmptyString()))
 
-    // one number
     clearText()
     typeText("123")
     equals()
@@ -26,13 +28,9 @@ fun testEqualsResult(mainText: ViewInteraction) {
     typeText("000.05")
     equals()
     mainText.check(matches(withText("[0.05]")))
+}
 
-    clearText()
-    typeText("(000.05)")
-    equals()
-    mainText.check(matches(withText("[0.05]")))
-
-    // one operator
+fun testEqualsWithSingleOperator() {
     repeat(10) {
         clearText()
         typeText("12+10")
@@ -60,8 +58,9 @@ fun testEqualsResult(mainText: ViewInteraction) {
         equals()
         checkMainTextMatchesAny(setOf("[11]", "[-7]", "[40]", "[0.1]"))
     }
+}
 
-    // several operators
+fun testEqualsWithSeveralOperators() {
     repeat(10) {
         clearText()
         typeText("2+5-4")
@@ -104,8 +103,14 @@ fun testEqualsResult(mainText: ViewInteraction) {
             )
         )
     }
+}
 
-    // parens
+fun testEqualsWithParens() {
+    clearText()
+    typeText("(000.05)")
+    equals()
+    mainText.check(matches(withText("[0.05]")))
+
     repeat(10) {
         clearText()
         typeText("2(5-4)")
@@ -119,8 +124,9 @@ fun testEqualsResult(mainText: ViewInteraction) {
             )
         )
     }
+}
 
-    // with previous computed
+fun testEqualsWithPreviouslyComputed() {
     repeat(10) {
         clearText()
         typeText("123")

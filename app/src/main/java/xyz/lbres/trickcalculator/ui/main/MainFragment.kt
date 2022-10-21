@@ -1,5 +1,6 @@
 package xyz.lbres.trickcalculator.ui.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.general.ternaryIf
-import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentMainBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
@@ -37,13 +36,7 @@ class MainFragment : BaseFragment() {
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private val random = Random(Date().time)
-
-    private lateinit var computeText: StringList
-    private var error: String? = null
-    private var computedValue: ExactFraction? = null
-
     private val settings = Settings()
-    private var lastHistoryItem: HistoryItem? = null
 
     /**
      * Initialize fragment
@@ -59,13 +52,6 @@ class MainFragment : BaseFragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         // observe changes in viewmodels
-        computationViewModel.computeText.observe(viewLifecycleOwner, computeTextObserver)
-        computationViewModel.error.observe(viewLifecycleOwner, errorObserver)
-        computationViewModel.computedValue.observe(viewLifecycleOwner, computedValueObserver)
-        computationViewModel.generatedHistoryItem.observe(
-            viewLifecycleOwner,
-            generatedHistoryItemObserver
-        )
         sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
         initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
         // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
@@ -77,6 +63,7 @@ class MainFragment : BaseFragment() {
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         binding.useLastHistoryButton.setOnClickListener { useLastHistoryItemOnClick() }
+        updateUI()
 
         initSettingsFragment(this, binding.settingsButton, R.id.navigateMainToSettings)
 
@@ -84,20 +71,9 @@ class MainFragment : BaseFragment() {
     }
 
     /**
-     * Save generated history value in shared view model and delete
-     */
-    private val generatedHistoryItemObserver: Observer<HistoryItem> = Observer {
-        if (it != null) {
-            sharedViewModel.addToHistory(it)
-            computationViewModel.clearStoredHistoryItem()
-        }
-    }
-
-    /**
-     * Save most recent history item and enable/disable the last item button
+     * Enable/disable the last item button
      */
     private val historyObserver: Observer<History> = Observer {
-        lastHistoryItem = it.lastOrNull()
         binding.useLastHistoryButton.isVisible = it.isNotEmpty()
     }
 
@@ -106,39 +82,6 @@ class MainFragment : BaseFragment() {
      */
     private val showSettingsButtonObserver: Observer<Boolean> = Observer {
         binding.settingsButton.isVisible = it
-    }
-
-    /**
-     * Save computed value in local variable and update textbox
-     */
-    private val computedValueObserver: Observer<ExactFraction?> = Observer {
-        computedValue = it
-        setMainText()
-    }
-
-    /**
-     * Save compute text in local variable and update textbox
-     */
-    private val computeTextObserver: Observer<StringList> = Observer {
-        computeText = it
-        setMainText()
-    }
-
-    /**
-     * Display current error message, and clear compute data depending on settings
-     */
-    private val errorObserver: Observer<String> = Observer {
-        error = it
-        if (it != null) {
-            binding.errorText.text = "Error: $it"
-            binding.errorText.visible()
-
-            if (settings.clearOnError) {
-                computationViewModel.resetComputeData(clearError = false)
-            }
-        } else {
-            binding.errorText.gone()
-        }
     }
 
     /**
@@ -159,10 +102,11 @@ class MainFragment : BaseFragment() {
      * Use last history item as current computation
      */
     private val useLastHistoryItemOnClick = {
-        if (lastHistoryItem != null) {
-            val item = lastHistoryItem!!
+        val item = sharedViewModel.history.value?.lastOrNull()
+        if (item != null) {
             computationViewModel.useHistoryItemAsComputeText(item)
 
+            updateUI()
             scrollTextToTop()
         }
     }
@@ -172,14 +116,12 @@ class MainFragment : BaseFragment() {
      * Updates viewmodel with resulting computed value or error message
      */
     private val equalsButtonOnClick = {
-        if (computeText.isNotEmpty()) {
-            computationViewModel.saveComputation()
-
+        if (computationViewModel.computeText.isNotEmpty()) {
             // set action for each operator
             // only include exponent if exp is used
             val operators = when {
                 !settings.shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                computeText.indexOf("^") == -1 -> listOf(
+                !computationViewModel.computeText.contains("^") -> listOf(
                     "+",
                     "-",
                     "x",
@@ -213,8 +155,8 @@ class MainFragment : BaseFragment() {
             try {
                 val computedValue: ExactFraction =
                     runComputation(
-                        computedValue,
-                        computeText,
+                        computationViewModel.computedValue,
+                        computationViewModel.computeText,
                         operatorRounds,
                         performOperation,
                         numberOrder,
@@ -223,12 +165,8 @@ class MainFragment : BaseFragment() {
                         settings.shuffleComputation
                     )
 
-                computationViewModel.setComputedValue(computedValue)
-                computationViewModel.setError(null)
-                computationViewModel.generateHistoryItem()
-
-                computationViewModel.clearComputeText()
-
+                computationViewModel.setResult(null, computedValue)
+                updateUI()
                 scrollTextToTop()
             } catch (e: Exception) {
                 val error: String = if (e.message == null) {
@@ -236,16 +174,20 @@ class MainFragment : BaseFragment() {
                 } else {
                     var message: String = e.message!!.trim()
 
-                    val firstChar = message[0]
-                    if (firstChar.isLowerCase()) {
+                    if (message.isNotEmpty() && message[0].isLowerCase()) {
+                        val firstChar = message[0]
                         message = message.replaceFirst(firstChar, firstChar.uppercaseChar())
                     }
+
                     message
                 }
 
-                computationViewModel.setError(error)
-                computationViewModel.generateHistoryItem()
+                computationViewModel.setResult(error, null, settings.clearOnError)
+                updateUI()
             }
+
+            sharedViewModel.addToHistory(computationViewModel.generatedHistoryItem!!)
+            computationViewModel.clearStoredHistoryItem()
         }
     }
 
@@ -256,9 +198,7 @@ class MainFragment : BaseFragment() {
      */
     private fun genericAddComputeOnClick(addText: String) {
         computationViewModel.appendComputeText(addText)
-        if (error != null) {
-            computationViewModel.setError(null)
-        }
+        updateUI()
         scrollTextToBottom()
     }
 
@@ -280,23 +220,39 @@ class MainFragment : BaseFragment() {
         binding.divideButton.setOnClickListener { genericAddComputeOnClick("/") }
 
         // functional buttons
-        binding.clearButton.setOnClickListener { computationViewModel.resetComputeData() }
+        binding.clearButton.setOnClickListener {
+            computationViewModel.resetComputeData()
+            updateUI()
+        }
         binding.equalsButton.setOnClickListener { equalsButtonOnClick() }
         binding.backspaceButton.setOnClickListener {
-            computationViewModel.setError(null)
             computationViewModel.backspaceComputeText()
+            updateUI()
             scrollTextToBottom()
         }
     }
 
     /**
-     * Sets the text in the textbox, including ui modifications for first term
+     * Updates the UI for the current error, computed value, and compute text.
+     * Includes adding brackets around computed value, if applicable
      */
-    private fun setMainText() {
+    private fun updateUI() {
         val textview: TextView = binding.mainText
-        var fullText = computeText.joinToString("")
+        val error = computationViewModel.error
+
+        // update error
+        if (error != null) {
+            @SuppressLint("SetTextI18n")
+            binding.errorText.text = "Error: $error"
+            binding.errorText.visible()
+        } else {
+            binding.errorText.gone()
+        }
+
+        // update main textview
+        var fullText = computationViewModel.computeText.joinToString("")
         // add computed value
-        val computedString = computedValue?.toDecimalString()
+        val computedString = computationViewModel.computedValue?.toDecimalString()
         if (computedString != null) {
             fullText = "[$computedString]$fullText"
         }

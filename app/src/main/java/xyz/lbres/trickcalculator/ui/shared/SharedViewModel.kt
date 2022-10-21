@@ -13,47 +13,52 @@ import kotlin.random.Random
  * ViewModel to track history and settings that are shared across fragments
  */
 class SharedViewModel : ViewModel() {
+    private val random = Random(Date().time)
+
     /**
      * Individual settings
      */
 
-    private val mApplyDecimals = MutableLiveData<Boolean>().apply { value = true }
-    val applyDecimals: LiveData<Boolean> = mApplyDecimals
-    fun setApplyDecimals(newValue: Boolean) { mApplyDecimals.value = newValue }
+    // LiveData because fragments need to observe when settings are changed via settings dialog
+    private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
+    val applyDecimals: LiveData<Boolean> = _applyDecimals
+    fun setApplyDecimals(newValue: Boolean) { _applyDecimals.value = newValue }
 
-    private val mApplyParens = MutableLiveData<Boolean>().apply { value = true }
-    val applyParens: LiveData<Boolean> = mApplyParens
-    fun setApplyParens(newValue: Boolean) { mApplyParens.value = newValue }
+    private val _applyParens = MutableLiveData<Boolean>().apply { value = true }
+    val applyParens: LiveData<Boolean> = _applyParens
+    fun setApplyParens(newValue: Boolean) { _applyParens.value = newValue }
 
-    private val mClearOnError = MutableLiveData<Boolean>().apply { value = false }
-    val clearOnError: LiveData<Boolean> = mClearOnError
-    fun setClearOnError(newValue: Boolean) { mClearOnError.value = newValue }
+    private val _clearOnError = MutableLiveData<Boolean>().apply { value = false }
+    val clearOnError: LiveData<Boolean> = _clearOnError
+    fun setClearOnError(newValue: Boolean) { _clearOnError.value = newValue }
 
-    private val mHistoryRandomness = MutableLiveData<Int>().apply { value = 1 }
-    val historyRandomness: LiveData<Int> = mHistoryRandomness
-    fun setHistoryRandomness(newValue: Int) { mHistoryRandomness.value = newValue }
+    private val _historyRandomness = MutableLiveData<Int>().apply { value = 1 }
+    val historyRandomness: LiveData<Int> = _historyRandomness
+    fun setHistoryRandomness(newValue: Int) { _historyRandomness.value = newValue }
 
-    private val mShowSettingsButton = MutableLiveData<Boolean>().apply { value = false }
-    val showSettingsButton: LiveData<Boolean> = mShowSettingsButton
-    fun setShowSettingsButton(newValue: Boolean) { mShowSettingsButton.value = newValue }
+    private val _showSettingsButton = MutableLiveData<Boolean>().apply { value = false }
+    val showSettingsButton: LiveData<Boolean> = _showSettingsButton
+    fun setShowSettingsButton(newValue: Boolean) { _showSettingsButton.value = newValue }
 
-    private val mShuffleComputation = MutableLiveData<Boolean>().apply { value = false }
-    val shuffleComputation: LiveData<Boolean> = mShuffleComputation
-    fun setShuffleComputation(newValue: Boolean) { mShuffleComputation.value = newValue }
+    private val _shuffleComputation = MutableLiveData<Boolean>().apply { value = false }
+    val shuffleComputation: LiveData<Boolean> = _shuffleComputation
+    fun setShuffleComputation(newValue: Boolean) { _shuffleComputation.value = newValue }
 
-    private val mShuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
-    val shuffleNumbers: LiveData<Boolean> = mShuffleNumbers
-    fun setShuffleNumbers(newValue: Boolean) { mShuffleNumbers.value = newValue }
+    private val _shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
+    val shuffleNumbers: LiveData<Boolean> = _shuffleNumbers
+    fun setShuffleNumbers(newValue: Boolean) { _shuffleNumbers.value = newValue }
 
-    private val mShuffleOperators = MutableLiveData<Boolean>().apply { value = true }
-    val shuffleOperators: LiveData<Boolean> = mShuffleOperators
-    fun setShuffleOperators(newValue: Boolean) { mShuffleOperators.value = newValue }
+    private val _shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
+    val shuffleOperators: LiveData<Boolean> = _shuffleOperators
+    fun setShuffleOperators(newValue: Boolean) { _shuffleOperators.value = newValue }
 
     /**
      * All settings
      */
 
-    // reset all settings other than settings button on main fragment
+    /**
+     * Reset all settings other than displaying settings button on main fragment
+     */
     fun resetSettings() {
         val defaults = Settings()
         setApplyDecimals(defaults.applyDecimals)
@@ -65,16 +70,17 @@ class SharedViewModel : ViewModel() {
         setShuffleOperators(defaults.shuffleOperators)
     }
 
-    // select random values for settings and hide settings button
+    /**
+     * Select random settings and hide settings button on main fragment
+     */
     fun randomizeSettings() {
-        val r = Random(Date().time)
-        setApplyDecimals(r.nextBoolean())
-        setApplyParens(r.nextBoolean())
-        setClearOnError(r.nextBoolean())
+        setApplyDecimals(random.nextBoolean())
+        setApplyParens(random.nextBoolean())
+        setClearOnError(random.nextBoolean())
         setHistoryRandomness((0..3).random())
-        setShuffleComputation(r.nextBoolean())
-        setShuffleNumbers(r.nextBoolean())
-        setShuffleOperators(r.nextBoolean())
+        setShuffleComputation(random.nextBoolean())
+        setShuffleNumbers(random.nextBoolean())
+        setShuffleOperators(random.nextBoolean())
 
         setShowSettingsButton(false)
     }
@@ -83,15 +89,16 @@ class SharedViewModel : ViewModel() {
      * History
      */
 
-    private val mHistory = MutableLiveData<History>().apply { value = listOf() }
-    val history: LiveData<History> = mHistory
+    // LiveData because MainFragment needs to observe when history is cleared
+    private val _history = MutableLiveData<History>().apply { value = emptyList() }
+    val history: LiveData<History> = _history
 
     fun addToHistory(newItem: HistoryItem) {
         val currentHistory = history.value!!
-        mHistory.value = currentHistory + newItem
+        _history.value = currentHistory + newItem
     }
 
     fun clearHistory() {
-        mHistory.value = listOf()
+        _history.value = emptyList()
     }
 }
