@@ -4,13 +4,13 @@ import androidx.lifecycle.LifecycleOwner
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
- * Initialize basic observers to update a settings object when settings change in the ViewModel
+ * Initialize basic observers to update a settings object when settings change in the ViewModel.
+ * Settings must be observed using LiveData because they can be changed at any time using the settings dialog.
  *
  * @param settings [Settings]: settings object to update
  * @param viewModel [SharedViewModel]: view model to observe
  * @param lifecycleOwner [LifecycleOwner]
  */
-// NOTE: need to use observers b/c settings can change from dialog at any time
 fun initSettingsObservers(settings: Settings, viewModel: SharedViewModel, lifecycleOwner: LifecycleOwner) {
     viewModel.applyDecimals.observe(lifecycleOwner) { settings.applyDecimals = it }
     viewModel.applyParens.observe(lifecycleOwner) { settings.applyParens = it }

@@ -233,12 +233,14 @@ class MainFragment : BaseFragment() {
     }
 
     /**
-     * Sets the text in the textbox, including ui modifications for first term
+     * Updates the UI for the current error, computed value, and compute text.
+     * Includes adding brackets around computed value, if applicable
      */
     private fun updateUI() {
         val textview: TextView = binding.mainText
         val error = computationViewModel.error
 
+        // update error
         if (error != null) {
             @SuppressLint("SetTextI18n")
             binding.errorText.text = "Error: $error"
@@ -247,6 +249,7 @@ class MainFragment : BaseFragment() {
             binding.errorText.gone()
         }
 
+        // update main textview
         var fullText = computationViewModel.computeText.joinToString("")
         // add computed value
         val computedString = computationViewModel.computedValue?.toDecimalString()
