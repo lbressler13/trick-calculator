@@ -5,7 +5,7 @@ package xyz.lbres.trickcalculator.ui.attributions
  *
  * @param name [String]: the author's display name in Flaticon
  * @param url [String]: link to author's page on Flaticon
- * @param images [List<ImageAttribution>]: list of images created by the author
+ * @param images [List]<[ImageAttribution]>: list of images created by the author
  */
 data class AuthorAttribution(
     val name: String,

@@ -17,9 +17,9 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
     /**
      * Open the specified url in a browser window
      */
-    override fun onClick(widget: View) {
+    override fun onClick(view: View) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        ContextCompat.startActivity(widget.context, browserIntent, null)
+        ContextCompat.startActivity(view.context, browserIntent, null)
     }
 
     companion object {

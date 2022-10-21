@@ -13,10 +13,13 @@ import kotlin.random.Random
  * ViewModel to track history and settings that are shared across fragments
  */
 class SharedViewModel : ViewModel() {
+    private val random = Random(Date().time)
+
     /**
      * Individual settings
      */
 
+    // LiveData because fragments need to observe when settings are changed via settings dialog
     private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
     val applyDecimals: LiveData<Boolean> = _applyDecimals
     fun setApplyDecimals(newValue: Boolean) { _applyDecimals.value = newValue }
@@ -53,7 +56,9 @@ class SharedViewModel : ViewModel() {
      * All settings
      */
 
-    // reset all settings other than settings button on main fragment
+    /**
+     * Reset all settings other than displaying settings button on main fragment
+     */
     fun resetSettings() {
         val defaults = Settings()
         setApplyDecimals(defaults.applyDecimals)
@@ -65,16 +70,17 @@ class SharedViewModel : ViewModel() {
         setShuffleOperators(defaults.shuffleOperators)
     }
 
-    // select random values for settings and hide settings button
+    /**
+     * Select random settings and hide settings button on main fragment
+     */
     fun randomizeSettings() {
-        val r = Random(Date().time)
-        setApplyDecimals(r.nextBoolean())
-        setApplyParens(r.nextBoolean())
-        setClearOnError(r.nextBoolean())
+        setApplyDecimals(random.nextBoolean())
+        setApplyParens(random.nextBoolean())
+        setClearOnError(random.nextBoolean())
         setHistoryRandomness((0..3).random())
-        setShuffleComputation(r.nextBoolean())
-        setShuffleNumbers(r.nextBoolean())
-        setShuffleOperators(r.nextBoolean())
+        setShuffleComputation(random.nextBoolean())
+        setShuffleNumbers(random.nextBoolean())
+        setShuffleOperators(random.nextBoolean())
 
         setShowSettingsButton(false)
     }
@@ -83,6 +89,7 @@ class SharedViewModel : ViewModel() {
      * History
      */
 
+    // LiveData because MainFragment needs to observe when history is cleared
     private val _history = MutableLiveData<History>().apply { value = emptyList() }
     val history: LiveData<History> = _history
 

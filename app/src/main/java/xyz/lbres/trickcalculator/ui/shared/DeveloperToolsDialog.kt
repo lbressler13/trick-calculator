@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.main
+package xyz.lbres.trickcalculator.ui.shared
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -16,11 +16,11 @@ import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
 import xyz.lbres.trickcalculator.ui.settings.initSettingsDialog
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
 
 class DeveloperToolsDialog : DialogFragment() {
+    // TODO move to dev folder
     private lateinit var binding: DialogDeveloperToolsBinding
     private lateinit var viewModel: SharedViewModel
 

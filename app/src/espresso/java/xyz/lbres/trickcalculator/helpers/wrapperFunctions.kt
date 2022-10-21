@@ -73,7 +73,7 @@ fun withNestedViewHolder(
     @IdRes nestedRecyclerId: Int,
     position: Int,
     nestedPosition: Int
-): NestedRecyclerViewMatcher {
+): Matcher<View?> {
     return NestedRecyclerViewMatcher(recyclerId, nestedRecyclerId, position, nestedPosition)
 }
 

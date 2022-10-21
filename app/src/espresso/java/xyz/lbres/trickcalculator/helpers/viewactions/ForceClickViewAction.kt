@@ -13,7 +13,7 @@ import org.hamcrest.Matcher
  */
 class ForceClickViewAction : ViewAction {
     override fun getConstraints(): Matcher<View> = isClickable()
-    override fun getDescription(): String = "clicking a view"
+    override fun getDescription(): String = "force-clicking a view"
 
     /**
      * Click on view if visible
