@@ -6,7 +6,7 @@ import xyz.lbres.trickcalculator.utils.visible
 /**
  * Configuration for dev build flavor
  */
-object BuildFlavor : BuildFlavorConfig {
+object ProductFlavor : ProductFlavorConfig {
     override val devMode = true
 
     /**

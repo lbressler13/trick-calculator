@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
-        BuildFlavor.setupFlavor(this)
+        ProductFlavor.setupFlavor(this)
 
         setContentView(binding.root)
         isDarkMode = isDarkMode()

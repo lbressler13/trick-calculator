@@ -23,8 +23,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.BuildFlavor
 import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
@@ -58,7 +58,7 @@ class AttributionsFragmentTest {
         )
 
         // hide dev tools to avoid interference with expanding/collapsing attributions
-        if (BuildFlavor.devMode) {
+        if (ProductFlavor.devMode) {
             hideDevToolsButton()
         }
     }
