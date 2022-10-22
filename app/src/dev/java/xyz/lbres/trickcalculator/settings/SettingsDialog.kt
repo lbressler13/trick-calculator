@@ -21,8 +21,6 @@ class SettingsDialog : DialogFragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var settingsUI: SettingsUI
 
-    var showSettingsButtonSwitch: Boolean = true
-
     /**
      * Build dialog, comes before onCreateView and dialog is not connected to context
      */

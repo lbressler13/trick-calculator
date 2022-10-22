@@ -15,17 +15,29 @@ import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
 
 // TODO don't pass root view explicitly
+/**
+ * Class to handle UI interactions in a settings fragment.
+ * Reduces specialized code in fragments.
+ *
+ * @param fragment [Fragment]: the fragment creating the UI
+ * @param rootView [View]: root view of the fragment, expected to contain Views for updating settings
+ * @param viewModel [SharedViewModel]: ViewModel that contains info about settings and can be used to modify them
+ * @param lifecycleOwner [LifecycleOwner]: lifecycle owner to use when observing changes in ViewModel
+ */
 class SettingsUI(private val fragment: Fragment, private val rootView: View, private val viewModel: SharedViewModel, private val lifecycleOwner: LifecycleOwner) {
     /**
-     * Flags for events in fragment
+     * If reset button was pressed
      */
     private var resetPressed: Boolean = false
+
+    /**
+     * If randomize button was pressed
+     */
     private var randomizePressed: Boolean = false
 
     /**
-     * UI elements to represent settings
+     * Switches to control settings
      */
-    // switches
     private lateinit var applyDecimalsSwitch: SwitchCompat
     private lateinit var applyParensSwitch: SwitchCompat
     private lateinit var clearOnErrorSwitch: SwitchCompat
@@ -34,14 +46,21 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
     private lateinit var shuffleNumbersSwitch: SwitchCompat
     private lateinit var shuffleOperatorsSwitch: SwitchCompat
 
-    // radio group
+    /**
+     * Radio group for history randomness settings
+     */
     private lateinit var historyRadioGroup: RadioGroup
     private lateinit var historyRadioButtons: List<RadioButton>
 
-    // all settings buttons
+    /**
+     * Button to modify all settings
+     */
     private lateinit var randomizeSettingsButton: View
     private lateinit var resetSettingsButton: View
 
+    /**
+     * Initialize UI elements, observers, and on click functions for buttons
+     */
     init {
         collectUI()
         settingsButtonSwitch.gone()
@@ -59,6 +78,9 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
         }
     }
 
+    /**
+     * Save UI elements using view IDs
+     */
     private fun collectUI() {
         applyDecimalsSwitch = rootView.findViewById(R.id.applyDecimalsSwitch)
         applyParensSwitch = rootView.findViewById(R.id.applyParensSwitch)
@@ -80,6 +102,10 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
         resetSettingsButton = rootView.findViewById(R.id.resetSettingsButton)
     }
 
+    /**
+     * Initial observers for updating settings in UI.
+     * Must be observed because dialog may update settings while fragment is open.
+     */
     private fun initObservers() {
         // update switches
         viewModel.applyDecimals.observe(lifecycleOwner) { applyDecimalsSwitch.isChecked = it }
@@ -94,6 +120,9 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
         viewModel.historyRandomness.observe(lifecycleOwner) { historyRadioButtons[it].isChecked = true }
     }
 
+    /**
+     * Close the current fragment
+     */
     private fun closeCurrentFragment() {
         when (fragment) {
             is DialogFragment -> fragment.dismiss()
@@ -101,6 +130,9 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
         }
     }
 
+    /**
+     * Use settings in UI to update ViewModel
+     */
     fun saveSettingsToViewModel() {
         val randomizedPressed = randomizePressed
         val resetPressed = resetPressed
@@ -128,12 +160,15 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
         }
     }
 
+    /**
+     * Close the previous fragment if applicable
+     */
     fun closePreviousFragment() {
         try {
             if (fragment is DialogFragment && fragment.requireParentFragment() is DialogFragment) {
                 (fragment.requireParentFragment() as DialogFragment).dismiss()
-            } else if (fragment !is DialogFragment && fragment.parentFragmentManager.backStackEntryCount > 0) {
-                (fragment as BaseFragment).requireMainActivity().popBackStack()
+            } else if (fragment is BaseFragment && fragment.parentFragmentManager.backStackEntryCount > 0) {
+                fragment.requireMainActivity().popBackStack()
             }
         } catch (e: Exception) {
             // expected to fail when ui is recreating due to configuration changes or via dev tools
@@ -141,6 +176,9 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
         }
     }
 
+    /**
+     * Make settings button switch visible
+     */
     fun showSettingsButtonSwitch() {
         settingsButtonSwitch.visible()
     }

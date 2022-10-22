@@ -20,19 +20,17 @@ The dialog can only be launched from the developer tools menu in the dev build v
 The fragment can be accessed from the main screen, if the settings button is enabled. By default, it is not.
 There is another way to access the fragment, but it will remain undocumented.
 
-In order to maintain 2 completely separate fragments with identical functionality, the vast majority of code is shared using util functions.
+In order to maintain 2 completely separate fragments with identical functionality, the vast majority of code is stored in a SettingsUI class, which is initialized in each fragment.
 The shared code includes functions to initialize the fragments, modify the UI, and update the SharedViewModel when the fragment closes.
-
-Because the shared code frequently interacts with the UI, both fragments implement a SettingsUI interface.
-This interface includes properties for all UI elements that are necessary when viewing and modifying settings.
+It also accesses UI elements in the fragments using their view resource IDs.
+This requires both fragments to have the same UI elements for viewing and modifying settings.
 
 ## Adding a setting
 Settings are referenced, modified, and observed in various places throughout the app.
 When a new setting is added, it must be added in all of these places.
 To ensure that nothing is missed, add the setting in the following places:
-* Settings class: both constructors
-* SettingsUI: property
-* settingsUtil: initObservers, saveToViewModel
+* Settings class: both constructors, equals
+* SettingsUI: property, collectUI, initObservers, saveSettingsToViewModel
 * initSettingsObservers: new observer
 * SharedViewModel: property, randomizeSettings, resetSettings
 * Layouts: fragment_settings and dialog_settings
