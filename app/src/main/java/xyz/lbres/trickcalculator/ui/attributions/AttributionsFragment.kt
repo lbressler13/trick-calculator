@@ -16,7 +16,6 @@ import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttribu
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonAttrPolicyUrl
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonUrl
-import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.utils.createUnderlineText
 
 /**
@@ -27,7 +26,8 @@ class AttributionsFragment : BaseFragment() {
     private lateinit var viewModel: AttributionsViewModel
 
     override var titleResId: Int = R.string.title_attributions
-    override var setActionBarOnClick: ((View) -> Unit)? = { initSettingsFragment(this, it, R.id.navigateAttributionsToSettings) }
+    override var actionBarOnClick: (() -> Unit)? =
+        { requireMainActivity().runNavAction(R.id.navigateAttributionsToSettings) }
 
     /**
      * Initialize fragment

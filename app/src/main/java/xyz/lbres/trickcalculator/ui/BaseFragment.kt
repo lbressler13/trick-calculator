@@ -1,6 +1,5 @@
 package xyz.lbres.trickcalculator.ui
 
-import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
@@ -19,7 +18,7 @@ abstract class BaseFragment : NavHostFragment() {
      * Function to set the onClick for the action bar. If null, the onClick is set to null.
      * Otherwise, function is called the action bar as an argument.
      */
-    protected open var setActionBarOnClick: ((View) -> Unit)? = null
+    protected open var actionBarOnClick: (() -> Unit)? = null
 
     /**
      * Re-add action bar settings when fragment is shown.
@@ -36,10 +35,10 @@ abstract class BaseFragment : NavHostFragment() {
         val actionBar = requireMainActivity().binding.actionBar
 
         // set onClick
-        if (setActionBarOnClick == null) {
+        if (actionBarOnClick == null) {
             actionBar.root.setOnClickListener(null)
         } else {
-            setActionBarOnClick!!(actionBar.root)
+            actionBar.root.setOnClickListener { actionBarOnClick!!() }
         }
 
         // set title

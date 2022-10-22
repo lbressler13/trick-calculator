@@ -13,10 +13,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogSettingsBinding
-import xyz.lbres.trickcalculator.ui.settings.components.SettingsUI
-import xyz.lbres.trickcalculator.ui.settings.components.closePreviousFragment
-import xyz.lbres.trickcalculator.ui.settings.components.initUi
-import xyz.lbres.trickcalculator.ui.settings.components.saveToViewModel
+import xyz.lbres.trickcalculator.ui.settings.components.*
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -26,6 +23,7 @@ class SettingsDialog : DialogFragment(), SettingsUI {
     private lateinit var binding: DialogSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
 
+    override var showSettingsButtonSwitch: Boolean = true
     override var randomizePressed = false
     override var resetPressed = false
 
@@ -63,7 +61,7 @@ class SettingsDialog : DialogFragment(), SettingsUI {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         collectUiElements()
-        initUi(this, sharedViewModel, viewLifecycleOwner)
+        initSettingsUi(sharedViewModel, viewLifecycleOwner)
 
         return binding.root
     }
@@ -91,8 +89,8 @@ class SettingsDialog : DialogFragment(), SettingsUI {
 
     override fun onDestroy() {
         super.onDestroy()
-        saveToViewModel(this, sharedViewModel)
-        closePreviousFragment(this)
+        saveToViewModel(sharedViewModel)
+        closePreviousFragment()
     }
 
     companion object {

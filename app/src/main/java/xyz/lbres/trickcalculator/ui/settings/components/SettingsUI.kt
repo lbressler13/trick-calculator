@@ -10,6 +10,11 @@ import androidx.appcompat.widget.SwitchCompat
  */
 interface SettingsUI {
     /**
+     * Values stored in element
+     */
+    var showSettingsButtonSwitch: Boolean
+
+    /**
      * Flags for events in fragment
      */
     var resetPressed: Boolean

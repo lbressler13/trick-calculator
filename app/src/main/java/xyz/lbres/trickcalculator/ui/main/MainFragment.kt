@@ -18,7 +18,6 @@ import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentMainBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.settings.Settings
-import xyz.lbres.trickcalculator.ui.settings.initSettingsFragment
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.History
@@ -61,11 +60,10 @@ class MainFragment : BaseFragment() {
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
+        binding.settingsButton.setOnClickListener { settingsButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         binding.useLastHistoryButton.setOnClickListener { useLastHistoryItemOnClick() }
         updateUI()
-
-        initSettingsFragment(this, binding.settingsButton, R.id.navigateMainToSettings)
 
         return binding.root
     }
@@ -109,6 +107,13 @@ class MainFragment : BaseFragment() {
             updateUI()
             scrollTextToTop()
         }
+    }
+
+    /**
+     * Launch SettingsFragment
+     */
+    private val settingsButtonOnClick = {
+        requireMainActivity().runNavAction(R.id.navigateMainToSettings)
     }
 
     /**

@@ -22,6 +22,7 @@ class SettingsFragment : BaseFragment(), SettingsUI {
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
 
+    override var showSettingsButtonSwitch: Boolean = false
     override var randomizePressed = false
     override var resetPressed = false
 
@@ -44,7 +45,7 @@ class SettingsFragment : BaseFragment(), SettingsUI {
         specializedFragmentCode()
 
         collectUiElements()
-        initUi(this, sharedViewModel, viewLifecycleOwner)
+        initSettingsUi(sharedViewModel, viewLifecycleOwner)
 
         return binding.root
     }
@@ -72,19 +73,23 @@ class SettingsFragment : BaseFragment(), SettingsUI {
 
     // code that is run in fragment but not dialog
     private fun specializedFragmentCode() {
+        // show or hide settings button based on number of previous fragments
+        val backStackSize = requireParentFragment().childFragmentManager.backStackEntryCount
+        showSettingsButtonSwitch = backStackSize > 1
+
         // close button
         binding.closeButton.setOnClickListener { requireMainActivity().popBackStack() }
 
         // save settings when another fragment is opened
         // preserves current settings when dialog is opened
         childFragmentManager.addFragmentOnAttachListener { _, _ ->
-            saveToViewModel(this, sharedViewModel)
+            saveToViewModel(sharedViewModel)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        saveToViewModel(this, sharedViewModel)
-        closePreviousFragment(this)
+        saveToViewModel(sharedViewModel)
+        closePreviousFragment()
     }
 }
