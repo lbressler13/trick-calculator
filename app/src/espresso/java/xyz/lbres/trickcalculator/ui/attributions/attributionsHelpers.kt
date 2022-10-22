@@ -32,7 +32,7 @@ fun expandCollapseAttribution(position: Int) {
 
 /**
  * Hide the dev tools button for 60 seconds to avoid interfering with tests when expanding/collapsing attributions.
- * Can only be run if dev mode is true.
+ * Will cause error if called in non-dev variant.
  */
 fun hideDevToolsButton() {
     onView(withId(R.id.devToolsButton)).perform(click())

@@ -22,20 +22,19 @@ private val spinner = onView(withId(R.id.devToolsTimeSpinner))
 private val hideDevToolsButton = onView(withId(R.id.hideDevToolsButton))
 private val devToolsButton = onView(withId(R.id.devToolsButton))
 
-fun testHideDevToolsOptions() {
+fun testCorrectHideDevToolsOptions() {
     openDialog()
 
-    spinner.check(matches(withSpinnerText("5000ms")))
-        .perform(click())
+    spinner.check(matches(withSpinnerText("5000ms"))).perform(click())
 
-    itemAtPosition(0).check(matches(allOf(isDisplayed(), withText("5000ms"))))
-    itemAtPosition(1).check(matches(allOf(isDisplayed(), withText("10000ms"))))
-    itemAtPosition(2).check(matches(allOf(isDisplayed(), withText("30000ms"))))
-    itemAtPosition(3).check(matches(allOf(isDisplayed(), withText("60000ms"))))
+    spinnerItemAt(0).check(matches(allOf(isDisplayed(), withText("5000ms"))))
+    spinnerItemAt(1).check(matches(allOf(isDisplayed(), withText("10000ms"))))
+    spinnerItemAt(2).check(matches(allOf(isDisplayed(), withText("30000ms"))))
+    spinnerItemAt(3).check(matches(allOf(isDisplayed(), withText("60000ms"))))
 
     var performException = false
     try {
-        itemAtPosition(4).check(matches(isDisplayed()))
+        spinnerItemAt(4).check(matches(isDisplayed()))
     } catch (e: PerformException) {
         performException = true
     }
@@ -51,23 +50,23 @@ fun testInteractWithHideDevToolsOptions() {
     openDialog()
 
     spinner.perform(click())
-    itemAtPosition(1).perform(click())
+    spinnerItemAt(1).perform(click())
     spinner.check(matches(withSpinnerText("10000ms")))
 
     spinner.perform(click())
-    itemAtPosition(0).perform(click())
+    spinnerItemAt(0).perform(click())
     spinner.check(matches(withSpinnerText("5000ms")))
 
     spinner.perform(click())
-    itemAtPosition(2).perform(click())
+    spinnerItemAt(2).perform(click())
     spinner.check(matches(withSpinnerText("30000ms")))
 
     spinner.perform(click())
-    itemAtPosition(3).perform(click())
+    spinnerItemAt(3).perform(click())
     spinner.check(matches(withSpinnerText("60000ms")))
 
     // close and re-open dialog
-    onView(withText("Done")).perform(click())
+    closeDialog()
     openDialog()
     spinner.check(matches(withSpinnerText("60000ms")))
 }
@@ -85,7 +84,7 @@ fun testHideDevTools() {
 
     // 10 seconds
     spinner.perform(click())
-    itemAtPosition(1).perform(click())
+    spinnerItemAt(1).perform(click())
     spinner.check(matches(withSpinnerText("10000ms")))
     hideDevToolsButton.perform(click())
     checkDevToolsHidden(10000)
@@ -94,7 +93,7 @@ fun testHideDevTools() {
 
     // 30 seconds
     spinner.perform(click())
-    itemAtPosition(2).perform(click())
+    spinnerItemAt(2).perform(click())
     spinner.check(matches(withSpinnerText("30000ms")))
     hideDevToolsButton.perform(click())
     checkDevToolsHidden(30000)
@@ -103,7 +102,7 @@ fun testHideDevTools() {
 
     // 60 seconds
     spinner.perform(click())
-    itemAtPosition(3).perform(click())
+    spinnerItemAt(3).perform(click())
     spinner.check(matches(withSpinnerText("60000ms")))
     hideDevToolsButton.perform(click())
     checkDevToolsHidden(60000)
@@ -130,7 +129,7 @@ private fun checkDevToolsHidden(hideTime: Long) {
  * @param position [Int]
  * @return [DataInteraction]: the item located at [position]
  */
-private fun itemAtPosition(position: Int): DataInteraction {
+private fun spinnerItemAt(position: Int): DataInteraction {
     return onData(`is`(instanceOf(String::class.java)))
         .inRoot(isPlatformPopup())
         .atPosition(position)

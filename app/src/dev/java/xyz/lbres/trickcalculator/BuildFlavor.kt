@@ -10,7 +10,7 @@ object BuildFlavor : BuildFlavorConfig {
     override val devMode = true
 
     /**
-     * Show or hide the dev tools button, and set the on click for it
+     * Show dev tools button and setup dialog
      */
     override fun setupFlavor(activity: MainActivity) {
         val devToolsButton = activity.binding.devToolsButton

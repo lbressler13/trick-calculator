@@ -70,7 +70,7 @@ class DeveloperToolsDialogTest {
         // clear history
         openDialog()
         onView(withId(R.id.clearHistoryButton)).perform(click())
-        onView(withText("Done")).perform(click())
+        closeDialog()
 
         noHistoryMessage.check(matches(isDisplayed()))
         onView(withId(R.id.closeButton)).perform(forceClick())
@@ -90,15 +90,13 @@ class DeveloperToolsDialogTest {
         onView(withId(R.id.twoButton)).perform(click())
         onView(withId(R.id.equalsButton)).perform(click())
 
-        useHistoryButton
-            .check(matches(isDisplayed()))
-            .perform(click())
+        useHistoryButton.check(matches(isDisplayed())).perform(click())
 
         onView(withId(R.id.mainText)).check(matches(withText("1+2")))
 
         openDialog()
         onView(withId(R.id.clearHistoryButton)).perform(click())
-        onView(withText("Done")).perform(click())
+        closeDialog()
 
         useHistoryButton.check(isNotPresented())
         onView(withId(R.id.mainText)).check(matches(withText("1+2")))
@@ -114,7 +112,7 @@ class DeveloperToolsDialogTest {
     }
 
     @Test
-    fun showHideDevToolsOptions() = testHideDevToolsOptions()
+    fun correctHideDevToolsOptions() = testCorrectHideDevToolsOptions()
 
     @Test
     fun interactWithHideDevToolsOptions() = testInteractWithHideDevToolsOptions()
