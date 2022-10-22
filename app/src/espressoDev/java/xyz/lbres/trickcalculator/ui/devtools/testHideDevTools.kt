@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.devtools
+package xyz.lbres.trickcalculator.ui.devtools
 
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Espresso.onData
@@ -22,7 +22,7 @@ private val spinner = onView(withId(R.id.devToolsTimeSpinner))
 private val hideDevToolsButton = onView(withId(R.id.hideDevToolsButton))
 private val devToolsButton = onView(withId(R.id.devToolsButton))
 
-fun testCorrectHideDevToolsOptions() {
+fun testHideDevToolsOptionsDisplayed() {
     openDialog()
 
     spinner.check(matches(withSpinnerText("5000ms"))).perform(click())
@@ -46,7 +46,7 @@ fun testCorrectHideDevToolsOptions() {
     }
 }
 
-fun testInteractWithHideDevToolsOptions() {
+fun testInteractWithHideDevToolsSpinner() {
     openDialog()
 
     spinner.perform(click())

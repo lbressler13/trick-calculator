@@ -11,7 +11,7 @@ import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
- * DialogFragment to display all configuration options for calculator
+ * Fragment to display all configuration options for calculator
  */
 class SettingsFragment : BaseFragment() {
     override var titleResId: Int = R.string.title_settings // fragment-specific value
@@ -30,7 +30,9 @@ class SettingsFragment : BaseFragment() {
         return binding.root
     }
 
-    // code that is run in fragment but not dialog
+    /**
+     * Code that is run in fragment but not dialog
+     */
     private fun specializedFragmentCode() {
         // show or hide settings button based on number of previous fragments
         val backStackSize = requireParentFragment().childFragmentManager.backStackEntryCount
@@ -41,8 +43,7 @@ class SettingsFragment : BaseFragment() {
         // close button
         binding.closeButton.setOnClickListener { requireMainActivity().popBackStack() }
 
-        // save settings when another fragment is opened
-        // preserves current settings when dialog is opened
+        // Save settings when another fragment is opened. Preserves current settings when dialog is opened
         childFragmentManager.addFragmentOnAttachListener { _, _ ->
             settingsUI.saveSettingsToViewModel()
         }

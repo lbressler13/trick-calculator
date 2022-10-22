@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.devtools
+package xyz.lbres.trickcalculator.ui.devtools
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -112,10 +112,10 @@ class DeveloperToolsDialogTest {
     }
 
     @Test
-    fun correctHideDevToolsOptions() = testCorrectHideDevToolsOptions()
+    fun hideDevToolsOptionsDisplayed() = testHideDevToolsOptionsDisplayed()
 
     @Test
-    fun interactWithHideDevToolsOptions() = testInteractWithHideDevToolsOptions()
+    fun interactWithHideDevToolsSpinner() = testInteractWithHideDevToolsSpinner()
 
     @Test
     fun hideDevTools() = testHideDevTools()

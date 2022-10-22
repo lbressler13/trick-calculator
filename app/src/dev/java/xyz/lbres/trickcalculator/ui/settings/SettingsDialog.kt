@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.settings
+package xyz.lbres.trickcalculator.ui.settings
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogSettingsBinding
-import xyz.lbres.trickcalculator.ui.settings.SettingsUI
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -48,6 +47,9 @@ class SettingsDialog : DialogFragment() {
         return binding.root
     }
 
+    /**
+     * Code that is run in dialog but not fragment
+     */
     private fun specializedFragmentCode() {
         settingsUI.showSettingsButtonSwitch()
     }

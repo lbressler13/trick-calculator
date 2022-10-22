@@ -103,8 +103,8 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
     }
 
     /**
-     * Initial observers for updating settings in UI.
-     * Must be observed because dialog may update settings while fragment is open.
+     * Initialize observers for updating settings in UI.
+     * Changes must be observed because dialog may update settings while fragment is open.
      */
     private fun initObservers() {
         // update switches
@@ -140,7 +140,7 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
         when {
             randomizedPressed -> viewModel.randomizeSettings()
             resetPressed -> {
-                // save changes to visibility of show settings
+                // persist show settings value
                 viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
                 viewModel.resetSettings()
             }

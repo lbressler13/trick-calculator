@@ -1,7 +1,7 @@
 package xyz.lbres.trickcalculator
 
 /**
- * Configuration interface that must be implemented in each build flavor.
+ * Configuration interface that must be implemented in each product flavor.
  * Created to ensure consistency across flavors.
  */
 interface ProductFlavorConfig {

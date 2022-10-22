@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.devtools
+package xyz.lbres.trickcalculator.ui.devtools
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click

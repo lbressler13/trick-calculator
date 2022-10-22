@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.devtools
+package xyz.lbres.trickcalculator.ui.devtools
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
-import xyz.lbres.trickcalculator.settings.SettingsDialog
+import xyz.lbres.trickcalculator.ui.settings.SettingsDialog
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
