@@ -82,12 +82,16 @@ android {
             java.srcDirs = ['src/final/java']
         }
 
+        androidTest {
+            java.srcDirs = ['src/espresso/java']
+        }
+
         androidTestDev {
             java.srcDirs = ['src/espressoDev/java']
         }
 
-        androidTest {
-            java.srcDirs = ['src/espresso/java']
+        androidTestComplete {
+            java.srcDirs = ['src/espressoFinal/java']
         }
     }
 
