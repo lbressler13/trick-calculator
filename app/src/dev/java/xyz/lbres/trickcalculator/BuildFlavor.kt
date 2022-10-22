@@ -1,8 +1,10 @@
 package xyz.lbres.trickcalculator
 
-import xyz.lbres.trickcalculator.ui.shared.DeveloperToolsDialog
 import xyz.lbres.trickcalculator.utils.visible
 
+/**
+ * Configuration for dev build flavor
+ */
 object BuildFlavor : BuildFlavorConfig {
     override val devMode = true
 
