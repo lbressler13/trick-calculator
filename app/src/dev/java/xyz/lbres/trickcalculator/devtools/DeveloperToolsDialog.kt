@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
-import xyz.lbres.trickcalculator.ui.settings.initSettingsDialog
+import xyz.lbres.trickcalculator.settings.SettingsDialog
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -60,7 +60,7 @@ class DeveloperToolsDialog : DialogFragment() {
         binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
 
         initHideDevTools()
-        initSettingsDialog(this, binding.settingsDialogButton)
+        initSettingsDialog()
 
         return binding.root
     }
@@ -102,6 +102,17 @@ class DeveloperToolsDialog : DialogFragment() {
         }, timer)
 
         dismiss()
+    }
+
+    /**
+     * Initialize settings dialog
+     */
+    private fun initSettingsDialog() {
+        val settingsDialog = SettingsDialog()
+
+        binding.settingsDialogButton.setOnClickListener {
+            settingsDialog.show(childFragmentManager, SettingsDialog.TAG)
+        }
     }
 
     companion object {

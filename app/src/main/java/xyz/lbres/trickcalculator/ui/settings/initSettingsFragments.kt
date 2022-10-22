@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.main.MainFragment
-import xyz.lbres.trickcalculator.ui.settings.components.SettingsDialog
 
 /**
  * Initialize onClick listener to launch settings fragment
@@ -20,21 +19,6 @@ fun initSettingsFragment(parentFragment: Fragment, viewToClick: View, navResId: 
     viewToClick.setOnClickListener {
         val activity = (parentFragment as BaseFragment).requireMainActivity()
         activity.runNavAction(navResId, getFragmentArgs(parentFragment))
-    }
-}
-
-/**
- * Initialize onClick listener to launch settings dialog
- *
- * @param parentFragment [Fragment]: calling fragment
- * @param viewToClick [View]: view which should launch settings dialog when clicked
- */
-fun initSettingsDialog(parentFragment: Fragment, viewToClick: View) {
-    val settingsDialog = SettingsDialog()
-
-    viewToClick.setOnClickListener {
-        settingsDialog.arguments = getFragmentArgs(parentFragment)
-        settingsDialog.show(parentFragment.childFragmentManager, SettingsDialog.TAG)
     }
 }
 
