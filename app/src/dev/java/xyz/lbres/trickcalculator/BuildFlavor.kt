@@ -1,5 +1,6 @@
 package xyz.lbres.trickcalculator
 
+import xyz.lbres.trickcalculator.devtools.DeveloperToolsDialog
 import xyz.lbres.trickcalculator.utils.visible
 
 /**
