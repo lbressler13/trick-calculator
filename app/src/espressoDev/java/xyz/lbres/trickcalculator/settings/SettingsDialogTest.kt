@@ -1,4 +1,3 @@
 package xyz.lbres.trickcalculator.settings
 
-class SettingsDialogTest {
-}
+class SettingsDialogTest

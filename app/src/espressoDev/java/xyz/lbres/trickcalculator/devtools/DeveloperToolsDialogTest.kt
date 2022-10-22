@@ -3,18 +3,20 @@ package xyz.lbres.trickcalculator.devtools
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withSpinnerText
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.helpers.forceClick
-import xyz.lbres.trickcalculator.helpers.isNotPresented
-import org.hamcrest.Matchers.*
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-
+import xyz.lbres.trickcalculator.helpers.forceClick
+import xyz.lbres.trickcalculator.helpers.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class DeveloperToolsDialogTest {
@@ -105,11 +107,6 @@ class DeveloperToolsDialogTest {
     }
 
     @Test
-    fun refreshUi() {
-        // TODO
-    }
-
-    @Test
     fun showSettingsDialog() {
         openDialog()
         onView(withId(R.id.settingsDialogButton)).perform(click())
@@ -117,13 +114,13 @@ class DeveloperToolsDialogTest {
     }
 
     @Test
-    fun hideDevToolsOptions() = testHideDevToolsOptions()
+    fun showHideDevToolsOptions() = testHideDevToolsOptions()
 
     @Test
     fun interactWithHideDevToolsOptions() = testInteractWithHideDevToolsOptions()
 
     @Test
-    fun hideDevTools() = testHideDevTools() // TODO
+    fun hideDevTools() = testHideDevTools()
 
     @Test
     fun historyFragment() {
