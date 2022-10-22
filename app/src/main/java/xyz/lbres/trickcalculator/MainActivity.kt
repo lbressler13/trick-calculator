@@ -3,12 +3,10 @@ package xyz.lbres.trickcalculator
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.databinding.ActivityMainBinding
-import xyz.lbres.trickcalculator.ui.shared.DeveloperToolsDialog
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -31,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
-        initDevToolsDialog()
+        BuildFlavor.setupFlavor(this)
 
         setContentView(binding.root)
         isDarkMode = isDarkMode()
@@ -88,20 +86,6 @@ class MainActivity : AppCompatActivity() {
             Configuration.UI_MODE_NIGHT_YES -> true
             Configuration.UI_MODE_NIGHT_NO -> false
             else -> true
-        }
-    }
-
-    /**
-     * Show or hide the dev tools button, and set the on click for it
-     */
-    private fun initDevToolsDialog() {
-        binding.devToolsButton.isVisible = BuildOptions.isDevMode
-
-        val dialog = DeveloperToolsDialog()
-        binding.devToolsButton.setOnClickListener {
-            if (fragmentManager != null) {
-                dialog.show(fragmentManager!!, DeveloperToolsDialog.TAG)
-            }
         }
     }
 }
