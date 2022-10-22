@@ -87,7 +87,8 @@
         android:id="@+id/settingsButtonSwitch"
         style="@style/SettingsFragmentItem"
         android:checked="true"
-        android:text="@string/show_settings_button" />
+        android:text="@string/show_settings_button"
+        android:visibility="gone" />
 
     <RadioGroup
         android:id="@+id/historyRandomnessGroup"

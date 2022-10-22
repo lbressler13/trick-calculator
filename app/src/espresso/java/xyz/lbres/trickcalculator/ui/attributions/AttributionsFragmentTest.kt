@@ -1,7 +1,7 @@
 package xyz.lbres.trickcalculator.ui.attributions
 
 import android.app.Activity
-import android.app.Instrumentation
+import android.app.Instrumentation.ActivityResult
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -24,6 +24,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.helpers.assertLinkOpened
 import xyz.lbres.trickcalculator.helpers.clickLinkInText
@@ -42,19 +43,19 @@ class AttributionsFragmentTest {
 
     @Before
     fun setupTest() {
+        // setup intents
+        Intents.init()
+        intending(not(isInternal())).respondWith(ActivityResult(Activity.RESULT_OK, null))
+
         // open fragment
         val infoButton = onView(withId(R.id.infoButton))
         infoButton.check(matches(isDisplayed()))
         infoButton.perform(click())
 
-        // setup intents
-        Intents.init()
-        intending(not(isInternal())).respondWith(
-            Instrumentation.ActivityResult(
-                Activity.RESULT_OK,
-                null
-            )
-        )
+        // hide dev tools to avoid interference with expanding/collapsing attributions
+        if (ProductFlavor.devMode) {
+            hideDevToolsButton()
+        }
     }
 
     @After

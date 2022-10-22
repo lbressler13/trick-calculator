@@ -13,7 +13,7 @@ class MainActivityTest {
     fun useAppContext() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
-        val buildSuffix = ternaryIf(BuildOptions.isDevMode, ".dev", "")
+        val buildSuffix = ternaryIf(ProductFlavor.devMode, ".dev", "")
         assertEquals("xyz.lbres.trickcalculator$buildSuffix", appContext.packageName)
     }
 }

@@ -85,6 +85,14 @@ android {
         androidTest {
             java.srcDirs = ['src/espresso/java']
         }
+
+        androidTestDev {
+            java.srcDirs = ['src/espressoDev/java']
+        }
+
+        androidTestComplete {
+            java.srcDirs = ['src/espressoFinal/java']
+        }
     }
 
     buildTypes {

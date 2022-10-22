@@ -13,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.allOf
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,16 +29,19 @@ class SettingsFragmentTest {
     @JvmField
     val rule = ActivityScenarioRule(MainActivity::class.java)
 
+    @Before
+    fun setupTest() {
+        openFragment()
+    }
+
     @Test
     fun loadActionBarWithTitle() {
-        openFragment()
         val expectedTitle = "Settings"
         onView(withId(R.id.title)).check(matches(withText(expectedTitle)))
     }
 
     @Test
     fun loadFullUi() {
-        openFragment()
         checkInitialSettings()
         onView(withId(R.id.resetSettingsButton)).check(matches(isDisplayed()))
         onView(withId(R.id.randomizeSettingsButton)).check(matches(isDisplayed()))
@@ -45,7 +49,6 @@ class SettingsFragmentTest {
 
     @Test
     fun interactWithUi() {
-        openFragment()
         // switches
         testSwitch(R.id.applyParensSwitch, true)
         testSwitch(R.id.applyDecimalsSwitch, true)
@@ -75,14 +78,12 @@ class SettingsFragmentTest {
 
     @Test
     fun closeButton() {
-        openFragment()
         onView(withId(R.id.closeButton)).perform(forceClick())
         onView(withText("Calculator")).check(matches(isDisplayed()))
     }
 
     @Test
     fun deviceBackButton() {
-        openFragment()
         pressBack()
         onView(withText("Calculator")).check(matches(isDisplayed()))
     }
@@ -90,7 +91,6 @@ class SettingsFragmentTest {
     @Test
     fun settingsButton() {
         // enabled settings button
-        openFragment()
         onView(withId(R.id.settingsButtonSwitch)).perform(click())
         closeFragment()
 
