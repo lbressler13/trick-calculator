@@ -17,10 +17,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.helpers.isEmptyString
-import xyz.lbres.trickcalculator.helpers.isNotEmptyString
-import xyz.lbres.trickcalculator.helpers.saveText
-import xyz.lbres.trickcalculator.helpers.withSavedText
+import xyz.lbres.trickcalculator.testutils.clearSavedText
+import xyz.lbres.trickcalculator.testutils.isEmptyString
+import xyz.lbres.trickcalculator.testutils.isNotEmptyString
+import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.saveText
+import xyz.lbres.trickcalculator.testutils.withSavedText
 
 // TODO tests for settings
 
@@ -31,10 +33,15 @@ class MainFragmentTest {
 
     @Rule
     @JvmField
-    val rule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Rule
+    @JvmField
+    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {
+        clearSavedText()
         clearText()
     }
 

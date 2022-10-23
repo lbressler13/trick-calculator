@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers
+package xyz.lbres.trickcalculator.testutils
 
 import android.view.View
 import androidx.annotation.IdRes
@@ -8,13 +8,13 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.not
 import org.hamcrest.TypeSafeMatcher
-import xyz.lbres.trickcalculator.helpers.matchers.NestedRecyclerViewMatcher
-import xyz.lbres.trickcalculator.helpers.matchers.RecyclerViewMatcher
-import xyz.lbres.trickcalculator.helpers.viewactions.ActionOnItemViewAtPositionViewAction
-import xyz.lbres.trickcalculator.helpers.viewactions.ActionOnNestedItemViewAtPositionViewAction
-import xyz.lbres.trickcalculator.helpers.viewactions.ClickLinkInTextViewAction
-import xyz.lbres.trickcalculator.helpers.viewactions.ForceClickViewAction
-import xyz.lbres.trickcalculator.helpers.viewassertions.NotPresentedViewAssertion
+import xyz.lbres.trickcalculator.testutils.matchers.NestedRecyclerViewMatcher
+import xyz.lbres.trickcalculator.testutils.matchers.RecyclerViewMatcher
+import xyz.lbres.trickcalculator.testutils.viewactions.ActionOnItemViewAtPositionViewAction
+import xyz.lbres.trickcalculator.testutils.viewactions.ActionOnNestedItemViewAtPositionViewAction
+import xyz.lbres.trickcalculator.testutils.viewactions.ClickLinkInTextViewAction
+import xyz.lbres.trickcalculator.testutils.viewactions.ForceClickViewAction
+import xyz.lbres.trickcalculator.testutils.viewassertions.NotPresentedViewAssertion
 
 /**
  * VIEW ACTIONS
@@ -131,4 +131,11 @@ fun withSavedText(): Matcher<View?> {
     }
 
     return lastSaver?.PreviousTextViewMatcher() ?: falseMatcher
+}
+
+/**
+ * Delete current stored [TextSaver]
+ */
+fun clearSavedText() {
+    lastSaver = null
 }

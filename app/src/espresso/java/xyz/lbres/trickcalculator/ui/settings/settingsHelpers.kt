@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.helpers.forceClick
+import xyz.lbres.trickcalculator.testutils.forceClick
 
 /**
  * Open settings fragment through attributions fragment

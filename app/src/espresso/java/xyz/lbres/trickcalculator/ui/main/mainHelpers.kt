@@ -7,7 +7,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.helpers.forceClick
+import xyz.lbres.trickcalculator.testutils.forceClick
 
 private val mainText = onView(withId(R.id.mainText))
 
