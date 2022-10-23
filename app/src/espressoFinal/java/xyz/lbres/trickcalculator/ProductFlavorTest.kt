@@ -7,7 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.helpers.isNotPresented
+import xyz.lbres.trickcalculator.testutils.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class ProductFlavorTest {
