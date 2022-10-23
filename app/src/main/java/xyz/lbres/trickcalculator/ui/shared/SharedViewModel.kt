@@ -22,35 +22,67 @@ class SharedViewModel : ViewModel() {
     // LiveData because fragments need to observe when settings are changed via settings dialog
     private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
     val applyDecimals: LiveData<Boolean> = _applyDecimals
-    fun setApplyDecimals(newValue: Boolean) { _applyDecimals.value = newValue }
+    fun setApplyDecimals(newValue: Boolean) {
+        if (newValue != applyDecimals.value) {
+            _applyDecimals.value = newValue
+        }
+    }
 
     private val _applyParens = MutableLiveData<Boolean>().apply { value = true }
     val applyParens: LiveData<Boolean> = _applyParens
-    fun setApplyParens(newValue: Boolean) { _applyParens.value = newValue }
+    fun setApplyParens(newValue: Boolean) {
+        if (newValue != applyParens.value) {
+            _applyParens.value = newValue
+        }
+    }
 
     private val _clearOnError = MutableLiveData<Boolean>().apply { value = false }
     val clearOnError: LiveData<Boolean> = _clearOnError
-    fun setClearOnError(newValue: Boolean) { _clearOnError.value = newValue }
+    fun setClearOnError(newValue: Boolean) {
+        if (newValue != clearOnError.value) {
+            _clearOnError.value = newValue
+        }
+    }
 
     private val _historyRandomness = MutableLiveData<Int>().apply { value = 1 }
     val historyRandomness: LiveData<Int> = _historyRandomness
-    fun setHistoryRandomness(newValue: Int) { _historyRandomness.value = newValue }
+    fun setHistoryRandomness(newValue: Int) {
+        if (newValue != historyRandomness.value) {
+            _historyRandomness.value = newValue
+        }
+    }
 
     private val _showSettingsButton = MutableLiveData<Boolean>().apply { value = false }
     val showSettingsButton: LiveData<Boolean> = _showSettingsButton
-    fun setShowSettingsButton(newValue: Boolean) { _showSettingsButton.value = newValue }
+    fun setShowSettingsButton(newValue: Boolean) {
+        if (newValue != showSettingsButton.value) {
+            _showSettingsButton.value = newValue
+        }
+    }
 
     private val _shuffleComputation = MutableLiveData<Boolean>().apply { value = false }
     val shuffleComputation: LiveData<Boolean> = _shuffleComputation
-    fun setShuffleComputation(newValue: Boolean) { _shuffleComputation.value = newValue }
+    fun setShuffleComputation(newValue: Boolean) {
+        if (newValue != shuffleComputation.value) {
+            _shuffleComputation.value = newValue
+        }
+    }
 
     private val _shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
     val shuffleNumbers: LiveData<Boolean> = _shuffleNumbers
-    fun setShuffleNumbers(newValue: Boolean) { _shuffleNumbers.value = newValue }
+    fun setShuffleNumbers(newValue: Boolean) {
+        if (newValue != shuffleNumbers.value) {
+            _shuffleNumbers.value = newValue
+        }
+    }
 
     private val _shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
     val shuffleOperators: LiveData<Boolean> = _shuffleOperators
-    fun setShuffleOperators(newValue: Boolean) { _shuffleOperators.value = newValue }
+    fun setShuffleOperators(newValue: Boolean) {
+        if (newValue != shuffleOperators.value) {
+            _shuffleOperators.value = newValue
+        }
+    }
 
     /**
      * All settings
