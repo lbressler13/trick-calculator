@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers.viewactions
+package xyz.lbres.trickcalculator.testutils.viewactions
 
 import android.view.View
 import androidx.core.view.isVisible

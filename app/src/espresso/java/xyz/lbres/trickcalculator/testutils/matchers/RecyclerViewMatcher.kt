@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers.matchers
+package xyz.lbres.trickcalculator.testutils.matchers
 
 import android.content.res.Resources
 import android.view.View

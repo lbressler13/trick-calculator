@@ -12,7 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.allOf
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.helpers.isNotPresented
+import xyz.lbres.trickcalculator.testutils.isNotPresented
 
 private val applyParensSwitch = onView(withId(R.id.applyParensSwitch))
 private val applyDecimalsSwitch = onView(withId(R.id.applyDecimalsSwitch))

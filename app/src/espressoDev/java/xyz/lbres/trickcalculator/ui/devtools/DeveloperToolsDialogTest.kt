@@ -15,8 +15,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.helpers.forceClick
-import xyz.lbres.trickcalculator.helpers.isNotPresented
+import xyz.lbres.trickcalculator.testutils.forceClick
+import xyz.lbres.trickcalculator.testutils.isNotPresented
+import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 
 @RunWith(AndroidJUnit4::class)
 class DeveloperToolsDialogTest {
@@ -24,7 +25,11 @@ class DeveloperToolsDialogTest {
 
     @Rule
     @JvmField
-    val rule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Rule
+    @JvmField
+    val retryRule = RetryRule()
 
     @Test
     fun loadInitialUi() {

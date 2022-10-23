@@ -26,10 +26,11 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.helpers.assertLinkOpened
-import xyz.lbres.trickcalculator.helpers.clickLinkInText
-import xyz.lbres.trickcalculator.helpers.forceClick
-import xyz.lbres.trickcalculator.helpers.isNotPresented
+import xyz.lbres.trickcalculator.testutils.assertLinkOpened
+import xyz.lbres.trickcalculator.testutils.clickLinkInText
+import xyz.lbres.trickcalculator.testutils.forceClick
+import xyz.lbres.trickcalculator.testutils.isNotPresented
+import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
@@ -39,7 +40,11 @@ class AttributionsFragmentTest {
 
     @Rule
     @JvmField
-    val rule = ActivityScenarioRule<MainActivity>(intent)
+    val activityRule = ActivityScenarioRule<MainActivity>(intent)
+
+    @Rule
+    @JvmField
+    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {

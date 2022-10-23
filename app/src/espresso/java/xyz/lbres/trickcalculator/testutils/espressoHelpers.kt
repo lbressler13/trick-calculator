@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.helpers
+package xyz.lbres.trickcalculator.testutils
 
 import android.content.Intent
 import androidx.test.espresso.intent.Intents.getIntents
