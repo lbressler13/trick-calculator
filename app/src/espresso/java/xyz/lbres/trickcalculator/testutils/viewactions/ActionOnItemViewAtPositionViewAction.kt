@@ -22,7 +22,7 @@ import org.hamcrest.Matchers.allOf
  * @param viewId [IdRes]: view ID for the view to take an action on
  * @param viewAction [ViewAction]: action to take on the view (i.e. click(), scrollTo())
  */
-class ActionOnItemViewAtPositionViewAction(
+private class ActionOnItemViewAtPositionViewAction(
     private val position: Int,
     @param:IdRes private val viewId: Int,
     private val viewAction: ViewAction
@@ -57,3 +57,9 @@ class ActionOnItemViewAtPositionViewAction(
         }
     }
 }
+
+/**
+ * Wrapper function for creating an [ActionOnItemViewAtPositionViewAction]
+ */
+fun actionOnItemViewAtPosition(position: Int, @IdRes viewId: Int, viewAction: ViewAction): ViewAction =
+    ActionOnItemViewAtPositionViewAction(position, viewId, viewAction)

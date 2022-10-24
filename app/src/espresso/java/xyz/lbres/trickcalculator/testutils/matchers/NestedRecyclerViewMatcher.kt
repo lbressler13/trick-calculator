@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import org.hamcrest.Description
+import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 /**
@@ -17,7 +18,7 @@ import org.hamcrest.TypeSafeMatcher
  * @param position [Int]: position of first ViewHolder in outer RecyclerView
  * @param nestedPosition [Int]: position of ViewHolder in nested RecyclerView
  */
-class NestedRecyclerViewMatcher(
+private class NestedRecyclerViewMatcher(
     @param:IdRes private val recyclerViewId: Int,
     @param:IdRes private val nestedRecyclerViewId: Int,
     private val position: Int,
@@ -79,4 +80,16 @@ class NestedRecyclerViewMatcher(
             }
         }
     }
+}
+
+/**
+ * Wrapper function for creating a [NestedRecyclerViewMatcher]
+ */
+fun withNestedViewHolder(
+    @IdRes recyclerId: Int,
+    @IdRes nestedRecyclerId: Int,
+    position: Int,
+    nestedPosition: Int
+): Matcher<View?> {
+    return NestedRecyclerViewMatcher(recyclerId, nestedRecyclerId, position, nestedPosition)
 }

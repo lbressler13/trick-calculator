@@ -11,7 +11,7 @@ import androidx.test.espresso.util.HumanReadables
  * Adapted from responses to this StackOverflow post:
  * https://stackoverflow.com/questions/41297524/espresso-check-view-either-doesnotexist-or-not-isdisplayed
  */
-class NotPresentedViewAssertion : ViewAssertion {
+private class NotPresentedViewAssertion : ViewAssertion {
     /**
      * Assert that a view is not in the view hierarchy or is not visible
      *
@@ -24,3 +24,8 @@ class NotPresentedViewAssertion : ViewAssertion {
         }
     }
 }
+
+/**
+ * Wrapper function for creating a [NotPresentedViewAssertion]
+ */
+fun isNotPresented(): ViewAssertion = NotPresentedViewAssertion()

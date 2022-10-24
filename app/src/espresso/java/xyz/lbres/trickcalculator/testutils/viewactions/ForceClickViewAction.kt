@@ -11,7 +11,7 @@ import org.hamcrest.Matcher
  * [ViewAction] to click a view if it is visible and clickable, regardless of percent visible on screen.
  * Allows click to occur even if isDisplayed() check would fail
  */
-class ForceClickViewAction : ViewAction {
+private class ForceClickViewAction : ViewAction {
     override fun getConstraints(): Matcher<View> = isClickable()
     override fun getDescription(): String = "force-clicking a view"
 
@@ -27,3 +27,8 @@ class ForceClickViewAction : ViewAction {
         }
     }
 }
+
+/**
+ * Wrapper function for creating a [ForceClickViewAction]
+ */
+fun forceClick(): ViewAction = ForceClickViewAction()

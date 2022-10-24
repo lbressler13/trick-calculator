@@ -27,10 +27,10 @@ import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
-import xyz.lbres.trickcalculator.testutils.clickLinkInText
-import xyz.lbres.trickcalculator.testutils.forceClick
-import xyz.lbres.trickcalculator.testutils.isNotPresented
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
+import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 

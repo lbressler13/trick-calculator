@@ -24,7 +24,7 @@ import xyz.lbres.kotlinutils.generic.ext.ifNull
  * @param viewId [IdRes]: view ID of the view to take action on in the nested RecyclerView ViewHolder
  * @param viewAction [ViewAction]: action to take on the view (i.e. click(), scrollTo())
  */
-class ActionOnNestedItemViewAtPositionViewAction(
+private class ActionOnNestedItemViewAtPositionViewAction(
     private val recyclerPosition: Int,
     private val nestedViewPosition: Int,
     @param:IdRes private val nestedRecyclerId: Int,
@@ -77,4 +77,23 @@ class ActionOnNestedItemViewAtPositionViewAction(
             viewAction.perform(uiController, targetView)
         }
     }
+}
+
+/**
+ * Wrapper function for creating an [ActionOnNestedItemViewAtPositionViewAction]
+ */
+fun actionOnNestedItemViewAtPosition(
+    recyclerPosition: Int,
+    nestedViewPosition: Int,
+    @IdRes nestedRecyclerId: Int,
+    @IdRes viewId: Int,
+    viewAction: ViewAction
+): ViewAction {
+    return ActionOnNestedItemViewAtPositionViewAction(
+        recyclerPosition,
+        nestedViewPosition,
+        nestedRecyclerId,
+        viewId,
+        viewAction
+    )
 }

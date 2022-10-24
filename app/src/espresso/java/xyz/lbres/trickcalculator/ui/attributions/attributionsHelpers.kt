@@ -15,7 +15,7 @@ import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.actionOnItemViewAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.actionOnItemViewAtPosition
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 
 /**

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import org.hamcrest.Description
+import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 /**
@@ -16,7 +17,10 @@ import org.hamcrest.TypeSafeMatcher
  * @param recyclerViewId [IdRes]: view ID of ReyclerView
  * @param position [Int]: position in recycler to match to
  */
-class RecyclerViewMatcher(@param:IdRes private val recyclerViewId: Int, private val position: Int) :
+private class RecyclerViewMatcher(
+    @param:IdRes private val recyclerViewId: Int,
+    private val position: Int
+) :
     TypeSafeMatcher<View?>() {
     private var resources: Resources? = null
     private var childView: View? = null
@@ -57,3 +61,9 @@ class RecyclerViewMatcher(@param:IdRes private val recyclerViewId: Int, private 
         }
     }
 }
+
+/**
+ * Wrapper function for creating a [RecyclerViewMatcher]
+ */
+fun withViewHolder(@IdRes recyclerId: Int, position: Int): Matcher<View?> =
+    RecyclerViewMatcher(recyclerId, position)

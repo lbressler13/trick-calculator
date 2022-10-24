@@ -2,6 +2,7 @@ package xyz.lbres.trickcalculator.testutils
 
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.IdRes
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
@@ -18,12 +19,12 @@ import org.hamcrest.TypeSafeMatcher
  * Can also be use to validate that text in a single TextView has not changed over time.
  */
 class TextSaver {
-    private var savedText: String? = null
+    // private var savedText: String? = null
 
     /**
      * [ViewAction] to save text from a TextView in a variable that can be accessed by the [PreviousTextViewMatcher]
      */
-    inner class SaveTextViewAction : ViewAction {
+    private class SaveTextViewAction : ViewAction {
         override fun getConstraints(): Matcher<View> = allOf(
             isAssignableFrom(TextView::class.java),
             isDisplayed()
@@ -47,7 +48,7 @@ class TextSaver {
     /**
      * [TypeSafeMatcher] to match text with the value that was saved by the [SaveTextViewAction]
      */
-    inner class PreviousTextViewMatcher : TypeSafeMatcher<View?>() {
+    private class PreviousTextViewMatcher : TypeSafeMatcher<View?>() {
         override fun describeTo(description: Description?) {
             description?.appendText("matching for text $savedText")
         }
@@ -59,5 +60,30 @@ class TextSaver {
 
             return view.text?.toString() == savedText
         }
+    }
+
+    private class ClearSavedTextViewAction : ViewAction {
+        override fun getConstraints(): Matcher<View> = allOf(
+            isAssignableFrom(TextView::class.java),
+            isDisplayed()
+        )
+
+        override fun getDescription(): String = "clearing saved text for view"
+
+        override fun perform(uiController: UiController?, view: View?) {
+            savedText = null
+        }
+
+    }
+
+    companion object {
+        private var savedTextMapping: Map<Int, String?> = emptyMap()
+        private var savedText: String? = null
+
+        fun clearSavedText(): ViewAction = ClearSavedTextViewAction()
+
+        fun saveText(): ViewAction = SaveTextViewAction()
+
+        fun withSavedText(): Matcher<View?> = PreviousTextViewMatcher()
     }
 }

@@ -13,13 +13,13 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.actionOnItemViewAtPosition
-import xyz.lbres.trickcalculator.testutils.actionOnNestedItemViewAtPosition
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
-import xyz.lbres.trickcalculator.testutils.clickLinkInText
-import xyz.lbres.trickcalculator.testutils.isNotPresented
-import xyz.lbres.trickcalculator.testutils.withNestedViewHolder
-import xyz.lbres.trickcalculator.testutils.withViewHolder
+import xyz.lbres.trickcalculator.testutils.matchers.withNestedViewHolder
+import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
+import xyz.lbres.trickcalculator.testutils.viewactions.actionOnItemViewAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.actionOnNestedItemViewAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
