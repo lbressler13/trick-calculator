@@ -18,13 +18,13 @@ import org.hamcrest.Matchers.allOf
  * Adapted from similar ViewAction created by GitHub user dannyroa in this file:
  * https://github.com/dannyroa/espresso-samples/tree/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview
  *
- * @param position [Int]: position of ViewHolder in the RecyclerView
  * @param viewId [IdRes]: view ID for the view to take an action on
+ * @param position [Int]: position of ViewHolder in the RecyclerView
  * @param viewAction [ViewAction]: action to take on the view (i.e. click(), scrollTo())
  */
 private class ActionOnItemViewAtPositionViewAction(
-    private val position: Int,
     @param:IdRes private val viewId: Int,
+    private val position: Int,
     private val viewAction: ViewAction
 ) : ViewAction {
     override fun getConstraints(): Matcher<View> =
@@ -61,5 +61,9 @@ private class ActionOnItemViewAtPositionViewAction(
 /**
  * Wrapper function for creating an [ActionOnItemViewAtPositionViewAction]
  */
-fun actionOnItemViewAtPosition(position: Int, @IdRes viewId: Int, viewAction: ViewAction): ViewAction =
-    ActionOnItemViewAtPositionViewAction(position, viewId, viewAction)
+fun actionOnItemViewAtPosition(
+    @IdRes viewId: Int,
+    position: Int,
+    viewAction: ViewAction
+): ViewAction =
+    ActionOnItemViewAtPositionViewAction(viewId, position, viewAction)

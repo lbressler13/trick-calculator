@@ -26,7 +26,7 @@ import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttribu
 fun expandCollapseAttribution(position: Int) {
     onView(withId(R.id.attributionsRecycler)).perform(
         RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(0),
-        actionOnItemViewAtPosition(position, R.id.expandCollapseButton, click())
+        actionOnItemViewAtPosition(R.id.expandCollapseButton, position, click())
     )
 }
 

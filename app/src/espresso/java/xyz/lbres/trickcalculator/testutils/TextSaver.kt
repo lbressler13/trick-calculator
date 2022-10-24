@@ -48,13 +48,13 @@ class TextSaver {
     /**
      * [TypeSafeMatcher] to match text with the value that was saved by the [SaveTextViewAction]
      */
-    private class PreviousTextViewMatcher : TypeSafeMatcher<View?>() {
+    private class PreviousTextViewMatcher : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description?) {
             description?.appendText("matching saved test for view")
         }
 
-        override fun matchesSafely(view: View?): Boolean {
-            if (view == null || view !is TextView) {
+        override fun matchesSafely(view: View): Boolean {
+            if (view !is TextView) {
                 return false
             }
 
@@ -64,6 +64,9 @@ class TextSaver {
         }
     }
 
+    /**
+     * [ViewAction] to clear the saved text for a view
+     */
     private class ClearSavedTextViewAction : ViewAction {
         override fun getConstraints(): Matcher<View> = allOf(
             isAssignableFrom(TextView::class.java),
@@ -80,6 +83,9 @@ class TextSaver {
     }
 
     companion object {
+        /**
+         * Mapping of view IDs to saved string values
+         */
         private var savedTextMapping: MutableMap<Int, String> = mutableMapOf()
 
         /**
@@ -95,6 +101,6 @@ class TextSaver {
         /**
          * Check if the text in a view matches the saved value
          */
-        fun withSavedText(): Matcher<View?> = PreviousTextViewMatcher()
+        fun withSavedText(): Matcher<View> = PreviousTextViewMatcher()
     }
 }

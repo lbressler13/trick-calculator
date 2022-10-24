@@ -9,7 +9,7 @@ import org.hamcrest.Matcher
 
 /**
  * [ViewAction] to call a function on a view.
- * This is designed for testing functions whose goal is to interact with the UI, not for manipulating the UI in all tests.
+ * This is designed only to test view-related functions, not to interact with the UI when testing functionality of the app.
  * If custom action is needed when testing functionality, it should be defined in a more specific ViewAction.
  *
  * @param function ([View]) -> [Unit]: function to call on a view
@@ -39,9 +39,27 @@ private class CallFunctionOnViewViewAction(private val function: (View) -> Unit)
     }
 }
 
+/**
+ * Call View.enable() extension function
+ */
 fun callEnable(): ViewAction = CallFunctionOnViewViewAction { it.enable() }
+
+/**
+ * Call View.disable() extension function
+ */
 fun callDisable(): ViewAction = CallFunctionOnViewViewAction { it.disable() }
 
+/**
+ * Call View.visible() extension function
+ */
 fun callVisible(): ViewAction = CallFunctionOnViewViewAction { it.visible() }
+
+/**
+ * Call View.invisible() extension function
+ */
 fun callInvisible(): ViewAction = CallFunctionOnViewViewAction { it.invisible() }
+
+/**
+ * Call View.gone() extension function
+ */
 fun callGone(): ViewAction = CallFunctionOnViewViewAction { it.gone() }

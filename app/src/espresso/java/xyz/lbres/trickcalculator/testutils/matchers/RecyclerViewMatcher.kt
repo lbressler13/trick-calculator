@@ -17,11 +17,8 @@ import org.hamcrest.TypeSafeMatcher
  * @param recyclerViewId [IdRes]: view ID of ReyclerView
  * @param position [Int]: position in recycler to match to
  */
-private class RecyclerViewMatcher(
-    @param:IdRes private val recyclerViewId: Int,
-    private val position: Int
-) :
-    TypeSafeMatcher<View?>() {
+private class RecyclerViewMatcher(@param:IdRes private val recyclerViewId: Int, private val position: Int) :
+    TypeSafeMatcher<View>() {
     private var resources: Resources? = null
     private var childView: View? = null
 
@@ -41,29 +38,27 @@ private class RecyclerViewMatcher(
     /**
      * Matches item at index [position] in the recycler
      *
-     * @param view [View]?: view to check
+     * @param view [View]: view to check
      * @return [Boolean] true if view is at index [position] in the RecyclerView with ID [recyclerViewId], false otherwise
      */
-    override fun matchesSafely(view: View?): Boolean {
-        return when {
-            view == null -> false
-            childView != null -> view == childView
-            else -> {
-                resources = view.resources
-                val recyclerView = view.rootView.findViewById<RecyclerView>(recyclerViewId)
-                if (recyclerView != null && recyclerView.id == recyclerViewId) {
-                    childView = recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
-                    view == childView
-                } else {
-                    false
-                }
-            }
+    override fun matchesSafely(view: View): Boolean {
+        if (childView != null) {
+            return view == childView
         }
+
+        resources = view.resources
+        val recyclerView = view.rootView.findViewById<RecyclerView>(recyclerViewId)
+        if (recyclerView != null && recyclerView.id == recyclerViewId) {
+            childView = recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
+            return view == childView
+        }
+
+        return false
     }
 }
 
 /**
  * Wrapper function for creating a [RecyclerViewMatcher]
  */
-fun withViewHolder(@IdRes recyclerId: Int, position: Int): Matcher<View?> =
+fun withViewHolder(@IdRes recyclerId: Int, position: Int): Matcher<View> =
     RecyclerViewMatcher(recyclerId, position)
