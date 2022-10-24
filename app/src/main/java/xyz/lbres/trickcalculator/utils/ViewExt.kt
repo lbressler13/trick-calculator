@@ -2,8 +2,6 @@ package xyz.lbres.trickcalculator.utils
 
 import android.view.View
 
-// TODO espresso tests for these functions
-
 /**
  * Enable view
  */
