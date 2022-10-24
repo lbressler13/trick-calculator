@@ -8,6 +8,11 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
+
+    @Rule
+    @JvmField
+    val retryRule = RetryRule()
+
     @Test
     fun useAppContext() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext

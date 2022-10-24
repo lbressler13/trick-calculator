@@ -9,7 +9,8 @@ import org.hamcrest.Matcher
 
 /**
  * [ViewAction] to call a function on a view.
- * This is designed for texting View extensions specifically, and should not be used to interact with the UI in standard tests.
+ * This is designed for testing functions whose goal is to interact with the UI, not for manipulating the UI in all tests.
+ * If custom action is needed when testing functionality, it should be defined in a more specific ViewAction.
  *
  * @param function ([View]) -> [Unit]: function to call on a view
  */

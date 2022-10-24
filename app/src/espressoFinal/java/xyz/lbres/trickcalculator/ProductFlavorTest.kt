@@ -16,6 +16,10 @@ class ProductFlavorTest {
     @JvmField
     val rule = ActivityScenarioRule(MainActivity::class.java)
 
+    @Rule
+    @JvmField
+    val retryRule = RetryRule()
+
     @Test
     fun noDevToolsButton() {
         onView(withId(R.id.devToolsButton)).check(isNotPresented())
