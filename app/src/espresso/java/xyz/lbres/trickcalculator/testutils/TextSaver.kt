@@ -18,8 +18,6 @@ import org.hamcrest.TypeSafeMatcher
  * Can also be use to validate that text in a single TextView has not changed over time.
  */
 class TextSaver {
-    // private var savedText: String? = null
-
     /**
      * [ViewAction] to save text from a TextView in a variable that can be accessed by the [PreviousTextViewMatcher]
      */
@@ -32,7 +30,7 @@ class TextSaver {
         override fun getDescription(): String = "saving text for view"
 
         /**
-         * Update [savedText] with text from TextView
+         * Update [savedTextMapping] with text from TextView
          *
          * @param uiController [UiController]
          * @param view [View]: TextView to read text from
@@ -84,10 +82,19 @@ class TextSaver {
     companion object {
         private var savedTextMapping: MutableMap<Int, String> = mutableMapOf()
 
+        /**
+         * Clear saved text for a view
+         */
         fun clearSavedText(): ViewAction = ClearSavedTextViewAction()
 
+        /**
+         * Save text for a view by mapping the viewId to its text
+         */
         fun saveText(): ViewAction = SaveTextViewAction()
 
+        /**
+         * Check if the text in a view matches the saved value
+         */
         fun withSavedText(): Matcher<View?> = PreviousTextViewMatcher()
     }
 }

@@ -20,6 +20,8 @@ import org.junit.runner.RunWith
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
@@ -36,7 +38,7 @@ class SettingsFragmentTest {
 
     @Before
     fun setupTest() {
-        openFragment()
+        openSettingsFragment()
     }
 
     @Test

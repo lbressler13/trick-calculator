@@ -27,6 +27,7 @@ import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
+import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
@@ -52,10 +53,7 @@ class AttributionsFragmentTest {
         Intents.init()
         intending(not(isInternal())).respondWith(ActivityResult(Activity.RESULT_OK, null))
 
-        // open fragment
-        val infoButton = onView(withId(R.id.infoButton))
-        infoButton.check(matches(isDisplayed()))
-        infoButton.perform(click())
+        openAttributionsFragment()
 
         // hide dev tools to avoid interference with expanding/collapsing attributions
         if (ProductFlavor.devMode) {

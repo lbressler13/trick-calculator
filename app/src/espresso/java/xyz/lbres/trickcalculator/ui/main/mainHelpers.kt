@@ -7,7 +7,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
+import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 
 private val mainText = onView(withId(R.id.mainText))
 
@@ -100,21 +101,6 @@ fun checkMainTextMatchesAny(options: Set<String>) {
  * Leave main fragment by opening attributions fragment, then return by closing attributions fragment
  */
 fun leaveAndReturn() {
-    onView(withId(R.id.infoButton)).perform(click())
-    onView(withId(R.id.closeButton)).perform(forceClick())
-}
-
-/**
- * Open settings fragment through attributions fragment
- */
-fun openSettingsFragment() {
-    onView(withId(R.id.infoButton)).perform(click())
-    onView(withId(R.id.title)).perform(click())
-}
-
-/**
- * Close settings fragment when open
- */
-fun closeSettingsFragment() {
-    onView(withId(R.id.closeButton)).perform(forceClick())
+    openAttributionsFragment()
+    closeFragment()
 }

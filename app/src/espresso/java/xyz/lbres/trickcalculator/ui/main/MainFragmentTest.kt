@@ -20,8 +20,10 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.saveText
 import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.withSavedText
+import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
 import xyz.lbres.trickcalculator.testutils.matchers.isNotEmptyString
+import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 
 // TODO tests for settings
@@ -415,7 +417,7 @@ class MainFragmentTest {
         clearText()
         openSettingsFragment()
         onView(withId(R.id.clearOnErrorSwitch)).perform(click())
-        closeSettingsFragment()
+        closeFragment()
         typeText("1+1..0")
         equals()
         errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))

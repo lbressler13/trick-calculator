@@ -14,13 +14,13 @@ import xyz.lbres.trickcalculator.utils.AppLogger
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
 
-// TODO don't pass root view explicitly
 /**
  * Class to handle UI interactions in a settings fragment.
  * Reduces specialized code in fragments.
  *
  * @param fragment [Fragment]: the fragment creating the UI
- * @param rootView [View]: root view of the fragment, expected to contain Views for updating settings
+ * @param rootView [View]: root view of the fragment, expected to contain Views for updating settings.
+ * Must be passed explicitly, because fragment view is not available until after onCreateView returns.
  * @param viewModel [SharedViewModel]: ViewModel that contains info about settings and can be used to modify them
  * @param lifecycleOwner [LifecycleOwner]: lifecycle owner to use when observing changes in ViewModel
  */

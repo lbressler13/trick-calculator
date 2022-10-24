@@ -12,6 +12,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.allOf
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 private val applyParensSwitch = onView(withId(R.id.applyParensSwitch))
@@ -49,7 +51,7 @@ fun testSwitchSettingsMaintained() {
     closeFragment()
 
     // check values after re-opening
-    openFragment()
+    openSettingsFragment()
 
     applyParensSwitch.check(matches(isNotChecked()))
     applyDecimalsSwitch.check(matches(isNotChecked()))
@@ -87,7 +89,7 @@ fun testSwitchSettingsMaintained() {
     closeFragment()
 
     // re-open to check settings from settings fragment
-    openFragment()
+    openSettingsFragment()
     applyParensSwitch.check(matches(isChecked()))
     applyDecimalsSwitch.check(matches(isNotChecked()))
     clearOnErrorSwitch.check(matches(isChecked()))
@@ -122,7 +124,7 @@ fun testResetButton() {
     settingsButton.check(isNotPresented())
 
     // check reset settings
-    openFragment()
+    openSettingsFragment()
     checkInitialSettings()
 
     // modify settings + enabled settings button
@@ -149,7 +151,7 @@ fun testResetButton() {
     resetButton.perform(click())
 
     // validate that settings button is still checked
-    openFragment()
+    openSettingsFragment()
     checkInitialSettings(checkSettingsButton = false)
     settingsButtonSwitch.check(matches(isChecked()))
 
@@ -165,24 +167,24 @@ fun testRandomizeButton() {
     settingsButtonSwitch.perform(click())
     closeFragment()
     settingsButton.check(matches(isDisplayed()))
-    openFragment()
+    openSettingsFragment()
     randomizeButton.perform(click())
     settingsButton.check(isNotPresented())
-    openFragment()
+    openSettingsFragment()
     settingsButtonSwitch.perform(click())
     closeFragment()
     settingsButton.perform(click())
     randomizeButton.perform(click())
     settingsButton.check(isNotPresented())
 
-    openFragment()
+    openSettingsFragment()
 
     try {
         onView(isRoot()).check(settingsRandomized())
     } catch (_: AssertionError) {
         // one retry, in case of rare event where randomized = initial settings
         randomizeButton.perform(click())
-        openFragment()
+        openSettingsFragment()
         onView(isRoot()).check(settingsRandomized())
     }
 }
