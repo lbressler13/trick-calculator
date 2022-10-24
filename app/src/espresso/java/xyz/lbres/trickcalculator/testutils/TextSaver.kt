@@ -2,7 +2,6 @@ package xyz.lbres.trickcalculator.testutils
 
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.IdRes
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
@@ -40,7 +39,10 @@ class TextSaver {
          */
         override fun perform(uiController: UiController?, view: View?) {
             if (view != null) {
-                savedText = (view as TextView).text?.toString()
+                val text = (view as TextView).text?.toString()
+                if (text != null) {
+                    savedTextMapping[view.id] = text
+                }
             }
         }
     }
@@ -50,15 +52,17 @@ class TextSaver {
      */
     private class PreviousTextViewMatcher : TypeSafeMatcher<View?>() {
         override fun describeTo(description: Description?) {
-            description?.appendText("matching for text $savedText")
+            description?.appendText("matching saved test for view")
         }
 
         override fun matchesSafely(view: View?): Boolean {
-            if (view == null || view !is TextView || savedText == null) {
+            if (view == null || view !is TextView) {
                 return false
             }
 
-            return view.text?.toString() == savedText
+            val savedText: String? = savedTextMapping[view.id]
+
+            return savedText != null && view.text?.toString() == savedText
         }
     }
 
@@ -71,14 +75,14 @@ class TextSaver {
         override fun getDescription(): String = "clearing saved text for view"
 
         override fun perform(uiController: UiController?, view: View?) {
-            savedText = null
+            if (view?.id != null) {
+                savedTextMapping.remove(view.id)
+            }
         }
-
     }
 
     companion object {
-        private var savedTextMapping: Map<Int, String?> = emptyMap()
-        private var savedText: String? = null
+        private var savedTextMapping: MutableMap<Int, String> = mutableMapOf()
 
         fun clearSavedText(): ViewAction = ClearSavedTextViewAction()
 

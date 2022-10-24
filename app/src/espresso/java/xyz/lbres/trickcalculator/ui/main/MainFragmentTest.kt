@@ -17,12 +17,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.clearSavedText
-import xyz.lbres.trickcalculator.testutils.isEmptyString
-import xyz.lbres.trickcalculator.testutils.isNotEmptyString
+import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.clearSavedText
+import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.saveText
+import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.withSavedText
+import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
+import xyz.lbres.trickcalculator.testutils.matchers.isNotEmptyString
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
-import xyz.lbres.trickcalculator.testutils.saveText
-import xyz.lbres.trickcalculator.testutils.withSavedText
 
 // TODO tests for settings
 
@@ -41,7 +41,7 @@ class MainFragmentTest {
 
     @Before
     fun setupTest() {
-        clearSavedText()
+        mainText.perform(clearSavedText())
         clearText()
     }
 
