@@ -13,13 +13,13 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.actionOnItemViewAtPosition
-import xyz.lbres.trickcalculator.testutils.actionOnNestedItemViewAtPosition
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
-import xyz.lbres.trickcalculator.testutils.clickLinkInText
-import xyz.lbres.trickcalculator.testutils.isNotPresented
-import xyz.lbres.trickcalculator.testutils.withNestedViewHolder
-import xyz.lbres.trickcalculator.testutils.withViewHolder
+import xyz.lbres.trickcalculator.testutils.matchers.withNestedViewHolder
+import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
+import xyz.lbres.trickcalculator.testutils.viewactions.actionOnItemViewAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.actionOnNestedItemViewAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
@@ -94,8 +94,8 @@ fun testAttributionLinks() {
         // flaticon link
         onView(withId(recyclerId)).perform(
             actionOnItemViewAtPosition(
-                position,
                 R.id.attribution,
+                position,
                 clickLinkInText("www.flaticon.com")
             )
         )
@@ -104,7 +104,7 @@ fun testAttributionLinks() {
 
         // author link
         onView(withId(recyclerId)).perform(
-            actionOnItemViewAtPosition(position, R.id.attribution, clickLinkInText(author.name))
+            actionOnItemViewAtPosition(R.id.attribution, position, clickLinkInText(author.name))
         )
         expectedLinkClicks++
         assertLinkOpened(author.url, expectedLinkClicks)
@@ -129,7 +129,7 @@ fun testAttributionLinks() {
 
     // check link with attributions open
     onView(withId(recyclerId)).perform(
-        actionOnItemViewAtPosition(0, R.id.attribution, clickLinkInText("www.flaticon.com"))
+        actionOnItemViewAtPosition(R.id.attribution, 0, clickLinkInText("www.flaticon.com"))
     )
     expectedLinkClicks++
     assertLinkOpened("https://www.flaticon.com", expectedLinkClicks)
@@ -137,7 +137,7 @@ fun testAttributionLinks() {
     // author link
     val author = authorAttributions[0]
     onView(withId(recyclerId)).perform(
-        actionOnItemViewAtPosition(0, R.id.attribution, clickLinkInText(author.name))
+        actionOnItemViewAtPosition(R.id.attribution, 0, clickLinkInText(author.name))
     )
     expectedLinkClicks++
     assertLinkOpened(author.url, expectedLinkClicks)
@@ -186,11 +186,11 @@ private fun checkImagesDisplayed(positions: IntList) {
 private fun imageLinkAction(position: Int, nestedPosition: Int, action: ViewAction) {
     onView(withId(recyclerId)).perform(
         actionOnNestedItemViewAtPosition(
+            viewId = R.id.link,
+            nestedRecyclerId = R.id.imagesRecycler,
             recyclerPosition = position,
             nestedViewPosition = nestedPosition,
-            nestedRecyclerId = R.id.imagesRecycler,
-            viewId = R.id.link,
-            action
+            viewAction = action
         )
     )
 }

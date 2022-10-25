@@ -7,7 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.testutils.isNotPresented
+import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class ProductFlavorTest {
@@ -15,6 +16,10 @@ class ProductFlavorTest {
     @Rule
     @JvmField
     val rule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Rule
+    @JvmField
+    val retryRule = RetryRule()
 
     @Test
     fun noDevToolsButton() {

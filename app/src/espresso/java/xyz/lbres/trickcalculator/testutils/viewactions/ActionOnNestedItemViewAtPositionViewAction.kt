@@ -18,17 +18,17 @@ import xyz.lbres.kotlinutils.generic.ext.ifNull
  * The positions in the outer RecyclerView and nested RecyclerView are both passed as parameters,
  * and the action is taken on the view in the nested RecyclerView
  *
+ * @param viewId [IdRes]: view ID of the view to take action on in the nested RecyclerView ViewHolder
+ * @param nestedRecyclerId [IdRes]: view ID of the nested RecyclerView
  * @param recyclerPosition [Int]: position of first ViewHolder in outer RecyclerView
  * @param nestedViewPosition [Int]: position of ViewHolder in nested RecyclerView
- * @param nestedRecyclerId [IdRes]: view ID of the nested RecyclerView
- * @param viewId [IdRes]: view ID of the view to take action on in the nested RecyclerView ViewHolder
  * @param viewAction [ViewAction]: action to take on the view (i.e. click(), scrollTo())
  */
-class ActionOnNestedItemViewAtPositionViewAction(
+private class ActionOnNestedItemViewAtPositionViewAction(
+    @param:IdRes private val viewId: Int,
+    @param:IdRes private val nestedRecyclerId: Int,
     private val recyclerPosition: Int,
     private val nestedViewPosition: Int,
-    @param:IdRes private val nestedRecyclerId: Int,
-    @param:IdRes private val viewId: Int,
     private val viewAction: ViewAction
 ) : ViewAction {
     override fun getConstraints(): Matcher<View> = allOf(isAssignableFrom(RecyclerView::class.java), isDisplayed())
@@ -77,4 +77,23 @@ class ActionOnNestedItemViewAtPositionViewAction(
             viewAction.perform(uiController, targetView)
         }
     }
+}
+
+/**
+ * Wrapper function for creating an [ActionOnNestedItemViewAtPositionViewAction]
+ */
+fun actionOnNestedItemViewAtPosition(
+    @IdRes viewId: Int,
+    @IdRes nestedRecyclerId: Int,
+    recyclerPosition: Int,
+    nestedViewPosition: Int,
+    viewAction: ViewAction
+): ViewAction {
+    return ActionOnNestedItemViewAtPositionViewAction(
+        viewId,
+        nestedRecyclerId,
+        recyclerPosition,
+        nestedViewPosition,
+        viewAction
+    )
 }

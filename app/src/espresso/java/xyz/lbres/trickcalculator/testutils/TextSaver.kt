@@ -18,12 +18,10 @@ import org.hamcrest.TypeSafeMatcher
  * Can also be use to validate that text in a single TextView has not changed over time.
  */
 class TextSaver {
-    private var savedText: String? = null
-
     /**
      * [ViewAction] to save text from a TextView in a variable that can be accessed by the [PreviousTextViewMatcher]
      */
-    inner class SaveTextViewAction : ViewAction {
+    private class SaveTextViewAction : ViewAction {
         override fun getConstraints(): Matcher<View> = allOf(
             isAssignableFrom(TextView::class.java),
             isDisplayed()
@@ -32,14 +30,17 @@ class TextSaver {
         override fun getDescription(): String = "saving text for view"
 
         /**
-         * Update [savedText] with text from TextView
+         * Update [savedTextMapping] with text from TextView
          *
          * @param uiController [UiController]
          * @param view [View]: TextView to read text from
          */
         override fun perform(uiController: UiController?, view: View?) {
             if (view != null) {
-                savedText = (view as TextView).text?.toString()
+                val text = (view as TextView).text?.toString()
+                if (text != null) {
+                    savedTextMapping[view.id] = text
+                }
             }
         }
     }
@@ -47,17 +48,59 @@ class TextSaver {
     /**
      * [TypeSafeMatcher] to match text with the value that was saved by the [SaveTextViewAction]
      */
-    inner class PreviousTextViewMatcher : TypeSafeMatcher<View?>() {
+    private class PreviousTextViewMatcher : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description?) {
-            description?.appendText("matching for text $savedText")
+            description?.appendText("matching saved test for view")
         }
 
-        override fun matchesSafely(view: View?): Boolean {
-            if (view == null || view !is TextView || savedText == null) {
+        override fun matchesSafely(view: View): Boolean {
+            if (view !is TextView) {
                 return false
             }
 
-            return view.text?.toString() == savedText
+            val savedText: String? = savedTextMapping[view.id]
+
+            return savedText != null && view.text?.toString() == savedText
         }
+    }
+
+    /**
+     * [ViewAction] to clear the saved text for a view
+     */
+    private class ClearSavedTextViewAction : ViewAction {
+        override fun getConstraints(): Matcher<View> = allOf(
+            isAssignableFrom(TextView::class.java),
+            isDisplayed()
+        )
+
+        override fun getDescription(): String = "clearing saved text for view"
+
+        override fun perform(uiController: UiController?, view: View?) {
+            if (view?.id != null) {
+                savedTextMapping.remove(view.id)
+            }
+        }
+    }
+
+    companion object {
+        /**
+         * Mapping of view IDs to saved string values
+         */
+        private var savedTextMapping: MutableMap<Int, String> = mutableMapOf()
+
+        /**
+         * Clear saved text for a view
+         */
+        fun clearSavedText(): ViewAction = ClearSavedTextViewAction()
+
+        /**
+         * Save text for a view by mapping the viewId to its text
+         */
+        fun saveText(): ViewAction = SaveTextViewAction()
+
+        /**
+         * Check if the text in a view matches the saved value
+         */
+        fun withSavedText(): Matcher<View> = PreviousTextViewMatcher()
     }
 }

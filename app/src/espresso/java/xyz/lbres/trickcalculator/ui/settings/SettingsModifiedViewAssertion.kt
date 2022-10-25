@@ -10,7 +10,7 @@ import xyz.lbres.trickcalculator.R
 /**
  * [ViewAssertion] to assert that settings displayed in settings fragment do not match initial settings
  */
-class SettingsModifiedViewAssertion : ViewAssertion {
+private class SettingsModifiedViewAssertion : ViewAssertion {
     /**
      * Assert that a the settings do not match the initial settings
      *
@@ -48,3 +48,8 @@ class SettingsModifiedViewAssertion : ViewAssertion {
         }
     }
 }
+
+/**
+ * Wrapper function to create a [SettingsModifiedViewAssertion]
+ */
+fun settingsRandomized(): ViewAssertion = SettingsModifiedViewAssertion()

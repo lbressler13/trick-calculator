@@ -15,9 +15,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.forceClick
-import xyz.lbres.trickcalculator.testutils.isNotPresented
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class DeveloperToolsDialogTest {

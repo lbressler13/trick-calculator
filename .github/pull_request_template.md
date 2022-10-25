@@ -6,7 +6,7 @@
 * [ ] New and existing unit tests pass
 * [ ] Unit tests have been written for all new computation
     * I __don't care__ how much work it is. Write the tests. Your future self will thank you. In this repo, we ♥ tests.
-* [ ] New and existing espresso tests pass
+* [ ] New and existing espresso tests pass on **both** build flavors.
 * [ ] Espresso tests have been written for all UI changes
 
 ### Images

@@ -18,7 +18,7 @@ import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
  *
  * @param textToClick [String]: text of span
  */
-class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
+private class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
     override fun getConstraints(): Matcher<View> = isAssignableFrom(TextView::class.java)
     override fun getDescription(): String = "clicking a URLClickableSpan with text $textToClick"
 
@@ -61,3 +61,8 @@ class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
         }
     }
 }
+
+/**
+ * Wrapper function for creating a [ClickLinkInTextViewAction]
+ */
+fun clickLinkInText(textToClick: String): ViewAction = ClickLinkInTextViewAction(textToClick)

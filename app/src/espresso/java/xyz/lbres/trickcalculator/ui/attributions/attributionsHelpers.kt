@@ -15,7 +15,7 @@ import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.actionOnItemViewAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.actionOnItemViewAtPosition
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 
 /**
@@ -26,7 +26,7 @@ import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttribu
 fun expandCollapseAttribution(position: Int) {
     onView(withId(R.id.attributionsRecycler)).perform(
         RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(0),
-        actionOnItemViewAtPosition(position, R.id.expandCollapseButton, click())
+        actionOnItemViewAtPosition(R.id.expandCollapseButton, position, click())
     )
 }
 

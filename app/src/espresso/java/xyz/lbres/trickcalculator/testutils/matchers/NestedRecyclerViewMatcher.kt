@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import org.hamcrest.Description
+import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 /**
@@ -14,15 +15,15 @@ import org.hamcrest.TypeSafeMatcher
  *
  * @param recyclerViewId [IdRes]: view ID of outer RecyclerView
  * @param nestedRecyclerViewId [IdRes]: view ID of nested RecyclerView
- * @param position [Int]: position of first ViewHolder in outer RecyclerView
- * @param nestedPosition [Int]: position of ViewHolder in nested RecyclerView
+ * @param recyclerPosition [Int]: position of first ViewHolder in outer RecyclerView
+ * @param nestedViewPosition [Int]: position of ViewHolder in nested RecyclerView
  */
-class NestedRecyclerViewMatcher(
+private class NestedRecyclerViewMatcher(
     @param:IdRes private val recyclerViewId: Int,
     @param:IdRes private val nestedRecyclerViewId: Int,
-    private val position: Int,
-    private val nestedPosition: Int
-) : TypeSafeMatcher<View?>() {
+    private val recyclerPosition: Int,
+    private val nestedViewPosition: Int
+) : TypeSafeMatcher<View>() {
     private var resources: Resources? = null
     private var childView: View? = null
 
@@ -48,35 +49,43 @@ class NestedRecyclerViewMatcher(
     }
 
     /**
-     * Matches item at index [position] in the outer RecyclerView and [nestedPosition] in the nested RecyclerView
+     * Matches item at index [recyclerPosition] in the outer RecyclerView and [nestedViewPosition] in the nested RecyclerView
      *
-     * @param view [View]?: view to check
-     * @return [Boolean] true if view is at index [nestedPosition] in the RecyclerView with ID [nestedRecyclerViewId],
-     * which is contained in the ViewHolder at index [position] in the RecyclerView with ID [recyclerViewId], false otherwise
+     * @param view [View]: view to check
+     * @return [Boolean] true if view is at index [nestedViewPosition] in the RecyclerView with ID [nestedRecyclerViewId],
+     * which is contained in the ViewHolder at index [recyclerPosition] in the RecyclerView with ID [recyclerViewId], false otherwise
      */
-    override fun matchesSafely(view: View?): Boolean {
-        return when {
-            view == null -> false
-            childView != null -> view == childView
-            else -> {
-                var viewMatched = false
-                resources = view.resources
+    override fun matchesSafely(view: View): Boolean {
+        if (childView != null) {
+            return view == childView
+        }
 
-                val recyclerView = view.rootView.findViewById<RecyclerView>(recyclerViewId)
-                if (recyclerView != null && recyclerView.id == recyclerViewId) {
-                    val viewholder =
-                        recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
-                    val nestedRecycler = viewholder.findViewById<RecyclerView>(nestedRecyclerViewId)
+        resources = view.resources
 
-                    if (nestedRecycler != null && nestedRecycler.id == nestedRecyclerViewId) {
-                        childView =
-                            nestedRecycler.findViewHolderForAdapterPosition(nestedPosition)!!.itemView
-                        viewMatched = view == childView
-                    }
-                }
+        val recyclerView = view.rootView.findViewById<RecyclerView>(recyclerViewId)
+        if (recyclerView != null && recyclerView.id == recyclerViewId) {
+            val viewholder = recyclerView.findViewHolderForAdapterPosition(recyclerPosition)!!.itemView
 
-                viewMatched
+            val nestedRecycler = viewholder.findViewById<RecyclerView>(nestedRecyclerViewId)
+
+            if (nestedRecycler != null && nestedRecycler.id == nestedRecyclerViewId) {
+                childView = nestedRecycler.findViewHolderForAdapterPosition(nestedViewPosition)!!.itemView
+                return view == childView
             }
         }
+
+        return false
     }
+}
+
+/**
+ * Wrapper function for creating a [NestedRecyclerViewMatcher]
+ */
+fun withNestedViewHolder(
+    @IdRes recyclerId: Int,
+    @IdRes nestedRecyclerId: Int,
+    recyclerPosition: Int,
+    nestedViewPosition: Int
+): Matcher<View> {
+    return NestedRecyclerViewMatcher(recyclerId, nestedRecyclerId, recyclerPosition, nestedViewPosition)
 }
