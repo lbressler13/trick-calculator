@@ -127,9 +127,13 @@ The hours writing tests will be worth it.
 
 You will gain a huge appreciation for testing and TDD.
 
+TODO command for running tests
+
 ### UI tests
 UI tests are implemented using the Espresso framework.
 See [here](https://developer.android.com/training/testing/espresso) for more information about testing with Espresso.
+
+TODO commands for running tests, some tests specific to product flavor
 
 ## Linting
 Linting is done using [ktlint](https://ktlint.github.io/), using [this](https://github.com/jlleitschuh/ktlint-gradle) plugin.

@@ -27,6 +27,7 @@ import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
+import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
