@@ -9,6 +9,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matchers.anyOf
+import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.int.ext.isZero
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.*
@@ -90,38 +92,68 @@ private fun checkMatchesAny(position: Int, historyItems: List<ComputeItem>) {
 }
 
 private fun checkCorrectData(computeHistory: List<ComputeItem>) {
-    // TODO test not in order
     var shuffled = false
     val historySize = computeHistory.size
 
     repeat(5) {
-        val itemOrder = IntArray(historySize)
-
         openHistoryFragment()
-        computeHistory.forEachIndexed { itemIndex, item ->
-            var foundIndex = -1
-            for (i in 0 until historySize) {
-                onView(withId(recyclerId))
-                    .perform(RecyclerViewActions.scrollToPosition<HistoryItemViewHolder>(i))
 
-                try {
-                    onView(withText(item.first)).check(matches(isDisplayed()))
-                    onView(withText(item.second)).check(matches(isDisplayed()))
-                    foundIndex = i
-                    break
-                } catch (_: Throwable) {}
-            }
+        // check that all items are displayed
+        checkItemsDisplayed(computeHistory)
 
-            if (foundIndex == -1) {
-                throw AssertionError("ViewHolder with text $it not found")
-            } else {
-                itemOrder[itemIndex] = foundIndex
-            }
+        // check that items are shuffled
+        if (historySize > 1 && !shuffled) {
+            shuffled = shuffled || checkItemsShuffled(computeHistory)
         }
 
-        for (i in computeHistory.indices) {
-            checkMatchesAny(i, computeHistory)
-        }
         closeFragment()
     }
+
+    // check shuffled after all repeats, because each repeat has some probability of correct order
+    if (historySize > 1 && !shuffled) {
+        throw AssertionError("History items should be shuffled in history randomness 1")
+    }
+}
+
+private fun checkItemsDisplayed(computeHistory: List<ComputeItem>) {
+    val historySize = computeHistory.size
+
+    computeHistory.forEach {
+        var foundItem = false
+        for (i in 0 until historySize) {
+            onView(withId(recyclerId))
+                .perform(RecyclerViewActions.scrollToPosition<HistoryItemViewHolder>(i))
+
+            try {
+                onView(withText(it.first)).check(matches(isDisplayed()))
+                onView(withText(it.second)).check(matches(isDisplayed()))
+                foundItem = true
+                break
+            } catch (_: Throwable) {}
+        }
+
+        if (!foundItem) {
+            throw AssertionError("ViewHolder with text $it not found")
+        }
+    }
+}
+
+private fun checkItemsShuffled(computeHistory: List<ComputeItem>): Boolean {
+    val historySize = computeHistory.size
+
+    for (i in 0 until historySize) {
+        try {
+            onView(withId(recyclerId))
+                .perform(RecyclerViewActions.scrollToPosition<HistoryItemViewHolder>(i))
+
+            // TODO use sublists instead
+            val reducedHistory = computeHistory.toMutableList()
+            reducedHistory.removeAt(i)
+            checkMatchesAny(i, reducedHistory)
+
+            return true
+        } catch (_: Throwable) {}
+    }
+
+    return false
 }
