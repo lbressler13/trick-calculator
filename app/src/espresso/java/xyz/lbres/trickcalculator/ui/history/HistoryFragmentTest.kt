@@ -11,8 +11,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
@@ -23,7 +21,6 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
-import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.main.clearText

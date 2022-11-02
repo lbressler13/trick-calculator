@@ -10,11 +10,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matchers.anyOf
 import xyz.lbres.kotlinutils.general.ternaryIf
-import xyz.lbres.kotlinutils.int.ext.isZero
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.*
+import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
+import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.ui.main.clearText
 import xyz.lbres.trickcalculator.ui.main.equals
 import xyz.lbres.trickcalculator.ui.main.typeText
@@ -146,9 +148,10 @@ private fun checkItemsShuffled(computeHistory: List<ComputeItem>): Boolean {
             onView(withId(recyclerId))
                 .perform(RecyclerViewActions.scrollToPosition<HistoryItemViewHolder>(i))
 
-            // TODO use sublists instead
-            val reducedHistory = computeHistory.toMutableList()
-            reducedHistory.removeAt(i)
+            val start = computeHistory.subList(0, i)
+            val end = ternaryIf(i == historySize - 1, emptyList(), computeHistory.subList(i + 1, historySize))
+            val reducedHistory = start + end
+
             checkMatchesAny(i, reducedHistory)
 
             return true
