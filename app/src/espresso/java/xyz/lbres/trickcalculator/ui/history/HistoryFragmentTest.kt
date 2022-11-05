@@ -3,9 +3,7 @@ package xyz.lbres.trickcalculator.ui.history
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -17,10 +15,14 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.MainActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.*
+import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
+import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.main.clearText
