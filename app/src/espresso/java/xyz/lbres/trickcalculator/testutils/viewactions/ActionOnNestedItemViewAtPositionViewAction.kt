@@ -43,8 +43,7 @@ private class ActionOnNestedItemViewAtPositionViewAction(
      */
     override fun perform(uiController: UiController, view: View) {
         view as RecyclerView
-        // RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(recyclerPosition)
-        ScrollToPositionViewAction(recyclerPosition).perform(uiController, view)
+        scrollToPosition(recyclerPosition).perform(uiController, view)
         uiController.loopMainThreadUntilIdle()
 
         val vhPosition = recyclerPosition % view.childCount
@@ -60,7 +59,7 @@ private class ActionOnNestedItemViewAtPositionViewAction(
         }
 
         val nestedRecycler = viewholder.findViewById<RecyclerView>(nestedRecyclerId)
-        ScrollToPositionViewAction(nestedViewPosition).perform(uiController, nestedRecycler)
+        scrollToPosition(nestedViewPosition).perform(uiController, nestedRecycler)
         uiController.loopMainThreadUntilIdle()
 
         val targetView: View? = nestedRecycler.getChildAt(nestedViewPosition).findViewById(viewId)

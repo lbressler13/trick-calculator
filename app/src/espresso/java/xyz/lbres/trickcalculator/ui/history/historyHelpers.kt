@@ -1,11 +1,49 @@
 package xyz.lbres.trickcalculator.ui.history
 
+import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
+import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
+
+/**
+ * Type to represent a computation and displayed result which should appear in history
+ */
+typealias TestCompItem = Pair<String, String>
+
+/**
+ * [Matcher] to identify that a history item displays the expected computation text and result string
+ */
+val withHistoryItem: (String, String) -> Matcher<View> = { computation: String, result: String ->
+    allOf(
+        withChild(withText(computation)),
+        withChild(withChild(withText(result)))
+    )
+}
+
+/**
+ * Check that the values in a view holder match one of the items in the compute history
+ *
+ * @param position [Int]: position of view holder to check
+ * @param computeHistory [List]<[TestCompItem]>: list of items in history
+ */
+fun checkViewHolderInHistory(position: Int, computeHistory: List<TestCompItem>) {
+    val recyclerId = R.id.itemsRecycler
+    val historyMatcher = anyOf(computeHistory.map { withHistoryItem(it.first, it.second) })
+
+    onView(withId(recyclerId)).perform(scrollToPosition(position))
+    onView(withViewHolder(recyclerId, position)).check(matches(historyMatcher))
+}
 
 /**
  * Update the history randomness setting.

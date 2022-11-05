@@ -6,12 +6,10 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
-import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,6 +19,7 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
+import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.main.clearText
@@ -36,9 +35,9 @@ class HistoryFragmentTest {
     @JvmField
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // @Rule
-    // @JvmField
-    // val retryRule = RetryRule()
+    @Rule
+    @JvmField
+    val retryRule = RetryRule(maxRetries = 0) // TODO reset to default amount
 
     @Test
     fun loadActionBarWithTitle() {
@@ -74,8 +73,7 @@ class HistoryFragmentTest {
         equals()
         openHistoryFragment()
         onView(withViewHolder(R.id.itemsRecycler, 0))
-            .check(matches(withChild(withText("1+2"))))
-            .check(matches(withChild(withChild(withText("3")))))
+            .check(matches(withHistoryItem("1+2", "3")))
 
         closeFragment()
 
@@ -97,42 +95,29 @@ class HistoryFragmentTest {
             openHistoryFragment()
 
             onView(withViewHolder(R.id.itemsRecycler, 0))
-                .check(matches(withChild(withText("1+2"))))
-                .check(matches(withChild(withChild(withText("3")))))
+                .check(matches(withHistoryItem("1+2", "3")))
 
             onView(withViewHolder(R.id.itemsRecycler, 1))
-                .check(matches(withChild(withText("3-1/2"))))
-                .check(matches(withChild(withChild(withText("2.5")))))
+                .check(matches(withHistoryItem("3-1/2", "2.5")))
 
             onView(withViewHolder(R.id.itemsRecycler, 2))
-                .check(matches(withChild(withText("+"))))
-                .check(matches(withChild(withChild(withText("Syntax error")))))
+                .check(matches(withHistoryItem("+", "Syntax error")))
 
             onView(withViewHolder(R.id.itemsRecycler, 3))
-                .check(matches(withChild(withText("1+2-2^3x1"))))
-                .check(matches(withChild(withChild(withText("-5")))))
+                .check(matches(withHistoryItem("1+2-2^3x1", "-5")))
 
             onView(withViewHolder(R.id.itemsRecycler, 4))
-                .check(matches(withChild(withText("(1+2)(4-2)"))))
-                .check(matches(withChild(withChild(withText("6")))))
+                .check(matches(withHistoryItem("(1+2)(4-2)", "6")))
 
             closeFragment()
         }
-
-        // TODO
     }
 
     @Test
-    fun historyRandomness1() = testRandomness1() // TODO
+    fun historyRandomness1() = testRandomness1()
 
     @Test
-    fun historyRandomness2() {
-        setHistoryRandomness(2)
-        openHistoryFragment()
-
-        onView(withText("No history")).check(matches(isDisplayed()))
-        // TODO
-    }
+    fun historyRandomness2() = testRandomness2() // TODO
 
     @Test
     fun historyRandomness3() {

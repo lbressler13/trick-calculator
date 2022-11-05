@@ -11,7 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
-import org.junit.Before
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,10 +41,10 @@ class MainFragmentTest {
     @JvmField
     val retryRule = RetryRule()
 
-    @Before
-    fun setupTest() {
-        mainText.perform(clearSavedText())
+    @After
+    fun cleanupTest() {
         clearText()
+        mainText.perform(clearSavedText())
     }
 
     @Test
