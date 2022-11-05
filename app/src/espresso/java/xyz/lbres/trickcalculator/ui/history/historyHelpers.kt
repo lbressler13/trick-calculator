@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
+import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
@@ -17,9 +18,9 @@ import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
- * Type to represent a computation and displayed result which should appear in history
+ * Type to represent values displayed in a history item in the UI
  */
-typealias TestCompItem = Pair<String, String>
+typealias TestHistory = List<Pair<String, String>>
 
 /**
  * [Matcher] to identify that a history item displays the expected computation text and result string
@@ -35,9 +36,9 @@ val withHistoryItem: (String, String) -> Matcher<View> = { computation: String, 
  * Check that the values in a view holder match one of the items in the compute history
  *
  * @param position [Int]: position of view holder to check
- * @param computeHistory [List]<[TestCompItem]>: list of items in history
+ * @param computeHistory [TestHistory]: list of items in history
  */
-fun checkViewHolderInHistory(position: Int, computeHistory: List<TestCompItem>) {
+fun checkViewHolderInHistory(position: Int, computeHistory: TestHistory) {
     val recyclerId = R.id.itemsRecycler
     val historyMatcher = anyOf(computeHistory.map { withHistoryItem(it.first, it.second) })
 
@@ -49,19 +50,14 @@ fun checkViewHolderInHistory(position: Int, computeHistory: List<TestCompItem>) 
  * Check that the values in a view holder do not match any of the items in the compute history
  *
  * @param position [Int]: position of view holder to check
- * @param computeHistory [List]<[TestCompItem]>: list of items in history
+ * @param computeHistory [TestHistory]: list of items in history
  */
-fun checkViewHolderNotInHistory(position: Int, computeHistory: List<TestCompItem>) {
-    var inHistory = false
+fun checkViewHolderNotInHistory(position: Int, computeHistory: TestHistory) {
+    val recyclerId = R.id.itemsRecycler
+    val historyMatcher = anyOf(computeHistory.map { withHistoryItem(it.first, it.second) })
 
-    try {
-        checkViewHolderInHistory(position, computeHistory)
-        inHistory = true
-    } catch (_: Throwable) {}
-
-    if (inHistory) {
-        throw AssertionError("ViewHolder at position $position matches an item in the compute history")
-    }
+    onView(withId(recyclerId)).perform(scrollToPosition(position))
+    onView(withViewHolder(recyclerId, position)).check(matches(not(historyMatcher)))
 }
 
 /**

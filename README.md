@@ -127,17 +127,31 @@ The hours writing tests will be worth it.
 
 You will gain a huge appreciation for testing and TDD.
 
-TODO command for running tests
+Unit tests can be run via an IDE, or with the following command:
+```./gradlew test```
 
 ### UI tests
 UI tests are implemented using the Espresso framework.
-See [here](https://developer.android.com/training/testing/espresso) for more information about testing with Espresso.
+This includes tests for functionality in the app, as well as tests for any UI utils/extension functions.
+Some tests are shared across build variants, and some are run only on specific variants.
 
-TODO commands for running tests, some tests specific to product flavor
+Tests can be run via an IDE, or with the following commands:
+* All tests for both variants: `./gradlew connectedCheck`
+* Dev build variant only: `./gradlew connectedDevDebugAndroidTest`
+* Final build variant only: `./gradlew connectedCompleteDebugAndroidTest`
+
+Espresso tests must be run on a physical device or an emulator.
+See [here](https://developer.android.com/training/testing/espresso) for more information about testing with Espresso.
 
 ## Linting
 Linting is done using [ktlint](https://ktlint.github.io/), using [this](https://github.com/jlleitschuh/ktlint-gradle) plugin.
 See [here](https://github.com/pinterest/ktlint#standard-rules) for a list of standard rules.
+
+To run linting and fix formatting issues if possible, run the following command in the terminal or via an IDE:
+```./gradlew ktlintFormat```
+
+To run linting without fixing issues, run the following command in the terminal or via an IDE:
+```./gradlew ktlintFormat```
 
 ## Serious stuff
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.

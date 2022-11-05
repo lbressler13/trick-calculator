@@ -55,8 +55,8 @@ fun toggleShuffleOperators() {
 }
 
 /**
- * Hide the dev tools button for 60 seconds to avoid interfering with tests when expanding/collapsing attributions.
- * Will cause error if called in non-dev variant.
+ * Hide the dev tools button for 60 seconds to avoid interfering with other items on the screen.
+ * Will cause error if called in non-dev build variant.
  */
 fun hideDevToolsButton() {
     onView(withId(R.id.devToolsButton)).perform(click())
@@ -66,9 +66,7 @@ fun hideDevToolsButton() {
         .atPosition(3)
         .perform(click())
 
-    onView(withId(R.id.devToolsTimeSpinner)).check(
-        matches(withSpinnerText("60000ms"))
-    )
+    onView(withId(R.id.devToolsTimeSpinner)).check(matches(withSpinnerText("60000ms")))
     onView(withId(R.id.hideDevToolsButton)).perform(click())
 
     onView(withText("Developer Tools")).check(doesNotExist())

@@ -29,8 +29,6 @@ import xyz.lbres.trickcalculator.ui.main.clearText
 import xyz.lbres.trickcalculator.ui.main.equals
 import xyz.lbres.trickcalculator.ui.main.typeText
 
-// TODO test with shuffled operators, shuffled numbers, etc
-
 @RunWith(AndroidJUnit4::class)
 class HistoryFragmentTest {
     private val recyclerId = R.id.itemsRecycler
@@ -41,7 +39,7 @@ class HistoryFragmentTest {
 
     @Rule
     @JvmField
-    val retryRule = RetryRule(maxRetries = 0) // TODO reset to default amount
+    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {

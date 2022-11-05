@@ -25,7 +25,7 @@ fun testRandomness1() {
     // no history
     onView(withText("No history")).check(matches(isDisplayed()))
 
-    val computeHistory: MutableList<TestCompItem> = mutableListOf()
+    val computeHistory: MutableList<Pair<String, String>> = mutableListOf()
 
     // one element
     closeFragment()
@@ -71,11 +71,13 @@ fun testRandomness1() {
  * Check that all the expected information is displayed in the history.
  * Verifies that all items are displayed and the order of items is shuffled.
  *
- * @param computeHistory [List]<[TestCompItem]>: list of items in history
+ * @param computeHistory [TestHistory]: list of items in history
  */
-private fun checkCorrectData(computeHistory: List<TestCompItem>) {
+private fun checkCorrectData(computeHistory: TestHistory) {
     var shuffled = false
     val historySize = computeHistory.size
+
+    // additional repeats for 2 items because of higher probability of 2 items being ordered
     val repeatCount = ternaryIf(historySize == 2, 10, 5)
 
     repeat(repeatCount) {
@@ -92,16 +94,16 @@ private fun checkCorrectData(computeHistory: List<TestCompItem>) {
 
     // check shuffled after all repeats, because each repeat has some probability of correct order
     if (historySize > 1 && !shuffled) {
-        throw AssertionError("History items should be shuffled in history randomness 1")
+        throw AssertionError("History items should be shuffled in history randomness 1. History: $computeHistory")
     }
 }
 
 /**
  * Check that all history items are visible on the screen
  *
- * @param computeHistory [List]<[TestCompItem]>: list of items in history
+ * @param computeHistory [TestHistory]: list of items in history
  */
-private fun checkItemsDisplayed(computeHistory: List<TestCompItem>) {
+private fun checkItemsDisplayed(computeHistory: TestHistory) {
     val historySize = computeHistory.size
 
     computeHistory.forEach {
@@ -126,10 +128,10 @@ private fun checkItemsDisplayed(computeHistory: List<TestCompItem>) {
 /**
  * Determine if the order of the history items is shuffled
  *
- * @param computeHistory [List]<[TestCompItem]>: list of items in history
+ * @param computeHistory [TestHistory]: list of items in history
  * @return [Boolean]: true if at least one item's position does not match its position in the history, false if all items are in order
  */
-private fun checkItemsShuffled(computeHistory: List<TestCompItem>): Boolean {
+private fun checkItemsShuffled(computeHistory: TestHistory): Boolean {
     val historySize = computeHistory.size
     if (historySize < 2) {
         return true
