@@ -39,7 +39,7 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
      * Switches to control settings
      */
     private val applyDecimalsSwitch: SwitchCompat = rootView.findViewById(R.id.applyDecimalsSwitch)
-    private val applyParensSwitch: SwitchCompat= rootView.findViewById(R.id.applyParensSwitch)
+    private val applyParensSwitch: SwitchCompat = rootView.findViewById(R.id.applyParensSwitch)
     private val clearOnErrorSwitch: SwitchCompat = rootView.findViewById(R.id.clearOnErrorSwitch)
     private val settingsButtonSwitch: SwitchCompat = rootView.findViewById(R.id.settingsButtonSwitch)
     private val shuffleComputationSwitch: SwitchCompat = rootView.findViewById(R.id.shuffleComputationSwitch)
