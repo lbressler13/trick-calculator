@@ -58,7 +58,7 @@ class AttributionsFragment : BaseFragment() {
      */
     private fun initializeAttributionsRecycler() {
         val recycler: RecyclerView = binding.attributionsRecycler
-        val adapter = AuthorAttributionAdapter(authorAttributions, viewModel, viewLifecycleOwner)
+        val adapter = AuthorAttributionAdapter(authorAttributions, viewModel)
 
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(requireContext())
