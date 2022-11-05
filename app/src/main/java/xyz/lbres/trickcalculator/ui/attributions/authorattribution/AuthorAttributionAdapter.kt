@@ -2,7 +2,6 @@ package xyz.lbres.trickcalculator.ui.attributions.authorattribution
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.trickcalculator.databinding.ViewHolderAuthorAttributionBinding
 import xyz.lbres.trickcalculator.ui.attributions.AttributionsViewModel
@@ -13,9 +12,8 @@ import xyz.lbres.trickcalculator.ui.attributions.AuthorAttribution
  *
  * @param authors [List]<[AuthorAttribution]>: list of AuthorAttribution objects
  * @param viewModel [AttributionsViewModel]: view model containing information about which attributions are expanded
- * @param lifecycleOwner [LifecycleOwner]
  */
-class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel, lifecycleOwner: LifecycleOwner) :
+class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel) :
     RecyclerView.Adapter<AuthorAttributionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorAttributionViewHolder {
