@@ -46,6 +46,25 @@ fun checkViewHolderInHistory(position: Int, computeHistory: List<TestCompItem>) 
 }
 
 /**
+ * Check that the values in a view holder do not match any of the items in the compute history
+ *
+ * @param position [Int]: position of view holder to check
+ * @param computeHistory [List]<[TestCompItem]>: list of items in history
+ */
+fun checkViewHolderNotInHistory(position: Int, computeHistory: List<TestCompItem>) {
+    var inHistory = false
+
+    try {
+        checkViewHolderInHistory(position, computeHistory)
+        inHistory = true
+    } catch (_: Throwable) {}
+
+    if (inHistory) {
+        throw AssertionError("ViewHolder at position $position matches an item in the compute history")
+    }
+}
+
+/**
  * Update the history randomness setting.
  * Must be called from main screen, and returns to main screen after updating setting.
  *

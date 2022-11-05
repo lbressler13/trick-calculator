@@ -6,10 +6,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.kotlinutils.general.ternaryIf
-import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
@@ -20,10 +18,6 @@ import xyz.lbres.trickcalculator.ui.main.typeText
 private const val recyclerId = R.id.itemsRecycler
 
 fun testRandomness1() {
-    if (ProductFlavor.devMode) {
-        hideDevToolsButton()
-    }
-
     setHistoryRandomness(1)
     toggleShuffleOperators()
     openHistoryFragment()
@@ -82,8 +76,9 @@ fun testRandomness1() {
 private fun checkCorrectData(computeHistory: List<TestCompItem>) {
     var shuffled = false
     val historySize = computeHistory.size
+    val repeatCount = ternaryIf(historySize == 2, 10, 5)
 
-    repeat(5) {
+    repeat(repeatCount) {
         openHistoryFragment()
 
         // check that all items are displayed
@@ -136,6 +131,9 @@ private fun checkItemsDisplayed(computeHistory: List<TestCompItem>) {
  */
 private fun checkItemsShuffled(computeHistory: List<TestCompItem>): Boolean {
     val historySize = computeHistory.size
+    if (historySize < 2) {
+        return true
+    }
 
     for (i in 0 until historySize) {
         try {
