@@ -11,6 +11,7 @@ jobs:
     name: "Run Tests"
 
     runs-on: macos-latest
+    timeout-minutes: 60
     env:
       USERNAME: ${{ secrets.USERNAME }}
       TOKEN: ${{ secrets.TOKEN }}
