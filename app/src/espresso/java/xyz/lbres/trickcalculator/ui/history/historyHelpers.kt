@@ -19,8 +19,7 @@ import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
  * Representation of a history item displayed in the UI.
- * First value is computation string (first row in UI),
- * and second value is result/error (second row in UI).
+ * First value is computation string (first row in UI), and second value is result/error (second row in UI).
  */
 typealias TestHistory = List<Pair<String, String>>
 

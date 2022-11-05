@@ -11,6 +11,7 @@ More information can be found in the below sections:
 - [Project structure](#project-structure)
 - [Build](#build)
 - [Testing](#testing)
+- [Linting](#linting)
 - [Serious stuff](#serious-stuff)
 
 ## Functionality

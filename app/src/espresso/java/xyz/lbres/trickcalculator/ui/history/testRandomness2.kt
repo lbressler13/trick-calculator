@@ -213,7 +213,7 @@ private fun checkItemsShuffled(computeHistory: TestHistory): Boolean {
 }
 
 /**
- * Determine if the pairs of values have been shuffled
+ * Determine if the computation/result matches have been shuffled
  *
  * @param computeHistory [TestHistory]: list of items in history
  * @return [Boolean]: true if at least one viewholder contains a mismatched computation/result, false if all pairs match
