@@ -24,7 +24,7 @@ import xyz.lbres.trickcalculator.utils.visible
  * @param viewModel [SharedViewModel]: ViewModel that contains info about settings and can be used to modify them
  * @param lifecycleOwner [LifecycleOwner]: lifecycle owner to use when observing changes in ViewModel
  */
-class SettingsUI(private val fragment: Fragment, private val rootView: View, private val viewModel: SharedViewModel, private val lifecycleOwner: LifecycleOwner) {
+class SettingsUI(private val fragment: Fragment, rootView: View, private val viewModel: SharedViewModel, private val lifecycleOwner: LifecycleOwner) {
     /**
      * If reset button was pressed
      */
@@ -38,31 +38,35 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
     /**
      * Switches to control settings
      */
-    private lateinit var applyDecimalsSwitch: SwitchCompat
-    private lateinit var applyParensSwitch: SwitchCompat
-    private lateinit var clearOnErrorSwitch: SwitchCompat
-    private lateinit var settingsButtonSwitch: SwitchCompat
-    private lateinit var shuffleComputationSwitch: SwitchCompat
-    private lateinit var shuffleNumbersSwitch: SwitchCompat
-    private lateinit var shuffleOperatorsSwitch: SwitchCompat
+    private val applyDecimalsSwitch: SwitchCompat = rootView.findViewById(R.id.applyDecimalsSwitch)
+    private val applyParensSwitch: SwitchCompat= rootView.findViewById(R.id.applyParensSwitch)
+    private val clearOnErrorSwitch: SwitchCompat = rootView.findViewById(R.id.clearOnErrorSwitch)
+    private val settingsButtonSwitch: SwitchCompat = rootView.findViewById(R.id.settingsButtonSwitch)
+    private val shuffleComputationSwitch: SwitchCompat = rootView.findViewById(R.id.shuffleComputationSwitch)
+    private val shuffleNumbersSwitch: SwitchCompat = rootView.findViewById(R.id.shuffleNumbersSwitch)
+    private val shuffleOperatorsSwitch: SwitchCompat = rootView.findViewById(R.id.shuffleOperatorsSwitch)
 
     /**
      * Radio group for history randomness settings
      */
-    private lateinit var historyRadioGroup: RadioGroup
-    private lateinit var historyRadioButtons: List<RadioButton>
+    private val historyRadioGroup: RadioGroup = rootView.findViewById(R.id.historyRandomnessGroup)
+    private val historyRadioButtons: List<RadioButton> = listOf(
+        rootView.findViewById(R.id.historyButton0),
+        rootView.findViewById(R.id.historyButton1),
+        rootView.findViewById(R.id.historyButton2),
+        rootView.findViewById(R.id.historyButton3),
+    )
 
     /**
      * Button to modify all settings
      */
-    private lateinit var randomizeSettingsButton: View
-    private lateinit var resetSettingsButton: View
+    private val randomizeSettingsButton: View = rootView.findViewById(R.id.randomizeSettingsButton)
+    private val resetSettingsButton: View = rootView.findViewById(R.id.resetSettingsButton)
 
     /**
      * Initialize UI elements, observers, and on click functions for buttons
      */
     init {
-        collectUI()
         settingsButtonSwitch.gone()
 
         initObservers()
@@ -76,30 +80,6 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
             resetPressed = true
             closeCurrentFragment()
         }
-    }
-
-    /**
-     * Save UI elements using view IDs
-     */
-    private fun collectUI() {
-        applyDecimalsSwitch = rootView.findViewById(R.id.applyDecimalsSwitch)
-        applyParensSwitch = rootView.findViewById(R.id.applyParensSwitch)
-        clearOnErrorSwitch = rootView.findViewById(R.id.clearOnErrorSwitch)
-        settingsButtonSwitch = rootView.findViewById(R.id.settingsButtonSwitch)
-        shuffleComputationSwitch = rootView.findViewById(R.id.shuffleComputationSwitch)
-        shuffleNumbersSwitch = rootView.findViewById(R.id.shuffleNumbersSwitch)
-        shuffleOperatorsSwitch = rootView.findViewById(R.id.shuffleOperatorsSwitch)
-
-        historyRadioGroup = rootView.findViewById(R.id.historyRandomnessGroup)
-        historyRadioButtons = listOf(
-            rootView.findViewById(R.id.historyButton0),
-            rootView.findViewById(R.id.historyButton1),
-            rootView.findViewById(R.id.historyButton2),
-            rootView.findViewById(R.id.historyButton3),
-        )
-
-        randomizeSettingsButton = rootView.findViewById(R.id.randomizeSettingsButton)
-        resetSettingsButton = rootView.findViewById(R.id.resetSettingsButton)
     }
 
     /**
@@ -171,7 +151,7 @@ class SettingsUI(private val fragment: Fragment, private val rootView: View, pri
                 fragment.requireMainActivity().popBackStack()
             }
         } catch (e: Exception) {
-            // expected to fail when ui is recreating due to configuration changes or via dev tools
+            // expected to fail when UI is recreating due to configuration changes or via dev tools
             AppLogger.e("Failed to close parent fragment:", e.message.toString())
         }
     }
