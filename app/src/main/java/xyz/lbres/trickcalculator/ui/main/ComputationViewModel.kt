@@ -165,7 +165,7 @@ class ComputationViewModel : ViewModel() {
      * If false, error is not reset with other computation data.
      */
     fun resetComputeData(clearError: Boolean = true) {
-        computeText = listOf()
+        computeText = emptyList()
         computedValue = null
         clearBackups()
 

@@ -65,60 +65,7 @@ class HistoryFragmentTest {
     }
 
     @Test
-    fun historyRandomness0() {
-        setHistoryRandomness(0)
-        toggleShuffleOperators()
-
-        openHistoryFragment()
-
-        // no history
-        onView(withText("No history")).check(matches(isDisplayed()))
-
-        closeFragment()
-
-        typeText("1+2")
-        equals()
-        openHistoryFragment()
-        onView(withViewHolder(recyclerId, 0))
-            .check(matches(withHistoryItem("1+2", "3")))
-
-        closeFragment()
-
-        typeText("-1/2")
-        equals()
-        clearText()
-        typeText("+")
-        equals()
-        clearText()
-        typeText("1+2-2^3x1")
-        equals()
-        clearText()
-        typeText("(1+2)(4-2)")
-        equals()
-        clearText()
-
-        // test that order doesn't change
-        repeat(5) {
-            openHistoryFragment()
-
-            onView(withViewHolder(recyclerId, 0))
-                .check(matches(withHistoryItem("1+2", "3")))
-
-            onView(withViewHolder(recyclerId, 1))
-                .check(matches(withHistoryItem("3-1/2", "2.5")))
-
-            onView(withViewHolder(recyclerId, 2))
-                .check(matches(withHistoryItem("+", "Syntax error")))
-
-            onView(withViewHolder(recyclerId, 3))
-                .check(matches(withHistoryItem("1+2-2^3x1", "-5")))
-
-            onView(withViewHolder(recyclerId, 4))
-                .check(matches(withHistoryItem("(1+2)(4-2)", "6")))
-
-            closeFragment()
-        }
-    }
+    fun historyRandomness0() = testRandomness0()
 
     @Test
     fun historyRandomness1() = testRandomness1()
@@ -126,15 +73,15 @@ class HistoryFragmentTest {
     @Test
     fun historyRandomness2() = testRandomness2()
 
-    @Test
-    fun historyRandomness3() {
-        // TODO
-    }
+    // TODO
+    // @Test
+    // fun historyRandomness3() {
+    // }
 
-    @Test
-    fun longHistory() {
-        // TODO
-    }
+    // TODO
+    // @Test
+    // fun longHistory() {
+    // }
 
     @Test
     fun clearOnError() {
@@ -199,9 +146,9 @@ class HistoryFragmentTest {
             .check(matches(withHistoryItem("2x4", "8")))
     }
 
-    @Test
-    fun shuffleValues() {
-        // TODO
+    // TODO
+    // @Test
+    // fun shuffleValues() {
         // test that correct operators/numbers/computation are saved when actual values are shuffled
-    }
+    // }
 }

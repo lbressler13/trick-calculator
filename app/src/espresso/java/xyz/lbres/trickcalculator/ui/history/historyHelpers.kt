@@ -18,12 +18,16 @@ import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
- * Type to represent values displayed in a history item in the UI
+ * Representation of a history item displayed in the UI.
+ * First value is computation string (first row in UI),
+ * and second value is result/error (second row in UI).
  */
 typealias TestHistory = List<Pair<String, String>>
 
 /**
  * [Matcher] to identify that a history item displays the expected computation text and result string
+ * First value is computation string (first row in UI),
+ * and second value is result/error (second row in UI).
  */
 val withHistoryItem: (String, String) -> Matcher<View> = { computation: String, result: String ->
     allOf(

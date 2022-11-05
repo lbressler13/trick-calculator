@@ -57,6 +57,13 @@ fun testRandomness2() {
     computeHistory.add(Pair("-7+11", "4"))
     checkCorrectData(computeHistory)
 
+    // duplicate element
+    clearText()
+    typeText("(3-4)(5+2)")
+    equals()
+    computeHistory.add(Pair("(3-4)(5+2)", "-7"))
+    checkCorrectData(computeHistory)
+
     // error
     clearText()
     typeText("+")
@@ -82,7 +89,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
     var shuffledPairs = false
     val historySize = computeHistory.size
 
-    // additional repeats for 2 items because of higher probability of 2 items being ordered
+    // additional repeats for 2 items due to occasional failures
     val repeatCount = ternaryIf(historySize == 2, 10, 5)
 
     repeat(repeatCount) {
@@ -98,7 +105,6 @@ private fun checkCorrectData(computeHistory: TestHistory) {
         closeFragment()
     }
 
-    // check shuffled after all repeats, because each repeat has some probability of correct order
     if (historySize > 1 && (!shuffledOrder || !shuffledPairs)) {
         throw AssertionError("History items and pairs should be shuffled in history randomness 2. History: $computeHistory")
     }
@@ -116,16 +122,18 @@ private fun checkItemsDisplayed(computeHistory: TestHistory) {
         var foundComputation = false
         var foundResult = false
 
-        for (i in 0 until historySize) {
-            onView(withId(recyclerId)).perform(scrollToPosition(i))
+        for (position in 0 until historySize) {
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
 
             try {
-                onView(withText(it.first)).check(matches(isDisplayed()))
+                onView(withViewHolder(recyclerId, position))
+                    .check(matches(withChild(withText(it.first))))
                 foundComputation = true
             } catch (_: Throwable) {}
 
             try {
-                onView(withText(it.second)).check(matches(isDisplayed()))
+                onView(withViewHolder(recyclerId, position))
+                    .check(matches(withChild(withChild(withText(it.second)))))
                 foundResult = true
             } catch (_: Throwable) {}
 
@@ -135,7 +143,7 @@ private fun checkItemsDisplayed(computeHistory: TestHistory) {
         }
 
         if (!foundComputation || !foundResult) {
-            throw AssertionError("ViewHolders with text $it not found")
+            throw AssertionError("ViewHolder with text $it not found. History: $computeHistory")
         }
     }
 }
@@ -157,17 +165,21 @@ private fun checkItemsShuffled(computeHistory: TestHistory): Boolean {
 
     // check that compuataion strings are shuffled
     val compStrings = computeHistory.map { it.first }
-    for (i in 0 until historySize) {
+    for (position in 0 until historySize) {
         try {
-            onView(withId(recyclerId)).perform(scrollToPosition(i))
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
 
-            val start = compStrings.subList(0, i)
-            val end = ternaryIf(i == historySize - 1, emptyList(), compStrings.subList(i + 1, historySize))
+            val start = compStrings.subList(0, position)
+            val end = ternaryIf(
+                position == historySize - 1,
+                emptyList(),
+                compStrings.subList(position + 1, historySize)
+            )
             val reducedCompStrings = start + end
 
             val matcher = anyOf(reducedCompStrings.map { withChild(withText(it)) })
-            onView(withId(recyclerId)).perform(scrollToPosition(i))
-            onView(withViewHolder(recyclerId, i)).check(matches(matcher))
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
+            onView(withViewHolder(recyclerId, position)).check(matches(matcher))
 
             computationsShuffled = true
             break
@@ -176,17 +188,21 @@ private fun checkItemsShuffled(computeHistory: TestHistory): Boolean {
 
     // check that results are shuffled
     val resultStrings = computeHistory.map { it.second }
-    for (i in 0 until historySize) {
+    for (position in 0 until historySize) {
         try {
-            onView(withId(recyclerId)).perform(scrollToPosition(i))
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
 
-            val start = resultStrings.subList(0, i)
-            val end = ternaryIf(i == historySize - 1, emptyList(), resultStrings.subList(i + 1, historySize))
+            val start = resultStrings.subList(0, position)
+            val end = ternaryIf(
+                position == historySize - 1,
+                emptyList(),
+                resultStrings.subList(position + 1, historySize)
+            )
             val reducedResultStrings = start + end
 
             val matcher = anyOf(reducedResultStrings.map { withChild(withChild(withText(it))) })
-            onView(withId(recyclerId)).perform(scrollToPosition(i))
-            onView(withViewHolder(recyclerId, i)).check(matches(matcher))
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
+            onView(withViewHolder(recyclerId, position)).check(matches(matcher))
 
             resultsShuffled = true
             break
@@ -211,13 +227,15 @@ private fun checkPairsShuffled(computeHistory: TestHistory): Boolean {
     val computeTextMatcher = anyOf(computeHistory.map { withChild(withText(it.first)) })
     val resultTextMatcher = anyOf(computeHistory.map { withChild(withChild(withText(it.second))) })
 
-    for (i in 0 until historySize) {
+    for (position in 0 until historySize) {
         try {
-            onView(withId(recyclerId)).perform(scrollToPosition(i))
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
             // both values are part of the history
-            onView(withViewHolder(recyclerId, i)).check(matches(allOf(computeTextMatcher, resultTextMatcher)))
+            onView(withViewHolder(recyclerId, position)).check(
+                matches(allOf(computeTextMatcher, resultTextMatcher))
+            )
             // the values do not match a specific item in the history
-            checkViewHolderNotInHistory(i, computeHistory)
+            checkViewHolderNotInHistory(position, computeHistory)
 
             return true
         } catch (_: Throwable) {}
