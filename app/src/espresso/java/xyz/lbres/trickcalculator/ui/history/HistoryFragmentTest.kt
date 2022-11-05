@@ -149,6 +149,6 @@ class HistoryFragmentTest {
     // TODO
     // @Test
     // fun shuffleValues() {
-        // test that correct operators/numbers/computation are saved when actual values are shuffled
+    // test that correct operators/numbers/computation are saved when actual values are shuffled
     // }
 }
