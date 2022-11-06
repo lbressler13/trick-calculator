@@ -6,14 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
-import xyz.lbres.trickcalculator.databinding.ActivityMainBinding
+import xyz.lbres.trickcalculator.databinding.ActivityBaseBinding
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
  * Activity that contains all functionality of app
  */
-class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+class BaseActivity : AppCompatActivity() {
+    lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
     private lateinit var sharedViewModel: SharedViewModel
 
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityBaseBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         ProductFlavor.setupFlavor(this)

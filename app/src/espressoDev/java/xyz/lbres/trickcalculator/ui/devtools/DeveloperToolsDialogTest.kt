@@ -13,7 +13,7 @@ import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
@@ -25,7 +25,7 @@ class DeveloperToolsDialogTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Rule
     @JvmField

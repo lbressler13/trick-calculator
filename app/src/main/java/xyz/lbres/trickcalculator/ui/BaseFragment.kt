@@ -1,11 +1,11 @@
 package xyz.lbres.trickcalculator.ui
 
 import androidx.navigation.fragment.NavHostFragment
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 
 /**
- * Abstract fragment to handle common functionality involving the MainActivity
+ * Abstract fragment to handle common functionality involving the BaseActivity
  */
 abstract class BaseFragment : NavHostFragment() {
     /**
@@ -32,7 +32,7 @@ abstract class BaseFragment : NavHostFragment() {
      * Run initial setup of action bar.
      */
     private fun runSetup() {
-        val actionBar = requireMainActivity().binding.actionBar
+        val actionBar = requireBaseActivity().binding.actionBar
 
         // set onClick
         if (actionBarOnClick == null) {
@@ -45,13 +45,13 @@ abstract class BaseFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        requireMainActivity().fragmentManager = childFragmentManager
+        requireBaseActivity().fragmentManager = childFragmentManager
     }
 
     /**
-     * Get current activity as [MainActivity].
+     * Get current activity as [BaseActivity].
      *
-     * @return [MainActivity]
+     * @return [BaseActivity]
      */
-    fun requireMainActivity(): MainActivity = requireActivity() as MainActivity
+    fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
 }

@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.main
+package xyz.lbres.trickcalculator.ui.calculator
 
 import android.text.Spannable
 import android.text.method.ScrollingMovementMethod

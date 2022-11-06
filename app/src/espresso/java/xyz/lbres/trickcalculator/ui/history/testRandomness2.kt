@@ -15,9 +15,9 @@ import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
-import xyz.lbres.trickcalculator.ui.main.clearText
-import xyz.lbres.trickcalculator.ui.main.equals
-import xyz.lbres.trickcalculator.ui.main.typeText
+import xyz.lbres.trickcalculator.ui.calculator.clearText
+import xyz.lbres.trickcalculator.ui.calculator.equals
+import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 private const val recyclerId = R.id.itemsRecycler
 

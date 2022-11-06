@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.main
+package xyz.lbres.trickcalculator.ui.calculator
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -15,7 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.saveText
@@ -29,13 +29,13 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 // TODO tests for settings
 
 @RunWith(AndroidJUnit4::class)
-class MainFragmentTest {
+class CalculatorFragmentTest {
     private val mainText = onView(withId(R.id.mainText))
     private val errorText = onView(withId(R.id.errorText))
 
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Rule
     @JvmField

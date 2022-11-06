@@ -37,8 +37,6 @@
     <string name="shuffle_computation">Shuffle Computation</string>
     <string name="shuffle_numbers">Shuffle Numbers</string>
     <string name="shuffle_operators">Shuffle Operators</string>
-    <!-- Settings Keys -->
-    <string name="key_main_fragment">isMainFragment</string>
 
     <!-- Attributions -->
     <string name="title_attributions">Image Attributions</string>

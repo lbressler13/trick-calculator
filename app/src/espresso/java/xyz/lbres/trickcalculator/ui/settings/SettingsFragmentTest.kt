@@ -18,7 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.kotlinutils.general.ternaryIf
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
@@ -30,7 +30,7 @@ import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 class SettingsFragmentTest {
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Rule
     @JvmField

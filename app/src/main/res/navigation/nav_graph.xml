@@ -2,20 +2,20 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/calculatorFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="xyz.lbres.trickcalculator.ui.main.MainFragment"
-        android:label="MainFragment" >
+        android:id="@+id/calculatorFragment"
+        android:name="xyz.lbres.trickcalculator.ui.calculator.CalculatorFragment"
+        android:label="CalculatorFragment" >
         <action
-            android:id="@+id/navigateMainToAttribution"
+            android:id="@+id/navigateCalculatorToAttribution"
             app:destination="@id/attributionsFragment" />
         <action
-            android:id="@+id/navigateMainToSettings"
+            android:id="@+id/navigateCalculatorToSettings"
             app:destination="@id/settingsFragment" />
         <action
-            android:id="@+id/navigateMainToHistory"
+            android:id="@+id/navigateCalculatorToHistory"
             app:destination="@id/historyFragment" />
     </fragment>
     <fragment

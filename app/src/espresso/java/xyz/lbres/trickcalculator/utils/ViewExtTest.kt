@@ -11,7 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
@@ -19,7 +19,7 @@ import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 class ViewExtTest {
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Test
     fun visible() {

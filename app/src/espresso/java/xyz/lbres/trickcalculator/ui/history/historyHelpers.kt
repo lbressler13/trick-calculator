@@ -65,7 +65,7 @@ fun checkViewHolderNotInHistory(position: Int, computeHistory: TestHistory) {
 
 /**
  * Update the history randomness setting.
- * Must be called from main screen, and returns to main screen after updating setting.
+ * Must be called from calculator screen, and returns to calculator screen after updating setting.
  *
  * @param randomness [Int]: new value of randomness setting
  */

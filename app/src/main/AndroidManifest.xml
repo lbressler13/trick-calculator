@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrickCalculator">
         <activity
-            android:name=".MainActivity"
+            android:name=".BaseActivity"
             android:configChanges="uiMode"
             android:screenOrientation="portrait"
             android:exported="true"

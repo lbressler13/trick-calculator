@@ -106,7 +106,7 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
     private fun closeCurrentFragment() {
         when (fragment) {
             is DialogFragment -> fragment.dismiss()
-            is BaseFragment -> fragment.requireMainActivity().popBackStack()
+            is BaseFragment -> fragment.requireBaseActivity().popBackStack()
         }
     }
 
@@ -148,7 +148,7 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
             if (fragment is DialogFragment && fragment.requireParentFragment() is DialogFragment) {
                 (fragment.requireParentFragment() as DialogFragment).dismiss()
             } else if (fragment is BaseFragment && fragment.parentFragmentManager.backStackEntryCount > 0) {
-                fragment.requireMainActivity().popBackStack()
+                fragment.requireBaseActivity().popBackStack()
             }
         } catch (e: Exception) {
             // expected to fail when UI is recreating due to configuration changes or via dev tools

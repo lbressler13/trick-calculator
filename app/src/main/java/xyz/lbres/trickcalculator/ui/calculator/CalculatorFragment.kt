@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.main
+package xyz.lbres.trickcalculator.ui.calculator
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -15,7 +15,7 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
-import xyz.lbres.trickcalculator.databinding.FragmentMainBinding
+import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
@@ -30,8 +30,8 @@ import java.util.Random
 /**
  * Fragment to display main calculator functionality
  */
-class MainFragment : BaseFragment() {
-    private lateinit var binding: FragmentMainBinding
+class CalculatorFragment : BaseFragment() {
+    private lateinit var binding: FragmentCalculatorBinding
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private val random = Random(Date().time)
@@ -45,7 +45,7 @@ class MainFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(layoutInflater)
+        binding = FragmentCalculatorBinding.inflate(layoutInflater)
         computationViewModel =
             ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
@@ -86,14 +86,14 @@ class MainFragment : BaseFragment() {
      * Launch AttributionsFragment
      */
     private val infoButtonOnClick = {
-        requireMainActivity().runNavAction(R.id.navigateMainToAttribution)
+        requireBaseActivity().runNavAction(R.id.navigateCalculatorToAttribution)
     }
 
     /**
      * Launch HistoryFragment
      */
     private val historyButtonOnClick = {
-        requireMainActivity().runNavAction(R.id.navigateMainToHistory)
+        requireBaseActivity().runNavAction(R.id.navigateCalculatorToHistory)
     }
 
     /**
@@ -113,7 +113,7 @@ class MainFragment : BaseFragment() {
      * Launch SettingsFragment
      */
     private val settingsButtonOnClick = {
-        requireMainActivity().runNavAction(R.id.navigateMainToSettings)
+        requireBaseActivity().runNavAction(R.id.navigateCalculatorToSettings)
     }
 
     /**

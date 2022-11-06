@@ -12,7 +12,7 @@ interface ProductFlavorConfig {
 
     /**
      * Run any setup necessary for the flavor
-     * @param activity [MainActivity]: initial activity
+     * @param activity [BaseActivity]: initial activity
      */
-    fun setupFlavor(activity: MainActivity)
+    fun setupFlavor(activity: BaseActivity)
 }

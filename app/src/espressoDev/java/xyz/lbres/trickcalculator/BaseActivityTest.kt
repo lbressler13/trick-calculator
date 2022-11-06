@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class BaseActivityTest {
 
     @Rule
     @JvmField
@@ -18,6 +18,6 @@ class MainActivityTest {
     @Test
     fun useAppContext() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("xyz.lbres.trickcalculator", appContext.packageName)
+        assertEquals("xyz.lbres.trickcalculator.dev", appContext.packageName)
     }
 }
