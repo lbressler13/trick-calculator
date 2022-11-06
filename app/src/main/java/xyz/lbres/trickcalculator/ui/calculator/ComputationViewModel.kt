@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.main
+package xyz.lbres.trickcalculator.ui.calculator
 
 import androidx.lifecycle.ViewModel
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction

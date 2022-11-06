@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.main
+package xyz.lbres.trickcalculator.ui.calculator
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -98,7 +98,7 @@ fun checkMainTextMatchesAny(options: Set<String>) {
 }
 
 /**
- * Leave main fragment by opening attributions fragment, then return by closing attributions fragment
+ * Leave calculator fragment by opening attributions fragment, then return by closing attributions fragment
  */
 fun leaveAndReturn() {
     openAttributionsFragment()

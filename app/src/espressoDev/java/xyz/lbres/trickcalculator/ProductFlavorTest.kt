@@ -18,7 +18,7 @@ class ProductFlavorTest {
 
     @Rule
     @JvmField
-    val rule = ActivityScenarioRule(MainActivity::class.java)
+    val rule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Rule
     @JvmField

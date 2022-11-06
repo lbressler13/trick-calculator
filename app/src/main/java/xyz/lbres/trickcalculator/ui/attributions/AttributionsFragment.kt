@@ -27,7 +27,7 @@ class AttributionsFragment : BaseFragment() {
 
     override var titleResId: Int = R.string.title_attributions
     override var actionBarOnClick: (() -> Unit)? =
-        { requireMainActivity().runNavAction(R.id.navigateAttributionsToSettings) }
+        { requireBaseActivity().runNavAction(R.id.navigateAttributionsToSettings) }
 
     /**
      * Initialize fragment
@@ -48,7 +48,7 @@ class AttributionsFragment : BaseFragment() {
             viewModel.setFlaticonMessageExpanded(!viewModel.flaticonMessageExpanded)
             setFlaticonMessage()
         }
-        binding.closeButton.root.setOnClickListener { requireMainActivity().popBackStack() }
+        binding.closeButton.root.setOnClickListener { requireBaseActivity().popBackStack() }
 
         return binding.root
     }

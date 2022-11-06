@@ -7,13 +7,13 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 
 @RunWith(AndroidJUnit4::class)
 class UiUtilsTest {
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Test
     fun createUnderlineText() {

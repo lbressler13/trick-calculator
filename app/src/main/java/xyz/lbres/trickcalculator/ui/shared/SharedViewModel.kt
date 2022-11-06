@@ -89,7 +89,7 @@ class SharedViewModel : ViewModel() {
      */
 
     /**
-     * Reset all settings other than displaying settings button on main fragment
+     * Reset all settings other than displaying settings button on calculator fragment
      */
     fun resetSettings() {
         val defaults = Settings()
@@ -103,7 +103,7 @@ class SharedViewModel : ViewModel() {
     }
 
     /**
-     * Select random settings and hide settings button on main fragment
+     * Select random settings and hide settings button on calculator fragment
      */
     fun randomizeSettings() {
         setApplyDecimals(random.nextBoolean())
@@ -121,7 +121,7 @@ class SharedViewModel : ViewModel() {
      * History
      */
 
-    // LiveData because MainFragment needs to observe when history is cleared
+    // LiveData because CalculatorFragment needs to observe when history is cleared
     private val _history = MutableLiveData<History>().apply { value = emptyList() }
     val history: LiveData<History> = _history
 

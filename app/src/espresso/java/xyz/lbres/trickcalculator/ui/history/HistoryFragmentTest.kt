@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
@@ -25,9 +25,9 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
-import xyz.lbres.trickcalculator.ui.main.clearText
-import xyz.lbres.trickcalculator.ui.main.equals
-import xyz.lbres.trickcalculator.ui.main.typeText
+import xyz.lbres.trickcalculator.ui.calculator.clearText
+import xyz.lbres.trickcalculator.ui.calculator.equals
+import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 @RunWith(AndroidJUnit4::class)
 class HistoryFragmentTest {
@@ -35,7 +35,7 @@ class HistoryFragmentTest {
 
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Rule
     @JvmField

@@ -12,7 +12,7 @@ object ProductFlavor : ProductFlavorConfig {
     /**
      * Show dev tools button and setup dialog
      */
-    override fun setupFlavor(activity: MainActivity) {
+    override fun setupFlavor(activity: BaseActivity) {
         val devToolsButton = activity.binding.devToolsButton
 
         devToolsButton.visible()

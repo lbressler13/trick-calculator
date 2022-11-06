@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
 import xyz.lbres.trickcalculator.ui.settings.SettingsDialog
@@ -93,7 +93,7 @@ class DeveloperToolsDialog : DialogFragment() {
         val numString = timerString.substring(0, timerString.length - 2) // remove ms from end
         val timer = Integer.parseInt(numString).toLong()
 
-        val button = (requireActivity() as MainActivity).binding.devToolsButton
+        val button = (requireActivity() as BaseActivity).binding.devToolsButton
         button.gone()
 
         // unhide dev tools button

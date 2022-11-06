@@ -22,7 +22,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.trickcalculator.MainActivity
+import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
@@ -37,11 +37,11 @@ import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
-    private val intent = Intent(ApplicationProvider.getApplicationContext(), MainActivity::class.java)
+    private val intent = Intent(ApplicationProvider.getApplicationContext(), BaseActivity::class.java)
 
     @Rule
     @JvmField
-    val activityRule = ActivityScenarioRule<MainActivity>(intent)
+    val activityRule = ActivityScenarioRule<BaseActivity>(intent)
 
     @Rule
     @JvmField

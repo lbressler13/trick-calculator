@@ -58,7 +58,7 @@ class HistoryFragment : BaseFragment() {
             }
         }
 
-        binding.closeButton.root.setOnClickListener { requireMainActivity().popBackStack() }
+        binding.closeButton.root.setOnClickListener { requireBaseActivity().popBackStack() }
 
         return binding.root
     }

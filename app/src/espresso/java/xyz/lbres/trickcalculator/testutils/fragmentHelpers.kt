@@ -14,14 +14,14 @@ fun closeFragment() {
 }
 
 /**
- * Open attributions fragment from main screen
+ * Open attributions fragment from calculator screen
  */
 fun openAttributionsFragment() {
     onView(withId(R.id.infoButton)).perform(click())
 }
 
 /**
- * Open settings fragment from main screen
+ * Open settings fragment from calculator screen
  */
 fun openSettingsFragment() {
     onView(withId(R.id.infoButton)).perform(click())
@@ -29,14 +29,14 @@ fun openSettingsFragment() {
 }
 
 /**
- * Open history fragment from main screen
+ * Open history fragment from calculator screen
  */
 fun openHistoryFragment() {
     onView(withId(R.id.historyButton)).perform(click())
 }
 
 /**
- * Toggle shuffle operators setting from main screen
+ * Toggle shuffle operators setting from calculator screen
  */
 fun toggleShuffleOperators() {
     openSettingsFragment()
