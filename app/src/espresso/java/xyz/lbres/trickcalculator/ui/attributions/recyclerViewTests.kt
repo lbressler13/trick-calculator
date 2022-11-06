@@ -4,7 +4,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -19,8 +18,8 @@ import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.actionOnItemViewAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.actionOnNestedItemViewAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
+import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
-import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
@@ -117,7 +116,7 @@ fun testAttributionLinks() {
     expandCollapseAttribution(3)
     expandCollapseAttribution(4)
     for (position in imageUrls.indices) {
-        onView(withId(recyclerId)).perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(position))
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
         val urls = imageUrls[position]
 
         for (url in urls) {
@@ -150,7 +149,7 @@ fun testAttributionLinks() {
  */
 private fun checkImagesNotPresented(positions: IntList) {
     for (position in positions) {
-        onView(withId(recyclerId)).perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(0))
+        onView(withId(recyclerId)).perform(scrollToPosition(0))
         for (url in imageUrls[position]) {
             onView(withText(url)).check(isNotPresented())
         }

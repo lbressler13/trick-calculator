@@ -34,3 +34,12 @@ fun openSettingsFragment() {
 fun openHistoryFragment() {
     onView(withId(R.id.historyButton)).perform(click())
 }
+
+/**
+ * Toggle shuffle operators setting from main screen
+ */
+fun toggleShuffleOperators() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    closeFragment()
+}

@@ -43,8 +43,8 @@ class MainFragmentTest {
 
     @Before
     fun setupTest() {
+        // must be performed in setup instead of cleanup, because mainText might not be visible at end of a test
         mainText.perform(clearSavedText())
-        clearText()
     }
 
     @Test

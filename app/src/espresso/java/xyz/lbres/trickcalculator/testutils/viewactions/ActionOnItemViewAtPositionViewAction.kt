@@ -42,7 +42,7 @@ private class ActionOnItemViewAtPositionViewAction(
     override fun perform(uiController: UiController, view: View) {
         view as RecyclerView
 
-        ScrollToPositionViewAction(position).perform(uiController, view)
+        scrollToPosition(position).perform(uiController, view)
         uiController.loopMainThreadUntilIdle()
 
         val vhPosition = position % view.childCount

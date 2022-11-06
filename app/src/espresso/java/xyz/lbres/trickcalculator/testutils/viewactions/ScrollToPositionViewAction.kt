@@ -11,13 +11,14 @@ import org.hamcrest.Matchers.allOf
 
 /**
  * [ViewAction] to scroll to a specified position in a [RecyclerView].
+ * Alternative to RecyclerViewActions.ScrollToPosition, which requires the ViewHolder class.
  *
  * Adapted from similar ViewAction created by GitHub user dannyroa in this file:
  * https://github.com/dannyroa/espresso-samples/blob/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview/TestUtils.java#L80
  *
  * @param position [Int]: index to scroll to
  */
-class ScrollToPositionViewAction(private val position: Int) : ViewAction {
+private class ScrollToPositionViewAction(private val position: Int) : ViewAction {
     override fun getConstraints(): Matcher<View> = allOf(
         isAssignableFrom(RecyclerView::class.java),
         isDisplayed()
@@ -35,3 +36,8 @@ class ScrollToPositionViewAction(private val position: Int) : ViewAction {
         view.scrollToPosition(position)
     }
 }
+
+/**
+ * Wrapper function for creating a [ScrollToPositionViewAction]
+ */
+fun scrollToPosition(position: Int): ViewAction = ScrollToPositionViewAction(position)

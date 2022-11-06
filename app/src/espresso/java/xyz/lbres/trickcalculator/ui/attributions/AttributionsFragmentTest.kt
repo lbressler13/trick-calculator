@@ -8,7 +8,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
@@ -32,8 +31,8 @@ import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
+import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
-import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 @RunWith(AndroidJUnit4::class)
@@ -143,7 +142,7 @@ class AttributionsFragmentTest {
             val author = pair.value
 
             expandCollapseAttribution(index)
-            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(index))
+            recycler.perform(scrollToPosition(index))
             val image = author.images[0]
             onView(withText(image.url)).check(matches(isDisplayed()))
         }
@@ -164,7 +163,7 @@ class AttributionsFragmentTest {
             val index = pair.index
             val author = pair.value
 
-            recycler.perform(RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(index))
+            recycler.perform(scrollToPosition(index))
             val image = author.images[0]
             onView(withText(image.url)).check(isNotPresented())
         }
