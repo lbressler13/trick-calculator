@@ -39,7 +39,7 @@ class HistoryFragmentTest {
 
     @Rule
     @JvmField
-    val retryRule = RetryRule()
+    val retryRule = RetryRule(0) // TODO undo this
 
     @Before
     fun setupTest() {
@@ -65,17 +65,20 @@ class HistoryFragmentTest {
     }
 
     @Test
-    fun historyRandomness0() = testRandomness0()
+    fun randomness0() = testRandomness0()
 
     @Test
-    fun historyRandomness1() = testRandomness1()
+    fun randomness1() = testRandomness1()
 
     @Test
-    fun historyRandomness2() = testRandomness2()
+    fun randomness1Reshuffled() = testRandomness1Reshuffled()
+
+    @Test
+    fun randomness2() = testRandomness2()
 
     // TODO
     // @Test
-    // fun historyRandomness3() {
+    // fun randomness3() {
     // }
 
     // TODO

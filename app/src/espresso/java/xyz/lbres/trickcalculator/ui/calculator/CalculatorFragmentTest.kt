@@ -17,9 +17,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.clearSavedText
-import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.saveText
-import xyz.lbres.trickcalculator.testutils.TextSaver.Companion.withSavedText
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.withSavedText
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
 import xyz.lbres.trickcalculator.testutils.matchers.isNotEmptyString

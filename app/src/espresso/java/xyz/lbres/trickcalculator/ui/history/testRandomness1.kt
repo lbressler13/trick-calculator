@@ -5,11 +5,15 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matchers.not
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.clearSavedTextAtPosition
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.ui.calculator.clearText
@@ -73,6 +77,85 @@ fun testRandomness1() {
     equals()
     computeHistory.add(Pair("2^0.5", "Exponents must be whole numbers"))
     checkCorrectData(computeHistory)
+}
+
+fun testRandomness1Reshuffled() {
+    setHistoryRandomness(1)
+    toggleShuffleOperators()
+
+    val computeHistory: MutableList<Pair<String, String>> = mutableListOf()
+
+    typeText("400/5")
+    equals()
+    computeHistory.add(Pair("400/5", "80"))
+
+    clearText()
+    typeText("15-2.5")
+    equals()
+    computeHistory.add(Pair("15-2.5", "12.5"))
+
+    clearText()
+    typeText("(3-4)(5+2)")
+    equals()
+    computeHistory.add(Pair("(3-4)(5+2)", "-7"))
+
+    typeText("+11")
+    equals()
+    computeHistory.add(Pair("-7+11", "4"))
+
+    clearText()
+    typeText("(3-4)(5+2)")
+    equals()
+    computeHistory.add(Pair("(3-4)(5+2)", "-7"))
+
+    clearText()
+    typeText("+")
+    equals()
+    computeHistory.add(Pair("+", "Syntax error"))
+
+    clearText()
+    typeText("2^0.5")
+    equals()
+    computeHistory.add(Pair("2^0.5", "Exponents must be whole numbers"))
+
+    checkCorrectData(computeHistory)
+    val historySize = computeHistory.size
+    openHistoryFragment()
+
+    for (position in 0 until historySize) {
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withViewHolder(recyclerId, position)).perform(saveTextAtPosition(position, R.id.computeText))
+    }
+
+    closeFragment()
+
+    // additional repeats for 2 items due to occasional failures
+    val repeatCount = ternaryIf(historySize == 2, 10, 5)
+    var repeats = 0
+    var shuffled = false
+
+    while (repeats < repeatCount && !shuffled) {
+        openHistoryFragment()
+
+        for (position in 0 until historySize) {
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
+
+            try {
+                onView(withViewHolder(recyclerId, position)).check(matches(not(withSavedTextAtPosition(position, R.id.computeText))))
+                shuffled = true
+            } catch (_: Throwable) {}
+        }
+
+        repeats++
+        closeFragment()
+    }
+
+    openHistoryFragment()
+    for (position in 0 until historySize) {
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withViewHolder(recyclerId, position)).perform(clearSavedTextAtPosition(position, R.id.computeText))
+    }
+
 }
 
 /**

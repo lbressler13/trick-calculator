@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.testutils
+package xyz.lbres.trickcalculator.testutils.textsaver
 
 import android.view.View
 import android.widget.TextView
