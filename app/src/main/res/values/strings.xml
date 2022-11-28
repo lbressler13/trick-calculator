@@ -37,6 +37,7 @@
     <string name="shuffle_computation">Shuffle Computation</string>
     <string name="shuffle_numbers">Shuffle Numbers</string>
     <string name="shuffle_operators">Shuffle Operators</string>
+    <string name="standard_function">Standard Function</string>
 
     <!-- Attributions -->
     <string name="title_attributions">Image Attributions</string>

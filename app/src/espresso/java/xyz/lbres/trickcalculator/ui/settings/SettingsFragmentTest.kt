@@ -52,6 +52,7 @@ class SettingsFragmentTest {
         checkInitialSettings()
         onView(withId(R.id.resetSettingsButton)).check(matches(isDisplayed()))
         onView(withId(R.id.randomizeSettingsButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.standardFunctionButton)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -113,6 +114,7 @@ class SettingsFragmentTest {
         checkInitialSettings(checkSettingsButton = false)
         onView(withId(R.id.resetSettingsButton)).check(matches(isDisplayed()))
         onView(withId(R.id.randomizeSettingsButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.standardFunctionButton)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -123,6 +125,9 @@ class SettingsFragmentTest {
 
     @Test
     fun randomizeButton() = testRandomizeButton()
+
+    @Test
+    fun standardFunctionButton() = testStandardFunctionButton()
 
     /**
      * Run basic tests on a switch by checking and unchecking

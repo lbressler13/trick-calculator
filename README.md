@@ -39,17 +39,7 @@ Here is the complete list:
 | Shuffle operators     | true    | Shuffle action of operators                                      |
 
 The app can also function as a standard calculator, which performs computation correctly.
-Here are the necessary configurations:
-| Setting               | Value  |
-|:----------------------|:-------|
-| Apply decimals        | true   |
-| Apply parentheses     | true   |
-| Clear text on error   | any    |
-| History               | 0      |
-| Show settings button  | any    |
-| Shuffle computation   | false  |
-| Shuffle numbers       | false  |
-| Shuffle operators     | false  |
+This can be enabled via a button in the settings menu.
 
 With the exception of showing the settings button, no visual indication is given in the calculator of which settings are applied.
 

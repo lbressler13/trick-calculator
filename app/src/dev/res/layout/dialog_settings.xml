@@ -114,4 +114,9 @@
         style="@style/DialogButton"
         android:text="@string/randomize_settings" />
 
+    <Button
+        android:id="@+id/standardFunctionButton"
+        style="@style/DialogButton"
+        android:text="@string/standard_function" />
+
 </LinearLayout>

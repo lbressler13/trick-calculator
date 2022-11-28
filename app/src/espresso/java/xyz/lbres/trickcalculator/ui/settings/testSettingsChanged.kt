@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.Matchers.allOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
@@ -187,4 +187,84 @@ fun testRandomizeButton() {
         openSettingsFragment()
         onView(isRoot()).check(settingsRandomized())
     }
+}
+
+fun testStandardFunctionButton() {
+    val standardFunctionButton = onView(withId(R.id.standardFunctionButton))
+
+    // from standard settings
+    standardFunctionButton.perform(click())
+    onView(withText("Calculator")).check(matches(isDisplayed()))
+    settingsButton.check(isNotPresented())
+
+    // check standard settings
+    openSettingsFragment()
+    checkStandardSettings()
+
+    // modify settings
+    applyParensSwitch.perform(click())
+    shuffleComputationSwitch.perform(click())
+    shuffleNumbersSwitch.perform(click())
+    shuffleOperatorsSwitch.perform(click())
+    onView(withId(R.id.historyButton3)).perform(click())
+
+    // set standard
+    standardFunctionButton.perform(click())
+    onView(withText("Calculator")).check(matches(isDisplayed()))
+    settingsButton.check(isNotPresented())
+
+    // check standard settings
+    openSettingsFragment()
+    checkStandardSettings()
+
+    // modify settings + enable settings button
+    shuffleNumbersSwitch.perform(click())
+    shuffleOperatorsSwitch.perform(click())
+    onView(withId(R.id.historyButton2)).perform(click())
+
+    settingsButtonSwitch.perform(click())
+
+    closeFragment()
+
+    // open settings button w/ existing changes + set standard
+    settingsButton.check(matches(isDisplayed())).perform(click())
+    standardFunctionButton.perform(click())
+    onView(withText("Calculator")).check(matches(isDisplayed()))
+
+    // validate that settings button still exists
+    settingsButton.check(matches(isDisplayed())).perform(click())
+    checkStandardSettings()
+
+    // modify settings through settings button + set standard
+    applyDecimalsSwitch.perform(click())
+    clearOnErrorSwitch.perform(click())
+    standardFunctionButton.perform(click())
+
+    // validate that settings button is still checked
+    openSettingsFragment()
+    checkStandardSettings()
+    settingsButtonSwitch.check(matches(isChecked()))
+
+    // set standard through regular method + validate settings still exists
+    standardFunctionButton.perform(click())
+    settingsButton.check(matches(isDisplayed()))
+}
+
+/**
+ * Check that settings match the config needed to function as a standard calculator.
+ */
+private fun checkStandardSettings() {
+    onView(withId(R.id.applyParensSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
+    onView(withId(R.id.applyDecimalsSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
+    onView(withId(R.id.shuffleComputationSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+    onView(withId(R.id.shuffleNumbersSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+    onView(withId(R.id.shuffleOperatorsSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+
+    onView(withId(R.id.clearOnErrorSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+
+    onView(withId(R.id.historyRandomnessGroup)).check(matches(isDisplayed()))
+    onView(withId(R.id.historyButton0)).check(matches(isChecked()))
+    onView(withId(R.id.historyButton1)).check(matches(isNotChecked()))
+    onView(withId(R.id.historyButton2)).check(matches(isNotChecked()))
+    onView(withId(R.id.historyButton3)).check(matches(isNotChecked()))
 }

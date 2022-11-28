@@ -165,6 +165,17 @@
             style="@style/SettingsFragmentItem.Button"
             android:text="@string/randomize_settings" />
 
+        <TextView
+            style="@style/SettingsFragmentItem.Button"
+            android:text="|"
+            tools:ignore="HardcodedText" />
+
+        <!-- TODO text on one line -->
+        <TextView
+            android:id="@+id/standardFunctionButton"
+            style="@style/SettingsFragmentItem.Button"
+            android:text="@string/standard_function" />
+
     </LinearLayout>
 
 </LinearLayout>

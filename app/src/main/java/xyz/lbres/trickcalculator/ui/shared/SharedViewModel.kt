@@ -118,6 +118,19 @@ class SharedViewModel : ViewModel() {
     }
 
     /**
+     * Set the calculator to use behave as a normal calculator
+     */
+    fun setStandardSettings() {
+        setApplyDecimals(true)
+        setApplyParens(true)
+        setClearOnError(false)
+        setHistoryRandomness(0)
+        setShuffleComputation(false)
+        setShuffleNumbers(false)
+        setShuffleOperators(false)
+    }
+
+    /**
      * History
      */
 

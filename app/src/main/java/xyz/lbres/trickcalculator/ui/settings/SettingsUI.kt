@@ -36,6 +36,11 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
     private var randomizePressed: Boolean = false
 
     /**
+     * If standard function button was pressed
+     */
+    private var standardFunctionPressed: Boolean = false
+
+    /**
      * Switches to control settings
      */
     private val applyDecimalsSwitch: SwitchCompat = rootView.findViewById(R.id.applyDecimalsSwitch)
@@ -62,6 +67,7 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
      */
     private val randomizeSettingsButton: View = rootView.findViewById(R.id.randomizeSettingsButton)
     private val resetSettingsButton: View = rootView.findViewById(R.id.resetSettingsButton)
+    private val standardFunctionButton: View = rootView.findViewById(R.id.standardFunctionButton)
 
     /**
      * Initialize UI elements, observers, and on click functions for buttons
@@ -78,6 +84,11 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
 
         resetSettingsButton.setOnClickListener {
             resetPressed = true
+            closeCurrentFragment()
+        }
+
+        standardFunctionButton.setOnClickListener {
+            standardFunctionPressed = true
             closeCurrentFragment()
         }
     }
@@ -116,6 +127,7 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
     fun saveSettingsToViewModel() {
         val randomizedPressed = randomizePressed
         val resetPressed = resetPressed
+        val standardFunctionPressed = standardFunctionPressed
 
         when {
             randomizedPressed -> viewModel.randomizeSettings()
@@ -123,6 +135,11 @@ class SettingsUI(private val fragment: Fragment, rootView: View, private val vie
                 // persist show settings value
                 viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
                 viewModel.resetSettings()
+            }
+            standardFunctionPressed -> {
+                // persist show settings value
+                viewModel.setShowSettingsButton(settingsButtonSwitch.isChecked)
+                viewModel.setStandardSettings()
             }
             else -> {
                 // update ViewModel based on settings selected in UI
