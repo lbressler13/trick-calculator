@@ -17,72 +17,42 @@ class SharedViewModel : ViewModel() {
 
     /**
      * Individual settings
+     *
+     * Settings are represented as LiveData because fragments need to observe changes through the settings dialog
      */
 
     // LiveData because fragments need to observe when settings are changed via settings dialog
     private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
     val applyDecimals: LiveData<Boolean> = _applyDecimals
-    fun setApplyDecimals(newValue: Boolean) {
-        if (newValue != applyDecimals.value) {
-            _applyDecimals.value = newValue
-        }
-    }
+    fun setApplyDecimals(newValue: Boolean) { updateSetting(newValue, _applyDecimals) }
 
     private val _applyParens = MutableLiveData<Boolean>().apply { value = true }
     val applyParens: LiveData<Boolean> = _applyParens
-    fun setApplyParens(newValue: Boolean) {
-        if (newValue != applyParens.value) {
-            _applyParens.value = newValue
-        }
-    }
+    fun setApplyParens(newValue: Boolean) { updateSetting(newValue, _applyParens) }
 
     private val _clearOnError = MutableLiveData<Boolean>().apply { value = false }
     val clearOnError: LiveData<Boolean> = _clearOnError
-    fun setClearOnError(newValue: Boolean) {
-        if (newValue != clearOnError.value) {
-            _clearOnError.value = newValue
-        }
-    }
+    fun setClearOnError(newValue: Boolean) { updateSetting(newValue, _clearOnError) }
 
     private val _historyRandomness = MutableLiveData<Int>().apply { value = 1 }
     val historyRandomness: LiveData<Int> = _historyRandomness
-    fun setHistoryRandomness(newValue: Int) {
-        if (newValue != historyRandomness.value) {
-            _historyRandomness.value = newValue
-        }
-    }
+    fun setHistoryRandomness(newValue: Int) { updateSetting(newValue, _historyRandomness) }
 
     private val _showSettingsButton = MutableLiveData<Boolean>().apply { value = false }
     val showSettingsButton: LiveData<Boolean> = _showSettingsButton
-    fun setShowSettingsButton(newValue: Boolean) {
-        if (newValue != showSettingsButton.value) {
-            _showSettingsButton.value = newValue
-        }
-    }
+    fun setShowSettingsButton(newValue: Boolean) { updateSetting(newValue, _showSettingsButton) }
 
     private val _shuffleComputation = MutableLiveData<Boolean>().apply { value = false }
     val shuffleComputation: LiveData<Boolean> = _shuffleComputation
-    fun setShuffleComputation(newValue: Boolean) {
-        if (newValue != shuffleComputation.value) {
-            _shuffleComputation.value = newValue
-        }
-    }
+    fun setShuffleComputation(newValue: Boolean) { updateSetting(newValue, _shuffleComputation) }
 
     private val _shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
     val shuffleNumbers: LiveData<Boolean> = _shuffleNumbers
-    fun setShuffleNumbers(newValue: Boolean) {
-        if (newValue != shuffleNumbers.value) {
-            _shuffleNumbers.value = newValue
-        }
-    }
+    fun setShuffleNumbers(newValue: Boolean) { updateSetting(newValue, _shuffleNumbers) }
 
     private val _shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
     val shuffleOperators: LiveData<Boolean> = _shuffleOperators
-    fun setShuffleOperators(newValue: Boolean) {
-        if (newValue != shuffleOperators.value) {
-            _shuffleOperators.value = newValue
-        }
-    }
+    fun setShuffleOperators(newValue: Boolean) { updateSetting(newValue, _shuffleOperators) }
 
     /**
      * All settings
@@ -145,5 +115,21 @@ class SharedViewModel : ViewModel() {
 
     fun clearHistory() {
         _history.value = emptyList()
+    }
+
+    /**
+     * Helpers
+     */
+
+    /**
+     * Update the value of a setting if its value has changed.
+     *
+     * @param newValue [T]: new value for setting
+     * @param mutable [MutableLiveData]<[T]>: mutable live data to be updated with the new value
+     */
+    private fun <T> updateSetting(newValue: T, mutable: MutableLiveData<T>) {
+        if (newValue != mutable.value) {
+            mutable.value = newValue
+        }
     }
 }
