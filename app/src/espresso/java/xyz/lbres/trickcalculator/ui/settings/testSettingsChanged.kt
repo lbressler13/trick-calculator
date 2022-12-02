@@ -3,6 +3,7 @@ package xyz.lbres.trickcalculator.ui.settings
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -165,7 +166,7 @@ fun testRandomizeButton() {
 
     // fragment closes
     onView(withText("Settings")).check(matches(isDisplayed()))
-    randomizeButton.perform(click())
+    randomizeButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
 
     openSettingsFragment()
@@ -173,7 +174,7 @@ fun testRandomizeButton() {
     closeFragment()
     settingsButton.perform(click())
     onView(withText("Settings")).check(matches(isDisplayed()))
-    randomizeButton.perform(click())
+    randomizeButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
 
     // settings button disappeared
@@ -187,7 +188,7 @@ fun testRandomizeButton() {
         onView(isRoot()).check(settingsRandomized())
     } catch (_: AssertionError) {
         // one retry, in case of rare event where randomized = initial settings
-        randomizeButton.perform(click())
+        randomizeButton.perform(scrollTo(), click())
         openSettingsFragment()
         onView(isRoot()).check(settingsRandomized())
     }
@@ -197,7 +198,7 @@ fun testStandardFunctionButton() {
     val standardFunctionButton = onView(withId(R.id.standardFunctionButton))
 
     // from initial settings
-    standardFunctionButton.perform(click())
+    standardFunctionButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
     settingsButton.check(isNotPresented())
 
@@ -213,7 +214,7 @@ fun testStandardFunctionButton() {
     onView(withId(R.id.historyButton3)).perform(click())
 
     // set standard
-    standardFunctionButton.perform(click())
+    standardFunctionButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
     settingsButton.check(isNotPresented())
 
@@ -232,7 +233,7 @@ fun testStandardFunctionButton() {
 
     // open settings button w/ existing changes + set standard
     settingsButton.check(matches(isDisplayed())).perform(click())
-    standardFunctionButton.perform(click())
+    standardFunctionButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
 
     // validate that settings button still exists
@@ -242,7 +243,7 @@ fun testStandardFunctionButton() {
     // modify settings through settings button + set standard
     applyDecimalsSwitch.perform(click())
     clearOnErrorSwitch.perform(click())
-    standardFunctionButton.perform(click())
+    standardFunctionButton.perform(scrollTo(), click())
 
     // validate that settings button is still checked
     openSettingsFragment()
@@ -250,7 +251,7 @@ fun testStandardFunctionButton() {
     settingsButtonSwitch.check(matches(isChecked()))
 
     // set standard through regular method + validate settings still exists
-    standardFunctionButton.perform(click())
+    standardFunctionButton.perform(scrollTo(), click())
     settingsButton.check(matches(isDisplayed()))
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,176 +7,175 @@
     android:background="?backgroundColor"
     android:orientation="vertical">
 
-    <!-- Display close button in line with the top title -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include android:id="@+id/closeButton" layout="@layout/component_close_button" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?colorPrimary"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toBottomOf="@+id/closeButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="0dp">
 
-        <TextView
-            style="@style/SettingsSectionHeading"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/computation"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
 
-        <!-- Can't use close button component due to difference in layout constraints -->
-        <ImageButton
-            android:id="@+id/closeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:contentDescription="@string/close_cd"
-            android:paddingEnd="@dimen/corner_icon_padding"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:src="@drawable/ic_close"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?colorOnPrimary"
-            tools:ignore="RtlSymmetry" />
+            <!-- Display close button in line with the top title -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?colorPrimary"
+                android:orientation="horizontal">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    style="@style/SettingsSectionHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/computation"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Computation-related settings -->
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/shuffleOperatorsSwitch"
-        style="@style/SettingsFragmentItem"
-        android:checked="true"
-        android:text="@string/shuffle_operators" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/shuffleNumbersSwitch"
-        style="@style/SettingsFragmentItem"
-        android:text="@string/shuffle_numbers" />
+            <!-- Computation-related settings -->
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/shuffleOperatorsSwitch"
+                style="@style/SettingsFragmentItem"
+                android:checked="true"
+                android:text="@string/shuffle_operators" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/applyParensSwitch"
-        style="@style/SettingsFragmentItem"
-        android:checked="true"
-        android:text="@string/apply_parens" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/shuffleNumbersSwitch"
+                style="@style/SettingsFragmentItem"
+                android:text="@string/shuffle_numbers" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/applyDecimalsSwitch"
-        style="@style/SettingsFragmentItem"
-        android:checked="true"
-        android:text="@string/apply_decimals" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/applyParensSwitch"
+                style="@style/SettingsFragmentItem"
+                android:checked="true"
+                android:text="@string/apply_parens" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/shuffleComputationSwitch"
-        style="@style/SettingsFragmentItem"
-        android:text="@string/shuffle_computation" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/applyDecimalsSwitch"
+                style="@style/SettingsFragmentItem"
+                android:checked="true"
+                android:text="@string/apply_decimals" />
 
-    <!-- View-related title -->
-    <TextView
-        style="@style/SettingsSectionHeading"
-        android:layout_marginTop="15dp"
-        android:text="@string/additional_options" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/shuffleComputationSwitch"
+                style="@style/SettingsFragmentItem"
+                android:text="@string/shuffle_computation" />
 
-    <!-- View-related settings -->
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/clearOnErrorSwitch"
-        style="@style/SettingsFragmentItem"
-        android:text="@string/clear_on_error" />
+            <!-- View-related title -->
+            <TextView
+                style="@style/SettingsSectionHeading"
+                android:layout_marginTop="15dp"
+                android:text="@string/additional_options" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/settingsButtonSwitch"
-        style="@style/SettingsFragmentItem"
-        android:checked="true"
-        android:text="@string/show_settings_button"
-        android:visibility="gone" />
+            <!-- View-related settings -->
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/clearOnErrorSwitch"
+                style="@style/SettingsFragmentItem"
+                android:text="@string/clear_on_error" />
 
-    <RadioGroup
-        android:id="@+id/historyRandomnessGroup"
-        style="@style/SettingsFragmentItem"
-        android:orientation="horizontal">
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsButtonSwitch"
+                style="@style/SettingsFragmentItem"
+                android:checked="true"
+                android:text="@string/show_settings_button"
+                android:visibility="gone" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
-            android:text="@string/random_history_label"
-            android:textColor="?colorOnBackground"
-            android:textSize="15sp"
-            tools:ignore="RtlSymmetry" />
+            <RadioGroup
+                android:id="@+id/historyRandomnessGroup"
+                style="@style/SettingsFragmentItem"
+                android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/historyButton0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/zero"
-            android:textColor="?colorOnBackground"
-            android:textSize="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="10dp"
+                    android:text="@string/random_history_label"
+                    android:textColor="?colorOnBackground"
+                    android:textSize="15sp"
+                    tools:ignore="RtlSymmetry" />
 
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/historyButton1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/one"
-            android:textColor="?colorOnBackground"
-            android:textSize="15sp" />
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/historyButton0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero"
+                    android:textColor="?colorOnBackground"
+                    android:textSize="15sp" />
 
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/historyButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/two"
-            android:textColor="?colorOnBackground"
-            android:textSize="15sp" />
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/historyButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/one"
+                    android:textColor="?colorOnBackground"
+                    android:textSize="15sp" />
 
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/historyButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/three"
-            android:textColor="?colorOnBackground"
-            android:textSize="15sp" />
-    </RadioGroup>
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/historyButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/two"
+                    android:textColor="?colorOnBackground"
+                    android:textSize="15sp" />
 
-    <!-- Title for options that affect all settings -->
-    <TextView
-        style="@style/SettingsSectionHeading"
-        android:layout_marginTop="15dp"
-        android:text="@string/all_settings" />
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/historyButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/three"
+                    android:textColor="?colorOnBackground"
+                    android:textSize="15sp" />
+            </RadioGroup>
 
-    <TextView
-        android:id="@+id/resetSettingsButton"
-        style="@style/SettingsFragmentItem.Button"
-        android:text="@string/reset_settings" />
+            <!-- Title for options that affect all settings -->
+            <TextView
+                style="@style/SettingsSectionHeading"
+                android:layout_marginTop="15dp"
+                android:text="@string/all_settings" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:background="?colorOnBackground" />
+            <TextView
+                android:id="@+id/resetSettingsButton"
+                style="@style/SettingsFragmentItem.Button"
+                android:text="@string/reset_settings" />
 
-    <TextView
-        android:id="@+id/randomizeSettingsButton"
-        style="@style/SettingsFragmentItem.Button"
-        android:text="@string/randomize_settings" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:background="?colorOnBackground" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:background="?colorOnBackground" />
+            <TextView
+                android:id="@+id/randomizeSettingsButton"
+                style="@style/SettingsFragmentItem.Button"
+                android:text="@string/randomize_settings" />
 
-    <TextView
-        android:id="@+id/standardFunctionButton"
-        style="@style/SettingsFragmentItem.Button"
-        android:text="@string/standard_function" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:background="?colorOnBackground" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:background="?colorOnBackground" />
+            <TextView
+                android:id="@+id/standardFunctionButton"
+                style="@style/SettingsFragmentItem.Button"
+                android:text="@string/standard_function" />
 
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:background="?colorOnBackground" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
