@@ -10,7 +10,7 @@ import xyz.lbres.trickcalculator.R
 /**
  * [ViewAssertion] to assert that settings displayed in settings fragment have been randomized
  */
-private class SettingsModifiedViewAssertion : ViewAssertion {
+private class SettingsRandomizedViewAssertion : ViewAssertion {
     /**
      * Assert that the settings have been randomized
      *
@@ -50,6 +50,6 @@ private class SettingsModifiedViewAssertion : ViewAssertion {
 }
 
 /**
- * Wrapper function to create a [SettingsModifiedViewAssertion]
+ * Wrapper function to create a [SettingsRandomizedViewAssertion]
  */
-fun settingsRandomized(): ViewAssertion = SettingsModifiedViewAssertion()
+fun settingsRandomized(): ViewAssertion = SettingsRandomizedViewAssertion()
