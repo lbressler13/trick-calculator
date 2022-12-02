@@ -75,7 +75,7 @@
     <TextView
         style="@style/SettingsSectionHeading"
         android:layout_marginTop="15dp"
-        android:text="@string/view" />
+        android:text="@string/additional_options" />
 
     <!-- View-related settings -->
     <androidx.appcompat.widget.SwitchCompat
@@ -143,39 +143,40 @@
         android:layout_marginTop="15dp"
         android:text="@string/all_settings" />
 
-    <!-- Horizontal layout for buttons that affect all settings -->
-    <LinearLayout
+    <TextView
+        android:id="@+id/resetSettingsButton"
+        style="@style/SettingsFragmentItem.Button"
+        android:text="@string/reset_settings" />
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:layout_height="1dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="?colorOnBackground" />
 
-        <TextView
-            android:id="@+id/resetSettingsButton"
-            style="@style/SettingsFragmentItem.Button"
-            android:text="@string/reset_settings" />
+    <TextView
+        android:id="@+id/randomizeSettingsButton"
+        style="@style/SettingsFragmentItem.Button"
+        android:text="@string/randomize_settings" />
 
-        <TextView
-            style="@style/SettingsFragmentItem.Button"
-            android:text="|"
-            tools:ignore="HardcodedText" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="?colorOnBackground" />
 
-        <TextView
-            android:id="@+id/randomizeSettingsButton"
-            style="@style/SettingsFragmentItem.Button"
-            android:text="@string/randomize_settings" />
+    <TextView
+        android:id="@+id/standardFunctionButton"
+        style="@style/SettingsFragmentItem.Button"
+        android:text="@string/standard_function" />
 
-        <TextView
-            style="@style/SettingsFragmentItem.Button"
-            android:text="|"
-            tools:ignore="HardcodedText" />
-
-        <!-- TODO text on one line -->
-        <TextView
-            android:id="@+id/standardFunctionButton"
-            style="@style/SettingsFragmentItem.Button"
-            android:text="@string/standard_function" />
-
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="?colorOnBackground" />
 
 </LinearLayout>

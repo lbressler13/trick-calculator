@@ -57,13 +57,14 @@
         <item name="android:textColor">?colorOnBackground</item>
     </style>
 
-    <style name="SettingsFragmentItem.Button">
+    <style name="SettingsFragmentItem.Button" parent="SettingsFragmentItem">
         <!-- Layout -->
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginEnd">25dp</item>
         <!-- Style -->
-        <item name="android:textColor">?colorOnBackground</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 
