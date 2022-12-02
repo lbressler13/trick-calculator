@@ -8,7 +8,7 @@ on:
       - feat/standard-settings
 
 jobs:
-    basic-checks:
+  basic-checks:
     name: "Basic Checks"
     uses: ./.github/workflows/basic_checks.yml
 
