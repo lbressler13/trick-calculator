@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DialogButton" parent="Widget.AppCompat.Button">
+        <!-- Layout -->
+        <item name="android:layout_width" >match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">25dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <!-- Style -->
+        <item name="android:background">?colorPrimaryDark</item>
+        <item name="android:textColor">?colorOnPrimary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="SettingsDialogItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+</resources>
