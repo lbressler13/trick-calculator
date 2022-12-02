@@ -5,13 +5,15 @@ on:
   push:
     branches:
       - main
-      - feat/standard-settings
+      - feat/standard-settings # TODO remove
 
 jobs:
   basic-checks:
     name: "Basic Checks"
     uses: ./.github/workflows/basic_checks.yml
+    secrets: inherit
 
   espresso-tests:
     name: "Espresso Tests"
     uses: ./.github/workflows/espresso_tests.yml
+    secrets: inherit

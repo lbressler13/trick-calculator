@@ -5,6 +5,7 @@ on:
   workflow_call:
   push:
     branches-ignore:
+      # runs on main as part of All Checks
       - main
   pull_request:
 

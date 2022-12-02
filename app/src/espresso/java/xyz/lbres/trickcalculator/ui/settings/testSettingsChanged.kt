@@ -196,7 +196,7 @@ fun testRandomizeButton() {
 fun testStandardFunctionButton() {
     val standardFunctionButton = onView(withId(R.id.standardFunctionButton))
 
-    // from standard settings
+    // from initial settings
     standardFunctionButton.perform(click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
     settingsButton.check(isNotPresented())

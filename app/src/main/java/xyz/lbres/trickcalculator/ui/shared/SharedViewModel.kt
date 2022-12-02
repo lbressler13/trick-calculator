@@ -21,7 +21,6 @@ class SharedViewModel : ViewModel() {
      * Settings are represented as LiveData because fragments need to observe changes through the settings dialog
      */
 
-    // LiveData because fragments need to observe when settings are changed via settings dialog
     private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
     val applyDecimals: LiveData<Boolean> = _applyDecimals
     fun setApplyDecimals(newValue: Boolean) { updateSetting(newValue, _applyDecimals) }
@@ -88,7 +87,7 @@ class SharedViewModel : ViewModel() {
     }
 
     /**
-     * Set the calculator to use behave as a normal calculator
+     * Set the calculator to use behave as a normal calculator. Does not affect settings button.
      */
     fun setStandardSettings() {
         setApplyDecimals(true)
