@@ -1,0 +1,17 @@
+name: All Checks
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - feat/standard-settings
+
+  jobs:
+    basic-checks:
+      name: "Basic Checks"
+      uses: ./.github/workflows/basic_checks.yml
+
+    espresso-tests:
+      name: "Espresso Tests"
+      uses: ./.github/workflows/espresso_tests.yml
