@@ -7,11 +7,11 @@ on:
       - main
       - feat/standard-settings
 
-  jobs:
+jobs:
     basic-checks:
-      name: "Basic Checks"
-      uses: ./.github/workflows/basic_checks.yml
+    name: "Basic Checks"
+    uses: ./.github/workflows/basic_checks.yml
 
-    espresso-tests:
-      name: "Espresso Tests"
-      uses: ./.github/workflows/espresso_tests.yml
+  espresso-tests:
+    name: "Espresso Tests"
+    uses: ./.github/workflows/espresso_tests.yml
