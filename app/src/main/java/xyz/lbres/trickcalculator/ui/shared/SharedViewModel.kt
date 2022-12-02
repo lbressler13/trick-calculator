@@ -73,17 +73,17 @@ class SharedViewModel : ViewModel() {
     }
 
     /**
-     * Select random settings and hide settings button on calculator fragment
+     * Select random settings, clear on error, and hide settings button on calculator fragment
      */
     fun randomizeSettings() {
         setApplyDecimals(random.nextBoolean())
         setApplyParens(random.nextBoolean())
-        setClearOnError(random.nextBoolean())
         setHistoryRandomness((0..3).random())
         setShuffleComputation(random.nextBoolean())
         setShuffleNumbers(random.nextBoolean())
         setShuffleOperators(random.nextBoolean())
 
+        setClearOnError(true)
         setShowSettingsButton(false)
     }
 

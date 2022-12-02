@@ -8,11 +8,11 @@ import androidx.test.espresso.ViewAssertion
 import xyz.lbres.trickcalculator.R
 
 /**
- * [ViewAssertion] to assert that settings displayed in settings fragment do not match initial settings
+ * [ViewAssertion] to assert that settings displayed in settings fragment have been randomized
  */
 private class SettingsModifiedViewAssertion : ViewAssertion {
     /**
-     * Assert that a the settings do not match the initial settings
+     * Assert that the settings have been randomized
      *
      * @param view [View]?: view to check, expected to be root of a settings fragment
      */
@@ -34,9 +34,9 @@ private class SettingsModifiedViewAssertion : ViewAssertion {
             val viewSettings = Settings(
                 view.findViewById<SwitchCompat>(R.id.applyDecimalsSwitch).isChecked,
                 view.findViewById<SwitchCompat>(R.id.applyParensSwitch).isChecked,
-                view.findViewById<SwitchCompat>(R.id.clearOnErrorSwitch).isChecked,
+                initialSettings.clearOnError, // hardcoded in randomize, not part of randomization
                 historyRandomness,
-                view.findViewById<SwitchCompat>(R.id.settingsButtonSwitch).isChecked,
+                initialSettings.showSettingsButton, // hardcoded in randomize, not part of randomization
                 view.findViewById<SwitchCompat>(R.id.shuffleComputationSwitch).isChecked,
                 view.findViewById<SwitchCompat>(R.id.shuffleNumbersSwitch).isChecked,
                 view.findViewById<SwitchCompat>(R.id.shuffleOperatorsSwitch).isChecked,

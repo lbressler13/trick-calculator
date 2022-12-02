@@ -26,7 +26,7 @@ private val shuffleOperatorsSwitch = onView(withId(R.id.shuffleOperatorsSwitch))
 
 private val settingsButton = onView(withId(R.id.settingsButton))
 
-fun testSwitchSettingsMaintained() {
+fun testSettingsMaintained() {
     // set ui
     applyParensSwitch.perform(click())
     applyDecimalsSwitch.perform(click())
@@ -163,21 +163,25 @@ fun testResetButton() {
 fun testRandomizeButton() {
     val randomizeButton = onView(withId(R.id.randomizeSettingsButton))
 
-    // settings button disappears
-    settingsButtonSwitch.perform(click())
-    closeFragment()
-    settingsButton.check(matches(isDisplayed()))
-    openSettingsFragment()
+    // fragment closes
+    onView(withText("Settings")).check(matches(isDisplayed()))
     randomizeButton.perform(click())
-    settingsButton.check(isNotPresented())
+    onView(withText("Calculator")).check(matches(isDisplayed()))
+
     openSettingsFragment()
     settingsButtonSwitch.perform(click())
     closeFragment()
     settingsButton.perform(click())
+    onView(withText("Settings")).check(matches(isDisplayed()))
     randomizeButton.perform(click())
+    onView(withText("Calculator")).check(matches(isDisplayed()))
+
+    // settings button disappeared
     settingsButton.check(isNotPresented())
 
     openSettingsFragment()
+    settingsButtonSwitch.check(matches(isNotChecked()))
+    onView(withId(R.id.clearOnErrorSwitch)).check(matches(isChecked()))
 
     try {
         onView(isRoot()).check(settingsRandomized())

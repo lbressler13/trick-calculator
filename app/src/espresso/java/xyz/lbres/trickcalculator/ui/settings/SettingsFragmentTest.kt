@@ -19,8 +19,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.BaseActivity
+import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
@@ -39,6 +41,9 @@ class SettingsFragmentTest {
     @Before
     fun setupTest() {
         openSettingsFragment()
+        if (ProductFlavor.devMode) {
+            hideDevToolsButton()
+        }
     }
 
     @Test
@@ -118,7 +123,7 @@ class SettingsFragmentTest {
     }
 
     @Test
-    fun switchSettingsMaintained() = testSwitchSettingsMaintained()
+    fun settingsMaintained() = testSettingsMaintained()
 
     @Test
     fun resetButton() = testResetButton()
