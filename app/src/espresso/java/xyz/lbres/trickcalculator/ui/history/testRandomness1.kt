@@ -156,6 +156,7 @@ fun testRandomness1Reshuffled() {
         onView(withViewHolder(recyclerId, position)).perform(clearSavedTextAtPosition(position, R.id.computeText))
     }
 
+    // TODO this isn't finished
 }
 
 /**
@@ -175,7 +176,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
         openHistoryFragment()
 
         // check that all items are displayed
-        checkItemsDisplayed(computeHistory)
+        checkItemsDisplayed(computeHistory, 1)
 
         // check that items are shuffled
         shuffled = shuffled || checkItemsShuffled(computeHistory)
@@ -185,33 +186,6 @@ private fun checkCorrectData(computeHistory: TestHistory) {
 
     if (historySize > 1 && !shuffled) {
         throw AssertionError("History items should be shuffled in history randomness 1. History: $computeHistory")
-    }
-}
-
-/**
- * Check that all history items are visible on the screen
- *
- * @param computeHistory [TestHistory]: list of items in history
- */
-private fun checkItemsDisplayed(computeHistory: TestHistory) {
-    val historySize = computeHistory.size
-
-    computeHistory.forEach {
-        var foundItem = false
-        for (position in 0 until historySize) {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-            try {
-                onView(withViewHolder(recyclerId, position))
-                    .check(matches(withHistoryItem(it.first, it.second)))
-                foundItem = true
-                break
-            } catch (_: Throwable) {}
-        }
-
-        if (!foundItem) {
-            throw AssertionError("ViewHolder with text $it not found. History: $computeHistory")
-        }
     }
 }
 
