@@ -99,7 +99,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
         checkItemsDisplayed(computeHistory, 2)
 
         // check that items are shuffled
-        shuffledOrder = shuffledOrder || checkItemsShuffled(computeHistory)
+        shuffledOrder = shuffledOrder || checkItemsShuffled(computeHistory, 2)
         shuffledPairs = shuffledPairs || checkPairsShuffled(computeHistory)
 
         closeFragment()
@@ -108,70 +108,6 @@ private fun checkCorrectData(computeHistory: TestHistory) {
     if (historySize > 1 && (!shuffledOrder || !shuffledPairs)) {
         throw AssertionError("History items and pairs should be shuffled in history randomness 2. History: $computeHistory")
     }
-}
-
-/**
- * Determine if the order of the history items is shuffled
- *
- * @param computeHistory [TestHistory]: list of items in history
- * @return [Boolean]: true if at least one item's position does not match its position in the history, false if all items are in order
- */
-private fun checkItemsShuffled(computeHistory: TestHistory): Boolean {
-    val historySize = computeHistory.size
-    if (historySize < 2) {
-        return true
-    }
-
-    var computationsShuffled = false
-    var resultsShuffled = false
-
-    // check that compuataion strings are shuffled
-    val compStrings = computeHistory.map { it.first }
-    for (position in 0 until historySize) {
-        try {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-            val start = compStrings.subList(0, position)
-            val end = ternaryIf(
-                position == historySize - 1,
-                emptyList(),
-                compStrings.subList(position + 1, historySize)
-            )
-            val reducedCompStrings = start + end
-
-            val matcher = anyOf(reducedCompStrings.map { withChild(withText(it)) })
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-            onView(withViewHolder(recyclerId, position)).check(matches(matcher))
-
-            computationsShuffled = true
-            break
-        } catch (_: Throwable) {}
-    }
-
-    // check that results are shuffled
-    val resultStrings = computeHistory.map { it.second }
-    for (position in 0 until historySize) {
-        try {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-            val start = resultStrings.subList(0, position)
-            val end = ternaryIf(
-                position == historySize - 1,
-                emptyList(),
-                resultStrings.subList(position + 1, historySize)
-            )
-            val reducedResultStrings = start + end
-
-            val matcher = anyOf(reducedResultStrings.map { withChild(withChild(withText(it))) })
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-            onView(withViewHolder(recyclerId, position)).check(matches(matcher))
-
-            resultsShuffled = true
-            break
-        } catch (_: Throwable) {}
-    }
-
-    return computationsShuffled && resultsShuffled
 }
 
 /**

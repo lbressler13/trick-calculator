@@ -179,7 +179,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
         checkItemsDisplayed(computeHistory, 1)
 
         // check that items are shuffled
-        shuffled = shuffled || checkItemsShuffled(computeHistory)
+        shuffled = shuffled || checkItemsShuffled(computeHistory, 1)
 
         closeFragment()
     }
@@ -187,37 +187,4 @@ private fun checkCorrectData(computeHistory: TestHistory) {
     if (historySize > 1 && !shuffled) {
         throw AssertionError("History items should be shuffled in history randomness 1. History: $computeHistory")
     }
-}
-
-/**
- * Determine if the order of the history items is shuffled
- *
- * @param computeHistory [TestHistory]: list of items in history
- * @return [Boolean]: true if at least one item's position does not match its position in the history, false if all items are in order
- */
-private fun checkItemsShuffled(computeHistory: TestHistory): Boolean {
-    val historySize = computeHistory.size
-    if (historySize < 2) {
-        return true
-    }
-
-    for (position in 0 until historySize) {
-        try {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-            val start = computeHistory.subList(0, position)
-            val end = ternaryIf(
-                position == historySize - 1,
-                emptyList(),
-                computeHistory.subList(position + 1, historySize)
-            )
-            val reducedHistory = start + end
-
-            checkViewHolderInHistory(position, reducedHistory)
-
-            return true
-        } catch (_: Throwable) {}
-    }
-
-    return false
 }

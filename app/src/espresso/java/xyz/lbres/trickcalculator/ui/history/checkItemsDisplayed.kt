@@ -5,6 +5,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import xyz.lbres.kotlinutils.generic.ext.ifNull
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
@@ -12,8 +13,8 @@ import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 private const val recyclerId = R.id.itemsRecycler
 
 private val displayedFunctions: Map<Int, (Pair<String, String>, Int) -> Pair<Boolean, Boolean>> = mapOf(
-    1 to { pair: Pair<String, String>, position: Int -> checkMatchedPair(pair, position) },
-    2 to { pair: Pair<String, String>, position: Int -> checkUnmatchedPair(pair, position) },
+    1 to { pair, position -> checkMatchedPair(pair, position) },
+    2 to { pair, position -> checkUnmatchedPair(pair, position) },
 )
 
 /**
@@ -23,7 +24,10 @@ private val displayedFunctions: Map<Int, (Pair<String, String>, Int) -> Pair<Boo
  */
 fun checkItemsDisplayed(computeHistory: TestHistory, randomness: Int) {
     val historySize = computeHistory.size
-    val checkDisplayed = displayedFunctions[randomness]!!
+
+    val checkDisplayed = displayedFunctions[randomness].ifNull {
+        throw IllegalArgumentException("checkItemsDisplayed not callable with randomness $randomness")
+    }
 
     computeHistory.forEach {
         var foundComputation = false
