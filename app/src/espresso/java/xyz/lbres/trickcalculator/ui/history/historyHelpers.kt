@@ -28,7 +28,7 @@ typealias TestHistory = List<Pair<String, String>>
  * First value is computation string (first row in UI),
  * and second value is result/error (second row in UI).
  */
-val withHistoryItem: (String, String) -> Matcher<View> = { computation: String, result: String ->
+val withHistoryItem: (String, String) -> Matcher<View?> = { computation: String, result: String ->
     allOf(
         withChild(withText(computation)),
         withChild(withChild(withText(result)))

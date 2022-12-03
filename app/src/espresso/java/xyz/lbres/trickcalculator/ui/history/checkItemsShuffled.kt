@@ -1,23 +1,37 @@
 package xyz.lbres.trickcalculator.ui.history
 
+import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers.anyOf
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
+// pair of function to get list of values and function to create a matcher from a value
+private typealias ShuffledCheckInfo = Pair<(TestHistory) -> List<*>, (Any) -> Matcher<View?>>
+
 private const val recyclerId = R.id.itemsRecycler
 
-private val computationShuffledFunctions: Map<Int, (Int, TestHistory) -> Boolean> = mapOf(
-    1 to { position, history -> checkMatchedShuffled(position, history) },
-    2 to { position, history -> checkUnmatchedComputation(position, history) }
+private val matchedPairCheckInfo = ShuffledCheckInfo({ it }, {
+    it as Pair<String, String>
+    withHistoryItem(it.first, it.second)
+})
+private val computationCheckInfo = ShuffledCheckInfo(
+    { it.map { it.first } },
+    { withChild(withText(it as String)) }
 )
-private val resultShuffledFunctions: Map<Int, ((Int, TestHistory) -> Boolean)?> = mapOf(
-    1 to null,
-    2 to { position, history -> checkUnmatchedResult(position, history) }
+private val resultCheckInfo = ShuffledCheckInfo(
+    { it.map { it.second } },
+    { withChild(withChild(withText(it as String))) }
+)
+
+private val checkInfoValues: Map<Int, List<ShuffledCheckInfo>> = mapOf(
+    1 to listOf(matchedPairCheckInfo),
+    2 to listOf(computationCheckInfo, resultCheckInfo)
 )
 
 fun checkItemsShuffled(computeHistory: TestHistory, randomness: Int): Boolean {
@@ -26,94 +40,45 @@ fun checkItemsShuffled(computeHistory: TestHistory, randomness: Int): Boolean {
         return true
     }
 
-    if (randomness !in computationShuffledFunctions || randomness !in resultShuffledFunctions) {
+    if (randomness !in checkInfoValues) {
         throw IllegalArgumentException("checkItemsShuffled not callable with randomness $randomness")
     }
 
-    val checkComputation = computationShuffledFunctions[randomness]!!
-    val checkResult = resultShuffledFunctions[randomness]
+    val checkInfo = checkInfoValues[randomness]!!
+    var allChecksPass = true
 
-    var computationsShuffled = false
-    var resultsShuffled = false
+    for (info in checkInfo) {
+        var checkPasses = false
+        val values = info.first(computeHistory)
 
-    for (position in 0 until historySize) {
-        computationsShuffled = computationsShuffled || checkComputation(position, computeHistory)
-    }
-
-    if (checkResult == null) {
-        resultsShuffled = computationsShuffled
-    } else {
         for (position in 0 until historySize) {
-            resultsShuffled = resultsShuffled || checkResult(position, computeHistory)
+            checkPasses = checkPasses || doShuffledCheck(values, position, info.second)
         }
+
+        allChecksPass = allChecksPass && checkPasses
     }
 
-    return computationsShuffled && resultsShuffled
+    return allChecksPass
 }
 
-private fun checkMatchedShuffled(position: Int, history: TestHistory): Boolean {
-    val historySize = history.size
-
+private fun doShuffledCheck(
+    values: List<*>,
+    position: Int,
+    getMatcher: (Any) -> Matcher<View?>
+): Boolean {
     return try {
         onView(withId(recyclerId)).perform(scrollToPosition(position))
 
-        val start = history.subList(0, position)
+        // get all values except value at current position
+        val start = values.subList(0, position)
         val end = ternaryIf(
-            position == historySize - 1,
+            position == values.lastIndex,
             emptyList(),
-            history.subList(position + 1, historySize)
+            values.subList(position + 1, values.size)
         )
+        val reducedValues = start + end
 
-        val reducedHistory = start + end
-        checkViewHolderInHistory(position, reducedHistory)
-
-        true
-    } catch (_: Throwable) {
-        false
-    }
-}
-
-private fun checkUnmatchedComputation(position: Int, history: TestHistory): Boolean {
-    val computations = history.map { it.first }
-    val historySize = history.size
-
-    return try {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-        val start = computations.subList(0, position)
-        val end = ternaryIf(
-            position == historySize - 1,
-            emptyList(),
-            computations.subList(position + 1, historySize)
-        )
-        val reducedString = start + end
-
-        val matcher = anyOf(reducedString.map { withChild(withText(it)) })
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position)).check(matches(matcher))
-
-        true
-    } catch (_: Throwable) {
-        false
-    }
-}
-
-private fun checkUnmatchedResult(position: Int, history: TestHistory): Boolean {
-    val results = history.map { it.second }
-    val historySize = history.size
-
-    return try {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-        val start = results.subList(0, position)
-        val end = ternaryIf(
-            position == historySize - 1,
-            emptyList(),
-            results.subList(position + 1, historySize)
-        )
-        val reducedStrings = start + end
-
-        val matcher = anyOf(reducedStrings.map { withChild(withChild(withText(it))) })
+        val matcher = anyOf(reducedValues.map { getMatcher(it!!) })
         onView(withId(recyclerId)).perform(scrollToPosition(position))
         onView(withViewHolder(recyclerId, position)).check(matches(matcher))
 
