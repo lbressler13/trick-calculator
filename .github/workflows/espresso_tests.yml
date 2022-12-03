@@ -2,9 +2,7 @@ name: Espresso Tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
   test:

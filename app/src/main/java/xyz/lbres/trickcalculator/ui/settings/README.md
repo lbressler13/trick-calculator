@@ -34,7 +34,7 @@ New settings must be added in the following places:
 * Settings class: both constructors, equals
 * SettingsUI: property, collectUI, initObservers, saveSettingsToViewModel
 * initSettingsObservers: new observer
-* SharedViewModel: property, randomizeSettings, resetSettings
+* SharedViewModel: property, randomizeSettings, resetSettings, setStandardSettings
 * Layouts: fragment_settings and dialog_settings
 * String resources: label
 * Main README: both tables

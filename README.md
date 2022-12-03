@@ -1,7 +1,6 @@
 # Trick Calculator
 
-[![Unit Tests](https://github.com/lbressler13/trick-calculator/actions/workflows/basic_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/trick-calculator/actions/workflows/basic_checks.yml)
-[![Espresso Tests](https://github.com/lbressler13/trick-calculator/actions/workflows/espresso_tests.yml/badge.svg?branch=main)](https://github.com/lbressler13/trick-calculator/actions/workflows/espresso_tests.yml)
+[![All Checks](https://github.com/lbressler13/trick-calculator/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/trick-calculator/actions/workflows/basic_checks.yml)
 
 This calculator exists purely for fun and chaos.
 Instead of performing the expected computations, it can change the actions of the operators, the values of the numbers, and several other aspects of computation.
@@ -39,17 +38,7 @@ Here is the complete list:
 | Shuffle operators     | true    | Shuffle action of operators                                      |
 
 The app can also function as a standard calculator, which performs computation correctly.
-Here are the necessary configurations:
-| Setting               | Value  |
-|:----------------------|:-------|
-| Apply decimals        | true   |
-| Apply parentheses     | true   |
-| Clear text on error   | any    |
-| History               | 0      |
-| Show settings button  | any    |
-| Shuffle computation   | false  |
-| Shuffle numbers       | false  |
-| Shuffle operators     | false  |
+This can be enabled via a button in the settings menu.
 
 With the exception of showing the settings button, no visual indication is given in the calculator of which settings are applied.
 

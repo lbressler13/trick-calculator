@@ -41,7 +41,7 @@ class SettingsFragment : BaseFragment() {
         }
 
         // close button
-        binding.closeButton.setOnClickListener { requireBaseActivity().popBackStack() }
+        binding.closeButton.root.setOnClickListener { requireBaseActivity().popBackStack() }
 
         // Save settings when another fragment is opened. Preserves current settings when dialog is opened
         childFragmentManager.addFragmentOnAttachListener { _, _ ->
