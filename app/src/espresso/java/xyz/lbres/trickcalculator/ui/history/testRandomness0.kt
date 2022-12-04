@@ -25,12 +25,12 @@ fun testRandomness0() {
     onView(withText("No history")).check(matches(isDisplayed()))
 
     closeFragment()
-    val computeHistory = mutableListOf<Pair<String, String>>()
+    val computeHistory = mutableListOf<TestHI>()
 
     // one element
     typeText("1+2")
     equals()
-    computeHistory.add(Pair("1+2", "3"))
+    computeHistory.add(TestHI("1+2", "3"))
     openHistoryFragment()
     onView(withViewHolder(recyclerId, 0)).check(matches(withHistoryItem("1+2", "3")))
 
@@ -39,25 +39,25 @@ fun testRandomness0() {
     // several elements
     typeText("-1/2")
     equals()
-    computeHistory.add(Pair("3-1/2", "2.5"))
+    computeHistory.add(TestHI("3-1/2", "2.5"))
     clearText()
     typeText("+")
     equals()
-    computeHistory.add(Pair("+", "Syntax error"))
+    computeHistory.add(TestHI("+", "Syntax error"))
     clearText()
     typeText("1+2-2^3x1")
     equals()
-    computeHistory.add(Pair("1+2-2^3x1", "-5"))
+    computeHistory.add(TestHI("1+2-2^3x1", "-5"))
     clearText()
     typeText("(1+2)(4-2)")
     equals()
-    computeHistory.add(Pair("(1+2)(4-2)", "6"))
+    computeHistory.add(TestHI("(1+2)(4-2)", "6"))
     clearText()
 
     // duplicate element
     typeText("(1+2)(4-2)")
     equals()
-    computeHistory.add(Pair("(1+2)(4-2)", "6"))
+    computeHistory.add(TestHI("(1+2)(4-2)", "6"))
     clearText()
 
     // check all items displayed

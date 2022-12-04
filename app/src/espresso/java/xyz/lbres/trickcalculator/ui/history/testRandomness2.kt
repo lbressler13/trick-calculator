@@ -21,51 +21,51 @@ fun testRandomness2() {
     // no history
     onView(withText("No history")).check(matches(isDisplayed()))
 
-    val computeHistory: MutableList<Pair<String, String>> = mutableListOf()
+    val computeHistory: MutableList<TestHI> = mutableListOf()
 
     // one element
     closeFragment()
     typeText("400/5")
     equals()
-    computeHistory.add(Pair("400/5", "80"))
+    computeHistory.add(TestHI("400/5", "80"))
     checkCorrectData(computeHistory, 2, errorMessage)
 
     // several elements
     clearText()
     typeText("15-2.5")
     equals()
-    computeHistory.add(Pair("15-2.5", "12.5"))
+    computeHistory.add(TestHI("15-2.5", "12.5"))
     checkCorrectData(computeHistory, 2, errorMessage)
 
     clearText()
     typeText("(3-4)(5+2)")
     equals()
-    computeHistory.add(Pair("(3-4)(5+2)", "-7"))
+    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
     checkCorrectData(computeHistory, 2, errorMessage)
 
     // previously computed
     typeText("+11")
     equals()
-    computeHistory.add(Pair("-7+11", "4"))
+    computeHistory.add(TestHI("-7+11", "4"))
     checkCorrectData(computeHistory, 2, errorMessage)
 
     // duplicate element
     clearText()
     typeText("(3-4)(5+2)")
     equals()
-    computeHistory.add(Pair("(3-4)(5+2)", "-7"))
+    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
     checkCorrectData(computeHistory, 2, errorMessage)
 
     // error
     clearText()
     typeText("+")
     equals()
-    computeHistory.add(Pair("+", "Syntax error"))
+    computeHistory.add(TestHI("+", "Syntax error"))
     checkCorrectData(computeHistory, 2, errorMessage)
 
     clearText()
     typeText("2^0.5")
     equals()
-    computeHistory.add(Pair("2^0.5", "Exponents must be whole numbers"))
+    computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
     checkCorrectData(computeHistory, 2, errorMessage)
 }

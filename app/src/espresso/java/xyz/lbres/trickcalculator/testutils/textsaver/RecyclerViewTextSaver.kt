@@ -14,7 +14,7 @@ import org.hamcrest.TypeSafeMatcher
  * Class to check if two TextView ViewInteractions contain the same text values, at a specific position in a RecyclerView.
  * Includes a [SaveTextViewAction] to save the text from the initial TextView,
  * and a [PreviousTextViewMatcher] to match the text from a different TextView against the saved value.
- * Can also be use to validate that text in a single TextView has not changed over time.
+ * Can also be used to validate that text in a single TextView has not changed over time.
  */
 class RecyclerViewTextSaver {
     /**
@@ -32,7 +32,7 @@ class RecyclerViewTextSaver {
          * Update [savedTextMapping] with text from TextView
          *
          * @param uiController [UiController]
-         * @param viewHolder [View]: ViewHolder at specified position
+         * @param viewHolder [View]: view for ViewHolder at specified position
          */
         override fun perform(uiController: UiController?, viewHolder: View) {
             val textview = viewHolder.findViewById<TextView>(viewId)

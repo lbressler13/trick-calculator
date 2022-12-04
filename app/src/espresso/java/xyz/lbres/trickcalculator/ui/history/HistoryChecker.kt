@@ -17,9 +17,14 @@ import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
  * Information needed to check if values are shuffled.
- * First position is list of values, second is a function to generate a matcher based on a single value in the list.
+ *
+ * @param values [List]<[T]>: list of values to check
+ * @param getMatcher ([T]) -> [Matcher]<[View]?>: function to generate a matcher based on a single value from [values]
  */
-private typealias ShuffledCheckInfo = Pair<List<*>, (Any) -> Matcher<View?>>
+private data class ShuffledCheckInfo<T>(
+    val values: List<T>,
+    val getMatcher: (T) -> Matcher<View?>
+)
 
 /**
  * Class to easily run checks on a compute history by specifying the randomness during each method call.
@@ -42,7 +47,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
      */
     fun checkDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
         checkAllowedRandomness(randomness)
-        val check: (Pair<String, String>, Int) -> Pair<Boolean, Boolean> = when (randomness) {
+        val check: (TestHI, Int) -> Pair<Boolean, Boolean> = when (randomness) {
             0 -> { item, position -> checkMatchedPairsDisplayed(item, position) }
             1 -> { item, position -> checkMatchedPairsDisplayed(item, position) }
             2 -> { item, position -> checkUnmatchedPairsDisplayed(item, position) }
@@ -77,7 +82,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
     fun checkOrdered(): Boolean {
         return try {
             computeHistory.forEachIndexed { position, item ->
-                matchesAtPosition(position, withHistoryItem(item.first, item.second))
+                matchesAtPosition(position, withHistoryItem(item))
             }
 
             true
@@ -102,15 +107,11 @@ class HistoryChecker(private val computeHistory: TestHistory) {
         }
 
         // order of items is shuffled, but computation/result pairs are kept together
-        val matchingShuffledCheck = ShuffledCheckInfo(computeHistory) { item ->
-            @Suppress("UNCHECKED_CAST")
-            item as Pair<String, String>
-            withHistoryItem(item.first, item.second)
-        }
+        val matchingShuffledCheck = ShuffledCheckInfo(computeHistory) { withHistoryItem(it) }
         // order of computation strings is shuffled
-        val shuffledComputationCheck = ShuffledCheckInfo(computeHistory.map { it.first }) { computation -> withChild(withText(computation as String)) }
+        val shuffledComputationCheck = ShuffledCheckInfo(computeHistory.map { it.first }) { withChild(withText(it)) }
         // order of result strings is shuffled
-        val shuffledResultCheck = ShuffledCheckInfo(computeHistory.map { it.second }) { result -> withChild(withChild(withText(result as String))) }
+        val shuffledResultCheck = ShuffledCheckInfo(computeHistory.map { it.second }) { withChild(withChild(withText(it))) }
         val checks = when (randomness) {
             1 -> listOf(matchingShuffledCheck)
             2 -> listOf(shuffledComputationCheck, shuffledResultCheck)
@@ -140,16 +141,16 @@ class HistoryChecker(private val computeHistory: TestHistory) {
      * Check that a single history item is displayed at the specified position.
      * ViewHolder must contain both the computation and result indicated by the item.
      *
-     * @param item [Pair]<[String], [String]>: item from test history, consisting of computation and result
+     * @param item [TestHI]: item from test history, consisting of computation and result
      * @param position [Int]: position of ViewHolder to evaluate
      * @return [Pair]<[Boolean], [Boolean]>: pair of `true` if ViewHolder contains both values, or pair of `false` otherwise
      */
     private fun checkMatchedPairsDisplayed(
-        item: Pair<String, String>,
+        item: TestHI,
         position: Int
     ): Pair<Boolean, Boolean> {
         return try {
-            matchesAtPosition(position, withHistoryItem(item.first, item.second))
+            matchesAtPosition(position, withHistoryItem(item))
             Pair(true, true)
         } catch (_: Throwable) {
             Pair(false, false)
@@ -160,13 +161,13 @@ class HistoryChecker(private val computeHistory: TestHistory) {
      * Check if any part of a history item is displayed at the specified position.
      * Checks for the computation and result separately.
      *
-     * @param item [Pair]<[String], [String]>: item from test history, consisting of computation and result
+     * @param item [TestHI]: item from test history, consisting of computation and result
      * @param position [Int]: position of ViewHolder to evaluate
      * @return [Pair]<[Boolean], [Boolean]>: a pair where the first value indicates if the ViewHolder contains the computation string,
      * and the second value indicates if it contains the result string
      */
     private fun checkUnmatchedPairsDisplayed(
-        item: Pair<String, String>,
+        item: TestHI,
         position: Int
     ): Pair<Boolean, Boolean> {
         val matchesComputation = try {
@@ -195,21 +196,19 @@ class HistoryChecker(private val computeHistory: TestHistory) {
      * @param check [ShuffledCheckInfo]: check to run
      * @return `true` if the check passes based on the given values and matcher, `false` otherwise
      */
-    private fun runShuffledCheck(position: Int, check: ShuffledCheckInfo): Boolean {
-        val values = check.first
-
+    private fun <T> runShuffledCheck(position: Int, check: ShuffledCheckInfo<T>): Boolean {
         return try {
             // get all values except value at current position
-            val start = values.subList(0, position)
+            val start = check.values.subList(0, position)
             val end = ternaryIf(
-                position == values.lastIndex,
+                position == check.values.lastIndex,
                 emptyList(),
-                values.subList(position + 1, values.size)
+                check.values.subList(position + 1, check.values.size)
             )
             val reducedValues = start + end
 
             // viewholder should match any item except value at current position
-            val matcher = anyOf(reducedValues.map { check.second(it!!) })
+            val matcher = anyOf(reducedValues.map { check.getMatcher(it!!) })
             matchesAtPosition(position, matcher)
 
             true
@@ -232,7 +231,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
         val resultTextMatcher =
             anyOf(computeHistory.map { withChild(withChild(withText(it.second))) })
         var historyMatcher: Matcher<View?> =
-            anyOf(computeHistory.map { withHistoryItem(it.first, it.second) })
+            anyOf(computeHistory.map { withHistoryItem(it) })
         if (computeHistory.size == 2) {
             // normal matcher has issues when size is 2
             historyMatcher = withHistoryItem(computeHistory[0].first, computeHistory[1].second)

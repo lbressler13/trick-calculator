@@ -13,22 +13,29 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 
 /**
+ * Representation of a compute history displayed in the UI.
+ */
+typealias TestHistory = List<TestHI>
+
+/**
  * Representation of a history item displayed in the UI.
  * First value is computation string (first row in UI), and second value is result/error (second row in UI).
  */
-typealias TestHistory = List<Pair<String, String>>
+typealias TestHI = Pair<String, String>
 
 /**
  * [Matcher] to identify that a history item displays the expected computation text and result string
  * First value is computation string (first row in UI),
  * and second value is result/error (second row in UI).
  */
-val withHistoryItem: (String, String) -> Matcher<View?> = { computation: String, result: String ->
-    allOf(
-        withChild(withText(computation)),
-        withChild(withChild(withText(result)))
+fun withHistoryItem(computation: String, result: String): Matcher<View?> {
+    return allOf(
+        withChild(withText(computation)), // computation
+        withChild(withChild(withText(result))) // result
     )
 }
+
+fun withHistoryItem(item: TestHI): Matcher<View?> = withHistoryItem(item.first, item.second)
 
 /**
  * Update the history randomness setting.

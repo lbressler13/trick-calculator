@@ -18,7 +18,6 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
@@ -32,8 +31,6 @@ import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 @RunWith(AndroidJUnit4::class)
 class HistoryFragmentTest {
-    private val recyclerId = R.id.itemsRecycler
-
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
@@ -96,59 +93,54 @@ class HistoryFragmentTest {
         onView(withId(R.id.clearOnErrorSwitch)).perform(click())
         closeFragment()
 
+        val computeHistory = mutableListOf<TestHI>()
+
         // one error
         typeText("0xx8")
         equals()
+        computeHistory.add(TestHI("0xx8", "Syntax error"))
         onView(withId(R.id.mainText)).check(matches(isEmptyString()))
 
         openHistoryFragment()
 
-        onView(withViewHolder(recyclerId, 0))
-            .check(matches(withHistoryItem("0xx8", "Syntax error")))
+        var checker = HistoryChecker(computeHistory)
+        checker.checkDisplayed(0)
+        checker.checkOrdered()
 
         // multiple errors
         closeFragment()
         clearText()
         typeText("10/0")
         equals()
+        computeHistory.add(TestHI("10/0", "Divide by zero"))
 
         openHistoryFragment()
 
-        onView(withViewHolder(recyclerId, 0))
-            .check(matches(withHistoryItem("0xx8", "Syntax error")))
-
-        onView(withViewHolder(recyclerId, 1))
-            .check(matches(withHistoryItem("10/0", "Divide by zero")))
+        checker = HistoryChecker(computeHistory)
+        checker.checkDisplayed(0)
+        checker.checkOrdered()
 
         // errors and results
         closeFragment()
         clearText()
         typeText("15+5")
         equals()
+        computeHistory.add(TestHI("15+5", "20"))
 
         typeText("x")
         equals()
+        computeHistory.add(TestHI("20x", "Syntax error"))
 
         // don't clear text, should have been cleared by error
         typeText("2x4")
         equals()
+        computeHistory.add(TestHI("2x4", "8"))
 
         openHistoryFragment()
 
-        onView(withViewHolder(recyclerId, 0))
-            .check(matches(withHistoryItem("0xx8", "Syntax error")))
-
-        onView(withViewHolder(recyclerId, 1))
-            .check(matches(withHistoryItem("10/0", "Divide by zero")))
-
-        onView(withViewHolder(recyclerId, 2))
-            .check(matches(withHistoryItem("15+5", "20")))
-
-        onView(withViewHolder(recyclerId, 3))
-            .check(matches(withHistoryItem("20x", "Syntax error")))
-
-        onView(withViewHolder(recyclerId, 4))
-            .check(matches(withHistoryItem("2x4", "8")))
+        checker = HistoryChecker(computeHistory)
+        checker.checkDisplayed(0)
+        checker.checkOrdered()
     }
 
     // TODO
