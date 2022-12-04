@@ -12,7 +12,7 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.repeatUntil
-import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.clearSavedTextAtPosition
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
@@ -120,7 +120,7 @@ fun testRandomness1Reshuffled() {
     computeHistory.add(Pair("2^0.5", "Exponents must be whole numbers"))
 
     runSingleReshuffledTest(computeHistory)
-    clearSavedValues(computeHistory.size)
+    RecyclerViewTextSaver.clearAllSavedValues()
     runSingleReshuffledTest(computeHistory) // re-run with different order of values
 }
 
@@ -158,6 +158,11 @@ private fun checkCorrectData(computeHistory: TestHistory) {
     }
 }
 
+/**
+ * Check that the order changes when opening and closing the fragment.
+ *
+ * @param computeHistory [TestHistory]
+ */
 private fun runSingleReshuffledTest(computeHistory: TestHistory) {
     checkCorrectData(computeHistory)
     val historySize = computeHistory.size
@@ -193,13 +198,4 @@ private fun runSingleReshuffledTest(computeHistory: TestHistory) {
     if (!shuffled) {
         throw AssertionError("Items not re-shuffled for history randomness 1. History: $computeHistory")
     }
-}
-
-private fun clearSavedValues(historySize: Int) {
-    openHistoryFragment()
-    for (position in 0 until historySize) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position)).perform(clearSavedTextAtPosition(position, R.id.computeText))
-    }
-    closeFragment()
 }

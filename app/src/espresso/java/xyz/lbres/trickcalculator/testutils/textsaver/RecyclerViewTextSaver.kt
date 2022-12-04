@@ -116,5 +116,12 @@ class RecyclerViewTextSaver {
          * Check if the text in a view matches the saved value at a given position
          */
         fun withSavedTextAtPosition(position: Int, @IdRes viewId: Int): Matcher<View> = PreviousTextViewMatcher(position, viewId)
+
+        /**
+         * Clear all saved values in the text saver
+         */
+        fun clearAllSavedValues() {
+            savedTextMapping.clear()
+        }
     }
 }

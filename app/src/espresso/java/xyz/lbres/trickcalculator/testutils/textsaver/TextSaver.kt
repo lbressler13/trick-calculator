@@ -102,5 +102,12 @@ class TextSaver {
          * Check if the text in a view matches the saved value
          */
         fun withSavedText(): Matcher<View> = PreviousTextViewMatcher()
+
+        /**
+         * Clear all saved values in the text saver
+         */
+        fun clearAllSavedValues() {
+            savedTextMapping.clear()
+        }
     }
 }

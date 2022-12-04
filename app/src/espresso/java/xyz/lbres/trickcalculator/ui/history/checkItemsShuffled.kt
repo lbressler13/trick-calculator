@@ -16,14 +16,17 @@ typealias ShuffledCheckInfo = Pair<(TestHistory) -> List<*>, (Any) -> Matcher<Vi
 
 private const val recyclerId = R.id.itemsRecycler
 
-fun checkItemsShuffled(computeHistory: TestHistory, checks: List<ShuffledCheckInfo>): Boolean {
+/**
+ * Wrapper function to run a set of checks to determine if the values displayed are shuffled.
+ */
+fun checkItemsShuffled(computeHistory: TestHistory, shuffledChecks: List<ShuffledCheckInfo>): Boolean {
     if (computeHistory.size < 2) {
         return true
     }
 
     var allChecksPass = true
 
-    for (check in checks) {
+    for (check in shuffledChecks) {
         var checkPasses = false
         val values = check.first(computeHistory)
 
@@ -37,14 +40,22 @@ fun checkItemsShuffled(computeHistory: TestHistory, checks: List<ShuffledCheckIn
     return allChecksPass
 }
 
+/**
+ * Check that a ViewHolder contains any of the values that are not located at the current position.
+ *
+ * @param values [List]<*>: list of values to use for check, likely the list of history items,
+ * computation strings, or result strings
+ * @param position [Int]: position of value in list/ViewHolder
+ * @param getMatcher ([Any]) -> [Matcher]<[View]?>: function to get a matcher to use when evaluating a ViewHolder.
+ * Uses values from [values] as input
+ * @return `true` if the check passes based on the given values and matcher, `false` otherwise
+ */
 private fun doShuffledCheck(
     values: List<*>,
     position: Int,
     getMatcher: (Any) -> Matcher<View?>
 ): Boolean {
     return try {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-
         // get all values except value at current position
         val start = values.subList(0, position)
         val end = ternaryIf(
@@ -56,6 +67,7 @@ private fun doShuffledCheck(
 
         val matcher = anyOf(reducedValues.map { getMatcher(it!!) })
         onView(withId(recyclerId)).perform(scrollToPosition(position))
+        // viewholder should match any item except value at current position
         onView(withViewHolder(recyclerId, position)).check(matches(matcher))
 
         true

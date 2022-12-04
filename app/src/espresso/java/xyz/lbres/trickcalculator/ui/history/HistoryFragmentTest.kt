@@ -22,6 +22,7 @@ import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
@@ -39,10 +40,12 @@ class HistoryFragmentTest {
 
     @Rule
     @JvmField
-    val retryRule = RetryRule(0) // TODO undo this
+    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {
+        RecyclerViewTextSaver.clearAllSavedValues()
+
         if (ProductFlavor.devMode) {
             hideDevToolsButton()
         }
