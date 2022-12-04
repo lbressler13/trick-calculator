@@ -5,12 +5,12 @@ package xyz.lbres.trickcalculator.testutils
  *
  * @param maxRepeats [Int]: number of times to repeat code without breaking
  * @param breakCondition () -> [Boolean]: condition to break out of loop
- * @param code () -> [Unit]: code to execute repeatedly
+ * @param function () -> [Unit]: code to execute repeatedly
  */
-fun repeatUntil(maxRepeats: Int, breakCondition: () -> Boolean, code: () -> Unit) {
+fun repeatUntil(maxRepeats: Int, breakCondition: () -> Boolean, function: () -> Unit) {
     var repeats = 0
     while (repeats < maxRepeats && !breakCondition()) {
-        code()
+        function()
         repeats++
     }
 }

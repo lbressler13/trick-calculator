@@ -145,6 +145,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
 
         // check that items are shuffled
         val shuffledCheck = ShuffledCheckInfo({ it }, { item ->
+            @Suppress("UNCHECKED_CAST")
             item as Pair<String, String>
             withHistoryItem(item.first, item.second)
         })
@@ -161,7 +162,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
 /**
  * Check that the order changes when opening and closing the fragment.
  *
- * @param computeHistory [TestHistory]
+ * @param computeHistory [TestHistory]: list of items in history
  */
 private fun runSingleReshuffledTest(computeHistory: TestHistory) {
     checkCorrectData(computeHistory)
