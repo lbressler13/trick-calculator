@@ -13,12 +13,12 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 
 /**
- * Representation of a compute history displayed in the UI.
+ * Test representation of a compute history displayed in the UI.
  */
 typealias TestHistory = List<TestHI>
 
 /**
- * Representation of a history item displayed in the UI.
+ * Test representation of a history item displayed in the UI.
  * First value is computation string (first row in UI), and second value is result/error (second row in UI).
  */
 typealias TestHI = Pair<String, String>

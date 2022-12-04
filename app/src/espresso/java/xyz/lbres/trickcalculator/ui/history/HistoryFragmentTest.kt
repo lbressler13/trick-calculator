@@ -102,10 +102,7 @@ class HistoryFragmentTest {
         onView(withId(R.id.mainText)).check(matches(isEmptyString()))
 
         openHistoryFragment()
-
-        var checker = HistoryChecker(computeHistory)
-        checker.checkDisplayed(0)
-        checker.checkOrdered()
+        HistoryChecker(computeHistory).runAllChecks(0)
 
         // multiple errors
         closeFragment()
@@ -115,10 +112,7 @@ class HistoryFragmentTest {
         computeHistory.add(TestHI("10/0", "Divide by zero"))
 
         openHistoryFragment()
-
-        checker = HistoryChecker(computeHistory)
-        checker.checkDisplayed(0)
-        checker.checkOrdered()
+        HistoryChecker(computeHistory).runAllChecks(0)
 
         // errors and results
         closeFragment()
@@ -137,10 +131,7 @@ class HistoryFragmentTest {
         computeHistory.add(TestHI("2x4", "8"))
 
         openHistoryFragment()
-
-        checker = HistoryChecker(computeHistory)
-        checker.checkDisplayed(0)
-        checker.checkOrdered()
+        HistoryChecker(computeHistory).runAllChecks(0)
     }
 
     // TODO

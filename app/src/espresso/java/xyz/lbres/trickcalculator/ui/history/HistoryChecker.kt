@@ -16,17 +16,6 @@ import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
- * Information needed to check if values are shuffled.
- *
- * @param values [List]<[T]>: list of values to check
- * @param getMatcher ([T]) -> [Matcher]<[View]?>: function to generate a matcher based on a single value from [values]
- */
-private data class ShuffledCheckInfo<T>(
-    val values: List<T>,
-    val getMatcher: (T) -> Matcher<View?>
-)
-
-/**
  * Class to easily run checks on a compute history by specifying the randomness during each method call.
  * Enables running checks for multiple levels of randomness on the same compute history.
  * Methods include checking for items to be displayed, checking that items are ordered, and checking that items are shuffled.
@@ -34,7 +23,29 @@ private data class ShuffledCheckInfo<T>(
  * @param computeHistory [TestHistory]: history of computation
  */
 class HistoryChecker(private val computeHistory: TestHistory) {
+    /**
+     * Information needed to check if displayed values are shuffled.
+     *
+     * @param values [List]<[T]>: list of values to check
+     * @param getMatcher ([T]) -> [Matcher]<[View]?>: function to generate a matcher based on a single value from [values]
+     */
+    private data class ShuffledCheckInfo<T>(val values: List<T>, val getMatcher: (T) -> Matcher<View?>)
+
     private val recyclerId = R.id.itemsRecycler
+
+    /**
+     * Run all checks for items displayed and ordered/shuffled for a level of randomness
+     *
+     * @param randomness [Int]: history randomness setting
+     */
+    fun runAllChecks(randomness: Int) {
+        checkAllowedRandomness(randomness)
+        checkDisplayed(randomness)
+        when (randomness) {
+            0 -> checkOrdered()
+            else -> checkShuffled(randomness)
+        }
+    }
 
     /**
      * Check that all ViewHolders contain a valid history item.
@@ -119,15 +130,14 @@ class HistoryChecker(private val computeHistory: TestHistory) {
         }
 
         for (check in checks) {
-            var checkPasses = false
-
             for (position in computeHistory.indices) {
-                checkPasses = checkPasses || runShuffledCheck(position, check)
+                // only needs one value to be different in order to be shuffled
+                if (runShuffledCheck(position, check)) {
+                    break
+                }
             }
 
-            if (!checkPasses) {
-                return false
-            }
+            return false
         }
 
         if (randomness == 2) {
@@ -166,8 +176,6 @@ class HistoryChecker(private val computeHistory: TestHistory) {
     private fun checkUnmatchedPairDisplayed(item: TestHI, position: Int): Pair<Boolean, Boolean> {
         val matchesComputation = try {
             matchesAtPosition(position, withChild(withText(item.first)))
-            onView(withViewHolder(recyclerId, position))
-                .check(matches(withChild(withText(item.first))))
             true
         } catch (_: Throwable) {
             false
@@ -225,7 +233,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
         val resultTextMatcher = anyOf(computeHistory.map { withChild(withChild(withText(it.second))) })
         var historyMatcher: Matcher<View?> = anyOf(computeHistory.map { withHistoryItem(it) })
         if (computeHistory.size == 2) {
-            // normal matcher has issues when size is 2
+            // normal matcher fails when size = 2, this is effectively the same
             historyMatcher = withHistoryItem(computeHistory[0].first, computeHistory[1].second)
         }
 
