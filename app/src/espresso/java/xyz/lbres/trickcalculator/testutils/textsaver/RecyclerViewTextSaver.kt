@@ -79,7 +79,6 @@ class RecyclerViewTextSaver {
         }
     }
 
-
     companion object {
         // first is position, second is view ID
         private var savedTextMapping: MutableMap<Pair<Int, Int>, String> = mutableMapOf()

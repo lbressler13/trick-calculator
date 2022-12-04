@@ -71,20 +71,19 @@ class HistoryFragmentTest {
     fun randomness1() = testRandomness1()
 
     @Test
-    fun randomness1Reshuffled() = testRandomness1Reshuffled() // TODO
+    fun randomness1Reshuffled() = testRandomness1Reshuffled()
 
     @Test
     fun randomness2() = testRandomness2()
 
-    // TODO
     // @Test
-    // fun randomness3() {
-    // }
+    // fun randomness2Reshuffled() {} // TODO
 
-    // TODO
     // @Test
-    // fun longHistory() {
-    // }
+    // fun randomness3() {} // TODO
+
+    // @Test
+    // fun longHistory() {} // TODO
 
     @Test
     fun clearOnError() {

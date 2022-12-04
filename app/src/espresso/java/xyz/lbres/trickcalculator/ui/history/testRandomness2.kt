@@ -4,17 +4,15 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withChild
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
+import org.hamcrest.Matchers.not
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
@@ -112,7 +110,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
             val computeTextMatcher = anyOf(computeHistory.map { withChild(withText(it.first)) })
             val resultTextMatcher = anyOf(computeHistory.map { withChild(withChild(withText(it.second))) })
             val historyMatcher = anyOf(computeHistory.map { withHistoryItem(it.first, it.second) })
-            if (computeHistory.size == 2) {
+            if (computeHistory.size == 2) { // TODO fix this
                 allOf(computeTextMatcher, resultTextMatcher)
             } else {
                 allOf(computeTextMatcher, resultTextMatcher, not(historyMatcher))

@@ -118,45 +118,9 @@ fun testRandomness1Reshuffled() {
     equals()
     computeHistory.add(Pair("2^0.5", "Exponents must be whole numbers"))
 
-    checkCorrectData(computeHistory)
-    val historySize = computeHistory.size
-    openHistoryFragment()
-
-    for (position in 0 until historySize) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position)).perform(saveTextAtPosition(position, R.id.computeText))
-    }
-
-    closeFragment()
-
-    // additional repeats for 2 items due to occasional failures
-    val repeatCount = ternaryIf(historySize == 2, 10, 5)
-    var repeats = 0
-    var shuffled = false
-
-    while (repeats < repeatCount && !shuffled) {
-        openHistoryFragment()
-
-        for (position in 0 until historySize) {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-            try {
-                onView(withViewHolder(recyclerId, position)).check(matches(not(withSavedTextAtPosition(position, R.id.computeText))))
-                shuffled = true
-            } catch (_: Throwable) {}
-        }
-
-        repeats++
-        closeFragment()
-    }
-
-    openHistoryFragment()
-    for (position in 0 until historySize) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position)).perform(clearSavedTextAtPosition(position, R.id.computeText))
-    }
-
-    // TODO this isn't finished
+    runSingleReshuffledTest(computeHistory)
+    clearSavedValues(computeHistory.size)
+    runSingleReshuffledTest(computeHistory) // re-run with different order of values
 }
 
 /**
@@ -191,4 +155,52 @@ private fun checkCorrectData(computeHistory: TestHistory) {
     if (historySize > 1 && !shuffled) {
         throw AssertionError("History items should be shuffled in history randomness 1. History: $computeHistory")
     }
+}
+
+private fun runSingleReshuffledTest(computeHistory: TestHistory) {
+    checkCorrectData(computeHistory)
+    val historySize = computeHistory.size
+    openHistoryFragment()
+
+    // save all current values
+    for (position in 0 until historySize) {
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withViewHolder(recyclerId, position)).perform(saveTextAtPosition(position, R.id.computeText))
+    }
+
+    closeFragment()
+
+    // additional repeats for 2 items due to occasional failures
+    val repeatCount = ternaryIf(historySize == 2, 10, 5)
+    var repeats = 0
+    var shuffled = false
+
+    while (repeats < repeatCount && !shuffled) {
+        openHistoryFragment()
+
+        for (position in 0 until historySize) {
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
+
+            try {
+                onView(withViewHolder(recyclerId, position)).check(matches(not(withSavedTextAtPosition(position, R.id.computeText))))
+                shuffled = true
+            } catch (_: Throwable) {}
+        }
+
+        repeats++
+        closeFragment()
+    }
+
+    if (!shuffled) {
+        throw AssertionError("Items not re-shuffled for history randomness 1. History: $computeHistory")
+    }
+}
+
+private fun clearSavedValues(historySize: Int) {
+    openHistoryFragment()
+    for (position in 0 until historySize) {
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withViewHolder(recyclerId, position)).perform(clearSavedTextAtPosition(position, R.id.computeText))
+    }
+    closeFragment()
 }

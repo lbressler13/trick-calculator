@@ -3,9 +3,9 @@ package xyz.lbres.trickcalculator.ui.history
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.anyOf
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
