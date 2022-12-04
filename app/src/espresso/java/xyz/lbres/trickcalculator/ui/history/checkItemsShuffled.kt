@@ -17,8 +17,7 @@ typealias ShuffledCheckInfo = Pair<(TestHistory) -> List<*>, (Any) -> Matcher<Vi
 private const val recyclerId = R.id.itemsRecycler
 
 fun checkItemsShuffled(computeHistory: TestHistory, checks: List<ShuffledCheckInfo>): Boolean {
-    val historySize = computeHistory.size
-    if (historySize < 2) {
+    if (computeHistory.size < 2) {
         return true
     }
 
@@ -28,7 +27,7 @@ fun checkItemsShuffled(computeHistory: TestHistory, checks: List<ShuffledCheckIn
         var checkPasses = false
         val values = check.first(computeHistory)
 
-        for (position in 0 until historySize) {
+        for (position in computeHistory.indices) {
             checkPasses = checkPasses || doShuffledCheck(values, position, check.second)
         }
 
