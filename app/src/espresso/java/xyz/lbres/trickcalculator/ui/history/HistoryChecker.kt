@@ -48,9 +48,9 @@ class HistoryChecker(private val computeHistory: TestHistory) {
     fun checkDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
         checkAllowedRandomness(randomness)
         val check: (TestHI, Int) -> Pair<Boolean, Boolean> = when (randomness) {
-            0 -> { item, position -> checkMatchedPairsDisplayed(item, position) }
-            1 -> { item, position -> checkMatchedPairsDisplayed(item, position) }
-            2 -> { item, position -> checkUnmatchedPairsDisplayed(item, position) }
+            0 -> { item, position -> checkMatchedPairDisplayed(item, position) }
+            1 -> { item, position -> checkMatchedPairDisplayed(item, position) }
+            2 -> { item, position -> checkUnmatchedPairDisplayed(item, position) }
             else -> { _, _ -> Pair(false, false) }
         }
 
@@ -145,10 +145,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
      * @param position [Int]: position of ViewHolder to evaluate
      * @return [Pair]<[Boolean], [Boolean]>: pair of `true` if ViewHolder contains both values, or pair of `false` otherwise
      */
-    private fun checkMatchedPairsDisplayed(
-        item: TestHI,
-        position: Int
-    ): Pair<Boolean, Boolean> {
+    private fun checkMatchedPairDisplayed(item: TestHI, position: Int): Pair<Boolean, Boolean> {
         return try {
             matchesAtPosition(position, withHistoryItem(item))
             Pair(true, true)
@@ -166,10 +163,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
      * @return [Pair]<[Boolean], [Boolean]>: a pair where the first value indicates if the ViewHolder contains the computation string,
      * and the second value indicates if it contains the result string
      */
-    private fun checkUnmatchedPairsDisplayed(
-        item: TestHI,
-        position: Int
-    ): Pair<Boolean, Boolean> {
+    private fun checkUnmatchedPairDisplayed(item: TestHI, position: Int): Pair<Boolean, Boolean> {
         val matchesComputation = try {
             matchesAtPosition(position, withChild(withText(item.first)))
             onView(withViewHolder(recyclerId, position))
@@ -228,10 +222,8 @@ class HistoryChecker(private val computeHistory: TestHistory) {
         }
 
         val computeTextMatcher = anyOf(computeHistory.map { withChild(withText(it.first)) })
-        val resultTextMatcher =
-            anyOf(computeHistory.map { withChild(withChild(withText(it.second))) })
-        var historyMatcher: Matcher<View?> =
-            anyOf(computeHistory.map { withHistoryItem(it) })
+        val resultTextMatcher = anyOf(computeHistory.map { withChild(withChild(withText(it.second))) })
+        var historyMatcher: Matcher<View?> = anyOf(computeHistory.map { withHistoryItem(it) })
         if (computeHistory.size == 2) {
             // normal matcher has issues when size is 2
             historyMatcher = withHistoryItem(computeHistory[0].first, computeHistory[1].second)
@@ -246,8 +238,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
                 )
 
                 return true
-            } catch (_: Throwable) {
-            }
+            } catch (_: Throwable) {}
         }
 
         return false

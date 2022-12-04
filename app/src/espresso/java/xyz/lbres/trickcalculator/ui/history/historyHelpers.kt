@@ -24,17 +24,25 @@ typealias TestHistory = List<TestHI>
 typealias TestHI = Pair<String, String>
 
 /**
- * [Matcher] to identify that a history item displays the expected computation text and result string
- * First value is computation string (first row in UI),
- * and second value is result/error (second row in UI).
+ * Create [Matcher] to identify that a history item displays the expected computation text and result string
+ *
+ * @param computation [String]: first string displayed in UI
+ * @param result [String]: second string displayed in UI
+ * @return [Matcher]<[View]?>: matcher that a view contains the result and computation string
  */
 fun withHistoryItem(computation: String, result: String): Matcher<View?> {
     return allOf(
-        withChild(withText(computation)), // computation
-        withChild(withChild(withText(result))) // result
+        withChild(withText(computation)),
+        withChild(withChild(withText(result)))
     )
 }
 
+/**
+ * Create [Matcher] to identify that a history item displays the expected computation text and result string
+ *
+ * @param item [TestHI]: item to check
+ * @return [Matcher]<[View]?>: matcher that a view contains the specified history item
+ */
 fun withHistoryItem(item: TestHI): Matcher<View?> = withHistoryItem(item.first, item.second)
 
 /**

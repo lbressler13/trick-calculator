@@ -6,7 +6,7 @@ import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.repeatUntil
 
 /**
- * Verifies that all items from the history are displayed and shuffled.
+ * Verifies that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
  *
  * @param computeHistory [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
