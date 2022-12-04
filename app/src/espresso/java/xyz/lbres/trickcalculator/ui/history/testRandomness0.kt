@@ -60,11 +60,15 @@ fun testRandomness0() {
     computeHistory.add(Pair("(1+2)(4-2)", "6"))
     clearText()
 
-    // test that order doesn't change
+    // check all items displayed
     val checker = HistoryChecker(computeHistory)
+    openHistoryFragment()
+    checker.checkDisplayed(0)
+    closeFragment()
+
+    // test that order doesn't change
     repeat(5) {
         openHistoryFragment()
-        checker.checkDisplayed(0)
         checker.checkOrdered()
         closeFragment()
     }

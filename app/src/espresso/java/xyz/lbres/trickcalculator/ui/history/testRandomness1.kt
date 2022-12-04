@@ -22,6 +22,7 @@ import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 private const val recyclerId = R.id.itemsRecycler
+private const val errorMessage = "History items should be shuffled in history randomness 1."
 
 fun testRandomness1() {
     setHistoryRandomness(1)
@@ -38,46 +39,46 @@ fun testRandomness1() {
     typeText("400/5")
     equals()
     computeHistory.add(Pair("400/5", "80"))
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
 
     // several elements
     clearText()
     typeText("15-2.5")
     equals()
     computeHistory.add(Pair("15-2.5", "12.5"))
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
 
     clearText()
     typeText("(3-4)(5+2)")
     equals()
     computeHistory.add(Pair("(3-4)(5+2)", "-7"))
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
 
     // previously computed
     typeText("+11")
     equals()
     computeHistory.add(Pair("-7+11", "4"))
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
 
     // duplicate element
     clearText()
     typeText("(3-4)(5+2)")
     equals()
     computeHistory.add(Pair("(3-4)(5+2)", "-7"))
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
 
     // error
     clearText()
     typeText("+")
     equals()
     computeHistory.add(Pair("+", "Syntax error"))
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
 
     clearText()
     typeText("2^0.5")
     equals()
     computeHistory.add(Pair("2^0.5", "Exponents must be whole numbers"))
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
 }
 
 fun testRandomness1Reshuffled() {
@@ -125,43 +126,12 @@ fun testRandomness1Reshuffled() {
 }
 
 /**
- * Check that all the expected information is displayed in the history.
- * Verifies that all items are displayed and the order of items is shuffled.
- *
- * @param computeHistory [TestHistory]: list of items in history
- */
-private fun checkCorrectData(computeHistory: TestHistory) {
-    var shuffled = false
-    val historySize = computeHistory.size
-    val checker = HistoryChecker(computeHistory)
-
-    // additional repeats for 2 items due to occasional failures
-    val repeatCount = ternaryIf(historySize == 2, 10, 5)
-
-    repeatUntil(repeatCount, { shuffled }) {
-        openHistoryFragment()
-
-        // check that all items are displayed
-        checker.checkDisplayed(1)
-
-        // check that items are shuffled
-        shuffled = shuffled || checker.checkShuffled(1)
-
-        closeFragment()
-    }
-
-    if (historySize > 1 && !shuffled) {
-        throw AssertionError("History items should be shuffled in history randomness 1. History: $computeHistory")
-    }
-}
-
-/**
  * Check that the order changes when opening and closing the fragment.
  *
  * @param computeHistory [TestHistory]: list of items in history
  */
 private fun runSingleReshuffledTest(computeHistory: TestHistory) {
-    checkCorrectData(computeHistory)
+    checkCorrectData(computeHistory, 1, errorMessage)
     val historySize = computeHistory.size
     openHistoryFragment()
 
