@@ -133,6 +133,7 @@ fun testRandomness1Reshuffled() {
 private fun checkCorrectData(computeHistory: TestHistory) {
     var shuffled = false
     val historySize = computeHistory.size
+    val checker = HistoryChecker(computeHistory)
 
     // additional repeats for 2 items due to occasional failures
     val repeatCount = ternaryIf(historySize == 2, 10, 5)
@@ -141,15 +142,10 @@ private fun checkCorrectData(computeHistory: TestHistory) {
         openHistoryFragment()
 
         // check that all items are displayed
-        checkItemsDisplayed(computeHistory, 1)
+        checker.checkDisplayed(1)
 
         // check that items are shuffled
-        val shuffledCheck = ShuffledCheckInfo({ it }, { item ->
-            @Suppress("UNCHECKED_CAST")
-            item as Pair<String, String>
-            withHistoryItem(item.first, item.second)
-        })
-        shuffled = shuffled || checkItemsShuffled(computeHistory, listOf(shuffledCheck))
+        shuffled = shuffled || checker.checkShuffled(1)
 
         closeFragment()
     }
