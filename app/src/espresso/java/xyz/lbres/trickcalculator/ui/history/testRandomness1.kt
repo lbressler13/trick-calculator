@@ -11,6 +11,7 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.clearSavedTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
@@ -136,7 +137,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
     // additional repeats for 2 items due to occasional failures
     val repeatCount = ternaryIf(historySize == 2, 10, 5)
 
-    repeat(repeatCount) {
+    repeatUntil(repeatCount, { shuffled }) {
         openHistoryFragment()
 
         // check that all items are displayed
@@ -171,11 +172,10 @@ private fun runSingleReshuffledTest(computeHistory: TestHistory) {
     closeFragment()
 
     // additional repeats for 2 items due to occasional failures
-    val repeatCount = ternaryIf(historySize == 2, 10, 5)
-    var repeats = 0
+    val repeats = ternaryIf(computeHistory.size == 2, 10, 5)
     var shuffled = false
 
-    while (repeats < repeatCount && !shuffled) {
+    repeatUntil(repeats, { shuffled }) {
         openHistoryFragment()
 
         for (position in 0 until historySize) {
@@ -187,7 +187,6 @@ private fun runSingleReshuffledTest(computeHistory: TestHistory) {
             } catch (_: Throwable) {}
         }
 
-        repeats++
         closeFragment()
     }
 

@@ -1,10 +1,12 @@
 package xyz.lbres.trickcalculator.ui.history
 
+import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
@@ -12,12 +14,11 @@ import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
-
-private const val recyclerId = R.id.itemsRecycler
 
 fun testRandomness2() {
     setHistoryRandomness(2)
@@ -89,7 +90,7 @@ private fun checkCorrectData(computeHistory: TestHistory) {
     // additional repeats for 2 items due to occasional failures
     val repeatCount = ternaryIf(historySize == 2, 10, 5)
 
-    repeat(repeatCount) {
+    repeatUntil(repeatCount, { shuffled }) {
         openHistoryFragment()
 
         // check that all items are displayed
@@ -109,12 +110,13 @@ private fun checkCorrectData(computeHistory: TestHistory) {
         val shuffledPairsCheck = ShuffledCheckInfo({ it }, { _ ->
             val computeTextMatcher = anyOf(computeHistory.map { withChild(withText(it.first)) })
             val resultTextMatcher = anyOf(computeHistory.map { withChild(withChild(withText(it.second))) })
-            val historyMatcher = anyOf(computeHistory.map { withHistoryItem(it.first, it.second) })
-            if (computeHistory.size == 2) { // TODO fix this
-                allOf(computeTextMatcher, resultTextMatcher)
-            } else {
-                allOf(computeTextMatcher, resultTextMatcher, not(historyMatcher))
+            var historyMatcher: Matcher<View?> = anyOf(computeHistory.map { withHistoryItem(it.first, it.second) })
+            // regular matcher creates issues when size = 2
+            if (computeHistory.size == 2) {
+                historyMatcher = withHistoryItem(computeHistory[0].first, computeHistory[1].second)
             }
+
+            allOf(computeTextMatcher, resultTextMatcher, not(historyMatcher))
         })
 
         shuffled = shuffled || checkItemsShuffled(computeHistory, listOf(shuffledComputationCheck, shuffledResultCheck, shuffledPairsCheck))
