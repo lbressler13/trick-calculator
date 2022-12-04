@@ -5,54 +5,31 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.anyOf
+import org.hamcrest.Matchers.*
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 // pair of function to get list of values and function to create a matcher from a value
-private typealias ShuffledCheckInfo = Pair<(TestHistory) -> List<*>, (Any) -> Matcher<View?>>
+typealias ShuffledCheckInfo = Pair<(TestHistory) -> List<*>, (Any) -> Matcher<View?>>
 
 private const val recyclerId = R.id.itemsRecycler
 
-private val matchedPairCheckInfo = ShuffledCheckInfo({ it }, {
-    it as Pair<String, String>
-    withHistoryItem(it.first, it.second)
-})
-private val computationCheckInfo = ShuffledCheckInfo(
-    { it.map { it.first } },
-    { withChild(withText(it as String)) }
-)
-private val resultCheckInfo = ShuffledCheckInfo(
-    { it.map { it.second } },
-    { withChild(withChild(withText(it as String))) }
-)
-
-private val checkInfoValues: Map<Int, List<ShuffledCheckInfo>> = mapOf(
-    1 to listOf(matchedPairCheckInfo),
-    2 to listOf(computationCheckInfo, resultCheckInfo)
-)
-
-fun checkItemsShuffled(computeHistory: TestHistory, randomness: Int): Boolean {
+fun checkItemsShuffled(computeHistory: TestHistory, checks: List<ShuffledCheckInfo>): Boolean {
     val historySize = computeHistory.size
     if (historySize < 2) {
         return true
     }
 
-    if (randomness !in checkInfoValues) {
-        throw IllegalArgumentException("checkItemsShuffled not callable with randomness $randomness")
-    }
-
-    val checkInfo = checkInfoValues[randomness]!!
     var allChecksPass = true
 
-    for (info in checkInfo) {
+    for (check in checks) {
         var checkPasses = false
-        val values = info.first(computeHistory)
+        val values = check.first(computeHistory)
 
         for (position in 0 until historySize) {
-            checkPasses = checkPasses || doShuffledCheck(values, position, info.second)
+            checkPasses = checkPasses || doShuffledCheck(values, position, check.second)
         }
 
         allChecksPass = allChecksPass && checkPasses

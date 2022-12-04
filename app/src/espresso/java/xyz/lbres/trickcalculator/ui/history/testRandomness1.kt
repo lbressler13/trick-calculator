@@ -179,7 +179,11 @@ private fun checkCorrectData(computeHistory: TestHistory) {
         checkItemsDisplayed(computeHistory, 1)
 
         // check that items are shuffled
-        shuffled = shuffled || checkItemsShuffled(computeHistory, 1)
+        val shuffledCheck = ShuffledCheckInfo({ it }, { item ->
+            item as Pair<String, String>
+            withHistoryItem(item.first, item.second)
+        })
+        shuffled = shuffled || checkItemsShuffled(computeHistory, listOf(shuffledCheck))
 
         closeFragment()
     }
