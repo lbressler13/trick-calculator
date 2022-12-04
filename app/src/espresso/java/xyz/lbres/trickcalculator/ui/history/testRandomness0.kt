@@ -32,8 +32,7 @@ fun testRandomness0() {
     equals()
     computeHistory.add(Pair("1+2", "3"))
     openHistoryFragment()
-    onView(withViewHolder(recyclerId, 0))
-        .check(matches(withHistoryItem("1+2", "3")))
+    onView(withViewHolder(recyclerId, 0)).check(matches(withHistoryItem("1+2", "3")))
 
     closeFragment()
 
