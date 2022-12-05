@@ -73,7 +73,7 @@ fun setHistoryRandomness(randomness: Int) {
 }
 
 /**
- * Verifies that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
+ * Verify that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
  *
  * @param computeHistory [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
@@ -111,7 +111,7 @@ fun checkCorrectData(computeHistory: TestHistory, randomness: Int, errorMessage:
  * @param randomness [Int]: history randomness setting
  * @param errorMessage [String]: error to throw if basic checks fail
  */
-fun runSingleReshuffledTest(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
+fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
     val recyclerId = R.id.itemsRecycler
     checkCorrectData(computeHistory, randomness, errorMessage)
     val historySize = computeHistory.size

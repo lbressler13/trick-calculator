@@ -4,7 +4,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
@@ -111,7 +110,7 @@ fun testRandomness1Reshuffled() {
     equals()
     computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
 
-    runSingleReshuffledTest(computeHistory, 1, errorMessage)
+    runSingleReshuffledCheck(computeHistory, 1, errorMessage)
     RecyclerViewTextSaver.clearAllSavedValues()
-    runSingleReshuffledTest(computeHistory, 1, errorMessage) // re-run with different order of values
+    runSingleReshuffledCheck(computeHistory, 1, errorMessage) // re-run with different order of values
 }

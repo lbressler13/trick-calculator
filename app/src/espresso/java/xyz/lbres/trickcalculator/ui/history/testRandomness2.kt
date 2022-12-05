@@ -110,7 +110,7 @@ fun testRandomness2Reshuffled() {
     equals()
     computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
 
-    runSingleReshuffledTest(computeHistory, 2, errorMessage)
+    runSingleReshuffledCheck(computeHistory, 2, errorMessage)
     RecyclerViewTextSaver.clearAllSavedValues()
-    runSingleReshuffledTest(computeHistory, 2, errorMessage) // re-run with different order of values
+    runSingleReshuffledCheck(computeHistory, 2, errorMessage) // re-run with different order of values
 }
