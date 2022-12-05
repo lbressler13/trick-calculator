@@ -4,6 +4,7 @@ import androidx.annotation.IdRes
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -19,8 +20,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.BaseActivity
+import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
@@ -39,6 +42,9 @@ class SettingsFragmentTest {
     @Before
     fun setupTest() {
         openSettingsFragment()
+        if (ProductFlavor.devMode) {
+            hideDevToolsButton()
+        }
     }
 
     @Test
@@ -51,7 +57,8 @@ class SettingsFragmentTest {
     fun loadFullUi() {
         checkInitialSettings()
         onView(withId(R.id.resetSettingsButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.randomizeSettingsButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.randomizeSettingsButton)).perform(scrollTo()).check(matches(isDisplayed()))
+        onView(withId(R.id.standardFunctionButton)).perform(scrollTo()).check(matches(isDisplayed()))
     }
 
     @Test
@@ -113,16 +120,20 @@ class SettingsFragmentTest {
         checkInitialSettings(checkSettingsButton = false)
         onView(withId(R.id.resetSettingsButton)).check(matches(isDisplayed()))
         onView(withId(R.id.randomizeSettingsButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.standardFunctionButton)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun switchSettingsMaintained() = testSwitchSettingsMaintained()
+    fun settingsMaintained() = testSettingsMaintained()
 
     @Test
     fun resetButton() = testResetButton()
 
     @Test
     fun randomizeButton() = testRandomizeButton()
+
+    @Test
+    fun standardFunctionButton() = testStandardFunctionButton()
 
     /**
      * Run basic tests on a switch by checking and unchecking
