@@ -6,14 +6,15 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
 
-fun testRandomness2() {
-    val errorMessage = "History items and pairs should be shuffled in history randomness 2."
+private const val errorMessage = "History items and pairs should be shuffled in history randomness 2."
 
+fun testRandomness2() {
     setHistoryRandomness(2)
     toggleShuffleOperators()
     openHistoryFragment()
@@ -68,4 +69,48 @@ fun testRandomness2() {
     equals()
     computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
     checkCorrectData(computeHistory, 2, errorMessage)
+}
+
+fun testRandomness2Reshuffled() {
+    setHistoryRandomness(2)
+    toggleShuffleOperators()
+
+    val computeHistory: MutableList<TestHI> = mutableListOf()
+
+    typeText("400/5")
+    equals()
+    computeHistory.add(TestHI("400/5", "80"))
+
+    clearText()
+    typeText("15-2.5")
+    equals()
+    computeHistory.add(TestHI("15-2.5", "12.5"))
+
+    clearText()
+    typeText("(3-4)(5+2)")
+    equals()
+    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
+
+    typeText("+11")
+    equals()
+    computeHistory.add(TestHI("-7+11", "4"))
+
+    clearText()
+    typeText("(3-4)(5+2)")
+    equals()
+    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
+
+    clearText()
+    typeText("+")
+    equals()
+    computeHistory.add(TestHI("+", "Syntax error"))
+
+    clearText()
+    typeText("2^0.5")
+    equals()
+    computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
+
+    runSingleReshuffledTest(computeHistory, 2, errorMessage)
+    RecyclerViewTextSaver.clearAllSavedValues()
+    runSingleReshuffledTest(computeHistory, 2, errorMessage) // re-run with different order of values
 }

@@ -3,14 +3,22 @@ package xyz.lbres.trickcalculator.ui.history
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
+import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
+import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
+import xyz.lbres.trickcalculator.testutils.repeatUntil
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
+import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
  * Test representation of a compute history displayed in the UI.
@@ -62,4 +70,83 @@ fun setHistoryRandomness(randomness: Int) {
     }
 
     closeFragment()
+}
+
+/**
+ * Verifies that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
+ *
+ * @param computeHistory [TestHistory]: list of items in history
+ * @param randomness [Int]: history randomness setting
+ * @param errorMessage [String]: error to show if check fails. Current history will be appended.
+ */
+fun checkCorrectData(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
+    var shuffled = false
+    val historySize = computeHistory.size
+    val checker = HistoryChecker(computeHistory)
+
+    // additional repeats for 2 items due to occasional failures
+    val repeatCount = ternaryIf(historySize == 2, 10, 5)
+
+    // check that all items are displayed, only needs to happen once
+    openHistoryFragment()
+    checker.checkDisplayed(randomness)
+    closeFragment()
+
+    // check that items are shuffled
+    repeatUntil(repeatCount, { shuffled }) {
+        openHistoryFragment()
+        shuffled = shuffled || checker.checkShuffled(randomness)
+        closeFragment()
+    }
+
+    if (historySize > 1 && !shuffled) {
+        throw AssertionError("$errorMessage. History: $computeHistory")
+    }
+}
+
+/**
+ * Check that the order changes when opening and closing the fragment.
+ *
+ * @param computeHistory [TestHistory]: list of items in history
+ * @param randomness [Int]: history randomness setting
+ * @param errorMessage [String]: error to throw if basic checks fail
+ */
+fun runSingleReshuffledTest(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
+    val recyclerId = R.id.itemsRecycler
+    checkCorrectData(computeHistory, randomness, errorMessage)
+    val historySize = computeHistory.size
+    openHistoryFragment()
+
+    // save all current values
+    for (position in 0 until historySize) {
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withViewHolder(recyclerId, position))
+            .perform(RecyclerViewTextSaver.saveTextAtPosition(position, R.id.computeText))
+    }
+
+    closeFragment()
+
+    // additional repeats for 2 items due to occasional failures
+    val repeats = ternaryIf(computeHistory.size == 2, 10, 5)
+    var shuffled = false
+
+    repeatUntil(repeats, { shuffled }) {
+        openHistoryFragment()
+
+        for (position in 0 until historySize) {
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
+
+            try {
+                onView(withViewHolder(recyclerId, position))
+                    .check(matches(not(RecyclerViewTextSaver.withSavedTextAtPosition(position, R.id.computeText))))
+                shuffled = true
+            } catch (_: Throwable) {}
+        }
+
+        closeFragment()
+    }
+
+    if (!shuffled) {
+        throw AssertionError("Items not re-shuffled for history randomness 1. History: $computeHistory")
+    }
 }
