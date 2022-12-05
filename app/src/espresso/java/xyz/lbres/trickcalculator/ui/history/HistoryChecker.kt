@@ -130,14 +130,18 @@ class HistoryChecker(private val computeHistory: TestHistory) {
         }
 
         for (check in checks) {
+            var checkPasses = false
+
             for (position in computeHistory.indices) {
-                // only needs one value to be different in order to be shuffled
-                if (runShuffledCheck(position, check)) {
-                    break
+                // only needs to pass once in order for values to be shuffled
+                if (!checkPasses) {
+                    checkPasses = checkPasses || runShuffledCheck(position, check)
                 }
             }
 
-            return false
+            if (!checkPasses) {
+                return false
+            }
         }
 
         if (randomness == 2) {
