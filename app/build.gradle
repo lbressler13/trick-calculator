@@ -74,24 +74,24 @@ android {
 
     sourceSets {
         dev {
-            java.srcDirs = ['src/dev/java']
+            kotlin.srcDirs = ['src/dev/kotlin']
             resources.srcDirs = ['src/dev/res']
         }
 
         complete {
-            java.srcDirs = ['src/final/java']
+            kotlin.srcDirs = ['src/final/kotlin']
         }
 
         androidTest {
-            java.srcDirs = ['src/espresso/java']
+            kotlin.srcDirs = ['src/espresso/kotlin']
         }
 
         androidTestDev {
-            java.srcDirs = ['src/espressoDev/java']
+            kotlin.srcDirs = ['src/espressoDev/kotlin']
         }
 
         androidTestComplete {
-            java.srcDirs = ['src/espressoFinal/java']
+            kotlin.srcDirs = ['src/espressoFinal/kotlin']
         }
     }
 

@@ -17,7 +17,7 @@ Creating chaos does not excuse messy code.
 ## Settings menus
 There are 2 different settings menus: the SettingsFragment and SettingsDialog, which extend the Fragment and DialogFragment classes respectively.
 The dialog can only be launched from the developer tools menu in the dev build variant.
-Therefore, the code for the SettingsDialog is stored in the [dev sources](https://github.com/lbressler13/trick-calculator/tree/main/app/src/dev/java/xyz/lbres/trickcalculator/ui/settings/SettingsDialog.kt).
+Therefore, the code for the SettingsDialog is stored in the [dev sources](https://github.com/lbressler13/trick-calculator/tree/main/app/src/dev/kotlin/xyz/lbres/trickcalculator/ui/settings/SettingsDialog.kt).
 In all variants, the SettingsFragment can be accessed in two different ways.
 The first way will remain undocumented.
 The second way is through the settings button on the main screen.

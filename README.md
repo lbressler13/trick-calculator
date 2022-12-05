@@ -45,7 +45,7 @@ With the exception of showing the settings button, no visual indication is given
 Access to the settings menu is unintuitive to create added difficulty.
 In the spirit of the app, this access is undocumented.
 
-Additional information about developing settings can be found [here](https://github.com/lbressler13/trick-calculator/blob/main/app/src/main/java/xyz/lbres/trickcalculator/ui/settings/README.md).
+Additional information about developing settings can be found [here](https://github.com/lbressler13/trick-calculator/blob/main/app/src/main/kotlin/xyz/lbres/trickcalculator/ui/settings/README.md).
 However, this documentation does not provide any additional insight into the settings or how to access them.
 
 ## Project structure
@@ -59,7 +59,7 @@ However, this documentation does not provide any additional insight into the set
 │   │   ├── espressoFinal    <-- UI tests that are specific to final product flavor
 │   │   ├── final            <-- code and resources that are specific to final product flavor
 │   │   ├── main
-│   │   │   ├── java         <-- main source code
+│   │   │   ├── kotlin       <-- main source code
 │   │   │   │   ├── compute  <-- code to perform calculation
 │   │   │   │   ├── ext      <-- extension methods for existing classes
 │   │   │   │   ├── ui       <-- app UI
