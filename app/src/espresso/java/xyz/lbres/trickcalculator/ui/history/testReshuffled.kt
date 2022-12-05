@@ -90,6 +90,8 @@ private fun createHistory(): TestHistory {
  * Check that the order changes when opening and closing the fragment.
  *
  * @param computeHistory [TestHistory]: list of items in history
+ * @param randomness [Int]: history randomness setting
+ * @param errorMessage [String]: error to throw if basic checks fail
  */
 private fun runSingleReshuffledTest(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
     val recyclerId = R.id.itemsRecycler

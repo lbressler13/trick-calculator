@@ -37,7 +37,7 @@ class HistoryFragmentTest {
 
     @Rule
     @JvmField
-    val retryRule = RetryRule(0) // TODO undo this
+    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {
@@ -138,11 +138,5 @@ class HistoryFragmentTest {
     // @Test
     // fun shuffleValues() {
     // test that correct operators/numbers/computation are saved when actual values are shuffled
-    // }
-
-    // TODO
-    // @Test
-    // fun changeRandomness() {
-    // change randomness setting for same history
     // }
 }
