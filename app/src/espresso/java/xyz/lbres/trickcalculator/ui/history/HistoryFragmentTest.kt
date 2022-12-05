@@ -18,10 +18,10 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
 import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
@@ -31,8 +31,6 @@ import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 @RunWith(AndroidJUnit4::class)
 class HistoryFragmentTest {
-    private val recyclerId = R.id.itemsRecycler
-
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
@@ -43,6 +41,8 @@ class HistoryFragmentTest {
 
     @Before
     fun setupTest() {
+        RecyclerViewTextSaver.clearAllSavedValues()
+
         if (ProductFlavor.devMode) {
             hideDevToolsButton()
         }
@@ -65,23 +65,25 @@ class HistoryFragmentTest {
     }
 
     @Test
-    fun historyRandomness0() = testRandomness0()
+    fun randomness0() = testRandomness0()
 
     @Test
-    fun historyRandomness1() = testRandomness1()
+    fun randomness1() = testRandomness1()
 
     @Test
-    fun historyRandomness2() = testRandomness2()
+    fun randomness1Reshuffled() = testRandomness1Reshuffled()
 
-    // TODO
-    // @Test
-    // fun historyRandomness3() {
-    // }
+    @Test
+    fun randomness2() = testRandomness2()
 
-    // TODO
     // @Test
-    // fun longHistory() {
-    // }
+    // fun randomness2Reshuffled() {} // TODO
+
+    // @Test
+    // fun randomness3() {} // TODO
+
+    // @Test
+    // fun longHistory() {} // TODO
 
     @Test
     fun clearOnError() {
@@ -91,64 +93,56 @@ class HistoryFragmentTest {
         onView(withId(R.id.clearOnErrorSwitch)).perform(click())
         closeFragment()
 
+        val computeHistory = mutableListOf<TestHI>()
+
         // one error
         typeText("0xx8")
         equals()
+        computeHistory.add(TestHI("0xx8", "Syntax error"))
         onView(withId(R.id.mainText)).check(matches(isEmptyString()))
 
         openHistoryFragment()
-
-        onView(withViewHolder(recyclerId, 0))
-            .check(matches(withHistoryItem("0xx8", "Syntax error")))
+        HistoryChecker(computeHistory).runAllChecks(0)
 
         // multiple errors
         closeFragment()
         clearText()
         typeText("10/0")
         equals()
+        computeHistory.add(TestHI("10/0", "Divide by zero"))
 
         openHistoryFragment()
-
-        onView(withViewHolder(recyclerId, 0))
-            .check(matches(withHistoryItem("0xx8", "Syntax error")))
-
-        onView(withViewHolder(recyclerId, 1))
-            .check(matches(withHistoryItem("10/0", "Divide by zero")))
+        HistoryChecker(computeHistory).runAllChecks(0)
 
         // errors and results
         closeFragment()
         clearText()
         typeText("15+5")
         equals()
+        computeHistory.add(TestHI("15+5", "20"))
 
         typeText("x")
         equals()
+        computeHistory.add(TestHI("20x", "Syntax error"))
 
         // don't clear text, should have been cleared by error
         typeText("2x4")
         equals()
+        computeHistory.add(TestHI("2x4", "8"))
 
         openHistoryFragment()
-
-        onView(withViewHolder(recyclerId, 0))
-            .check(matches(withHistoryItem("0xx8", "Syntax error")))
-
-        onView(withViewHolder(recyclerId, 1))
-            .check(matches(withHistoryItem("10/0", "Divide by zero")))
-
-        onView(withViewHolder(recyclerId, 2))
-            .check(matches(withHistoryItem("15+5", "20")))
-
-        onView(withViewHolder(recyclerId, 3))
-            .check(matches(withHistoryItem("20x", "Syntax error")))
-
-        onView(withViewHolder(recyclerId, 4))
-            .check(matches(withHistoryItem("2x4", "8")))
+        HistoryChecker(computeHistory).runAllChecks(0)
     }
 
     // TODO
     // @Test
     // fun shuffleValues() {
     // test that correct operators/numbers/computation are saved when actual values are shuffled
+    // }
+
+    // TODO
+    // @Test
+    // fun changeRandomness() {
+    // change randomness setting for same history
     // }
 }
