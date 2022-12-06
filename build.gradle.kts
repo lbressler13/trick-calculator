@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
         google()
@@ -6,7 +5,7 @@ buildscript {
     }
 
     val kotlinVersion = "1.6.20"
-    val gradleVersion = "7.0.4"
+    val gradleVersion = "7.0.2"
 
     dependencies {
         classpath("com.android.tools.build:gradle:$gradleVersion")
