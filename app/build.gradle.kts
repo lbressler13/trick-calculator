@@ -114,7 +114,7 @@ android {
 }
 
 dependencies {
-    val kotlinVersion = "1.6.20"
+    val kotlinVersion: String by rootProject.extra
 
     val androidxCoreVersion = "1.8.0"
     val appCompatVersion = "1.4.1"
