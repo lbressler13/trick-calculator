@@ -49,6 +49,7 @@ repositories {
 android {
     namespace = "xyz.lbres.trickcalculator"
     compileSdk = 31
+    buildToolsVersion = "31.0.0"
 
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"
@@ -127,7 +128,7 @@ dependencies {
 
     val androidxJunitVersion = "1.1.4"
     val androidxTestVersion = "1.5.0"
-    val espressoVersion = "3.5.0"
+    val espressoVersion = "3.4.0"
     val junitVersion = "4.13.2"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
@@ -146,6 +147,7 @@ dependencies {
     testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestVersion")
+    androidTestImplementation("androidx.test:runner:$androidxTestVersion") // needed to run on emulator
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")

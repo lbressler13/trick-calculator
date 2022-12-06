@@ -5,7 +5,7 @@ buildscript {
     }
 
     val kotlinVersion = "1.6.20"
-    val gradleVersion = "7.0.2"
+    val gradleVersion = "7.0.4"
 
     // only project-level dependencies, app-specific dependencies should go in application build files
     dependencies {
