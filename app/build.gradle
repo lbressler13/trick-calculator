@@ -121,6 +121,8 @@ android {
 }
 
 dependencies {
+    def kotlinVersion = '1.6.20'
+
     def androidxCoreVersion = "1.8.0"
     def appCompatVersion = "1.4.1"
     def constraintLayoutVersion = "2.1.4"
