@@ -7,6 +7,7 @@ buildscript {
     val kotlinVersion = "1.6.20"
     val gradleVersion = "7.0.2"
 
+    // only project-level dependencies, app-specific dependencies should go in application build files
     dependencies {
         classpath("com.android.tools.build:gradle:$gradleVersion")
         classpath(kotlin("gradle-plugin", version = kotlinVersion))

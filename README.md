@@ -67,8 +67,8 @@ However, this documentation does not provide any additional insight into the set
 │   │   │   ├── res          <-- app resources, including strings, layouts, and images
 │   │   │   ├── AndroidManifest.xml
 │   │   ├── test             <-- unit tests
-│   ├── build.gradle         <-- module level gradle file, contains app dependencies
-├── build.gradle             <-- project level gradle file
+│   ├── build.gradle.kts     <-- module level gradle file, contains app dependencies
+├── build.gradle.kts         <-- project level gradle file
 ├── gradle.properties
 └── settings.gradle
 ```
@@ -128,7 +128,7 @@ Some tests are shared across build variants, and some are run only on specific v
 Tests can be run via an IDE, or with the following commands:
 * All tests for both variants: `./gradlew connectedCheck`
 * Dev build variant only: `./gradlew connectedDevDebugAndroidTest`
-* Final build variant only: `./gradlew connectedCompleteDebugAndroidTest`
+* Final build variant only: `./gradlew connectedFinalDebugAndroidTest`
 
 Espresso tests must be run on a physical device or an emulator.
 See [here](https://developer.android.com/training/testing/espresso) for more information about testing with Espresso.

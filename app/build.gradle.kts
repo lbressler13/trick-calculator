@@ -29,7 +29,7 @@ repositories {
         }
     }
 
-    // kotlin utils
+    // exact numbers
     exclusiveContent {
         forRepository {
             maven {
@@ -50,7 +50,6 @@ android {
     namespace = "xyz.lbres.trickcalculator"
     compileSdk = 31
 
-    // TODO everything in here
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"
         minSdk = 29 // maximum sdk available in tester used in github actions
@@ -58,7 +57,6 @@ android {
         versionCode = 1
         versionName = "1.0.0"
 
-        // Custom test runner to set up Hilt dependency graph
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
@@ -70,7 +68,6 @@ android {
         }
     }
 
-    // Specifies one flavor dimension.
     flavorDimensions += "type"
     productFlavors {
         create("dev") {
@@ -78,6 +75,7 @@ android {
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
         }
+
         create("final") {
             dimension = "type"
             versionNameSuffix = "-final"
