@@ -122,20 +122,21 @@ android {
 
 dependencies {
     def androidxCoreVersion = "1.8.0"
-    def appCompatVersion = "1.4.1" // sdk 31 does not support higher
+    def appCompatVersion = "1.4.1"
     def constraintLayoutVersion = "2.1.4"
     def lifecycleVersion = "2.5.1"
     def materialVersion = "1.6.1"
-    def navigationVersion = "2.5.2"
+    def navigationVersion = "2.5.3"
 
     def exactNumbersVersion = "0.1.0"
-    def kotlinUtilsVersion = "0.3.0"
+    def kotlinUtilsVersion = "0.3.1"
 
+    def androidxJunitVersion = "1.1.4"
+    def androidxTestVersion = "1.5.0"
+    def espressoVersion = "3.5.0"
     def junitVersion = "4.13.2"
-    def androidxJunitVersion = "1.1.3"
-    def espressoVersion = "3.4.0"
-    def androidxTestVersion = "1.4.0"
 
+    //noinspection GradleDependency
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
     //noinspection GradleDependency
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
@@ -152,7 +153,6 @@ dependencies {
     // testing
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
-    androidTestImplementation "androidx.test:runner:$androidxTestVersion"
     androidTestImplementation "androidx.test:rules:$androidxTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
