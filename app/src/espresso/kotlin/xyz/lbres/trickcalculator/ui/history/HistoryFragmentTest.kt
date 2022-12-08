@@ -79,8 +79,7 @@ class HistoryFragmentTest {
     @Test
     fun randomness2Reshuffled() = testRandomness2Reshuffled()
 
-    // @Test
-    // fun randomness3() {} // TODO
+    // @Test fun randomness3() {} // TODO
 
     @Test
     fun longHistory() = testLongHistory()
@@ -134,9 +133,9 @@ class HistoryFragmentTest {
         HistoryChecker(computeHistory).runAllChecks(0)
     }
 
-    // @Test fun shuffledNumbers() = testShuffledNumbers() // TODO
-
     @Test fun shuffleOperators() = testShuffleOperators()
+
+    // @Test fun shuffleNumbers() = testShuffledNumbers() // TODO
 
     // @Test fun shuffleComputation() = testShuffleComputation() // TODO
 

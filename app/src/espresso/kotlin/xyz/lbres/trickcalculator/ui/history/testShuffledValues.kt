@@ -56,7 +56,7 @@ fun testShuffleOperators() {
     checkRandomness(checker, 2)
 }
 
-fun testShuffledNumbers() {}
+fun testShuffleNumbers() {}
 
 fun testShuffleComputation() {}
 
