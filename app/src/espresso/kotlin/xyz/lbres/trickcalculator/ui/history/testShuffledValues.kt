@@ -1,14 +1,8 @@
 package xyz.lbres.trickcalculator.ui.history
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.kotlinutils.int.ext.isZero
-import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
-import xyz.lbres.trickcalculator.testutils.openSettingsFragment
-import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
@@ -21,6 +15,7 @@ fun testShuffleOperators() {
 
     addItemWithResult("3", computeHistory)
     addItemWithResult("-1/2", computeHistory, previousResult = "3")
+
     // long decimal
     addItemWithResult("0.123456", computeHistory)
 
@@ -51,30 +46,21 @@ fun testShuffleOperators() {
     checkRandomness(checker, 0)
     checkRandomness(checker, 1)
     checkRandomness(checker, 2)
-
 }
 
-fun testShuffledNumbers() {
-    toggleShuffleOperators()
-    openSettingsFragment()
-    onView(withId(R.id.shuffleNumbersSwitch)).perform(click())
+fun testShuffledNumbers() {}
 
-}
-
-fun testShuffleComputation() {
-
-}
-
+fun testShuffleComputation() {}
 
 /**
- * Type a computation in the text, get the result, and add to compute history
+ * Type a computation in the main TextView, get the result, and add to compute history
  *
  * @param computeText [String]: the computation to run
- * @param computeHistory [MutableList]<[TestHI]>: mutable history to add to
+ * @param computeHistory [TestHistory]: mutable history to add to
  * @param previousResult [String]: result of previous computation, to use in creating the text for the history item.
  * Defaults to empty string.
  */
-private fun addItemWithResult(computeText: String, computeHistory: MutableList<TestHI>, previousResult: String = "") {
+private fun addItemWithResult(computeText: String, computeHistory: TestHistory, previousResult: String = "") {
     val maxDecimalLength = 5
 
     if (previousResult == "") {
@@ -105,9 +91,9 @@ private fun addItemWithResult(computeText: String, computeHistory: MutableList<T
  *
  * @param computeText [String]: the computation to run
  * @param error [String]: the expected error message
- * @param computeHistory [MutableList]<[TestHI]>: mutable history to add to
+ * @param computeHistory [TestHistory]: mutable history to add to
  */
-private fun addItemWithError(computeText: String, error: String, computeHistory: MutableList<TestHI>) {
+private fun addItemWithError(computeText: String, error: String, computeHistory: TestHistory) {
     clearText()
     typeText(computeText)
     equals()

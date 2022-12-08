@@ -22,7 +22,7 @@ fun testRandomness1() {
     // no history
     onView(withText("No history")).check(matches(isDisplayed()))
 
-    val computeHistory: MutableList<TestHI> = mutableListOf()
+    val computeHistory: TestHistory = mutableListOf()
 
     // one element
     closeFragment()
@@ -72,15 +72,13 @@ fun testRandomness1() {
     equals()
     computeHistory.add(TestHI(longText, longResult))
     checkCorrectData(computeHistory, 1, errorMessage)
-
-    checkCorrectData(computeHistory, 1, errorMessage)
 }
 
 fun testRandomness1Reshuffled() {
     setHistoryRandomness(1)
     toggleShuffleOperators()
 
-    val computeHistory: MutableList<TestHI> = mutableListOf()
+    val computeHistory: TestHistory = mutableListOf()
 
     typeText("400/5")
     equals()

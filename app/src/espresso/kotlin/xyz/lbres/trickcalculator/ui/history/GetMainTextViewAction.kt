@@ -9,8 +9,15 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
 import xyz.lbres.trickcalculator.R
 
+/**
+ * Most recently saved text. Should be reset after being retrieved once.
+ */
 private var savedText: String? = null
 
+/**
+ * [ViewAction] to extract the text from the main TextView and save it in a local variable.
+ * This is designed specifically to retrieve the randomized result in the main view and save it in a history item.
+ */
 private class GetMainTextViewAction : ViewAction {
     override fun getConstraints(): Matcher<View> = withId(R.id.mainText)
 
@@ -23,9 +30,15 @@ private class GetMainTextViewAction : ViewAction {
     }
 }
 
+/**
+ * Get the text from the main TextView
+ *
+ * @return [String]
+ */
 fun getMainText(): String {
     onView(withId(R.id.mainText)).perform(GetMainTextViewAction())
     val text = savedText!!
+    // reset saved text
     savedText = null
 
     return text

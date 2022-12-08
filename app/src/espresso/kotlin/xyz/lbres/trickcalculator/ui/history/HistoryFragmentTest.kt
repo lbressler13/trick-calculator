@@ -37,7 +37,7 @@ class HistoryFragmentTest {
 
     @Rule
     @JvmField
-    val retryRule = RetryRule(0) // TODO undo this
+    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {
