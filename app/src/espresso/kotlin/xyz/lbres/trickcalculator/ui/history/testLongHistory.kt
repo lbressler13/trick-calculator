@@ -27,7 +27,6 @@ private fun checkValues(computeHistory: TestHistory) {
     checker.runAllChecks(0)
     closeFragment()
 
-    /*
     setHistoryRandomness(1)
     openHistoryFragment()
     // very low probably of unshuffled due to long history
@@ -47,7 +46,6 @@ private fun checkValues(computeHistory: TestHistory) {
         checker.runAllChecks(2)
     }
     closeFragment()
-     */
 }
 
 /**

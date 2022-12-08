@@ -2,7 +2,7 @@ package xyz.lbres.trickcalculator.ui.history
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.kotlinutils.int.ext.isZero
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
@@ -19,46 +19,39 @@ import java.math.RoundingMode
 fun testShuffleOperators() {
     val computeHistory = mutableListOf<TestHI>()
 
-    addSingleItem("3", computeHistory)
-    addSingleItem("-1/2", computeHistory, previousResult = "3")
-    addSingleItem("0.123456", computeHistory)
+    addItemWithResult("3", computeHistory)
+    addItemWithResult("-1/2", computeHistory, previousResult = "3")
+    // long decimal
+    addItemWithResult("0.123456", computeHistory)
 
     var checker = HistoryChecker(computeHistory)
     checkRandomness(checker, 0)
 
-    addSingleItem("1+2-2/3x1", computeHistory)
-    addSingleItem("(1+2)(4-2)", computeHistory)
-    addSingleItem("2x(1-9)", computeHistory)
-    addSingleItem("1.2x5(4)", computeHistory)
-    addSingleItem("1.2x5(4)", computeHistory)
+    addItemWithResult("1+2-2/3x1", computeHistory)
+    addItemWithResult("(1+2)(4-2)", computeHistory)
+    addItemWithResult("2x(1-9)", computeHistory)
+    addItemWithResult("1.2x5(4)", computeHistory)
+    addItemWithResult("1.2x5(4)", computeHistory)
 
     // with error
-    clearText()
-    typeText("4+5()-44")
-    equals()
-    computeHistory.add(TestHI("4+5()-44", "Syntax error"))
+    addItemWithError("4+5()-44", "Syntax error", computeHistory)
 
-    addSingleItem("4+(5)-44", computeHistory)
-    addSingleItem(".00000003", computeHistory)
-    addSingleItem("55^6", computeHistory)
-    // TODO long value
-    // addSingleItem("123456789/12.898989898989+(98765x432100)-555555555x13131313131313", computeHistory)
+    addItemWithResult("4+(5)-44", computeHistory)
+    addItemWithResult(".00000003", computeHistory)
+    addItemWithResult("55^6", computeHistory)
 
     // multiple errors
-    clearText()
-    typeText("400/3..3")
-    equals()
-    computeHistory.add(TestHI("400/3..3", "Syntax error"))
+    addItemWithError("400/3..3", "Syntax error", computeHistory)
+    addItemWithError("(500-5))-6", "Syntax error", computeHistory)
 
-    clearText()
-    typeText("(500-5))-6")
-    equals()
-    computeHistory.add(TestHI("(500-5))-6", "Syntax error"))
+    val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)x3"
+    addItemWithResult(longText, computeHistory)
 
     checker = HistoryChecker(computeHistory)
     checkRandomness(checker, 0)
     checkRandomness(checker, 1)
     checkRandomness(checker, 2)
+
 }
 
 fun testShuffledNumbers() {
@@ -72,7 +65,16 @@ fun testShuffleComputation() {
 
 }
 
-private fun addSingleItem(computeText: String, computeHistory: MutableList<TestHI>, previousResult: String = "") {
+
+/**
+ * Type a computation in the text, get the result, and add to compute history
+ *
+ * @param computeText [String]: the computation to run
+ * @param computeHistory [MutableList]<[TestHI]>: mutable history to add to
+ * @param previousResult [String]: result of previous computation, to use in creating the text for the history item.
+ * Defaults to empty string.
+ */
+private fun addItemWithResult(computeText: String, computeHistory: MutableList<TestHI>, previousResult: String = "") {
     val maxDecimalLength = 5
 
     if (previousResult == "") {
@@ -84,6 +86,7 @@ private fun addSingleItem(computeText: String, computeHistory: MutableList<TestH
     var result = getMainText()
     result = result.substring(1, result.lastIndex) // trim [] around result
 
+    // shorten decimal
     if (result.contains('.')) {
         val pieces = result.split('.')
         val decimal = BigDecimal("." + pieces[1])
@@ -97,6 +100,26 @@ private fun addSingleItem(computeText: String, computeHistory: MutableList<TestH
     computeHistory.add(TestHI(previousResult + computeText, result))
 }
 
+/**
+ * Type a computation in the text and add text+error to compute history
+ *
+ * @param computeText [String]: the computation to run
+ * @param error [String]: the expected error message
+ * @param computeHistory [MutableList]<[TestHI]>: mutable history to add to
+ */
+private fun addItemWithError(computeText: String, error: String, computeHistory: MutableList<TestHI>) {
+    clearText()
+    typeText(computeText)
+    equals()
+    computeHistory.add(TestHI(computeText, error))
+}
+
+/**
+ * Run a randomness check for a compute history, including a retry
+ *
+ * @param checker [HistoryChecker]
+ * @param randomness [Int]: history randomness setting
+ */
 private fun checkRandomness(checker: HistoryChecker, randomness: Int) {
     setHistoryRandomness(randomness)
     openHistoryFragment()
