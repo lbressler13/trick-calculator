@@ -58,6 +58,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
      */
     fun checkDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
         checkAllowedRandomness(randomness)
+
         val check: (TestHI, Int) -> Pair<Boolean, Boolean> = when (randomness) {
             0 -> { item, position -> checkMatchedPairDisplayed(item, position) }
             1 -> { item, position -> checkMatchedPairDisplayed(item, position) }
@@ -76,6 +77,7 @@ class HistoryChecker(private val computeHistory: TestHistory) {
             }
 
             if (!(foundComputation && foundResult) && throwError) {
+                Thread.sleep(5000)
                 throw AssertionError("ViewHolder with text $it not found. History: $computeHistory")
             } else if (!(foundComputation && foundResult)) {
                 return false
