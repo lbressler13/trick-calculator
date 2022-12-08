@@ -1,6 +1,14 @@
 package xyz.lbres.trickcalculator.ui.history
 
+import android.view.View
+import android.widget.TextView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import org.hamcrest.Matcher
 import xyz.lbres.kotlinutils.int.ext.isZero
+import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.ui.calculator.clearText
@@ -122,4 +130,27 @@ private fun checkRandomness(checker: HistoryChecker, randomness: Int) {
     }
 
     closeFragment()
+}
+
+/**
+ * Get the text from the main TextView.
+ * Explicitly for using randomized results to generate history items.
+ * For other uses, use a [Matcher] or TextSaver
+ *
+ * @return [String]
+ */
+private fun getMainText(): String {
+    var text = ""
+
+    val viewAction = object : ViewAction {
+        override fun getConstraints(): Matcher<View> = withId(R.id.mainText)
+        override fun getDescription(): String = "retrieving main text"
+
+        override fun perform(uiController: UiController?, view: View?) {
+            text = (view as TextView).text?.toString() ?: ""
+        }
+    }
+
+    onView(withId(R.id.mainText)).perform(viewAction)
+    return text
 }
