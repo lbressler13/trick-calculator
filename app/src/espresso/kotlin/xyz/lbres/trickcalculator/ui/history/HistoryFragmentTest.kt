@@ -134,10 +134,8 @@ class HistoryFragmentTest {
     }
 
     @Test fun shuffleOperators() = testShuffleOperators()
-
-    // @Test fun shuffleNumbers() = testShuffledNumbers() // TODO
-
-    // @Test fun shuffleComputation() = testShuffleComputation() // TODO
+    @Test fun shuffleNumbers() = testShuffleNumbers()
+    @Test fun shuffleComputation() = testShuffleComputation()
 
     // @Test fun noApplyDecimals() {} // TODO
 
