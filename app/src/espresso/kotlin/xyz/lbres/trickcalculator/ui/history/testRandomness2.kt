@@ -22,7 +22,7 @@ fun testRandomness2() {
     // no history
     onView(withText("No history")).check(matches(isDisplayed()))
 
-    val computeHistory: MutableList<TestHI> = mutableListOf()
+    val computeHistory: TestHistory = mutableListOf()
 
     // one element
     closeFragment()
@@ -36,13 +36,11 @@ fun testRandomness2() {
     typeText("15-2.5")
     equals()
     computeHistory.add(TestHI("15-2.5", "12.5"))
-    checkCorrectData(computeHistory, 2, errorMessage)
 
     clearText()
     typeText("(3-4)(5+2)")
     equals()
     computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
-    checkCorrectData(computeHistory, 2, errorMessage)
 
     // previously computed
     typeText("+11")
@@ -55,19 +53,24 @@ fun testRandomness2() {
     typeText("(3-4)(5+2)")
     equals()
     computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
-    checkCorrectData(computeHistory, 2, errorMessage)
 
     // error
     clearText()
     typeText("+")
     equals()
     computeHistory.add(TestHI("+", "Syntax error"))
-    checkCorrectData(computeHistory, 2, errorMessage)
 
     clearText()
     typeText("2^0.5")
     equals()
     computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
+
+    val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
+    val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
+    clearText()
+    typeText(longText)
+    equals()
+    computeHistory.add(TestHI(longText, longResult))
     checkCorrectData(computeHistory, 2, errorMessage)
 }
 
@@ -75,7 +78,7 @@ fun testRandomness2Reshuffled() {
     setHistoryRandomness(2)
     toggleShuffleOperators()
 
-    val computeHistory: MutableList<TestHI> = mutableListOf()
+    val computeHistory: TestHistory = mutableListOf()
 
     typeText("400/5")
     equals()
@@ -109,6 +112,13 @@ fun testRandomness2Reshuffled() {
     typeText("2^0.5")
     equals()
     computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
+
+    val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
+    val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
+    clearText()
+    typeText(longText)
+    equals()
+    computeHistory.add(TestHI(longText, longResult))
 
     runSingleReshuffledCheck(computeHistory, 2, errorMessage)
     RecyclerViewTextSaver.clearAllSavedValues()

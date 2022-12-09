@@ -23,7 +23,7 @@ import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 /**
  * Test representation of a compute history displayed in the UI.
  */
-typealias TestHistory = List<TestHI>
+typealias TestHistory = MutableList<TestHI>
 
 /**
  * Test representation of a history item displayed in the UI.

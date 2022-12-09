@@ -48,6 +48,9 @@ fun testRandomness0() {
     typeText("1+2-2^3x1")
     equals()
     computeHistory.add(TestHI("1+2-2^3x1", "-5"))
+    typeText("3")
+    equals()
+    computeHistory.add(TestHI("-5x3", "-15"))
     clearText()
     typeText("(1+2)(4-2)")
     equals()
@@ -59,6 +62,19 @@ fun testRandomness0() {
     equals()
     computeHistory.add(TestHI("(1+2)(4-2)", "6"))
     clearText()
+
+    // long decimal
+    typeText("0.123456")
+    equals()
+    computeHistory.add(TestHI("0.123456", "0.12346"))
+    clearText()
+
+    // long computation
+    val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
+    val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
+    typeText(longText)
+    equals()
+    computeHistory.add(TestHI(longText, longResult))
 
     // check all items displayed
     val checker = HistoryChecker(computeHistory)
