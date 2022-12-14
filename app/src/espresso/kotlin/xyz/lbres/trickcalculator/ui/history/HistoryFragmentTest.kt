@@ -35,9 +35,9 @@ class HistoryFragmentTest {
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
-    @Rule
-    @JvmField
-    val retryRule = RetryRule()
+//    @Rule
+//    @JvmField
+//    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {
@@ -137,7 +137,7 @@ class HistoryFragmentTest {
     @Test fun shuffleNumbers() = testShuffleNumbers()
     @Test fun shuffleComputation() = testShuffleComputation()
 
-    // @Test fun noApplyDecimals() {} // TODO
+    @Test fun noApplyDecimals() = testNoApplyDecimals()
 
     // @Test fun noApplyParens() {} // TODO
 
