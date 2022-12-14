@@ -138,8 +138,7 @@ class HistoryFragmentTest {
     @Test fun shuffleComputation() = testShuffleComputation()
 
     @Test fun noApplyDecimals() = testNoApplyDecimals()
-
-    // @Test fun noApplyParens() {} // TODO
+    @Test fun noApplyParens() = testNoApplyParens()
 
     // @Test fun multipleSettings() {} // TODO
 }

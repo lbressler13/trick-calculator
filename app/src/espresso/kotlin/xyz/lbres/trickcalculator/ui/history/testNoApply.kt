@@ -96,7 +96,77 @@ fun testNoApplyDecimals() {
 }
 
 fun testNoApplyParens() {
+    toggleShuffleOperators()
+    openSettingsFragment()
+    onView(withId(R.id.applyParensSwitch)).perform(click())
+    closeFragment()
 
+    val history = TestHistory()
+
+    // no parens
+    history.add(generateHistoryItem("100", "100"))
+    history.add(generateHistoryItem("123.4567", "123.4567"))
+    history.add(generateHistoryItem("55-6x3", "37"))
+    history.add(generateHistoryItem("0.4^2", "0.16"))
+    history.add(generateHistoryItem("15-3x4..0", "Syntax error"))
+
+    openHistoryFragment()
+    history.runAllChecks(0)
+    closeFragment()
+
+    // one set of parens
+    history.add(generateHistoryItem("(1000.3)", "1000.3"))
+    history.add(generateHistoryItem("(4x6)", "24"))
+    history.add(generateHistoryItem("(100-204)", "-104"))
+    history.add(generateHistoryItem("3x(1-2)", "1"))
+    history.add(generateHistoryItem("0.3x12/(5-3)x1+3", "0.72"))
+    history.add(generateHistoryItem("5^(3/2+.5)", "63"))
+    history.add(generateHistoryItem("(4)3", "12"))
+    history.add(generateHistoryItem("(0)3", "0"))
+
+    openHistoryFragment()
+    history.runAllChecks(0)
+    closeFragment()
+
+    // multiple sets of parens
+    history.add(generateHistoryItem("(4)(3)", "12"))
+    history.add(generateHistoryItem("(2x3)-5(4-1)", "-15"))
+    history.add(generateHistoryItem("(4(2+3))/2", "9.5"))
+    history.add(generateHistoryItem("(4/(15-3)x(3-1)+10)+1", "1.26667"))
+
+    openHistoryFragment()
+    history.runAllChecks(0)
+    closeFragment()
+
+    // parens error
+    history.add(generateHistoryItem("4x((5+2)", "Syntax error"))
+    history.add(generateHistoryItem("()5", "Syntax error"))
+    history.add(generateHistoryItem("(4/(15-3)x(11-1))+3)+1", "Syntax error"))
+
+    openHistoryFragment()
+    history.runAllChecks(0)
+    closeFragment()
+
+    // using result
+    clearText()
+    typeText("5-3")
+    equals()
+    history.add(TestHI("5-3", "2"))
+    typeText("(5-3)")
+    equals()
+    history.add(TestHI("2(5-3)", "7"))
+
+    openHistoryFragment()
+    history.runAllChecks(0)
+    closeFragment()
+    setHistoryRandomness(1)
+    openHistoryFragment()
+    history.runAllChecks(1)
+    closeFragment()
+    setHistoryRandomness(2)
+    openHistoryFragment()
+    history.runAllChecks(2)
+    closeFragment()
 }
 
 private fun generateHistoryItem(computeHistory: String, result: String): TestHI {
