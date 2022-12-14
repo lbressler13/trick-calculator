@@ -22,105 +22,105 @@ fun testRandomness1() {
     // no history
     onView(withText("No history")).check(matches(isDisplayed()))
 
-    val computeHistory: TestHistory = mutableListOf()
+    val history = TestHistory()
 
     // one element
     closeFragment()
     typeText("400/5")
     equals()
-    computeHistory.add(TestHI("400/5", "80"))
-    checkCorrectData(computeHistory, 1, errorMessage)
+    history.add(TestHI("400/5", "80"))
+    checkCorrectData(history, 1, errorMessage)
 
     // several elements
     clearText()
     typeText("15-2.5")
     equals()
-    computeHistory.add(TestHI("15-2.5", "12.5"))
+    history.add(TestHI("15-2.5", "12.5"))
 
     clearText()
     typeText("(3-4)(5+2)")
     equals()
-    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
+    history.add(TestHI("(3-4)(5+2)", "-7"))
 
     // previously computed
     typeText("+11")
     equals()
-    computeHistory.add(TestHI("-7+11", "4"))
-    checkCorrectData(computeHistory, 1, errorMessage)
+    history.add(TestHI("-7+11", "4"))
+    checkCorrectData(history, 1, errorMessage)
 
     // duplicate element
     clearText()
     typeText("(3-4)(5+2)")
     equals()
-    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
+    history.add(TestHI("(3-4)(5+2)", "-7"))
 
     // error
     clearText()
     typeText("+")
     equals()
-    computeHistory.add(TestHI("+", "Syntax error"))
+    history.add(TestHI("+", "Syntax error"))
 
     clearText()
     typeText("2^0.5")
     equals()
-    computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
+    history.add(TestHI("2^0.5", "Exponents must be whole numbers"))
 
     val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
     val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
     clearText()
     typeText(longText)
     equals()
-    computeHistory.add(TestHI(longText, longResult))
-    checkCorrectData(computeHistory, 1, errorMessage)
+    history.add(TestHI(longText, longResult))
+    checkCorrectData(history, 1, errorMessage)
 }
 
 fun testRandomness1Reshuffled() {
     setHistoryRandomness(1)
     toggleShuffleOperators()
 
-    val computeHistory: TestHistory = mutableListOf()
+    val history = TestHistory()
 
     typeText("400/5")
     equals()
-    computeHistory.add(TestHI("400/5", "80"))
+    history.add(TestHI("400/5", "80"))
 
     clearText()
     typeText("15-2.5")
     equals()
-    computeHistory.add(TestHI("15-2.5", "12.5"))
+    history.add(TestHI("15-2.5", "12.5"))
 
     clearText()
     typeText("(3-4)(5+2)")
     equals()
-    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
+    history.add(TestHI("(3-4)(5+2)", "-7"))
 
     typeText("+11")
     equals()
-    computeHistory.add(TestHI("-7+11", "4"))
+    history.add(TestHI("-7+11", "4"))
 
     clearText()
     typeText("(3-4)(5+2)")
     equals()
-    computeHistory.add(TestHI("(3-4)(5+2)", "-7"))
+    history.add(TestHI("(3-4)(5+2)", "-7"))
 
     clearText()
     typeText("+")
     equals()
-    computeHistory.add(TestHI("+", "Syntax error"))
+    history.add(TestHI("+", "Syntax error"))
 
     clearText()
     typeText("2^0.5")
     equals()
-    computeHistory.add(TestHI("2^0.5", "Exponents must be whole numbers"))
+    history.add(TestHI("2^0.5", "Exponents must be whole numbers"))
 
     val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
     val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
     clearText()
     typeText(longText)
     equals()
-    computeHistory.add(TestHI(longText, longResult))
+    history.add(TestHI(longText, longResult))
 
-    runSingleReshuffledCheck(computeHistory, 1, errorMessage)
+    runSingleReshuffledCheck(history, 1, errorMessage)
     RecyclerViewTextSaver.clearAllSavedValues()
-    runSingleReshuffledCheck(computeHistory, 1, errorMessage) // re-run with different order of values
+    runSingleReshuffledCheck(history, 1, errorMessage) // re-run with different order of values
 }

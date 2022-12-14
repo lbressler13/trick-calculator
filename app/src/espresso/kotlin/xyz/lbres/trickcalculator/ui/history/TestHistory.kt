@@ -19,10 +19,13 @@ import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
  * Class to easily run checks on a compute history by specifying the randomness during each method call.
  * Enables running checks for multiple levels of randomness on the same compute history.
  * Methods include checking for items to be displayed, checking that items are ordered, and checking that items are shuffled.
- *
- * @param computeHistory [TestHistory]: history of computation
  */
-class HistoryChecker(private val computeHistory: TestHistory) {
+class TestHistory {
+    private val computeHistory: MutableList<TestHI> = mutableListOf()
+
+    val size: Int
+        get() = computeHistory.size
+
     /**
      * Information needed to check if displayed values are shuffled.
      *
@@ -32,6 +35,10 @@ class HistoryChecker(private val computeHistory: TestHistory) {
     private data class ShuffledCheckInfo<T>(val values: List<T>, val getMatcher: (T) -> Matcher<View?>)
 
     private val recyclerId = R.id.itemsRecycler
+
+    fun add(item: TestHI) {
+        computeHistory.add(item)
+    }
 
     /**
      * Run all checks for items displayed and ordered/shuffled for a level of randomness
