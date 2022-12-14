@@ -16,8 +16,8 @@ import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
- * Class to easily run checks on a compute history by specifying the randomness during each method call.
- * Enables running checks for multiple levels of randomness on the same compute history.
+ * Test representation of a compute history to display in the UI, including methods to run checks on the history.
+ * Enables running checks for multiple levels of randomness on the same history.
  * Methods include checking for items to be displayed, checking that items are ordered, and checking that items are shuffled.
  */
 class TestHistory {

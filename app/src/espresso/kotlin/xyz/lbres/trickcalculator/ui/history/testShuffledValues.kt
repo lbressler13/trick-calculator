@@ -22,36 +22,34 @@ import java.math.RoundingMode
 
 private const val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)x3"
 
-// TODO history.add(itemWithResult("comp"))
-
 fun testShuffleOperators() {
     val history = TestHistory()
 
-    addItemWithResult("3", history)
-    addItemWithResult("-1/2", history, previousResult = "3")
+    history.add(generateItemWithResult("3"))
+    history.add(generateItemWithResult("-1/2", previousResult = "3"))
 
     // long decimal
-    addItemWithResult("0.123456", history)
+    history.add(generateItemWithResult("0.123456"))
 
     checkRandomness(history, 0)
 
-    addItemWithResult("1+2-2/3x1", history)
-    addItemWithResult("(1+2)(4-2)", history)
-    addItemWithResult("2x(1-9)", history)
-    addItemWithResult("1.2x5(4)", history)
-    addItemWithResult("1.2x5(4)", history)
-    addItemWithResult(longText, history)
+    history.add(generateItemWithResult("1+2-2/3x1"))
+    history.add(generateItemWithResult("(1+2)(4-2)"))
+    history.add(generateItemWithResult("2x(1-9)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult(longText))
 
     // with error
-    addItemWithError("4+5()-44", "Syntax error", history)
+    history.add(generateItemWithError("4+5()-44", "Syntax error"))
 
-    addItemWithResult("4+(5)-44", history)
-    addItemWithResult(".00000003", history)
-    addItemWithResult("55^6", history)
+    history.add(generateItemWithResult("4+(5)-44"))
+    history.add(generateItemWithResult(".00000003"))
+    history.add(generateItemWithResult("55^6"))
 
     // multiple errors
-    addItemWithError("400/3..3", "Syntax error", history)
-    addItemWithError("(500-5))-6", "Syntax error", history)
+    history.add(generateItemWithError("400/3..3", "Syntax error"))
+    history.add(generateItemWithError("(500-5))-6", "Syntax error"))
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
@@ -67,38 +65,38 @@ fun testShuffleNumbers() {
     val history = TestHistory()
 
     // one digit
-    addItemWithResult("1", history)
-    addItemWithResult("22.22222", history)
-    addItemWithResult("00000", history)
+    history.add(generateItemWithResult("1"))
+    history.add(generateItemWithResult("22.22222"))
+    history.add(generateItemWithResult("00000"))
 
     checkRandomness(history, 0)
 
     // multiple digits
-    addItemWithResult("123.456", history)
-    addItemWithResult("8900000", history)
+    history.add(generateItemWithResult("123.456"))
+    history.add(generateItemWithResult("8900000"))
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
 
     // operators
-    addItemWithResult("1+2-2/3x1", history)
-    addItemWithResult("(1+2)(4-2)", history)
-    addItemWithResult("2x(1-9)", history)
-    addItemWithResult("1.2x5(4)", history)
-    addItemWithResult("1.2x5(4)", history)
-    addItemWithResult("55+16/3-4-3+23/66x44(20+30)", history)
+    history.add(generateItemWithResult("1+2-2/3x1"))
+    history.add(generateItemWithResult("(1+2)(4-2)"))
+    history.add(generateItemWithResult("2x(1-9)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("55+16/3-4-3+23/66x44(20+30)"))
 
     // with error
-    addItemWithError("4+5()-44", "Syntax error", history)
+    history.add(generateItemWithError("4+5()-44", "Syntax error"))
 
-    addItemWithResult("4+(5)-44", history)
-    addItemWithResult(".00000003", history)
-    addItemWithResult("55^6", history)
-    addItemWithResult(longText, history)
+    history.add(generateItemWithResult("4+(5)-44"))
+    history.add(generateItemWithResult(".00000003"))
+    history.add(generateItemWithResult("55^6"))
+    history.add(generateItemWithResult(longText))
 
     // multiple errors
-    addItemWithError("400/3..3", "Syntax error", history)
-    addItemWithError("(500-5))-6", "Syntax error", history)
+    history.add(generateItemWithError("400/3..3", "Syntax error"))
+    history.add(generateItemWithError("(500-5))-6", "Syntax error"))
 
 
     checkRandomness(history, 0)
@@ -114,31 +112,31 @@ fun testShuffleComputation() {
 
     val history = TestHistory()
 
-    addItemWithResult("3", history)
-    addItemWithResult("-1/2", history, previousResult = "3")
+    history.add(generateItemWithResult("3"))
+    history.add(generateItemWithResult("-1/2", previousResult = "3"))
 
     // long decimal
-    addItemWithResult("0.123456", history)
+    history.add(generateItemWithResult("0.123456"))
 
     checkRandomness(history, 0)
 
-    addItemWithResult("1+2-2/3x1", history)
-    addItemWithResult("(1+2)(4-2)", history)
-    addItemWithResult("2x(1-9)", history)
-    addItemWithResult("1.2x5(4)", history)
-    addItemWithResult("1.2x5(4)", history)
-    addItemWithResult(longText, history)
+    history.add(generateItemWithResult("1+2-2/3x1"))
+    history.add(generateItemWithResult("(1+2)(4-2)"))
+    history.add(generateItemWithResult("2x(1-9)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult(longText))
 
     // with error
-    addItemWithError("4+5()-44", "Syntax error", history)
+    history.add(generateItemWithError("4+5()-44", "Syntax error"))
 
-    addItemWithResult("4+(5)-44", history)
-    addItemWithResult(".00000003", history)
-    addItemWithResult("55^6", history)
+    history.add(generateItemWithResult("4+(5)-44"))
+    history.add(generateItemWithResult(".00000003"))
+    history.add(generateItemWithResult("55^6"))
 
     // multiple errors
-    addItemWithError("400/3..3", "Syntax error", history)
-    addItemWithError("(500-5))-6", "Syntax error", history)
+    history.add(generateItemWithError("400/3..3", "Syntax error"))
+    history.add(generateItemWithError("(500-5))-6", "Syntax error"))
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
@@ -146,14 +144,14 @@ fun testShuffleComputation() {
 }
 
 /**
- * Type a computation in the main TextView, get the result, and add to compute history
+ * Type a computation in the main TextView, get the result, and generate a history item.
  *
  * @param computeText [String]: the computation to run
- * @param computeHistory [TestHistory]: mutable history to add to
  * @param previousResult [String]: result of previous computation, to use in creating the text for the history item.
  * Defaults to empty string.
+ * @return [TestHI]: history item with the typed text and generated result
  */
-private fun addItemWithResult(computeText: String, computeHistory: TestHistory, previousResult: String = "") {
+private fun generateItemWithResult(computeText: String, previousResult: String = ""): TestHI {
     val maxDecimalLength = 5
 
     if (previousResult == "") {
@@ -176,21 +174,21 @@ private fun addItemWithResult(computeText: String, computeHistory: TestHistory, 
         result = "${pieces[0]}.$decimalString"
     }
 
-    computeHistory.add(TestHI(previousResult + computeText, result))
+    return TestHI(previousResult + computeText, result)
 }
 
 /**
- * Type a computation in the text and add text+error to compute history
+ * Type a computation that generates an error, and return the appropriate history item.
  *
  * @param computeText [String]: the computation to run
  * @param error [String]: the expected error message
- * @param computeHistory [TestHistory]: mutable history to add to
+ * @return [TestHI]: history item with the specified compute text and error
  */
-private fun addItemWithError(computeText: String, error: String, computeHistory: TestHistory) {
+private fun generateItemWithError(computeText: String, error: String): TestHI {
     clearText()
     typeText(computeText)
     equals()
-    computeHistory.add(TestHI(computeText, error))
+    return TestHI(computeText, error)
 }
 
 /**

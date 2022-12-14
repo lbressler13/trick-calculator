@@ -35,9 +35,9 @@ class HistoryFragmentTest {
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
-//    @Rule
-//    @JvmField
-//    val retryRule = RetryRule()
+    @Rule
+    @JvmField
+    val retryRule = RetryRule()
 
     @Before
     fun setupTest() {
