@@ -169,9 +169,16 @@ fun testNoApplyParens() {
     closeFragment()
 }
 
-private fun generateHistoryItem(computeHistory: String, result: String): TestHI {
+/**
+ * Type a computation, and return an item containing the expected text and result or error message
+ *
+ * @param computeString [String]: the computation to run
+ * @param result [String]: the expected value
+ * @return [TestHI]: history item with the specified compute text and result
+ */
+private fun generateHistoryItem(computeString: String, result: String): TestHI {
     clearText()
-    typeText(computeHistory)
+    typeText(computeString)
     equals()
-    return TestHI(computeHistory, result)
+    return TestHI(computeString, result)
 }

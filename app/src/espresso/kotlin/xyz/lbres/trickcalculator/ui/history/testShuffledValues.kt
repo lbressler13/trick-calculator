@@ -201,16 +201,16 @@ private fun checkRandomness(history: TestHistory, randomness: Int) {
     setHistoryRandomness(randomness)
     openHistoryFragment()
 
-    history.checkDisplayed(randomness)
+    history.checkAllDisplayed(randomness)
 
     if (randomness.isZero()) {
-        history.checkOrdered()
+        history.checkDisplayOrdered()
     } else {
         // one retry in case of small probability where numbers aren't shuffled
         try {
-            history.checkShuffled(randomness)
+            history.checkDisplayShuffled(randomness)
         } catch (_: Throwable) {
-            history.checkShuffled(randomness)
+            history.checkDisplayShuffled(randomness)
         }
     }
 

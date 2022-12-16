@@ -36,6 +36,11 @@ class TestHistory {
 
     private val recyclerId = R.id.itemsRecycler
 
+    /**
+     * Add a new item to the history
+     *
+     * @param item [TestHI]: value to add
+     */
     fun add(item: TestHI) {
         computeHistory.add(item)
     }
@@ -47,10 +52,10 @@ class TestHistory {
      */
     fun runAllChecks(randomness: Int) {
         checkAllowedRandomness(randomness)
-        checkDisplayed(randomness)
+        checkAllDisplayed(randomness)
         when (randomness) {
-            0 -> checkOrdered()
-            else -> checkShuffled(randomness)
+            0 -> checkDisplayOrdered()
+            else -> checkDisplayShuffled(randomness)
         }
     }
 
@@ -63,7 +68,7 @@ class TestHistory {
      * If `false`, the function will return `false`. Defaults to `true`.
      * @return [Boolean]: `true` if the check passes, `false` if it fails and [throwError] is set to `false`
      */
-    fun checkDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
+    fun checkAllDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
         checkAllowedRandomness(randomness)
         val check: (TestHI, Int) -> Pair<Boolean, Boolean> = when (randomness) {
             0 -> { item, position -> checkMatchedPairDisplayed(item, position) }
@@ -97,7 +102,7 @@ class TestHistory {
      *
      * @return [Boolean]: `true` if items are ordered, `false` otherwise
      */
-    fun checkOrdered(): Boolean {
+    fun checkDisplayOrdered(): Boolean {
         return try {
             computeHistory.forEachIndexed { position, item ->
                 matchesAtPosition(position, withHistoryItem(item))
@@ -115,13 +120,13 @@ class TestHistory {
      * @param randomness [Int]: history randomness setting
      * @return [Boolean] `true` if the history passes all the checks, `false` otherwise
      */
-    fun checkShuffled(randomness: Int): Boolean {
+    fun checkDisplayShuffled(randomness: Int): Boolean {
         if (computeHistory.size < 2) {
             return true
         }
 
         if (randomness == 0) {
-            return checkOrdered()
+            return checkDisplayOrdered()
         }
 
         // order of items is shuffled, but computation/result pairs are kept together

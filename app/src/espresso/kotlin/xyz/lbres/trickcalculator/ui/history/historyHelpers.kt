@@ -76,24 +76,23 @@ fun setHistoryRandomness(randomness: Int) {
  */
 fun checkCorrectData(history: TestHistory, randomness: Int, errorMessage: String) {
     var shuffled = false
-    val historySize = history.size
 
     // additional repeats for 2 items due to occasional failures
-    val repeatCount = ternaryIf(historySize == 2, 10, 5)
+    val repeatCount = ternaryIf(history.size == 2, 10, 5)
 
     // check that all items are displayed, only needs to happen once
     openHistoryFragment()
-    history.checkDisplayed(randomness)
+    history.checkAllDisplayed(randomness)
     closeFragment()
 
     // check that items are shuffled
     repeatUntil(repeatCount, { shuffled }) {
         openHistoryFragment()
-        shuffled = shuffled || history.checkShuffled(randomness)
+        shuffled = shuffled || history.checkDisplayShuffled(randomness)
         closeFragment()
     }
 
-    if (historySize > 1 && !shuffled) {
+    if (history.size > 1 && !shuffled) {
         throw AssertionError("$errorMessage. History: $history")
     }
 }

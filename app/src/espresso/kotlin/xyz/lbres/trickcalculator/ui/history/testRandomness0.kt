@@ -78,13 +78,13 @@ fun testRandomness0() {
 
     // check all items displayed
     openHistoryFragment()
-    history.checkDisplayed(0)
+    history.checkAllDisplayed(0)
     closeFragment()
 
     // test that order doesn't change
     repeat(5) {
         openHistoryFragment()
-        history.checkOrdered()
+        history.checkDisplayOrdered()
         closeFragment()
     }
 }
