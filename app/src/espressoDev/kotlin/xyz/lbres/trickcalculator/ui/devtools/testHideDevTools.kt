@@ -117,9 +117,9 @@ fun testHideDevTools() {
 private fun checkDevToolsHidden(hideTime: Long) {
     onView(withText("Developer Tools")).check(doesNotExist())
     devToolsButton.check(matches(not(isDisplayed())))
-    Thread.sleep(hideTime - 1000)
+    Thread.sleep(hideTime - 2000)
     devToolsButton.check(matches(not(isDisplayed())))
-    Thread.sleep(2000)
+    Thread.sleep(4000)
     devToolsButton.check(matches(isDisplayed()))
 }
 
