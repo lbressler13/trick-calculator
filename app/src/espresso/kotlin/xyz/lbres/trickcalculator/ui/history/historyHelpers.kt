@@ -3,22 +3,20 @@ package xyz.lbres.trickcalculator.ui.history
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.not
-import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
-import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
-import xyz.lbres.trickcalculator.testutils.repeatUntil
-import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
+import xyz.lbres.trickcalculator.ui.calculator.clearText
+import xyz.lbres.trickcalculator.ui.calculator.equals
+import xyz.lbres.trickcalculator.ui.calculator.typeText
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 
 /**
  * Test representation of a history item displayed in the UI.
@@ -68,78 +66,35 @@ fun setHistoryRandomness(randomness: Int) {
 }
 
 /**
- * Verify that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
+ * Type a computation in the main TextView, get the result, and generate a history item.
  *
- * @param history [TestHistory]: list of items in history
- * @param randomness [Int]: history randomness setting
- * @param errorMessage [String]: error to show if check fails. Current history will be appended.
+ * @param computeText [String]: the computation to run
+ * @param previousResult [String]: result of previous computation, to use in creating the text for the history item.
+ * Defaults to empty string.
+ * @param getResult () -> [String]: function to get the result to use in the history item
+ * @return [TestHI]: history item with the typed text and generated result
  */
-fun checkCorrectData(history: TestHistory, randomness: Int, errorMessage: String) {
-    var shuffled = false
+fun generateHI(computeText: String, previousResult: String = "", getResult: () -> String): TestHI {
+    val maxDecimalLength = 5
 
-    // additional repeats for 2 items due to occasional failures
-    val repeatCount = ternaryIf(history.size == 2, 10, 5)
+    if (previousResult == "") {
+        clearText()
+    }
+    typeText(computeText)
+    equals()
 
-    // check that all items are displayed, only needs to happen once
-    openHistoryFragment()
-    history.checkAllDisplayed(randomness)
-    closeFragment()
+    var result = getResult()
 
-    // check that items are shuffled
-    repeatUntil(repeatCount, { shuffled }) {
-        openHistoryFragment()
-        shuffled = shuffled || history.checkDisplayShuffled(randomness)
-        closeFragment()
+    // shorten decimal
+    if (result.contains('.')) {
+        val pieces = result.split('.')
+        val decimal = BigDecimal("." + pieces[1])
+        val mc = MathContext(maxDecimalLength, RoundingMode.HALF_UP)
+        val fullDecimalString = decimal.round(mc).toEngineeringString()
+        val decimalString = fullDecimalString.substringAfter('.')
+
+        result = "${pieces[0]}.$decimalString"
     }
 
-    if (history.size > 1 && !shuffled) {
-        throw AssertionError("$errorMessage. History: $history")
-    }
-}
-
-/**
- * Check that the order changes when opening and closing the fragment.
- *
- * @param computeHistory [TestHistory]: list of items in history
- * @param randomness [Int]: history randomness setting
- * @param errorMessage [String]: error to throw if basic checks fail
- */
-fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
-    val recyclerId = R.id.itemsRecycler
-    checkCorrectData(computeHistory, randomness, errorMessage)
-    val historySize = computeHistory.size
-    openHistoryFragment()
-
-    // save all current values
-    for (position in 0 until historySize) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position))
-            .perform(RecyclerViewTextSaver.saveTextAtPosition(position, R.id.computeText))
-    }
-
-    closeFragment()
-
-    // additional repeats for 2 items due to occasional failures
-    val repeats = ternaryIf(computeHistory.size == 2, 10, 5)
-    var shuffled = false
-
-    repeatUntil(repeats, { shuffled }) {
-        openHistoryFragment()
-
-        for (position in 0 until historySize) {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-
-            try {
-                onView(withViewHolder(recyclerId, position))
-                    .check(matches(not(RecyclerViewTextSaver.withSavedTextAtPosition(position, R.id.computeText))))
-                shuffled = true
-            } catch (_: Throwable) {}
-        }
-
-        closeFragment()
-    }
-
-    if (!shuffled) {
-        throw AssertionError("Items not re-shuffled for history randomness 1. History: $computeHistory")
-    }
+    return TestHI(previousResult + computeText, result)
 }
