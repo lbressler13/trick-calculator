@@ -13,6 +13,7 @@ import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
  * Activity that contains all functionality of app
  */
 class BaseActivity : AppCompatActivity() {
+
     lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
     private lateinit var sharedViewModel: SharedViewModel

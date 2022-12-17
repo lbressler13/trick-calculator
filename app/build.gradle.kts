@@ -82,16 +82,35 @@ android {
         }
     }
 
+    sourceSets.getByName("main") {
+        java.setSrcDirs(listOf("src/main/kotlin"))
+    }
+
+    sourceSets.getByName("dev") {
+        java.setSrcDirs(listOf("src/dev/kotlin"))
+    }
+
+    sourceSets.getByName("final") {
+        java.setSrcDirs(listOf("src/final/kotlin"))
+    }
+
+    sourceSets.getByName("test") {
+        java.setSrcDirs(listOf("src/test/kotlin"))
+    }
+
     sourceSets.getByName("androidTest") {
         kotlin.setSrcDirs(listOf("src/espresso/kotlin"))
+        java.setSrcDirs(listOf("src/espresso/kotlin"))
     }
 
     sourceSets.getByName("androidTestDev") {
         kotlin.setSrcDirs(listOf("src/espressoDev/kotlin"))
+        java.setSrcDirs(listOf("src/espressoDev/kotlin"))
     }
 
     sourceSets.getByName("androidTestFinal") {
         kotlin.setSrcDirs(listOf("src/espressoFinal/kotlin"))
+        java.setSrcDirs(listOf("src/espressoFinal/kotlin"))
     }
 
     buildFeatures {
