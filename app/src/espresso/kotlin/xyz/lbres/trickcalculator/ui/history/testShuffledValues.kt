@@ -98,7 +98,6 @@ fun testShuffleNumbers() {
     history.add(generateItemWithError("400/3..3", "Syntax error"))
     history.add(generateItemWithError("(500-5))-6", "Syntax error"))
 
-
     checkRandomness(history, 0)
     checkRandomness(history, 1)
     checkRandomness(history, 2)
