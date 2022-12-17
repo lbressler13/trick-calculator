@@ -5,12 +5,14 @@ import android.widget.TextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
 import xyz.lbres.kotlinutils.int.ext.isZero
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
@@ -18,57 +20,138 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-fun testShuffleOperators() {
-    val computeHistory = mutableListOf<TestHI>()
+private const val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)x3"
 
-    addItemWithResult("3", computeHistory)
-    addItemWithResult("-1/2", computeHistory, previousResult = "3")
+fun testShuffleOperators() {
+    val history = TestHistory()
+
+    history.add(generateItemWithResult("3"))
+    history.add(generateItemWithResult("-1/2", previousResult = "3"))
 
     // long decimal
-    addItemWithResult("0.123456", computeHistory)
+    history.add(generateItemWithResult("0.123456"))
 
-    var checker = HistoryChecker(computeHistory)
-    checkRandomness(checker, 0)
+    checkRandomness(history, 0)
 
-    addItemWithResult("1+2-2/3x1", computeHistory)
-    addItemWithResult("(1+2)(4-2)", computeHistory)
-    addItemWithResult("2x(1-9)", computeHistory)
-    addItemWithResult("1.2x5(4)", computeHistory)
-    addItemWithResult("1.2x5(4)", computeHistory)
+    history.add(generateItemWithResult("1+2-2/3x1"))
+    history.add(generateItemWithResult("(1+2)(4-2)"))
+    history.add(generateItemWithResult("2x(1-9)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult(longText))
 
     // with error
-    addItemWithError("4+5()-44", "Syntax error", computeHistory)
+    history.add(generateItemWithError("4+5()-44", "Syntax error"))
 
-    addItemWithResult("4+(5)-44", computeHistory)
-    addItemWithResult(".00000003", computeHistory)
-    addItemWithResult("55^6", computeHistory)
+    history.add(generateItemWithResult("4+(5)-44"))
+    history.add(generateItemWithResult(".00000003"))
+    history.add(generateItemWithResult("55^6"))
 
     // multiple errors
-    addItemWithError("400/3..3", "Syntax error", computeHistory)
-    addItemWithError("(500-5))-6", "Syntax error", computeHistory)
+    history.add(generateItemWithError("400/3..3", "Syntax error"))
+    history.add(generateItemWithError("(500-5))-6", "Syntax error"))
 
-    val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)x3"
-    addItemWithResult(longText, computeHistory)
-
-    checker = HistoryChecker(computeHistory)
-    checkRandomness(checker, 0)
-    checkRandomness(checker, 1)
-    checkRandomness(checker, 2)
+    checkRandomness(history, 0)
+    checkRandomness(history, 1)
+    checkRandomness(history, 2)
 }
 
-fun testShuffleNumbers() {}
+fun testShuffleNumbers() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    onView(withId(R.id.shuffleNumbersSwitch)).perform(click())
+    closeFragment()
 
-fun testShuffleComputation() {}
+    val history = TestHistory()
+
+    // one digit
+    history.add(generateItemWithResult("1"))
+    history.add(generateItemWithResult("22.22222"))
+    history.add(generateItemWithResult("00000"))
+
+    checkRandomness(history, 0)
+
+    // multiple digits
+    history.add(generateItemWithResult("123.456"))
+    history.add(generateItemWithResult("8900000"))
+
+    checkRandomness(history, 0)
+    checkRandomness(history, 1)
+
+    // operators
+    history.add(generateItemWithResult("1+2-2/3x1"))
+    history.add(generateItemWithResult("(1+2)(4-2)"))
+    history.add(generateItemWithResult("2x(1-9)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("55+16/3-4-3+23/66x44(20+30)"))
+
+    // with error
+    history.add(generateItemWithError("4+5()-44", "Syntax error"))
+
+    history.add(generateItemWithResult("4+(5)-44"))
+    history.add(generateItemWithResult(".00000003"))
+    history.add(generateItemWithResult("55^6"))
+    history.add(generateItemWithResult(longText))
+
+    // multiple errors
+    history.add(generateItemWithError("400/3..3", "Syntax error"))
+    history.add(generateItemWithError("(500-5))-6", "Syntax error"))
+
+
+    checkRandomness(history, 0)
+    checkRandomness(history, 1)
+    checkRandomness(history, 2)
+}
+
+fun testShuffleComputation() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    onView(withId(R.id.shuffleComputationSwitch)).perform(click())
+    closeFragment()
+
+    val history = TestHistory()
+
+    history.add(generateItemWithResult("3"))
+    history.add(generateItemWithResult("-1/2", previousResult = "3"))
+
+    // long decimal
+    history.add(generateItemWithResult("0.123456"))
+
+    checkRandomness(history, 0)
+
+    history.add(generateItemWithResult("1+2-2/3x1"))
+    history.add(generateItemWithResult("(1+2)(4-2)"))
+    history.add(generateItemWithResult("2x(1-9)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult("1.2x5(4)"))
+    history.add(generateItemWithResult(longText))
+
+    // with error
+    history.add(generateItemWithError("4+5()-44", "Syntax error"))
+
+    history.add(generateItemWithResult("4+(5)-44"))
+    history.add(generateItemWithResult(".00000003"))
+    history.add(generateItemWithResult("55^6"))
+
+    // multiple errors
+    history.add(generateItemWithError("400/3..3", "Syntax error"))
+    history.add(generateItemWithError("(500-5))-6", "Syntax error"))
+
+    checkRandomness(history, 0)
+    checkRandomness(history, 1)
+    checkRandomness(history, 2)
+}
 
 /**
- * Type a computation in the main TextView, get the result, and add to compute history
+ * Type a computation in the main TextView, get the result, and generate a history item.
  *
  * @param computeText [String]: the computation to run
- * @param computeHistory [TestHistory]: mutable history to add to
  * @param previousResult [String]: result of previous computation, to use in creating the text for the history item.
  * Defaults to empty string.
+ * @return [TestHI]: history item with the typed text and generated result
  */
-private fun addItemWithResult(computeText: String, computeHistory: TestHistory, previousResult: String = "") {
+private fun generateItemWithResult(computeText: String, previousResult: String = ""): TestHI {
     val maxDecimalLength = 5
 
     if (previousResult == "") {
@@ -91,41 +174,43 @@ private fun addItemWithResult(computeText: String, computeHistory: TestHistory, 
         result = "${pieces[0]}.$decimalString"
     }
 
-    computeHistory.add(TestHI(previousResult + computeText, result))
+    return TestHI(previousResult + computeText, result)
 }
 
 /**
- * Type a computation in the text and add text+error to compute history
+ * Type a computation that generates an error, and return the appropriate history item.
  *
  * @param computeText [String]: the computation to run
  * @param error [String]: the expected error message
- * @param computeHistory [TestHistory]: mutable history to add to
+ * @return [TestHI]: history item with the specified compute text and error
  */
-private fun addItemWithError(computeText: String, error: String, computeHistory: TestHistory) {
+private fun generateItemWithError(computeText: String, error: String): TestHI {
     clearText()
     typeText(computeText)
     equals()
-    computeHistory.add(TestHI(computeText, error))
+    return TestHI(computeText, error)
 }
 
 /**
  * Run a randomness check for a compute history, including a retry
  *
- * @param checker [HistoryChecker]
+ * @param history [TestHistory]
  * @param randomness [Int]: history randomness setting
  */
-private fun checkRandomness(checker: HistoryChecker, randomness: Int) {
+private fun checkRandomness(history: TestHistory, randomness: Int) {
     setHistoryRandomness(randomness)
     openHistoryFragment()
 
+    history.checkAllDisplayed(randomness)
+
     if (randomness.isZero()) {
-        checker.runAllChecks(0)
+        history.checkDisplayOrdered()
     } else {
         // one retry in case of small probability where numbers aren't shuffled
         try {
-            checker.runAllChecks(randomness)
+            history.checkDisplayShuffled(randomness)
         } catch (_: Throwable) {
-            checker.runAllChecks(randomness)
+            history.checkDisplayShuffled(randomness)
         }
     }
 

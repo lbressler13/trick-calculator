@@ -25,12 +25,12 @@ fun testRandomness0() {
     onView(withText("No history")).check(matches(isDisplayed()))
 
     closeFragment()
-    val computeHistory = mutableListOf<TestHI>()
+    val history = TestHistory()
 
     // one element
     typeText("1+2")
     equals()
-    computeHistory.add(TestHI("1+2", "3"))
+    history.add(TestHI("1+2", "3"))
     openHistoryFragment()
     onView(withViewHolder(recyclerId, 0)).check(matches(withHistoryItem("1+2", "3")))
 
@@ -39,34 +39,34 @@ fun testRandomness0() {
     // several elements
     typeText("-1/2")
     equals()
-    computeHistory.add(TestHI("3-1/2", "2.5"))
+    history.add(TestHI("3-1/2", "2.5"))
     clearText()
     typeText("+")
     equals()
-    computeHistory.add(TestHI("+", "Syntax error"))
+    history.add(TestHI("+", "Syntax error"))
     clearText()
     typeText("1+2-2^3x1")
     equals()
-    computeHistory.add(TestHI("1+2-2^3x1", "-5"))
+    history.add(TestHI("1+2-2^3x1", "-5"))
     typeText("3")
     equals()
-    computeHistory.add(TestHI("-5x3", "-15"))
+    history.add(TestHI("-5x3", "-15"))
     clearText()
     typeText("(1+2)(4-2)")
     equals()
-    computeHistory.add(TestHI("(1+2)(4-2)", "6"))
+    history.add(TestHI("(1+2)(4-2)", "6"))
     clearText()
 
     // duplicate element
     typeText("(1+2)(4-2)")
     equals()
-    computeHistory.add(TestHI("(1+2)(4-2)", "6"))
+    history.add(TestHI("(1+2)(4-2)", "6"))
     clearText()
 
     // long decimal
     typeText("0.123456")
     equals()
-    computeHistory.add(TestHI("0.123456", "0.12346"))
+    history.add(TestHI("0.123456", "0.12346"))
     clearText()
 
     // long computation
@@ -74,18 +74,17 @@ fun testRandomness0() {
     val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
     typeText(longText)
     equals()
-    computeHistory.add(TestHI(longText, longResult))
+    history.add(TestHI(longText, longResult))
 
     // check all items displayed
-    val checker = HistoryChecker(computeHistory)
     openHistoryFragment()
-    checker.checkDisplayed(0)
+    history.checkAllDisplayed(0)
     closeFragment()
 
     // test that order doesn't change
     repeat(5) {
         openHistoryFragment()
-        checker.checkOrdered()
+        history.checkDisplayOrdered()
         closeFragment()
     }
 }

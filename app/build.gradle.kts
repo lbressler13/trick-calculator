@@ -49,7 +49,6 @@ repositories {
 android {
     namespace = "xyz.lbres.trickcalculator"
     compileSdk = 31
-    buildToolsVersion = "31.0.0"
 
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"

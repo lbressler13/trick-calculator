@@ -21,11 +21,6 @@ import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
- * Test representation of a compute history displayed in the UI.
- */
-typealias TestHistory = MutableList<TestHI>
-
-/**
  * Test representation of a history item displayed in the UI.
  * First value is computation string (first row in UI), and second value is result/error (second row in UI).
  */
@@ -75,32 +70,30 @@ fun setHistoryRandomness(randomness: Int) {
 /**
  * Verify that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
  *
- * @param computeHistory [TestHistory]: list of items in history
+ * @param history [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
  * @param errorMessage [String]: error to show if check fails. Current history will be appended.
  */
-fun checkCorrectData(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
+fun checkCorrectData(history: TestHistory, randomness: Int, errorMessage: String) {
     var shuffled = false
-    val historySize = computeHistory.size
-    val checker = HistoryChecker(computeHistory)
 
     // additional repeats for 2 items due to occasional failures
-    val repeatCount = ternaryIf(historySize == 2, 10, 5)
+    val repeatCount = ternaryIf(history.size == 2, 10, 5)
 
     // check that all items are displayed, only needs to happen once
     openHistoryFragment()
-    checker.checkDisplayed(randomness)
+    history.checkAllDisplayed(randomness)
     closeFragment()
 
     // check that items are shuffled
     repeatUntil(repeatCount, { shuffled }) {
         openHistoryFragment()
-        shuffled = shuffled || checker.checkShuffled(randomness)
+        shuffled = shuffled || history.checkDisplayShuffled(randomness)
         closeFragment()
     }
 
-    if (historySize > 1 && !shuffled) {
-        throw AssertionError("$errorMessage. History: $computeHistory")
+    if (history.size > 1 && !shuffled) {
+        throw AssertionError("$errorMessage. History: $history")
     }
 }
 

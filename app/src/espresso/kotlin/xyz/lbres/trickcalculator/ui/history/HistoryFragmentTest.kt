@@ -92,56 +92,53 @@ class HistoryFragmentTest {
         onView(withId(R.id.clearOnErrorSwitch)).perform(click())
         closeFragment()
 
-        val computeHistory = mutableListOf<TestHI>()
+        val history = TestHistory()
 
         // one error
         typeText("0xx8")
         equals()
-        computeHistory.add(TestHI("0xx8", "Syntax error"))
+        history.add(TestHI("0xx8", "Syntax error"))
         onView(withId(R.id.mainText)).check(matches(isEmptyString()))
 
         openHistoryFragment()
-        HistoryChecker(computeHistory).runAllChecks(0)
+        history.runAllChecks(0)
 
         // multiple errors
         closeFragment()
         clearText()
         typeText("10/0")
         equals()
-        computeHistory.add(TestHI("10/0", "Divide by zero"))
+        history.add(TestHI("10/0", "Divide by zero"))
 
         openHistoryFragment()
-        HistoryChecker(computeHistory).runAllChecks(0)
+        history.runAllChecks(0)
 
         // errors and results
         closeFragment()
         clearText()
         typeText("15+5")
         equals()
-        computeHistory.add(TestHI("15+5", "20"))
+        history.add(TestHI("15+5", "20"))
 
         typeText("x")
         equals()
-        computeHistory.add(TestHI("20x", "Syntax error"))
+        history.add(TestHI("20x", "Syntax error"))
 
         // don't clear text, should have been cleared by error
         typeText("2x4")
         equals()
-        computeHistory.add(TestHI("2x4", "8"))
+        history.add(TestHI("2x4", "8"))
 
         openHistoryFragment()
-        HistoryChecker(computeHistory).runAllChecks(0)
+        history.runAllChecks(0)
     }
 
     @Test fun shuffleOperators() = testShuffleOperators()
+    @Test fun shuffleNumbers() = testShuffleNumbers()
+    @Test fun shuffleComputation() = testShuffleComputation()
 
-    // @Test fun shuffleNumbers() = testShuffledNumbers() // TODO
-
-    // @Test fun shuffleComputation() = testShuffleComputation() // TODO
-
-    // @Test fun noApplyDecimals() {} // TODO
-
-    // @Test fun noApplyParens() {} // TODO
+    @Test fun noApplyDecimals() = testNoApplyDecimals()
+    @Test fun noApplyParens() = testNoApplyParens()
 
     // @Test fun multipleSettings() {} // TODO
 }

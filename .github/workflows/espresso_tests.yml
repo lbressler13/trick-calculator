@@ -9,7 +9,6 @@ jobs:
     name: "Run Tests"
 
     runs-on: macos-latest
-    timeout-minutes: 75
     env:
       USERNAME: ${{ secrets.USERNAME }}
       TOKEN: ${{ secrets.TOKEN }}
@@ -26,6 +25,7 @@ jobs:
           cache: 'gradle'
 
       - name: Run Tests
+        timeout-minutes: 105
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29

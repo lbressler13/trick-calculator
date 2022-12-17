@@ -20,20 +20,20 @@ fun testLongHistory() {
  * @param computeHistory [TestHistory]: history to check
  */
 private fun checkValues(computeHistory: TestHistory) {
-    val checker = HistoryChecker(computeHistory)
+    val history = TestHistory()
 
     setHistoryRandomness(0)
     openHistoryFragment()
-    checker.runAllChecks(0)
+    history.runAllChecks(0)
     closeFragment()
 
     setHistoryRandomness(1)
     openHistoryFragment()
     // very low probably of unshuffled due to long history
     try {
-        checker.runAllChecks(1)
+        history.runAllChecks(1)
     } catch (_: Throwable) {
-        checker.runAllChecks(1)
+        history.runAllChecks(1)
     }
     closeFragment()
 
@@ -41,9 +41,9 @@ private fun checkValues(computeHistory: TestHistory) {
     openHistoryFragment()
     // very low probably of unshuffled due to long history
     try {
-        checker.runAllChecks(2)
+        history.runAllChecks(2)
     } catch (_: Throwable) {
-        checker.runAllChecks(2)
+        history.runAllChecks(2)
     }
     closeFragment()
 }
@@ -54,72 +54,72 @@ private fun checkValues(computeHistory: TestHistory) {
  * @return [TestHistory]: generated history
  */
 private fun createHistory(): TestHistory {
-    val computeHistory = mutableListOf<TestHI>()
+    val history = TestHistory()
 
     typeText("1+2")
     equals()
-    computeHistory.add(TestHI("1+2", "3"))
+    history.add(TestHI("1+2", "3"))
     typeText("-1/2")
     equals()
-    computeHistory.add(TestHI("3-1/2", "2.5"))
+    history.add(TestHI("3-1/2", "2.5"))
     clearText()
     typeText("+")
     equals()
-    computeHistory.add(TestHI("+", "Syntax error"))
+    history.add(TestHI("+", "Syntax error"))
     clearText()
     typeText("1+2-2^3x1")
     equals()
-    computeHistory.add(TestHI("1+2-2^3x1", "-5"))
+    history.add(TestHI("1+2-2^3x1", "-5"))
     clearText()
     typeText("(1+2)(4-2)")
     equals()
-    computeHistory.add(TestHI("(1+2)(4-2)", "6"))
+    history.add(TestHI("(1+2)(4-2)", "6"))
     clearText()
     typeText("(1+2)(4-2)")
     equals()
-    computeHistory.add(TestHI("(1+2)(4-2)", "6"))
+    history.add(TestHI("(1+2)(4-2)", "6"))
     clearText()
     typeText("2x(1-9)")
     equals()
-    computeHistory.add(TestHI("2x(1-9)", "-16"))
+    history.add(TestHI("2x(1-9)", "-16"))
     typeText("/5")
     equals()
-    computeHistory.add(TestHI("-16/5", "-3.2"))
+    history.add(TestHI("-16/5", "-3.2"))
     clearText()
     typeText("2^6-7x8")
     equals()
-    computeHistory.add(TestHI("2^6-7x8", "8"))
+    history.add(TestHI("2^6-7x8", "8"))
     clearText()
     typeText("1.2x5(4)")
     equals()
-    computeHistory.add(TestHI("1.2x5(4)", "24"))
+    history.add(TestHI("1.2x5(4)", "24"))
     clearText()
     typeText("1..2x5(4)")
     equals()
-    computeHistory.add(TestHI("1..2x5(4)", "Syntax error"))
+    history.add(TestHI("1..2x5(4)", "Syntax error"))
     clearText()
     typeText("1.2x5(4)")
     equals()
-    computeHistory.add(TestHI("1.2x5(4)", "24"))
+    history.add(TestHI("1.2x5(4)", "24"))
     clearText()
     typeText("2x(1-9)")
     equals()
-    computeHistory.add(TestHI("2x(1-9)", "-16"))
+    history.add(TestHI("2x(1-9)", "-16"))
     typeText("/5")
     equals()
-    computeHistory.add(TestHI("-16/5", "-3.2"))
+    history.add(TestHI("-16/5", "-3.2"))
     clearText()
     typeText("12345.09876")
     equals()
-    computeHistory.add(TestHI("12345.09876", "12345.09876"))
+    history.add(TestHI("12345.09876", "12345.09876"))
     clearText()
     typeText("00000010.000000")
     equals()
-    computeHistory.add(TestHI("00000010.000000", "10"))
+    history.add(TestHI("00000010.000000", "10"))
     typeText("-11")
     equals()
-    computeHistory.add(TestHI("10-11", "-1"))
+    history.add(TestHI("10-11", "-1"))
     clearText()
 
-    return computeHistory
+    return history
 }
