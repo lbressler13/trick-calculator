@@ -39,6 +39,7 @@ fun testMultipleSettings() {
     history.add(generateItemWithKnownResult("(15-3)/(4x).6", "Syntax error"))
     history.add(generateItemWithKnownResult("(15-3)/4x.6.", "Syntax error"))
 
+    // test with previously computed
     history.add(generateItemWithKnownResult("(1.5-2)x4", "7"))
     typeText("/.21")
     equals()
@@ -110,6 +111,11 @@ fun testMultipleSettings() {
     checkRandomness(history, 2)
 }
 
+/**
+ * Type values that are used for all checks that have only shuffled settings, and add to history
+ *
+ * @param history [TestHistory]: history to add to
+ */
 private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean) {
     val expBase = ternaryIf(shuffleComputation, "23456", "23456.0987654^7")
 
@@ -121,6 +127,11 @@ private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean
     history.add(generateItemWithKnownResult("700x35-61/", "Syntax error"))
 }
 
+/**
+ * Type values that are used for all checks that have a combination of settings types, and add to history
+ *
+ * @param history [TestHistory]: history to add to
+ */
 private fun typeCombinationValues(history: TestHistory) {
     history.add(generateItemWithShuffledResult("700x35-61"))
     history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
