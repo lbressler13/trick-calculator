@@ -25,7 +25,7 @@ jobs:
           cache: 'gradle'
 
       - name: Run Tests
-        timeout-minutes: 105
+        timeout-minutes: 120
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
