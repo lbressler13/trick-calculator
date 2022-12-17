@@ -37,7 +37,7 @@ class HistoryFragmentTest {
 
     @Rule
     @JvmField
-    val retryRule = RetryRule()
+    val retryRule = RetryRule(0) // TODO undo this
 
     @Before
     fun setupTest() {
@@ -140,5 +140,5 @@ class HistoryFragmentTest {
     @Test fun noApplyDecimals() = testNoApplyDecimals()
     @Test fun noApplyParens() = testNoApplyParens()
 
-    // @Test fun multipleSettings() {} // TODO
+    @Test fun multipleSettings() = testMultipleSettings()
 }
