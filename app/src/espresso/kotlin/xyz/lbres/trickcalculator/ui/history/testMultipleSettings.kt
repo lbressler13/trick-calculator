@@ -8,6 +8,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
+import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.int.ext.isZero
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
@@ -38,13 +39,11 @@ fun testMultipleSettings() {
     history.add(generateItemWithKnownResult("(15-3)/(4x).6", "Syntax error"))
     history.add(generateItemWithKnownResult("(15-3)/4x.6.", "Syntax error"))
 
-    clearText()
-    typeText("(1.5-2)x4")
+    history.add(generateItemWithKnownResult("(1.5-2)x4", "7"))
+    typeText("/.21")
     equals()
-    history.add(TestHI("(1.5-2)x4", "7"))
-    typeText("/0.21")
-    equals()
-    history.add(TestHI("7/0.21", "0.33333"))
+    history.add(TestHI("7/.21", "0.33333"))
+    typeText("(1.5-02)x04")
     clearText()
 
     checkRandomness(history, 0)
@@ -57,14 +56,7 @@ fun testMultipleSettings() {
     onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // disable
     closeFragment()
 
-    history.add(generateItemWithShuffledResult("12345"))
-    history.add(generateItemWithShuffledResult("700x35-61"))
-    history.add(generateItemWithShuffledResult("(55.5+77/3)x12(2.3-3.2)"))
-    history.add(generateItemWithShuffledResult("23456.0987654^7"))
-    history.add(generateItemWithShuffledResult("123.456/789.012-03(4.5)"))
-    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
-    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
-    history.add(generateItemWithKnownResult("700x35-61/", "Syntax error"))
+    typeShuffledValues(history, shuffleComputation = false)
 
     // shuffle ops + shuffle comp
     openSettingsFragment()
@@ -72,14 +64,7 @@ fun testMultipleSettings() {
     onView(withId(R.id.shuffleComputationSwitch)).perform(click()) // enable
     closeFragment()
 
-    history.add(generateItemWithShuffledResult("12345"))
-    history.add(generateItemWithShuffledResult("700x35-61"))
-    history.add(generateItemWithShuffledResult("(55.5+77/3)x12(2.3-3.2)"))
-    history.add(generateItemWithShuffledResult("23456^7"))
-    history.add(generateItemWithShuffledResult("123.456/789.012-03(4.5)"))
-    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
-    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
-    history.add(generateItemWithKnownResult("700x35-61/", "Syntax error"))
+    typeShuffledValues(history, shuffleComputation = true)
 
     // shuffle nums + shuffle comp
     openSettingsFragment()
@@ -87,41 +72,14 @@ fun testMultipleSettings() {
     onView(withId(R.id.shuffleOperatorsSwitch)).perform(click()) // disable
     closeFragment()
 
-    history.add(generateItemWithShuffledResult("12345"))
-    history.add(generateItemWithShuffledResult("700x35-61"))
-    history.add(generateItemWithShuffledResult("(55.5+77/3)x12(2.3-3.2)"))
-    history.add(generateItemWithShuffledResult("23456^7"))
-    history.add(generateItemWithShuffledResult("123.456/789.012-03(4.5)"))
-    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
-    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
-    history.add(generateItemWithKnownResult("700x35-61/", "Syntax error"))
+    typeShuffledValues(history, shuffleComputation = true)
 
     // shuffle ops, nums, comp
     openSettingsFragment()
     onView(withId(R.id.shuffleOperatorsSwitch)).perform(click()) // enable
     closeFragment()
 
-    history.add(generateItemWithShuffledResult("12345"))
-    history.add(generateItemWithShuffledResult("700x35-61"))
-    history.add(generateItemWithShuffledResult("(55.5+77/3)x12(2.3-3.2)"))
-    history.add(generateItemWithShuffledResult("23456.0987654^7"))
-    history.add(generateItemWithShuffledResult("123.456/789.012-03(4.5)"))
-    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
-    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
-    history.add(generateItemWithKnownResult("700x35-61/", "Syntax error"))
-
-    clearText()
-    typeText("(1.5-02)x43")
-    equals()
-    var result = getMainText()
-    result = result.substring(1, result.lastIndex)
-    history.add(TestHI("(1.5-02)x43", result))
-    typeText("/0.13")
-    equals()
-    var secondResult = getMainText()
-    secondResult = secondResult.substring(1, secondResult.lastIndex)
-    history.add(TestHI("$result/0.13", secondResult))
-    clearText()
+    typeShuffledValues(history, shuffleComputation = true)
 
     checkRandomness(history, 0)
 
@@ -131,59 +89,43 @@ fun testMultipleSettings() {
     onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // enable
     closeFragment()
 
-    history.add(generateItemWithShuffledResult("12345"))
-    history.add(generateItemWithShuffledResult("700x35-61"))
-    history.add(generateItemWithShuffledResult("(55.5+77/3)x12(2.3-3.2)"))
-    history.add(generateItemWithShuffledResult("23456.0987654^7"))
-    history.add(generateItemWithShuffledResult("123.456/789.012-03(4.5)"))
-    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
-    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
-    history.add(generateItemWithKnownResult("700x35-61.", "Syntax error"))
+    typeCombinationValues(history)
 
     openSettingsFragment()
     onView(withId(R.id.shuffleComputationSwitch)).perform(click()) // disable
     onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // disable
     closeFragment()
 
-    history.add(generateItemWithShuffledResult("12345"))
-    history.add(generateItemWithShuffledResult("700x35-61"))
-    history.add(generateItemWithShuffledResult("(55.5+77/3)x12(2.3-3.2)"))
-    history.add(generateItemWithShuffledResult("23456.0987654^7"))
-    history.add(generateItemWithShuffledResult("123.456/789.012-03(4.5)"))
-    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
-    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
-    history.add(generateItemWithKnownResult("700x35-61.", "Syntax error"))
+    typeCombinationValues(history)
 
     openSettingsFragment()
     onView(withId(R.id.shuffleNumbersSwitch)).perform(click()) // enable
     onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // enable
     closeFragment()
 
-    history.add(generateItemWithShuffledResult("12345"))
-    history.add(generateItemWithShuffledResult("700x35-61"))
-    history.add(generateItemWithShuffledResult("(55.5+77/3)x12(2.3-3.2)"))
-    history.add(generateItemWithShuffledResult("23456.0987654^7"))
-    history.add(generateItemWithShuffledResult("123.456/789.012-03(4.5)"))
-    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
-    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
-    history.add(generateItemWithKnownResult("700x35-61.", "Syntax error"))
-
-    clearText()
-    typeText("(1.5-02)x43")
-    equals()
-    result = getMainText()
-    result = result.substring(1, result.lastIndex)
-    history.add(TestHI("(1.5-02)x43", result))
-    typeText("/0.13")
-    equals()
-    secondResult = getMainText()
-    secondResult = secondResult.substring(1, secondResult.lastIndex)
-    history.add(TestHI("$result/0.13", secondResult))
-    clearText()
+    typeCombinationValues(history)
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
     checkRandomness(history, 2)
+}
+
+private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean) {
+    val expBase = ternaryIf(shuffleComputation, "23456", "23456.0987654^7")
+
+    history.add(generateItemWithShuffledResult("12345"))
+    history.add(generateItemWithShuffledResult("700x35-61"))
+    history.add(generateItemWithShuffledResult("$expBase^7"))
+    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
+    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
+    history.add(generateItemWithKnownResult("700x35-61/", "Syntax error"))
+}
+
+private fun typeCombinationValues(history: TestHistory) {
+    history.add(generateItemWithShuffledResult("700x35-61"))
+    history.add(generateItemWithShuffledResult("01+23-45x56/78+90-12x34/56"))
+    history.add(generateItemWithShuffledResult("(14/(1.5-03)x(03-.1)+10)+0.01"))
+    history.add(generateItemWithKnownResult("700x35-61.", "Syntax error"))
 }
 
 /**
