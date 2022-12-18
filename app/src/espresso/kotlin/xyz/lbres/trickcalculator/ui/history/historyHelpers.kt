@@ -79,13 +79,18 @@ fun generateHI(computeText: String, previousResult: String = "", getResult: () -
 
     // shorten decimal
     if (result.contains('.')) {
-        val pieces = result.split('.')
+        val pieces = result.split('.', 'E')
         val decimal = BigDecimal("." + pieces[1])
         val mc = MathContext(maxDecimalLength, RoundingMode.HALF_UP)
         val fullDecimalString = decimal.round(mc).toEngineeringString()
         val decimalString = fullDecimalString.substringAfter('.')
+        val eString = if (pieces.size == 3) {
+            "E${pieces[2]}"
+        } else {
+            ""
+        }
 
-        result = "${pieces[0]}.$decimalString"
+        result = "${pieces[0]}.$decimalString$eString"
     }
 
     return TestHI(previousResult + computeText, result)
