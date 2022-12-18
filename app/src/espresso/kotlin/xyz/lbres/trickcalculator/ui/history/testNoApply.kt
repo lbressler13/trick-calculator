@@ -101,13 +101,11 @@ fun testNoApplyParens() {
 
     // one set of parens
     history.add(generateHI("(1000.3)") { "1000.3" })
-    history.add(generateHI("(4x6)") { "24" })
     history.add(generateHI("(100-204)") { "-104" })
     history.add(generateHI("3x(1-2)") { "1" })
+    history.add(generateHI("(4)3") { "12" })
     history.add(generateHI("0.3x12/(5-3)x1+3") { "0.72" })
     history.add(generateHI("5^(3/2+.5)") { "63" })
-    history.add(generateHI("(4)3") { "12" })
-    history.add(generateHI("(0)3") { "0" })
 
     openHistoryFragment()
     history.runAllChecks(0)
@@ -126,7 +124,7 @@ fun testNoApplyParens() {
     // parens error
     history.add(generateHI("4x((5+2)") { "Syntax error" })
     history.add(generateHI("()5") { "Syntax error" })
-    history.add(generateHI("(4/(15-3)x(11-1))+3)+1") { "Syntax error" })
+    history.add(generateHI("(4(15-3)(11-1))+3)-1") { "Syntax error" })
 
     openHistoryFragment()
     history.runAllChecks(0)

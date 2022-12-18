@@ -123,7 +123,7 @@ fun generateAndValidateComputeText(
                     currentNumber += it
                 }
                 currentDecimal = true // gets counted even when not applied, to check for syntax errors
-                lastDecimal = true
+                lastDecimal = true // tracked separately for use in syntax errors
             }
             numbersOrder == null -> {
                 currentNumber += it

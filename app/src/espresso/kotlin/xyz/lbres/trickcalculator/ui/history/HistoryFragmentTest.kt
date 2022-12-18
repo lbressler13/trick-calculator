@@ -118,5 +118,7 @@ class HistoryFragmentTest {
     @Test fun noApplyDecimals() = testNoApplyDecimals()
     @Test fun noApplyParens() = testNoApplyParens()
 
-    @Test fun multipleSettings() = testMultipleSettings() // TODO enable this
+    @Test fun multipleNoApply() = testMultipleNoApply()
+    @Test fun multipleShuffle() = testMultipleShuffle()
+    @Test fun multipleSettingsTypes() = testMultipleSettingsTypes()
 }

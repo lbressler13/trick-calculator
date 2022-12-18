@@ -71,19 +71,17 @@ fun testShuffleNumbers() {
     checkRandomness(history, 1)
 
     // operators
-    history.add(generateHI("1+2-2/3x1") { getMainTextResult() })
-    history.add(generateHI("(1+2)(4-2)") { getMainTextResult() })
-    history.add(generateHI("2x(1-9)") { getMainTextResult() })
-    history.add(generateHI("1.2x5(4)") { getMainTextResult() })
-    history.add(generateHI("1.2x5(4)") { getMainTextResult() })
-    history.add(generateHI("55+16/3-4-3+23/66x44(20+30)") { getMainTextResult() })
+    history.add(generateHI("01+02-02/03x01") { getMainTextResult() })
+    history.add(generateHI("(21+12)(04-02)") { getMainTextResult() })
+    history.add(generateHI("1.2x53(14)") { getMainTextResult() })
+    history.add(generateHI("55+16/03-04-03+23/66x44(20+30)") { getMainTextResult() })
 
     // with error
     history.add(generateHI("4+5()-44") { "Syntax error" })
 
-    history.add(generateHI("4+(5)-44") { getMainTextResult() })
+    history.add(generateHI("04+(05)-44") { getMainTextResult() })
     history.add(generateHI(".00000003") { getMainTextResult() })
-    history.add(generateHI("55^6") { getMainTextResult() })
+    history.add(generateHI("55^06") { getMainTextResult() })
     history.add(generateHI(longText) { getMainTextResult() })
 
     // multiple errors

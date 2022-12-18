@@ -13,7 +13,7 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 
-fun testMultipleSettings() {
+fun testMultipleNoApply() {
     val history = TestHistory()
 
     // no parens + no decimals
@@ -35,13 +35,14 @@ fun testMultipleSettings() {
     history.add(generateHI("/.21", "7") { "0.33333" })
 
     checkRandomness(history, 0)
+}
+
+fun testMultipleShuffle() {
+    val history = TestHistory()
 
     // shuffle ops + shuffle nums
     openSettingsFragment()
-    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click()) // enable
     onView(withId(R.id.shuffleNumbersSwitch)).perform(click()) // enable
-    onView(withId(R.id.applyParensSwitch)).perform(click()) // disable
-    onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // disable
     closeFragment()
 
     typeShuffledValues(history, shuffleComputation = false)
@@ -70,25 +71,30 @@ fun testMultipleSettings() {
     typeShuffledValues(history, shuffleComputation = true)
 
     checkRandomness(history, 0)
+}
 
-    // combinations
-    openSettingsFragment()
-    onView(withId(R.id.applyParensSwitch)).perform(click()) // enable
-    onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // enable
-    closeFragment()
-
-    typeCombinationValues(history)
+fun testMultipleSettingsTypes() {
+    val history = TestHistory()
 
     openSettingsFragment()
-    onView(withId(R.id.shuffleComputationSwitch)).perform(click()) // disable
+    onView(withId(R.id.shuffleNumbersSwitch)).perform(click()) // enable
+    onView(withId(R.id.shuffleComputationSwitch)).perform(click()) // enable
+    onView(withId(R.id.applyParensSwitch)).perform(click()) // disable
     onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // disable
     closeFragment()
 
     typeCombinationValues(history)
 
     openSettingsFragment()
-    onView(withId(R.id.shuffleNumbersSwitch)).perform(click()) // enable
+    onView(withId(R.id.shuffleComputationSwitch)).perform(click()) // disable
     onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // enable
+    closeFragment()
+
+    typeCombinationValues(history)
+
+    openSettingsFragment()
+    onView(withId(R.id.shuffleNumbersSwitch)).perform(click()) // enable
+    onView(withId(R.id.applyDecimalsSwitch)).perform(click()) // disable
     closeFragment()
 
     typeCombinationValues(history)

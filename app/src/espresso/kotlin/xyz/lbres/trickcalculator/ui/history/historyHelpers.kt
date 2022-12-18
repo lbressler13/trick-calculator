@@ -6,6 +6,9 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.trickcalculator.R
@@ -14,9 +17,6 @@ import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
-import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
 
 /**
  * Test representation of a history item displayed in the UI.
@@ -37,14 +37,6 @@ fun withHistoryItem(computation: String, result: String): Matcher<View?> {
         withChild(withChild(withText(result)))
     )
 }
-
-/**
- * Create [Matcher] to identify that a history item displays the expected computation text and result string
- *
- * @param item [TestHI]: item to check
- * @return [Matcher]<[View]?>: matcher that a view contains the specified history item
- */
-fun withHistoryItem(item: TestHI): Matcher<View?> = withHistoryItem(item.first, item.second)
 
 /**
  * Update the history randomness setting.
