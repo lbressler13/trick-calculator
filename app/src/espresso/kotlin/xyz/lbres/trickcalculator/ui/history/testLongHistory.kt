@@ -1,7 +1,5 @@
 package xyz.lbres.trickcalculator.ui.history
 
-import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 
 fun testLongHistory() {
@@ -27,39 +25,7 @@ fun testLongHistory() {
     history.add(generateHI("000000010.000000000000") { "10" })
     history.add(generateHI("-11", "10") { "-1" })
 
-    checkValues(history)
-}
-
-/**
- * Run checks on compute history for randomness settings 0, 1, 2
- *
- * @param computeHistory [TestHistory]: history to check
- */
-private fun checkValues(computeHistory: TestHistory) {
-    val history = TestHistory()
-
-    setHistoryRandomness(0)
-    openHistoryFragment()
-    history.runAllChecks(0)
-    closeFragment()
-
-    setHistoryRandomness(1)
-    openHistoryFragment()
-    // very low probably of unshuffled due to long history
-    try {
-        history.runAllChecks(1)
-    } catch (_: Throwable) {
-        history.runAllChecks(1)
-    }
-    closeFragment()
-
-    setHistoryRandomness(2)
-    openHistoryFragment()
-    // very low probably of unshuffled due to long history
-    try {
-        history.runAllChecks(2)
-    } catch (_: Throwable) {
-        history.runAllChecks(2)
-    }
-    closeFragment()
+    checkRandomness(history, 0)
+    checkRandomness(history, 1)
+    checkRandomness(history, 2)
 }
