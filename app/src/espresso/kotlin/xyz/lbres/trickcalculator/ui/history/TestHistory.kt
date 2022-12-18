@@ -15,6 +15,8 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
+// TODO find a more efficient way to do checks -- save values from vh into list?
+
 /**
  * Test representation of a compute history to display in the UI, including methods to run checks on the history.
  * Enables running checks for multiple levels of randomness on the same history.

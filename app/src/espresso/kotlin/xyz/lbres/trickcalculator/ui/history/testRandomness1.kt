@@ -8,9 +8,6 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
-import xyz.lbres.trickcalculator.ui.calculator.clearText
-import xyz.lbres.trickcalculator.ui.calculator.equals
-import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 private const val errorMessage = "History items should be shuffled in history randomness 1."
 
@@ -26,51 +23,28 @@ fun testRandomness1() {
 
     // one element
     closeFragment()
-    typeText("400/5")
-    equals()
-    history.add(TestHI("400/5", "80"))
+
+    history.add(generateHI("400/5") { "80" })
     checkCorrectData(history, 1, errorMessage)
 
     // several elements
-    clearText()
-    typeText("15-2.5")
-    equals()
-    history.add(TestHI("15-2.5", "12.5"))
-
-    clearText()
-    typeText("(3-4)(5+2)")
-    equals()
-    history.add(TestHI("(3-4)(5+2)", "-7"))
+    history.add(generateHI("15-2.5") { "12.5" })
+    history.add(generateHI("(3+4)(5+2)") { "49" })
 
     // previously computed
-    typeText("+11")
-    equals()
-    history.add(TestHI("-7+11", "4"))
+    history.add(generateHI("+11", "49") { "60" })
     checkCorrectData(history, 1, errorMessage)
 
     // duplicate element
-    clearText()
-    typeText("(3-4)(5+2)")
-    equals()
-    history.add(TestHI("(3-4)(5+2)", "-7"))
+    history.add(generateHI("(3+4)(5+2)") { "49" })
 
     // error
-    clearText()
-    typeText("+")
-    equals()
-    history.add(TestHI("+", "Syntax error"))
-
-    clearText()
-    typeText("2^0.5")
-    equals()
-    history.add(TestHI("2^0.5", "Exponents must be whole numbers"))
+    history.add(generateHI("+") { "Syntax error" })
+    history.add(generateHI("2^0.5") { "Exponents must be whole numbers" })
 
     val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
     val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
-    clearText()
-    typeText(longText)
-    equals()
-    history.add(TestHI(longText, longResult))
+    history.add(generateHI(longText) { longResult })
     checkCorrectData(history, 1, errorMessage)
 }
 
@@ -80,45 +54,17 @@ fun testRandomness1Reshuffled() {
 
     val history = TestHistory()
 
-    typeText("400/5")
-    equals()
-    history.add(TestHI("400/5", "80"))
-
-    clearText()
-    typeText("15-2.5")
-    equals()
-    history.add(TestHI("15-2.5", "12.5"))
-
-    clearText()
-    typeText("(3-4)(5+2)")
-    equals()
-    history.add(TestHI("(3-4)(5+2)", "-7"))
-
-    typeText("+11")
-    equals()
-    history.add(TestHI("-7+11", "4"))
-
-    clearText()
-    typeText("(3-4)(5+2)")
-    equals()
-    history.add(TestHI("(3-4)(5+2)", "-7"))
-
-    clearText()
-    typeText("+")
-    equals()
-    history.add(TestHI("+", "Syntax error"))
-
-    clearText()
-    typeText("2^0.5")
-    equals()
-    history.add(TestHI("2^0.5", "Exponents must be whole numbers"))
+    history.add(generateHI("400/5") { "80" })
+    history.add(generateHI("15-2.5") { "12.5" })
+    history.add(generateHI("(3+4)(5+2)") { "49" })
+    history.add(generateHI("+11", "49") { "60" })
+    history.add(generateHI("(3+4)(5+2)") { "49" })
+    history.add(generateHI("+") { "Syntax error" })
+    history.add(generateHI("2^0.5") { "Exponents must be whole numbers" })
 
     val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
     val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
-    clearText()
-    typeText(longText)
-    equals()
-    history.add(TestHI(longText, longResult))
+    history.add(generateHI(longText) { longResult })
 
     runSingleReshuffledCheck(history, 1, errorMessage)
     RecyclerViewTextSaver.clearAllSavedValues()

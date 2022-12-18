@@ -12,9 +12,6 @@ import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
-import xyz.lbres.trickcalculator.ui.calculator.clearText
-import xyz.lbres.trickcalculator.ui.calculator.equals
-import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 fun testMultipleSettings() {
     val history = TestHistory()
@@ -36,11 +33,7 @@ fun testMultipleSettings() {
 
     // test with previously computed
     history.add(generateHI("(1.5-2)x4") { "7" })
-    typeText("/.21")
-    equals()
-    history.add(TestHI("7/.21", "0.33333"))
-    typeText("(1.5-02)x04")
-    clearText()
+    history.add(generateHI("/.21", "7") { "0.33333" })
 
     checkRandomness(history, 0)
 
@@ -110,6 +103,7 @@ fun testMultipleSettings() {
  * Type values that are used for all checks that have only shuffled settings, and add to history
  *
  * @param history [TestHistory]: history to add to
+ * @param shuffleComputation [Boolean]: value of shuffled computation setting
  */
 private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean) {
     val expBase = ternaryIf(shuffleComputation, "23456", "23456.0987654^7")
@@ -118,7 +112,7 @@ private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean
     history.add(generateHI("700x35-61") { getMainTextResult() })
     history.add(generateHI("$expBase^7") { getMainTextResult() })
     history.add(generateHI("01+23-45x56/78+90-12x34/56") { getMainTextResult() })
-    history.add(generateHI("(14/(1.5-03)x(03-.1)+10)+0.01") { getMainTextResult() })
+    history.add(generateHI("(14/(1.5-03)x(03-.10)+10)+0.01") { getMainTextResult() })
     history.add(generateHI("700x35-61/") { "Syntax error" })
 }
 

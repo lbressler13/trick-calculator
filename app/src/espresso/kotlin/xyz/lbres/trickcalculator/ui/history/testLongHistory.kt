@@ -3,15 +3,31 @@ package xyz.lbres.trickcalculator.ui.history
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
-import xyz.lbres.trickcalculator.ui.calculator.clearText
-import xyz.lbres.trickcalculator.ui.calculator.equals
-import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 fun testLongHistory() {
     toggleShuffleOperators()
 
-    val computeHistory = createHistory()
-    checkValues(computeHistory)
+    val history = TestHistory()
+
+    history.add(generateHI("1+2") { "3" })
+    history.add(generateHI("-1/2", "3") { "2.5" })
+    history.add(generateHI("+") { "Syntax error" })
+    history.add(generateHI("1+2-2^3x1") { "-5" })
+    history.add(generateHI("(1+2)(4-2)") { "6" })
+    history.add(generateHI("(1+2)(4-2)") { "6" })
+    history.add(generateHI("2x(1-9)") { "-16" })
+    history.add(generateHI("/5", "-16") { "-3.2" })
+    history.add(generateHI("2^6-7x8") { "8" })
+    history.add(generateHI("1.2x5(4)") { "24" })
+    history.add(generateHI("1..2x5(4)") { "Syntax error" })
+    history.add(generateHI("1.2x5(4)") { "24" })
+    history.add(generateHI("2x(1-9)") { "-16" })
+    history.add(generateHI("/5", "-16") { "-3.2" })
+    history.add(generateHI("12345.09876") { "12345.09876" })
+    history.add(generateHI("000000010.000000000000") { "10" })
+    history.add(generateHI("-11", "10") { "-1" })
+
+    checkValues(history)
 }
 
 /**
@@ -46,80 +62,4 @@ private fun checkValues(computeHistory: TestHistory) {
         history.runAllChecks(2)
     }
     closeFragment()
-}
-
-/**
- * Create a long compute history by typing many values
- *
- * @return [TestHistory]: generated history
- */
-private fun createHistory(): TestHistory {
-    val history = TestHistory()
-
-    typeText("1+2")
-    equals()
-    history.add(TestHI("1+2", "3"))
-    typeText("-1/2")
-    equals()
-    history.add(TestHI("3-1/2", "2.5"))
-    clearText()
-    typeText("+")
-    equals()
-    history.add(TestHI("+", "Syntax error"))
-    clearText()
-    typeText("1+2-2^3x1")
-    equals()
-    history.add(TestHI("1+2-2^3x1", "-5"))
-    clearText()
-    typeText("(1+2)(4-2)")
-    equals()
-    history.add(TestHI("(1+2)(4-2)", "6"))
-    clearText()
-    typeText("(1+2)(4-2)")
-    equals()
-    history.add(TestHI("(1+2)(4-2)", "6"))
-    clearText()
-    typeText("2x(1-9)")
-    equals()
-    history.add(TestHI("2x(1-9)", "-16"))
-    typeText("/5")
-    equals()
-    history.add(TestHI("-16/5", "-3.2"))
-    clearText()
-    typeText("2^6-7x8")
-    equals()
-    history.add(TestHI("2^6-7x8", "8"))
-    clearText()
-    typeText("1.2x5(4)")
-    equals()
-    history.add(TestHI("1.2x5(4)", "24"))
-    clearText()
-    typeText("1..2x5(4)")
-    equals()
-    history.add(TestHI("1..2x5(4)", "Syntax error"))
-    clearText()
-    typeText("1.2x5(4)")
-    equals()
-    history.add(TestHI("1.2x5(4)", "24"))
-    clearText()
-    typeText("2x(1-9)")
-    equals()
-    history.add(TestHI("2x(1-9)", "-16"))
-    typeText("/5")
-    equals()
-    history.add(TestHI("-16/5", "-3.2"))
-    clearText()
-    typeText("12345.09876")
-    equals()
-    history.add(TestHI("12345.09876", "12345.09876"))
-    clearText()
-    typeText("00000010.000000")
-    equals()
-    history.add(TestHI("00000010.000000", "10"))
-    typeText("-11")
-    equals()
-    history.add(TestHI("10-11", "-1"))
-    clearText()
-
-    return history
 }
