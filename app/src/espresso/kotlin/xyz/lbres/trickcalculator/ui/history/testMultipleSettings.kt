@@ -24,12 +24,11 @@ fun testMultipleSettings() {
     closeFragment()
 
     history.add(generateHI("100^2") { "10000" })
-    history.add(generateHI("10.0^2") { "10000" })
     history.add(generateHI("10.0^.2") { "10000" })
     history.add(generateHI("(15-3)/4x.6") { "10.5" })
     history.add(generateHI("(4/(1.5-3)x(3-.1)+10)+0.01") { "1.26667" })
-    history.add(generateHI("(15-3)/(4x).6") { "Syntax error" })
-    history.add(generateHI("(15-3)/4x.6.") { "Syntax error" })
+    history.add(generateHI("(15-3)/(4x).6") { "Syntax error" }) // parens error
+    history.add(generateHI("(15-3)/4x.6.") { "Syntax error" }) // decimal error
 
     // test with previously computed
     history.add(generateHI("(1.5-2)x4") { "7" })
@@ -108,11 +107,9 @@ fun testMultipleSettings() {
 private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean) {
     val expBase = ternaryIf(shuffleComputation, "23456", "23456.0987654^7")
 
-    history.add(generateHI("12345") { getMainTextResult() })
     history.add(generateHI("700x35-61") { getMainTextResult() })
     history.add(generateHI("$expBase^7") { getMainTextResult() })
-    history.add(generateHI("01+23-45x56/78+90-12x34/56") { getMainTextResult() })
-    history.add(generateHI("(14/(1.5-03)x(03-.10)+10)+0.01") { getMainTextResult() })
+    history.add(generateHI("14/(1.5-03)x(04.9)+10") { getMainTextResult() })
     history.add(generateHI("700x35-61/") { "Syntax error" })
 }
 
@@ -123,8 +120,7 @@ private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean
  */
 private fun typeCombinationValues(history: TestHistory) {
     history.add(generateHI("700x35-61") { getMainTextResult() })
-    history.add(generateHI("01+23-45x56/78+90-12x34/56") { getMainTextResult() })
-    history.add(generateHI("(14/(1.5-03)x(03-.1)+10)+0.01") { getMainTextResult() })
+    history.add(generateHI("14/(1.5-03)x(04.9)+10") { getMainTextResult() })
     history.add(generateHI("700x35-61.") { "Syntax error" })
 }
 

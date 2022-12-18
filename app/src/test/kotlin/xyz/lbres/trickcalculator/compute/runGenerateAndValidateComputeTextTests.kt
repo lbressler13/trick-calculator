@@ -148,6 +148,9 @@ private fun testValidateErrors() {
     text = splitString("5.")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
+    text = splitString("5.")
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
+
     text = listOf(".")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
