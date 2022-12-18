@@ -1,15 +1,18 @@
 package xyz.lbres.trickcalculator.ui.history
 
 import android.view.View
+import android.widget.TextView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withChild
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
+import xyz.lbres.kotlinutils.collection.ext.toMultiSet
+import xyz.lbres.kotlinutils.collection.ext.toMutableMultiSet
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
@@ -72,31 +75,43 @@ class TestHistory {
      */
     fun checkAllDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
         checkAllowedRandomness(randomness)
-        val check: (TestHI, Int) -> Pair<Boolean, Boolean> = when (randomness) {
-            0 -> { item, position -> checkMatchedPairDisplayed(item, position) }
-            1 -> { item, position -> checkMatchedPairDisplayed(item, position) }
-            2 -> { item, position -> checkUnmatchedPairDisplayed(item, position) }
-            else -> { _, _ -> Pair(false, false) }
-        }
 
-        computeHistory.forEach {
-            var foundComputation = false
-            var foundResult = false
+        val displayedValues = computeHistory.indices.map { getViewHolderTextAtPosition(it) }
+        if (randomness == 0 || randomness == 1) {
+            val displayedSet = displayedValues.toMutableMultiSet()
+            val computeHistorySet = computeHistory.toMutableMultiSet()
 
-            for (position in computeHistory.indices) {
-                val checkResult = check(it, position)
-                foundComputation = foundComputation || checkResult.first
-                foundResult = foundResult || checkResult.second
+            if (displayedSet == computeHistorySet) {
+                return true
             }
 
-            if (!(foundComputation && foundResult) && throwError) {
-                throw AssertionError("ViewHolder with text $it not found. History: $computeHistory")
-            } else if (!(foundComputation && foundResult)) {
-                return false
-            }
-        }
+            computeHistorySet.removeAll(displayedSet)
 
-        return true
+            if (throwError) {
+                throw AssertionError("ViewHolders with text $computeHistorySet not found. History: $computeHistory")
+            }
+
+            return false
+        } else {
+            val computations = computeHistory.map { it.first }.toMutableMultiSet()
+            val results = computeHistory.map { it.second }.toMutableMultiSet()
+
+            val displayedComputations = displayedValues.map { it.first }.toMutableMultiSet()
+            val displayedResults = displayedValues.map { it.second }.toMutableMultiSet()
+
+            if (computations == displayedComputations && results == displayedResults) {
+                return true
+            }
+
+            computations.removeAll(displayedComputations)
+            results.removeAll(displayedResults)
+
+            if (throwError) {
+                throw AssertionError("ViewHolders with compute text $computations and result text $results not found. History: $computeHistory")
+            }
+
+            return computations == displayedComputations && results == displayedResults
+        }
     }
 
     /**
@@ -163,50 +178,6 @@ class TestHistory {
         }
 
         return true
-    }
-
-    /**
-     * Check that a single history item is displayed at the specified position.
-     * ViewHolder must contain both the computation and result indicated by the item.
-     *
-     * @param item [TestHI]: item from test history, consisting of computation and result
-     * @param position [Int]: position of ViewHolder to evaluate
-     * @return [Pair]<[Boolean], [Boolean]>: pair of `true` if ViewHolder contains both values, or pair of `false` otherwise
-     */
-    private fun checkMatchedPairDisplayed(item: TestHI, position: Int): Pair<Boolean, Boolean> {
-        return try {
-            matchesAtPosition(position, withHistoryItem(item))
-            Pair(true, true)
-        } catch (_: Throwable) {
-            Pair(false, false)
-        }
-    }
-
-    /**
-     * Check if any part of a history item is displayed at the specified position.
-     * Checks for the computation and result separately.
-     *
-     * @param item [TestHI]: item from test history, consisting of computation and result
-     * @param position [Int]: position of ViewHolder to evaluate
-     * @return [Pair]<[Boolean], [Boolean]>: a pair where the first value indicates if the ViewHolder contains the computation string,
-     * and the second value indicates if it contains the result string
-     */
-    private fun checkUnmatchedPairDisplayed(item: TestHI, position: Int): Pair<Boolean, Boolean> {
-        val matchesComputation = try {
-            matchesAtPosition(position, withChild(withText(item.first)))
-            true
-        } catch (_: Throwable) {
-            false
-        }
-
-        val matchesResult = try {
-            matchesAtPosition(position, withChild(withChild(withText(item.second))))
-            true
-        } catch (_: Throwable) {
-            false
-        }
-
-        return Pair(matchesComputation, matchesResult)
     }
 
     /**
@@ -290,5 +261,38 @@ class TestHistory {
         if (randomness !in 0..2) {
             throw IllegalArgumentException("Invalid randomness value: $randomness")
         }
+    }
+
+    /**
+     * Get the computation and result/error text for a history item ViewHolder at a given position
+     *
+     * @param position [Int]: position of ViewHolder
+     * @return [Pair]<String, String>: pair where first value represents the compute text and second value represents result/error
+     */
+    private fun getViewHolderTextAtPosition(position: Int): Pair<String, String> {
+        var computation = ""
+        var result = ""
+
+        val viewAction = object : ViewAction {
+            override fun getConstraints(): Matcher<View> = isDisplayed()
+            override fun getDescription(): String = "retrieving text from viewholder at position $position"
+
+            override fun perform(uiController: UiController?, view: View?) {
+                computation = view?.findViewById<TextView>(R.id.computeText)?.text?.toString() ?: ""
+
+                val numberResult = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
+                val errorResult = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
+                result = when {
+                    !numberResult.isNullOrBlank() -> numberResult
+                    !errorResult.isNullOrBlank() -> errorResult
+                    else -> ""
+                }
+            }
+        }
+
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withViewHolder(recyclerId, position)).perform(viewAction)
+
+        return Pair(computation, result)
     }
 }
