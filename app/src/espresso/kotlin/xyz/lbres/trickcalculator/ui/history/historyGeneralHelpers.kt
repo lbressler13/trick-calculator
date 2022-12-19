@@ -25,16 +25,12 @@ import java.math.RoundingMode
 typealias TestHI = Pair<String, String>
 
 /**
- * Create [Matcher] to identify that a history item displays the expected computation text and result string
- *
- * @param computation [String]: first string displayed in UI
- * @param result [String]: second string displayed in UI
- * @return [Matcher]<[View]?>: matcher that a view contains the result and computation string
+ * [Matcher] to identify that a history item displays the expected computation text and result string
  */
-fun withHistoryItem(computation: String, result: String): Matcher<View?> {
-    return allOf(
+val withHistoryItem: (String, String) -> Matcher<View?> = { computation, errorResult ->
+    allOf(
         withChild(withText(computation)),
-        withChild(withChild(withText(result)))
+        withChild(withChild(withText(errorResult)))
     )
 }
 

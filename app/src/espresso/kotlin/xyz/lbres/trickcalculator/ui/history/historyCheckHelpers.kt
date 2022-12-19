@@ -5,7 +5,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.not
 import xyz.lbres.kotlinutils.general.ternaryIf
-import xyz.lbres.kotlinutils.int.ext.isZero
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
@@ -21,8 +20,16 @@ private val randomnessErrors = mapOf(
     2 to "History items and pairs should be shuffled in history randomness 2.",
 )
 
+private val reshuffledErrors = mapOf(
+    1 to "Items not re-shuffled for history randomness 1.",
+    2 to "Items not re-shuffled for history randomness 2.",
+)
+
+private const val recyclerId = R.id.itemsRecycler
+
 /**
- * Verify that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
+ * Set the history randomness, open history fragment, and verify that all items from the history are
+ * displayed and shuffled/ordered based on randomness.
  *
  * @param history [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
@@ -30,48 +37,68 @@ private val randomnessErrors = mapOf(
 fun checkRandomness(history: TestHistory, randomness: Int) {
     setHistoryRandomness(randomness)
 
-    // additional repeats for 2 items due to occasional failures
-    val repeatCount = ternaryIf(history.size == 2, 10, 5)
-
     openHistoryFragment()
     history.checkAllDisplayed(randomness)
     closeFragment()
 
-    if (randomness.isZero()) {
-        openHistoryFragment()
-        if (!history.checkDisplayOrdered()) {
-            throw AssertionError(randomnessErrors[0])
-        }
-        closeFragment()
-    } else {
-        var shuffled = false
-        repeatUntil(repeatCount, { shuffled }) {
-            openHistoryFragment()
-            shuffled = shuffled || history.checkDisplayShuffled(randomness)
-            closeFragment()
-        }
-
-        if (history.size > 1 && !shuffled) {
-            val errorMessage = randomnessErrors[randomness] ?: ""
-            throw AssertionError("$errorMessage History: $history")
-        }
+    val correctOrder = when (randomness) {
+        0 -> checkOrdered(history)
+        else -> checkShuffled(history, randomness)
     }
+
+    if (history.size > 1 && !correctOrder) {
+        val errorMessage = randomnessErrors[randomness] ?: "Items in unexpected order."
+        throw AssertionError("$errorMessage History: $history")
+    }
+}
+
+/**
+ * Check that the elements in the history are displayed in order
+ *
+ * @return [Boolean]: `true` if the elements are displayed in order, `false` otherwise
+ */
+private fun checkOrdered(history: TestHistory): Boolean {
+    openHistoryFragment()
+    val result = history.checkDisplayOrdered()
+    closeFragment()
+    return result
+}
+
+/**
+ * Check that the elements in the history are shuffled according to the randomness, including retries
+ *
+ * @param history [TestHistory]: list of items in history
+ * @param randomness [Int]: history randomness setting
+ * @return [Boolean]: `true` if elements are shuffled even once, `false` otherwise
+ */
+private fun checkShuffled(history: TestHistory, randomness: Int): Boolean {
+    if (history.size <= 1) {
+        return true
+    }
+
+    val repeatCount = ternaryIf(history.size == 2, 10, 5)
+    var shuffled = false
+    repeatUntil(repeatCount, { shuffled }) {
+        openHistoryFragment()
+        shuffled = shuffled || history.checkDisplayShuffled(randomness)
+        closeFragment()
+    }
+
+    return shuffled
 }
 
 /**
  * Check that the order changes when opening and closing the fragment.
  *
- * @param computeHistory [TestHistory]: list of items in history
+ * @param history [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
  */
-fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int) {
-    val recyclerId = R.id.itemsRecycler
-    checkRandomness(computeHistory, randomness)
-    val historySize = computeHistory.size
+fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
+    checkRandomness(history, randomness)
     openHistoryFragment()
 
     // save all current values
-    for (position in 0 until historySize) {
+    for (position in 0 until history.size) {
         onView(withId(recyclerId)).perform(scrollToPosition(position))
         onView(withViewHolder(recyclerId, position))
             .perform(saveTextAtPosition(position, R.id.computeText))
@@ -79,11 +106,24 @@ fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int) {
 
     closeFragment()
 
-    // additional repeats for 2 items due to occasional failures
-    val repeats = ternaryIf(computeHistory.size == 2, 10, 5)
-    var shuffled = false
+    if (history.size > 1 && !checkReshuffled(history.size)) {
+        val errorMessage = reshuffledErrors[randomness] ?: "Items not re-shuffled."
+        throw AssertionError("$errorMessage History: $history")
+    }
+}
 
-    repeatUntil(repeats, { shuffled }) {
+/**
+ * Check that the values displayed in the UI do not match the saved values, including retries
+ *
+ * @param historySize [Int]: number of saved values
+ * @return [Boolean]: `true` if any of the values have changed, `false` otherwise
+ */
+private fun checkReshuffled(historySize: Int): Boolean {
+    // additional repeats for 2 items due to occasional failures
+    val repeats = ternaryIf(historySize == 2, 10, 5)
+    var reshuffled = false
+
+    repeatUntil(repeats, { reshuffled }) {
         openHistoryFragment()
 
         for (position in 0 until historySize) {
@@ -92,14 +132,12 @@ fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int) {
             try {
                 onView(withViewHolder(recyclerId, position))
                     .check(matches(not(withSavedTextAtPosition(position, R.id.computeText))))
-                shuffled = true
+                reshuffled = true
             } catch (_: Throwable) {}
         }
 
         closeFragment()
     }
 
-    if (!shuffled) {
-        throw AssertionError("Items not re-shuffled for history randomness 1. History: $computeHistory")
-    }
+    return reshuffled
 }

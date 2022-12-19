@@ -35,6 +35,7 @@ fun testMultipleNoApply() {
     history.add(generateTestItem("/.21", "7") { "0.33333" })
 
     checkRandomness(history, 0)
+    checkRandomness(history, 1)
 }
 
 fun testMultipleShuffle() {
@@ -71,6 +72,7 @@ fun testMultipleShuffle() {
     typeShuffledValues(history, shuffleComputation = true)
 
     checkRandomness(history, 0)
+    checkRandomness(history, 1)
 }
 
 fun testMultipleSettingsTypes() {

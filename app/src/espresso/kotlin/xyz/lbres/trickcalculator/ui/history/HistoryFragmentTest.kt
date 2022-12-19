@@ -91,11 +91,13 @@ class HistoryFragmentTest {
 
         // multiple errors
         history.add(generateTestItem("10/0") { "Divide by zero" })
+        onView(withId(R.id.mainText)).check(matches(isEmptyString()))
         checkRandomness(history, 0)
 
         // previous result
         history.add(generateTestItem("15+5") { "20" })
         history.add(generateTestItem("x", "20") { "Syntax error" })
+        onView(withId(R.id.mainText)).check(matches(isEmptyString()))
 
         // don't clear text, should have been cleared by error
         history.add(generateTestItem("2x4") { "8" })
