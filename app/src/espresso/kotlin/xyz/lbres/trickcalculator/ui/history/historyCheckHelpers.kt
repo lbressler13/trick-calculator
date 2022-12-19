@@ -11,36 +11,50 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.repeatUntil
-import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
+import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
+
+private val randomnessErrors = mapOf(
+    0 to "History items should be ordered in history randomness 0.",
+    1 to "History items should be shuffled in history randomness 1.",
+    2 to "History items and pairs should be shuffled in history randomness 2.",
+)
 
 /**
  * Verify that all items from the history are displayed and shuffled, including multiple repeats of shuffled check
  *
  * @param history [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
- * @param errorMessage [String]: error to show if check fails. Current history will be appended.
  */
-fun checkCorrectData(history: TestHistory, randomness: Int, errorMessage: String) {
-    var shuffled = false
+fun checkRandomness(history: TestHistory, randomness: Int) {
+    setHistoryRandomness(randomness)
 
     // additional repeats for 2 items due to occasional failures
     val repeatCount = ternaryIf(history.size == 2, 10, 5)
 
-    // check that all items are displayed, only needs to happen once
     openHistoryFragment()
     history.checkAllDisplayed(randomness)
     closeFragment()
 
-    // check that items are shuffled
-    repeatUntil(repeatCount, { shuffled }) {
+    if (randomness.isZero()) {
         openHistoryFragment()
-        shuffled = shuffled || history.checkDisplayShuffled(randomness)
+        if (!history.checkDisplayOrdered()) {
+            throw AssertionError(randomnessErrors[0])
+        }
         closeFragment()
-    }
+    } else {
+        var shuffled = false
+        repeatUntil(repeatCount, { shuffled }) {
+            openHistoryFragment()
+            shuffled = shuffled || history.checkDisplayShuffled(randomness)
+            closeFragment()
+        }
 
-    if (history.size > 1 && !shuffled) {
-        throw AssertionError("$errorMessage. History: $history")
+        if (history.size > 1 && !shuffled) {
+            val errorMessage = randomnessErrors[randomness] ?: ""
+            throw AssertionError("$errorMessage History: $history")
+        }
     }
 }
 
@@ -49,11 +63,10 @@ fun checkCorrectData(history: TestHistory, randomness: Int, errorMessage: String
  *
  * @param computeHistory [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
- * @param errorMessage [String]: error to throw if basic checks fail
  */
-fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int, errorMessage: String) {
+fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int) {
     val recyclerId = R.id.itemsRecycler
-    checkCorrectData(computeHistory, randomness, errorMessage)
+    checkRandomness(computeHistory, randomness)
     val historySize = computeHistory.size
     openHistoryFragment()
 
@@ -61,7 +74,7 @@ fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int, error
     for (position in 0 until historySize) {
         onView(withId(recyclerId)).perform(scrollToPosition(position))
         onView(withViewHolder(recyclerId, position))
-            .perform(RecyclerViewTextSaver.saveTextAtPosition(position, R.id.computeText))
+            .perform(saveTextAtPosition(position, R.id.computeText))
     }
 
     closeFragment()
@@ -78,7 +91,7 @@ fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int, error
 
             try {
                 onView(withViewHolder(recyclerId, position))
-                    .check(matches(not(RecyclerViewTextSaver.withSavedTextAtPosition(position, R.id.computeText))))
+                    .check(matches(not(withSavedTextAtPosition(position, R.id.computeText))))
                 shuffled = true
             } catch (_: Throwable) {}
         }
@@ -89,30 +102,4 @@ fun runSingleReshuffledCheck(computeHistory: TestHistory, randomness: Int, error
     if (!shuffled) {
         throw AssertionError("Items not re-shuffled for history randomness 1. History: $computeHistory")
     }
-}
-
-/**
- * Run a randomness check for a compute history, including a retry
- *
- * @param history [TestHistory]
- * @param randomness [Int]: history randomness setting
- */
-fun checkRandomness(history: TestHistory, randomness: Int) {
-    setHistoryRandomness(randomness)
-    openHistoryFragment()
-
-    history.checkAllDisplayed(randomness)
-
-    if (randomness.isZero()) {
-        history.checkDisplayOrdered()
-    } else {
-        // one retry in case of small probability where numbers aren't shuffled
-        try {
-            history.checkDisplayShuffled(randomness)
-        } catch (_: Throwable) {
-            history.checkDisplayShuffled(randomness)
-        }
-    }
-
-    closeFragment()
 }

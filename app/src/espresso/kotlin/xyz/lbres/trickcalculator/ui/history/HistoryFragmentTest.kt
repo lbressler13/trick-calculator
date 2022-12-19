@@ -20,7 +20,6 @@ import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
-import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
@@ -77,38 +76,31 @@ class HistoryFragmentTest {
 
     @Test
     fun clearOnError() {
-        setHistoryRandomness(0)
-        toggleShuffleOperators()
         openSettingsFragment()
+        onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
         onView(withId(R.id.clearOnErrorSwitch)).perform(click())
+        onView(withId(R.id.historyButton2)).perform(click())
         closeFragment()
 
         val history = TestHistory()
 
         // one error
-        history.add(generateHI("0xx8") { "Syntax error" })
+        history.add(generateTestItem("0xx8") { "Syntax error" })
         onView(withId(R.id.mainText)).check(matches(isEmptyString()))
-
-        openHistoryFragment()
-        history.runAllChecks(0)
+        checkRandomness(history, 0)
 
         // multiple errors
-        closeFragment()
-        history.add(generateHI("10/0") { "Divide by zero" })
+        history.add(generateTestItem("10/0") { "Divide by zero" })
+        checkRandomness(history, 0)
 
-        openHistoryFragment()
-        history.runAllChecks(0)
-
-        // errors and results
-        closeFragment()
-        history.add(generateHI("15+5") { "20" })
-        history.add(generateHI("x", "20") { "Syntax error" })
+        // previous result
+        history.add(generateTestItem("15+5") { "20" })
+        history.add(generateTestItem("x", "20") { "Syntax error" })
 
         // don't clear text, should have been cleared by error
-        history.add(generateHI("2x4") { "8" })
+        history.add(generateTestItem("2x4") { "8" })
 
-        openHistoryFragment()
-        history.runAllChecks(0)
+        checkRandomness(history, 0)
     }
 
     @Test fun shuffleOperators() = testShuffleOperators()

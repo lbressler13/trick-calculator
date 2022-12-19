@@ -17,31 +17,31 @@ private const val longText = "(123456789/12.898989898989+(98765x432100)-55555555
 fun testShuffleOperators() {
     val history = TestHistory()
 
-    history.add(generateHI("3") { getMainTextResult() })
-    history.add(generateHI("-1/2", previousResult = "3") { getMainTextResult() })
+    history.add(generateTestItem("3") { getMainTextResult() })
+    history.add(generateTestItem("-1/2", previousResult = "3") { getMainTextResult() })
 
     // long decimal
-    history.add(generateHI("0.123456") { getMainTextResult() })
+    history.add(generateTestItem("0.123456") { getMainTextResult() })
 
     checkRandomness(history, 0)
 
-    history.add(generateHI("1+2-2/3x1") { getMainTextResult() })
-    history.add(generateHI("(1+2)(4-2)") { getMainTextResult() })
-    history.add(generateHI("2x(1-9)") { getMainTextResult() })
-    history.add(generateHI("1.2x5(4)") { getMainTextResult() })
-    history.add(generateHI("1.2x5(4)") { getMainTextResult() })
-    history.add(generateHI(longText) { getMainTextResult() })
+    history.add(generateTestItem("1+2-2/3x1") { getMainTextResult() })
+    history.add(generateTestItem("(1+2)(4-2)") { getMainTextResult() })
+    history.add(generateTestItem("2x(1-9)") { getMainTextResult() })
+    history.add(generateTestItem("1.2x5(4)") { getMainTextResult() })
+    history.add(generateTestItem("1.2x5(4)") { getMainTextResult() })
+    history.add(generateTestItem(longText) { getMainTextResult() })
 
     // with error
-    history.add(generateHI("4+5()-44") { "Syntax error" })
+    history.add(generateTestItem("4+5()-44") { "Syntax error" })
 
-    history.add(generateHI("4+(5)-44") { getMainTextResult() })
-    history.add(generateHI(".00000003") { getMainTextResult() })
-    history.add(generateHI("55^6") { getMainTextResult() })
+    history.add(generateTestItem("4+(5)-44") { getMainTextResult() })
+    history.add(generateTestItem(".00000003") { getMainTextResult() })
+    history.add(generateTestItem("55^6") { getMainTextResult() })
 
     // multiple errors
-    history.add(generateHI("400/3..3") { "Syntax error" })
-    history.add(generateHI("(500-5))-6") { "Syntax error" })
+    history.add(generateTestItem("400/3..3") { "Syntax error" })
+    history.add(generateTestItem("(500-5))-6") { "Syntax error" })
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
@@ -57,36 +57,36 @@ fun testShuffleNumbers() {
     val history = TestHistory()
 
     // one digit
-    history.add(generateHI("1") { getMainTextResult() })
-    history.add(generateHI("22.22222") { getMainTextResult() })
-    history.add(generateHI("00000") { getMainTextResult() })
+    history.add(generateTestItem("1") { getMainTextResult() })
+    history.add(generateTestItem("22.22222") { getMainTextResult() })
+    history.add(generateTestItem("00000") { getMainTextResult() })
 
     checkRandomness(history, 0)
 
     // multiple digits
-    history.add(generateHI("123.456") { getMainTextResult() })
-    history.add(generateHI("8900000") { getMainTextResult() })
+    history.add(generateTestItem("123.456") { getMainTextResult() })
+    history.add(generateTestItem("8900000") { getMainTextResult() })
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
 
     // operators
-    history.add(generateHI("01+02-02/03x01") { getMainTextResult() })
-    history.add(generateHI("(21+12)(04-02)") { getMainTextResult() })
-    history.add(generateHI("1.2x53(14)") { getMainTextResult() })
-    history.add(generateHI("55+16/03-04-03+23/66x44(20+30)") { getMainTextResult() })
+    history.add(generateTestItem("01+02-02/03x01") { getMainTextResult() })
+    history.add(generateTestItem("(21+12)(04-02)") { getMainTextResult() })
+    history.add(generateTestItem("1.2x53(14)") { getMainTextResult() })
+    history.add(generateTestItem("55+16/03-04-03+23/66x44(20+30)") { getMainTextResult() })
 
     // with error
-    history.add(generateHI("4+5()-44") { "Syntax error" })
+    history.add(generateTestItem("4+5()-44") { "Syntax error" })
 
-    history.add(generateHI("04+(05)-44") { getMainTextResult() })
-    history.add(generateHI(".00000003") { getMainTextResult() })
-    history.add(generateHI("55^06") { getMainTextResult() })
-    history.add(generateHI(longText) { getMainTextResult() })
+    history.add(generateTestItem("04+(05)-44") { getMainTextResult() })
+    history.add(generateTestItem(".00000003") { getMainTextResult() })
+    history.add(generateTestItem("55^06") { getMainTextResult() })
+    history.add(generateTestItem(longText) { getMainTextResult() })
 
     // multiple errors
-    history.add(generateHI("400/3..3") { "Syntax error" })
-    history.add(generateHI("(500-5))-6") { "Syntax error" })
+    history.add(generateTestItem("400/3..3") { "Syntax error" })
+    history.add(generateTestItem("(500-5))-6") { "Syntax error" })
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
@@ -101,31 +101,31 @@ fun testShuffleComputation() {
 
     val history = TestHistory()
 
-    history.add(generateHI("3") { getMainTextResult() })
-    history.add(generateHI("-1/2", previousResult = "3") { getMainTextResult() })
+    history.add(generateTestItem("3") { getMainTextResult() })
+    history.add(generateTestItem("-1/2", previousResult = "3") { getMainTextResult() })
 
     // long decimal
-    history.add(generateHI("0.123456") { getMainTextResult() })
+    history.add(generateTestItem("0.123456") { getMainTextResult() })
 
     checkRandomness(history, 0)
 
-    history.add(generateHI("1+2-2/3x1") { getMainTextResult() })
-    history.add(generateHI("(1+2)(4-2)") { getMainTextResult() })
-    history.add(generateHI("2x(1-9)") { getMainTextResult() })
-    history.add(generateHI("1.2x5(4)") { getMainTextResult() })
-    history.add(generateHI("1.2x5(4)") { getMainTextResult() })
-    history.add(generateHI(longText) { getMainTextResult() })
+    history.add(generateTestItem("1+2-2/3x1") { getMainTextResult() })
+    history.add(generateTestItem("(1+2)(4-2)") { getMainTextResult() })
+    history.add(generateTestItem("2x(1-9)") { getMainTextResult() })
+    history.add(generateTestItem("1.2x5(4)") { getMainTextResult() })
+    history.add(generateTestItem("1.2x5(4)") { getMainTextResult() })
+    history.add(generateTestItem(longText) { getMainTextResult() })
 
     // with error
-    history.add(generateHI("4+5()-44") { "Syntax error" })
+    history.add(generateTestItem("4+5()-44") { "Syntax error" })
 
-    history.add(generateHI("4+(5)-44") { getMainTextResult() })
-    history.add(generateHI(".00000003") { getMainTextResult() })
-    history.add(generateHI("55^6") { getMainTextResult() })
+    history.add(generateTestItem("4+(5)-44") { getMainTextResult() })
+    history.add(generateTestItem(".00000003") { getMainTextResult() })
+    history.add(generateTestItem("55^6") { getMainTextResult() })
 
     // multiple errors
-    history.add(generateHI("400/3..3") { "Syntax error" })
-    history.add(generateHI("(500-5))-6") { "Syntax error" })
+    history.add(generateTestItem("400/3..3") { "Syntax error" })
+    history.add(generateTestItem("(500-5))-6") { "Syntax error" })
 
     checkRandomness(history, 0)
     checkRandomness(history, 1)
@@ -134,10 +134,10 @@ fun testShuffleComputation() {
 
 /**
  * Get the text from the main TextView.
- * Explicitly for using randomized results to generate history items.
- * For other uses, use a [Matcher] or TextSaver
+ * Explicitly for using randomized results to generate history items. For other uses, use a [Matcher] or TextSaver.
+ * Not stored as a public util function to avoid misuse out of convenience.
  *
- * @return [String]
+ * @return [String] text in the main TextView, without the brackets surrounding a result, if applicable
  */
 private fun getMainTextResult(): String {
     var text = ""

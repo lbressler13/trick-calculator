@@ -63,10 +63,10 @@ fun setHistoryRandomness(randomness: Int) {
  * @param computeText [String]: the computation to run
  * @param previousResult [String]: result of previous computation, to use in creating the text for the history item.
  * Defaults to empty string.
- * @param getResult () -> [String]: function to get the result to use in the history item
+ * @param getResult () -> [String]: function to get the result of the computation
  * @return [TestHI]: history item with the typed text and generated result
  */
-fun generateHI(computeText: String, previousResult: String = "", getResult: () -> String): TestHI {
+fun generateTestItem(computeText: String, previousResult: String = "", getResult: () -> String): TestHI {
     val maxDecimalLength = 5
 
     if (previousResult == "") {

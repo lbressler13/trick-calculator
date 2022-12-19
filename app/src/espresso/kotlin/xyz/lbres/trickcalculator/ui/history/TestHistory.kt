@@ -37,20 +37,6 @@ class TestHistory {
     }
 
     /**
-     * Run all checks for items displayed and ordered/shuffled for a level of randomness
-     *
-     * @param randomness [Int]: history randomness setting
-     */
-    fun runAllChecks(randomness: Int) {
-        checkAllowedRandomness(randomness)
-        checkAllDisplayed(randomness)
-        when (randomness) {
-            0 -> checkDisplayOrdered()
-            else -> checkDisplayShuffled(randomness)
-        }
-    }
-
-    /**
      * Check that all ViewHolders contain a valid history item.
      * Method of checking is based on level of randomness.
      *
@@ -63,17 +49,18 @@ class TestHistory {
         checkAllowedRandomness(randomness)
 
         val displayedValues = computeHistory.indices.map { getViewHolderTextAtPosition(it) }
-        var result = false
-        var error = ""
+        var allDisplayed = false
+        var errorMessage = ""
 
         when (randomness) {
             0, 1 -> {
                 val displayedSet = displayedValues.toMutableMultiSet()
                 val computeHistorySet = computeHistory.toMutableMultiSet()
-                result = displayedSet == computeHistorySet
+                allDisplayed = displayedSet == computeHistorySet
 
+                // TODO replace with minus operation when available
                 computeHistorySet.removeAll(displayedSet)
-                error = "ViewHolders with text $computeHistorySet not found. History: $computeHistory"
+                errorMessage = "ViewHolders with text $computeHistorySet not found. History: $computeHistory"
             }
             2 -> {
                 val computations = computeHistory.map { it.first }.toMutableMultiSet()
@@ -81,17 +68,18 @@ class TestHistory {
 
                 val displayedComputations = displayedValues.map { it.first }.toMutableMultiSet()
                 val displayedResults = displayedValues.map { it.second }.toMutableMultiSet()
-                result = computations == displayedComputations && results == displayedResults
+                allDisplayed = computations == displayedComputations && results == displayedResults
 
+                // TODO replace with minus operations when available
                 computations.removeAll(displayedComputations)
                 results.removeAll(displayedResults)
-                error = "ViewHolders with compute text $computations and result text $results not found. History: $computeHistory"
+                errorMessage = "ViewHolders with compute text $computations and result text $results not found. History: $computeHistory"
             }
         }
 
         return when {
-            result -> result
-            throwError -> throw AssertionError(error)
+            allDisplayed -> allDisplayed
+            throwError -> throw AssertionError(errorMessage)
             else -> false
         }
     }
@@ -162,28 +150,30 @@ class TestHistory {
      */
     private fun getViewHolderTextAtPosition(position: Int): Pair<String, String> {
         var computation = ""
-        var result = ""
+        var errorResult = ""
 
-        val viewAction = object : ViewAction {
+        val getViewHolderText = object : ViewAction {
             override fun getConstraints(): Matcher<View> = isDisplayed()
             override fun getDescription(): String = "retrieving text from viewholder at position $position"
 
             override fun perform(uiController: UiController?, view: View?) {
                 computation = view?.findViewById<TextView>(R.id.computeText)?.text?.toString() ?: ""
 
-                val numberResult = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
-                val errorResult = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
-                result = when {
-                    !numberResult.isNullOrBlank() -> numberResult
-                    !errorResult.isNullOrBlank() -> errorResult
+                val number = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
+                val error = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
+                errorResult = when {
+                    !number.isNullOrBlank() -> number
+                    !error.isNullOrBlank() -> error
                     else -> ""
                 }
             }
         }
 
         onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position)).perform(viewAction)
+        onView(withViewHolder(recyclerId, position)).perform(getViewHolderText)
 
-        return Pair(computation, result)
+        return Pair(computation, errorResult)
     }
+
+    override fun toString(): String = computeHistory.toString()
 }
