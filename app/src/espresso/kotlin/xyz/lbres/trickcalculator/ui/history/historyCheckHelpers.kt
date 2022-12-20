@@ -43,7 +43,7 @@ fun checkRandomness(history: TestHistory, randomness: Int) {
 
     val correctOrder = when (randomness) {
         0 -> checkOrdered(history)
-        else -> checkShuffled(history, randomness)
+        else -> checkShuffledCorrectly(history, randomness)
     }
 
     if (history.size > 1 && !correctOrder) {
@@ -71,7 +71,7 @@ private fun checkOrdered(history: TestHistory): Boolean {
  * @param randomness [Int]: history randomness setting
  * @return [Boolean]: `true` if elements are shuffled even once, `false` otherwise
  */
-private fun checkShuffled(history: TestHistory, randomness: Int): Boolean {
+private fun checkShuffledCorrectly(history: TestHistory, randomness: Int): Boolean {
     if (history.size <= 1) {
         return true
     }
@@ -106,7 +106,7 @@ fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
 
     closeFragment()
 
-    if (history.size > 1 && !checkReshuffled(history.size)) {
+    if (history.size > 1 && !checkReshuffledCorrectly(history.size)) {
         val errorMessage = reshuffledErrors[randomness] ?: "Items not re-shuffled."
         throw AssertionError("$errorMessage History: $history")
     }
@@ -118,7 +118,7 @@ fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
  * @param historySize [Int]: number of saved values
  * @return [Boolean]: `true` if any of the values have changed, `false` otherwise
  */
-private fun checkReshuffled(historySize: Int): Boolean {
+private fun checkReshuffledCorrectly(historySize: Int): Boolean {
     // additional repeats for 2 items due to occasional failures
     val repeats = ternaryIf(historySize == 2, 10, 5)
     var reshuffled = false

@@ -28,10 +28,7 @@ typealias TestHI = Pair<String, String>
  * [Matcher] to identify that a history item displays the expected computation text and result string
  */
 val withHistoryItem: (String, String) -> Matcher<View?> = { computation, errorResult ->
-    allOf(
-        withChild(withText(computation)),
-        withChild(withChild(withText(errorResult)))
-    )
+    allOf(withChild(withText(computation)), withChild(withChild(withText(errorResult))))
 }
 
 /**

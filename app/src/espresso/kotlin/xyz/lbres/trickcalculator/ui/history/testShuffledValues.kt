@@ -142,7 +142,7 @@ fun testShuffleComputation() {
 private fun getMainTextResult(): String {
     var text = ""
 
-    val viewAction = object : ViewAction {
+    val getText = object : ViewAction {
         override fun getConstraints(): Matcher<View> = withId(R.id.mainText)
         override fun getDescription(): String = "retrieving main text"
 
@@ -151,7 +151,7 @@ private fun getMainTextResult(): String {
         }
     }
 
-    onView(withId(R.id.mainText)).perform(viewAction)
+    onView(withId(R.id.mainText)).perform(getText)
 
     if (text.startsWith('[')) {
         return text.substring(1, text.lastIndex) // strip [] around result

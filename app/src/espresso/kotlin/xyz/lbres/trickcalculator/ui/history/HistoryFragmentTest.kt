@@ -79,7 +79,7 @@ class HistoryFragmentTest {
         openSettingsFragment()
         onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
         onView(withId(R.id.clearOnErrorSwitch)).perform(click())
-        onView(withId(R.id.historyButton2)).perform(click())
+        onView(withId(R.id.historyButton0)).perform(click())
         closeFragment()
 
         val history = TestHistory()
