@@ -61,6 +61,7 @@ fun generateAndValidateComputeText(
     var currentType = ""
     var currentNumber = ""
     var currentDecimal = false
+    var lastDecimal = false
     var openParenCount = 0
 
     if (initialValue != null) {
@@ -75,7 +76,7 @@ fun generateAndValidateComputeText(
 
     // add the current number to the compute text
     val addCurrentNumber: () -> Unit = {
-        if (currentNumber.isNotEmpty() && currentNumber.last() == '.') {
+        if (currentNumber.isNotEmpty() && lastDecimal) {
             throw syntaxError
         }
 
@@ -110,6 +111,7 @@ fun generateAndValidateComputeText(
         }
 
         lastType = currentType
+        lastDecimal = false
     }
 
     // add digit or decimal to current number
@@ -121,13 +123,18 @@ fun generateAndValidateComputeText(
                     currentNumber += it
                 }
                 currentDecimal = true // gets counted even when not applied, to check for syntax errors
+                lastDecimal = true // tracked separately for use in syntax errors
             }
-            numbersOrder == null -> currentNumber += it
+            numbersOrder == null -> {
+                currentNumber += it
+                lastDecimal = false
+            }
             else -> {
                 // apply numbers order
                 val index = Integer.parseInt(it)
                 val digit = numbersOrder[index]
                 currentNumber += digit.toString()
+                lastDecimal = false
             }
         }
     }

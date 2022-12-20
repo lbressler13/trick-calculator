@@ -42,24 +42,24 @@ private class CallFunctionOnViewViewAction(private val function: (View) -> Unit)
 /**
  * Call View.enable() extension function
  */
-fun callEnable(): ViewAction = CallFunctionOnViewViewAction { it.enable() }
+fun callEnable(): ViewAction = CallFunctionOnViewViewAction(View::enable)
 
 /**
  * Call View.disable() extension function
  */
-fun callDisable(): ViewAction = CallFunctionOnViewViewAction { it.disable() }
+fun callDisable(): ViewAction = CallFunctionOnViewViewAction(View::disable)
 
 /**
  * Call View.visible() extension function
  */
-fun callVisible(): ViewAction = CallFunctionOnViewViewAction { it.visible() }
+fun callVisible(): ViewAction = CallFunctionOnViewViewAction(View::visible)
 
 /**
  * Call View.invisible() extension function
  */
-fun callInvisible(): ViewAction = CallFunctionOnViewViewAction { it.invisible() }
+fun callInvisible(): ViewAction = CallFunctionOnViewViewAction(View::invisible)
 
 /**
  * Call View.gone() extension function
  */
-fun callGone(): ViewAction = CallFunctionOnViewViewAction { it.gone() }
+fun callGone(): ViewAction = CallFunctionOnViewViewAction(View::gone)
