@@ -46,6 +46,24 @@ repositories {
     }
 }
 
+// TODO change this
+fun getIsEspresso(): Boolean {
+    return true
+    val property = project.findProperty("espresso_tests")
+    return property == "true"
+}
+
+fun getEspressoRetries(): Int {
+    return 0
+
+    val property = project.findProperty("espresso_retries")
+    return try {
+        property as Int
+    } catch (_: Exception) {
+        0
+    }
+}
+
 android {
     namespace = "xyz.lbres.trickcalculator"
     compileSdk = 31
@@ -59,6 +77,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
+
+        buildConfigField("Boolean", "ESPRESSO_TESTS", getIsEspresso().toString()) // TODO rename this
+        buildConfigField("Integer", "ESPRESSO_RETRIES", getEspressoRetries().toString())
     }
 
     buildTypes {
@@ -131,6 +152,10 @@ android {
     }
 }
 
+//    def getBaseUrl(String fallback) {
+//        return project.hasProperty("base_url") ? project.getProperties().get("base_url") : fallback
+//    }
+
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
@@ -142,7 +167,7 @@ dependencies {
     val navigationVersion = "2.5.3"
 
     val exactNumbersVersion = "0.1.0"
-    val kotlinUtilsVersion = "0.3.1"
+    val kotlinUtilsVersion = "0.4.0"
 
     val androidxJunitVersion = "1.1.4"
     val androidxTestVersion = "1.5.0"

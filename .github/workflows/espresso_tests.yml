@@ -30,4 +30,4 @@ jobs:
         with:
           api-level: 29
           profile: 'Nexus 6'
-          script: ./gradlew connectedCheck --info --stacktrace
+          script: ./gradlew connectedCheck --info --stacktrace -Pespresso_tests=true -Pespresso_retries=3

@@ -18,6 +18,9 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
+const val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)^3"
+const val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
+
 /**
  * Test representation of a history item displayed in the UI.
  * First value is computation string (first row in UI), and second value is result/error (second row in UI).

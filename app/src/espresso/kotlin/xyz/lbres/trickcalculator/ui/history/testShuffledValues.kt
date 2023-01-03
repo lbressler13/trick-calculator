@@ -12,7 +12,7 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 
-private const val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)x3"
+// private const val longText = "(123456789/12.898989898989+(98765x432100)-555555555x13131313131313)x3"
 
 fun testShuffleOperators() {
     val history = TestHistory()

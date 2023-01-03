@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
+import xyz.lbres.trickcalculator.BuildConfig
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
@@ -123,14 +124,9 @@ class HistoryFragment : BaseFragment() {
         when {
             // error
             randomHistory == null -> {
-                // set error message to blink
-                val blinking: Animation = AlphaAnimation(0.0f, 1.0f)
-                blinking.duration = 200
-
-                blinking.startOffset = 10
-                blinking.repeatMode = Animation.REVERSE
-                blinking.repeatCount = Animation.INFINITE
-                binding.errorMessage.startAnimation(blinking)
+                if (!BuildConfig.ESPRESSO_TESTS) {
+                    setErrorAnimation()
+                }
 
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.gone()
@@ -155,5 +151,18 @@ class HistoryFragment : BaseFragment() {
                 binding.errorMessage.gone()
             }
         }
+    }
+
+    /**
+     * Set error message to blink
+     */
+    private fun setErrorAnimation() {
+        val blinking: Animation = AlphaAnimation(0.0f, 1.0f)
+        blinking.duration = 200
+
+        blinking.startOffset = 10
+        blinking.repeatMode = Animation.REVERSE
+        blinking.repeatCount = Animation.INFINITE
+        binding.errorMessage.startAnimation(blinking)
     }
 }

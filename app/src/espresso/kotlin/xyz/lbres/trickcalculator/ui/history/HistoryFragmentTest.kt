@@ -69,7 +69,10 @@ class HistoryFragmentTest {
     @Test
     fun randomness2Reshuffled() = testRandomness2Reshuffled()
 
-    // @Test fun randomness3() {} // TODO
+    @Test
+    fun randomness3() = testRandomness3() // TODO
+
+    // @Test fun randomness3Changed() = testRandomness3Changed() // TODO
 
     @Test
     fun longHistory() = testLongHistory()

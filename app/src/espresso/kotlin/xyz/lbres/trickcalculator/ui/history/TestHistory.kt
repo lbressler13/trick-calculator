@@ -5,11 +5,13 @@ import android.widget.TextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.collection.ext.toMultiSet
-import xyz.lbres.kotlinutils.collection.ext.toMutableMultiSet
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
@@ -48,32 +50,57 @@ class TestHistory {
     fun checkAllDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
         checkAllowedRandomness(randomness)
 
+        if (randomness == 3) {
+            try {
+                onView(withId(R.id.errorMessage)).check(matches(isDisplayed()))
+                return true
+            } catch (_: Throwable) {}
+        }
+
         val displayedValues = computeHistory.indices.map { getViewHolderTextAtPosition(it) }
         var allDisplayed = false
         var errorMessage = ""
 
         when (randomness) {
             0, 1 -> {
-                val displayedSet = displayedValues.toMutableMultiSet()
-                val computeHistorySet = computeHistory.toMutableMultiSet()
+                val displayedSet = displayedValues.toMultiSet()
+                val computeHistorySet = computeHistory.toMultiSet()
                 allDisplayed = displayedSet == computeHistorySet
 
-                // TODO replace with minus operation when available
-                computeHistorySet.removeAll(displayedSet)
-                errorMessage = "ViewHolders with text $computeHistorySet not found. History: $computeHistory"
+                val diff = computeHistorySet - displayedSet
+                errorMessage = "ViewHolders with text $diff not found. History: $computeHistory"
             }
             2 -> {
-                val computations = computeHistory.map { it.first }.toMutableMultiSet()
-                val results = computeHistory.map { it.second }.toMutableMultiSet()
+                val computations = computeHistory.map { it.first }.toMultiSet()
+                val results = computeHistory.map { it.second }.toMultiSet()
 
-                val displayedComputations = displayedValues.map { it.first }.toMutableMultiSet()
-                val displayedResults = displayedValues.map { it.second }.toMutableMultiSet()
+                val displayedComputations = displayedValues.map { it.first }.toMultiSet()
+                val displayedResults = displayedValues.map { it.second }.toMultiSet()
                 allDisplayed = computations == displayedComputations && results == displayedResults
 
-                // TODO replace with minus operations when available
-                computations.removeAll(displayedComputations)
-                results.removeAll(displayedResults)
-                errorMessage = "ViewHolders with compute text $computations and result text $results not found. History: $computeHistory"
+                val computationDiff = computations - displayedComputations
+                val resultDiff = results - displayedResults
+                errorMessage = "ViewHolders with compute text $computationDiff and result text $resultDiff not found. History: $computeHistory"
+            }
+            3 -> {
+                try {
+                    onView(withId(R.id.errorText)).check(matches(isDisplayed()))
+                    allDisplayed = true
+                } catch (_: Throwable) {
+                    errorMessage = "Error message or ViewHolders with appropriate text should be displayed."
+                    allDisplayed = false
+                }
+
+                if (!allDisplayed) {
+                    val displayedSet = displayedValues.toMultiSet()
+                    val computeHistorySet = computeHistory.toMultiSet()
+
+                    // TODO switch to inline function
+                    val intersection = (displayedSet).intersect(computeHistorySet)
+
+                    allDisplayed = displayedSet.size == computeHistorySet.size && intersection.isEmpty()
+                    errorMessage = "ViewHolders with text $intersection should not be displayed."
+                }
             }
         }
 
@@ -107,6 +134,13 @@ class TestHistory {
             return true
         }
 
+        if (randomness == 3) {
+            try {
+                onView(withId(R.id.errorMessage)).check(matches(isDisplayed()))
+                return true
+            } catch (_: Throwable) {}
+        }
+
         val displayedValues = computeHistory.indices.map { getViewHolderTextAtPosition(it) }
         val computeHistorySet = computeHistory.toMultiSet()
         val displayedSet = displayedValues.toMultiSet()
@@ -127,8 +161,27 @@ class TestHistory {
 
                 computationsShuffled && resultsShuffled && pairsShuffled
             }
+            3 -> displayedSet.size == computeHistorySet.size && displayedSet.intersect(computeHistorySet).isEmpty()
             else -> false // never matches this case
         }
+    }
+
+    fun checkErrorInDisplayedHistory(): Boolean {
+        try {
+            onView(withId(R.id.errorMessage)).check(matches(isDisplayed()))
+            return false
+        } catch (_: Throwable) {}
+
+        for (position in computeHistory.indices) {
+            onView(withId(recyclerId)).perform(scrollToPosition(position))
+            try {
+                val errorMatcher = withChild(withChild(allOf(withId(R.id.errorText), isDisplayed())))
+                onView(withViewHolder(recyclerId, position)).check(matches(errorMatcher))
+                return true
+            } catch (_: Throwable) {}
+        }
+
+        return false
     }
 
     /**
@@ -137,7 +190,7 @@ class TestHistory {
      * @param randomness [Int]: value to check
      */
     private fun checkAllowedRandomness(randomness: Int) {
-        if (randomness !in 0..2) {
+        if (randomness !in 0..3) {
             throw IllegalArgumentException("Invalid randomness value: $randomness")
         }
     }

@@ -24,6 +24,7 @@
 
 ### Other
 * [ ] ktlint has run successfully
+* [ ] Functions in the build.gradle.kts file return the correct values
 
 ## Comments
 Fun but optional
