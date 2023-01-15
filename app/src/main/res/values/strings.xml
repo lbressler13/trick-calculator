@@ -71,4 +71,7 @@
     <string name="plus_cd">Plus symbol</string>
     <string name="settings_cd">Settings</string>
     <string name="times_cd">Times symbol</string>
+
+    <!-- Other -->
+    <string name="dev_tools_key">DeveloperToolsDismissed</string>
 </resources>

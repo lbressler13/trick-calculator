@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.general.ternaryIf
@@ -48,9 +47,6 @@ class CalculatorFragment : BaseFragment() {
             ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        // observe changes in viewmodels
-        sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
-
         // init UI
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
@@ -66,13 +62,7 @@ class CalculatorFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
-    }
-
-    /**
-     * Enable/disable the last item button
-     */
-    private val historyObserver: Observer<History> = Observer {
-        binding.useLastHistoryButton.isVisible = it.isNotEmpty()
+        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
     }
 
     /**
@@ -93,7 +83,7 @@ class CalculatorFragment : BaseFragment() {
      * Use last history item as current computation
      */
     private val useLastHistoryItemOnClick = {
-        val item = sharedViewModel.history.value?.lastOrNull()
+        val item = sharedViewModel.history.lastOrNull()
         if (item != null) {
             computationViewModel.useHistoryItemAsComputeText(item)
 
@@ -187,6 +177,8 @@ class CalculatorFragment : BaseFragment() {
             sharedViewModel.addToHistory(computationViewModel.generatedHistoryItem!!)
             computationViewModel.clearStoredHistoryItem()
         }
+
+        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
     }
 
     /**
@@ -257,6 +249,15 @@ class CalculatorFragment : BaseFragment() {
 
         textview.text = fullText
     }
+
+    override fun handleHistoryChange(previousHistory: History) {
+        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
+    }
+
+    // TODO
+//    override fun handleSettingsChange() {
+//        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
+//    }
 
     /**
      * Scroll main text to top of text box

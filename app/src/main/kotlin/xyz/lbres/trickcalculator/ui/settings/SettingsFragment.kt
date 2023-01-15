@@ -97,10 +97,6 @@ class SettingsFragment : BaseFragment() {
         }
     }
 
-    private fun closeFragment() {
-        requireBaseActivity().popBackStack()
-    }
-
     private fun saveSettingsToViewModel() {
         val randomizePressed = randomizePressed
         val resetPressed = resetPressed

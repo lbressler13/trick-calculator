@@ -19,9 +19,16 @@ object ProductFlavor : ProductFlavorConfig {
 
         val dialog = DeveloperToolsDialog()
         devToolsButton.setOnClickListener {
-            val fragmentManager = activity.fragmentManager
+            val fragmentContext = activity.fragmentContext
 
-            if (fragmentManager != null) {
+            if (fragmentContext != null) {
+                val requestKey = activity.getString(R.string.dev_tools_key)
+                val fragmentManager = fragmentContext.childFragmentManager
+
+                fragmentManager.setFragmentResultListener(requestKey, fragmentContext.lifecycleOwner) { _, _ ->
+                    fragmentContext.handleSettingsChange()
+                }
+
                 dialog.show(fragmentManager, DeveloperToolsDialog.TAG)
             }
         }

@@ -2,6 +2,7 @@ package xyz.lbres.trickcalculator.ui.devtools
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.BaseActivity
@@ -56,7 +58,14 @@ class DeveloperToolsDialog : DialogFragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding.clearHistoryButton.setOnClickListener { viewModel.clearHistory() }
+        val parentContext = (requireParentFragment() as? BaseFragment)?.devToolsContext
+
+        binding.clearHistoryButton.setOnClickListener {
+            val previousHistory = List(viewModel.history.size) { viewModel.history[it] }
+            viewModel.clearHistory()
+            parentContext?.handleHistoryChange?.invoke(previousHistory)
+        }
+
         binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
 
         initHideDevTools()
@@ -116,6 +125,12 @@ class DeveloperToolsDialog : DialogFragment() {
             }
             dismiss()
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        val requestKey = getString(R.string.dev_tools_key)
+        parentFragmentManager.setFragmentResult(requestKey, bundleOf())
     }
 
     companion object {

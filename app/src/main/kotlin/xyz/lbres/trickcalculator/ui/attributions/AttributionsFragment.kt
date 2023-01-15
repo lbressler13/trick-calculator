@@ -50,7 +50,7 @@ class AttributionsFragment : BaseFragment() {
             viewModel.setFlaticonMessageExpanded(!viewModel.flaticonMessageExpanded)
             setFlaticonMessage()
         }
-        binding.closeButton.root.setOnClickListener { requireBaseActivity().popBackStack() }
+        binding.closeButton.root.setOnClickListener { closeFragment() }
 
         return binding.root
     }

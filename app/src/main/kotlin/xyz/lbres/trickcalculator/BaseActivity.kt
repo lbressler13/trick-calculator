@@ -3,10 +3,10 @@ package xyz.lbres.trickcalculator
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.databinding.ActivityBaseBinding
+import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -19,7 +19,12 @@ class BaseActivity : AppCompatActivity() {
     private lateinit var sharedViewModel: SharedViewModel
 
     // fragment manager used to show/hide dev tools dialog, set by the current fragment
-    var fragmentManager: FragmentManager? = null
+    // var fragmentManager: FragmentManager? = null
+    // var handleDevToolsDismissed: () -> Unit = {}
+    // var fragmentLifecycleOwner: LifecycleOwner? = null
+
+    // TODO don't need to store this in activity, can just use parent fragment in dialog
+    var fragmentContext: FragmentDevToolsContext? = null
 
     /**
      * Initialize activity

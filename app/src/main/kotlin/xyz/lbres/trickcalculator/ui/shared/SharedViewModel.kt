@@ -1,7 +1,5 @@
 package xyz.lbres.trickcalculator.ui.shared
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.ui.settings.Settings
@@ -17,48 +15,14 @@ class SharedViewModel : ViewModel() {
 
     /**
      * Individual settings
-     *
-     * Settings are represented as LiveData because fragments need to observe changes through the settings dialog
      */
-
-    // private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
-    // val applyDecimals: LiveData<Boolean> = _applyDecimals
-    // fun setApplyDecimals(newValue: Boolean) { updateSetting(newValue, _applyDecimals) }
     var applyDecimals: Boolean = true
-
-//    private val _applyParens = MutableLiveData<Boolean>().apply { value = true }
-//    val applyParens: LiveData<Boolean> = _applyParens
-//    fun setApplyParens(newValue: Boolean) { updateSetting(newValue, _applyParens) }
     var applyParens: Boolean = true
-
-    // private val _clearOnError = MutableLiveData<Boolean>().apply { value = false }
-    // val clearOnError: LiveData<Boolean> = _clearOnError
-    // fun setClearOnError(newValue: Boolean) { updateSetting(newValue, _clearOnError) }
     var clearOnError: Boolean = false
-
-    // private val _historyRandomness = MutableLiveData<Int>().apply { value = 1 }
-    // val historyRandomness: LiveData<Int> = _historyRandomness
-    // fun setHistoryRandomness(newValue: Int) { updateSetting(newValue, _historyRandomness) }
     var historyRandomness: Int = 1
-
-    // private val _showSettingsButton = MutableLiveData<Boolean>().apply { value = false }
-    // val showSettingsButton: LiveData<Boolean> = _showSettingsButton
-    // fun setShowSettingsButton(newValue: Boolean) { updateSetting(newValue, _showSettingsButton) }
     var showSettingsButton: Boolean = false
-
-    // private val _shuffleComputation = MutableLiveData<Boolean>().apply { value = false }
-    // val shuffleComputation: LiveData<Boolean> = _shuffleComputation
-    // fun setShuffleComputation(newValue: Boolean) { updateSetting(newValue, _shuffleComputation) }
     var shuffleComputation: Boolean = false
-
-    // private val _shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
-    // val shuffleNumbers: LiveData<Boolean> = _shuffleNumbers
-    // fun setShuffleNumbers(newValue: Boolean) { updateSetting(newValue, _shuffleNumbers) }
     var shuffleNumbers: Boolean = false
-
-    // private val _shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
-    // val shuffleOperators: LiveData<Boolean> = _shuffleOperators
-    // fun setShuffleOperators(newValue: Boolean) { updateSetting(newValue, _shuffleOperators) }
     var shuffleOperators: Boolean = true
 
     /**
@@ -111,32 +75,14 @@ class SharedViewModel : ViewModel() {
      * History
      */
 
-    // LiveData because CalculatorFragment needs to observe when history is cleared
-    private val _history = MutableLiveData<History>().apply { value = emptyList() }
-    val history: LiveData<History> = _history
+    private val _history: MutableList<HistoryItem> = mutableListOf()
+    val history: History = _history
 
     fun addToHistory(newItem: HistoryItem) {
-        val currentHistory = history.value!!
-        _history.value = currentHistory + newItem
+        _history.add(newItem)
     }
 
     fun clearHistory() {
-        _history.value = emptyList()
-    }
-
-    /**
-     * Helpers
-     */
-
-    /**
-     * Update the value of a setting if its value has changed.
-     *
-     * @param newValue [T]: new value for setting
-     * @param mutable [MutableLiveData]<[T]>: mutable live data to be updated with the new value
-     */
-    private fun <T> updateSetting(newValue: T, mutable: MutableLiveData<T>) {
-        if (newValue != mutable.value) {
-            mutable.value = newValue
-        }
+        _history.clear()
     }
 }
