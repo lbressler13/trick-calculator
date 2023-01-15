@@ -55,13 +55,17 @@ class CalculatorFragment : BaseFragment() {
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
-        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
         binding.settingsButton.setOnClickListener { settingsButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         binding.useLastHistoryButton.setOnClickListener { useLastHistoryItemOnClick() }
         updateUI()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
     }
 
     /**
