@@ -34,6 +34,7 @@ class HistoryFragment : BaseFragment() {
 
     // saved to prevent unnecessary changes when opening/closing settings dialog
     private var randomness: Int = 0
+    private var history: History = emptyList()
 
     /**
      * Initialize fragment
@@ -47,6 +48,7 @@ class HistoryFragment : BaseFragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         randomness = sharedViewModel.historyRandomness
+        history = sharedViewModel.history
 
         setUI()
 
@@ -54,6 +56,8 @@ class HistoryFragment : BaseFragment() {
 
         return binding.root
     }
+
+    // TODO don't reshuffle when opening/closing settings
 
     /**
      * Generate history, using the degree of randomness specified in the viewmodel
@@ -153,6 +157,7 @@ class HistoryFragment : BaseFragment() {
 
     override fun handleHistoryChange(previousHistory: History) {
         if (previousHistory != sharedViewModel.history) {
+            history = previousHistory
             setUI()
         }
     }

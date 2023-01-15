@@ -56,6 +56,7 @@ abstract class BaseFragment : NavHostFragment() {
 
         devToolsContext = FragmentDevToolsContext(
             childFragmentManager,
+            viewLifecycleOwner,
             { handleHistoryChange(it) },
             { handleSettingsChange() }
         )

@@ -23,6 +23,9 @@ class SettingsFragment : BaseFragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var historyButtons: List<RadioButton>
 
+    private var fromCalculatorFragment = false
+    private var fromDialog = false
+
     override var navigateToSettings: Int? = null
 
     /**
@@ -44,8 +47,11 @@ class SettingsFragment : BaseFragment() {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
+        fromDialog = arguments?.getBoolean("fromDialog") ?: false
+        val backStackSize = requireParentFragment().childFragmentManager.backStackEntryCount
+        fromCalculatorFragment = backStackSize == 1
+
         initUi()
-        // specializedFragmentCode()
 
         return binding.root
     }
@@ -84,9 +90,7 @@ class SettingsFragment : BaseFragment() {
             closeFragment()
         }
 
-        // show or hide settings button based on number of previous fragments
-        val backStackSize = requireParentFragment().childFragmentManager.backStackEntryCount
-        binding.settingsButtonSwitch.isVisible = backStackSize > 1
+        binding.settingsButtonSwitch.isVisible = fromDialog || !fromCalculatorFragment
 
         // close button
         binding.closeButton.root.setOnClickListener { closeFragment() }
@@ -106,7 +110,6 @@ class SettingsFragment : BaseFragment() {
             randomizePressed -> sharedViewModel.randomizeSettings()
             resetPressed -> {
                 // persist show settings value
-                // sharedViewModel.setShowSettingsButton(binding.settingsButtonSwitch.isChecked)
                 sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
                 sharedViewModel.resetSettings()
             }
@@ -133,7 +136,7 @@ class SettingsFragment : BaseFragment() {
 
     private fun closePreviousFragment() {
         try {
-            if (parentFragmentManager.backStackEntryCount > 0) {
+            if (!fromDialog && !fromCalculatorFragment) {
                 requireBaseActivity().popBackStack()
             }
         } catch (e: Exception) {

@@ -121,7 +121,8 @@ class DeveloperToolsDialog : DialogFragment() {
             val baseActivity = requireActivity() as BaseActivity
             val baseFragment = requireParentFragment() as BaseFragment
             if (baseFragment.navigateToSettings != null) {
-                baseActivity.runNavAction(baseFragment.navigateToSettings!!)
+                val args = bundleOf("fromDialog" to true)
+                baseActivity.runNavAction(baseFragment.navigateToSettings!!, args)
             }
             dismiss()
         }
