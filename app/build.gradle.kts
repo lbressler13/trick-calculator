@@ -142,7 +142,7 @@ dependencies {
     val navigationVersion = "2.5.3"
 
     val exactNumbersVersion = "0.1.0"
-    val kotlinUtilsVersion = "0.3.1"
+    val kotlinUtilsVersion = "0.4.0"
 
     val androidxJunitVersion = "1.1.4"
     val androidxTestVersion = "1.5.0"

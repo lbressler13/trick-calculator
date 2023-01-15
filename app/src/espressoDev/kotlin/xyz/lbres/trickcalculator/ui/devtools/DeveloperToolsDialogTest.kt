@@ -41,8 +41,8 @@ class DeveloperToolsDialogTest {
             .check(matches(allOf(isDisplayed(), withText("Clear history"))))
         onView(withId(R.id.refreshUIButton))
             .check(matches(allOf(isDisplayed(), withText("Refresh UI"))))
-        onView(withId(R.id.settingsDialogButton))
-            .check(matches(allOf(isDisplayed(), withText("Show settings dialog"))))
+        onView(withId(R.id.openSettingsButton))
+            .check(matches(allOf(isDisplayed(), withText("Open settings menu"))))
         onView(withId(R.id.hideDevToolsButton))
             .check(matches(allOf(isDisplayed(), withText("Hide dev tools"))))
 
@@ -112,7 +112,7 @@ class DeveloperToolsDialogTest {
     @Test
     fun showSettingsDialog() {
         openDialog()
-        onView(withId(R.id.settingsDialogButton)).perform(click())
+        onView(withId(R.id.openSettingsButton)).perform(click())
         onView(withText("Settings")).check(matches(isDisplayed()))
     }
 

@@ -20,6 +20,8 @@ class SettingsFragment : BaseFragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var settingsUI: SettingsUI
 
+    override var navigateToSettings: Int? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]

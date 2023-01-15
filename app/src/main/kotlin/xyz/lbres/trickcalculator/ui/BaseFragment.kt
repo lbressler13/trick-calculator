@@ -21,6 +21,12 @@ abstract class BaseFragment : NavHostFragment() {
     protected open var actionBarOnClick: (() -> Unit)? = null
 
     /**
+     * Resource ID for the action to navigate to the settings page from the current fragment
+     */
+    abstract var navigateToSettings: Int?
+        protected set
+
+    /**
      * Re-add action bar settings when fragment is shown.
      */
     override fun onResume() {

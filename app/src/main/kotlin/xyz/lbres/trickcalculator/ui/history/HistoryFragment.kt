@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
+import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
@@ -27,6 +28,8 @@ import kotlin.random.Random
 class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var sharedViewModel: SharedViewModel
+
+    override var navigateToSettings: Int? = R.id.navigateHistoryToSettings
 
     private var randomness: Int? = null
     private var history: History? = null

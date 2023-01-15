@@ -36,6 +36,7 @@ class CalculatorFragment : BaseFragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private val random = Random(Date().time)
     private val settings = Settings()
+    override var navigateToSettings: Int? = R.id.navigateCalculatorToSettings
 
     /**
      * Initialize fragment

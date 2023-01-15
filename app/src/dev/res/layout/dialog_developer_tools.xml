@@ -19,7 +19,7 @@
         android:text="@string/refresh_ui" />
 
     <Button
-        android:id="@+id/settingsDialogButton"
+        android:id="@+id/openSettingsButton"
         style="@style/DialogButton"
         android:text="@string/show_settings_dialog" />
 
