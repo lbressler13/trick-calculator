@@ -21,37 +21,45 @@ class SharedViewModel : ViewModel() {
      * Settings are represented as LiveData because fragments need to observe changes through the settings dialog
      */
 
-    private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
-    val applyDecimals: LiveData<Boolean> = _applyDecimals
-    fun setApplyDecimals(newValue: Boolean) { updateSetting(newValue, _applyDecimals) }
+    // private val _applyDecimals = MutableLiveData<Boolean>().apply { value = true }
+    // val applyDecimals: LiveData<Boolean> = _applyDecimals
+    // fun setApplyDecimals(newValue: Boolean) { updateSetting(newValue, _applyDecimals) }
+    var applyDecimals: Boolean = true
 
-    private val _applyParens = MutableLiveData<Boolean>().apply { value = true }
-    val applyParens: LiveData<Boolean> = _applyParens
-    fun setApplyParens(newValue: Boolean) { updateSetting(newValue, _applyParens) }
+//    private val _applyParens = MutableLiveData<Boolean>().apply { value = true }
+//    val applyParens: LiveData<Boolean> = _applyParens
+//    fun setApplyParens(newValue: Boolean) { updateSetting(newValue, _applyParens) }
+    var applyParens: Boolean = true
 
-    private val _clearOnError = MutableLiveData<Boolean>().apply { value = false }
-    val clearOnError: LiveData<Boolean> = _clearOnError
-    fun setClearOnError(newValue: Boolean) { updateSetting(newValue, _clearOnError) }
+    // private val _clearOnError = MutableLiveData<Boolean>().apply { value = false }
+    // val clearOnError: LiveData<Boolean> = _clearOnError
+    // fun setClearOnError(newValue: Boolean) { updateSetting(newValue, _clearOnError) }
+    var clearOnError: Boolean = false
 
-    private val _historyRandomness = MutableLiveData<Int>().apply { value = 1 }
-    val historyRandomness: LiveData<Int> = _historyRandomness
-    fun setHistoryRandomness(newValue: Int) { updateSetting(newValue, _historyRandomness) }
+    // private val _historyRandomness = MutableLiveData<Int>().apply { value = 1 }
+    // val historyRandomness: LiveData<Int> = _historyRandomness
+    // fun setHistoryRandomness(newValue: Int) { updateSetting(newValue, _historyRandomness) }
+    var historyRandomness: Int = 1
 
-    private val _showSettingsButton = MutableLiveData<Boolean>().apply { value = false }
-    val showSettingsButton: LiveData<Boolean> = _showSettingsButton
-    fun setShowSettingsButton(newValue: Boolean) { updateSetting(newValue, _showSettingsButton) }
+    // private val _showSettingsButton = MutableLiveData<Boolean>().apply { value = false }
+    // val showSettingsButton: LiveData<Boolean> = _showSettingsButton
+    // fun setShowSettingsButton(newValue: Boolean) { updateSetting(newValue, _showSettingsButton) }
+    var showSettingsButton: Boolean = false
 
-    private val _shuffleComputation = MutableLiveData<Boolean>().apply { value = false }
-    val shuffleComputation: LiveData<Boolean> = _shuffleComputation
-    fun setShuffleComputation(newValue: Boolean) { updateSetting(newValue, _shuffleComputation) }
+    // private val _shuffleComputation = MutableLiveData<Boolean>().apply { value = false }
+    // val shuffleComputation: LiveData<Boolean> = _shuffleComputation
+    // fun setShuffleComputation(newValue: Boolean) { updateSetting(newValue, _shuffleComputation) }
+    var shuffleComputation: Boolean = false
 
-    private val _shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
-    val shuffleNumbers: LiveData<Boolean> = _shuffleNumbers
-    fun setShuffleNumbers(newValue: Boolean) { updateSetting(newValue, _shuffleNumbers) }
+    // private val _shuffleNumbers = MutableLiveData<Boolean>().apply { value = false }
+    // val shuffleNumbers: LiveData<Boolean> = _shuffleNumbers
+    // fun setShuffleNumbers(newValue: Boolean) { updateSetting(newValue, _shuffleNumbers) }
+    var shuffleNumbers: Boolean = false
 
-    private val _shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
-    val shuffleOperators: LiveData<Boolean> = _shuffleOperators
-    fun setShuffleOperators(newValue: Boolean) { updateSetting(newValue, _shuffleOperators) }
+    // private val _shuffleOperators = MutableLiveData<Boolean>().apply { value = true }
+    // val shuffleOperators: LiveData<Boolean> = _shuffleOperators
+    // fun setShuffleOperators(newValue: Boolean) { updateSetting(newValue, _shuffleOperators) }
+    var shuffleOperators: Boolean = true
 
     /**
      * All settings
@@ -62,41 +70,41 @@ class SharedViewModel : ViewModel() {
      */
     fun resetSettings() {
         val defaults = Settings()
-        setApplyDecimals(defaults.applyDecimals)
-        setApplyParens(defaults.applyParens)
-        setClearOnError(defaults.clearOnError)
-        setHistoryRandomness(defaults.historyRandomness)
-        setShuffleComputation(defaults.shuffleComputation)
-        setShuffleNumbers(defaults.shuffleNumbers)
-        setShuffleOperators(defaults.shuffleOperators)
+        applyDecimals = defaults.applyDecimals
+        applyParens = defaults.applyParens
+        clearOnError = defaults.clearOnError
+        historyRandomness = defaults.historyRandomness
+        shuffleComputation = defaults.shuffleComputation
+        shuffleNumbers = defaults.shuffleNumbers
+        shuffleOperators = defaults.shuffleOperators
     }
 
     /**
      * Select random settings, clear on error, and hide settings button on calculator fragment
      */
     fun randomizeSettings() {
-        setApplyDecimals(random.nextBoolean())
-        setApplyParens(random.nextBoolean())
-        setHistoryRandomness((0..3).random())
-        setShuffleComputation(random.nextBoolean())
-        setShuffleNumbers(random.nextBoolean())
-        setShuffleOperators(random.nextBoolean())
+        applyDecimals = random.nextBoolean()
+        applyParens = random.nextBoolean()
+        historyRandomness = (0..3).random(random)
+        shuffleComputation = random.nextBoolean()
+        shuffleNumbers = random.nextBoolean()
+        shuffleOperators = random.nextBoolean()
 
-        setClearOnError(true)
-        setShowSettingsButton(false)
+        clearOnError = true
+        showSettingsButton = false
     }
 
     /**
      * Set the calculator to use behave as a normal calculator. Does not affect settings button.
      */
     fun setStandardSettings() {
-        setApplyDecimals(true)
-        setApplyParens(true)
-        setClearOnError(false)
-        setHistoryRandomness(0)
-        setShuffleComputation(false)
-        setShuffleNumbers(false)
-        setShuffleOperators(false)
+        applyDecimals = true
+        applyParens = true
+        clearOnError = false
+        historyRandomness = 0
+        shuffleComputation = false
+        shuffleNumbers = false
+        shuffleOperators = false
     }
 
     /**

@@ -31,7 +31,8 @@ class HistoryFragment : BaseFragment() {
 
     override var navigateToSettings: Int? = R.id.navigateHistoryToSettings
 
-    private var randomness: Int? = null
+    // TODO don't need these in vars
+    private var randomness: Int = 1
     private var history: History? = null
     private var randomHistory: History? = null
 
@@ -46,21 +47,13 @@ class HistoryFragment : BaseFragment() {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
+        randomness = sharedViewModel.historyRandomness
+
         sharedViewModel.history.observe(viewLifecycleOwner) {
             history = it
-            if (history != null && randomness != null) {
-                setRandomHistory()
-                setUI()
-            }
+            setRandomHistory()
+            setUI()
         }
-        sharedViewModel.historyRandomness.observe(viewLifecycleOwner) {
-            randomness = it
-            if (history != null && randomness != null) {
-                setRandomHistory()
-                setUI()
-            }
-        }
-
         binding.closeButton.root.setOnClickListener { requireBaseActivity().popBackStack() }
 
         return binding.root

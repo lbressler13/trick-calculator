@@ -17,8 +17,6 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.settings.Settings
-import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.OperatorFunction
@@ -35,7 +33,6 @@ class CalculatorFragment : BaseFragment() {
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private val random = Random(Date().time)
-    private val settings = Settings()
     override var navigateToSettings: Int? = R.id.navigateCalculatorToSettings
 
     /**
@@ -53,14 +50,12 @@ class CalculatorFragment : BaseFragment() {
 
         // observe changes in viewmodels
         sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
-        initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
-        // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
-        sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
 
         // init UI
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
         binding.infoButton.setOnClickListener { infoButtonOnClick() }
+        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
         binding.settingsButton.setOnClickListener { settingsButtonOnClick() }
         binding.historyButton.setOnClickListener { historyButtonOnClick() }
         binding.useLastHistoryButton.setOnClickListener { useLastHistoryItemOnClick() }
@@ -74,13 +69,6 @@ class CalculatorFragment : BaseFragment() {
      */
     private val historyObserver: Observer<History> = Observer {
         binding.useLastHistoryButton.isVisible = it.isNotEmpty()
-    }
-
-    /**
-     * Show or hide settings button
-     */
-    private val showSettingsButtonObserver: Observer<Boolean> = Observer {
-        binding.settingsButton.isVisible = it
     }
 
     /**
@@ -126,7 +114,7 @@ class CalculatorFragment : BaseFragment() {
             // set action for each operator
             // only include exponent if exp is used
             val operators = when {
-                !settings.shuffleOperators -> listOf("+", "-", "x", "/", "^")
+                !sharedViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
                 !computationViewModel.computeText.contains("^") -> listOf(
                     "+",
                     "-",
@@ -155,7 +143,7 @@ class CalculatorFragment : BaseFragment() {
             )
 
             val numberOrder =
-                ternaryIf(settings.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
+                ternaryIf(sharedViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
 
             // try to run computation, and update compute text and error message
             try {
@@ -166,9 +154,9 @@ class CalculatorFragment : BaseFragment() {
                         operatorRounds,
                         performOperation,
                         numberOrder,
-                        settings.applyParens,
-                        settings.applyDecimals,
-                        settings.shuffleComputation
+                        sharedViewModel.applyParens,
+                        sharedViewModel.applyDecimals,
+                        sharedViewModel.shuffleComputation
                     )
 
                 computationViewModel.setResult(null, computedValue)
@@ -188,7 +176,7 @@ class CalculatorFragment : BaseFragment() {
                     message
                 }
 
-                computationViewModel.setResult(error, null, settings.clearOnError)
+                computationViewModel.setResult(error, null, sharedViewModel.clearOnError)
                 updateUI()
             }
 
