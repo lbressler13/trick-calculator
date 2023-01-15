@@ -4,7 +4,6 @@
 
     <!-- Developer Tools -->
     <string name="title_dev_tools">Developer Tools</string>
-    <string name="dev_tools_button">{ }</string>
     <string name="clear_history">Clear history</string>
     <string name="refresh_ui">Refresh UI</string>
     <string name="show_settings_dialog">Open settings menu</string>

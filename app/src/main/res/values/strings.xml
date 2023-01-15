@@ -72,6 +72,7 @@
     <string name="settings_cd">Settings</string>
     <string name="times_cd">Times symbol</string>
 
-    <!-- Other -->
+    <!-- Dev Tools -->
     <string name="dev_tools_key">DeveloperToolsDismissed</string>
+    <string name="dev_tools_button">{ }</string>
 </resources>
