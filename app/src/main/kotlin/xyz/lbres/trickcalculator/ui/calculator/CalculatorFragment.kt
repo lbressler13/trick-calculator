@@ -254,11 +254,6 @@ class CalculatorFragment : BaseFragment() {
         binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
     }
 
-    // TODO
-//    override fun handleSettingsChange() {
-//        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
-//    }
-
     /**
      * Scroll main text to top of text box
      */

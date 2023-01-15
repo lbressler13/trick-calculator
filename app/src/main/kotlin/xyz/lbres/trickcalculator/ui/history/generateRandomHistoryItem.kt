@@ -1,6 +1,7 @@
 package xyz.lbres.trickcalculator.ui.history
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.int.ext.ifZero
 import xyz.lbres.kotlinutils.int.ext.isZero
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.WeightedList
@@ -131,7 +132,7 @@ private fun generateExactFraction(
     }
 
     val denominatorRange = random.nextFromWeightedList(weightedRanges)
-    val denominator = denominatorRange.random()
+    val denominator = denominatorRange.random().ifZero { 1 }
     return ExactFraction(numerator, denominator)
 }
 

@@ -43,6 +43,8 @@ class SettingsFragment : BaseFragment() {
      */
     private var standardFunctionPressed: Boolean = false
 
+    private var initialHistoryRandomness: Int = 1
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
@@ -96,9 +98,9 @@ class SettingsFragment : BaseFragment() {
         binding.closeButton.root.setOnClickListener { closeFragment() }
 
         // Save settings when another fragment is opened. Preserves current settings when dialog is opened
-        childFragmentManager.addFragmentOnAttachListener { _, _ ->
-            saveSettingsToViewModel()
-        }
+        // childFragmentManager.addFragmentOnAttachListener { _, _ ->
+        // saveSettingsToViewModel()
+        // }
     }
 
     private fun saveSettingsToViewModel() {
@@ -129,7 +131,8 @@ class SettingsFragment : BaseFragment() {
                 sharedViewModel.shuffleOperators = binding.shuffleOperatorsSwitch.isChecked
 
                 val checkedId = binding.historyRandomnessGroup.checkedRadioButtonId
-                sharedViewModel.historyRandomness = historyButtons.indexOfFirst { it.id == checkedId }
+                val newHistoryRandomness = historyButtons.indexOfFirst { it.id == checkedId }
+                sharedViewModel.setHistoryRandomness(newHistoryRandomness)
             }
         }
     }

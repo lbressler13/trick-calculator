@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,12 +30,9 @@ import kotlin.random.Random
 class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
     override var navigateToSettings: Int? = R.id.navigateHistoryToSettings
-
-    // saved to prevent unnecessary changes when opening/closing settings dialog
-    private var randomness: Int = 0
-    private var history: History = emptyList()
 
     /**
      * Initialize fragment
@@ -46,23 +44,29 @@ class HistoryFragment : BaseFragment() {
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
-        randomness = sharedViewModel.historyRandomness
-        history = sharedViewModel.history
-
+        updateValues()
         setUI()
 
         binding.closeButton.root.setOnClickListener { closeFragment() }
+        sharedViewModel.uiValuesChanged.observe(viewLifecycleOwner, changeObserver)
 
         return binding.root
     }
 
-    // TODO don't reshuffle when opening/closing settings
+    private val changeObserver = Observer<Boolean> {
+        if (it) {
+            updateValues()
+            setUI()
+            sharedViewModel.historyRandomnessApplied()
+        }
+    }
 
     /**
      * Generate history, using the degree of randomness specified in the viewmodel
      */
-    private fun getRandomHistory(): History? {
+    private fun createRandomHistory(): History? {
         return when (sharedViewModel.historyRandomness) {
             0 -> sharedViewModel.history // no randomness
             1 -> sharedViewModel.history.shuffled() // shuffled order
@@ -117,10 +121,12 @@ class HistoryFragment : BaseFragment() {
      * Set UI based on randomHistory
      */
     private fun setUI() {
-        val randomHistory = getRandomHistory()
+        val randomHistory = historyViewModel.randomizedHistory
+        val displayError = randomHistory?.isEmpty() == true && historyViewModel.randomness == 3
+
         when {
             // error
-            randomHistory == null -> {
+            displayError -> {
                 // set error message to blink
                 val blinking: Animation = AlphaAnimation(0.0f, 1.0f)
                 blinking.duration = 200
@@ -135,7 +141,7 @@ class HistoryFragment : BaseFragment() {
                 binding.errorMessage.visible()
             }
             // empty
-            randomHistory.isEmpty() -> {
+            randomHistory?.isEmpty() == true -> {
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.visible()
                 binding.errorMessage.gone()
@@ -143,7 +149,7 @@ class HistoryFragment : BaseFragment() {
             // non-empty
             else -> {
                 val recycler: RecyclerView = binding.itemsRecycler
-                val adapter = HistoryItemAdapter(randomHistory)
+                val adapter = HistoryItemAdapter(randomHistory ?: emptyList())
 
                 recycler.adapter = adapter
                 recycler.layoutManager = LinearLayoutManager(requireContext())
@@ -155,19 +161,25 @@ class HistoryFragment : BaseFragment() {
         }
     }
 
-    override fun handleHistoryChange(previousHistory: History) {
-        if (previousHistory != sharedViewModel.history) {
-            history = previousHistory
-            setUI()
+    private fun updateValues() {
+        val matchedRandomness = historyViewModel.randomness == sharedViewModel.historyRandomness
+        val matchedHistory = historyViewModel.history == sharedViewModel.history
+        if (historyViewModel.randomizedHistory == null || !matchedRandomness || !matchedHistory) {
+            historyViewModel.randomness = sharedViewModel.historyRandomness
+            historyViewModel.setHistory(sharedViewModel.history)
+            historyViewModel.randomizedHistory = createRandomHistory()
         }
     }
 
-    // TODO
-//    override fun handleSettingsChange() {
-//        AppLogger.e("randomness", Pair(randomness, sharedViewModel.historyRandomness).toString())
-//        if (randomness != sharedViewModel.historyRandomness) {
-//            randomness = sharedViewModel.historyRandomness
-//            setUI()
-//        }
-//    }
+    override fun handleHistoryChange(previousHistory: History) {
+        updateValues()
+        setUI()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        historyViewModel.setHistory(null)
+        historyViewModel.randomness = null
+        historyViewModel.randomizedHistory = null
+    }
 }

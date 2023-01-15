@@ -56,15 +56,11 @@ abstract class BaseFragment : NavHostFragment() {
 
         devToolsContext = FragmentDevToolsContext(
             childFragmentManager,
-            viewLifecycleOwner,
-            { handleHistoryChange(it) },
-            { handleSettingsChange() }
-        )
+        ) { handleHistoryChange(it) }
         requireBaseActivity().fragmentContext = devToolsContext
     }
 
     protected open fun handleHistoryChange(previousHistory: History) {}
-    protected open fun handleSettingsChange() {}
 
     fun closeFragment() = requireBaseActivity().popBackStack()
 
