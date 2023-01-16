@@ -17,6 +17,8 @@ import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.openDialog
+import xyz.lbres.trickcalculator.testutils.closeDialog
 
 private val spinner = onView(withId(R.id.devToolsTimeSpinner))
 private val hideDevToolsButton = onView(withId(R.id.hideDevToolsButton))

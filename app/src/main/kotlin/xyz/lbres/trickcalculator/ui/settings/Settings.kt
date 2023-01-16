@@ -1,5 +1,8 @@
 package xyz.lbres.trickcalculator.ui.settings
 
+/**
+ * TODO
+ */
 data class Settings(
     var applyDecimals: Boolean,
     var applyParens: Boolean,

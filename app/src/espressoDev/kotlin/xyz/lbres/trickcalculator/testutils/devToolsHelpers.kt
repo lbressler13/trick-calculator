@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.devtools
+package xyz.lbres.trickcalculator.testutils
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -18,4 +18,9 @@ fun openDialog() {
  */
 fun closeDialog() {
     onView(withText("Done")).perform(click())
+}
+
+fun openSettingsFromDialog() {
+    openDialog()
+    onView(withId(R.id.openSettingsButton)).perform(click())
 }

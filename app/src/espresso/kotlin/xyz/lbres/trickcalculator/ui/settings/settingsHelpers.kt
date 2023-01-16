@@ -35,3 +35,22 @@ fun checkInitialSettings(checkSettingsButton: Boolean = true) {
         onView(withId(R.id.settingsButtonSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
     }
 }
+
+/**
+ * Check that settings match the config needed to function as a standard calculator.
+ */
+fun checkStandardSettings() {
+    onView(withId(R.id.applyParensSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
+    onView(withId(R.id.applyDecimalsSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
+    onView(withId(R.id.shuffleComputationSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+    onView(withId(R.id.shuffleNumbersSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+    onView(withId(R.id.shuffleOperatorsSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+
+    onView(withId(R.id.clearOnErrorSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
+
+    onView(withId(R.id.historyRandomnessGroup)).check(matches(isDisplayed()))
+    onView(withId(R.id.historyButton0)).check(matches(isChecked()))
+    onView(withId(R.id.historyButton1)).check(matches(isNotChecked()))
+    onView(withId(R.id.historyButton2)).check(matches(isNotChecked()))
+    onView(withId(R.id.historyButton3)).check(matches(isNotChecked()))
+}
