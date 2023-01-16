@@ -27,8 +27,6 @@ abstract class BaseFragment : NavHostFragment() {
     abstract var navigateToSettings: Int?
         protected set
 
-    lateinit var devToolsContext: FragmentDevToolsContext
-
     /**
      * Re-add action bar settings when fragment is shown.
      */
@@ -54,10 +52,9 @@ abstract class BaseFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        devToolsContext = FragmentDevToolsContext(
+        FragmentDevToolsContext.currentContext = FragmentDevToolsContext(
             childFragmentManager,
         ) { handleHistoryChange(it) }
-        requireBaseActivity().fragmentContext = devToolsContext
     }
 
     protected open fun handleHistoryChange(previousHistory: History) {}

@@ -15,7 +15,7 @@ import xyz.lbres.trickcalculator.utils.AppLogger
  * Defaults to 3.
  */
 // TODO restore default = 3
-class RetryRule(val maxRetries: Int = 0) : TestRule {
+class RetryRule(val maxRetries: Int = 1) : TestRule {
     /**
      * Apply rule to a test with a given description
      *

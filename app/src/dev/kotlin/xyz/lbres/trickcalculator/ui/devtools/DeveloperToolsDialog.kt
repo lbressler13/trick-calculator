@@ -18,6 +18,7 @@ import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
+import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -58,7 +59,7 @@ class DeveloperToolsDialog : DialogFragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        val parentContext = (requireParentFragment() as? BaseFragment)?.devToolsContext
+        val parentContext = FragmentDevToolsContext.currentContext
 
         binding.clearHistoryButton.setOnClickListener {
             val previousHistory = List(viewModel.history.size) { viewModel.history[it] }

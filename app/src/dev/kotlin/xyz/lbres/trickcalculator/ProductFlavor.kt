@@ -1,5 +1,6 @@
 package xyz.lbres.trickcalculator
 
+import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
 import xyz.lbres.trickcalculator.ui.devtools.DeveloperToolsDialog
 import xyz.lbres.trickcalculator.utils.visible
 
@@ -19,7 +20,7 @@ object ProductFlavor : ProductFlavorConfig {
 
         val dialog = DeveloperToolsDialog()
         devToolsButton.setOnClickListener {
-            val fragmentContext = activity.fragmentContext
+            val fragmentContext = FragmentDevToolsContext.currentContext
 
             if (fragmentContext != null) {
                 val fragmentManager = fragmentContext.childFragmentManager

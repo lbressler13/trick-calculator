@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.databinding.ActivityBaseBinding
-import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
@@ -17,9 +16,6 @@ class BaseActivity : AppCompatActivity() {
     lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
     private lateinit var sharedViewModel: SharedViewModel
-
-    // TODO don't need to store this in activity, can just use current fragment (?)
-    var fragmentContext: FragmentDevToolsContext? = null
 
     /**
      * Initialize activity
