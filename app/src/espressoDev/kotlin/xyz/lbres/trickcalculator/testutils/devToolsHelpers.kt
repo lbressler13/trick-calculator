@@ -9,7 +9,7 @@ import xyz.lbres.trickcalculator.R
 /**
  * Open dialog using dev tools button
  */
-fun openDialog() {
+fun openDevTools() {
     onView(withId(R.id.devToolsButton)).perform(click())
 }
 
@@ -21,6 +21,12 @@ fun closeDialog() {
 }
 
 fun openSettingsFromDialog() {
-    openDialog()
+    openDevTools()
     onView(withId(R.id.openSettingsButton)).perform(click())
+}
+
+fun doClearHistory() {
+    openDevTools()
+    onView(withText("Clear history")).perform(click())
+    closeDialog()
 }

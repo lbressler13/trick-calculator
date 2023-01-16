@@ -18,12 +18,7 @@ class BaseActivity : AppCompatActivity() {
     private var isDarkMode = true
     private lateinit var sharedViewModel: SharedViewModel
 
-    // fragment manager used to show/hide dev tools dialog, set by the current fragment
-    // var fragmentManager: FragmentManager? = null
-    // var handleDevToolsDismissed: () -> Unit = {}
-    // var fragmentLifecycleOwner: LifecycleOwner? = null
-
-    // TODO don't need to store this in activity, can just use parent fragment in dialog
+    // TODO don't need to store this in activity, can just use current fragment (?)
     var fragmentContext: FragmentDevToolsContext? = null
 
     /**
