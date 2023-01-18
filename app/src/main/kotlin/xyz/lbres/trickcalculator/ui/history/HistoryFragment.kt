@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,14 +37,26 @@ class HistoryFragment : BaseFragment() {
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
+        historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
 
         historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
         setUI()
 
+        sharedViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, liveDataObserver)
         binding.closeButton.root.setOnClickListener { closeFragment() }
 
         return binding.root
+    }
+
+    /**
+     * Indirectly observe change to history randomness setting
+     */
+    private val liveDataObserver = Observer<Boolean> {
+        if (it) {
+            historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
+            setUI()
+            sharedViewModel.historyRandomnessObserved()
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package xyz.lbres.trickcalculator.ui.shared
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.ui.settings.Settings
@@ -14,16 +16,42 @@ class SharedViewModel : ViewModel() {
     private val random = Random(Date().time)
 
     /**
+     * LiveData to indirectly observe changes to [historyRandomness]
+     */
+    private val _historyRandomnessUpdated = MutableLiveData<Boolean>().apply { value = false }
+    val historyRandomnessUpdated: LiveData<Boolean> = _historyRandomnessUpdated
+
+    /**
      * Individual settings
      */
     var applyDecimals: Boolean = true
     var applyParens: Boolean = true
     var clearOnError: Boolean = false
     var historyRandomness: Int = 1
+        private set
     var showSettingsButton: Boolean = false
     var shuffleComputation: Boolean = false
     var shuffleNumbers: Boolean = false
     var shuffleOperators: Boolean = true
+
+    /**
+     * Update value of [historyRandomness] and update LiveData
+     *
+     * @param newValue [Int]
+     */
+    fun setHistoryRandomness(newValue: Int) {
+        if (newValue != historyRandomness) {
+            historyRandomness = newValue
+            _historyRandomnessUpdated.value = true
+        }
+    }
+
+    /**
+     * Reset LiveData to track that history randomness was observed
+     */
+    fun historyRandomnessObserved() {
+        _historyRandomnessUpdated.value = false
+    }
 
     /**
      * All settings
@@ -37,7 +65,7 @@ class SharedViewModel : ViewModel() {
         applyDecimals = defaults.applyDecimals
         applyParens = defaults.applyParens
         clearOnError = defaults.clearOnError
-        historyRandomness = defaults.historyRandomness
+        setHistoryRandomness(defaults.historyRandomness)
         shuffleComputation = defaults.shuffleComputation
         shuffleNumbers = defaults.shuffleNumbers
         shuffleOperators = defaults.shuffleOperators
@@ -53,7 +81,8 @@ class SharedViewModel : ViewModel() {
         shuffleNumbers = random.nextBoolean()
         shuffleOperators = random.nextBoolean()
 
-        historyRandomness = (0..3).random(random)
+        val newHistoryRandomness = (0..3).random(random)
+        setHistoryRandomness(newHistoryRandomness)
 
         clearOnError = true
         showSettingsButton = false
@@ -66,7 +95,7 @@ class SharedViewModel : ViewModel() {
         applyDecimals = true
         applyParens = true
         clearOnError = false
-        historyRandomness = 0
+        setHistoryRandomness(0)
         shuffleComputation = false
         shuffleNumbers = false
         shuffleOperators = false
