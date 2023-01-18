@@ -1,7 +1,16 @@
 package xyz.lbres.trickcalculator.ui.settings
 
 /**
- * TODO
+ * Object containing all settings
+ *
+ * @param applyDecimals [Boolean]
+ * @param applyParens [Boolean]
+ * @param clearOnError [Boolean]
+ * @param historyRandomness [Int]
+ * @param showSettingsButton [Boolean]
+ * @param shuffleComputation [Boolean]
+ * @param shuffleNumbers [Boolean]
+ * @param shuffleOperators [Boolean]
  */
 data class Settings(
     var applyDecimals: Boolean,
@@ -13,6 +22,9 @@ data class Settings(
     var shuffleNumbers: Boolean,
     var shuffleOperators: Boolean,
 ) {
+    /**
+     * Constructor with default values
+     */
     constructor() : this(
         applyDecimals = true,
         applyParens = true,
@@ -24,6 +36,9 @@ data class Settings(
         shuffleOperators = true
     )
 
+    /**
+     * Function defining tow [Settings] objects as equal when all settings are the same
+     */
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is Settings) {
             return false

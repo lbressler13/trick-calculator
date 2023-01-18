@@ -15,8 +15,11 @@ import kotlin.random.Random
 class SharedViewModel : ViewModel() {
     private val random = Random(Date().time)
 
-    private val _uiValuesChanged = MutableLiveData<Boolean>().apply { value = false }
-    val uiValuesChanged: LiveData<Boolean> = _uiValuesChanged
+    /**
+     * LiveData to indirectly observe changes to [historyRandomness]
+     */
+    private val _historyRandomnessUpdated = MutableLiveData<Boolean>().apply { value = false }
+    val historyRandomnessUpdated: LiveData<Boolean> = _historyRandomnessUpdated
 
     /**
      * Individual settings
@@ -31,15 +34,23 @@ class SharedViewModel : ViewModel() {
     var shuffleNumbers: Boolean = false
     var shuffleOperators: Boolean = true
 
+    /**
+     * Update value of [historyRandomness] and update LiveData
+     *
+     * @param newValue [Int]
+     */
     fun setHistoryRandomness(newValue: Int) {
         if (newValue != historyRandomness) {
             historyRandomness = newValue
-            _uiValuesChanged.value = true
+            _historyRandomnessUpdated.value = true
         }
     }
 
+    /**
+     * Reset LiveData to track that history randomness was changed
+     */
     fun historyRandomnessApplied() {
-        _uiValuesChanged.value = false
+        _historyRandomnessUpdated.value = false
     }
 
     /**
@@ -97,10 +108,18 @@ class SharedViewModel : ViewModel() {
     private val _history: MutableList<HistoryItem> = mutableListOf()
     val history: History = _history
 
+    /**
+     * Add new item to history
+     *
+     * @param newItem [HistoryItem]
+     */
     fun addToHistory(newItem: HistoryItem) {
         _history.add(newItem)
     }
 
+    /**
+     * Clear all values in history
+     */
     fun clearHistory() {
         _history.clear()
     }

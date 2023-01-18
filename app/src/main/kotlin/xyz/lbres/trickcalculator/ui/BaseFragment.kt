@@ -3,7 +3,6 @@ package xyz.lbres.trickcalculator.ui
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.utils.History
 
 /**
  * Abstract fragment to handle common functionality involving the BaseActivity
@@ -24,8 +23,7 @@ abstract class BaseFragment : NavHostFragment() {
     /**
      * Resource ID for the action to navigate to the settings page from the current fragment
      */
-    abstract var navigateToSettings: Int?
-        protected set
+    abstract val navigateToSettings: Int?
 
     /**
      * Re-add action bar settings when fragment is shown.
@@ -54,11 +52,17 @@ abstract class BaseFragment : NavHostFragment() {
 
         FragmentDevToolsContext.currentContext = FragmentDevToolsContext(
             childFragmentManager,
-        ) { handleHistoryChange(it) }
+        ) { handleHistoryCleared() }
     }
 
-    protected open fun handleHistoryChange(previousHistory: History) {}
+    /**
+     * Callback to call when history is cleared through dev tools
+     */
+    protected open fun handleHistoryCleared() {}
 
+    /**
+     * Close the fragment
+     */
     fun closeFragment() = requireBaseActivity().popBackStack()
 
     /**

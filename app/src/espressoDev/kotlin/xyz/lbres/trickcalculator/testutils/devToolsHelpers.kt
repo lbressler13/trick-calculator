@@ -20,11 +20,17 @@ fun closeDialog() {
     onView(withText("Done")).perform(click())
 }
 
+/**
+ * Open settings fragment through dev tools dialog
+ */
 fun openSettingsFromDialog() {
     openDevTools()
     onView(withId(R.id.openSettingsButton)).perform(click())
 }
 
+/**
+ * Open dev tools dialog, clear history, and close dev tools dialog
+ */
 fun doClearHistory() {
     openDevTools()
     onView(withText("Clear history")).perform(click())

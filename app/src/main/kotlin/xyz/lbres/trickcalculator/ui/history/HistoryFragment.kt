@@ -32,7 +32,7 @@ class HistoryFragment : BaseFragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var historyViewModel: HistoryViewModel
 
-    override var navigateToSettings: Int? = R.id.navigateHistoryToSettings
+    override val navigateToSettings = R.id.navigateHistoryToSettings
 
     /**
      * Initialize fragment
@@ -50,11 +50,14 @@ class HistoryFragment : BaseFragment() {
         setUI()
 
         binding.closeButton.root.setOnClickListener { closeFragment() }
-        sharedViewModel.uiValuesChanged.observe(viewLifecycleOwner, changeObserver)
+        sharedViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, changeObserver)
 
         return binding.root
     }
 
+    /**
+     * Observer for change to history randomness setting
+     */
     private val changeObserver = Observer<Boolean> {
         if (it) {
             updateValues()
@@ -67,12 +70,12 @@ class HistoryFragment : BaseFragment() {
      * Generate history, using the degree of randomness specified in the viewmodel
      */
     private fun createRandomHistory(): History? {
-        return when (sharedViewModel.historyRandomness) {
-            0 -> sharedViewModel.history // no randomness
-            1 -> sharedViewModel.history.shuffled() // shuffled order
+        return when (historyViewModel.randomness) {
+            0 -> historyViewModel.history // no randomness
+            1 -> historyViewModel.history!!.shuffled() // shuffled order
             2 -> shuffleValues() // shuffled values
-            3 -> generateRandomHistory() // random generation
-            else -> sharedViewModel.history
+            3 -> generateRandomHistory() ?: emptyList() // random generation
+            else -> historyViewModel.history
         }
     }
 
@@ -83,7 +86,7 @@ class HistoryFragment : BaseFragment() {
      * @return [History]: history where computations and values have been shuffled
      */
     private fun shuffleValues(): History {
-        val history = sharedViewModel.history
+        val history = historyViewModel.history!!
 
         val computations: List<StringList> = history.map { it.computation }.shuffled()
         val values: List<Pair<ExactFraction?, String?>> =
@@ -108,17 +111,17 @@ class HistoryFragment : BaseFragment() {
      * @return [History]: possibly null history of generated computations, with same length as real history (if not null)
      */
     private fun generateRandomHistory(): History? {
-        val probabilityError = ternaryIf(sharedViewModel.history.isEmpty(), 1f, 0.2f)
+        val probabilityError = ternaryIf(historyViewModel.history!!.isEmpty(), 1f, 0.2f)
 
         if (Random(Date().time).nextBoolean(probabilityError)) {
             return null
         }
 
-        return List(sharedViewModel.history.size) { generateRandomHistoryItem() }
+        return List(historyViewModel.history!!.size) { generateRandomHistoryItem() }
     }
 
     /**
-     * Set UI based on randomHistory
+     * Set UI based on randomized history
      */
     private fun setUI() {
         val randomHistory = historyViewModel.randomizedHistory
@@ -161,6 +164,9 @@ class HistoryFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Update values in history ViewModel and create new randomized history if needed
+     */
     private fun updateValues() {
         val matchedRandomness = historyViewModel.randomness == sharedViewModel.historyRandomness
         val matchedHistory = historyViewModel.history == sharedViewModel.history
@@ -171,15 +177,19 @@ class HistoryFragment : BaseFragment() {
         }
     }
 
-    override fun handleHistoryChange(previousHistory: History) {
+    /**
+     * Update UI when history is cleared
+     */
+    override fun handleHistoryCleared() {
         updateValues()
         setUI()
     }
 
+    /**
+     * Clear values in history viewmodel when destroying fragment
+     */
     override fun onDestroy() {
         super.onDestroy()
-        historyViewModel.setHistory(null)
-        historyViewModel.randomness = null
-        historyViewModel.randomizedHistory = null
+        historyViewModel.clearValues()
     }
 }

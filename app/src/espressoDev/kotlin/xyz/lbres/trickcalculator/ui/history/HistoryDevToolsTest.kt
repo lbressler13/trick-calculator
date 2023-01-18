@@ -7,7 +7,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,14 +14,10 @@ import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.doClearHistory
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
-import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
-import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
@@ -97,7 +92,7 @@ class HistoryDevToolsTest {
         noHistoryMessage.check(matches(isDisplayed()))
         closeFragment() // history fragment
 
-        // long history to reduce likeliness of being in order
+        // long history to reduce likeliness of being ordered on randomness 1 or 2
         history.add(generateTestItem("1+2") { "3" })
         history.add(generateTestItem("-1/2", "3") { "2.5" })
         history.add(generateTestItem("+") { "Syntax error" })
@@ -145,8 +140,6 @@ class HistoryDevToolsTest {
 
     @Test
     fun historyNotReshuffled() {
-        val recyclerId = R.id.itemsRecycler
-
         val history = TestHistory()
         history.add(generateTestItem("1+2") { "3" })
         history.add(generateTestItem("-1/2", "3") { "2.5" })
@@ -155,35 +148,7 @@ class HistoryDevToolsTest {
         history.add(generateTestItem("(1+2)(4-2)") { "6" })
 
         openHistoryFragment()
-        openSettingsFromDialog()
-        onView(withId(R.id.historyButton2)).perform(click())
-        closeFragment()
-
-        for (position in 0 until history.size) {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-            onView(withViewHolder(recyclerId, position))
-                .perform(
-                    saveTextAtPosition(position, R.id.computeText),
-                    saveTextAtPosition(position, R.id.resultText),
-                    saveTextAtPosition(position, R.id.errorText)
-                )
-        }
-
-        openSettingsFromDialog()
-        closeFragment()
-
-        for (position in 0 until history.size) {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
-            onView(withViewHolder(recyclerId, position))
-                .check(
-                    matches(
-                        allOf(
-                            withSavedTextAtPosition(position, R.id.computeText),
-                            withSavedTextAtPosition(position, R.id.resultText),
-                            withSavedTextAtPosition(position, R.id.errorText)
-                        )
-                    )
-                )
-        }
+        runSingleNotReshuffledCheck(history, 2) // start with 2, because initial randomness is 1
+        runSingleNotReshuffledCheck(history, 1)
     }
 }

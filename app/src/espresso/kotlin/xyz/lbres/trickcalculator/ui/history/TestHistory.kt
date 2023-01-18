@@ -9,7 +9,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
 import xyz.lbres.kotlinutils.collection.ext.toMultiSet
-import xyz.lbres.kotlinutils.collection.ext.toMutableMultiSet
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
@@ -54,26 +53,24 @@ class TestHistory {
 
         when (randomness) {
             0, 1 -> {
-                val displayedSet = displayedValues.toMutableMultiSet()
-                val computeHistorySet = computeHistory.toMutableMultiSet()
+                val displayedSet = displayedValues.toMultiSet()
+                val computeHistorySet = computeHistory.toMultiSet()
                 allDisplayed = displayedSet == computeHistorySet
 
-                // TODO replace with minus operation when available
-                computeHistorySet.removeAll(displayedSet)
-                errorMessage = "ViewHolders with text $computeHistorySet not found. History: $computeHistory"
+                val diff = computeHistorySet - displayedSet
+                errorMessage = "ViewHolders with text $diff not found. History: $computeHistory"
             }
             2 -> {
-                val computations = computeHistory.map { it.first }.toMutableMultiSet()
-                val results = computeHistory.map { it.second }.toMutableMultiSet()
+                val computations = computeHistory.map { it.first }.toMultiSet()
+                val results = computeHistory.map { it.second }.toMultiSet()
 
-                val displayedComputations = displayedValues.map { it.first }.toMutableMultiSet()
-                val displayedResults = displayedValues.map { it.second }.toMutableMultiSet()
+                val displayedComputations = displayedValues.map { it.first }.toMultiSet()
+                val displayedResults = displayedValues.map { it.second }.toMultiSet()
                 allDisplayed = computations == displayedComputations && results == displayedResults
 
-                // TODO replace with minus operations when available
-                computations.removeAll(displayedComputations)
-                results.removeAll(displayedResults)
-                errorMessage = "ViewHolders with compute text $computations and result text $results not found. History: $computeHistory"
+                val computationDiff = computations - displayedComputations
+                val resultDiff = results - displayedResults
+                errorMessage = "ViewHolders with compute text $computationDiff and result text $resultDiff not found. History: $computeHistory"
             }
         }
 

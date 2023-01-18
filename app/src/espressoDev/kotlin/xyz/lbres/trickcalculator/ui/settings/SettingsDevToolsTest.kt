@@ -18,12 +18,16 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
-import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class SettingsDevToolsTest {
+
+    private val devToolsButton = onView(withId(R.id.devToolsButton))
+    private val settingsDialogButton = onView(withId(R.id.openSettingsButton))
+    private val closeButton = onView(withId(R.id.closeButton))
 
     @Rule
     @JvmField
@@ -37,7 +41,9 @@ class SettingsDevToolsTest {
     fun openFromCalculatorFragment() {
         onView(withText("Calculator")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withText("Developer Tools")).check(doesNotExist())
         onView(withText("Settings")).check(matches(isDisplayed()))
         checkInitialSettings(checkSettingsButton = true)
@@ -48,7 +54,9 @@ class SettingsDevToolsTest {
         openAttributionsFragment()
         onView(withText("Image Attributions")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withText("Developer Tools")).check(doesNotExist())
         onView(withText("Settings")).check(matches(isDisplayed()))
         checkInitialSettings(checkSettingsButton = true)
@@ -59,7 +67,9 @@ class SettingsDevToolsTest {
         openHistoryFragment()
         onView(withText("No history")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withText("Developer Tools")).check(doesNotExist())
         onView(withText("Settings")).check(matches(isDisplayed()))
         checkInitialSettings(checkSettingsButton = true)
@@ -70,7 +80,9 @@ class SettingsDevToolsTest {
         openSettingsFragment()
         onView(withText("Settings")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withText("Developer Tools")).check(doesNotExist())
         onView(withText("Settings")).check(matches(isDisplayed()))
         checkInitialSettings(checkSettingsButton = true)
@@ -84,7 +96,10 @@ class SettingsDevToolsTest {
 
         onView(withId(R.id.settingsButton)).perform(click())
         onView(withId(R.id.settingsButtonSwitch)).check(isNotPresented())
-        openSettingsFromDialog()
+
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withId(R.id.settingsButtonSwitch)).check(isNotPresented())
     }
 
@@ -92,10 +107,12 @@ class SettingsDevToolsTest {
     fun closeFromCalculatorFragment() {
         onView(withText("Calculator")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withText("Settings")).check(matches(isDisplayed()))
         onView(withText("Calculator")).check(doesNotExist())
-        closeFragment()
+        onView(withId(R.id.closeButton))
 
         onView(withText("Calculator")).check(matches(isDisplayed()))
         onView(withText("Settings")).check(doesNotExist())
@@ -106,10 +123,12 @@ class SettingsDevToolsTest {
         openAttributionsFragment()
         onView(withText("Image Attributions")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withText("Settings")).check(matches(isDisplayed()))
         onView(withText("Image Attributions")).check(doesNotExist())
-        closeFragment()
+        closeButton.perform(forceClick())
 
         onView(withText("Image Attributions")).check(matches(isDisplayed()))
         onView(withText("Settings")).check(doesNotExist())
@@ -120,10 +139,12 @@ class SettingsDevToolsTest {
         openHistoryFragment()
         onView(withText("No history")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+
         onView(withText("Settings")).check(matches(isDisplayed()))
         onView(withText("No history")).check(doesNotExist())
-        closeFragment()
+        closeButton.perform(forceClick())
 
         onView(withText("No history")).check(matches(isDisplayed()))
         onView(withText("Settings")).check(doesNotExist())
@@ -134,8 +155,9 @@ class SettingsDevToolsTest {
         openSettingsFragment()
         onView(withText("Settings")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
-        closeFragment()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+        closeButton.perform(forceClick())
 
         // should go back to calculator fragment
         onView(withText("Calculator")).check(matches(isDisplayed()))
@@ -151,8 +173,9 @@ class SettingsDevToolsTest {
         onView(withId(R.id.settingsButton)).perform(click())
         onView(withText("Settings")).check(matches(isDisplayed()))
 
-        openSettingsFromDialog()
-        closeFragment()
+        devToolsButton.perform(click())
+        settingsDialogButton.perform(click())
+        closeButton.perform(forceClick())
 
         // should go back to calculator fragment
         onView(withText("Calculator")).check(matches(isDisplayed()))

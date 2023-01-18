@@ -28,23 +28,28 @@ Support for irrational numbers is planned for the future.
 
 Several settings are available to make the calculator more/less chaotic and difficult to use.
 Here is the complete list:
-| Setting               | Default | Description                                                      |
-|:----------------------|:--------|:-----------------------------------------------------------------|
-| Apply decimals        | true    | Apply decimals entered in textbox                                |
-| Apply parentheses     | true    | Apply parentheses entered in textbox                             |
-| Clear text on error   | false   | Clear textbox when error occurs                                  |
-| History               | 1       | Degree of randomness in computation history                      |
-| Show settings button  | false   | Show settings button on main screen                              |
-| Shuffle computation   | false   | Shuffle order of numbers and order of ops within the computation |
-| Shuffle numbers       | false   | Shuffle value of numbers                                         |
-| Shuffle operators     | true    | Shuffle action of operators                                      |
+| Setting               | Default | Description                                                       |
+|:----------------------|:--------|:------------------------------------------------------------------|
+| Apply decimals        | true    | Apply decimals entered in textbox                                 |
+| Apply parentheses     | true    | Apply parentheses entered in textbox                              |
+| Clear text on error   | false   | Clear textbox when error occurs                                   |
+| History mode          | 1       | Degree of randomness in computation history                       |
+| Show settings button  | false   | Show settings button on main screen                               |
+| Shuffle computation   | false   | Shuffle order of numbers and order of ops within the computation  |
+| Shuffle numbers       | false   | Shuffle value of numbers                                          |
+| Shuffle operators     | true    | Shuffle action of operators                                       |
 
 The app can also function as a standard calculator, which performs computation correctly.
 This can be enabled via a button in the settings menu.
 
 With the exception of showing the settings button, no visual indication is given in the calculator of which settings are applied.
+Randomization settings are re-applied each time the equals button is clicked. 
+Therefore, values will likely not be shuffled in the same way twice in a row.
 
-Access to the settings menu is unintuitive to create added difficulty.
+There is some information about settings that is not documented. For example, there is no definition of the history mode values or their meanings.
+However, all details are available through comments in the code. Creating chaos does not excuse messy code.
+
+In addition, access to the settings menu is unintuitive to create added difficulty.
 In the spirit of the app, this access is undocumented.
 
 ## Project structure

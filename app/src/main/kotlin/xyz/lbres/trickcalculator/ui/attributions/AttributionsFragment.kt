@@ -25,7 +25,7 @@ class AttributionsFragment : BaseFragment() {
     private lateinit var binding: FragmentAttributionsBinding
     private lateinit var viewModel: AttributionsViewModel
 
-    override var navigateToSettings: Int? = R.id.navigateAttributionsToSettings
+    override val navigateToSettings = R.id.navigateAttributionsToSettings
 
     override var titleResId: Int = R.string.title_attributions
     override var actionBarOnClick: (() -> Unit)? =

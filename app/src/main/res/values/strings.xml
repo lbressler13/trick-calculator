@@ -73,6 +73,5 @@
     <string name="times_cd">Times symbol</string>
 
     <!-- Dev Tools -->
-    <string name="dev_tools_key">DeveloperToolsDismissed</string>
     <string name="dev_tools_button">{ }</string>
 </resources>

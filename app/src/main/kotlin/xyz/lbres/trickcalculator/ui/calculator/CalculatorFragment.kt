@@ -17,7 +17,6 @@ import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
-import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -32,7 +31,7 @@ class CalculatorFragment : BaseFragment() {
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private val random = Random(Date().time)
-    override var navigateToSettings: Int? = R.id.navigateCalculatorToSettings
+    override val navigateToSettings = R.id.navigateCalculatorToSettings
 
     /**
      * Initialize fragment
@@ -59,6 +58,9 @@ class CalculatorFragment : BaseFragment() {
         return binding.root
     }
 
+    /**
+     * Update visibility of buttons when fragment is resumed
+     */
     override fun onResume() {
         super.onResume()
         binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
@@ -250,8 +252,11 @@ class CalculatorFragment : BaseFragment() {
         textview.text = fullText
     }
 
-    override fun handleHistoryChange(previousHistory: History) {
-        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
+    /**
+     * Hide useLastHistory button when history is cleared
+     */
+    override fun handleHistoryCleared() {
+        binding.useLastHistoryButton.gone()
     }
 
     /**

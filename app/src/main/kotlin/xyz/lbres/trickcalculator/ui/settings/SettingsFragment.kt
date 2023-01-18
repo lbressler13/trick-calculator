@@ -17,16 +17,23 @@ import xyz.lbres.trickcalculator.utils.AppLogger
  * Fragment to display all configuration options for calculator
  */
 class SettingsFragment : BaseFragment() {
-    override var titleResId: Int = R.string.title_settings // fragment-specific value
+    override var titleResId: Int = R.string.title_settings
 
     private lateinit var binding: FragmentSettingsBinding
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var historyButtons: List<RadioButton>
 
-    private var fromCalculatorFragment = false
-    private var fromDialog = false
+    override val navigateToSettings: Int? = null
 
-    override var navigateToSettings: Int? = null
+    /**
+     * Value indicating if the settings menu was launched from the calculator fragment
+     */
+    private var fromCalculatorFragment = false
+
+    /**
+     * Value indicating if the settings menu was launched through the dev tools dialog, starting on any fragment
+     */
+    private var fromDialog = false
 
     /**
      * If reset button was pressed
@@ -43,8 +50,9 @@ class SettingsFragment : BaseFragment() {
      */
     private var standardFunctionPressed: Boolean = false
 
-    private var initialHistoryRandomness: Int = 1
-
+    /**
+     * Initialize fragment
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
@@ -58,6 +66,9 @@ class SettingsFragment : BaseFragment() {
         return binding.root
     }
 
+    /**
+     * Set values in UI based on ViewModel and add necessary onClick actions
+     */
     private fun initUi() {
         historyButtons = listOf(binding.historyButton0, binding.historyButton1, binding.historyButton2, binding.historyButton3)
 
@@ -96,13 +107,11 @@ class SettingsFragment : BaseFragment() {
 
         // close button
         binding.closeButton.root.setOnClickListener { closeFragment() }
-
-        // Save settings when another fragment is opened. Preserves current settings when dialog is opened
-        // childFragmentManager.addFragmentOnAttachListener { _, _ ->
-        // saveSettingsToViewModel()
-        // }
     }
 
+    /**
+     * Save settings to ViewModel before fragment is closed
+     */
     private fun saveSettingsToViewModel() {
         val randomizePressed = randomizePressed
         val resetPressed = resetPressed
@@ -137,6 +146,9 @@ class SettingsFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Close previous fragment
+     */
     private fun closePreviousFragment() {
         try {
             if (!fromDialog && !fromCalculatorFragment) {
@@ -148,6 +160,9 @@ class SettingsFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Save settings to ViewModel and return to calculator screen, if not coming through dev tools
+     */
     override fun onDestroy() {
         super.onDestroy()
         saveSettingsToViewModel()

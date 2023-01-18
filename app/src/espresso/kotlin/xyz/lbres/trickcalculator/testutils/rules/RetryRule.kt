@@ -14,8 +14,7 @@ import xyz.lbres.trickcalculator.utils.AppLogger
  * @param maxRetries [Int]: number of times to re-try failing test, not including the initial test run.
  * Defaults to 3.
  */
-// TODO restore default = 3
-class RetryRule(val maxRetries: Int = 1) : TestRule {
+class RetryRule(val maxRetries: Int = 3) : TestRule {
     /**
      * Apply rule to a test with a given description
      *
