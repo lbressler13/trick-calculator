@@ -141,7 +141,7 @@ class SettingsFragment : BaseFragment() {
 
                 val checkedId = binding.historyRandomnessGroup.checkedRadioButtonId
                 val newHistoryRandomness = historyButtons.indexOfFirst { it.id == checkedId }
-                sharedViewModel.setHistoryRandomness(newHistoryRandomness)
+                sharedViewModel.historyRandomness = newHistoryRandomness
             }
         }
     }
