@@ -112,7 +112,7 @@ class SettingsDevToolsTest {
 
         onView(withText("Settings")).check(matches(isDisplayed()))
         onView(withText("Calculator")).check(doesNotExist())
-        onView(withId(R.id.closeButton))
+        closeButton.perform(forceClick())
 
         onView(withText("Calculator")).check(matches(isDisplayed()))
         onView(withText("Settings")).check(doesNotExist())
