@@ -30,16 +30,7 @@ fun testRandomizeButtonSaved() {
     closeFragment()
 
     // history fragment
-    openHistoryFragment()
-    openSettingsFromDialog()
-    onView(withText("No history")).check(doesNotExist())
-    randomizeButton.perform(scrollTo(), click())
-    onView(withText("No history")).check(matches(isDisplayed()))
-    closeFragment() // close history fragment
-
-    openSettingsFragment()
-    onView(isRoot()).check(settingsRandomized())
-    closeFragment()
+    // not checked due to risk of setting randomness 3 and being stuck in infinite loop on screen
 
     // settings fragment
     openSettingsFragment()
