@@ -56,7 +56,7 @@ fun setHistoryRandomness(randomness: Int) {
 
 /**
  * Test that the "No history" message is displayed.
- * Must be called from calculator screen, and app returns to calculator screen after performing check.
+ * Must be called from calculator screen, and returns to calculator screen after check is performed
  */
 fun checkNoHistoryMessageDisplayed() {
     openHistoryFragment()
@@ -66,7 +66,7 @@ fun checkNoHistoryMessageDisplayed() {
 
 /**
  * Test that the "No history" message is not presented.
- * Must be called from calculator screen, and app returns to calculator screen after performing check.
+ * Must be called from calculator screen, and returns to calculator screen after check is performed
  */
 fun checkNoHistoryMessageNotPresented() {
     openHistoryFragment()

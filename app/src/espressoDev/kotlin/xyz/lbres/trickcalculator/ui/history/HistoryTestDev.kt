@@ -23,7 +23,7 @@ import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 @RunWith(AndroidJUnit4::class)
-class HistoryDevToolsTest {
+class HistoryTestDev {
 
     @Rule
     @JvmField
@@ -110,32 +110,10 @@ class HistoryDevToolsTest {
             throw AssertionError("History items should by ordered in history randomness 0. History $history")
         }
 
-        // check randomness 1
-        openSettingsFromDialog()
-        onView(withId(R.id.historyButton1)).perform(click())
-        closeFragment()
-        history.checkAllDisplayed(1)
-        if (!history.checkDisplayShuffled(1)) {
-            throw AssertionError("History items should be shuffled in history randomness 1. History: $history")
-        }
-
-        // check randomness 2
-        openSettingsFromDialog()
-        onView(withId(R.id.historyButton2)).perform(click())
-        closeFragment()
-        history.checkAllDisplayed(2)
-        if (!history.checkDisplayShuffled(2)) {
-            throw AssertionError("History items and pairs should be shuffled in history randomness 2. History: $history")
-        }
-
+        runSingleUpdateRandomnessTest(history, 1, "History items should be shuffled in history randomness 1.")
+        runSingleUpdateRandomnessTest(history, 2, "History items and pairs should be shuffled in history randomness 2.")
         // switch back to 0
-        openSettingsFromDialog()
-        onView(withId(R.id.historyButton0)).perform(click())
-        closeFragment()
-        history.checkAllDisplayed(0)
-        if (!history.checkDisplayOrdered()) {
-            throw AssertionError("History items should by ordered in history randomness 0. History $history")
-        }
+        runSingleUpdateRandomnessTest(history, 0, "History items should be ordered in history randomness 0.")
     }
 
     @Test
@@ -150,5 +128,26 @@ class HistoryDevToolsTest {
         openHistoryFragment()
         runSingleNotReshuffledCheck(history, 2) // start with 2, because initial randomness is 1
         runSingleNotReshuffledCheck(history, 1)
+    }
+
+    /**
+     * Run single test to update history randomness and check that changes are applied without closing/re-opening history fragment.
+     *
+     * @param history [TestHistory]: list of items in history
+     * @param randomness [Int]: history randomness setting
+     * @param error [String]: error message for [AssertionError] if test fails. History is appended.
+     */
+    private fun runSingleUpdateRandomnessTest(history: TestHistory, randomness: Int, error: String) {
+        val historyButtonIds = listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
+        val buttonId = historyButtonIds[randomness]
+
+        openSettingsFromDialog()
+        onView(withId(buttonId)).perform(click())
+        closeFragment()
+
+        history.checkAllDisplayed(randomness)
+        if (!history.checkDisplayShuffled(randomness)) { // checks ordered if randomness = 0
+            throw AssertionError("$error History: $history")
+        }
     }
 }

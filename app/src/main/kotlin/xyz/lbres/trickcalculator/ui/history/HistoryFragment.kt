@@ -112,7 +112,7 @@ class HistoryFragment : BaseFragment() {
     }
 
     /**
-     * Clear values in history viewmodel when destroying fragment
+     * Clear values in history ViewModel when destroying fragment
      */
     override fun onDestroy() {
         super.onDestroy()

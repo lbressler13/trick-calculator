@@ -37,7 +37,7 @@ data class Settings(
     )
 
     /**
-     * Function defining tow [Settings] objects as equal when all settings are the same
+     * Function defining two [Settings] objects as equal when all settings are the same
      */
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is Settings) {

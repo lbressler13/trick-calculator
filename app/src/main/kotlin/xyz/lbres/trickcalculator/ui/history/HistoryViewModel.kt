@@ -14,7 +14,7 @@ import kotlin.random.Random
  */
 class HistoryViewModel : ViewModel() {
     /**
-     * Unmodified displayed on screen
+     * Values before modification
      */
     var history: History? = null
         private set

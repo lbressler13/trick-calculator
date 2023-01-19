@@ -42,11 +42,10 @@ Here is the complete list:
 The app can also function as a standard calculator, which performs computation correctly.
 This can be enabled via a button in the settings menu.
 
-With the exception of showing the settings button, no visual indication is given in the calculator of which settings are applied.
-Randomization settings are re-applied each time the equals button is clicked. 
-Therefore, values will likely not be shuffled in the same way twice in a row.
+Outside of the settings menu, there is no visual indication of which settings are applied to computation.
+Randomization settings are re-applied each time the equals button is clicked, so repetitions of a computation may not produce the same result.
 
-There is some information about settings that is not documented. For example, there is no definition of the history mode values or their meanings.
+Some details about the settings are not documented. The definition of the "history mode" is one example of this.
 However, all details are available through comments in the code. Creating chaos does not excuse messy code.
 
 In addition, access to the settings menu is unintuitive to create added difficulty.

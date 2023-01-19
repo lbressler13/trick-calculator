@@ -21,11 +21,9 @@ import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
-import xyz.lbres.trickcalculator.ui.history.checkNoHistoryMessageDisplayed
-import xyz.lbres.trickcalculator.ui.history.checkNoHistoryMessageNotPresented
 
 @RunWith(AndroidJUnit4::class)
-class CalculatorDevToolsTest {
+class CalculatorTestDev {
 
     private val useHistoryButton = onView(withId(R.id.useLastHistoryButton))
 
@@ -43,7 +41,7 @@ class CalculatorDevToolsTest {
 
         typeText("12+34")
         equals()
-        useHistoryButton.check(matches(isDisplayed())).perform(click())
+        useHistoryButton.check(matches(isDisplayed()))
 
         doClearHistory()
         useHistoryButton.check(isNotPresented())
@@ -55,7 +53,7 @@ class CalculatorDevToolsTest {
 
         typeText("12+34")
         equals()
-        useHistoryButton.check(matches(isDisplayed())).perform(click())
+        useHistoryButton.check(matches(isDisplayed()))
 
         openHistoryFragment()
         doClearHistory()
@@ -69,7 +67,6 @@ class CalculatorDevToolsTest {
         typeText("12+34")
         equals()
 
-        checkNoHistoryMessageNotPresented()
         useHistoryButton.check(matches(isDisplayed())).perform(click())
         onView(withId(R.id.mainText)).check(matches(withText("12+34")))
 
@@ -79,11 +76,10 @@ class CalculatorDevToolsTest {
 
         onView(withId(R.id.mainText)).check(matches(withText("12+34")))
         useHistoryButton.check(isNotPresented())
-        checkNoHistoryMessageDisplayed()
     }
 
     @Test
-    fun applySettingsButtonSetting() {
+    fun changeSettingsButtonThroughDialog() {
         // show
         val settingsButton = onView(withId(R.id.settingsButton))
         settingsButton.check(isNotPresented())

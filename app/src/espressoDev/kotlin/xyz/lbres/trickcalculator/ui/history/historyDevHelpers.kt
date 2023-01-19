@@ -18,7 +18,7 @@ private const val recyclerId = R.id.itemsRecycler
 
 /**
  * From the history fragment, open the settings fragment, set the randomness,
- * and verify that values don't change when settings is closed and re-opened with no changes
+ * and verify that values don't change when settings is closed and re-opened
  *
  * @param history [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
@@ -33,12 +33,11 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int) {
     // save values
     for (position in 0 until history.size) {
         onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position))
-            .perform(
-                saveTextAtPosition(position, R.id.computeText),
-                saveTextAtPosition(position, R.id.resultText),
-                saveTextAtPosition(position, R.id.errorText)
-            )
+        onView(withViewHolder(recyclerId, position)).perform(
+            saveTextAtPosition(position, R.id.computeText),
+            saveTextAtPosition(position, R.id.resultText),
+            saveTextAtPosition(position, R.id.errorText)
+        )
     }
 
     openSettingsFromDialog()
@@ -48,15 +47,14 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int) {
     // match saved values
     for (position in 0 until history.size) {
         onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position))
-            .check(
-                matches(
-                    allOf(
-                        withSavedTextAtPosition(position, R.id.computeText),
-                        withSavedTextAtPosition(position, R.id.resultText),
-                        withSavedTextAtPosition(position, R.id.errorText)
-                    )
+        onView(withViewHolder(recyclerId, position)).check(
+            matches(
+                allOf(
+                    withSavedTextAtPosition(position, R.id.computeText),
+                    withSavedTextAtPosition(position, R.id.resultText),
+                    withSavedTextAtPosition(position, R.id.errorText)
                 )
             )
+        )
     }
 }

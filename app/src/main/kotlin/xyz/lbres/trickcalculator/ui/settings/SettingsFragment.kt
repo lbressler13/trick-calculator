@@ -88,6 +88,18 @@ class SettingsFragment : BaseFragment() {
         }
         binding.historyRandomnessGroup.check(checkedButton.id)
 
+        binding.settingsButtonSwitch.isVisible = fromDialog || !fromCalculatorFragment
+
+        // close button
+        binding.closeButton.root.setOnClickListener { closeFragment() }
+
+        setButtonActions()
+    }
+
+    /**
+     * Assign onClick actions to buttons that affect all settings
+     */
+    private fun setButtonActions() {
         binding.randomizeSettingsButton.setOnClickListener {
             randomizePressed = true
             closeFragment()
@@ -102,11 +114,6 @@ class SettingsFragment : BaseFragment() {
             standardFunctionPressed = true
             closeFragment()
         }
-
-        binding.settingsButtonSwitch.isVisible = fromDialog || !fromCalculatorFragment
-
-        // close button
-        binding.closeButton.root.setOnClickListener { closeFragment() }
     }
 
     /**
@@ -156,7 +163,8 @@ class SettingsFragment : BaseFragment() {
             }
         } catch (e: Exception) {
             // expected to fail when UI is recreating due to configuration changes or via dev tools
-            AppLogger.e("Failed to close parent fragment:", e.message.toString())
+            val appName = getString(R.string.app_name)
+            AppLogger.e(appName, "Failed to close parent fragment: ${e.message}")
         }
     }
 
