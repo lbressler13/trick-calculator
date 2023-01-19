@@ -23,7 +23,7 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
-class CalculatorTestDev {
+class CalculatorFragmentTestDev {
 
     private val useHistoryButton = onView(withId(R.id.useLastHistoryButton))
 

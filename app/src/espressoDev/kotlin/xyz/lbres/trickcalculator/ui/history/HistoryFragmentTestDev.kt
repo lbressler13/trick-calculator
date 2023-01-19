@@ -23,7 +23,7 @@ import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
 
 @RunWith(AndroidJUnit4::class)
-class HistoryTestDev {
+class HistoryFragmentTestDev {
 
     @Rule
     @JvmField
