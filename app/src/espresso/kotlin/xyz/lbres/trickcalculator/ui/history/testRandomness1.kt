@@ -1,27 +1,18 @@
 package xyz.lbres.trickcalculator.ui.history
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 
 fun testRandomness1() {
     setHistoryRandomness(1)
     toggleShuffleOperators()
-    openHistoryFragment()
 
     // no history
-    onView(withText("No history")).check(matches(isDisplayed()))
+    checkNoHistoryMessageDisplayed()
 
     val history = TestHistory()
 
     // one element
-    closeFragment()
-
     history.add(generateTestItem("400/5") { "80" })
     checkRandomness(history, 1)
 

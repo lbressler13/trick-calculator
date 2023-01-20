@@ -17,13 +17,15 @@ import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.closeDialog
+import xyz.lbres.trickcalculator.testutils.openDevTools
 
 private val spinner = onView(withId(R.id.devToolsTimeSpinner))
 private val hideDevToolsButton = onView(withId(R.id.hideDevToolsButton))
 private val devToolsButton = onView(withId(R.id.devToolsButton))
 
 fun testHideDevToolsOptionsDisplayed() {
-    openDialog()
+    openDevTools()
 
     spinner.check(matches(withSpinnerText("5000ms"))).perform(click())
 
@@ -47,7 +49,7 @@ fun testHideDevToolsOptionsDisplayed() {
 }
 
 fun testInteractWithHideDevToolsSpinner() {
-    openDialog()
+    openDevTools()
 
     spinner.perform(click())
     spinnerItemAt(1).perform(click())
@@ -67,20 +69,20 @@ fun testInteractWithHideDevToolsSpinner() {
 
     // close and re-open dialog
     closeDialog()
-    openDialog()
+    openDevTools()
     spinner.check(matches(withSpinnerText("60000ms")))
 }
 
 fun testHideDevTools() {
     devToolsButton.check(matches(isDisplayed()))
-    openDialog()
+    openDevTools()
 
     // 5 seconds
     spinner.check(matches(withSpinnerText("5000ms")))
     hideDevToolsButton.perform(click())
     checkDevToolsHidden(5000)
 
-    openDialog()
+    openDevTools()
 
     // 10 seconds
     spinner.perform(click())
@@ -89,7 +91,7 @@ fun testHideDevTools() {
     hideDevToolsButton.perform(click())
     checkDevToolsHidden(10000)
 
-    openDialog()
+    openDevTools()
 
     // 30 seconds
     spinner.perform(click())
@@ -98,7 +100,7 @@ fun testHideDevTools() {
     hideDevToolsButton.perform(click())
     checkDevToolsHidden(30000)
 
-    openDialog()
+    openDevTools()
 
     // 60 seconds
     spinner.perform(click())

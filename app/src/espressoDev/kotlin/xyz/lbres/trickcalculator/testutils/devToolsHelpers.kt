@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ui.devtools
+package xyz.lbres.trickcalculator.testutils
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -9,7 +9,7 @@ import xyz.lbres.trickcalculator.R
 /**
  * Open dialog using dev tools button
  */
-fun openDialog() {
+fun openDevTools() {
     onView(withId(R.id.devToolsButton)).perform(click())
 }
 
@@ -18,4 +18,21 @@ fun openDialog() {
  */
 fun closeDialog() {
     onView(withText("Done")).perform(click())
+}
+
+/**
+ * Open settings fragment through dev tools dialog
+ */
+fun openSettingsFromDialog() {
+    openDevTools()
+    onView(withId(R.id.openSettingsButton)).perform(click())
+}
+
+/**
+ * Open dev tools dialog, clear history, and close dev tools dialog
+ */
+fun doClearHistory() {
+    openDevTools()
+    onView(withText("Clear history")).perform(click())
+    closeDialog()
 }

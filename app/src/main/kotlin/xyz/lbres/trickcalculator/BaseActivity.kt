@@ -3,7 +3,6 @@ package xyz.lbres.trickcalculator
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.databinding.ActivityBaseBinding
@@ -17,9 +16,6 @@ class BaseActivity : AppCompatActivity() {
     lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
     private lateinit var sharedViewModel: SharedViewModel
-
-    // fragment manager used to show/hide dev tools dialog, set by the current fragment
-    var fragmentManager: FragmentManager? = null
 
     /**
      * Initialize activity

@@ -21,6 +21,11 @@ abstract class BaseFragment : NavHostFragment() {
     protected open var actionBarOnClick: (() -> Unit)? = null
 
     /**
+     * Resource ID for the action to navigate to the settings page from the current fragment
+     */
+    abstract val navigateToSettings: Int?
+
+    /**
      * Re-add action bar settings when fragment is shown.
      */
     override fun onResume() {
@@ -45,8 +50,20 @@ abstract class BaseFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        requireBaseActivity().fragmentManager = childFragmentManager
+        FragmentDevToolsContext.currentContext = FragmentDevToolsContext(
+            childFragmentManager,
+        ) { handleHistoryCleared() }
     }
+
+    /**
+     * Callback to call when history is cleared through dev tools
+     */
+    protected open fun handleHistoryCleared() {}
+
+    /**
+     * Close the fragment
+     */
+    fun closeFragment() = requireBaseActivity().popBackStack()
 
     /**
      * Get current activity as [BaseActivity].

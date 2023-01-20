@@ -3,6 +3,8 @@ package xyz.lbres.trickcalculator.ui.history
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -10,7 +12,9 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
@@ -47,6 +51,26 @@ fun setHistoryRandomness(randomness: Int) {
         3 -> onView(withId(R.id.historyButton3)).perform(click())
     }
 
+    closeFragment()
+}
+
+/**
+ * Test that the "No history" message is displayed.
+ * Must be called from calculator screen, and returns to calculator screen after check is performed
+ */
+fun checkNoHistoryMessageDisplayed() {
+    openHistoryFragment()
+    onView(withText("No history")).check(matches(isDisplayed()))
+    closeFragment()
+}
+
+/**
+ * Test that the "No history" message is not presented.
+ * Must be called from calculator screen, and returns to calculator screen after check is performed
+ */
+fun checkNoHistoryMessageNotPresented() {
+    openHistoryFragment()
+    onView(withText("No history")).check(isNotPresented())
     closeFragment()
 }
 

@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.general.ternaryIf
@@ -17,10 +16,7 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.settings.Settings
-import xyz.lbres.trickcalculator.ui.settings.initSettingsObservers
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
-import xyz.lbres.trickcalculator.utils.History
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -35,7 +31,7 @@ class CalculatorFragment : BaseFragment() {
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private val random = Random(Date().time)
-    private val settings = Settings()
+    override val navigateToSettings = R.id.navigateCalculatorToSettings
 
     /**
      * Initialize fragment
@@ -50,12 +46,6 @@ class CalculatorFragment : BaseFragment() {
             ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        // observe changes in viewmodels
-        sharedViewModel.history.observe(viewLifecycleOwner, historyObserver)
-        initSettingsObservers(settings, sharedViewModel, viewLifecycleOwner)
-        // additional observer to show/hide settings button, in addition to observer in initSettingsObservers
-        sharedViewModel.showSettingsButton.observe(viewLifecycleOwner, showSettingsButtonObserver)
-
         // init UI
         initNumpad()
         binding.mainText.movementMethod = UnprotectedScrollingMovementMethod()
@@ -69,17 +59,12 @@ class CalculatorFragment : BaseFragment() {
     }
 
     /**
-     * Enable/disable the last item button
+     * Update visibility of buttons when fragment is resumed
      */
-    private val historyObserver: Observer<History> = Observer {
-        binding.useLastHistoryButton.isVisible = it.isNotEmpty()
-    }
-
-    /**
-     * Show or hide settings button
-     */
-    private val showSettingsButtonObserver: Observer<Boolean> = Observer {
-        binding.settingsButton.isVisible = it
+    override fun onResume() {
+        super.onResume()
+        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
+        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
     }
 
     /**
@@ -100,7 +85,7 @@ class CalculatorFragment : BaseFragment() {
      * Use last history item as current computation
      */
     private val useLastHistoryItemOnClick = {
-        val item = sharedViewModel.history.value?.lastOrNull()
+        val item = sharedViewModel.history.lastOrNull()
         if (item != null) {
             computationViewModel.useHistoryItemAsComputeText(item)
 
@@ -125,7 +110,7 @@ class CalculatorFragment : BaseFragment() {
             // set action for each operator
             // only include exponent if exp is used
             val operators = when {
-                !settings.shuffleOperators -> listOf("+", "-", "x", "/", "^")
+                !sharedViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
                 !computationViewModel.computeText.contains("^") -> listOf(
                     "+",
                     "-",
@@ -154,7 +139,7 @@ class CalculatorFragment : BaseFragment() {
             )
 
             val numberOrder =
-                ternaryIf(settings.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
+                ternaryIf(sharedViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
 
             // try to run computation, and update compute text and error message
             try {
@@ -165,9 +150,9 @@ class CalculatorFragment : BaseFragment() {
                         operatorRounds,
                         performOperation,
                         numberOrder,
-                        settings.applyParens,
-                        settings.applyDecimals,
-                        settings.shuffleComputation
+                        sharedViewModel.applyParens,
+                        sharedViewModel.applyDecimals,
+                        sharedViewModel.shuffleComputation
                     )
 
                 computationViewModel.setResult(null, computedValue)
@@ -187,13 +172,15 @@ class CalculatorFragment : BaseFragment() {
                     message
                 }
 
-                computationViewModel.setResult(error, null, settings.clearOnError)
+                computationViewModel.setResult(error, null, sharedViewModel.clearOnError)
                 updateUI()
             }
 
             sharedViewModel.addToHistory(computationViewModel.generatedHistoryItem!!)
             computationViewModel.clearStoredHistoryItem()
         }
+
+        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
     }
 
     /**
@@ -263,6 +250,13 @@ class CalculatorFragment : BaseFragment() {
         }
 
         textview.text = fullText
+    }
+
+    /**
+     * Hide useLastHistory button when history is cleared
+     */
+    override fun handleHistoryCleared() {
+        binding.useLastHistoryButton.gone()
     }
 
     /**

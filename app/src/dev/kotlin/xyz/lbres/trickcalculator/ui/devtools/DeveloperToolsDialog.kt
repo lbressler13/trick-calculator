@@ -10,12 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
-import xyz.lbres.trickcalculator.ui.settings.SettingsDialog
+import xyz.lbres.trickcalculator.ui.BaseFragment
+import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
 import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -56,11 +58,16 @@ class DeveloperToolsDialog : DialogFragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding.clearHistoryButton.setOnClickListener { viewModel.clearHistory() }
+        binding.clearHistoryButton.setOnClickListener {
+            val parentContext = FragmentDevToolsContext.currentContext
+            viewModel.clearHistory()
+            parentContext?.handleHistoryCleared?.invoke()
+        }
+
         binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
 
         initHideDevTools()
-        initSettingsDialog()
+        initSettingsNavigation()
 
         return binding.root
     }
@@ -105,13 +112,20 @@ class DeveloperToolsDialog : DialogFragment() {
     }
 
     /**
-     * Initialize settings dialog
+     * Initialize navigation to settings fragment.
      */
-    private fun initSettingsDialog() {
-        val settingsDialog = SettingsDialog()
+    private fun initSettingsNavigation() {
+        val fromDialogKey = getString(R.string.from_dialog_key)
 
-        binding.settingsDialogButton.setOnClickListener {
-            settingsDialog.show(childFragmentManager, SettingsDialog.TAG)
+        binding.openSettingsButton.setOnClickListener {
+            val baseActivity = requireActivity() as BaseActivity
+            val baseFragment = requireParentFragment() as BaseFragment
+
+            if (baseFragment.navigateToSettings != null) {
+                val args = bundleOf(fromDialogKey to true)
+                baseActivity.runNavAction(baseFragment.navigateToSettings!!, args)
+            }
+            dismiss()
         }
     }
 
