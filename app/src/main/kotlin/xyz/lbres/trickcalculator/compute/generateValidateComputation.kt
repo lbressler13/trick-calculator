@@ -7,6 +7,9 @@ import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
 import xyz.lbres.trickcalculator.utils.isNumber
 import xyz.lbres.trickcalculator.utils.isNumberChar
 
+/**
+ * Types
+ */
 private const val NUMBER = "number"
 private const val OPERATOR = "operator"
 private const val LPAREN = "lparen"
@@ -14,6 +17,9 @@ private const val RPAREN = "rparen"
 
 private val syntaxError = Exception("Syntax error")
 
+/**
+ * Values used in computation
+ */
 private val computeText = mutableListOf<String>()
 private var lastType = ""
 private var currentType = ""
@@ -62,10 +68,11 @@ fun generateAndValidateComputeText(
 ): StringList {
     resetGlobalVars()
 
-    // empty compute text
+    // empty compute text or starting with operator
     when {
         splitText.isEmpty() && initialValue == null -> return emptyList()
         splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
+        initialValue == null && isOperator(splitText[0], ops) -> throw syntaxError
     }
 
     if (initialValue != null) {
@@ -96,13 +103,14 @@ fun generateAndValidateComputeText(
         }
     }
 
+    // add remaining number
     if (currentNumber.isNotEmpty()) {
         addCurrentNumber()
     }
 
-    val startsWithOperator = computeText.isNotEmpty() && isOperator(computeText[0], ops)
+    // check syntax error at end
     val endsWithOperator = lastType == OPERATOR && currentNumber.isEmpty()
-    if (openParenCount != 0 || startsWithOperator || endsWithOperator) {
+    if (openParenCount != 0 || endsWithOperator) {
         throw syntaxError
     }
 
@@ -211,10 +219,11 @@ private fun addCurrentNumber() {
     }
 
     if (currentNumber.isNotEmpty()) {
-        // add multiplication between number and preceding paren
+        // add times between number and preceding paren
         if (lastType == RPAREN) {
             computeText.add("x")
         }
+
         computeText.add(currentNumber)
         currentNumber = ""
         currentDecimal = false
