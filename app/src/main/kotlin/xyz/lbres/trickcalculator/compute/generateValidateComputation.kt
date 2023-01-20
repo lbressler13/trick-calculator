@@ -7,6 +7,11 @@ import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
 import xyz.lbres.trickcalculator.utils.isNumber
 import xyz.lbres.trickcalculator.utils.isNumberChar
 
+private const val NUMBER = "number"
+private const val OPERATOR = "operator"
+private const val LPAREN = "lparen"
+private const val RPAREN = "rparen"
+
 private val syntaxError = Exception("Syntax error")
 
 private val computeText = mutableListOf<String>()
@@ -75,7 +80,7 @@ fun generateAndValidateComputeText(
 
         currentType = getTypeOf(element, ops) ?: throw syntaxError
 
-        if (currentType != "number" && currentNumber.isNotEmpty()) {
+        if (currentType != NUMBER && currentNumber.isNotEmpty()) {
             addCurrentNumber()
         }
 
@@ -84,7 +89,7 @@ fun generateAndValidateComputeText(
             throw syntaxError
         }
 
-        if (currentType == "number") {
+        if (currentType == NUMBER) {
             addDigit(element, applyDecimals, numbersOrder)
         } else {
             addNonNumber(element, applyParens)
@@ -96,7 +101,7 @@ fun generateAndValidateComputeText(
     }
 
     val startsWithOperator = computeText.isNotEmpty() && isOperator(computeText[0], ops)
-    val endsWithOperator = lastType == "operator" && currentNumber.isEmpty()
+    val endsWithOperator = lastType == OPERATOR && currentNumber.isEmpty()
     if (openParenCount != 0 || startsWithOperator || endsWithOperator) {
         throw syntaxError
     }
@@ -129,7 +134,7 @@ private fun resetGlobalVars() {
  */
 private fun addInitialValue(initialValue: ExactFraction, initialText: StringList) {
     computeText.add(initialValue.toEFString())
-    lastType = "number"
+    lastType = NUMBER
 
     // add multiplication between initial val and first num
     if (initialText.isNotEmpty() && isNumberChar(initialText[0])) {
@@ -185,11 +190,11 @@ private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): Stri
  */
 private fun addNonNumber(element: String, applyParens: Boolean) {
     // add times between preceding num and paren, or between adjacent parens
-    if ((lastType == "number" && currentType == "lparen") || (lastType == "rparen" && currentType == "lparen")) {
+    if ((lastType == NUMBER && currentType == LPAREN) || (lastType == RPAREN && currentType == LPAREN)) {
         computeText.add("x")
     }
 
-    if ((currentType != "lparen" && currentType != "rparen") || applyParens) {
+    if ((currentType != LPAREN && currentType != RPAREN) || applyParens) {
         computeText.add(element)
     }
 
@@ -207,14 +212,14 @@ private fun addCurrentNumber() {
 
     if (currentNumber.isNotEmpty()) {
         // add multiplication between number and preceding paren
-        if (lastType == "rparen") {
+        if (lastType == RPAREN) {
             computeText.add("x")
         }
         computeText.add(currentNumber)
         currentNumber = ""
         currentDecimal = false
 
-        lastType = "number"
+        lastType = NUMBER
     }
 }
 
@@ -227,10 +232,10 @@ private fun addCurrentNumber() {
  */
 private fun getTypeOf(element: String, ops: StringList): String? {
     return when {
-        isOperator(element, ops) -> "operator"
-        element == "(" -> "lparen"
-        element == ")" -> "rparen"
-        isNumberChar(element) -> "number"
+        isOperator(element, ops) -> OPERATOR
+        element == "(" -> LPAREN
+        element == ")" -> RPAREN
+        isNumberChar(element) -> NUMBER
         else -> null
     }
 }
@@ -239,9 +244,9 @@ private fun getTypeOf(element: String, ops: StringList): String? {
  * Increment or decrement the paren count based on the current type
  */
 private fun updateParenCount() {
-    if (currentType == "lparen") {
+    if (currentType == LPAREN) {
         openParenCount++
-    } else if (currentType == "rparen") {
+    } else if (currentType == RPAREN) {
         openParenCount--
     }
 }
@@ -253,9 +258,9 @@ private fun updateParenCount() {
  * @return [Boolean]: `true` if there is an error, `false` otherwise
  */
 private fun nonNumberSyntaxError(openParenCount: Int): Boolean {
-    val operatorInsideParens = (lastType == "lparen" && currentType == "operator") || (lastType == "operator" && currentType == "rparen")
-    val doubleOperators = lastType == "operator" && currentType == "operator"
-    val emptyParens = lastType == "lparen" && currentType == "rparen"
+    val operatorInsideParens = (lastType == LPAREN && currentType == OPERATOR) || (lastType == OPERATOR && currentType == RPAREN)
+    val doubleOperators = lastType == OPERATOR && currentType == OPERATOR
+    val emptyParens = lastType == LPAREN && currentType == RPAREN
 
     return openParenCount < 0 || operatorInsideParens || doubleOperators || emptyParens
 }
