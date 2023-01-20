@@ -58,9 +58,8 @@ class DeveloperToolsDialog : DialogFragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        val parentContext = FragmentDevToolsContext.currentContext
-
         binding.clearHistoryButton.setOnClickListener {
+            val parentContext = FragmentDevToolsContext.currentContext
             viewModel.clearHistory()
             parentContext?.handleHistoryCleared?.invoke()
         }
@@ -116,12 +115,14 @@ class DeveloperToolsDialog : DialogFragment() {
      * Initialize navigation to settings fragment.
      */
     private fun initSettingsNavigation() {
+        val fromDialogKey = getString(R.string.from_dialog_key)
+
         binding.openSettingsButton.setOnClickListener {
             val baseActivity = requireActivity() as BaseActivity
             val baseFragment = requireParentFragment() as BaseFragment
 
             if (baseFragment.navigateToSettings != null) {
-                val args = bundleOf("fromDialog" to true)
+                val args = bundleOf(fromDialogKey to true)
                 baseActivity.runNavAction(baseFragment.navigateToSettings!!, args)
             }
             dismiss()

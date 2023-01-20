@@ -29,7 +29,7 @@
     <!-- Settings Labels -->
     <string name="apply_decimals">Apply Decimals</string>
     <string name="apply_parens">Apply Parens</string>
-    <string name="clear_on_error">Reset on Error</string>
+    <string name="clear_on_error">Clear on Error</string>
     <string name="random_history_label">History Mode</string>
     <string name="randomize_settings">Randomize Settings</string>
     <string name="reset_settings">Reset Settings</string>
@@ -74,4 +74,5 @@
 
     <!-- Dev Tools -->
     <string name="dev_tools_button">{ }</string>
+    <string name="from_dialog_key">fromDialog</string>
 </resources>

@@ -36,19 +36,9 @@ class SettingsFragment : BaseFragment() {
     private var fromDialog = false
 
     /**
-     * If reset button was pressed
+     * If settings were saved before [saveSettingsToViewModel] was called, such as by using reset button
      */
-    private var resetPressed: Boolean = false
-
-    /**
-     * If randomize button was pressed
-     */
-    private var randomizePressed: Boolean = false
-
-    /**
-     * If standard function button was pressed
-     */
-    private var standardFunctionPressed: Boolean = false
+    private var settingsPreSaved: Boolean = false
 
     /**
      * Initialize fragment
@@ -57,7 +47,8 @@ class SettingsFragment : BaseFragment() {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        fromDialog = arguments?.getBoolean("fromDialog") ?: false
+        val fromDialogKey = getString(R.string.from_dialog_key)
+        fromDialog = arguments?.getBoolean(fromDialogKey) ?: false
         val backStackSize = requireParentFragment().childFragmentManager.backStackEntryCount
         fromCalculatorFragment = backStackSize == 1
 
@@ -101,56 +92,44 @@ class SettingsFragment : BaseFragment() {
      */
     private fun setButtonActions() {
         binding.randomizeSettingsButton.setOnClickListener {
-            randomizePressed = true
+            sharedViewModel.randomizeSettings()
+            settingsPreSaved = true
             closeFragment()
         }
 
         binding.resetSettingsButton.setOnClickListener {
-            resetPressed = true
+            // persist show settings value
+            sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
+            sharedViewModel.resetSettings()
+
+            settingsPreSaved = true
             closeFragment()
         }
 
         binding.standardFunctionButton.setOnClickListener {
-            standardFunctionPressed = true
+            sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
+            sharedViewModel.setStandardSettings()
+
+            settingsPreSaved = true
             closeFragment()
         }
     }
 
     /**
-     * Save settings to ViewModel before fragment is closed
+     * Save settings to ViewModel based on selections in UI
      */
     private fun saveSettingsToViewModel() {
-        val randomizePressed = randomizePressed
-        val resetPressed = resetPressed
-        val standardFunctionPressed = standardFunctionPressed
+        sharedViewModel.applyDecimals = binding.applyDecimalsSwitch.isChecked
+        sharedViewModel.applyParens = binding.applyParensSwitch.isChecked
+        sharedViewModel.clearOnError = binding.clearOnErrorSwitch.isChecked
+        sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
+        sharedViewModel.shuffleComputation = binding.shuffleComputationSwitch.isChecked
+        sharedViewModel.shuffleNumbers = binding.shuffleNumbersSwitch.isChecked
+        sharedViewModel.shuffleOperators = binding.shuffleOperatorsSwitch.isChecked
 
-        when {
-            randomizePressed -> sharedViewModel.randomizeSettings()
-            resetPressed -> {
-                // persist show settings value
-                sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
-                sharedViewModel.resetSettings()
-            }
-            standardFunctionPressed -> {
-                // persist show settings value
-                sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
-                sharedViewModel.setStandardSettings()
-            }
-            else -> {
-                // update ViewModel based on settings selected in UI
-                sharedViewModel.applyDecimals = binding.applyDecimalsSwitch.isChecked
-                sharedViewModel.applyParens = binding.applyParensSwitch.isChecked
-                sharedViewModel.clearOnError = binding.clearOnErrorSwitch.isChecked
-                sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
-                sharedViewModel.shuffleComputation = binding.shuffleComputationSwitch.isChecked
-                sharedViewModel.shuffleNumbers = binding.shuffleNumbersSwitch.isChecked
-                sharedViewModel.shuffleOperators = binding.shuffleOperatorsSwitch.isChecked
-
-                val checkedId = binding.historyRandomnessGroup.checkedRadioButtonId
-                val newHistoryRandomness = historyButtons.indexOfFirst { it.id == checkedId }
-                sharedViewModel.setHistoryRandomness(newHistoryRandomness)
-            }
-        }
+        val checkedId = binding.historyRandomnessGroup.checkedRadioButtonId
+        val newHistoryRandomness = historyButtons.indexOfFirst { it.id == checkedId }
+        sharedViewModel.setHistoryRandomness(newHistoryRandomness)
     }
 
     /**
@@ -158,9 +137,7 @@ class SettingsFragment : BaseFragment() {
      */
     private fun closePreviousFragment() {
         try {
-            if (!fromDialog && !fromCalculatorFragment) {
-                requireBaseActivity().popBackStack()
-            }
+            requireBaseActivity().popBackStack()
         } catch (e: Exception) {
             // expected to fail when UI is recreating due to configuration changes or via dev tools
             val appName = getString(R.string.app_name)
@@ -173,7 +150,13 @@ class SettingsFragment : BaseFragment() {
      */
     override fun onDestroy() {
         super.onDestroy()
-        saveSettingsToViewModel()
-        closePreviousFragment()
+
+        if (!settingsPreSaved) {
+            saveSettingsToViewModel()
+        }
+
+        if (!fromDialog && !fromCalculatorFragment) {
+            closePreviousFragment()
+        }
     }
 }

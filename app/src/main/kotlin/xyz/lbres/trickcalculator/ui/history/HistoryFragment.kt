@@ -37,6 +37,7 @@ class HistoryFragment : BaseFragment() {
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        // values are reset when fragment is destroyed
         historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
 
         historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
@@ -109,13 +110,5 @@ class HistoryFragment : BaseFragment() {
     override fun handleHistoryCleared() {
         historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
         setUI()
-    }
-
-    /**
-     * Clear values in history ViewModel when destroying fragment
-     */
-    override fun onDestroy() {
-        super.onDestroy()
-        historyViewModel.clearValues()
     }
 }

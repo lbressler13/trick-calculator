@@ -13,10 +13,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.closeDialog
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.doClearHistory
-import xyz.lbres.trickcalculator.testutils.openDevTools
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
@@ -70,9 +68,7 @@ class CalculatorFragmentTestDev {
         useHistoryButton.check(matches(isDisplayed())).perform(click())
         onView(withId(R.id.mainText)).check(matches(withText("12+34")))
 
-        openDevTools()
-        onView(withId(R.id.clearHistoryButton)).perform(click())
-        closeDialog()
+        doClearHistory()
 
         onView(withId(R.id.mainText)).check(matches(withText("12+34")))
         useHistoryButton.check(isNotPresented())

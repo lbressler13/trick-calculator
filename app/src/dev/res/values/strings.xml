@@ -6,7 +6,7 @@
     <string name="title_dev_tools">Developer Tools</string>
     <string name="clear_history">Clear history</string>
     <string name="refresh_ui">Refresh UI</string>
-    <string name="show_settings_dialog">Open settings menu</string>
+    <string name="open_settings">Open settings fragment</string>
     <string name="hide_dev_tools">Hide dev tools</string>
     <string-array name="dev_tools_time_options">
         <item>5000ms</item>

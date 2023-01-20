@@ -41,7 +41,7 @@ class DeveloperToolsDialogTest {
         onView(withId(R.id.refreshUIButton))
             .check(matches(allOf(isDisplayed(), withText("Refresh UI"))))
         onView(withId(R.id.openSettingsButton))
-            .check(matches(allOf(isDisplayed(), withText("Open settings menu"))))
+            .check(matches(allOf(isDisplayed(), withText("Open settings fragment"))))
         onView(withId(R.id.hideDevToolsButton))
             .check(matches(allOf(isDisplayed(), withText("Hide dev tools"))))
 

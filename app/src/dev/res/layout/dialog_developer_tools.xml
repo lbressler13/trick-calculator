@@ -21,7 +21,7 @@
     <Button
         android:id="@+id/openSettingsButton"
         style="@style/DialogButton"
-        android:text="@string/show_settings_dialog" />
+        android:text="@string/open_settings" />
 
     <!-- Options for hiding dev tools button -->
     <androidx.constraintlayout.widget.ConstraintLayout

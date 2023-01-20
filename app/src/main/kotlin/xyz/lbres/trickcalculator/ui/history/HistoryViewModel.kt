@@ -13,6 +13,8 @@ import kotlin.random.Random
  * Information about values that are currently displayed on history screen
  */
 class HistoryViewModel : ViewModel() {
+    private val random = Random(Date().time)
+
     /**
      * Values before modification
      */
@@ -87,19 +89,10 @@ class HistoryViewModel : ViewModel() {
     private fun generateRandomHistory(): History? {
         val probabilityError = ternaryIf(history!!.isEmpty(), 1f, 0.2f)
 
-        if (Random(Date().time).nextBoolean(probabilityError)) {
+        if (random.nextBoolean(probabilityError)) {
             return null
         }
 
         return List(history!!.size) { generateRandomHistoryItem() }
-    }
-
-    /**
-     * Clear all values in ViewModel
-     */
-    fun clearValues() {
-        randomness = null
-        history = null
-        randomizedHistory = null
     }
 }

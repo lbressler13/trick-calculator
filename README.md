@@ -48,7 +48,7 @@ Randomization settings are re-applied each time the equals button is clicked, so
 Some details about the settings are not documented. The definition of the "history mode" is one example of this.
 However, all details are available through comments in the code. Creating chaos does not excuse messy code.
 
-In addition, access to the settings menu is unintuitive to create added difficulty.
+Similarly, access to the settings menu is unintuitive to create added difficulty.
 In the spirit of the app, this access is undocumented.
 
 ## Project structure
