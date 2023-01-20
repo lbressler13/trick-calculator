@@ -1,6 +1,6 @@
 # Trick Calculator
 
-[![All Checks](https://github.com/lbressler13/trick-calculator/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/trick-calculator/actions/workflows/basic_checks.yml)
+[![All Checks](https://github.com/lbressler13/trick-calculator/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/trick-calculator/actions/workflows/all_checks.yml)
 
 This calculator exists purely for fun and chaos.
 Instead of performing the expected computations, it can change the actions of the operators, the values of the numbers, and several other aspects of computation.
