@@ -15,6 +15,8 @@ private const val OPERATOR = "operator"
 private const val LPAREN = "lparen"
 private const val RPAREN = "rparen"
 
+private val parenCounts = mapOf(LPAREN to 1, RPAREN to -1)
+
 private val syntaxError = Exception("Syntax error")
 
 /**
@@ -24,9 +26,11 @@ private val computeText = mutableListOf<String>()
 private var lastType = ""
 private var currentType = ""
 private var currentNumber = ""
-private var currentDecimal = false
-private var lastDecimal = false
 private var openParenCount = 0
+
+// decimal values tracked for use in syntax errors when applyDecimals = false
+private var currentDecimal = false // if current num already has a decimal
+private var lastDecimal = false // if the most recent element was a decimal
 
 /**
  * Validate computation text, combine adjacent digits/decimals to form numbers,
@@ -91,8 +95,8 @@ fun generateAndValidateComputeText(
             addCurrentNumber()
         }
 
-        updateParenCount()
-        if (nonNumberSyntaxError(openParenCount)) {
+        openParenCount += parenCounts.getOrDefault(currentType, 0)
+        if (nonNumberSyntaxError()) {
             throw syntaxError
         }
 
@@ -144,7 +148,7 @@ private fun addInitialValue(initialValue: ExactFraction, initialText: StringList
     computeText.add(initialValue.toEFString())
     lastType = NUMBER
 
-    // add multiplication between initial val and first num
+    // add times between initial val and first num
     if (initialText.isNotEmpty() && isNumberChar(initialText[0])) {
         computeText.add("x")
     }
@@ -178,7 +182,7 @@ private fun addDigit(element: String, applyDecimals: Boolean, numbersOrder: IntL
  * Map an element to the corresponding value in the numbers order. Returns [element] if the order is null.
  *
  * @param element [String]: value to map
- * @param numbersOrder [IntList]?: list containing numbers 0..9, or null
+ * @param numbersOrder [IntList]?: list containing numbers 0..9 in some order, or null
  */
 private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): String {
     if (numbersOrder == null) {
@@ -250,23 +254,11 @@ private fun getTypeOf(element: String, ops: StringList): String? {
 }
 
 /**
- * Increment or decrement the paren count based on the current type
- */
-private fun updateParenCount() {
-    if (currentType == LPAREN) {
-        openParenCount++
-    } else if (currentType == RPAREN) {
-        openParenCount--
-    }
-}
-
-/**
  * Determine if there is a syntax error due to placement of operators or parens
  *
- * @param openParenCount [Int]: number of current open sets of parens
  * @return [Boolean]: `true` if there is an error, `false` otherwise
  */
-private fun nonNumberSyntaxError(openParenCount: Int): Boolean {
+private fun nonNumberSyntaxError(): Boolean {
     val operatorInsideParens = (lastType == LPAREN && currentType == OPERATOR) || (lastType == OPERATOR && currentType == RPAREN)
     val doubleOperators = lastType == OPERATOR && currentType == OPERATOR
     val emptyParens = lastType == LPAREN && currentType == RPAREN
@@ -282,6 +274,7 @@ private fun nonNumberSyntaxError(openParenCount: Int): Boolean {
  * @param ops [StringList]: list of string values recognized as operators
  * @return [StringList]: a list containing the same elements as the computeText, with the orders of numbers and operators shuffled
  */
+// public for testing purposes
 fun getShuffledComputation(computeText: StringList, ops: StringList): StringList {
     val numbers = computeText.filter { isNumber(it) }.toMutableList()
     val operators = computeText.filter { isOperator(it, ops) }.toMutableList()
