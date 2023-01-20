@@ -355,6 +355,13 @@ private fun testBuildText() {
         expected,
         generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
     )
+
+    text = splitString("(2(3)4)")
+    expected = "( 2 x ( 3 ) x 4 )".split(' ')
+    assertEquals(
+        expected,
+        generateAndValidateComputeText(null, text, ops, null, true, true, false)
+    )
 }
 
 private fun testBuildTextWithMods() {

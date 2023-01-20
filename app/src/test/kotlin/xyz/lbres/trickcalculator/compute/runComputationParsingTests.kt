@@ -234,6 +234,10 @@ fun runParseTextTests() {
     expected = ExactFraction(621, 121)
     assertEquals(expected, parseText(text, allOps, performOp))
 
+    text = "( 2 x ( 3 ) x 4 )".split(' ')
+    expected = ExactFraction(24)
+    assertEquals(expected, parseText(text, allOps, performOp))
+
     text = "( 2 + 7 ) / ( 0.5 - 1 / 2 )".split(' ')
     assertDivByZero {
         parseText(text, allOps, performOp)
