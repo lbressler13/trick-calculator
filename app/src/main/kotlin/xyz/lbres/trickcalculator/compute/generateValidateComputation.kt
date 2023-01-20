@@ -95,10 +95,6 @@ fun generateAndValidateComputeText(
 
     // add operator or paren to compute text
     val addNonNumber: (String) -> Unit = {
-        if (currentNumber.isNotEmpty()) {
-            addCurrentNumber()
-        }
-
         // add mult between preceding num and paren, or between adjacent parens
         if ((lastType == "number" && currentType == "lparen") ||
             (lastType == "rparen" && currentType == "lparen")
@@ -154,7 +150,7 @@ fun generateAndValidateComputeText(
         }
 
         if (currentType != "number" && currentNumber.isNotEmpty()) {
-            lastType = "number"
+            addCurrentNumber()
         }
 
         if (currentType == "lparen") {
