@@ -22,7 +22,7 @@ import xyz.lbres.trickcalculator.utils.visible
 class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var viewModel: HistoryViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
     override val navigateToSettings = R.id.navigateHistoryToSettings
 
@@ -36,13 +36,13 @@ class HistoryFragment : BaseFragment() {
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
-        viewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
+        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
         val initialLoadKey = getString(R.string.initial_fragment_load_key)
         val isInitialLoad = arguments?.getBoolean(initialLoadKey) ?: false
 
-        if (isInitialLoad || viewModel.randomizedHistory == null) {
-            viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        if (isInitialLoad || historyViewModel.randomizedHistory == null) {
+            historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         }
 
         setUI()
@@ -57,7 +57,7 @@ class HistoryFragment : BaseFragment() {
      * Set UI based on randomized history
      */
     private fun setUI() {
-        val randomHistory = viewModel.randomizedHistory
+        val randomHistory = historyViewModel.randomizedHistory
         val displayError = randomHistory?.isEmpty() == true && settingsViewModel.historyRandomness == 3
 
         when {
@@ -97,9 +97,13 @@ class HistoryFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Update history randomness when setting changes, and redisplay UI.
+     * Redisplay can happen when randomness changes, or when history is cleared.
+     */
     override fun handlePostDevTools() {
-        if (viewModel.randomness != settingsViewModel.historyRandomness) {
-            viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        if (historyViewModel.randomness != settingsViewModel.historyRandomness) {
+            historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         }
 
         setUI()

@@ -15,6 +15,9 @@ class BaseActivity : AppCompatActivity() {
     lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
 
+    /**
+     * Fragment manager for current fragment, used when displaying the dev tools dialog
+     */
     var dialogFragmentManager: FragmentManager? = null
 
     /**
@@ -47,8 +50,7 @@ class BaseActivity : AppCompatActivity() {
      * @param args [Bundle?]: arguments to pass with action
      */
     fun runNavAction(actionResId: Int, args: Bundle? = null) {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
         if (args == null) {
@@ -75,8 +77,7 @@ class BaseActivity : AppCompatActivity() {
      * Determine if phone is set to dark mode
      */
     private fun isDarkMode(): Boolean {
-        val nightModeFlags: Int =
-            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val nightModeFlags: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return when (nightModeFlags) {
             Configuration.UI_MODE_NIGHT_YES -> true
             Configuration.UI_MODE_NIGHT_NO -> false

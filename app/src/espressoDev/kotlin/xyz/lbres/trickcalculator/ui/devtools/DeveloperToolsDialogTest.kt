@@ -22,6 +22,8 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 class DeveloperToolsDialogTest {
     private val devToolsButton = onView(withId(R.id.devToolsButton))
 
+    // TODO tests for recreating ui
+
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)

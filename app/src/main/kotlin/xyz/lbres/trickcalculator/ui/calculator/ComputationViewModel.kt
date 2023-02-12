@@ -40,7 +40,8 @@ class ComputationViewModel : ViewModel() {
      *
      * @param newError [String]?: error result, null if no error was thrown
      * @param newComputed [ExactFraction]?: computed result, null if result was not computed successfully
-     * @param clearOnError [Boolean]: if compute data should be cleared in event of an error. Defaults to false
+     * @param clearOnError [Boolean]: if compute data should be cleared in event of an error. Defaults to `false`
+     * @return [HistoryItem]?: new history item based on previous values and new result/error
      */
     fun setResult(newError: String?, newComputed: ExactFraction?, clearOnError: Boolean = false): HistoryItem? {
         backupComputeText = computeText
@@ -62,7 +63,9 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Store last history value based on most recent error or computation
+     * Generate last history value based on most recent error or computation
+     *
+     * @return [HistoryItem]?: the generated item
      */
     private fun generateHistoryItem(): HistoryItem? {
         val lastComputed = backupComputed
@@ -86,7 +89,6 @@ class ComputationViewModel : ViewModel() {
         }
 
         return when {
-            // generatedHistoryItem = when {
             error != null -> HistoryItem(lastComputeText, error!!, lastComputed)
             computedValue != null -> HistoryItem(lastComputeText, computedValue!!, lastComputed)
             else -> null

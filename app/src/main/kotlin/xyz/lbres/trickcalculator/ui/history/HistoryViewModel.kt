@@ -16,7 +16,7 @@ class HistoryViewModel : ViewModel() {
     private val random = Random(Date().time)
 
     /**
-     * Randomness applied to items on screen
+     * Randomness applied to items on screen. Copied from value in SettingsViewModel
      */
     var randomness: Int? = null
         private set
@@ -98,10 +98,10 @@ class HistoryViewModel : ViewModel() {
     /**
      * Add new item to history
      *
-     * @param newItem [HistoryItem]
+     * @param item [HistoryItem]
      */
-    fun addToHistory(newItem: HistoryItem) {
-        _history.add(newItem)
+    fun addToHistory(item: HistoryItem) {
+        _history.add(item)
     }
 
     /**

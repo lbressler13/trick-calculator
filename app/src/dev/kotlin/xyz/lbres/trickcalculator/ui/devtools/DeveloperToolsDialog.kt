@@ -31,6 +31,10 @@ class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var historyViewModel: HistoryViewModel
+
+    /**
+     * If settings fragment is opened when dialog is dismissed
+     */
     private var openedSettings: Boolean = false
 
     /**
@@ -130,10 +134,23 @@ class DeveloperToolsDialog : DialogFragment() {
         }
     }
 
+    /**
+     * Get current activity as [BaseActivity].
+     *
+     * @return [BaseActivity]
+     */
     private fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
 
+    /**
+     * Get current fragment as [BaseFragment].
+     *
+     * @return [BaseFragment]
+     */
     private fun requireBaseFragment(): BaseFragment = requireParentFragment() as BaseFragment
 
+    /**
+     * Call the post dev tools callback, unless settings fragment has been opened
+     */
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
@@ -143,7 +160,7 @@ class DeveloperToolsDialog : DialogFragment() {
     }
 
     companion object {
-        // tag is required when showing fragment
+        // tag is required when showing dialog
         const val TAG = "DeveloperToolsDialog"
     }
 }
