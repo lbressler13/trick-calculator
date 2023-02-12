@@ -56,7 +56,6 @@ class HistoryFragment : BaseFragment() {
         if (it) {
             viewModel.updateRandomHistory(settingsViewModel.historyRandomness, forceUpdate = false)
             setUI()
-            // settingsViewModel.historyRandomnessObserved()
         }
     }
 

@@ -10,7 +10,7 @@ import java.util.Date
 import kotlin.random.Random
 
 /**
- * Information about values that are currently displayed on history screen
+ * Information about history
  */
 class HistoryViewModel : ViewModel() {
     private val random = Random(Date().time)
@@ -20,6 +20,9 @@ class HistoryViewModel : ViewModel() {
      */
     private var randomness: Int? = null
 
+    /**
+     * List of history items
+     */
     private val _history: MutableList<HistoryItem> = mutableListOf()
     val history: History = _history
 

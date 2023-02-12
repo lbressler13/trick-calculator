@@ -5,7 +5,7 @@ import java.util.Date
 import kotlin.random.Random
 
 /**
- * ViewModel to track history and settings that are shared across fragments
+ * ViewModel to track settings that are shared across fragments
  */
 class SettingsViewModel : ViewModel() {
     private val random = Random(Date().time)
@@ -68,27 +68,4 @@ class SettingsViewModel : ViewModel() {
         shuffleNumbers = false
         shuffleOperators = false
     }
-
-//    /**
-//     * History
-//     */
-//
-//    private val _history: MutableList<HistoryItem> = mutableListOf()
-//    val history: History = _history
-//
-//    /**
-//     * Add new item to history
-//     *
-//     * @param newItem [HistoryItem]
-//     */
-//    fun addToHistory(newItem: HistoryItem) {
-//        _history.add(newItem)
-//    }
-//
-//    /**
-//     * Clear all values in history
-//     */
-//    fun clearHistory() {
-//        _history.clear()
-//    }
 }
