@@ -38,7 +38,10 @@ class HistoryFragment : BaseFragment() {
         settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
         viewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
-        if (viewModel.randomizedHistory == null) {
+        val initialLoadKey = getString(R.string.initial_fragment_load_key)
+        val isInitialLoad = arguments?.getBoolean(initialLoadKey) ?: false
+
+        if (isInitialLoad || viewModel.randomizedHistory == null) {
             viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         }
 
@@ -46,6 +49,7 @@ class HistoryFragment : BaseFragment() {
 
         binding.closeButton.root.setOnClickListener { closeFragment() }
 
+        arguments?.remove(initialLoadKey)
         return binding.root
     }
 
@@ -99,10 +103,5 @@ class HistoryFragment : BaseFragment() {
         }
 
         setUI()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.deleteRandomizedHistory()
     }
 }

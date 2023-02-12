@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -81,7 +82,10 @@ class CalculatorFragment : BaseFragment() {
      * Launch HistoryFragment
      */
     private val historyButtonOnClick = {
-        requireBaseActivity().runNavAction(R.id.navigateCalculatorToHistory)
+        val initialLoadKey = getString(R.string.initial_fragment_load_key)
+        val args = bundleOf(initialLoadKey to true)
+
+        requireBaseActivity().runNavAction(R.id.navigateCalculatorToHistory, args)
     }
 
     /**

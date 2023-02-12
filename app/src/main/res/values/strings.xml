@@ -72,6 +72,9 @@
     <string name="settings_cd">Settings</string>
     <string name="times_cd">Times symbol</string>
 
+    <!-- Keys -->
+    <string name="initial_fragment_load_key">initialFragmentLoad</string>
+
     <!-- Dev Tools -->
     <string name="dev_tools_button">{ }</string>
     <string name="from_dialog_key">fromDialog</string>

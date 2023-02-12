@@ -30,12 +30,6 @@ class ComputationViewModel : ViewModel() {
         private set
 
     /**
-     * History item generated from most recent computation
-     */
-//    var generatedHistoryItem: HistoryItem? = null
-//        private set
-
-    /**
      * Backup values to use when generating history item
      */
     private var backupComputeText: StringList = emptyList()
@@ -97,14 +91,6 @@ class ComputationViewModel : ViewModel() {
             computedValue != null -> HistoryItem(lastComputeText, computedValue!!, lastComputed)
             else -> null
         }
-    }
-
-    /**
-     * Remove the generated history item and historical values
-     */
-    fun clearStoredHistoryItem() {
-        // generatedHistoryItem = null
-        clearBackups()
     }
 
     /**

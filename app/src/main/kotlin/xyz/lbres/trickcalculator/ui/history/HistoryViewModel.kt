@@ -111,8 +111,4 @@ class HistoryViewModel : ViewModel() {
         _history.clear()
         randomizedHistory = emptyList()
     }
-
-    fun deleteRandomizedHistory() {
-        randomizedHistory = null
-    }
 }
