@@ -22,8 +22,6 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 class DeveloperToolsDialogTest {
     private val devToolsButton = onView(withId(R.id.devToolsButton))
 
-    // TODO tests for recreating ui
-
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
@@ -56,6 +54,13 @@ class DeveloperToolsDialogTest {
         openDevTools()
         onView(withId(R.id.openSettingsButton)).perform(click())
         onView(withText("Settings")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun refreshUI() {
+        openDevTools()
+        onView(withId(R.id.refreshUIButton)).perform(click())
+        onView(withText("Developer Tools")).check(matches(isDisplayed()))
     }
 
     @Test fun hideDevToolsOptionsDisplayed() = testHideDevToolsOptionsDisplayed()

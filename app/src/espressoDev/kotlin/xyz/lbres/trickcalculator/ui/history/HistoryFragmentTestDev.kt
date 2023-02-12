@@ -130,6 +130,20 @@ class HistoryFragmentTestDev {
         runSingleNotReshuffledCheck(history, 1)
     }
 
+    @Test
+    fun refreshUI() {
+        val history = TestHistory()
+        history.add(generateTestItem("1+2") { "3" })
+        history.add(generateTestItem("-1/2", "3") { "2.5" })
+        history.add(generateTestItem("+") { "Syntax error" })
+        history.add(generateTestItem("1+2-2^3x1") { "-5" })
+        history.add(generateTestItem("(1+2)(4-2)") { "6" })
+
+        openHistoryFragment()
+        runSingleNotReshuffledCheck(history, 1, withRefresh = true)
+        runSingleNotReshuffledCheck(history, 2, withRefresh = true)
+    }
+
     /**
      * Run single test to update history randomness and check that changes are applied without closing/re-opening history fragment.
      *

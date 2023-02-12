@@ -33,6 +33,15 @@ fun openSettingsFromDialog() {
  */
 fun doClearHistory() {
     openDevTools()
-    onView(withText("Clear history")).perform(click())
+    onView(withId(R.id.clearHistoryButton)).perform(click())
+    closeDialog()
+}
+
+/**
+ * Open dev tools dialog, refresh UI, and close dev tools dialog
+ */
+fun doRefreshUI() {
+    openDevTools()
+    onView(withId(R.id.refreshUIButton)).perform(click())
     closeDialog()
 }

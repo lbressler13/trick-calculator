@@ -142,12 +142,14 @@ fun testAttributionLinks() {
     assertLinkOpened(author.url, expectedLinkClicks)
 }
 
+// TODO move these to helpers
+
 /**
  * Check that image urls for specified dropdowns are not visible
  *
  * @param positions [IntList]: list of positions where image urls should not be visible
  */
-private fun checkImagesNotPresented(positions: IntList) {
+fun checkImagesNotPresented(positions: IntList) {
     for (position in positions) {
         onView(withId(recyclerId)).perform(scrollToPosition(0))
         for (url in imageUrls[position]) {
@@ -161,7 +163,7 @@ private fun checkImagesNotPresented(positions: IntList) {
  *
  * @param positions [IntList]: list of positions where image urls should be visible
  */
-private fun checkImagesDisplayed(positions: IntList) {
+fun checkImagesDisplayed(positions: IntList) {
     for (position in positions) {
         for (pair in imageUrls[position].withIndex()) {
             val nestedPosition = pair.index

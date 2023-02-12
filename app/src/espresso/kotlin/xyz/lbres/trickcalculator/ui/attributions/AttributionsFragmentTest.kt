@@ -74,10 +74,8 @@ class AttributionsFragmentTest {
 
     @Test
     fun flaticonMessage() {
-        val flaticonShort =
-            "All icons are taken from Flaticon. Expand for details of their attribution policies."
-        val flaticonLong =
-            "All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies."
+        val flaticonShort = "All icons are taken from Flaticon. Expand for details of their attribution policies."
+        val flaticonLong = "All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies."
 
         // initial view
         onView(withId(R.id.flaticonPolicyMessage)).check(matches(withText(flaticonShort)))

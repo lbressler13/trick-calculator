@@ -98,6 +98,7 @@ fun testSettingsSaved() {
     closeFragment()
 }
 
+// TODO move this to helper
 /**
  * Test that a specific group of settings is displayed in the UI
  *
@@ -105,7 +106,7 @@ fun testSettingsSaved() {
  * @param settingsSwitchDisplayed [Boolean]: is the settings button switch should be visible.
  * Defaults to `true`
  */
-private fun checkSettingsDisplayed(settings: Settings, settingsSwitchDisplayed: Boolean = true) {
+fun checkSettingsDisplayed(settings: Settings, settingsSwitchDisplayed: Boolean = true) {
     val checkSetting: (Int, Boolean) -> Unit = { switchId, settingValue ->
         val switch = onView(withId(switchId))
         val checkedMatcher = ternaryIf(settingValue, isChecked(), isNotChecked())
