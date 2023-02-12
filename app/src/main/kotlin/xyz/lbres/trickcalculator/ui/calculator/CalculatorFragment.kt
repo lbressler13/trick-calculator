@@ -260,8 +260,11 @@ class CalculatorFragment : BaseFragment() {
     /**
      * Hide useLastHistory button when history is cleared
      */
-    override fun handleHistoryCleared() {
-        binding.useLastHistoryButton.gone()
+    override fun handlePostDevTools() {
+        // handle history cleared
+        if (historyViewModel.history.isEmpty()) {
+            binding.useLastHistoryButton.gone()
+        }
     }
 
     /**

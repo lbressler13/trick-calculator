@@ -143,18 +143,30 @@ class SettingsFragment : BaseFragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        if (!settingsPreSaved) {
+            saveSettingsToViewModel()
+        }
+
+        if (fromDialog && devToolsCallback != null) {
+            devToolsCallback!!()
+        }
+    }
+
     /**
      * Save settings to ViewModel and return to calculator screen, if not coming through dev tools
      */
     override fun onDestroy() {
         super.onDestroy()
 
-        if (!settingsPreSaved) {
-            saveSettingsToViewModel()
-        }
-
         if (!fromDialog && !fromCalculatorFragment) {
             closePreviousFragment()
         }
+    }
+
+    companion object {
+        var devToolsCallback: (() -> Unit)? = null
     }
 }

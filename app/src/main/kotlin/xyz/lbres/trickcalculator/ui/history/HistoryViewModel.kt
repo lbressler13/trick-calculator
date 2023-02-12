@@ -32,17 +32,34 @@ class HistoryViewModel : ViewModel() {
     var randomizedHistory: History? = null
         private set
 
+    private var postDevTools: Boolean = false
+
     /**
-     * Update randomized history, based on current history and new [randomness] value
+     * Update randomness and randomized history after dev tools closes.
+     * Only changes history if randomness changed.
      *
-     * @param randomness [Int]: new history randomness value from SettingsViewModel
-     * @param forceUpdate [Boolean]: if randomized history should be update when randomness is unchanged. Defaults to `true`
+     * @param randomness [Int]: new randomness to use
      */
-    fun updateRandomHistory(randomness: Int, forceUpdate: Boolean = true) {
-        if (randomness != this.randomness || forceUpdate) {
+    fun updatePostDevTools(randomness: Int) {
+        postDevTools = true
+        if (randomness != this.randomness) {
             this.randomness = randomness
             randomizedHistory = getRandomHistory()
         }
+    }
+
+    /**
+     * Update randomized history, based on current history and new randomness value
+     *
+     * @param randomness [Int]: new history randomness value from SettingsViewModel
+     */
+    fun updateRandomHistory(randomness: Int) {
+        if (!postDevTools) {
+            this.randomness = randomness
+            randomizedHistory = getRandomHistory()
+        }
+
+        postDevTools = false
     }
 
     /**
@@ -111,5 +128,6 @@ class HistoryViewModel : ViewModel() {
      */
     fun clearHistory() {
         _history.clear()
+        randomizedHistory = emptyList()
     }
 }

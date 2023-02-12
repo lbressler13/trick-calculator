@@ -50,15 +50,13 @@ abstract class BaseFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        FragmentDevToolsContext.currentContext = FragmentDevToolsContext(
-            childFragmentManager,
-        ) { handleHistoryCleared() }
+        requireBaseActivity().dialogFragmentManager = childFragmentManager
     }
 
     /**
-     * Callback to call when history is cleared through dev tools
+     * Callback to call when dev tools flow completes, either from the dialog or from the settings fragment
      */
-    protected open fun handleHistoryCleared() {}
+    open fun handlePostDevTools() {}
 
     /**
      * Close the fragment

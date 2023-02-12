@@ -3,6 +3,7 @@ package xyz.lbres.trickcalculator
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.databinding.ActivityBaseBinding
 
@@ -13,6 +14,8 @@ class BaseActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
+
+    var dialogFragmentManager: FragmentManager? = null
 
     /**
      * Initialize activity

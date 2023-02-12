@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,20 +42,9 @@ class HistoryFragment : BaseFragment() {
         viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         setUI()
 
-        // settingsViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, liveDataObserver)
         binding.closeButton.root.setOnClickListener { closeFragment() }
 
         return binding.root
-    }
-
-    /**
-     * Indirectly observe change to history randomness setting
-     */
-    private val liveDataObserver = Observer<Boolean> {
-        if (it) {
-            viewModel.updateRandomHistory(settingsViewModel.historyRandomness, forceUpdate = false)
-            setUI()
-        }
     }
 
     /**
@@ -103,11 +91,8 @@ class HistoryFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Update UI when history is cleared
-     */
-    override fun handleHistoryCleared() {
-        viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+    override fun handlePostDevTools() {
+        viewModel.updatePostDevTools(settingsViewModel.historyRandomness)
         setUI()
     }
 }
