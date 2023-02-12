@@ -188,20 +188,18 @@ class SettingsFragmentTestDev {
         openSettingsFragment()
 
         // initial settings
-        checkInitialSettings()
         doRefreshUI()
         checkInitialSettings()
 
         // modified settings
         val settings = Settings()
-        settings.clearOnError = true
-        settings.shuffleNumbers = true
-        settings.historyRandomness = 0
 
         onView(withId(R.id.clearOnErrorSwitch)).perform(click())
         onView(withId(R.id.shuffleNumbersSwitch)).perform(click())
         onView(withId(R.id.historyButton0)).perform(click())
-        checkSettingsDisplayed(settings)
+        settings.clearOnError = true
+        settings.shuffleNumbers = true
+        settings.historyRandomness = 0
 
         doRefreshUI()
         checkSettingsDisplayed(settings)

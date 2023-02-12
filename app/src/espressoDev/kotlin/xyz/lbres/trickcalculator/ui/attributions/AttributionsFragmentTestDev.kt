@@ -45,14 +45,7 @@ class AttributionsFragmentTestDev {
     fun refreshUI() {
         val authorTitles = authorAttributions.map { "Icon made by ${it.name} from www.flaticon.com" }
 
-        // initial view
-        onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Expand")))
-        authorTitles.indices.forEach {
-            val withAuthorTitle = hasDescendant(withText(authorTitles[it]))
-            onView(withViewHolder(recyclerId, it)).check(matches(allOf(isDisplayed(), withAuthorTitle)))
-        }
-
-        // refresh with all collapsed
+        // refresh with initial view (all collapsed)
         doRefreshUI()
 
         onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Expand")))

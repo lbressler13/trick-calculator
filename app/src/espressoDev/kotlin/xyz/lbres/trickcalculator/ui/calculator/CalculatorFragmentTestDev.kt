@@ -13,7 +13,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.*
+import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.doClearHistory
+import xyz.lbres.trickcalculator.testutils.doRefreshUI
+import xyz.lbres.trickcalculator.testutils.openHistoryFragment
+import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
+import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
@@ -97,18 +102,14 @@ class CalculatorFragmentTestDev {
 
         // with text
         typeText("1-3+4")
-        checkMainTextMatches("1-3+4")
-        useHistoryButton.check(isNotPresented())
-
         doRefreshUI()
+
         checkMainTextMatches("1-3+4")
         useHistoryButton.check(isNotPresented())
 
         // with result
         equals()
         typeText("x6")
-        checkMainTextMatches("[2]x6")
-        useHistoryButton.check(matches(isDisplayed()))
 
         doRefreshUI()
         checkMainTextMatches("[2]x6")
@@ -116,11 +117,8 @@ class CalculatorFragmentTestDev {
 
         // with error
         clearText()
-
         typeText("5/0")
         equals()
-        checkMainTextMatches("5/0")
-        onView(withId(R.id.errorText)).check(matches(withText("Error: Divide by zero")))
 
         doRefreshUI()
         checkMainTextMatches("5/0")

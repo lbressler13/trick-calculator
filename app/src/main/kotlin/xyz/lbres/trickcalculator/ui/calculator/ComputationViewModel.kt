@@ -63,7 +63,7 @@ class ComputationViewModel : ViewModel() {
     }
 
     /**
-     * Generate last history value based on most recent error or computation
+     * Generate last history item based on most recent error or computation
      *
      * @return [HistoryItem]?: the generated item
      */

@@ -163,6 +163,9 @@ class SettingsFragment : BaseFragment() {
     }
 
     companion object {
+        /**
+         * Function to call when fragment is closed, after being opened from dev tools dialog
+         */
         var devToolsCallback: (() -> Unit)? = null
     }
 }

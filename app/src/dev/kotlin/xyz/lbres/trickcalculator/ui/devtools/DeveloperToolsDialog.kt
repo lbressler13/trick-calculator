@@ -33,7 +33,7 @@ class DeveloperToolsDialog : DialogFragment() {
     private lateinit var historyViewModel: HistoryViewModel
 
     /**
-     * If settings fragment is opened when dialog is dismissed
+     * If settings navigation occurs before dialog is dismissed
      */
     private var openedSettings: Boolean = false
 
@@ -149,11 +149,12 @@ class DeveloperToolsDialog : DialogFragment() {
     private fun requireBaseFragment(): BaseFragment = requireParentFragment() as BaseFragment
 
     /**
-     * Call the post dev tools callback, unless settings fragment has been opened
+     * Call callback for current function
      */
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
+        // callback will be called in settings fragment
         if (!openedSettings) {
             requireBaseFragment().handlePostDevTools()
         }

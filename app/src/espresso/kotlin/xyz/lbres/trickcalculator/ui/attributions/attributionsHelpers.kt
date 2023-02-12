@@ -61,9 +61,8 @@ fun checkImagesDisplayed(positions: IntList) {
             val url = pair.value
 
             imageLinkAction(position, nestedPosition, scrollTo())
-            onView(
-                withNestedViewHolder(recyclerId, nestedRecyclerId, position, nestedPosition)
-            ).check(matches(allOf(isDisplayed(), hasDescendant(withText(url)))))
+            onView(withNestedViewHolder(recyclerId, nestedRecyclerId, position, nestedPosition))
+                .check(matches(allOf(isDisplayed(), hasDescendant(withText(url)))))
         }
     }
 }

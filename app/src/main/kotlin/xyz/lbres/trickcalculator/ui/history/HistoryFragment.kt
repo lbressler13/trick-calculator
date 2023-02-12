@@ -98,7 +98,7 @@ class HistoryFragment : BaseFragment() {
     }
 
     /**
-     * Update history randomness when setting changes, and redisplay UI.
+     * Update randomized history when randomness setting is changed, and redisplay UI.
      * Redisplay can happen when randomness changes, or when history is cleared.
      */
     override fun handlePostDevTools() {

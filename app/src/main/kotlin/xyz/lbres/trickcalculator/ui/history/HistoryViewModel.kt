@@ -10,7 +10,7 @@ import java.util.Date
 import kotlin.random.Random
 
 /**
- * Information about history
+ * Information about computation history
  */
 class HistoryViewModel : ViewModel() {
     private val random = Random(Date().time)
@@ -64,8 +64,7 @@ class HistoryViewModel : ViewModel() {
      */
     private fun shuffleHistoryValues(): History {
         val computations: List<StringList> = history.map { it.computation }.shuffled()
-        val values: List<Pair<ExactFraction?, String?>> =
-            history.map { Pair(it.result, it.error) }.shuffled()
+        val values: List<Pair<ExactFraction?, String?>> = history.map { Pair(it.result, it.error) }.shuffled()
 
         val shuffledHistory = computations.mapIndexed { index, comp ->
             val valuePair = values[index]
