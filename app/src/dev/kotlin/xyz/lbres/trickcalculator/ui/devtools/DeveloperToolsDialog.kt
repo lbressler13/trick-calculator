@@ -18,6 +18,7 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
+import xyz.lbres.trickcalculator.ui.history.HistoryViewModel
 import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -27,7 +28,8 @@ import xyz.lbres.trickcalculator.utils.visible
  */
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
-    private lateinit var viewModel: SettingsViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
     /**
      * Build dialog, comes before onCreateView and dialog is not connected to context
@@ -36,7 +38,8 @@ class DeveloperToolsDialog : DialogFragment() {
         binding = DialogDeveloperToolsBinding.inflate(layoutInflater)
         val root = binding.root
 
-        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
         val doneText = requireContext().getString(R.string.done)
         val title = requireContext().getString(R.string.title_dev_tools)
@@ -60,7 +63,7 @@ class DeveloperToolsDialog : DialogFragment() {
 
         binding.clearHistoryButton.setOnClickListener {
             val parentContext = FragmentDevToolsContext.currentContext
-            viewModel.clearHistory()
+            historyViewModel.clearHistory()
             parentContext?.handleHistoryCleared?.invoke()
         }
 

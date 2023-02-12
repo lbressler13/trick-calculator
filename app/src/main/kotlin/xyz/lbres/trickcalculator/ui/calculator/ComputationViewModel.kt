@@ -32,8 +32,8 @@ class ComputationViewModel : ViewModel() {
     /**
      * History item generated from most recent computation
      */
-    var generatedHistoryItem: HistoryItem? = null
-        private set
+//    var generatedHistoryItem: HistoryItem? = null
+//        private set
 
     /**
      * Backup values to use when generating history item
@@ -48,7 +48,7 @@ class ComputationViewModel : ViewModel() {
      * @param newComputed [ExactFraction]?: computed result, null if result was not computed successfully
      * @param clearOnError [Boolean]: if compute data should be cleared in event of an error. Defaults to false
      */
-    fun setResult(newError: String?, newComputed: ExactFraction?, clearOnError: Boolean = false) {
+    fun setResult(newError: String?, newComputed: ExactFraction?, clearOnError: Boolean = false): HistoryItem? {
         backupComputeText = computeText
         backupComputed = computedValue
         error = newError
@@ -57,18 +57,20 @@ class ComputationViewModel : ViewModel() {
             computeText = emptyList()
         }
 
-        generateHistoryItem()
+        val historyItem = generateHistoryItem()
 
         when {
             newComputed != null -> computeText = emptyList()
             newError != null && clearOnError -> resetComputeData(clearError = false)
         }
+
+        return historyItem
     }
 
     /**
      * Store last history value based on most recent error or computation
      */
-    private fun generateHistoryItem() {
+    private fun generateHistoryItem(): HistoryItem? {
         val lastComputed = backupComputed
         var lastComputeText = backupComputeText
 
@@ -89,7 +91,8 @@ class ComputationViewModel : ViewModel() {
             lastComputeText = start + lastComputeText.subList(1, lastComputeText.size)
         }
 
-        generatedHistoryItem = when {
+        return when {
+            // generatedHistoryItem = when {
             error != null -> HistoryItem(lastComputeText, error!!, lastComputed)
             computedValue != null -> HistoryItem(lastComputeText, computedValue!!, lastComputed)
             else -> null
@@ -100,7 +103,7 @@ class ComputationViewModel : ViewModel() {
      * Remove the generated history item and historical values
      */
     fun clearStoredHistoryItem() {
-        generatedHistoryItem = null
+        // generatedHistoryItem = null
         clearBackups()
     }
 

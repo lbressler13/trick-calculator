@@ -23,7 +23,7 @@ import xyz.lbres.trickcalculator.utils.visible
 class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var historyViewModel: HistoryViewModel
+    private lateinit var viewModel: HistoryViewModel
 
     override val navigateToSettings = R.id.navigateHistoryToSettings
 
@@ -38,12 +38,12 @@ class HistoryFragment : BaseFragment() {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
         // values are reset when fragment is destroyed
-        historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
-        historyViewModel.updateValues(settingsViewModel.historyRandomness, settingsViewModel.history)
+        viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         setUI()
 
-        settingsViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, liveDataObserver)
+        // settingsViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, liveDataObserver)
         binding.closeButton.root.setOnClickListener { closeFragment() }
 
         return binding.root
@@ -54,9 +54,9 @@ class HistoryFragment : BaseFragment() {
      */
     private val liveDataObserver = Observer<Boolean> {
         if (it) {
-            historyViewModel.updateValues(settingsViewModel.historyRandomness, settingsViewModel.history)
+            viewModel.updateRandomHistory(settingsViewModel.historyRandomness, forceUpdate = false)
             setUI()
-            settingsViewModel.historyRandomnessObserved()
+            // settingsViewModel.historyRandomnessObserved()
         }
     }
 
@@ -64,8 +64,8 @@ class HistoryFragment : BaseFragment() {
      * Set UI based on randomized history
      */
     private fun setUI() {
-        val randomHistory = historyViewModel.randomizedHistory
-        val displayError = randomHistory?.isEmpty() == true && historyViewModel.randomness == 3
+        val randomHistory = viewModel.randomizedHistory
+        val displayError = randomHistory?.isEmpty() == true && settingsViewModel.historyRandomness == 3
 
         when {
             // error
@@ -108,7 +108,7 @@ class HistoryFragment : BaseFragment() {
      * Update UI when history is cleared
      */
     override fun handleHistoryCleared() {
-        historyViewModel.updateValues(settingsViewModel.historyRandomness, settingsViewModel.history)
+        viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         setUI()
     }
 }

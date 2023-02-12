@@ -1,10 +1,6 @@
 package xyz.lbres.trickcalculator.ui.settings
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import xyz.lbres.trickcalculator.ui.history.HistoryItem
-import xyz.lbres.trickcalculator.utils.History
 import java.util.Date
 import kotlin.random.Random
 
@@ -15,42 +11,16 @@ class SettingsViewModel : ViewModel() {
     private val random = Random(Date().time)
 
     /**
-     * LiveData to indirectly observe changes to [historyRandomness]
-     */
-    private val _historyRandomnessUpdated = MutableLiveData<Boolean>().apply { value = false }
-    val historyRandomnessUpdated: LiveData<Boolean> = _historyRandomnessUpdated
-
-    /**
      * Individual settings
      */
     var applyDecimals: Boolean = true
     var applyParens: Boolean = true
     var clearOnError: Boolean = false
     var historyRandomness: Int = 1
-        private set
     var showSettingsButton: Boolean = false
     var shuffleComputation: Boolean = false
     var shuffleNumbers: Boolean = false
     var shuffleOperators: Boolean = true
-
-    /**
-     * Update value of [historyRandomness] and update LiveData
-     *
-     * @param newValue [Int]
-     */
-    fun setHistoryRandomness(newValue: Int) {
-        if (newValue != historyRandomness) {
-            historyRandomness = newValue
-            _historyRandomnessUpdated.value = true
-        }
-    }
-
-    /**
-     * Reset LiveData to track that history randomness was observed
-     */
-    fun historyRandomnessObserved() {
-        _historyRandomnessUpdated.value = false
-    }
 
     /**
      * All settings
@@ -64,7 +34,7 @@ class SettingsViewModel : ViewModel() {
         applyDecimals = defaults.applyDecimals
         applyParens = defaults.applyParens
         clearOnError = defaults.clearOnError
-        setHistoryRandomness(defaults.historyRandomness)
+        historyRandomness = defaults.historyRandomness
         shuffleComputation = defaults.shuffleComputation
         shuffleNumbers = defaults.shuffleNumbers
         shuffleOperators = defaults.shuffleOperators
@@ -80,8 +50,7 @@ class SettingsViewModel : ViewModel() {
         shuffleNumbers = random.nextBoolean()
         shuffleOperators = random.nextBoolean()
 
-        val newHistoryRandomness = (0..3).random(random)
-        setHistoryRandomness(newHistoryRandomness)
+        historyRandomness = (0..3).random(random)
 
         clearOnError = true
         showSettingsButton = false
@@ -94,32 +63,32 @@ class SettingsViewModel : ViewModel() {
         applyDecimals = true
         applyParens = true
         clearOnError = false
-        setHistoryRandomness(0)
+        historyRandomness = 0
         shuffleComputation = false
         shuffleNumbers = false
         shuffleOperators = false
     }
 
-    /**
-     * History
-     */
-
-    private val _history: MutableList<HistoryItem> = mutableListOf()
-    val history: History = _history
-
-    /**
-     * Add new item to history
-     *
-     * @param newItem [HistoryItem]
-     */
-    fun addToHistory(newItem: HistoryItem) {
-        _history.add(newItem)
-    }
-
-    /**
-     * Clear all values in history
-     */
-    fun clearHistory() {
-        _history.clear()
-    }
+//    /**
+//     * History
+//     */
+//
+//    private val _history: MutableList<HistoryItem> = mutableListOf()
+//    val history: History = _history
+//
+//    /**
+//     * Add new item to history
+//     *
+//     * @param newItem [HistoryItem]
+//     */
+//    fun addToHistory(newItem: HistoryItem) {
+//        _history.add(newItem)
+//    }
+//
+//    /**
+//     * Clear all values in history
+//     */
+//    fun clearHistory() {
+//        _history.clear()
+//    }
 }

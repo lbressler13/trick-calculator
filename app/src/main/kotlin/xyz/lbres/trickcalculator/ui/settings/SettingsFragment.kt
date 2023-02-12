@@ -127,8 +127,7 @@ class SettingsFragment : BaseFragment() {
         viewModel.shuffleOperators = binding.shuffleOperatorsSwitch.isChecked
 
         val checkedId = binding.historyRandomnessGroup.checkedRadioButtonId
-        val newHistoryRandomness = historyButtons.indexOfFirst { it.id == checkedId }
-        viewModel.setHistoryRandomness(newHistoryRandomness)
+        viewModel.historyRandomness = historyButtons.indexOfFirst { it.id == checkedId }
     }
 
     /**
