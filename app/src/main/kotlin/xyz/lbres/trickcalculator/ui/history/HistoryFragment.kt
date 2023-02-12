@@ -36,10 +36,12 @@ class HistoryFragment : BaseFragment() {
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
-        // values are reset when fragment is destroyed
         viewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
-        viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        if (viewModel.randomizedHistory == null) {
+            viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        }
+
         setUI()
 
         binding.closeButton.root.setOnClickListener { closeFragment() }
@@ -92,16 +94,15 @@ class HistoryFragment : BaseFragment() {
     }
 
     override fun handlePostDevTools() {
-        viewModel.updatePostDevTools(settingsViewModel.historyRandomness)
-        setUI()
-    }
+        if (viewModel.randomness != settingsViewModel.historyRandomness) {
+            viewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        }
 
-    override fun openSettingsThroughDevTools() {
-        viewModel.postDevTools = true
+        setUI()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.postDevTools = false
+        viewModel.deleteRandomizedHistory()
     }
 }
