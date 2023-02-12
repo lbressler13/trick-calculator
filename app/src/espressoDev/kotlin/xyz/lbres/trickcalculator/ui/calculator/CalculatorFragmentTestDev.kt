@@ -18,8 +18,8 @@ import xyz.lbres.trickcalculator.testutils.doClearHistory
 import xyz.lbres.trickcalculator.testutils.doRefreshUI
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
-import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
+import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
