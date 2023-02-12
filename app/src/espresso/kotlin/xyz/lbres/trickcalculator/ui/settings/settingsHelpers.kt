@@ -7,7 +7,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.allOf
+import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 /**
  * Check that settings match initial settings.
@@ -53,4 +55,42 @@ fun checkStandardSettings() {
     onView(withId(R.id.historyButton1)).check(matches(isNotChecked()))
     onView(withId(R.id.historyButton2)).check(matches(isNotChecked()))
     onView(withId(R.id.historyButton3)).check(matches(isNotChecked()))
+}
+
+/**
+ * Test that a specific group of settings is displayed in the UI
+ *
+ * @param settings [Settings]: settings to check
+ * @param settingsSwitchDisplayed [Boolean]: is the settings button switch should be visible.
+ * Defaults to `true`
+ */
+fun checkSettingsDisplayed(settings: Settings, settingsSwitchDisplayed: Boolean = true) {
+    val checkSetting: (Int, Boolean) -> Unit = { switchId, settingValue ->
+        val switch = onView(withId(switchId))
+        val checkedMatcher = ternaryIf(settingValue, isChecked(), isNotChecked())
+        switch.check(matches(allOf(isDisplayed(), checkedMatcher)))
+    }
+
+    // switches
+    checkSetting(R.id.applyDecimalsSwitch, settings.applyDecimals)
+    checkSetting(R.id.applyParensSwitch, settings.applyParens)
+    checkSetting(R.id.clearOnErrorSwitch, settings.clearOnError)
+    checkSetting(R.id.shuffleComputationSwitch, settings.shuffleComputation)
+    checkSetting(R.id.shuffleNumbersSwitch, settings.shuffleNumbers)
+    checkSetting(R.id.shuffleOperatorsSwitch, settings.shuffleOperators)
+
+    // history randomness
+    onView(withId(R.id.historyRandomnessGroup)).check(matches(isDisplayed()))
+    val historyButtonIds = listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
+    historyButtonIds.forEachIndexed { index, buttonId ->
+        val checkedMatcher = ternaryIf(index == settings.historyRandomness, isChecked(), isNotChecked())
+        onView(withId(buttonId)).check(matches(allOf(isDisplayed(), checkedMatcher)))
+    }
+
+    // settings button switch
+    if (settingsSwitchDisplayed) {
+        checkSetting(R.id.settingsButtonSwitch, settings.showSettingsButton)
+    } else {
+        onView(withId(R.id.settingsButtonSwitch)).check(isNotPresented())
+    }
 }
