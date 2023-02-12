@@ -123,7 +123,6 @@ class DeveloperToolsDialog : DialogFragment() {
             if (baseFragment.navigateToSettings != null) {
                 val args = bundleOf(fromDialogKey to true)
                 requireBaseActivity().runNavAction(baseFragment.navigateToSettings!!, args)
-                baseFragment.openSettingsThroughDevTools()
                 SettingsFragment.devToolsCallback = { baseFragment.handlePostDevTools() }
             }
             openedSettings = true
