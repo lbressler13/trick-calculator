@@ -95,4 +95,13 @@ class HistoryFragment : BaseFragment() {
         viewModel.updatePostDevTools(settingsViewModel.historyRandomness)
         setUI()
     }
+
+    override fun openSettingsThroughDevTools() {
+        viewModel.postDevTools = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.postDevTools = false
+    }
 }

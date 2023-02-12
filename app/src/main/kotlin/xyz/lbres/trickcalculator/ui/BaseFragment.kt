@@ -58,6 +58,8 @@ abstract class BaseFragment : NavHostFragment() {
      */
     open fun handlePostDevTools() {}
 
+    open fun openSettingsThroughDevTools() {}
+
     /**
      * Close the fragment
      */

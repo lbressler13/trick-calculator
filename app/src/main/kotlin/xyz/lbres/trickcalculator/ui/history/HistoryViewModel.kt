@@ -32,7 +32,7 @@ class HistoryViewModel : ViewModel() {
     var randomizedHistory: History? = null
         private set
 
-    private var postDevTools: Boolean = false
+    var postDevTools: Boolean = false
 
     /**
      * Update randomness and randomized history after dev tools closes.
