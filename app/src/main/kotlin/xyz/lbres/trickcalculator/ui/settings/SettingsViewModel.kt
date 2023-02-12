@@ -1,10 +1,9 @@
-package xyz.lbres.trickcalculator.ui.shared
+package xyz.lbres.trickcalculator.ui.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
-import xyz.lbres.trickcalculator.ui.settings.Settings
 import xyz.lbres.trickcalculator.utils.History
 import java.util.Date
 import kotlin.random.Random
@@ -12,7 +11,7 @@ import kotlin.random.Random
 /**
  * ViewModel to track history and settings that are shared across fragments
  */
-class SharedViewModel : ViewModel() {
+class SettingsViewModel : ViewModel() {
     private val random = Random(Date().time)
 
     /**

@@ -3,10 +3,8 @@ package xyz.lbres.trickcalculator
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.databinding.ActivityBaseBinding
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 
 /**
  * Activity that contains all functionality of app
@@ -15,7 +13,6 @@ class BaseActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
-    private lateinit var sharedViewModel: SharedViewModel
 
     /**
      * Initialize activity
@@ -24,8 +21,6 @@ class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityBaseBinding.inflate(layoutInflater)
-        sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
-
         ProductFlavor.setupFlavor(this)
 
         setContentView(binding.root)

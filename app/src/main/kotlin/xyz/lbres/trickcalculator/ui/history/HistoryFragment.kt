@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
 
@@ -22,7 +22,7 @@ import xyz.lbres.trickcalculator.utils.visible
  */
 class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
-    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var historyViewModel: HistoryViewModel
 
     override val navigateToSettings = R.id.navigateHistoryToSettings
@@ -36,14 +36,14 @@ class HistoryFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
         // values are reset when fragment is destroyed
         historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
 
-        historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
+        historyViewModel.updateValues(settingsViewModel.historyRandomness, settingsViewModel.history)
         setUI()
 
-        sharedViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, liveDataObserver)
+        settingsViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, liveDataObserver)
         binding.closeButton.root.setOnClickListener { closeFragment() }
 
         return binding.root
@@ -54,9 +54,9 @@ class HistoryFragment : BaseFragment() {
      */
     private val liveDataObserver = Observer<Boolean> {
         if (it) {
-            historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
+            historyViewModel.updateValues(settingsViewModel.historyRandomness, settingsViewModel.history)
             setUI()
-            sharedViewModel.historyRandomnessObserved()
+            settingsViewModel.historyRandomnessObserved()
         }
     }
 
@@ -108,7 +108,7 @@ class HistoryFragment : BaseFragment() {
      * Update UI when history is cleared
      */
     override fun handleHistoryCleared() {
-        historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
+        historyViewModel.updateValues(settingsViewModel.historyRandomness, settingsViewModel.history)
         setUI()
     }
 }

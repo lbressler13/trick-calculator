@@ -16,7 +16,7 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -29,7 +29,7 @@ import java.util.Random
 class CalculatorFragment : BaseFragment() {
     private lateinit var binding: FragmentCalculatorBinding
     private lateinit var computationViewModel: ComputationViewModel
-    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
     private val random = Random(Date().time)
     override val navigateToSettings = R.id.navigateCalculatorToSettings
 
@@ -44,7 +44,7 @@ class CalculatorFragment : BaseFragment() {
         binding = FragmentCalculatorBinding.inflate(layoutInflater)
         computationViewModel =
             ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         // init UI
         initNumpad()
@@ -63,8 +63,8 @@ class CalculatorFragment : BaseFragment() {
      */
     override fun onResume() {
         super.onResume()
-        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
-        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
+        binding.settingsButton.isVisible = settingsViewModel.showSettingsButton
+        binding.useLastHistoryButton.isVisible = settingsViewModel.history.isNotEmpty()
     }
 
     /**
@@ -85,7 +85,7 @@ class CalculatorFragment : BaseFragment() {
      * Use last history item as current computation
      */
     private val useLastHistoryItemOnClick = {
-        val item = sharedViewModel.history.lastOrNull()
+        val item = settingsViewModel.history.lastOrNull()
         if (item != null) {
             computationViewModel.useHistoryItemAsComputeText(item)
 
@@ -110,7 +110,7 @@ class CalculatorFragment : BaseFragment() {
             // set action for each operator
             // only include exponent if exp is used
             val operators = when {
-                !sharedViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
+                !settingsViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
                 !computationViewModel.computeText.contains("^") -> listOf(
                     "+",
                     "-",
@@ -139,7 +139,7 @@ class CalculatorFragment : BaseFragment() {
             )
 
             val numberOrder =
-                ternaryIf(sharedViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
+                ternaryIf(settingsViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
 
             // try to run computation, and update compute text and error message
             try {
@@ -150,9 +150,9 @@ class CalculatorFragment : BaseFragment() {
                         operatorRounds,
                         performOperation,
                         numberOrder,
-                        sharedViewModel.applyParens,
-                        sharedViewModel.applyDecimals,
-                        sharedViewModel.shuffleComputation
+                        settingsViewModel.applyParens,
+                        settingsViewModel.applyDecimals,
+                        settingsViewModel.shuffleComputation
                     )
 
                 computationViewModel.setResult(null, computedValue)
@@ -172,15 +172,15 @@ class CalculatorFragment : BaseFragment() {
                     message
                 }
 
-                computationViewModel.setResult(error, null, sharedViewModel.clearOnError)
+                computationViewModel.setResult(error, null, settingsViewModel.clearOnError)
                 updateUI()
             }
 
-            sharedViewModel.addToHistory(computationViewModel.generatedHistoryItem!!)
+            settingsViewModel.addToHistory(computationViewModel.generatedHistoryItem!!)
             computationViewModel.clearStoredHistoryItem()
         }
 
-        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
+        binding.useLastHistoryButton.isVisible = settingsViewModel.history.isNotEmpty()
     }
 
     /**

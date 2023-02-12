@@ -18,7 +18,7 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
 
@@ -27,7 +27,7 @@ import xyz.lbres.trickcalculator.utils.visible
  */
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var viewModel: SettingsViewModel
 
     /**
      * Build dialog, comes before onCreateView and dialog is not connected to context
@@ -36,7 +36,7 @@ class DeveloperToolsDialog : DialogFragment() {
         binding = DialogDeveloperToolsBinding.inflate(layoutInflater)
         val root = binding.root
 
-        viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         val doneText = requireContext().getString(R.string.done)
         val title = requireContext().getString(R.string.title_dev_tools)
