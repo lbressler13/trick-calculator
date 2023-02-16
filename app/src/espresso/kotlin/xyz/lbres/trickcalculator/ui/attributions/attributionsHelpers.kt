@@ -2,9 +2,9 @@ package xyz.lbres.trickcalculator.ui.attributions
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -13,10 +13,11 @@ import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withNestedViewHolder
-import xyz.lbres.trickcalculator.testutils.viewactions.actionOnItemViewAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.actionOnNestedItemViewAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.clickChildWithId
 import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
+import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
@@ -29,9 +30,10 @@ private const val nestedRecyclerId = R.id.imagesRecycler
  * @param position [Int]: position of item to click
  */
 fun expandCollapseAttribution(position: Int) {
+    val action = clickChildWithId(R.id.expandCollapseButton)
+
     onView(withId(recyclerId)).perform(
-        scrollToPosition(0),
-        actionOnItemViewAtPosition(R.id.expandCollapseButton, position, click())
+        RecyclerViewActions.actionOnItemAtPosition<AuthorAttributionViewHolder>(position, action)
     )
 }
 

@@ -65,7 +65,7 @@ private class ActionOnNestedItemViewAtPositionViewAction(
         val targetView: View? = nestedRecycler?.getChildAt(nestedViewPosition)?.findViewById(viewId)
 
         if (targetView == null) {
-            val errorMessage = "No view with id $viewId found at VH with $nestedViewPosition in nested RecyclerView with id $nestedRecyclerId at position $recyclerPosition"
+            val errorMessage = "No view with id $viewId found at VH with position $nestedViewPosition in nested RecyclerView with id $nestedRecyclerId at position $recyclerPosition"
             throwPerformException(view, errorMessage)
         } else {
             viewAction.perform(uiController, targetView)
