@@ -34,7 +34,7 @@ class AttributionsFragmentTestDev {
 
     @Rule
     @JvmField
-    val retryRule = RetryRule()
+    val retryRule = RetryRule(0) // TODO undo this
 
     @Before
     fun setupTest() {
@@ -53,20 +53,23 @@ class AttributionsFragmentTestDev {
             val withAuthorTitle = hasDescendant(withText(authorTitles[it]))
             onView(withViewHolder(recyclerId, it)).check(matches(allOf(isDisplayed(), withAuthorTitle)))
         }
+        checkImagesNotPresented(listOf(0, 1, 2, 3, 4))
 
         // expand some
         hideDevToolsButton(0)
-        onView(withId(R.id.expandCollapseMessage)).perform(click())
         expandCollapseAttribution(0)
         expandCollapseAttribution(3)
         expandCollapseAttribution(4)
-        Thread.sleep(5000) // wait for dev tools button to be visible before clicking refresh button
 
-        // refresh with some expanded
+        Thread.sleep(5000) // wait for dev tools to reappear after hide
         doRefreshUI()
 
-        onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
         checkImagesDisplayed(listOf(0, 3, 4))
         checkImagesNotPresented(listOf(1, 2))
+
+        // flaticon message
+        onView(withId(R.id.expandCollapseMessage)).perform(click())
+        doRefreshUI()
+        onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
     }
 }

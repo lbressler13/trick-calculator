@@ -62,19 +62,21 @@ private class ActionOnNestedItemViewAtPositionViewAction(
         scrollToPosition(nestedViewPosition).perform(uiController, nestedRecycler)
         uiController.loopMainThreadUntilIdle()
 
-        val targetView: View? = nestedRecycler.getChildAt(nestedViewPosition).findViewById(viewId)
+        val targetView: View? = nestedRecycler?.getChildAt(nestedViewPosition)?.findViewById(viewId)
+
         if (targetView == null) {
-            throw PerformException.Builder().withActionDescription(this.toString())
-                .withViewDescription(HumanReadables.describe(view))
-                .withCause(
-                    IllegalStateException(
-                        "No view with id $viewId found at VH with $nestedViewPosition in nested RecyclerView with id $nestedRecyclerId at position $recyclerPosition"
-                    )
-                )
-                .build()
+            val errorMessage = "No view with id $viewId found at VH with $nestedViewPosition in nested RecyclerView with id $nestedRecyclerId at position $recyclerPosition"
+            throwPerformException(view, errorMessage)
         } else {
             viewAction.perform(uiController, targetView)
         }
+    }
+
+    private fun throwPerformException(view: View, message: String) {
+        throw PerformException.Builder().withActionDescription(this.toString())
+            .withViewDescription(HumanReadables.describe(view))
+            .withCause(IllegalStateException(message))
+            .build()
     }
 }
 

@@ -29,7 +29,7 @@ private const val nestedRecyclerId = R.id.imagesRecycler
  * @param position [Int]: position of item to click
  */
 fun expandCollapseAttribution(position: Int) {
-    onView(withId(R.id.attributionsRecycler)).perform(
+    onView(withId(recyclerId)).perform(
         scrollToPosition(0),
         actionOnItemViewAtPosition(R.id.expandCollapseButton, position, click())
     )
@@ -56,6 +56,8 @@ fun checkImagesNotPresented(positions: IntList) {
  */
 fun checkImagesDisplayed(positions: IntList) {
     for (position in positions) {
+        onView(withId(recyclerId)).perform(scrollToPosition(position))
+
         for (pair in imageUrls[position].withIndex()) {
             val nestedPosition = pair.index
             val url = pair.value
