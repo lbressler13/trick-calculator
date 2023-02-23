@@ -12,7 +12,6 @@ import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 private val randomnessErrors = mapOf(
     0 to "History items should be ordered in history randomness 0.",
@@ -99,7 +98,7 @@ fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
 
     // save all current values
     for (position in 0 until history.size) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
         onView(withViewHolder(recyclerId, position))
             .perform(saveTextAtPosition(position, R.id.computeText))
     }
@@ -127,7 +126,7 @@ private fun checkReshuffledCorrectly(historySize: Int): Boolean {
         openHistoryFragment()
 
         for (position in 0 until historySize) {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
+            onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
 
             try {
                 onView(withViewHolder(recyclerId, position))

@@ -11,7 +11,6 @@ import org.hamcrest.Matcher
 import xyz.lbres.kotlinutils.collection.ext.toMultiSet
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 /**
  * Test representation of a compute history to display in the UI, including methods to run checks on the history.
@@ -166,7 +165,7 @@ class TestHistory {
             }
         }
 
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
         onView(withViewHolder(recyclerId, position)).perform(getViewHolderText)
 
         return Pair(computation, errorResult)

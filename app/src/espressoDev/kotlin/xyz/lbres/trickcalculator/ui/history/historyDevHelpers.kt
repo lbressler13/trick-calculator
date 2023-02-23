@@ -12,7 +12,6 @@ import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 
 private val historyButtonIds = listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
 private const val recyclerId = R.id.itemsRecycler
@@ -34,7 +33,7 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefre
 
     // save values
     for (position in 0 until history.size) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
         onView(withViewHolder(recyclerId, position)).perform(
             saveTextAtPosition(position, R.id.computeText),
             saveTextAtPosition(position, R.id.resultText),
@@ -52,7 +51,7 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefre
 
     // match saved values
     for (position in 0 until history.size) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
         onView(withViewHolder(recyclerId, position)).check(
             matches(
                 allOf(

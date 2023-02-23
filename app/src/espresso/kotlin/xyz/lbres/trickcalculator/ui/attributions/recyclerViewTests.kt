@@ -14,7 +14,7 @@ import xyz.lbres.trickcalculator.testutils.assertLinkOpened
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInTextWithViewId
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
+// import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
@@ -109,7 +109,7 @@ fun testAttributionLinks() {
     expandCollapseAttribution(3)
     expandCollapseAttribution(4)
     for (position in imageUrls.indices) {
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
+        onView(withId(recyclerId)).perform(scrollToAuthorPosition(position))
         val urls = imageUrls[position]
 
         for (url in urls) {
