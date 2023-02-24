@@ -108,30 +108,30 @@ class AttributionsFragmentTest {
     @Test
     fun expandCollapseAttributions() = testExpandCollapseAttributions()
 
-//    @Test
-//    fun expandFlaticonMessageAndAttributions() {
-//        onView(withId(R.id.expandCollapseMessage)).perform(click())
-//        onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
-//
-//        expandCollapseAttribution(0)
-//        checkImagesDisplayed(listOf(0))
-//        checkImagesNotPresented(listOf(1, 2, 3, 4))
-//
-//        expandCollapseAttribution(1)
-//        checkImagesDisplayed(listOf(0, 1))
-//        checkImagesNotPresented(listOf(2, 3, 4))
-//
-//        expandCollapseAttribution(2)
-//        checkImagesDisplayed(listOf(0, 1, 2))
-//        checkImagesNotPresented(listOf(3, 4))
-//
-//        expandCollapseAttribution(3)
-//        checkImagesDisplayed(listOf(0, 1, 2, 3))
-//        checkImagesNotPresented(listOf(4))
-//
-//        expandCollapseAttribution(4)
-//        checkImagesDisplayed(listOf(0, 1, 2, 3, 4))
-//    }
+    @Test
+    fun expandFlaticonMessageAndAttributions() {
+        onView(withId(R.id.expandCollapseMessage)).perform(click())
+        onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
+
+        expandCollapseAttribution(0)
+        checkImagesDisplayed(listOf(0))
+        checkImagesNotPresented(listOf(1, 2, 3, 4))
+
+        expandCollapseAttribution(1)
+        checkImagesDisplayed(listOf(0, 1))
+        checkImagesNotPresented(listOf(2, 3, 4))
+
+        expandCollapseAttribution(2)
+        checkImagesDisplayed(listOf(0, 1, 2))
+        checkImagesNotPresented(listOf(3, 4))
+
+        expandCollapseAttribution(3)
+        checkImagesDisplayed(listOf(0, 1, 2, 3))
+        checkImagesNotPresented(listOf(4))
+
+        expandCollapseAttribution(4)
+        checkImagesDisplayed(listOf(0, 1, 2, 3, 4))
+    }
 
     @Test
     fun flaticonPolicyLinks() {

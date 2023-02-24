@@ -1,20 +1,19 @@
 package xyz.lbres.trickcalculator.ui.attributions
 
+import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.matchers.withNestedViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.trickcalculator.testutils.viewactions.clickChildWithId
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
+import xyz.lbres.trickcalculator.testutils.viewassertions.matchesAtPosition
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 import xyz.lbres.trickcalculator.ui.attributions.imageattribution.ImageAttributionViewHolder
@@ -47,6 +46,7 @@ fun actionOnImageItemAtPosition(position: Int, action: ViewAction): ViewAction {
 fun expandCollapseAttribution(position: Int) {
     val action = clickChildWithId(R.id.expandCollapseButton)
     onView(withId(recyclerId)).perform(actionOnAuthorItemAtPosition(position, action))
+    onView(withId(recyclerId)).check(matchesAtPosition(position, hasDescendant(withId(nestedRecyclerId))))
 }
 
 /**
@@ -77,8 +77,19 @@ fun checkImagesDisplayed(positions: IntList) {
             val url = pair.value
 
             scrollToLink(position, nestedPosition)
-            onView(withNestedViewHolder(recyclerId, nestedRecyclerId, position, nestedPosition))
-                .check(matches(allOf(isDisplayed(), hasDescendant(withText(url)))))
+
+            val urlMatcher: Matcher<View?> = allOf(isDisplayed(), hasDescendant(withText(url)))
+            val nestedRecyclerMatcher = hasDescendant(allOf(withId(nestedRecyclerId), isDisplayed(), hasDescendant(urlMatcher)))
+            val nestedRecyclerAssertion = ViewAssertion { view, noMatchingViewException ->
+                if (!nestedRecyclerMatcher.matches(view)) {
+                    throw noMatchingViewException ?: AssertionError("No matching view found")
+                }
+                matchesAtPosition(nestedPosition, urlMatcher)
+            }
+            // TODO use this
+            // val b = matchesAll(matches(nestedMatcher), matchesAtPosition(nestedPosition, childMatcher))
+
+            onView(withId(recyclerId)).check(matchesAtPosition(position, nestedRecyclerAssertion))
         }
     }
 }

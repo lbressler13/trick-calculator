@@ -14,7 +14,6 @@ import xyz.lbres.trickcalculator.testutils.assertLinkOpened
 import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInTextWithViewId
-// import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
