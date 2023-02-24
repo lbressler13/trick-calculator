@@ -3,6 +3,7 @@ package xyz.lbres.trickcalculator.ui.history
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
@@ -131,8 +132,8 @@ private fun checkReshuffledCorrectly(historySize: Int): Boolean {
             itemsRecycler.perform(scrollToHistoryItemAtPosition(position))
 
             try {
-                val matcher = matches(not(withSavedTextAtPosition(position, R.id.computeText)))
-                itemsRecycler.check(matchesAtPosition(position, matcher))
+                val matcher = allOf(not(withSavedTextAtPosition(position, R.id.computeText)))
+                itemsRecycler.check(matches(matchesAtPosition(position, matcher)))
                 reshuffled = true
             } catch (_: Throwable) {}
         }

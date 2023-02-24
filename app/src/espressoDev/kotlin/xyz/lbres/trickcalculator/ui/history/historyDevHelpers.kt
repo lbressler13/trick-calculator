@@ -2,6 +2,7 @@ package xyz.lbres.trickcalculator.ui.history
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.trickcalculator.R
@@ -52,12 +53,14 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefre
     for (position in 0 until history.size) {
         itemsRecycler.perform(scrollToHistoryItemAtPosition(position))
         itemsRecycler.check(
-            matchesAtPosition(
-                position,
-                allOf(
-                    withSavedTextAtPosition(position, R.id.computeText),
-                    withSavedTextAtPosition(position, R.id.resultText),
-                    withSavedTextAtPosition(position, R.id.errorText)
+            matches(
+                matchesAtPosition(
+                    position,
+                    allOf(
+                        withSavedTextAtPosition(position, R.id.computeText),
+                        withSavedTextAtPosition(position, R.id.resultText),
+                        withSavedTextAtPosition(position, R.id.errorText)
+                    )
                 )
             )
         )

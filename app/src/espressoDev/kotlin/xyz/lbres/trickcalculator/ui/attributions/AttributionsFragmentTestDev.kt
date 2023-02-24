@@ -51,7 +51,7 @@ class AttributionsFragmentTestDev {
         onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Expand")))
         authorTitles.indices.forEach {
             val withAuthorTitle = hasDescendant(withText(authorTitles[it]))
-            onView(withId(recyclerId)).check(matchesAtPosition(it, allOf(isDisplayed(), withAuthorTitle)))
+            onView(withId(recyclerId)).check(matches(matchesAtPosition(it, allOf(isDisplayed(), withAuthorTitle))))
         }
         checkImagesNotPresented(listOf(0, 1, 2, 3, 4))
 

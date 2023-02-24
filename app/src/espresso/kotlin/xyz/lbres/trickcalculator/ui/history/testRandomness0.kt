@@ -1,6 +1,7 @@
 package xyz.lbres.trickcalculator.ui.history
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
@@ -20,7 +21,7 @@ fun testRandomness0() {
     // one element
     history.add(generateTestItem("1+2") { "3" })
     openHistoryFragment()
-    onView(withId(R.id.itemsRecycler)).check(matchesAtPosition(0, withHistoryItem("1+2", "3")))
+    onView(withId(R.id.itemsRecycler)).check(matches(matchesAtPosition(0, withHistoryItem("1+2", "3"))))
 
     closeFragment()
 

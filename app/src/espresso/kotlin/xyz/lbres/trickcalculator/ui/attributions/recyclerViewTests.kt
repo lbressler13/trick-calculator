@@ -1,11 +1,13 @@
 package xyz.lbres.trickcalculator.ui.attributions
 
+import android.view.View
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import xyz.lbres.trickcalculator.R
@@ -20,15 +22,15 @@ private val attributionsRecycler = onView(withId(R.id.attributionsRecycler))
 
 fun testExpandCollapseAttributions() {
     val authorTitles = authorAttributions.map { "Icon made by ${it.name} from www.flaticon.com" }
-    val titleAssertion: (Int) -> ViewAssertion = {
+    val titleAssertion: (Int) -> Matcher<View> = {
         matchesAtPosition(it, allOf(isDisplayed(), hasDescendant(withText(authorTitles[it]))))
     }
 
-    attributionsRecycler.check(titleAssertion(0))
-    attributionsRecycler.check(titleAssertion(1))
-    attributionsRecycler.check(titleAssertion(2))
-    attributionsRecycler.check(titleAssertion(3))
-    attributionsRecycler.check(titleAssertion(4))
+    attributionsRecycler.check(matches(titleAssertion(0)))
+    attributionsRecycler.check(matches(titleAssertion(1)))
+    attributionsRecycler.check(matches(titleAssertion(2)))
+    attributionsRecycler.check(matches(titleAssertion(3)))
+    attributionsRecycler.check(matches(titleAssertion(4)))
 
     checkImagesNotPresented(listOf(0, 1, 2, 3, 4))
 
