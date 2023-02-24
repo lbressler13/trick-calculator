@@ -57,6 +57,7 @@ class AttributionsFragmentTestDev {
 
         // expand some
         hideDevToolsButton(0)
+        onView(withId(R.id.expandCollapseMessage)).perform(click())
         expandCollapseAttribution(0)
         expandCollapseAttribution(3)
         expandCollapseAttribution(4)
@@ -66,10 +67,6 @@ class AttributionsFragmentTestDev {
 
         checkImagesDisplayed(listOf(0, 3, 4))
         checkImagesNotPresented(listOf(1, 2))
-
-        // flaticon message
-        onView(withId(R.id.expandCollapseMessage)).perform(click())
-        doRefreshUI()
         onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
     }
 }

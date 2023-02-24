@@ -21,7 +21,7 @@ import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 import xyz.lbres.trickcalculator.ui.attributions.imageattribution.ImageAttributionViewHolder
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
-private const val recyclerId = R.id.attributionsRecycler
+private val attributionsRecycler = onView(withId(R.id.attributionsRecycler))
 private const val nestedRecyclerId = R.id.imagesRecycler
 
 /**
@@ -62,8 +62,8 @@ fun actionOnAuthorItemAtPosition(position: Int, action: ViewAction): ViewAction 
  */
 fun expandCollapseAttribution(position: Int) {
     val action = clickChildWithId(R.id.expandCollapseButton)
-    onView(withId(recyclerId)).perform(actionOnAuthorItemAtPosition(position, action))
-    onView(withId(recyclerId)).check(matches(matchesAtPosition(position, hasDescendant(withId(nestedRecyclerId)))))
+    attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, action))
+    attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(withId(nestedRecyclerId)))))
 }
 
 /**
@@ -73,7 +73,7 @@ fun expandCollapseAttribution(position: Int) {
  */
 fun checkImagesNotPresented(positions: IntList) {
     for (position in positions) {
-        onView(withId(recyclerId)).perform(scrollToAuthorPosition(0))
+        attributionsRecycler.perform(scrollToAuthorPosition(0))
         for (url in imageUrls[position]) {
             onView(withText(url)).check(isNotPresented())
         }
@@ -87,29 +87,19 @@ fun checkImagesNotPresented(positions: IntList) {
  */
 fun checkImagesDisplayed(positions: IntList) {
     for (position in positions) {
-        onView(withId(recyclerId)).perform(scrollToAuthorPosition(position))
+        attributionsRecycler.perform(scrollToAuthorPosition(position))
 
         for (pair in imageUrls[position].withIndex()) {
             val nestedPosition = pair.index
             val url = pair.value
 
-            scrollToLink(position, nestedPosition)
+            val nestedScroll = actionOnChildWithId(R.id.imagesRecycler, scrollToImagePosition(nestedPosition))
+            attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, nestedScroll))
 
             val urlMatcher = allOf(isShown(), hasDescendant(withText(url)))
             val nestedMatcher = allOf(withId(nestedRecyclerId), isDisplayed(), matchesAtPosition(nestedPosition, urlMatcher))
 
-            onView(withId(recyclerId)).check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
+            attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
         }
     }
-}
-
-/**
- * Wrapper function to take action on a link in an item in the nested RecyclerView
- *
- * @param position [Int]: position in main RecyclerView
- * @param nestedPosition [Int]: position in nested RecyclerView
- */
-private fun scrollToLink(position: Int, nestedPosition: Int) {
-    val childAction = actionOnChildWithId(R.id.imagesRecycler, scrollToImagePosition(nestedPosition))
-    onView(withId(recyclerId)).perform(actionOnAuthorItemAtPosition(position, childAction))
 }
