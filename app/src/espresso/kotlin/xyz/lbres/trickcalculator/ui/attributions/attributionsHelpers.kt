@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.matchers.isShown
 import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.trickcalculator.testutils.viewactions.clickChildWithId
@@ -23,20 +24,35 @@ private val imageUrls = authorAttributions.map { it.images.map { it.url } }
 private const val recyclerId = R.id.attributionsRecycler
 private const val nestedRecyclerId = R.id.imagesRecycler
 
+/**
+ * Wrapper function to scroll a RecyclerView to [position], with ViewHolder type [AuthorAttributionViewHolder]
+ *
+ * @param position [Int]: position to scroll to
+ * @return [ViewAction]: action to scroll to the given position
+ */
 fun scrollToAuthorPosition(position: Int): ViewAction {
     return RecyclerViewActions.scrollToPosition<AuthorAttributionViewHolder>(position)
 }
 
+/**
+ * Wrapper function to scroll a RecyclerView to [position], with ViewHolder type [ImageAttributionViewHolder]
+ *
+ * @param position [Int]: position to scroll to
+ * @return [ViewAction]: action to scroll to the given position
+ */
 fun scrollToImagePosition(position: Int): ViewAction {
     return RecyclerViewActions.scrollToPosition<ImageAttributionViewHolder>(position)
 }
 
+/**
+ * Wrapper function to perform an action at a given index in a RecyclerView, with ViewHolder type [AuthorAttributionViewHolder]
+ *
+ * @param position [Int]: position to perform action
+ * @param action [ViewAction]: action to perform
+ * @return [ViewAction]: action to perform given [action] on the ViewHolder at position [position]
+ */
 fun actionOnAuthorItemAtPosition(position: Int, action: ViewAction): ViewAction {
     return RecyclerViewActions.actionOnItemAtPosition<AuthorAttributionViewHolder>(position, action)
-}
-
-fun actionOnImageItemAtPosition(position: Int, action: ViewAction): ViewAction {
-    return RecyclerViewActions.actionOnItemAtPosition<ImageAttributionViewHolder>(position, action)
 }
 
 /**
@@ -79,7 +95,7 @@ fun checkImagesDisplayed(positions: IntList) {
 
             scrollToLink(position, nestedPosition)
 
-            val urlMatcher = allOf(isDisplayed(), hasDescendant(withText(url)))
+            val urlMatcher = allOf(isShown(), hasDescendant(withText(url)))
             val nestedMatcher = allOf(withId(nestedRecyclerId), isDisplayed(), matchesAtPosition(nestedPosition, urlMatcher))
 
             onView(withId(recyclerId)).check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
