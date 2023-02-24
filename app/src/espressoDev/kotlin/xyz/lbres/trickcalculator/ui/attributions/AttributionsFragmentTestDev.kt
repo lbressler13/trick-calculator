@@ -18,9 +18,9 @@ import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.doRefreshUI
 import xyz.lbres.trickcalculator.testutils.hideDevToolsButton
+import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
-import xyz.lbres.trickcalculator.testutils.viewassertions.matchesAtPosition
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 @RunWith(AndroidJUnit4::class)

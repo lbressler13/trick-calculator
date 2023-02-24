@@ -12,9 +12,9 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
+import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInTextWithViewId
-import xyz.lbres.trickcalculator.testutils.viewassertions.matchesAtPosition
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }

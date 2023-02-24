@@ -11,10 +11,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.trickcalculator.testutils.viewactions.clickChildWithId
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
-import xyz.lbres.trickcalculator.testutils.viewassertions.matchesAtPosition
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 import xyz.lbres.trickcalculator.ui.attributions.imageattribution.ImageAttributionViewHolder

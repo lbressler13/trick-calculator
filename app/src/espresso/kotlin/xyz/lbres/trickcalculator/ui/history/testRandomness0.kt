@@ -5,9 +5,9 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
-import xyz.lbres.trickcalculator.testutils.viewassertions.matchesAtPosition
 
 fun testRandomness0() {
     setHistoryRandomness(0)
