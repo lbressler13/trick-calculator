@@ -5,7 +5,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
+import xyz.lbres.trickcalculator.testutils.isEmptyString
 
 private val mainText = onView(withId(R.id.mainText))
 

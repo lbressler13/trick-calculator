@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
+import xyz.lbres.trickcalculator.testutils.isEmptyString
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule

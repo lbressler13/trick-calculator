@@ -37,7 +37,11 @@ val withHistoryItem: (String, String) -> Matcher<View?> = { computation, errorRe
     allOf(withChild(withText(computation)), withChild(withChild(withText(errorResult))))
 }
 
-fun scrollToHistoryPosition(position: Int): ViewAction = RecyclerViewActions.scrollToPosition<HistoryItemViewHolder>(position)
+fun scrollToHistoryItemAtPosition(position: Int): ViewAction = RecyclerViewActions.scrollToPosition<HistoryItemViewHolder>(position)
+
+fun actionOnHistoryItemAtPosition(position: Int, action: ViewAction): ViewAction {
+    return RecyclerViewActions.actionOnItemAtPosition<HistoryItemViewHolder>(position, action)
+}
 
 /**
  * Update the history randomness setting.

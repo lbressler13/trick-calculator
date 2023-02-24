@@ -7,11 +7,11 @@ import org.hamcrest.Matchers.not
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
+import xyz.lbres.trickcalculator.testutils.viewassertions.matchesAtPosition
 
 private val randomnessErrors = mapOf(
     0 to "History items should be ordered in history randomness 0.",
@@ -24,7 +24,8 @@ private val reshuffledErrors = mapOf(
     2 to "Items not re-shuffled for history randomness 2.",
 )
 
-private const val recyclerId = R.id.itemsRecycler
+// private const val recyclerId = R.id.itemsRecycler
+private val itemsRecycler = onView(withId(R.id.itemsRecycler))
 
 /**
  * Set the history randomness, open history fragment, and verify that all items from the history are
@@ -98,9 +99,10 @@ fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
 
     // save all current values
     for (position in 0 until history.size) {
-        onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
-        onView(withViewHolder(recyclerId, position))
-            .perform(saveTextAtPosition(position, R.id.computeText))
+        itemsRecycler.perform(
+            scrollToHistoryItemAtPosition(position),
+            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText))
+        )
     }
 
     closeFragment()
@@ -126,11 +128,11 @@ private fun checkReshuffledCorrectly(historySize: Int): Boolean {
         openHistoryFragment()
 
         for (position in 0 until historySize) {
-            onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
+            itemsRecycler.perform(scrollToHistoryItemAtPosition(position))
 
             try {
-                onView(withViewHolder(recyclerId, position))
-                    .check(matches(not(withSavedTextAtPosition(position, R.id.computeText))))
+                val matcher = matches(not(withSavedTextAtPosition(position, R.id.computeText)))
+                itemsRecycler.check(matchesAtPosition(position, matcher))
                 reshuffled = true
             } catch (_: Throwable) {}
         }

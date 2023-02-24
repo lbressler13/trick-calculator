@@ -10,7 +10,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
 import xyz.lbres.kotlinutils.collection.ext.toMultiSet
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
 
 /**
  * Test representation of a compute history to display in the UI, including methods to run checks on the history.
@@ -22,8 +21,6 @@ class TestHistory {
 
     val size: Int
         get() = computeHistory.size
-
-    private val recyclerId = R.id.itemsRecycler
 
     /**
      * Add a new item to the history
@@ -165,8 +162,10 @@ class TestHistory {
             }
         }
 
-        onView(withId(recyclerId)).perform(scrollToHistoryPosition(position))
-        onView(withViewHolder(recyclerId, position)).perform(getViewHolderText)
+        onView(withId(R.id.itemsRecycler)).perform(
+            scrollToHistoryItemAtPosition(position),
+            actionOnHistoryItemAtPosition(position, getViewHolderText)
+        )
 
         return Pair(computation, errorResult)
     }
