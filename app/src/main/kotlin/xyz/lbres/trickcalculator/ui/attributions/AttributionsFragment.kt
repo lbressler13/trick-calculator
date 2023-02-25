@@ -47,7 +47,7 @@ class AttributionsFragment : BaseFragment() {
         initializeAttributionsRecycler()
 
         binding.expandCollapseMessage.setOnClickListener {
-            viewModel.setFlaticonMessageExpanded(!viewModel.flaticonMessageExpanded)
+            viewModel.flaticonMessageExpanded = !viewModel.flaticonMessageExpanded
             setFlaticonMessage()
         }
         binding.closeButton.root.setOnClickListener { closeFragment() }
@@ -64,7 +64,6 @@ class AttributionsFragment : BaseFragment() {
 
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.initAttributionsExpanded(authorAttributions.size)
     }
 
     /**

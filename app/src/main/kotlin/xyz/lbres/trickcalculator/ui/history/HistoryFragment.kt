@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
 
@@ -22,7 +21,7 @@ import xyz.lbres.trickcalculator.utils.visible
  */
 class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
-    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var historyViewModel: HistoryViewModel
 
     override val navigateToSettings = R.id.navigateHistoryToSettings
@@ -36,28 +35,22 @@ class HistoryFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        // values are reset when fragment is destroyed
-        historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
+        settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
-        historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
+        val initialLoadKey = getString(R.string.initial_fragment_load_key)
+        val isInitialLoad = arguments?.getBoolean(initialLoadKey) ?: false
+
+        if (isInitialLoad || historyViewModel.randomizedHistory == null) {
+            historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        }
+
         setUI()
 
-        sharedViewModel.historyRandomnessUpdated.observe(viewLifecycleOwner, liveDataObserver)
         binding.closeButton.root.setOnClickListener { closeFragment() }
 
+        arguments?.remove(initialLoadKey)
         return binding.root
-    }
-
-    /**
-     * Indirectly observe change to history randomness setting
-     */
-    private val liveDataObserver = Observer<Boolean> {
-        if (it) {
-            historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
-            setUI()
-            sharedViewModel.historyRandomnessObserved()
-        }
     }
 
     /**
@@ -65,7 +58,7 @@ class HistoryFragment : BaseFragment() {
      */
     private fun setUI() {
         val randomHistory = historyViewModel.randomizedHistory
-        val displayError = randomHistory?.isEmpty() == true && historyViewModel.randomness == 3
+        val displayError = randomHistory?.isEmpty() == true && settingsViewModel.historyRandomness == 3
 
         when {
             // error
@@ -105,10 +98,14 @@ class HistoryFragment : BaseFragment() {
     }
 
     /**
-     * Update UI when history is cleared
+     * Update randomized history when randomness setting is changed, and redisplay UI.
+     * Redisplay can happen when randomness changes, or when history is cleared.
      */
-    override fun handleHistoryCleared() {
-        historyViewModel.updateValues(sharedViewModel.historyRandomness, sharedViewModel.history)
-        setUI()
+    override fun handlePostDevTools() {
+        if (settingsViewModel.historyRandomness != historyViewModel.appliedRandomness) {
+            historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        }
+
+        setUI() // handles history being cleared
     }
 }

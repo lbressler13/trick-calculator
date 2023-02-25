@@ -1,7 +1,11 @@
 package xyz.lbres.trickcalculator.testutils
 
 import android.content.Intent
+import android.view.View
 import androidx.test.espresso.intent.Intents.getIntents
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import java.lang.AssertionError
 
@@ -21,3 +25,13 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
     val intent = intents.last()
     assertEquals(url, intent.dataString)
 }
+
+/**
+ * [Matcher] that checks if text of TextView is an empty string
+ */
+fun withEmptyString(): Matcher<View> = withText("")
+
+/**
+ * [Matcher] that checks if text of TextView is a non-empty string
+ */
+fun withNonEmptyString(): Matcher<View> = not(withText(""))

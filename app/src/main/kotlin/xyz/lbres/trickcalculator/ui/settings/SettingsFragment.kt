@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentSettingsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
 import xyz.lbres.trickcalculator.utils.AppLogger
 
 /**
@@ -20,7 +19,7 @@ class SettingsFragment : BaseFragment() {
     override var titleResId: Int = R.string.title_settings
 
     private lateinit var binding: FragmentSettingsBinding
-    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var viewModel: SettingsViewModel
     private lateinit var historyButtons: List<RadioButton>
 
     override val navigateToSettings: Int? = null
@@ -45,7 +44,7 @@ class SettingsFragment : BaseFragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         val fromDialogKey = getString(R.string.from_dialog_key)
         fromDialog = arguments?.getBoolean(fromDialogKey) ?: false
@@ -63,15 +62,15 @@ class SettingsFragment : BaseFragment() {
     private fun initUi() {
         historyButtons = listOf(binding.historyButton0, binding.historyButton1, binding.historyButton2, binding.historyButton3)
 
-        binding.applyDecimalsSwitch.isChecked = sharedViewModel.applyDecimals
-        binding.applyParensSwitch.isChecked = sharedViewModel.applyParens
-        binding.clearOnErrorSwitch.isChecked = sharedViewModel.clearOnError
-        binding.settingsButtonSwitch.isChecked = sharedViewModel.showSettingsButton
-        binding.shuffleComputationSwitch.isChecked = sharedViewModel.shuffleComputation
-        binding.shuffleNumbersSwitch.isChecked = sharedViewModel.shuffleNumbers
-        binding.shuffleOperatorsSwitch.isChecked = sharedViewModel.shuffleOperators
+        binding.applyDecimalsSwitch.isChecked = viewModel.applyDecimals
+        binding.applyParensSwitch.isChecked = viewModel.applyParens
+        binding.clearOnErrorSwitch.isChecked = viewModel.clearOnError
+        binding.settingsButtonSwitch.isChecked = viewModel.showSettingsButton
+        binding.shuffleComputationSwitch.isChecked = viewModel.shuffleComputation
+        binding.shuffleNumbersSwitch.isChecked = viewModel.shuffleNumbers
+        binding.shuffleOperatorsSwitch.isChecked = viewModel.shuffleOperators
 
-        val checkedIndex = sharedViewModel.historyRandomness
+        val checkedIndex = viewModel.historyRandomness
         val checkedButton = if (checkedIndex in historyButtons.indices) {
             historyButtons[checkedIndex]
         } else {
@@ -92,23 +91,23 @@ class SettingsFragment : BaseFragment() {
      */
     private fun setButtonActions() {
         binding.randomizeSettingsButton.setOnClickListener {
-            sharedViewModel.randomizeSettings()
+            viewModel.randomizeSettings()
             settingsPreSaved = true
             closeFragment()
         }
 
         binding.resetSettingsButton.setOnClickListener {
             // persist show settings value
-            sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
-            sharedViewModel.resetSettings()
+            viewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
+            viewModel.resetSettings()
 
             settingsPreSaved = true
             closeFragment()
         }
 
         binding.standardFunctionButton.setOnClickListener {
-            sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
-            sharedViewModel.setStandardSettings()
+            viewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
+            viewModel.setStandardSettings()
 
             settingsPreSaved = true
             closeFragment()
@@ -119,17 +118,16 @@ class SettingsFragment : BaseFragment() {
      * Save settings to ViewModel based on selections in UI
      */
     private fun saveSettingsToViewModel() {
-        sharedViewModel.applyDecimals = binding.applyDecimalsSwitch.isChecked
-        sharedViewModel.applyParens = binding.applyParensSwitch.isChecked
-        sharedViewModel.clearOnError = binding.clearOnErrorSwitch.isChecked
-        sharedViewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
-        sharedViewModel.shuffleComputation = binding.shuffleComputationSwitch.isChecked
-        sharedViewModel.shuffleNumbers = binding.shuffleNumbersSwitch.isChecked
-        sharedViewModel.shuffleOperators = binding.shuffleOperatorsSwitch.isChecked
+        viewModel.applyDecimals = binding.applyDecimalsSwitch.isChecked
+        viewModel.applyParens = binding.applyParensSwitch.isChecked
+        viewModel.clearOnError = binding.clearOnErrorSwitch.isChecked
+        viewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
+        viewModel.shuffleComputation = binding.shuffleComputationSwitch.isChecked
+        viewModel.shuffleNumbers = binding.shuffleNumbersSwitch.isChecked
+        viewModel.shuffleOperators = binding.shuffleOperatorsSwitch.isChecked
 
         val checkedId = binding.historyRandomnessGroup.checkedRadioButtonId
-        val newHistoryRandomness = historyButtons.indexOfFirst { it.id == checkedId }
-        sharedViewModel.setHistoryRandomness(newHistoryRandomness)
+        viewModel.historyRandomness = historyButtons.indexOfFirst { it.id == checkedId }
     }
 
     /**
@@ -155,8 +153,19 @@ class SettingsFragment : BaseFragment() {
             saveSettingsToViewModel()
         }
 
+        if (fromDialog && devToolsCallback != null) {
+            devToolsCallback!!()
+        }
+
         if (!fromDialog && !fromCalculatorFragment) {
             closePreviousFragment()
         }
+    }
+
+    companion object {
+        /**
+         * Function to call when fragment is closed, after being opened from dev tools dialog
+         */
+        var devToolsCallback: (() -> Unit)? = null
     }
 }

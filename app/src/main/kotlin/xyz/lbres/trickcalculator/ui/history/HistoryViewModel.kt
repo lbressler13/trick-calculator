@@ -10,50 +10,49 @@ import java.util.Date
 import kotlin.random.Random
 
 /**
- * Information about values that are currently displayed on history screen
+ * Information about computation history
  */
 class HistoryViewModel : ViewModel() {
     private val random = Random(Date().time)
 
     /**
-     * Values before modification
+     * Randomness used in current shuffled history
      */
-    var history: History? = null
+    var appliedRandomness: Int? = null
         private set
 
     /**
-     * Randomness applied to items on screen
+     * List of history items
      */
-    var randomness: Int? = null
-        private set
+    private val _history: MutableList<HistoryItem> = mutableListOf()
+    val history: History = _history
 
     /**
-     * Values generated based on [history] and [randomness]
+     * Values generated based on [history] and [appliedRandomness]
      */
     var randomizedHistory: History? = null
         private set
 
     /**
-     * Update values and create new randomized history, if needed
+     * Update randomized history, based on current history and new randomness value
+     *
+     * @param randomness [Int]: new history randomness value from SettingsViewModel
      */
-    fun updateValues(newRandomness: Int, newHistory: History) {
-        if (newRandomness != randomness || newHistory != history || randomizedHistory == null) {
-            randomness = newRandomness
-            history = newHistory.toList() // create copy
-            randomizedHistory = getRandomHistory()
-        }
+    fun updateRandomHistory(randomness: Int) {
+        this.appliedRandomness = randomness
+        randomizedHistory = getRandomHistory()
     }
 
     /**
      * Generate history, using the degree of randomness specified in the viewmodel
      */
     private fun getRandomHistory(): History {
-        return when (randomness) {
-            0 -> history!! // no randomness
-            1 -> history!!.shuffled() // shuffled order
+        return when (appliedRandomness) {
+            0 -> history // no randomness
+            1 -> history.shuffled() // shuffled order
             2 -> shuffleHistoryValues() // shuffled values
             3 -> generateRandomHistory() ?: emptyList() // random generation
-            else -> history!!
+            else -> history
         }
     }
 
@@ -64,9 +63,8 @@ class HistoryViewModel : ViewModel() {
      * @return [History]: history where computations and values have been shuffled
      */
     private fun shuffleHistoryValues(): History {
-        val computations: List<StringList> = history!!.map { it.computation }.shuffled()
-        val values: List<Pair<ExactFraction?, String?>> =
-            history!!.map { Pair(it.result, it.error) }.shuffled()
+        val computations: List<StringList> = history.map { it.computation }.shuffled()
+        val values: List<Pair<ExactFraction?, String?>> = history.map { Pair(it.result, it.error) }.shuffled()
 
         val shuffledHistory = computations.mapIndexed { index, comp ->
             val valuePair = values[index]
@@ -87,12 +85,29 @@ class HistoryViewModel : ViewModel() {
      * @return [History]: possibly null history of generated computations, with same length as real history (if not null)
      */
     private fun generateRandomHistory(): History? {
-        val probabilityError = ternaryIf(history!!.isEmpty(), 1f, 0.2f)
+        val probabilityError = ternaryIf(history.isEmpty(), 1f, 0.2f)
 
         if (random.nextBoolean(probabilityError)) {
             return null
         }
 
-        return List(history!!.size) { generateRandomHistoryItem() }
+        return List(history.size) { generateRandomHistoryItem() }
+    }
+
+    /**
+     * Add new item to history
+     *
+     * @param item [HistoryItem]
+     */
+    fun addToHistory(item: HistoryItem) {
+        _history.add(item)
+    }
+
+    /**
+     * Clear all values in history
+     */
+    fun clearHistory() {
+        _history.clear()
+        randomizedHistory = emptyList()
     }
 }

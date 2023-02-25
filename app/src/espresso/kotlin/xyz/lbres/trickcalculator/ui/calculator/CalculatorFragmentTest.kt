@@ -18,14 +18,14 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.matchers.isEmptyString
-import xyz.lbres.trickcalculator.testutils.matchers.isNotEmptyString
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.withSavedText
+import xyz.lbres.trickcalculator.testutils.withEmptyString
+import xyz.lbres.trickcalculator.testutils.withNonEmptyString
 
 // TODO tests for settings
 
@@ -61,7 +61,7 @@ class CalculatorFragmentTest {
         onView(withId(R.id.useLastHistoryButton)).check(matches(not(isDisplayed())))
         onView(withId(R.id.historyButton)).check(matches(isDisplayed()))
         errorText.check(matches(not(isDisplayed())))
-        mainText.check(matches(allOf(isDisplayed(), isEmptyString())))
+        mainText.check(matches(allOf(isDisplayed(), withEmptyString())))
 
         // numpad layout
         onView(withId(R.id.oneButton)).check(matches(allOf(isDisplayed(), withText("1"))))
@@ -94,7 +94,7 @@ class CalculatorFragmentTest {
 
     @Test
     fun typeInMainText() {
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         // digits
         onView(withId(R.id.oneButton)).perform(click())
@@ -158,41 +158,41 @@ class CalculatorFragmentTest {
         val clearButton = onView(withId(R.id.clearButton))
 
         // empty
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         // with text
         typeText("123")
-        mainText.check(matches(isNotEmptyString()))
+        mainText.check(matches(withNonEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         typeText("(.7-45+55/5)^3(4.3)")
-        mainText.check(matches(isNotEmptyString()))
+        mainText.check(matches(withNonEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         // with computed
         typeText("123")
         equals()
-        mainText.check(matches(isNotEmptyString()))
+        mainText.check(matches(withNonEmptyString()))
         clearButton.perform(click())
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         typeText("100x44-3")
         equals()
-        mainText.check(matches((isNotEmptyString())))
+        mainText.check(matches((withNonEmptyString())))
         clearButton.perform(click())
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         // with error
         typeText("100..3")
         equals()
-        mainText.check(matches(isNotEmptyString()))
-        errorText.check(matches(allOf(isDisplayed(), isNotEmptyString())))
+        mainText.check(matches(withNonEmptyString()))
+        errorText.check(matches(allOf(isDisplayed(), withNonEmptyString())))
         clearButton.perform(click())
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
     }
 
@@ -245,15 +245,15 @@ class CalculatorFragmentTest {
     @Test
     fun useBackspace() {
         // blank
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
         backspace()
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         // with text
         clearText()
         typeText("1")
         backspace()
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
 
         clearText()
         typeText("123")
@@ -293,7 +293,7 @@ class CalculatorFragmentTest {
         equals()
         onView(withId(R.id.errorText)).check(matches(isDisplayed()))
         backspace()
-        mainText.check(matches(isEmptyString()))
+        mainText.check(matches(withEmptyString()))
         onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
 
         clearText()

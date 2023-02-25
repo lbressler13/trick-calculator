@@ -39,67 +39,48 @@ fun testSettingsMaintained() {
 
     settingsButtonSwitch.perform(click())
 
-    applyParensSwitch.check(matches(isNotChecked()))
-    applyDecimalsSwitch.check(matches(isNotChecked()))
-    clearOnErrorSwitch.check(matches(isChecked()))
-    shuffleComputationSwitch.check(matches(isChecked()))
-    shuffleNumbersSwitch.check(matches(isChecked()))
-    shuffleOperatorsSwitch.check(matches(isNotChecked()))
-    onView(withId(R.id.historyButton3)).check(matches(isChecked()))
+    val settings = Settings(
+        applyDecimals = false,
+        applyParens = false,
+        clearOnError = true,
+        historyRandomness = 3,
+        showSettingsButton = true,
+        shuffleComputation = true,
+        shuffleNumbers = true,
+        shuffleOperators = false
+    )
 
-    settingsButtonSwitch.check(matches(isChecked()))
+    checkSettingsDisplayed(settings)
 
     closeFragment()
 
     // check values after re-opening
     openSettingsFragment()
-
-    applyParensSwitch.check(matches(isNotChecked()))
-    applyDecimalsSwitch.check(matches(isNotChecked()))
-    clearOnErrorSwitch.check(matches(isChecked()))
-    shuffleComputationSwitch.check(matches(isChecked()))
-    shuffleNumbersSwitch.check(matches(isChecked()))
-    shuffleOperatorsSwitch.check(matches(isNotChecked()))
-    onView(withId(R.id.historyButton3)).check(matches(isChecked()))
-
-    settingsButtonSwitch.check(matches(allOf(isDisplayed(), isChecked())))
+    checkSettingsDisplayed(settings)
 
     shuffleOperatorsSwitch.perform(click())
     onView(withId(R.id.historyButton2)).perform(click())
-    shuffleOperatorsSwitch.check(matches(isChecked()))
-    onView(withId(R.id.historyButton2)).check(matches(isChecked()))
+
+    settings.shuffleOperators = !settings.shuffleOperators
+    settings.historyRandomness = 2
+    checkSettingsDisplayed(settings)
 
     pressBack()
 
     // check values after opening with settings button
     settingsButton.perform(click())
-
-    applyParensSwitch.check(matches(isNotChecked()))
-    applyDecimalsSwitch.check(matches(isNotChecked()))
-    clearOnErrorSwitch.check(matches(isChecked()))
-    shuffleComputationSwitch.check(matches(isChecked()))
-    shuffleNumbersSwitch.check(matches(isChecked()))
-    shuffleOperatorsSwitch.check(matches(isChecked()))
-    onView(withId(R.id.historyButton2)).check(matches(isChecked()))
-
-    settingsButtonSwitch.check(isNotPresented())
+    checkSettingsDisplayed(settings, settingsSwitchDisplayed = false)
 
     applyParensSwitch.perform(click())
-    applyParensSwitch.check(matches(isChecked()))
+    settings.applyParens = !settings.applyParens
+    checkSettingsDisplayed(settings, settingsSwitchDisplayed = false)
 
     closeFragment()
 
     // re-open to check settings from settings fragment
     openSettingsFragment()
-    applyParensSwitch.check(matches(isChecked()))
-    applyDecimalsSwitch.check(matches(isNotChecked()))
-    clearOnErrorSwitch.check(matches(isChecked()))
-    shuffleComputationSwitch.check(matches(isChecked()))
-    shuffleNumbersSwitch.check(matches(isChecked()))
-    shuffleOperatorsSwitch.check(matches(isChecked()))
-    onView(withId(R.id.historyButton2)).check(matches(isChecked()))
+    checkSettingsDisplayed(settings, settingsSwitchDisplayed = true)
 
-    settingsButtonSwitch.check(matches(allOf(isDisplayed(), isChecked())))
     settingsButtonSwitch.perform(click())
     settingsButtonSwitch.check(matches(allOf(isDisplayed(), isNotChecked())))
 

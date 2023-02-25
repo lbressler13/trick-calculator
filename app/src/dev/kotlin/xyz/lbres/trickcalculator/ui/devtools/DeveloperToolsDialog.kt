@@ -2,6 +2,7 @@ package xyz.lbres.trickcalculator.ui.devtools
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,8 +18,9 @@ import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.DialogDeveloperToolsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.FragmentDevToolsContext
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.ui.history.HistoryViewModel
+import xyz.lbres.trickcalculator.ui.settings.SettingsFragment
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
 
@@ -27,7 +29,13 @@ import xyz.lbres.trickcalculator.utils.visible
  */
 class DeveloperToolsDialog : DialogFragment() {
     private lateinit var binding: DialogDeveloperToolsBinding
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var historyViewModel: HistoryViewModel
+
+    /**
+     * If settings navigation occurs before dialog is dismissed
+     */
+    private var openedSettings: Boolean = false
 
     /**
      * Build dialog, comes before onCreateView and dialog is not connected to context
@@ -36,7 +44,8 @@ class DeveloperToolsDialog : DialogFragment() {
         binding = DialogDeveloperToolsBinding.inflate(layoutInflater)
         val root = binding.root
 
-        viewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
         val doneText = requireContext().getString(R.string.done)
         val title = requireContext().getString(R.string.title_dev_tools)
@@ -58,12 +67,7 @@ class DeveloperToolsDialog : DialogFragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding.clearHistoryButton.setOnClickListener {
-            val parentContext = FragmentDevToolsContext.currentContext
-            viewModel.clearHistory()
-            parentContext?.handleHistoryCleared?.invoke()
-        }
-
+        binding.clearHistoryButton.setOnClickListener { historyViewModel.clearHistory() }
         binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
 
         initHideDevTools()
@@ -100,7 +104,7 @@ class DeveloperToolsDialog : DialogFragment() {
         val numString = timerString.substring(0, timerString.length - 2) // remove ms from end
         val timer = Integer.parseInt(numString).toLong()
 
-        val button = (requireActivity() as BaseActivity).binding.devToolsButton
+        val button = requireBaseActivity().binding.devToolsButton
         button.gone()
 
         // unhide dev tools button
@@ -118,19 +122,46 @@ class DeveloperToolsDialog : DialogFragment() {
         val fromDialogKey = getString(R.string.from_dialog_key)
 
         binding.openSettingsButton.setOnClickListener {
-            val baseActivity = requireActivity() as BaseActivity
-            val baseFragment = requireParentFragment() as BaseFragment
+            val baseFragment = requireBaseFragment()
 
             if (baseFragment.navigateToSettings != null) {
                 val args = bundleOf(fromDialogKey to true)
-                baseActivity.runNavAction(baseFragment.navigateToSettings!!, args)
+                requireBaseActivity().runNavAction(baseFragment.navigateToSettings!!, args)
+                SettingsFragment.devToolsCallback = { baseFragment.handlePostDevTools() }
             }
+            openedSettings = true
             dismiss()
         }
     }
 
+    /**
+     * Get current activity as [BaseActivity].
+     *
+     * @return [BaseActivity]
+     */
+    private fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
+
+    /**
+     * Get parent fragment as [BaseFragment].
+     *
+     * @return [BaseFragment]
+     */
+    private fun requireBaseFragment(): BaseFragment = requireParentFragment() as BaseFragment
+
+    /**
+     * Call callback for current function
+     */
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+
+        // callback will be called in settings fragment
+        if (!openedSettings) {
+            requireBaseFragment().handlePostDevTools()
+        }
+    }
+
     companion object {
-        // tag is required when showing fragment
+        // tag is required when showing dialog
         const val TAG = "DeveloperToolsDialog"
     }
 }

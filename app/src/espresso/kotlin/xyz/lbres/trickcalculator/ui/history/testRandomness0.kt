@@ -2,13 +2,12 @@ package xyz.lbres.trickcalculator.ui.history
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
+import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
-
-private const val recyclerId = R.id.itemsRecycler
 
 fun testRandomness0() {
     setHistoryRandomness(0)
@@ -22,7 +21,7 @@ fun testRandomness0() {
     // one element
     history.add(generateTestItem("1+2") { "3" })
     openHistoryFragment()
-    onView(withViewHolder(recyclerId, 0)).check(matches(withHistoryItem("1+2", "3")))
+    onView(withId(R.id.itemsRecycler)).check(matches(matchesAtPosition(0, withHistoryItem("1+2", "3"))))
 
     closeFragment()
 

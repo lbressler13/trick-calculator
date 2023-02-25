@@ -15,6 +15,7 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.doRefreshUI
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
@@ -180,6 +181,28 @@ class SettingsFragmentTestDev {
         // should go back to calculator fragment
         onView(withText("Calculator")).check(matches(isDisplayed()))
         onView(withText("Settings")).check(doesNotExist())
+    }
+
+    @Test
+    fun refreshUI() {
+        openSettingsFragment()
+
+        // initial settings
+        doRefreshUI()
+        checkInitialSettings()
+
+        // modified settings
+        val settings = Settings()
+
+        onView(withId(R.id.clearOnErrorSwitch)).perform(click())
+        onView(withId(R.id.shuffleNumbersSwitch)).perform(click())
+        onView(withId(R.id.historyButton0)).perform(click())
+        settings.clearOnError = true
+        settings.shuffleNumbers = true
+        settings.historyRandomness = 0
+
+        doRefreshUI()
+        checkSettingsDisplayed(settings)
     }
 
     @Test fun settingsSaved() = testSettingsSaved()

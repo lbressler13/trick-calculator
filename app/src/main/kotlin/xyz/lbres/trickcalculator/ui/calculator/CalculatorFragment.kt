@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +17,9 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
+import xyz.lbres.trickcalculator.ui.history.HistoryItem
+import xyz.lbres.trickcalculator.ui.history.HistoryViewModel
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
@@ -29,7 +32,8 @@ import java.util.Random
 class CalculatorFragment : BaseFragment() {
     private lateinit var binding: FragmentCalculatorBinding
     private lateinit var computationViewModel: ComputationViewModel
-    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var historyViewModel: HistoryViewModel
     private val random = Random(Date().time)
     override val navigateToSettings = R.id.navigateCalculatorToSettings
 
@@ -42,9 +46,9 @@ class CalculatorFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalculatorBinding.inflate(layoutInflater)
-        computationViewModel =
-            ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        computationViewModel = ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
+        settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
         // init UI
         initNumpad()
@@ -63,8 +67,8 @@ class CalculatorFragment : BaseFragment() {
      */
     override fun onResume() {
         super.onResume()
-        binding.settingsButton.isVisible = sharedViewModel.showSettingsButton
-        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
+        binding.settingsButton.isVisible = settingsViewModel.showSettingsButton
+        binding.useLastHistoryButton.isVisible = historyViewModel.history.isNotEmpty()
     }
 
     /**
@@ -78,14 +82,17 @@ class CalculatorFragment : BaseFragment() {
      * Launch HistoryFragment
      */
     private val historyButtonOnClick = {
-        requireBaseActivity().runNavAction(R.id.navigateCalculatorToHistory)
+        val initialLoadKey = getString(R.string.initial_fragment_load_key)
+        val args = bundleOf(initialLoadKey to true)
+
+        requireBaseActivity().runNavAction(R.id.navigateCalculatorToHistory, args)
     }
 
     /**
      * Use last history item as current computation
      */
     private val useLastHistoryItemOnClick = {
-        val item = sharedViewModel.history.lastOrNull()
+        val item = historyViewModel.history.lastOrNull()
         if (item != null) {
             computationViewModel.useHistoryItemAsComputeText(item)
 
@@ -110,7 +117,7 @@ class CalculatorFragment : BaseFragment() {
             // set action for each operator
             // only include exponent if exp is used
             val operators = when {
-                !sharedViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
+                !settingsViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
                 !computationViewModel.computeText.contains("^") -> listOf(
                     "+",
                     "-",
@@ -138,8 +145,9 @@ class CalculatorFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder =
-                ternaryIf(sharedViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
+            val numberOrder = ternaryIf(settingsViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
+
+            var newHistoryItem: HistoryItem?
 
             // try to run computation, and update compute text and error message
             try {
@@ -150,12 +158,12 @@ class CalculatorFragment : BaseFragment() {
                         operatorRounds,
                         performOperation,
                         numberOrder,
-                        sharedViewModel.applyParens,
-                        sharedViewModel.applyDecimals,
-                        sharedViewModel.shuffleComputation
+                        settingsViewModel.applyParens,
+                        settingsViewModel.applyDecimals,
+                        settingsViewModel.shuffleComputation
                     )
 
-                computationViewModel.setResult(null, computedValue)
+                newHistoryItem = computationViewModel.setResult(null, computedValue)
                 updateUI()
                 scrollTextToTop()
             } catch (e: Exception) {
@@ -172,15 +180,16 @@ class CalculatorFragment : BaseFragment() {
                     message
                 }
 
-                computationViewModel.setResult(error, null, sharedViewModel.clearOnError)
+                newHistoryItem = computationViewModel.setResult(error, null, settingsViewModel.clearOnError)
                 updateUI()
             }
 
-            sharedViewModel.addToHistory(computationViewModel.generatedHistoryItem!!)
-            computationViewModel.clearStoredHistoryItem()
-        }
+            if (newHistoryItem != null) {
+                historyViewModel.addToHistory(newHistoryItem)
+            }
 
-        binding.useLastHistoryButton.isVisible = sharedViewModel.history.isNotEmpty()
+            binding.useLastHistoryButton.isVisible = historyViewModel.history.isNotEmpty()
+        }
     }
 
     /**
@@ -255,8 +264,10 @@ class CalculatorFragment : BaseFragment() {
     /**
      * Hide useLastHistory button when history is cleared
      */
-    override fun handleHistoryCleared() {
-        binding.useLastHistoryButton.gone()
+    override fun handlePostDevTools() {
+        if (historyViewModel.history.isEmpty()) {
+            binding.useLastHistoryButton.gone()
+        }
     }
 
     /**

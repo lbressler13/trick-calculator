@@ -31,7 +31,6 @@ import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
@@ -74,10 +73,8 @@ class AttributionsFragmentTest {
 
     @Test
     fun flaticonMessage() {
-        val flaticonShort =
-            "All icons are taken from Flaticon. Expand for details of their attribution policies."
-        val flaticonLong =
-            "All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies."
+        val flaticonShort = "All icons are taken from Flaticon. Expand for details of their attribution policies."
+        val flaticonLong = "All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies."
 
         // initial view
         onView(withId(R.id.flaticonPolicyMessage)).check(matches(withText(flaticonShort)))
@@ -112,6 +109,31 @@ class AttributionsFragmentTest {
     fun expandCollapseAttributions() = testExpandCollapseAttributions()
 
     @Test
+    fun expandFlaticonMessageAndAttributions() {
+        onView(withId(R.id.expandCollapseMessage)).perform(click())
+        onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
+
+        expandCollapseAttribution(0)
+        checkImagesDisplayed(listOf(0))
+        checkImagesNotPresented(listOf(1, 2, 3, 4))
+
+        expandCollapseAttribution(1)
+        checkImagesDisplayed(listOf(0, 1))
+        checkImagesNotPresented(listOf(2, 3, 4))
+
+        expandCollapseAttribution(2)
+        checkImagesDisplayed(listOf(0, 1, 2))
+        checkImagesNotPresented(listOf(3, 4))
+
+        expandCollapseAttribution(3)
+        checkImagesDisplayed(listOf(0, 1, 2, 3))
+        checkImagesNotPresented(listOf(4))
+
+        expandCollapseAttribution(4)
+        checkImagesDisplayed(listOf(0, 1, 2, 3, 4))
+    }
+
+    @Test
     fun flaticonPolicyLinks() {
         var expectedLinkClicks = 0
 
@@ -142,7 +164,7 @@ class AttributionsFragmentTest {
             val author = pair.value
 
             expandCollapseAttribution(index)
-            recycler.perform(scrollToPosition(index))
+            recycler.perform(scrollToAuthorPosition(index))
             val image = author.images[0]
             onView(withText(image.url)).check(matches(isDisplayed()))
         }
@@ -163,7 +185,7 @@ class AttributionsFragmentTest {
             val index = pair.index
             val author = pair.value
 
-            recycler.perform(scrollToPosition(index))
+            recycler.perform(scrollToAuthorPosition(index))
             val image = author.images[0]
             onView(withText(image.url)).check(isNotPresented())
         }

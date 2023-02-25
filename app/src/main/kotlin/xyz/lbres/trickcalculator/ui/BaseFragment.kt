@@ -1,5 +1,6 @@
 package xyz.lbres.trickcalculator.ui
 
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
@@ -50,15 +51,13 @@ abstract class BaseFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        FragmentDevToolsContext.currentContext = FragmentDevToolsContext(
-            childFragmentManager,
-        ) { handleHistoryCleared() }
+        dialogFragmentManager = childFragmentManager
     }
 
     /**
-     * Callback to call when history is cleared through dev tools
+     * Callback to call when dev tools flow completes, from either the dialog or the settings fragment
      */
-    protected open fun handleHistoryCleared() {}
+    open fun handlePostDevTools() {}
 
     /**
      * Close the fragment
@@ -71,4 +70,11 @@ abstract class BaseFragment : NavHostFragment() {
      * @return [BaseActivity]
      */
     fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
+
+    companion object {
+        /**
+         * Fragment manager for current fragment, used when displaying the dev tools dialog
+         */
+        var dialogFragmentManager: FragmentManager? = null
+    }
 }

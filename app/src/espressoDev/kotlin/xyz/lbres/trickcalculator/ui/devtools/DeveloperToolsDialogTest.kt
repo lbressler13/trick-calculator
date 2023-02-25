@@ -56,6 +56,13 @@ class DeveloperToolsDialogTest {
         onView(withText("Settings")).check(matches(isDisplayed()))
     }
 
+    @Test
+    fun refreshUI() {
+        openDevTools()
+        onView(withId(R.id.refreshUIButton)).perform(click())
+        onView(withText("Developer Tools")).check(matches(isDisplayed()))
+    }
+
     @Test fun hideDevToolsOptionsDisplayed() = testHideDevToolsOptionsDisplayed()
     @Test fun interactWithHideDevToolsSpinner() = testInteractWithHideDevToolsSpinner()
     @Test fun hideDevTools() = testHideDevTools()
