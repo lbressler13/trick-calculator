@@ -77,7 +77,6 @@ fun testExpandCollapseAttributions() {
 
 fun testAttributionLinks() {
     var expectedLinkClicks = 0
-    // val clickFlaticon = clickLinkInTextWithViewId(R.id.attribution, "www.flaticon.com")
     val clickFlaticon = actionOnChildWithId(R.id.attribution, clickLinkInText("www.flaticon.com"))
 
     // authors
@@ -91,7 +90,6 @@ fun testAttributionLinks() {
         assertLinkOpened("https://www.flaticon.com", expectedLinkClicks)
 
         // author link
-        // val clickAuthor = clickLinkInTextWithViewId(R.id.attribution, author.name)
         val clickAuthor = actionOnChildWithId(R.id.attribution, clickLinkInText(author.name))
         attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, clickAuthor))
         expectedLinkClicks++

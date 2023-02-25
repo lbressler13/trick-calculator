@@ -163,7 +163,6 @@ class TestHistory {
         }
 
         onView(withId(R.id.itemsRecycler)).perform(
-            scrollToHistoryItemAtPosition(position),
             actionOnHistoryItemAtPosition(position, getViewHolderText)
         )
 

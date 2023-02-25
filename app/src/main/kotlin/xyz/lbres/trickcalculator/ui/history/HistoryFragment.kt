@@ -106,6 +106,6 @@ class HistoryFragment : BaseFragment() {
             historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         }
 
-        setUI()
+        setUI() // handles history being cleared
     }
 }

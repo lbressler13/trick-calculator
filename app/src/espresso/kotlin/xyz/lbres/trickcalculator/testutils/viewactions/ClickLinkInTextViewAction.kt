@@ -11,7 +11,7 @@ import org.hamcrest.Matcher
 import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
 
 /**
- * Click the first [URLClickableSpan] in a TextView that matches the specified textToClick.
+ * Click the first [URLClickableSpan] in a TextView that matches the specified text.
  *
  * Adapted from solution on this StackOverflow post:
  * https://stackoverflow.com/questions/38314077/how-to-click-a-clickablespan-using-espresso
@@ -63,7 +63,7 @@ private class ClickLinkInTextViewAction(private val textToClick: String) : ViewA
 }
 
 /**
- * [ViewAction] to click the first [URLClickableSpan] in a TextView that matches the specified textToClick.
+ * [ViewAction] to click the first [URLClickableSpan] in a TextView that matches the specified text.
  *
  * @param textToClick [String]: text to click
 */

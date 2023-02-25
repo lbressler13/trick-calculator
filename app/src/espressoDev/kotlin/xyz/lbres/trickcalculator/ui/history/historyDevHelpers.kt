@@ -51,18 +51,13 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefre
 
     // match saved values
     for (position in 0 until history.size) {
-        itemsRecycler.perform(scrollToHistoryItemAtPosition(position))
-        itemsRecycler.check(
-            matches(
-                matchesAtPosition(
-                    position,
-                    allOf(
-                        withSavedTextAtPosition(position, R.id.computeText),
-                        withSavedTextAtPosition(position, R.id.resultText),
-                        withSavedTextAtPosition(position, R.id.errorText)
-                    )
-                )
-            )
+        val savedValuesMatcher = allOf(
+            withSavedTextAtPosition(position, R.id.computeText),
+            withSavedTextAtPosition(position, R.id.resultText),
+            withSavedTextAtPosition(position, R.id.errorText)
         )
+
+        itemsRecycler.perform(scrollToHistoryItemAtPosition(position))
+        itemsRecycler.check(matches(matchesAtPosition(position, savedValuesMatcher)))
     }
 }

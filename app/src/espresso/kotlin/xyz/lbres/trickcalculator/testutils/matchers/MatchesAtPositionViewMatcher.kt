@@ -7,7 +7,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 /**
- * [Matcher] to apply [vhMatcher] to a ViewHolder in a RecyclerView, with the given position
+ * [Matcher] to apply [vhMatcher] to a ViewHolder in a RecyclerView, at the given position
  *
  * @param position [Int]: position of ViewHolder in recycler
  * @param vhMatcher [Int]: matcher to apply to ViewHolder
@@ -41,7 +41,7 @@ private class MatchesAtPositionViewMatcher(private val position: Int, private va
 }
 
 /**
- * [Matcher] for a RecyclerView, to determine that the ViewHolder at a specified position matches a given matcher
+ * [Matcher] for a RecyclerView, to determine if the ViewHolder at a specified position matches a given matcher
  *
  * @param position [Int]: position of ViewHolder in recycler
  * @param vhMatcher [Int]: matcher for ViewHolder

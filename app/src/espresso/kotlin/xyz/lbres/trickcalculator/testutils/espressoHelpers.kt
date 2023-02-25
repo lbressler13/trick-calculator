@@ -27,11 +27,11 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
 }
 
 /**
- * Wrapper function for creating a [Matcher] for text with an empty string
+ * [Matcher] that checks if text of TextView is an empty string
  */
 fun withEmptyString(): Matcher<View> = withText("")
 
 /**
- * Wrapper function for creating a [Matcher] for text with a non-empty string
+ * [Matcher] that checks if text of TextView is a non-empty string
  */
 fun withNonEmptyString(): Matcher<View> = not(withText(""))

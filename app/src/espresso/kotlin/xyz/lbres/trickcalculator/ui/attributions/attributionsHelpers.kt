@@ -61,8 +61,9 @@ fun actionOnAuthorItemAtPosition(position: Int, action: ViewAction): ViewAction 
  * @param position [Int]: position of item to click
  */
 fun expandCollapseAttribution(position: Int) {
-    val action = actionOnChildWithId(R.id.expandCollapseButton, click())
-    attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, action))
+    val clickExpandCollapse = actionOnChildWithId(R.id.expandCollapseButton, click())
+
+    attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, clickExpandCollapse))
     attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(withId(nestedRecyclerId)))))
 }
 
@@ -93,8 +94,8 @@ fun checkImagesDisplayed(positions: IntList) {
             val nestedPosition = pair.index
             val url = pair.value
 
-            val nestedScroll = actionOnChildWithId(R.id.imagesRecycler, scrollToImagePosition(nestedPosition))
-            attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, nestedScroll))
+            val scrollImagesRecycler = actionOnChildWithId(R.id.imagesRecycler, scrollToImagePosition(nestedPosition))
+            attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, scrollImagesRecycler))
 
             val urlMatcher = allOf(isShown(), hasDescendant(withText(url)))
             val nestedMatcher = allOf(withId(nestedRecyclerId), isDisplayed(), matchesAtPosition(nestedPosition, urlMatcher))

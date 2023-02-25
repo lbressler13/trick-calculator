@@ -25,7 +25,6 @@ private val reshuffledErrors = mapOf(
     2 to "Items not re-shuffled for history randomness 2.",
 )
 
-// private const val recyclerId = R.id.itemsRecycler
 private val itemsRecycler = onView(withId(R.id.itemsRecycler))
 
 /**
@@ -101,7 +100,6 @@ fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
     // save all current values
     for (position in 0 until history.size) {
         itemsRecycler.perform(
-            scrollToHistoryItemAtPosition(position),
             actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText))
         )
     }
