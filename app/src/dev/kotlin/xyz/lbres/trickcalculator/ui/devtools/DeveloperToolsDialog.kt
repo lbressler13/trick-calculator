@@ -142,7 +142,7 @@ class DeveloperToolsDialog : DialogFragment() {
     private fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
 
     /**
-     * Get current fragment as [BaseFragment].
+     * Get parent fragment as [BaseFragment].
      *
      * @return [BaseFragment]
      */

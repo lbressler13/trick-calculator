@@ -63,6 +63,8 @@ private class ClickLinkInTextViewAction(private val textToClick: String) : ViewA
 }
 
 /**
- * Wrapper function for creating a [ClickLinkInTextViewAction]
- */
+ * [ViewAction] to click the first [URLClickableSpan] in a TextView that matches the specified textToClick.
+ *
+ * @param textToClick [String]: text to click
+*/
 fun clickLinkInText(textToClick: String): ViewAction = ClickLinkInTextViewAction(textToClick)

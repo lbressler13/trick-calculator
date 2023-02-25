@@ -16,9 +16,9 @@ class HistoryViewModel : ViewModel() {
     private val random = Random(Date().time)
 
     /**
-     * Randomness applied to items on screen. Copied from value in SettingsViewModel
+     * Randomness used in current shuffled history
      */
-    var randomness: Int? = null
+    var appliedRandomness: Int? = null
         private set
 
     /**
@@ -28,7 +28,7 @@ class HistoryViewModel : ViewModel() {
     val history: History = _history
 
     /**
-     * Values generated based on [history] and [randomness]
+     * Values generated based on [history] and [appliedRandomness]
      */
     var randomizedHistory: History? = null
         private set
@@ -39,7 +39,7 @@ class HistoryViewModel : ViewModel() {
      * @param randomness [Int]: new history randomness value from SettingsViewModel
      */
     fun updateRandomHistory(randomness: Int) {
-        this.randomness = randomness
+        this.appliedRandomness = randomness
         randomizedHistory = getRandomHistory()
     }
 
@@ -47,7 +47,7 @@ class HistoryViewModel : ViewModel() {
      * Generate history, using the degree of randomness specified in the viewmodel
      */
     private fun getRandomHistory(): History {
-        return when (randomness) {
+        return when (appliedRandomness) {
             0 -> history // no randomness
             1 -> history.shuffled() // shuffled order
             2 -> shuffleHistoryValues() // shuffled values

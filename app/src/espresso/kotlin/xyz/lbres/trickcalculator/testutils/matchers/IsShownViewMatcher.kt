@@ -24,4 +24,8 @@ private class IsShownViewMatcher : TypeSafeMatcher<View>() {
     }
 }
 
+/**
+ * [Matcher] to match a view that is shown on screen.
+ * More inclusive than ViewMatchers.isDisplayed.
+ */
 fun isShown(): Matcher<View> = IsShownViewMatcher()

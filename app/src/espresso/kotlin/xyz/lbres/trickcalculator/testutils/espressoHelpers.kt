@@ -3,9 +3,9 @@ package xyz.lbres.trickcalculator.testutils
 import android.content.Intent
 import android.view.View
 import androidx.test.espresso.intent.Intents.getIntents
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import java.lang.AssertionError
 
@@ -29,9 +29,9 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
 /**
  * Wrapper function for creating a [Matcher] for text with an empty string
  */
-fun isEmptyString(): Matcher<View> = ViewMatchers.withText("")
+fun withEmptyString(): Matcher<View> = withText("")
 
 /**
  * Wrapper function for creating a [Matcher] for text with a non-empty string
  */
-fun isNotEmptyString(): Matcher<View> = Matchers.not(ViewMatchers.withText(""))
+fun withNonEmptyString(): Matcher<View> = not(withText(""))

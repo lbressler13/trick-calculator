@@ -7,24 +7,24 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 /**
- * [Matcher] for applying checks to a ViewHolder with given traits in a RecyclerView
+ * [Matcher] to apply [vhMatcher] to a ViewHolder in a RecyclerView, with the given position
  *
  * @param position [Int]: position of ViewHolder in recycler
- * @param matcher [Int]: matcher to apply to ViewHolder
+ * @param vhMatcher [Int]: matcher to apply to ViewHolder
  */
-private class MatchesAtPositionViewMatcher(private val position: Int, private val matcher: Matcher<View?>) : TypeSafeMatcher<View>() {
+private class MatchesAtPositionViewMatcher(private val position: Int, private val vhMatcher: Matcher<View?>) : TypeSafeMatcher<View>() {
     override fun describeTo(description: Description?) {
         if (description != null) {
             description.appendText("matching view at position $position with child matcher: ")
-            description.appendDescriptionOf(matcher)
+            description.appendDescriptionOf(vhMatcher)
         }
     }
 
     /**
      * Applies matcher to ViewHolder at index [position] in the recycler
      *
-     * @param view [View]: view to check
-     * @return [Boolean] true if view is at index [position] in the RecyclerView with ID [recyclerViewId], false otherwise
+     * @param view [View]?: view to check, expected to be a [RecyclerView]
+     * @return [Boolean] `true` if the ViewHolder exists and matches the matcher, `false` otherwise
      */
     override fun matchesSafely(view: View?): Boolean {
         if (view !is RecyclerView) {
@@ -36,8 +36,16 @@ private class MatchesAtPositionViewMatcher(private val position: Int, private va
             return false
         }
 
-        return matcher.matches(viewholder)
+        return vhMatcher.matches(viewholder)
     }
 }
 
-fun matchesAtPosition(position: Int, matcher: Matcher<View?>): Matcher<View> = MatchesAtPositionViewMatcher(position, matcher)
+/**
+ * [Matcher] for a RecyclerView, to determine that the ViewHolder at a specified position matches a given matcher
+ *
+ * @param position [Int]: position of ViewHolder in recycler
+ * @param vhMatcher [Int]: matcher for ViewHolder
+ */
+fun matchesAtPosition(position: Int, vhMatcher: Matcher<View?>): Matcher<View> {
+    return MatchesAtPositionViewMatcher(position, vhMatcher)
+}

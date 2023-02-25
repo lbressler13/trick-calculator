@@ -102,7 +102,7 @@ class HistoryFragment : BaseFragment() {
      * Redisplay can happen when randomness changes, or when history is cleared.
      */
     override fun handlePostDevTools() {
-        if (historyViewModel.randomness != settingsViewModel.historyRandomness) {
+        if (settingsViewModel.historyRandomness != historyViewModel.appliedRandomness) {
             historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         }
 

@@ -2,6 +2,7 @@ package xyz.lbres.trickcalculator.ui.attributions
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
@@ -14,7 +15,6 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.matchers.isShown
 import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 import xyz.lbres.trickcalculator.testutils.viewactions.actionOnChildWithId
-import xyz.lbres.trickcalculator.testutils.viewactions.clickChildWithId
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
@@ -61,7 +61,7 @@ fun actionOnAuthorItemAtPosition(position: Int, action: ViewAction): ViewAction 
  * @param position [Int]: position of item to click
  */
 fun expandCollapseAttribution(position: Int) {
-    val action = clickChildWithId(R.id.expandCollapseButton)
+    val action = actionOnChildWithId(R.id.expandCollapseButton, click())
     attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, action))
     attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(withId(nestedRecyclerId)))))
 }

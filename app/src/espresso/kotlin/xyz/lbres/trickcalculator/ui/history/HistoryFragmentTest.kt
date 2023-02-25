@@ -15,13 +15,13 @@ import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
-import xyz.lbres.trickcalculator.testutils.isEmptyString
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
+import xyz.lbres.trickcalculator.testutils.withEmptyString
 
 @RunWith(AndroidJUnit4::class)
 class HistoryFragmentTest {
@@ -86,18 +86,18 @@ class HistoryFragmentTest {
 
         // one error
         history.add(generateTestItem("0xx8") { "Syntax error" })
-        onView(withId(R.id.mainText)).check(matches(isEmptyString()))
+        onView(withId(R.id.mainText)).check(matches(withEmptyString()))
         checkRandomness(history, 0)
 
         // multiple errors
         history.add(generateTestItem("10/0") { "Divide by zero" })
-        onView(withId(R.id.mainText)).check(matches(isEmptyString()))
+        onView(withId(R.id.mainText)).check(matches(withEmptyString()))
         checkRandomness(history, 0)
 
         // previous result
         history.add(generateTestItem("15+5") { "20" })
         history.add(generateTestItem("x", "20") { "Syntax error" })
-        onView(withId(R.id.mainText)).check(matches(isEmptyString()))
+        onView(withId(R.id.mainText)).check(matches(withEmptyString()))
 
         // don't clear text, should have been cleared by error
         history.add(generateTestItem("2x4") { "8" })

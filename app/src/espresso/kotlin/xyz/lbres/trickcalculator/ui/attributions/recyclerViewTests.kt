@@ -13,8 +13,8 @@ import org.hamcrest.Matchers.containsString
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.assertLinkOpened
 import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
+import xyz.lbres.trickcalculator.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInText
-import xyz.lbres.trickcalculator.testutils.viewactions.clickLinkInTextWithViewId
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
@@ -77,7 +77,8 @@ fun testExpandCollapseAttributions() {
 
 fun testAttributionLinks() {
     var expectedLinkClicks = 0
-    val clickFlaticon = clickLinkInTextWithViewId(R.id.attribution, "www.flaticon.com")
+    // val clickFlaticon = clickLinkInTextWithViewId(R.id.attribution, "www.flaticon.com")
+    val clickFlaticon = actionOnChildWithId(R.id.attribution, clickLinkInText("www.flaticon.com"))
 
     // authors
     for (pair in authorAttributions.withIndex()) {
@@ -90,7 +91,8 @@ fun testAttributionLinks() {
         assertLinkOpened("https://www.flaticon.com", expectedLinkClicks)
 
         // author link
-        val clickAuthor = clickLinkInTextWithViewId(R.id.attribution, author.name)
+        // val clickAuthor = clickLinkInTextWithViewId(R.id.attribution, author.name)
+        val clickAuthor = actionOnChildWithId(R.id.attribution, clickLinkInText(author.name))
         attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, clickAuthor))
         expectedLinkClicks++
         assertLinkOpened(author.url, expectedLinkClicks)
@@ -120,7 +122,7 @@ fun testAttributionLinks() {
 
     // author link
     val author = authorAttributions[0]
-    val clickAuthor = clickLinkInTextWithViewId(R.id.attribution, author.name)
+    val clickAuthor = actionOnChildWithId(R.id.attribution, clickLinkInText(author.name))
     attributionsRecycler.perform(actionOnAuthorItemAtPosition(0, clickAuthor))
     expectedLinkClicks++
     assertLinkOpened(author.url, expectedLinkClicks)
