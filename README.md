@@ -150,7 +150,7 @@ To run linting and fix formatting issues if possible, run the following command 
 ```./gradlew ktlintFormat```
 
 To run linting without fixing issues, run the following command in the terminal or via an IDE:
-```./gradlew ktlintFormat```
+```./gradlew ktlintCheck```
 
 ## Serious stuff
 
