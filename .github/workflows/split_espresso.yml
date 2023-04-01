@@ -5,6 +5,8 @@ on:
   workflow_call:
   push: # TODO delete
 
+# TODO caching
+
 jobs:
   test:
     name: "Run Tests"
@@ -12,7 +14,7 @@ jobs:
     runs-on: macos-latest
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      TOKEN: ${{ secrets.TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout

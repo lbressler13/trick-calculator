@@ -99,8 +99,8 @@ In order to build the project, you will need a GitHub access token with at least
 
 You can add the following properties to a gradle.properties file in order to build:
 ```properties
-gpr.user=GITHUB_USERNAME
-gpr.key=GITHUB_PAT
+github.username=GITHUB_USERNAME
+github.token=GITHUB_PAT
 ```
 This will allow you to build through an IDE or the command line.
 To build in the command line, you can set:

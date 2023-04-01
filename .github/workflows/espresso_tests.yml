@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      TOKEN: ${{ secrets.TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout

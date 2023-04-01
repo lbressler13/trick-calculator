@@ -5,8 +5,8 @@ plugins {
 }
 apply(plugin = "kotlin-android")
 
-val githubUsername: String? = project.findProperty("gpr.user")?.toString() ?: System.getenv("USERNAME")
-val githubPassword: String? = project.findProperty("gpr.key")?.toString() ?: System.getenv("TOKEN")
+val githubUsername: String? = project.findProperty("github.username")?.toString() ?: System.getenv("USERNAME")
+val githubPassword: String? = project.findProperty("github.token")?.toString() ?: System.getenv("ACCESS_TOKEN")
 
 repositories {
     // general repositories
@@ -45,6 +45,8 @@ repositories {
         }
     }
 }
+
+// TODO parameter for number of retries
 
 android {
     namespace = "xyz.lbres.trickcalculator"
