@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    name: "Run Tests"
+    name: Run Tests
 
     runs-on: macos-latest
     env:
@@ -20,14 +20,51 @@ jobs:
       - name: Set Java Version
         uses: actions/setup-java@v3
         with:
-          distribution: 'corretto'
-          java-version: '11'
-          cache: 'gradle'
+          distribution: corretto
+          java-version: 11
+          cache: gradle
 
-      - name: Run Tests
-        timeout-minutes: 135
+      - name: Gradle Cache
+        uses: gradle/gradle-build-action@v2
+
+      - name: AVD Cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-29
+
+      - name: Create AVD and Generate Snapshot
+        if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          profile: 'Nexus 6'
-          script: ./gradlew connectedCheck --info --stacktrace
+          profile: Nexus 6
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run Tests on Final Flavor
+        timeout-minutes: 45
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          profile: Nexus 6
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace
+
+      - name: Run Tests on Dev Flavor
+        timeout-minutes: 60
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          profile: Nexus 6
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace
