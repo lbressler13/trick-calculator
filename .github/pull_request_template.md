@@ -19,7 +19,6 @@
 ### Documentation
 * [ ] Any new or changed settings have been updated as described in the settings README
   * This includes documentation in the main README
-* [ ] Any new uses of settings have been documented in the settings README
 * [ ] If function signatures changed, the docstrings have been updated
 
 ### Other
