@@ -31,7 +31,7 @@ jobs:
         with:
           api-level: 29
           profile: 'Nexus 6'
-          script: ./gradlew connectedCheckFinalDebugAndroidTest --info --stacktrace
+          script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace
 
       - name: Run Tests on Dev Flavor
         timeout-minutes: 75
@@ -39,4 +39,4 @@ jobs:
         with:
           api-level: 29
           profile: 'Nexus 6'
-          script: ./gradlew connectedCheckDevDebugAndroidTest --info --stacktrace
+          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace
