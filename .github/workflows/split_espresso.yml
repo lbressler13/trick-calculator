@@ -20,6 +20,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set Java Version
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '11'
+          cache: 'gradle'
+
       - name: Gradle Cache
         uses: gradle/gradle-build-action@v2
 
@@ -32,13 +39,6 @@ jobs:
             ~/.android/adb*
           # key: avd-nexus6-29
           key: avd-29
-
-      # - name: Set Java Version
-        # uses: actions/setup-java@v3
-        # with:
-          # distribution: 'corretto'
-          # java-version: '11'
-          # cache: 'gradle'
 
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
