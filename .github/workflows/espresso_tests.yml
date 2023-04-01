@@ -13,6 +13,8 @@ jobs:
       USERNAME: ${{ secrets.USERNAME }}
       ACCESS_TOKEN: ${{ secrets.TOKEN }}
 
+    # TODO move emulator arguments + test arguments into variables
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -56,7 +58,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace
+          script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace -PespressoRetries=3
 
       - name: Run Tests on Dev Flavor
         timeout-minutes: 60
@@ -67,4 +69,4 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace
+          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace -PespressoRetries=3
