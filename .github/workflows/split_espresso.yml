@@ -1,0 +1,42 @@
+name: Espresso Tests (split)
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push: # TODO delete
+
+jobs:
+  test:
+    name: "Run Tests"
+
+    runs-on: macos-latest
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      TOKEN: ${{ secrets.TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Java Version
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '11'
+          cache: 'gradle'
+
+      - name: Run Tests on Final Flavor
+        timeout-minutes: 60
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          profile: 'Nexus 6'
+          script: ./gradlew connectedCheckFinalDebugAndroidTest --info --stacktrace
+
+      - name: Run Tests on Dev Flavor
+        timeout-minutes: 75
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          profile: 'Nexus 6'
+          script: ./gradlew connectedCheckDevDebugAndroidTest --info --stacktrace
