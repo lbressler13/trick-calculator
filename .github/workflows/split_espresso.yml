@@ -5,11 +5,9 @@ on:
   workflow_call:
   push: # TODO delete
 
-# TODO caching
-
 jobs:
   test:
-    name: "Run Tests"
+    name: Run Tests
 
     runs-on: macos-latest
     env:
@@ -23,9 +21,9 @@ jobs:
       - name: Set Java Version
         uses: actions/setup-java@v3
         with:
-          distribution: 'corretto'
-          java-version: '11'
-          cache: 'gradle'
+          distribution: corretto
+          java-version: 11
+          cache: gradle
 
       - name: Gradle Cache
         uses: gradle/gradle-build-action@v2
@@ -51,6 +49,7 @@ jobs:
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run Tests on Final Flavor
+        timeout-minutes: 45
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
@@ -60,18 +59,13 @@ jobs:
           disable-animations: true
           script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace
 
-#      - name: Run Tests on Final Flavor
-#        timeout-minutes: 60
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: 29
-#          profile: 'Nexus 6'
-#          script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace
-#
-#      - name: Run Tests on Dev Flavor
-#        timeout-minutes: 75
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: 29
-#          profile: 'Nexus 6'
-#          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace
+      - name: Run Tests on Dev Flavor
+        timeout-minutes: 60
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          profile: Nexus 6
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace
