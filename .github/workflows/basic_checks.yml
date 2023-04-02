@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      TOKEN: ${{ secrets.TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout

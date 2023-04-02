@@ -5,8 +5,8 @@ plugins {
 }
 apply(plugin = "kotlin-android")
 
-val githubUsername: String? = project.findProperty("gpr.user")?.toString() ?: System.getenv("USERNAME")
-val githubPassword: String? = project.findProperty("gpr.key")?.toString() ?: System.getenv("TOKEN")
+val githubUsername: String? = project.findProperty("github.username")?.toString() ?: System.getenv("USERNAME")
+val githubPassword: String? = project.findProperty("github.token")?.toString() ?: System.getenv("ACCESS_TOKEN")
 
 repositories {
     // general repositories
@@ -46,6 +46,17 @@ repositories {
     }
 }
 
+fun getEspressoRetries(): Int {
+    val defaultRetries = 0
+
+    return if (project.hasProperty("espressoRetries")) {
+        val espressoRetries: String? by project
+        espressoRetries?.toIntOrNull() ?: defaultRetries
+    } else {
+        defaultRetries
+    }
+}
+
 android {
     namespace = "xyz.lbres.trickcalculator"
     compileSdk = 31
@@ -56,6 +67,8 @@ android {
         targetSdk = 31
         versionCode = 1
         versionName = "1.0.0"
+
+        buildConfigField("int", "ESPRESSO_RETRIES", getEspressoRetries().toString())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
