@@ -52,15 +52,18 @@ class RecyclerViewTextSaver {
      */
     private class PreviousTextViewMatcher(val position: Int, @IdRes val viewId: Int) : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description?) {
-            description?.appendText("matching saved text for view with ID $viewId at position $position")
+            description?.appendText("matching saved text at position $position")
         }
 
+        /**
+         * Determine if the text in the specified TextView matches the text at the given position
+         *
+         * @param viewHolder [View]: the ViewHolder at the given position
+         * @return [Boolean]: `true` if the text matches what is present in [savedTextMapping],
+         * `false` if there is no saved value or the value does not match
+         */
         override fun matchesSafely(viewHolder: View): Boolean {
-            val textview = viewHolder.findViewById<TextView>(viewId)
-
-            if (textview !is TextView) {
-                return false
-            }
+            val textview = viewHolder.findViewById<TextView>(viewId) ?: return false
 
             val key = Pair(position, viewId)
             val savedText: String? = savedTextMapping[key]
@@ -95,19 +98,30 @@ class RecyclerViewTextSaver {
         private var savedTextMapping: MutableMap<Pair<Int, Int>, String> = mutableMapOf()
 
         /**
-         * Clear saved text for a view for a given position
+         * [ViewAction] to clear text for a specified view at a given position
+         *
+         * @param position [Int]: position of ViewHolder in RecyclerView
+         * @param viewId [IdRes]: view ID for the view to clear text for
          */
         fun clearSavedTextAtPosition(position: Int, @IdRes viewId: Int): ViewAction = ClearSavedTextViewAction(position, viewId)
 
         /**
-         * Save text for a view by mapping the viewId to its text at a given position
+         /**
+         * [ViewAction] to save text from a specified view at a given position
+         *
+         * @param position [Int]: position of ViewHolder in RecyclerView
+         * @param viewId [IdRes]: view ID for the view to save text for
+         */
          */
         fun saveTextAtPosition(position: Int, @IdRes viewId: Int): ViewAction = SaveTextViewAction(position, viewId)
 
         /**
-         * Check if the text in a view matches the saved value at a given position
+         * [Matcher] to match text against the previously saved test
+         *
+         * @param position [Int]: position of ViewHolder in RecyclerView
+         * @param viewId [IdRes]: view ID for the view to match text for
          */
-        fun withSavedTextAtPosition(position: Int, @IdRes viewId: Int): Matcher<View> = PreviousTextViewMatcher(position, viewId)
+        fun withSavedTextAtPosition(position: Int, @IdRes viewId: Int): Matcher<in View?> = PreviousTextViewMatcher(position, viewId)
 
         /**
          * Clear all saved values in the text saver

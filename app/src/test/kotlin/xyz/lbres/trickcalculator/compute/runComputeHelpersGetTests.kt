@@ -68,6 +68,15 @@ fun runGetMatchingParenIndexTests() {
     index = 12
     expected = 15
     assertEquals(expected, getMatchingParenIndex(index, text))
+
+    text = "( 5 ( 2 ) 3 )".split(' ')
+    index = 0
+    expected = 6
+    assertEquals(expected, getMatchingParenIndex(index, text))
+
+    index = 2
+    expected = 4
+    assertEquals(expected, getMatchingParenIndex(index, text))
 }
 
 fun runGetParsingErrorTests() {

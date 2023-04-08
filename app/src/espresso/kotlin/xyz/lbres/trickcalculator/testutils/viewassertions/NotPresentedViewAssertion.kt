@@ -6,7 +6,7 @@ import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.util.HumanReadables
 
 /**
- * [ViewAssertion] to assert that view is not presented on screen, due to not existing or not being visible.
+ * [ViewAssertion] to assert that view is not presented on screen, due to not existing or not being shown
  *
  * Adapted from responses to this StackOverflow post:
  * https://stackoverflow.com/questions/41297524/espresso-check-view-either-doesnotexist-or-not-isdisplayed
@@ -26,6 +26,6 @@ private class NotPresentedViewAssertion : ViewAssertion {
 }
 
 /**
- * Wrapper function for creating a [NotPresentedViewAssertion]
+ * [ViewAssertion] to assert that view is not presented on screen, due to not existing or not being shown
  */
 fun isNotPresented(): ViewAssertion = NotPresentedViewAssertion()

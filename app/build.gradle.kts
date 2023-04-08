@@ -5,8 +5,8 @@ plugins {
 }
 apply(plugin = "kotlin-android")
 
-val githubUsername: String? = project.findProperty("gpr.user")?.toString() ?: System.getenv("USERNAME")
-val githubPassword: String? = project.findProperty("gpr.key")?.toString() ?: System.getenv("TOKEN")
+val githubUsername: String? = project.findProperty("github.username")?.toString() ?: System.getenv("USERNAME")
+val githubPassword: String? = project.findProperty("github.token")?.toString() ?: System.getenv("ACCESS_TOKEN")
 
 repositories {
     // general repositories
@@ -49,18 +49,19 @@ repositories {
 // TODO change this
 fun getIsEspresso(): Boolean {
     return true
-    val property = project.findProperty("espresso_tests")
+    // return false
+    val property = project.findProperty("espressoTests")
     return property == "true"
 }
 
 fun getEspressoRetries(): Int {
-    return 0
+    val defaultRetries = 0
 
-    val property = project.findProperty("espresso_retries")
-    return try {
-        property as Int
-    } catch (_: Exception) {
-        0
+    return if (project.hasProperty("espressoRetries")) {
+        val espressoRetries: String? by project
+        espressoRetries?.toIntOrNull() ?: defaultRetries
+    } else {
+        defaultRetries
     }
 }
 
@@ -75,11 +76,13 @@ android {
         versionCode = 1
         versionName = "1.0.0"
 
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
+        testInstrumentationRunnerArguments["espressoTests"] = "true"
 
         buildConfigField("Boolean", "ESPRESSO_TESTS", getIsEspresso().toString()) // TODO rename this
-        buildConfigField("Integer", "ESPRESSO_RETRIES", getEspressoRetries().toString())
+        buildConfigField("int", "ESPRESSO_RETRIES", getEspressoRetries().toString())
     }
 
     buildTypes {

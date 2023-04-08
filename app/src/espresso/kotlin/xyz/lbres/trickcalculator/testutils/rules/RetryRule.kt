@@ -13,7 +13,7 @@ import xyz.lbres.trickcalculator.utils.AppLogger
  * https://andresand.medium.com/retry-testrule-for-android-espresso-tests-74683ee3b845
  *
  * @param maxRetries [Int]: number of times to re-try failing test, not including the initial test run.
- * Defaults to retry value in build files.
+ * Defaults to value passed in build parameters.
  */
 class RetryRule(val maxRetries: Int = BuildConfig.ESPRESSO_RETRIES) : TestRule {
     /**

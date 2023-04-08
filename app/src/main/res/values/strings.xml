@@ -29,7 +29,7 @@
     <!-- Settings Labels -->
     <string name="apply_decimals">Apply Decimals</string>
     <string name="apply_parens">Apply Parens</string>
-    <string name="clear_on_error">Reset on Error</string>
+    <string name="clear_on_error">Clear on Error</string>
     <string name="random_history_label">History Mode</string>
     <string name="randomize_settings">Randomize Settings</string>
     <string name="reset_settings">Reset Settings</string>
@@ -52,23 +52,6 @@
     <string name="no_history">No history</string>
     <string name="history_error">Error retrieving history</string>
 
-    <!-- Developer Tools -->
-    <string name="title_dev_tools">Developer Tools</string>
-    <string name="dev_tools_button">{ }</string>
-    <string name="clear_history">Clear history</string>
-    <string name="refresh_ui">Refresh UI</string>
-    <string name="show_settings_dialog">Show settings dialog</string>
-    <string name="hide_dev_tools">Hide dev tools</string>
-    <string-array name="dev_tools_time_options">
-        <item>5000ms</item>
-        <item>10000ms</item>
-        <item>30000ms</item>
-        <item>60000ms</item>
-    </string-array>
-
-    <!-- Other/Shared -->
-    <string name="done">Done</string>
-
     <!-- Content Descriptions -->
     <string name="backspace_cd">Backspace</string>
     <string name="chevron_down_cd">Down chevron</string>
@@ -88,4 +71,11 @@
     <string name="plus_cd">Plus symbol</string>
     <string name="settings_cd">Settings</string>
     <string name="times_cd">Times symbol</string>
+
+    <!-- Keys -->
+    <string name="initial_fragment_load_key">initialFragmentLoad</string>
+
+    <!-- Dev Tools -->
+    <string name="dev_tools_button">{ }</string>
+    <string name="from_dialog_key">fromDialog</string>
 </resources>

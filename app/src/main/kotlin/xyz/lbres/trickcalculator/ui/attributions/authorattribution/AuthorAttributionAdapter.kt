@@ -25,7 +25,7 @@ class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, pri
 
     override fun onBindViewHolder(holder: AuthorAttributionViewHolder, position: Int) {
         val author = authors[position]
-        val setShowingIcons: (Boolean) -> Unit = { viewModel.setExpandedAt(it, position) }
+        val setShowingIcons: (Boolean) -> Unit = { viewModel.attributionsExpanded[position] = it }
         holder.update(author, viewModel.attributionsExpanded[position], setShowingIcons)
     }
 

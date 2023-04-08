@@ -9,29 +9,23 @@ import android.view.animation.Animation
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.kotlinutils.list.StringList
-import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.trickcalculator.BuildConfig
+import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.shared.SharedViewModel
-import xyz.lbres.trickcalculator.utils.History
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.visible
-import java.util.Date
-import kotlin.random.Random
 
 /**
  * Fragment to display computation history, possibly with some level of randomness
  */
 class HistoryFragment : BaseFragment() {
     private lateinit var binding: FragmentHistoryBinding
-    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
-    private var randomness: Int? = null
-    private var history: History? = null
-    private var randomHistory: History? = null
+    override val navigateToSettings = R.id.navigateHistoryToSettings
 
     /**
      * Initialize fragment
@@ -42,98 +36,43 @@ class HistoryFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        historyViewModel = ViewModelProvider(requireActivity())[HistoryViewModel::class.java]
 
-        sharedViewModel.history.observe(viewLifecycleOwner) {
-            history = it
-            if (history != null && randomness != null) {
-                setRandomHistory()
-                setUI()
-            }
-        }
-        sharedViewModel.historyRandomness.observe(viewLifecycleOwner) {
-            randomness = it
-            if (history != null && randomness != null) {
-                setRandomHistory()
-                setUI()
-            }
+        val initialLoadKey = getString(R.string.initial_fragment_load_key)
+        val isInitialLoad = arguments?.getBoolean(initialLoadKey) ?: false
+
+        if (isInitialLoad || historyViewModel.randomizedHistory == null) {
+            historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
         }
 
-        binding.closeButton.root.setOnClickListener { requireBaseActivity().popBackStack() }
+        setUI()
 
+        binding.closeButton.root.setOnClickListener { closeFragment() }
+
+        arguments?.remove(initialLoadKey)
         return binding.root
     }
 
     /**
-     * Generate history, using the degree of randomness specified in the viewmodel
-     */
-    private fun setRandomHistory() {
-        randomHistory = when (randomness) {
-            0 -> history // no randomness
-            1 -> history!!.shuffled() // shuffled order
-            2 -> shuffleValues() // shuffled values
-            3 -> generateRandomHistory() // random generation
-            else -> history
-        }
-    }
-
-    /**
-     * Shuffle history computations and results/errors.
-     * Returns a list that contains all computations and results/errors, but not necessarily in their original pari.
-     *
-     * @return [History]: history where computations and values have been shuffled
-     */
-    private fun shuffleValues(): History {
-        val currentHistory = history!!
-
-        val computations: List<StringList> = currentHistory.map { it.computation }.shuffled()
-        val values: List<Pair<ExactFraction?, String?>> = currentHistory.map { Pair(it.result, it.error) }.shuffled()
-
-        val shuffledHistory = computations.mapIndexed { index, comp ->
-            val valuePair = values[index]
-            if (valuePair.first != null) {
-                HistoryItem(comp, valuePair.first!!)
-            } else {
-                HistoryItem(comp, valuePair.second!!)
-            }
-        }
-
-        return shuffledHistory
-    }
-
-    /**
-     * Generate randomized history items based on the length of the input.
-     * Returns null randomly or if history is empty, to indicate an "error" in retrieving history.
-     *
-     * @return [History]: possibly null history of generated computations, with same length as real history (if not null)
-     */
-    private fun generateRandomHistory(): History? {
-        val probabilityError = if (history.isNullOrEmpty()) 1f else 0.2f
-
-        if (Random(Date().time).nextBoolean(probabilityError)) {
-            return null
-        }
-
-        return List(history!!.size) { generateRandomHistoryItem() }
-    }
-
-    /**
-     * Set UI based on randomHistory
+     * Set UI based on randomized history
      */
     private fun setUI() {
+        val randomHistory = historyViewModel.randomizedHistory
+        val displayError = randomHistory?.isEmpty() == true && settingsViewModel.historyRandomness == 3
+
         when {
             // error
-            randomHistory == null -> {
+            displayError -> {
                 if (!BuildConfig.ESPRESSO_TESTS) {
                     setErrorAnimation()
                 }
-
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.gone()
                 binding.errorMessage.visible()
             }
             // empty
-            randomHistory!!.isEmpty() -> {
+            randomHistory?.isEmpty() == true -> {
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.visible()
                 binding.errorMessage.gone()
@@ -141,7 +80,7 @@ class HistoryFragment : BaseFragment() {
             // non-empty
             else -> {
                 val recycler: RecyclerView = binding.itemsRecycler
-                val adapter = HistoryItemAdapter(randomHistory!!)
+                val adapter = HistoryItemAdapter(randomHistory ?: emptyList())
 
                 recycler.adapter = adapter
                 recycler.layoutManager = LinearLayoutManager(requireContext())
@@ -164,5 +103,17 @@ class HistoryFragment : BaseFragment() {
         blinking.repeatMode = Animation.REVERSE
         blinking.repeatCount = Animation.INFINITE
         binding.errorMessage.startAnimation(blinking)
+    }
+
+    /**
+     * Update randomized history when randomness setting is changed, and redisplay UI.
+     * Redisplay can happen when randomness changes, or when history is cleared.
+     */
+    override fun handlePostDevTools() {
+        if (settingsViewModel.historyRandomness != historyViewModel.appliedRandomness) {
+            historyViewModel.updateRandomHistory(settingsViewModel.historyRandomness)
+        }
+
+        setUI() // handles history being cleared
     }
 }

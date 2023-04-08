@@ -6,15 +6,12 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withChild
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.collection.ext.toMultiSet
 import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.matchers.withViewHolder
-import xyz.lbres.trickcalculator.testutils.viewactions.scrollToPosition
+import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
 
 /**
  * Test representation of a compute history to display in the UI, including methods to run checks on the history.
@@ -26,8 +23,6 @@ class TestHistory {
 
     val size: Int
         get() = computeHistory.size
-
-    private val recyclerId = R.id.itemsRecycler
 
     /**
      * Add a new item to the history
@@ -95,8 +90,7 @@ class TestHistory {
                     val displayedSet = displayedValues.toMultiSet()
                     val computeHistorySet = computeHistory.toMultiSet()
 
-                    // TODO switch to inline function
-                    val intersection = (displayedSet).intersect(computeHistorySet)
+                    val intersection = displayedSet intersect computeHistorySet
 
                     allDisplayed = displayedSet.size == computeHistorySet.size && intersection.isEmpty()
                     errorMessage = "ViewHolders with text $intersection should not be displayed."
@@ -105,7 +99,7 @@ class TestHistory {
         }
 
         return when {
-            allDisplayed -> allDisplayed
+            allDisplayed -> true
             throwError -> throw AssertionError(errorMessage)
             else -> false
         }
@@ -173,10 +167,9 @@ class TestHistory {
         } catch (_: Throwable) {}
 
         for (position in computeHistory.indices) {
-            onView(withId(recyclerId)).perform(scrollToPosition(position))
             try {
-                val errorMatcher = withChild(withChild(allOf(withId(R.id.errorText), isDisplayed())))
-                onView(withViewHolder(recyclerId, position)).check(matches(errorMatcher))
+                val errorMatcher = hasDescendant(allOf(withId(R.id.errorText), isDisplayed()))
+                onView(withId(R.id.itemsRecycler)).check(matches(matchesAtPosition(position, errorMatcher)))
                 return true
             } catch (_: Throwable) {}
         }
@@ -222,8 +215,9 @@ class TestHistory {
             }
         }
 
-        onView(withId(recyclerId)).perform(scrollToPosition(position))
-        onView(withViewHolder(recyclerId, position)).perform(getViewHolderText)
+        onView(withId(R.id.itemsRecycler)).perform(
+            actionOnHistoryItemAtPosition(position, getViewHolderText)
+        )
 
         return Pair(computation, errorResult)
     }

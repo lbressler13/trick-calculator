@@ -8,6 +8,31 @@ import xyz.lbres.trickcalculator.utils.isNumber
 import xyz.lbres.trickcalculator.utils.isNumberChar
 
 /**
+ * Types
+ */
+private const val NUMBER = "number"
+private const val OPERATOR = "operator"
+private const val LPAREN = "lparen"
+private const val RPAREN = "rparen"
+
+private val parenCounts = mapOf(LPAREN to 1, RPAREN to -1)
+
+private val syntaxError = Exception("Syntax error")
+
+/**
+ * Values used in computation
+ */
+private val computeText = mutableListOf<String>()
+private var lastType = ""
+private var currentType = ""
+private var currentNumber = ""
+private var openParenCount = 0
+
+// decimal values tracked for use in syntax errors when applyDecimals = false
+private var currentDecimal = false // if current num already has a decimal
+private var lastDecimal = false // if the most recent element was a decimal
+
+/**
  * Validate computation text, combine adjacent digits/decimals to form numbers,
  * and perform modifications related to number order and application of parens and/or decimals.
  *
@@ -45,98 +70,17 @@ fun generateAndValidateComputeText(
     applyDecimals: Boolean,
     shuffleComputation: Boolean
 ): StringList {
-    val syntaxError = Exception("Syntax error")
+    resetGlobalVars()
 
-    // empty compute text
-    if (splitText.isEmpty() && initialValue == null) {
-        return emptyList()
+    // empty compute text or starting with operator
+    when {
+        splitText.isEmpty() && initialValue == null -> return emptyList()
+        splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
+        initialValue == null && isOperator(splitText[0], ops) -> throw syntaxError
     }
-
-    if (splitText.isEmpty()) {
-        return listOf(initialValue!!.toEFString())
-    }
-
-    val computeText = mutableListOf<String>()
-    var lastType = ""
-    var currentType = ""
-    var currentNumber = ""
-    var currentDecimal = false
-    var lastDecimal = false
-    var openParenCount = 0
 
     if (initialValue != null) {
-        computeText.add(initialValue.toEFString())
-        lastType = "number"
-
-        // add multiplication between initial val and first num
-        if (splitText.isNotEmpty() && isNumberChar(splitText[0])) {
-            computeText.add("x")
-        }
-    }
-
-    // add the current number to the compute text
-    val addCurrentNumber: () -> Unit = {
-        if (currentNumber.isNotEmpty() && lastDecimal) {
-            throw syntaxError
-        }
-
-        if (currentNumber.isNotEmpty()) {
-            // add multiplication between number and preceding paren
-            if (lastType == "rparen") {
-                computeText.add("x")
-            }
-            computeText.add(currentNumber)
-            currentNumber = ""
-            currentDecimal = false
-
-            lastType = "number"
-        }
-    }
-
-    // add operator or paren to compute text
-    val addNonNumber: (String) -> Unit = {
-        if (currentNumber.isNotEmpty()) {
-            addCurrentNumber()
-        }
-
-        // add mult between preceding num and paren, or between adjacent parens
-        if ((lastType == "number" && currentType == "lparen") ||
-            (lastType == "rparen" && currentType == "lparen")
-        ) {
-            computeText.add("x")
-        }
-
-        if ((currentType != "lparen" && currentType != "rparen") || applyParens) {
-            computeText.add(it)
-        }
-
-        lastType = currentType
-        lastDecimal = false
-    }
-
-    // add digit or decimal to current number
-    val addDigit: (String) -> Unit = {
-        when {
-            it == "." && currentDecimal -> throw syntaxError
-            it == "." -> {
-                if (applyDecimals) {
-                    currentNumber += it
-                }
-                currentDecimal = true // gets counted even when not applied, to check for syntax errors
-                lastDecimal = true // tracked separately for use in syntax errors
-            }
-            numbersOrder == null -> {
-                currentNumber += it
-                lastDecimal = false
-            }
-            else -> {
-                // apply numbers order
-                val index = Integer.parseInt(it)
-                val digit = numbersOrder[index]
-                currentNumber += digit.toString()
-                lastDecimal = false
-            }
-        }
+        addInitialValue(initialValue, splitText)
     }
 
     // loop over all elements
@@ -145,49 +89,32 @@ fun generateAndValidateComputeText(
             throw syntaxError
         }
 
-        currentType = when {
-            isOperator(element, ops) -> "operator"
-            element == "(" -> "lparen"
-            element == ")" -> "rparen"
-            isNumberChar(element) -> "number"
-            else -> throw syntaxError
+        currentType = getTypeOf(element, ops) ?: throw syntaxError
+
+        if (currentType != NUMBER && currentNumber.isNotEmpty()) {
+            addCurrentNumber()
         }
 
-        if (currentType != "number" && currentNumber.isNotEmpty()) {
-            lastType = "number"
-        }
-
-        if (currentType == "lparen") {
-            openParenCount++
-        } else if (currentType == "rparen") {
-            openParenCount--
-        }
-
-        if (openParenCount < 0 ||
-            (lastType == "lparen" && currentType == "operator") || // operator inside lparen
-            (lastType == "operator" && currentType == "rparen") || // operator inside rparen
-            (lastType == "operator" && currentType == "operator") || // double operators
-            (lastType == "lparen" && currentType == "rparen") // empty parens
-        ) {
+        openParenCount += parenCounts.getOrDefault(currentType, 0)
+        if (nonNumberSyntaxError()) {
             throw syntaxError
         }
 
-        if (currentType == "number") {
-            addDigit(element)
+        if (currentType == NUMBER) {
+            addDigit(element, applyDecimals, numbersOrder)
         } else {
-            addNonNumber(element)
+            addNonNumber(element, applyParens)
         }
     }
 
+    // add remaining number
     if (currentNumber.isNotEmpty()) {
         addCurrentNumber()
     }
 
-    if (
-        openParenCount != 0 ||
-        (computeText.isNotEmpty() && isOperator(computeText[0], ops)) || // starts with operator
-        (lastType == "operator" && currentNumber.isEmpty()) // ends in operator
-    ) {
+    // check syntax error at end
+    val endsWithOperator = lastType == OPERATOR && currentNumber.isEmpty()
+    if (openParenCount != 0 || endsWithOperator) {
         throw syntaxError
     }
 
@@ -199,6 +126,147 @@ fun generateAndValidateComputeText(
 }
 
 /**
+ * Clear saved compute text and reset values of global variables
+ */
+private fun resetGlobalVars() {
+    computeText.clear()
+    lastType = ""
+    currentType = ""
+    currentNumber = ""
+    currentDecimal = false
+    lastDecimal = false
+    openParenCount = 0
+}
+
+/**
+ * Add the previously computed value to the start of the computation
+ *
+ * @param initialValue [ExactFraction]: previously computed value, used as the first element in computation
+ * @param initialText [StringList]: following compute text
+ */
+private fun addInitialValue(initialValue: ExactFraction, initialText: StringList) {
+    computeText.add(initialValue.toEFString())
+    lastType = NUMBER
+
+    // add times between initial val and first num
+    if (initialText.isNotEmpty() && isNumberChar(initialText[0])) {
+        computeText.add("x")
+    }
+}
+
+/**
+ * Add a digit or decimal to the current number
+ *
+ * @param element [String]: element to add
+ * @param applyDecimals [Boolean]: whether or not decimals points should be applied
+ * @param numbersOrder [IntList]?: list of numbers, containing the values 0..9 in any other order, or null
+ */
+private fun addDigit(element: String, applyDecimals: Boolean, numbersOrder: IntList?) {
+    when {
+        element == "." && currentDecimal -> throw syntaxError
+        element == "." -> {
+            if (applyDecimals) {
+                currentNumber += element
+            }
+            currentDecimal = true // gets counted even when not applied, to check for syntax errors
+            lastDecimal = true // tracked separately for use in syntax errors
+        }
+        else -> {
+            currentNumber += digitFromNumbersOrder(element, numbersOrder)
+            lastDecimal = false
+        }
+    }
+}
+
+/**
+ * Map an element to the corresponding value in the numbers order. Returns [element] if the order is null.
+ *
+ * @param element [String]: value to map
+ * @param numbersOrder [IntList]?: list containing numbers 0..9 in some order, or null
+ */
+private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): String {
+    if (numbersOrder == null) {
+        return element
+    }
+
+    val index = element.toInt()
+    val digit = numbersOrder[index]
+    return digit.toString()
+}
+
+/**
+ * Add an operator or paren to the compute text
+ *
+ * @param element [String]: element to add
+ * @param applyParens [Boolean]: whether or not parens should be applied
+ */
+private fun addNonNumber(element: String, applyParens: Boolean) {
+    // add times between preceding num and paren, or between adjacent parens
+    if ((lastType == NUMBER && currentType == LPAREN) || (lastType == RPAREN && currentType == LPAREN)) {
+        computeText.add("x")
+    }
+
+    if ((currentType != LPAREN && currentType != RPAREN) || applyParens) {
+        computeText.add(element)
+    }
+
+    lastType = currentType
+    lastDecimal = false
+}
+
+/**
+ * Add the current number to the compute text
+ */
+private fun addCurrentNumber() {
+    if (currentNumber.isNotEmpty() && lastDecimal) {
+        throw syntaxError
+    }
+
+    if (currentNumber.isNotEmpty()) {
+        // add times between number and preceding paren
+        if (lastType == RPAREN) {
+            computeText.add("x")
+        }
+
+        computeText.add(currentNumber)
+        currentNumber = ""
+        currentDecimal = false
+
+        lastType = NUMBER
+    }
+}
+
+/**
+ * Get the type of an element
+ *
+ * @param element [String]: value to get type of
+ * @param ops [StringList]: list of valid operators
+ * @return [String]?: the element's type, or null if it matches no valid type
+ */
+private fun getTypeOf(element: String, ops: StringList): String? {
+    return when {
+        isOperator(element, ops) -> OPERATOR
+        element == "(" -> LPAREN
+        element == ")" -> RPAREN
+        isNumberChar(element) -> NUMBER
+        else -> null
+    }
+}
+
+/**
+ * Determine if there is a syntax error due to placement of operators or parens
+ *
+ * @return [Boolean]: `true` if there is an error, `false` otherwise
+ */
+private fun nonNumberSyntaxError(): Boolean {
+    val operatorInsideParens = (lastType == LPAREN && currentType == OPERATOR) || (lastType == OPERATOR && currentType == RPAREN)
+    val doubleOperators = lastType == OPERATOR && currentType == OPERATOR
+    val emptyParens = lastType == LPAREN && currentType == RPAREN
+
+    return openParenCount < 0 || operatorInsideParens || doubleOperators || emptyParens
+}
+
+/**
  * Shuffle the order of the numbers and order of ops in compute text.
  * The relative positions of parens, numbers, and ops remains the same, but the values may change.
  *
@@ -206,6 +274,7 @@ fun generateAndValidateComputeText(
  * @param ops [StringList]: list of string values recognized as operators
  * @return [StringList]: a list containing the same elements as the computeText, with the orders of numbers and operators shuffled
  */
+// public for testing purposes
 fun getShuffledComputation(computeText: StringList, ops: StringList): StringList {
     val numbers = computeText.filter { isNumber(it) }.toMutableList()
     val operators = computeText.filter { isOperator(it, ops) }.toMutableList()

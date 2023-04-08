@@ -25,6 +25,8 @@ class AttributionsFragment : BaseFragment() {
     private lateinit var binding: FragmentAttributionsBinding
     private lateinit var viewModel: AttributionsViewModel
 
+    override val navigateToSettings = R.id.navigateAttributionsToSettings
+
     override var titleResId: Int = R.string.title_attributions
     override var actionBarOnClick: (() -> Unit)? =
         { requireBaseActivity().runNavAction(R.id.navigateAttributionsToSettings) }
@@ -45,10 +47,10 @@ class AttributionsFragment : BaseFragment() {
         initializeAttributionsRecycler()
 
         binding.expandCollapseMessage.setOnClickListener {
-            viewModel.setFlaticonMessageExpanded(!viewModel.flaticonMessageExpanded)
+            viewModel.flaticonMessageExpanded = !viewModel.flaticonMessageExpanded
             setFlaticonMessage()
         }
-        binding.closeButton.root.setOnClickListener { requireBaseActivity().popBackStack() }
+        binding.closeButton.root.setOnClickListener { closeFragment() }
 
         return binding.root
     }
@@ -62,7 +64,6 @@ class AttributionsFragment : BaseFragment() {
 
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.initAttributionsExpanded(authorAttributions.size)
     }
 
     /**

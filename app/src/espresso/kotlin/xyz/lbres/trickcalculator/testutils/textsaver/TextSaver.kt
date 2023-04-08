@@ -88,22 +88,22 @@ class TextSaver {
         private var savedTextMapping: MutableMap<Int, String> = mutableMapOf()
 
         /**
-         * Clear saved text for a view
+         * [ViewAction] to clear saved text for a view
          */
         fun clearSavedText(): ViewAction = ClearSavedTextViewAction()
 
         /**
-         * Save text for a view by mapping the viewId to its text
+         * [ViewAction] to save text for a view by mapping the viewId to its text
          */
         fun saveText(): ViewAction = SaveTextViewAction()
 
         /**
-         * Check if the text in a view matches the saved value
+         * [Matcher] to check if the text in a view matches the saved value
          */
         fun withSavedText(): Matcher<View> = PreviousTextViewMatcher()
 
         /**
-         * Clear all saved values in the text saver
+         * Clear all saved values in the TextSaver
          */
         fun clearAllSavedValues() {
             savedTextMapping.clear()

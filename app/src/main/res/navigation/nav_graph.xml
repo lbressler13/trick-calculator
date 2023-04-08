@@ -29,7 +29,11 @@
     <fragment
         android:id="@+id/historyFragment"
         android:name="xyz.lbres.trickcalculator.ui.history.HistoryFragment"
-        android:label="HistoryFragment" />
+        android:label="HistoryFragment" >
+        <action
+            android:id="@+id/navigateHistoryToSettings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="xyz.lbres.trickcalculator.ui.settings.SettingsFragment"

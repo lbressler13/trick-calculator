@@ -1,5 +1,6 @@
 package xyz.lbres.trickcalculator.ui
 
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
@@ -19,6 +20,11 @@ abstract class BaseFragment : NavHostFragment() {
      * Otherwise, function is called the action bar as an argument.
      */
     protected open var actionBarOnClick: (() -> Unit)? = null
+
+    /**
+     * Resource ID for the action to navigate to the settings page from the current fragment
+     */
+    abstract val navigateToSettings: Int?
 
     /**
      * Re-add action bar settings when fragment is shown.
@@ -45,8 +51,18 @@ abstract class BaseFragment : NavHostFragment() {
         val title = requireContext().getString(titleResId)
         actionBar.title.text = title
 
-        requireBaseActivity().fragmentManager = childFragmentManager
+        dialogFragmentManager = childFragmentManager
     }
+
+    /**
+     * Callback to call when dev tools flow completes, from either the dialog or the settings fragment
+     */
+    open fun handlePostDevTools() {}
+
+    /**
+     * Close the fragment
+     */
+    fun closeFragment() = requireBaseActivity().popBackStack()
 
     /**
      * Get current activity as [BaseActivity].
@@ -54,4 +70,11 @@ abstract class BaseFragment : NavHostFragment() {
      * @return [BaseActivity]
      */
     fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
+
+    companion object {
+        /**
+         * Fragment manager for current fragment, used when displaying the dev tools dialog
+         */
+        var dialogFragmentManager: FragmentManager? = null
+    }
 }

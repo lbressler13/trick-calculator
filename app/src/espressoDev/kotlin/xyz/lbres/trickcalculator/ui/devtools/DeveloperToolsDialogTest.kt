@@ -15,9 +15,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.openDevTools
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
-import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
-import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class DeveloperToolsDialogTest {
@@ -33,7 +32,7 @@ class DeveloperToolsDialogTest {
 
     @Test
     fun loadInitialUi() {
-        openDialog()
+        openDevTools()
 
         onView(withText("Developer Tools")).check(matches(isDisplayed()))
 
@@ -41,8 +40,8 @@ class DeveloperToolsDialogTest {
             .check(matches(allOf(isDisplayed(), withText("Clear history"))))
         onView(withId(R.id.refreshUIButton))
             .check(matches(allOf(isDisplayed(), withText("Refresh UI"))))
-        onView(withId(R.id.settingsDialogButton))
-            .check(matches(allOf(isDisplayed(), withText("Show settings dialog"))))
+        onView(withId(R.id.openSettingsButton))
+            .check(matches(allOf(isDisplayed(), withText("Open settings fragment"))))
         onView(withId(R.id.hideDevToolsButton))
             .check(matches(allOf(isDisplayed(), withText("Hide dev tools"))))
 
@@ -51,79 +50,22 @@ class DeveloperToolsDialogTest {
     }
 
     @Test
-    fun clearHistory() {
-        val historyButton = onView(withId(R.id.historyButton))
-        val useHistoryButton = onView(withId(R.id.useLastHistoryButton))
-        val noHistoryMessage = onView(withText("No history"))
-
-        historyButton.check(matches(isDisplayed()))
-        useHistoryButton.check(isNotPresented())
-
-        // no history
-        historyButton.perform(click())
-        noHistoryMessage.check(matches(isDisplayed()))
-        onView(withId(R.id.closeButton)).perform(forceClick())
-
-        // create history
-        onView(withId(R.id.oneButton)).perform(click())
-        onView(withId(R.id.equalsButton)).perform(click())
-
-        useHistoryButton.check(matches(isDisplayed()))
-        historyButton.perform(click())
-        noHistoryMessage.check(isNotPresented())
-
-        // clear history
-        openDialog()
-        onView(withId(R.id.clearHistoryButton)).perform(click())
-        closeDialog()
-
-        noHistoryMessage.check(matches(isDisplayed()))
-        onView(withId(R.id.closeButton)).perform(forceClick())
-        useHistoryButton.check(isNotPresented())
-    }
-
-    @Test
-    fun clearHistoryWhileUsingItem() {
-        val historyButton = onView(withId(R.id.historyButton))
-        val useHistoryButton = onView(withId(R.id.useLastHistoryButton))
-
-        historyButton.check(matches(isDisplayed()))
-        useHistoryButton.check(isNotPresented())
-
-        onView(withId(R.id.oneButton)).perform(click())
-        onView(withId(R.id.plusButton)).perform(click())
-        onView(withId(R.id.twoButton)).perform(click())
-        onView(withId(R.id.equalsButton)).perform(click())
-
-        useHistoryButton.check(matches(isDisplayed())).perform(click())
-
-        onView(withId(R.id.mainText)).check(matches(withText("1+2")))
-
-        openDialog()
-        onView(withId(R.id.clearHistoryButton)).perform(click())
-        closeDialog()
-
-        useHistoryButton.check(isNotPresented())
-        onView(withId(R.id.mainText)).check(matches(withText("1+2")))
-        historyButton.perform(click())
-        onView(withText("No history")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun showSettingsDialog() {
-        openDialog()
-        onView(withId(R.id.settingsDialogButton)).perform(click())
+    fun showSettingsFragment() {
+        openDevTools()
+        onView(withId(R.id.openSettingsButton)).perform(click())
         onView(withText("Settings")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun hideDevToolsOptionsDisplayed() = testHideDevToolsOptionsDisplayed()
+    fun refreshUI() {
+        openDevTools()
+        onView(withId(R.id.refreshUIButton)).perform(click())
+        onView(withText("Developer Tools")).check(matches(isDisplayed()))
+    }
 
-    @Test
-    fun interactWithHideDevToolsSpinner() = testInteractWithHideDevToolsSpinner()
-
-    @Test
-    fun hideDevTools() = testHideDevTools()
+    @Test fun hideDevToolsOptionsDisplayed() = testHideDevToolsOptionsDisplayed()
+    @Test fun interactWithHideDevToolsSpinner() = testInteractWithHideDevToolsSpinner()
+    @Test fun hideDevTools() = testHideDevTools()
 
     @Test
     fun historyFragment() {

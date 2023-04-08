@@ -2,7 +2,11 @@ package xyz.lbres.trickcalculator.ui.history
 
 import android.view.View
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -10,7 +14,9 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.ui.calculator.clearText
 import xyz.lbres.trickcalculator.ui.calculator.equals
 import xyz.lbres.trickcalculator.ui.calculator.typeText
@@ -35,6 +41,27 @@ val withHistoryItem: (String, String) -> Matcher<View?> = { computation, errorRe
 }
 
 /**
+ * Wrapper function to scroll a RecyclerView to [position], with ViewHolder type [HistoryItemViewHolder]
+ *
+ * @param position [Int]: position to scroll to
+ * @return [ViewAction]: action to scroll to the given position
+ */
+fun scrollToHistoryItemAtPosition(position: Int): ViewAction {
+    return RecyclerViewActions.scrollToPosition<HistoryItemViewHolder>(position)
+}
+
+/**
+ * Wrapper function to perform an action at a given index in a RecyclerView, with ViewHolder type [HistoryItemViewHolder]
+ *
+ * @param position [Int]: position to perform action
+ * @param action [ViewAction]: action to perform
+ * @return [ViewAction]: action to perform given [action] on the ViewHolder at position [position]
+ */
+fun actionOnHistoryItemAtPosition(position: Int, action: ViewAction): ViewAction {
+    return RecyclerViewActions.actionOnItemAtPosition<HistoryItemViewHolder>(position, action)
+}
+
+/**
  * Update the history randomness setting.
  * Must be called from calculator screen, and returns to calculator screen after updating setting.
  *
@@ -50,6 +77,26 @@ fun setHistoryRandomness(randomness: Int) {
         3 -> onView(withId(R.id.historyButton3)).perform(click())
     }
 
+    closeFragment()
+}
+
+/**
+ * Test that the "No history" message is displayed.
+ * Must be called from calculator screen, and returns to calculator screen after check is performed
+ */
+fun checkNoHistoryMessageDisplayed() {
+    openHistoryFragment()
+    onView(withText("No history")).check(matches(isDisplayed()))
+    closeFragment()
+}
+
+/**
+ * Test that the "No history" message is not presented.
+ * Must be called from calculator screen, and returns to calculator screen after check is performed
+ */
+fun checkNoHistoryMessageNotPresented() {
+    openHistoryFragment()
+    onView(withText("No history")).check(isNotPresented())
     closeFragment()
 }
 
