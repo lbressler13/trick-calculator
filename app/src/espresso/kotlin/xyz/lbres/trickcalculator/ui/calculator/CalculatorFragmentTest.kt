@@ -428,4 +428,15 @@ class CalculatorFragmentTest {
         errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
         checkMainTextMatches("")
     }
+
+    // @Test fun shuffleOperators() = testShuffleOperators() // TODO
+    // @Test fun shuffleNumbers() = testShuffleNumbers() // TODO
+    // @Test fun shuffleComputation() = testShuffleComputation() // TODO
+
+    @Test fun noApplyDecimals() = testNoApplyDecimals()
+    @Test fun noApplyParens() = testNoApplyParens()
+
+    // @Test fun multipleNoApply() = testMultipleNoApply() // TODO
+    // @Test fun multipleShuffle() = testMultipleShuffle() // TODO
+    // @Test fun multipleSettingsTypes() = testMultipleSettingsTypes() // TODO
 }

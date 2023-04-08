@@ -3,8 +3,10 @@ package xyz.lbres.trickcalculator.ui.calculator
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
@@ -95,6 +97,30 @@ fun checkMainTextMatches(text: String) {
 fun checkMainTextMatchesAny(options: Set<String>) {
     val matchers = options.map { withText(it) }.toMutableList()
     mainText.check(matches(anyOf(matchers)))
+}
+
+fun typeAndCheckResult(input: String, expected: String, clearPrevious: Boolean = true) {
+    if (clearPrevious) {
+        clearText()
+    }
+
+    typeText(input)
+    equals()
+    mainText.check(matches(withText(expected)))
+}
+
+fun typeAndCheckError(input: String, expected: String, clearPrevious: Boolean = true) {
+    if (clearPrevious) {
+        clearText()
+    }
+
+    typeText(input)
+    equals()
+    onView(withId(R.id.errorText)).check(matches(allOf(isDisplayed(), withText(expected))))
+}
+
+fun typeAndCheckSyntaxError(input: String, clearPrevious: Boolean = true) {
+    typeAndCheckError(input, "Error: Syntax error", clearPrevious)
 }
 
 /**

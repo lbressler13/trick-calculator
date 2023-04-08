@@ -35,15 +35,19 @@ private fun testValidateErrors() {
     // operator at start or end in parens
     text = splitString("(+)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = splitString("(-3)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = splitString("1+(3-4/)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = splitString("3.0-(4+3(2+))")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     // empty parens
     text = splitString("()")
@@ -55,34 +59,27 @@ private fun testValidateErrors() {
     // mismatched parens
     text = listOf("(")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = listOf(")")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = splitString(")(")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = splitString("5-(0+(3-2)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = splitString("(1)+3)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     text = splitString("(1(8/9)+3(2+3)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("(1(8/9)+3(2+3)")
-    assertSyntaxError {
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            null,
-            applyParens = false,
-            true,
-            false
-        )
-    }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, false, true, false) }
 
     // repeated ops
     text = splitString("1+-2")
@@ -147,34 +144,27 @@ private fun testValidateErrors() {
     // invalid/repeated decimals
     text = splitString("5.")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
 
     text = splitString("5.")
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
 
     text = listOf(".")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
 
     text = splitString("5.0.1+10.2")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
 
     text = splitString("5.0.+10.2")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
 
     text = splitString("1+.45(..4)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("1+.45(..4)")
-    assertSyntaxError {
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            null,
-            true,
-            applyDecimals = false,
-            false
-        )
-    }
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
 
     // blank spaces
     text = listOf("")

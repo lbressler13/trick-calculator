@@ -114,7 +114,7 @@ fun generateAndValidateComputeText(
 
     // check syntax error at end
     val endsWithOperator = lastType == OPERATOR && currentNumber.isEmpty()
-    if (openParenCount != 0 || endsWithOperator) {
+    if (openParenCount != 0 || endsWithOperator || lastDecimal) {
         throw syntaxError
     }
 
