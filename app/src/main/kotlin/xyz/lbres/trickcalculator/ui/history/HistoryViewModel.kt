@@ -18,8 +18,10 @@ class HistoryViewModel : ViewModel() {
     /**
      * Randomness used in current shuffled history
      */
-    var appliedRandomness: Int? = null
-        private set
+    private var _appliedRandomness: Int? = null
+    var appliedRandomness: Int?
+        get() = _appliedRandomness
+        set(value) = updateRandomHistory(value ?: 0)
 
     /**
      * List of history items
@@ -38,8 +40,8 @@ class HistoryViewModel : ViewModel() {
      *
      * @param randomness [Int]: new history randomness value from SettingsViewModel
      */
-    fun updateRandomHistory(randomness: Int) {
-        this.appliedRandomness = randomness
+    private fun updateRandomHistory(randomness: Int) {
+        _appliedRandomness = randomness
         randomizedHistory = getRandomHistory()
     }
 
