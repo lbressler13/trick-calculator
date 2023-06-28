@@ -131,7 +131,7 @@ android {
     }
 
     testOptions {
-        unitTests.isReturnDefaultValues = true
+        unitTests.isReturnDefaultValues = true // mocks android Log
         animationsDisabled = true
     }
 

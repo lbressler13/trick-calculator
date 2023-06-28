@@ -25,7 +25,7 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
 
     companion object {
         /**
-         * Add URLClickableSpan to the a string
+         * Add URLClickableSpan to a string
          *
          * @param text [SpannableString]: the string to add a span to
          * @param url [String]: the url to open when the string is clicked

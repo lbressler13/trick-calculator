@@ -13,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
@@ -20,6 +21,10 @@ class ViewExtTest {
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
+
+    @Rule
+    @JvmField
+    val retryRule = RetryRule(maxRetries = 0)
 
     @Test
     fun visible() {
