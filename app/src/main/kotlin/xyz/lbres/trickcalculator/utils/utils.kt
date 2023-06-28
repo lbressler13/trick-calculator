@@ -10,6 +10,10 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
  * @return `true` if value can be parsed to a ExactFraction, `false` otherwise
  */
 fun isNumber(value: String): Boolean {
+    if (value.count { it == '-' } > 1 || value.count { it == '.' } > 1) {
+        return false
+    }
+
     return try {
         ExactFraction(value)
         true
