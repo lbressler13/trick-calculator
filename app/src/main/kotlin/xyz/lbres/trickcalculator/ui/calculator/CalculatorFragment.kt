@@ -12,7 +12,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
@@ -138,7 +138,7 @@ class CalculatorFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = ternaryIf(settingsViewModel.shuffleNumbers, (0..9).seededShuffled(), (0..9).toList())
+            val numberOrder = simpleIf(settingsViewModel.shuffleNumbers, (0..9).seededShuffled(), (0..9).toList())
 
             var newHistoryItem: HistoryItem?
 

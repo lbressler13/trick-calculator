@@ -2,7 +2,7 @@ package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.exactfraction.ExactFractionOverflowException
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.utils.AppLogger
@@ -37,7 +37,7 @@ fun runComputation(
     applyDecimals: Boolean,
     shuffleComputation: Boolean
 ): ExactFraction {
-    val validatedNumOrder = ternaryIf(validateNumbersOrder(numbersOrder), numbersOrder, null)
+    val validatedNumOrder = simpleIf(validateNumbersOrder(numbersOrder), numbersOrder, null)
     val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
 
     val computeText = generateAndValidateComputeText(

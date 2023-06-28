@@ -8,7 +8,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
@@ -116,7 +116,7 @@ fun testMultipleSettingsTypes() {
  * @param shuffleComputation [Boolean]: value of shuffled computation setting
  */
 private fun typeShuffledValues(history: TestHistory, shuffleComputation: Boolean) {
-    val expBase = ternaryIf(shuffleComputation, "23456", "23456.0987^7")
+    val expBase = simpleIf(shuffleComputation, "23456", "23456.0987^7")
 
     history.add(generateTestItem("700x35-61") { getMainTextResult() })
     history.add(generateTestItem("$expBase^7") { getMainTextResult() })

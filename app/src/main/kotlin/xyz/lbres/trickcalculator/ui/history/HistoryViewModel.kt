@@ -2,7 +2,7 @@ package xyz.lbres.trickcalculator.ui.history
 
 import androidx.lifecycle.ViewModel
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.trickcalculator.SharedValues.random
@@ -85,7 +85,7 @@ class HistoryViewModel : ViewModel() {
      * @return [History]: possibly null history of generated computations, with same length as real history (if not null)
      */
     private fun generateRandomHistory(): History? {
-        val probabilityError = ternaryIf(history.isEmpty(), 1f, 0.2f)
+        val probabilityError = simpleIf(history.isEmpty(), 1f, 0.2f)
 
         if (random.nextBoolean(probabilityError)) {
             return null
