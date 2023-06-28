@@ -40,7 +40,7 @@ class AttributionsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAttributionsBinding.inflate(layoutInflater)
-        // view model is tied to fragment lifecycle, so expansions are reset for each instance of fragment
+        // ViewModel is tied to fragment lifecycle, so expansions are reset for each instance of fragment
         viewModel = ViewModelProvider(this)[AttributionsViewModel::class.java]
 
         setFlaticonMessage()

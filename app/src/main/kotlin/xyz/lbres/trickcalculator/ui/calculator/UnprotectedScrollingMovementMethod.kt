@@ -9,11 +9,11 @@ import android.widget.TextView
  * of scrolling to top and bottom
  */
 class UnprotectedScrollingMovementMethod : ScrollingMovementMethod() {
-    fun goToBottom(widget: TextView?, buffer: Spannable? = null): Boolean {
+    fun toBottom(widget: TextView?, buffer: Spannable? = null): Boolean {
         return bottom(widget, buffer)
     }
 
-    fun goToTop(widget: TextView?, buffer: Spannable? = null): Boolean {
+    fun toTop(widget: TextView?, buffer: Spannable? = null): Boolean {
         return top(widget, buffer)
     }
 }

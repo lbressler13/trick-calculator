@@ -13,8 +13,8 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
-import xyz.lbres.trickcalculator.utils.gone
-import xyz.lbres.trickcalculator.utils.visible
+import xyz.lbres.trickcalculator.ext.view.gone
+import xyz.lbres.trickcalculator.ext.view.visible
 
 /**
  * Fragment to display computation history, possibly with some level of randomness

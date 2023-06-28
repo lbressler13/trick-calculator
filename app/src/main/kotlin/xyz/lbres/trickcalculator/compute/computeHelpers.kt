@@ -94,6 +94,23 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
 }
 
 /**
+ * Validate that a number order contains only the numbers 0..9, not in the sorted order
+ *
+ * Validations:
+ * - Order is not null
+ * - Order contains current digits
+ * - Order is not already sorted
+ *
+ * @param order [List]: list of numbers, can be null
+ * @return true if validation succeeds, false otherwise
+ */
+fun validateNumbersOrder(order: IntList?): Boolean {
+    return order != null &&
+        order.joinToString("") != "0123456789" &&
+        order.sorted().joinToString("") == "0123456789"
+}
+
+/**
  * Generate a specific error message after a NumberFormatException
  *
  * @param error [String]: message from initial exception, can be null

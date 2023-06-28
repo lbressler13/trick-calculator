@@ -7,7 +7,10 @@ import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.WeightedList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.kotlinutils.random.ext.nextFromWeightedList
+import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.compute.isOperator
+import xyz.lbres.trickcalculator.ext.intrange.appRandom
+import xyz.lbres.trickcalculator.ext.list.appRandom
 import xyz.lbres.trickcalculator.utils.isNumber
 import java.util.Date
 import kotlin.random.Random
@@ -50,8 +53,6 @@ private val weightedRangesComputation = listOf(
 
 private val operators = listOf("+", "-", "x", "/", "^")
 
-private val random = Random(Date().time)
-
 /**
  * Generate a history item with a random computation string and result or error message
  *
@@ -61,7 +62,7 @@ fun generateRandomHistoryItem(): HistoryItem {
     // show error message instead of result
     val showError = random.nextBoolean(probabilityErrorMessage)
 
-    val length = (1..maxCompLength).random()
+    val length = (1..maxCompLength).appRandom()
     val computation = generateComputation(length)
 
     if (showError) {
@@ -91,7 +92,7 @@ private fun generateComputation(length: Int): StringList {
             )
             ef.toDecimalString(5)
         } else {
-            operators.random()
+            operators.appRandom()
         }
     }
 

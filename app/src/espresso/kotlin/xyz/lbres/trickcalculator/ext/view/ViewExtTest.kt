@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.utils
+package xyz.lbres.trickcalculator.ext.view
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches

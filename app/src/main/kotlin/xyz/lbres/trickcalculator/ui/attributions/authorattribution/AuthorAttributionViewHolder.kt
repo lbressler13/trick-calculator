@@ -13,8 +13,8 @@ import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonDisplayUrl
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonUrl
 import xyz.lbres.trickcalculator.ui.attributions.imageattribution.ImageAttributionAdapter
-import xyz.lbres.trickcalculator.utils.gone
-import xyz.lbres.trickcalculator.utils.visible
+import xyz.lbres.trickcalculator.ext.view.gone
+import xyz.lbres.trickcalculator.ext.view.visible
 
 /**
  * ViewHolder for a single author attribution. Includes dropdown for image attributions.

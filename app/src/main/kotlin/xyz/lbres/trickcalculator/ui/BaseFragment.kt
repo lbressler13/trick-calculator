@@ -16,8 +16,7 @@ abstract class BaseFragment : NavHostFragment() {
     protected open var titleResId: Int = R.string.title_action_bar
 
     /**
-     * Function to set the onClick for the action bar. If null, the onClick is set to null.
-     * Otherwise, function is called the action bar as an argument.
+     * Function to set the onClick for the action bar. If `null`, the onClick is set to `null`.
      */
     protected open var actionBarOnClick: (() -> Unit)? = null
 

@@ -10,7 +10,7 @@ import xyz.lbres.trickcalculator.ui.attributions.AuthorAttribution
 /**
  * Adapter for author attributions for the RecyclerView in the AttributionsFragment
  *
- * @param authors [List]<[AuthorAttribution]>: list of AuthorAttribution objects
+ * @param authors [List]<AuthorAttribution>: list of AuthorAttribution objects
  * @param viewModel [AttributionsViewModel]: view model containing information about which attributions are expanded
  */
 class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel) :

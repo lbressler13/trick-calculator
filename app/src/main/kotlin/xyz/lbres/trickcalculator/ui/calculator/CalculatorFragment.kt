@@ -16,15 +16,15 @@ import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
+import xyz.lbres.trickcalculator.ext.intrange.appShuffled
+import xyz.lbres.trickcalculator.ext.list.appShuffled
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.ui.history.HistoryViewModel
 import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.OperatorFunction
-import xyz.lbres.trickcalculator.utils.gone
-import xyz.lbres.trickcalculator.utils.visible
-import java.util.Date
-import java.util.Random
+import xyz.lbres.trickcalculator.ext.view.gone
+import xyz.lbres.trickcalculator.ext.view.visible
 
 /**
  * Fragment to display main calculator functionality
@@ -34,7 +34,6 @@ class CalculatorFragment : BaseFragment() {
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var historyViewModel: HistoryViewModel
-    private val random = Random(Date().time)
     override val navigateToSettings = R.id.navigateCalculatorToSettings
 
     /**
@@ -123,8 +122,8 @@ class CalculatorFragment : BaseFragment() {
                     "-",
                     "x",
                     "/"
-                ).shuffled(random) + listOf("^")
-                else -> listOf("+", "-", "x", "/", "^").shuffled(random)
+                ).appShuffled() + listOf("^")
+                else -> listOf("+", "-", "x", "/", "^").appShuffled()
             }
 
             // maps operator symbols to their given functions
@@ -145,7 +144,7 @@ class CalculatorFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = ternaryIf(settingsViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
+            val numberOrder = ternaryIf(settingsViewModel.shuffleNumbers, (0..9).appShuffled(), (0..9).toList())
 
             var newHistoryItem: HistoryItem?
 
@@ -275,7 +274,7 @@ class CalculatorFragment : BaseFragment() {
      */
     private fun scrollTextToTop() {
         val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
-        movement.goToTop(binding.mainText)
+        movement.toTop(binding.mainText)
     }
 
     /**
@@ -283,6 +282,6 @@ class CalculatorFragment : BaseFragment() {
      */
     private fun scrollTextToBottom() {
         val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
-        movementMethod.goToBottom(binding.mainText)
+        movementMethod.toBottom(binding.mainText)
     }
 }

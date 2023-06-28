@@ -13,7 +13,7 @@ typealias History = List<HistoryItem>
  * Function to apply an operator to two numbers.
  * Operator is represented as a string and numbers are represented as ExactFractions.
  */
-typealias OperatorFunction = (ExactFraction, ExactFraction, String) -> ExactFraction
+typealias OperatorFunction = (leftValue: ExactFraction, rightValue: ExactFraction, operator: String) -> ExactFraction
 
 /**
  * Alias for Android Log util. Used to avoid duplicate imports with exact numbers Log class.

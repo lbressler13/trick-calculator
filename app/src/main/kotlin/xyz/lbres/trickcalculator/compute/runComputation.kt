@@ -5,6 +5,7 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFractionOverflowException
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.trickcalculator.utils.AppLogger
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 
 /**
@@ -98,7 +99,10 @@ fun parseText(
     return when (currentState.size) {
         0 -> ExactFraction.ZERO
         1 -> ExactFraction(currentState[0])
-        else -> throw Exception("Parse error")
+        else -> {
+            AppLogger.e(null, "Failed to compute single result for $computeText. Result: $currentState")
+            throw Exception("Parse error")
+        }
     }
 }
 
@@ -189,18 +193,3 @@ fun parseParens(
 
     return simplifiedList
 }
-
-/**
- * Validate that a number order contains only the numbers 0..9, not in the sorted order
- *
- * Validations:
- * - Order is not null
- * - Order contains current digits
- * - Order is not already sorted
- *
- * @param order [List]: list of numbers, can be null
- * @return true if validation succeeds, false otherwise
- */
-fun validateNumbersOrder(order: IntList?): Boolean = order != null &&
-    order.joinToString("") != "0123456789" &&
-    order.sorted().joinToString("") == "0123456789"
