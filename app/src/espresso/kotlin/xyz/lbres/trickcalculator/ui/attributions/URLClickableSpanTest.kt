@@ -1,7 +1,9 @@
 package xyz.lbres.trickcalculator.ui.attributions
 
+import android.text.SpannableString
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,7 +16,58 @@ class URLClickableSpanTest {
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Test
+    fun addToText() {
+        var string = SpannableString("Hello world")
+        URLClickableSpan.addToText(string, "http://lbres.xyz")
+        var spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(1, spans.size)
+
+        string = SpannableString("")
+        URLClickableSpan.addToText(string, "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(1, spans.size)
+
+        string = SpannableString("a")
+        URLClickableSpan.addToText(string, "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(1, spans.size)
+
+        string = SpannableString("http://lbres.xyz")
+        URLClickableSpan.addToText(string, "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(1, spans.size)
+    }
+
+    @Test
     fun addToFirstWord() {
-        // TODO
+        var string = SpannableString("Hello world")
+        URLClickableSpan.addToFirstWord(string, "Hello", "http://lbres.xyz")
+        var spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(1, spans.size)
+
+        string = SpannableString("Hello world")
+        URLClickableSpan.addToFirstWord(string, "Hello", "http://lbres.xyz")
+        URLClickableSpan.addToFirstWord(string, "world", "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(2, spans.size)
+
+        string = SpannableString("12345 6789 12345")
+        URLClickableSpan.addToFirstWord(string, "12345", "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(1, spans.size)
+
+        URLClickableSpan.addToFirstWord(string, "12345", "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(2, spans.size)
+
+        string = SpannableString("Visit this site: http://lbres.xyz!")
+        URLClickableSpan.addToFirstWord(string, "http://lbres.xyz", "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(1, spans.size)
+
+        string = SpannableString("goodbye planet")
+        URLClickableSpan.addToFirstWord(string, "hello", "http://lbres.xyz")
+        spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
+        assertEquals(0, spans.size)
     }
 }

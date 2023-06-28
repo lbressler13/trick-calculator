@@ -25,6 +25,16 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
 
     companion object {
         /**
+         * Add URLClickableSpan to the a string
+         *
+         * @param text [SpannableString]: the string to add a span to
+         * @param url [String]: the url to open when the string is clicked
+         */
+        fun addToText(text: SpannableString, url: String) {
+            text.setSpan(URLClickableSpan(url), 0, text.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+        }
+
+        /**
          * Add URLClickableSpan to the first occurrence of a word in a string
          *
          * @param text [SpannableString]: the string to add a span to
@@ -39,10 +49,6 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
             } catch (e: Exception) {
                 AppLogger.e(null, "Unable to add url to word: $word. Failed with exception: $e")
             }
-        }
-
-        fun addToText(text: SpannableString, url: String) {
-            text.setSpan(URLClickableSpan(url), 0, text.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         }
     }
 }

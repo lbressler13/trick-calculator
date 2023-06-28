@@ -58,7 +58,6 @@ class BaseActivity : AppCompatActivity() {
      * Perform updates when dark mode is toggled
      */
     override fun onConfigurationChanged(newConfig: Configuration) {
-        // TODO is this needed?
         super.onConfigurationChanged(newConfig)
 
         val wasDarkMode = isDarkMode
