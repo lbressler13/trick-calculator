@@ -41,13 +41,13 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
          * @param word [String]: the word to be made clickable
          * @param url [String]: the url to open when the word is clicked
          */
-        fun addToFirstWord(text: SpannableString, word: String, url: String) {
+        fun addToFirstOccurrence(text: SpannableString, word: String, url: String) {
             try {
                 val start = text.indexOf(word)
                 val end = start + word.length
                 text.setSpan(URLClickableSpan(url), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
-            } catch (e: Exception) {
-                AppLogger.e(null, "Unable to add url to word: $word. Failed with exception: $e")
+            } catch (e: IndexOutOfBoundsException) {
+                AppLogger.e(null, "Failed to add url to word: $word. Exception: $e.")
             }
         }
     }

@@ -44,34 +44,34 @@ class URLClickableSpanTest {
     }
 
     @Test
-    fun addToFirstWord() {
+    fun addToFirstOccurrence() {
         var string = SpannableString("Hello world")
-        URLClickableSpan.addToFirstWord(string, "Hello", "http://lbres.xyz")
+        URLClickableSpan.addToFirstOccurrence(string, "Hello", "http://lbres.xyz")
         var spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
         assertEquals(1, spans.size)
 
         string = SpannableString("Hello world")
-        URLClickableSpan.addToFirstWord(string, "Hello", "http://lbres.xyz")
-        URLClickableSpan.addToFirstWord(string, "world", "http://lbres.xyz")
+        URLClickableSpan.addToFirstOccurrence(string, "Hello", "http://lbres.xyz")
+        URLClickableSpan.addToFirstOccurrence(string, "world", "http://lbres.xyz")
         spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
         assertEquals(2, spans.size)
 
         string = SpannableString("12345 6789 12345")
-        URLClickableSpan.addToFirstWord(string, "12345", "http://lbres.xyz")
+        URLClickableSpan.addToFirstOccurrence(string, "12345", "http://lbres.xyz")
         spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
         assertEquals(1, spans.size)
 
-        URLClickableSpan.addToFirstWord(string, "12345", "http://lbres.xyz")
+        URLClickableSpan.addToFirstOccurrence(string, "12345", "http://lbres.xyz")
         spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
         assertEquals(2, spans.size)
 
         string = SpannableString("Visit this site: http://lbres.xyz!")
-        URLClickableSpan.addToFirstWord(string, "http://lbres.xyz", "http://lbres.xyz")
+        URLClickableSpan.addToFirstOccurrence(string, "http://lbres.xyz", "http://lbres.xyz")
         spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
         assertEquals(1, spans.size)
 
         string = SpannableString("goodbye planet")
-        URLClickableSpan.addToFirstWord(string, "hello", "http://lbres.xyz")
+        URLClickableSpan.addToFirstOccurrence(string, "hello", "http://lbres.xyz")
         spans = string.getSpans(0, string.length, URLClickableSpan::class.java)
         assertEquals(0, spans.size)
     }

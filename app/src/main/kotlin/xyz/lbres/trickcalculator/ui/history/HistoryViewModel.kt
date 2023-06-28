@@ -16,10 +16,13 @@ class HistoryViewModel : ViewModel() {
     /**
      * Randomness used in current shuffled history
      */
-    private var _appliedRandomness: Int? = null
-    var appliedRandomness: Int?
-        get() = _appliedRandomness
-        set(value) = updateRandomHistory(value ?: 0)
+    private var _randomness: Int? = null
+    var randomness: Int?
+        get() = _randomness
+        set(value) {
+            _randomness = value
+            updateRandomHistory()
+        }
 
     /**
      * List of history items
@@ -28,26 +31,16 @@ class HistoryViewModel : ViewModel() {
     val history: History = _history
 
     /**
-     * Values generated based on [history] and [appliedRandomness]
+     * Values generated based on [history] and [randomness]
      */
     var randomizedHistory: History? = null
         private set
 
     /**
-     * Update randomized history, based on current history and new randomness value
-     *
-     * @param randomness [Int]: new history randomness value from SettingsViewModel
+     * Update randomized history based on current randomness
      */
-    private fun updateRandomHistory(randomness: Int) {
-        _appliedRandomness = randomness
-        randomizedHistory = getRandomHistory()
-    }
-
-    /**
-     * Generate history, using the degree of randomness specified in the viewmodel
-     */
-    private fun getRandomHistory(): History {
-        return when (appliedRandomness) {
+    private fun updateRandomHistory() {
+        randomizedHistory = when (randomness) {
             0 -> history // no randomness
             1 -> history.seededShuffled() // shuffled order
             2 -> shuffleHistoryValues() // shuffled values

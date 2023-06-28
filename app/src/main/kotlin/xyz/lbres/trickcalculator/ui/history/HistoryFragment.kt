@@ -42,7 +42,7 @@ class HistoryFragment : BaseFragment() {
         val isInitialLoad = arguments?.getBoolean(initialLoadKey) ?: false
 
         if (isInitialLoad || historyViewModel.randomizedHistory == null) {
-            historyViewModel.appliedRandomness = settingsViewModel.historyRandomness
+            historyViewModel.randomness = settingsViewModel.historyRandomness
         }
 
         setUI()
@@ -102,8 +102,8 @@ class HistoryFragment : BaseFragment() {
      * Redisplay can happen when randomness changes, or when history is cleared.
      */
     override fun handlePostDevTools() {
-        if (settingsViewModel.historyRandomness != historyViewModel.appliedRandomness) {
-            historyViewModel.appliedRandomness = settingsViewModel.historyRandomness
+        if (settingsViewModel.historyRandomness != historyViewModel.randomness) {
+            historyViewModel.randomness = settingsViewModel.historyRandomness
         }
 
         setUI() // handles history being cleared

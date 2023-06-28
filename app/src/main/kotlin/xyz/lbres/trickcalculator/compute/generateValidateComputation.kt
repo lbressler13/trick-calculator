@@ -19,7 +19,7 @@ private val parenCounts = mapOf(LPAREN to 1, RPAREN to -1)
 private val syntaxError = Exception("Syntax error")
 
 /**
- * Object to store all values used in computation
+ * Class to store all values used in computation
  */
 private data class ComputeData(
     val computeText: MutableList<String> = mutableListOf(),
@@ -28,8 +28,8 @@ private data class ComputeData(
     var currentNumber: String = "",
     var openParenCount: Int = 0,
     // track decimal state in case applyDecimals = false
-    var currentDecimal: Boolean = false, // if current num already has a decimal
-    var lastDecimal: Boolean = false // if the most recent element was a decimal
+    var currentDecimal: Boolean = false, // if current num already has a decimal, used to check if there are multiple decimals
+    var lastDecimal: Boolean = false // if the most recent element was a decimal, used to check a number ends with a decimal
 )
 
 /**
@@ -39,19 +39,19 @@ private data class ComputeData(
  * Validations:
  * - Each element has length 1
  * - Doesn't start or end with operator
- * - All values are number, operator, or paren
+ * - All values are numbers, operators, or parens
  * - Parentheses are matched
  * - No successive operators
  * - Operators are not the first or last value within a set of parens
  *
  * Assumptions:
- * - If the number order is not null, it has already passed validation
- * - If the initial value is not null, any necessary number substitutions have already been performed on it
+ * - If the number order is not `null`, it has already passed validation
+ * - If the initial value is not `null`, any necessary number substitutions have already been performed on it
  *
- * @param initialValue [ExactFraction]: the previously computed value, if being used as the start of the computation
- * @param splitText [StringList]: list of single-character values to combine, excluding initialValue
+ * @param initialValue [ExactFraction]: the previously computed value, if being used as the start of the computation. Can be `null`
+ * @param splitText [StringList]: list of single-character values to combine, excluding the initial value
  * @param ops [List]: list of string values recognized as operators
- * @param numbersOrder [IntList]: list of numbers, containing the values 0..9 in any other order
+ * @param numbersOrder [IntList]: list of numbers containing the values 0..9 in any other order, or `null`
  * @param applyParens [Boolean]: whether or not parentheses should be applied
  * @param applyDecimals [Boolean]: whether or not decimals points should be applied.
  * This does not impact any decimals in the initial value.
@@ -59,13 +59,12 @@ private data class ComputeData(
  * @return [StringList]: modified list with adjacent digits/decimals combined into single numbers,
  * and with any of the specified modifications for number order, applying parens, and applying decimals.
  * The relative position of numbers, operators, and parens is unchanged in the returned value.
- * @throws Exception: if validation fails
  */
 fun generateAndValidateComputeText(
     initialValue: ExactFraction?,
     splitText: StringList,
     ops: StringList,
-    numbersOrder: IntList?, // make this nullable so we don't always have to get index
+    numbersOrder: IntList?,
     applyParens: Boolean,
     applyDecimals: Boolean,
     shuffleComputation: Boolean
@@ -96,14 +95,10 @@ fun generateAndValidateComputeText(
         }
 
         data.openParenCount += parenCounts.getOrDefault(data.currentType, 0)
-        if (nonNumberSyntaxError(data)) {
-            throw syntaxError
-        }
-
-        if (data.currentType == NUMBER) {
-            addDigit(data, element, applyDecimals, numbersOrder)
-        } else {
-            addNonNumber(data, element, applyParens)
+        when {
+            nonNumberSyntaxError(data) -> throw syntaxError
+            data.currentType == NUMBER -> addDigit(data, element, applyDecimals, numbersOrder)
+            else -> addNonNumber(data, element, applyParens)
         }
     }
 
@@ -147,8 +142,8 @@ private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, init
  *
  * @param data [ComputeData]: data about current state of computation
  * @param element [String]: element to add
- * @param applyDecimals [Boolean]: whether or not decimals points should be applied
- * @param numbersOrder [IntList]?: list of numbers, containing the values 0..9 in any other order, or null
+ * @param applyDecimals [Boolean]: whether or not decimals should be applied
+ * @param numbersOrder [IntList]?: list of numbers containing the values 0..9 in any other order, or `null`
  */
 private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean, numbersOrder: IntList?) {
     when {
@@ -157,8 +152,9 @@ private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean,
             if (applyDecimals) {
                 data.currentNumber += element
             }
-            data.currentDecimal = true // gets counted even when not applied, to check for syntax errors
-            data.lastDecimal = true // tracked separately for use in syntax errors
+            // update decimals even when not applied, to check for syntax errors
+            data.currentDecimal = true
+            data.lastDecimal = true
         }
         else -> {
             data.currentNumber += digitFromNumbersOrder(element, numbersOrder)
@@ -171,16 +167,20 @@ private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean,
  * Map an element to the corresponding value in the numbers order. Returns [element] if the order is null.
  *
  * @param element [String]: value to map
- * @param numbersOrder [IntList]?: list containing numbers 0..9 in some order, or null
+ * @param numbersOrder [IntList]?: list of numbers containing the values 0..9 in any other order, or `null`
  */
 private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): String {
     if (numbersOrder == null) {
         return element
     }
 
-    val index = element.toInt()
-    val digit = numbersOrder[index]
-    return digit.toString()
+    return try {
+        val index = element.toInt()
+        val digit = numbersOrder[index]
+        digit.toString()
+    } catch (_: NumberFormatException) {
+        element
+    }
 }
 
 /**
@@ -233,7 +233,7 @@ private fun addCurrentNumber(data: ComputeData) {
  *
  * @param element [String]: value to get type of
  * @param ops [StringList]: list of valid operators
- * @return [String]?: the element's type, or null if it matches no valid type
+ * @return [String]?: the element's type, or `null` if it matches no valid type
  */
 private fun getTypeOf(element: String, ops: StringList): String? {
     return when {
@@ -246,7 +246,7 @@ private fun getTypeOf(element: String, ops: StringList): String? {
 }
 
 /**
- * Determine if there is a syntax error due to placement of operators or parens
+ * Determine if there is a syntax error due to placement of operators or parens, at the current position in the text
  *
  * @param data [ComputeData]: data about current state of computation
  * @return [Boolean]: `true` if there is an error, `false` otherwise

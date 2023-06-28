@@ -116,7 +116,7 @@ class CalculatorFragment : BaseFragment() {
             // only include exponent if exp is used
             val operators = when {
                 !settingsViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                !computationViewModel.computeText.contains("^") -> listOf("+", "-", "x", "/").seededShuffled() + listOf("^")
+                !computationViewModel.computeText.contains("^") -> listOf("+", "-", "x", "/").seededShuffled() + "^"
                 else -> listOf("+", "-", "x", "/", "^").seededShuffled()
             }
 
