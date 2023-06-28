@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
-import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.ext.view.gone
 import xyz.lbres.trickcalculator.ext.view.visible
+import xyz.lbres.trickcalculator.ui.BaseFragment
+import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 
 /**
  * Fragment to display computation history, possibly with some level of randomness

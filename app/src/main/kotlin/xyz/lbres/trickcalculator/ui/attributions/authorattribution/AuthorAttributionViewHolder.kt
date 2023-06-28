@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.ViewHolderAuthorAttributionBinding
+import xyz.lbres.trickcalculator.ext.view.gone
+import xyz.lbres.trickcalculator.ext.view.visible
 import xyz.lbres.trickcalculator.ui.attributions.AuthorAttribution
 import xyz.lbres.trickcalculator.ui.attributions.ImageAttribution
 import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonDisplayUrl
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonUrl
 import xyz.lbres.trickcalculator.ui.attributions.imageattribution.ImageAttributionAdapter
-import xyz.lbres.trickcalculator.ext.view.gone
-import xyz.lbres.trickcalculator.ext.view.visible
 
 /**
  * ViewHolder for a single author attribution. Includes dropdown for image attributions.

@@ -1,8 +1,8 @@
 package xyz.lbres.trickcalculator
 
+import xyz.lbres.trickcalculator.ext.view.visible
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.devtools.DeveloperToolsDialog
-import xyz.lbres.trickcalculator.ext.view.visible
 
 /**
  * Configuration for dev build flavor

@@ -11,12 +11,8 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
  */
 fun isNumber(value: String): Boolean {
     return try {
-//        if (value.count { it == '-' } > 1 || value.count { it == '.' } > 1) {
-//            false
-//        } else {
-            ExactFraction(value)
-            true
-//        }
+        ExactFraction(value)
+        true
     } catch (_: Exception) {
         false
     }

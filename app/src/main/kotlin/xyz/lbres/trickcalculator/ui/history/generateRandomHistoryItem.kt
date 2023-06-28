@@ -12,8 +12,6 @@ import xyz.lbres.trickcalculator.compute.isOperator
 import xyz.lbres.trickcalculator.ext.intrange.appRandom
 import xyz.lbres.trickcalculator.ext.list.appRandom
 import xyz.lbres.trickcalculator.utils.isNumber
-import java.util.Date
-import kotlin.random.Random
 
 private typealias MStringList = MutableList<String>
 
