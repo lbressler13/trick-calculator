@@ -35,22 +35,4 @@ data class Settings(
         shuffleNumbers = false,
         shuffleOperators = true
     )
-
-    /**
-     * Function defining two [Settings] objects as equal when all settings are the same
-     */
-    override fun equals(other: Any?): Boolean {
-        if (other == null || other !is Settings) {
-            return false
-        }
-
-        return applyDecimals == other.applyDecimals &&
-            applyParens == other.applyParens &&
-            clearOnError == other.clearOnError &&
-            historyRandomness == other.historyRandomness &&
-            showSettingsButton == other.showSettingsButton &&
-            shuffleComputation == other.shuffleComputation &&
-            shuffleNumbers == other.shuffleNumbers &&
-            shuffleOperators == other.shuffleOperators
-    }
 }

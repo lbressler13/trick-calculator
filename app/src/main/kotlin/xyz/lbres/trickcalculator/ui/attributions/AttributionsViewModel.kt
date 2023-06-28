@@ -15,5 +15,5 @@ class AttributionsViewModel : ViewModel() {
     /**
      * If attributions are expanded
      */
-    var attributionsExpanded: BooleanArray = BooleanArray(authorAttributions.size) { false }
+    val attributionsExpanded: BooleanArray = BooleanArray(authorAttributions.size) { false }
 }

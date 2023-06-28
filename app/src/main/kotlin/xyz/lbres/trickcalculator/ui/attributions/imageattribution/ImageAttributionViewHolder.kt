@@ -24,7 +24,7 @@ class ImageAttributionViewHolder(private val binding: ViewHolderImageAttribution
 
         // initialize link
         val spannableString = SpannableString(image.url)
-        URLClickableSpan.addToFirstWord(spannableString, image.url, image.url)
+        URLClickableSpan.addToText(spannableString, image.url)
         binding.link.movementMethod = LinkMovementMethod()
         binding.link.text = spannableString
     }

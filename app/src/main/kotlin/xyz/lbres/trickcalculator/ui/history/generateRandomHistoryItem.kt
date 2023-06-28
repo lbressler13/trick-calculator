@@ -7,10 +7,10 @@ import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.WeightedList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.kotlinutils.random.ext.nextFromWeightedList
+import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.compute.isOperator
 import xyz.lbres.trickcalculator.utils.isNumber
-import java.util.Date
-import kotlin.random.Random
+import xyz.lbres.trickcalculator.utils.seededRandom
 
 private typealias MStringList = MutableList<String>
 
@@ -50,8 +50,6 @@ private val weightedRangesComputation = listOf(
 
 private val operators = listOf("+", "-", "x", "/", "^")
 
-private val random = Random(Date().time)
-
 /**
  * Generate a history item with a random computation string and result or error message
  *
@@ -61,7 +59,7 @@ fun generateRandomHistoryItem(): HistoryItem {
     // show error message instead of result
     val showError = random.nextBoolean(probabilityErrorMessage)
 
-    val length = (1..maxCompLength).random()
+    val length = (1..maxCompLength).seededRandom()
     val computation = generateComputation(length)
 
     if (showError) {
@@ -91,7 +89,7 @@ private fun generateComputation(length: Int): StringList {
             )
             ef.toDecimalString(5)
         } else {
-            operators.random()
+            operators.seededRandom()
         }
     }
 
@@ -123,7 +121,7 @@ private fun generateExactFraction(
     val negative = allowNegative && random.nextBoolean()
 
     val numeratorRange = random.nextFromWeightedList(weightedRanges)
-    var numerator = numeratorRange.random()
+    var numerator = numeratorRange.seededRandom()
     if (negative) {
         numerator *= -1
     }
@@ -132,7 +130,7 @@ private fun generateExactFraction(
     }
 
     val denominatorRange = random.nextFromWeightedList(weightedRanges)
-    val denominator = denominatorRange.random().ifZero { 1 }
+    val denominator = denominatorRange.seededRandom().ifZero { 1 }
     return ExactFraction(numerator, denominator)
 }
 

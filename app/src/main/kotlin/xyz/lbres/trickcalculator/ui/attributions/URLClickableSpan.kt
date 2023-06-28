@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.style.ClickableSpan
 import android.view.View
 import androidx.core.content.ContextCompat
+import xyz.lbres.trickcalculator.utils.AppLogger
 
 /**
  * Implementation of ClickableSpan, where the clicked text opens a link
@@ -24,17 +25,30 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
 
     companion object {
         /**
+         * Add URLClickableSpan to a string
+         *
+         * @param text [SpannableString]: the string to add a span to
+         * @param url [String]: the url to open when the string is clicked
+         */
+        fun addToText(text: SpannableString, url: String) {
+            text.setSpan(URLClickableSpan(url), 0, text.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+        }
+
+        /**
          * Add URLClickableSpan to the first occurrence of a word in a string
          *
          * @param text [SpannableString]: the string to add a span to
          * @param word [String]: the word to be made clickable
          * @param url [String]: the url to open when the word is clicked
-         * @throws IndexOutOfBoundsException if word is not in text
          */
-        fun addToFirstWord(text: SpannableString, word: String, url: String) {
-            val start = text.indexOf(word)
-            val end = start + word.length
-            text.setSpan(URLClickableSpan(url), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+        fun addToFirstOccurrence(text: SpannableString, word: String, url: String) {
+            try {
+                val start = text.indexOf(word)
+                val end = start + word.length
+                text.setSpan(URLClickableSpan(url), start, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+            } catch (e: IndexOutOfBoundsException) {
+                AppLogger.e(null, "Failed to add url to word: $word. Exception: $e.")
+            }
         }
     }
 }

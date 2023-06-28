@@ -1,15 +1,13 @@
 package xyz.lbres.trickcalculator.ui.settings
 
 import androidx.lifecycle.ViewModel
-import java.util.Date
-import kotlin.random.Random
+import xyz.lbres.trickcalculator.SharedValues.random
+import xyz.lbres.trickcalculator.utils.seededRandom
 
 /**
  * ViewModel to track settings that are shared across fragments
  */
 class SettingsViewModel : ViewModel() {
-    private val random = Random(Date().time)
-
     /**
      * Individual settings
      */
@@ -50,7 +48,7 @@ class SettingsViewModel : ViewModel() {
         shuffleNumbers = random.nextBoolean()
         shuffleOperators = random.nextBoolean()
 
-        historyRandomness = (0..3).random(random)
+        historyRandomness = (0..3).seededRandom()
 
         clearOnError = true
         showSettingsButton = false

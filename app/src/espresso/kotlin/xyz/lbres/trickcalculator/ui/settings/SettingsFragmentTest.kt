@@ -18,7 +18,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.ProductFlavor
 import xyz.lbres.trickcalculator.R
@@ -143,8 +143,8 @@ class SettingsFragmentTest {
      */
     private fun testSwitch(@IdRes id: Int, initialChecked: Boolean) {
         val switch = onView(withId(id))
-        val inititalCheck = ternaryIf(initialChecked, isChecked(), isNotChecked())
-        val oppositeCheck = ternaryIf(initialChecked, isNotChecked(), isChecked())
+        val inititalCheck = simpleIf(initialChecked, isChecked(), isNotChecked())
+        val oppositeCheck = simpleIf(initialChecked, isNotChecked(), isChecked())
 
         switch.check(matches(allOf(isDisplayed(), inititalCheck)))
 

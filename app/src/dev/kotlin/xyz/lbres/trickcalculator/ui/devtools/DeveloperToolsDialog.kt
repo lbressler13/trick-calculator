@@ -35,7 +35,7 @@ class DeveloperToolsDialog : DialogFragment() {
     /**
      * If settings navigation occurs before dialog is dismissed
      */
-    private var openedSettings: Boolean = false
+    private var launchedSettingsFragment: Boolean = false
 
     /**
      * Build dialog, comes before onCreateView and dialog is not connected to context
@@ -129,7 +129,7 @@ class DeveloperToolsDialog : DialogFragment() {
                 requireBaseActivity().runNavAction(baseFragment.navigateToSettings!!, args)
                 SettingsFragment.devToolsCallback = { baseFragment.handlePostDevTools() }
             }
-            openedSettings = true
+            launchedSettingsFragment = true
             dismiss()
         }
     }
@@ -155,7 +155,7 @@ class DeveloperToolsDialog : DialogFragment() {
         super.onDismiss(dialog)
 
         // callback will be called in settings fragment
-        if (!openedSettings) {
+        if (!launchedSettingsFragment) {
             requireBaseFragment().handlePostDevTools()
         }
     }

@@ -7,7 +7,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.allOf
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
@@ -67,7 +67,7 @@ fun checkStandardSettings() {
 fun checkSettingsDisplayed(settings: Settings, settingsSwitchDisplayed: Boolean = true) {
     val checkSetting: (Int, Boolean) -> Unit = { switchId, settingValue ->
         val switch = onView(withId(switchId))
-        val checkedMatcher = ternaryIf(settingValue, isChecked(), isNotChecked())
+        val checkedMatcher = simpleIf(settingValue, isChecked(), isNotChecked())
         switch.check(matches(allOf(isDisplayed(), checkedMatcher)))
     }
 
@@ -83,7 +83,7 @@ fun checkSettingsDisplayed(settings: Settings, settingsSwitchDisplayed: Boolean 
     onView(withId(R.id.historyRandomnessGroup)).check(matches(isDisplayed()))
     val historyButtonIds = listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
     historyButtonIds.forEachIndexed { index, buttonId ->
-        val checkedMatcher = ternaryIf(index == settings.historyRandomness, isChecked(), isNotChecked())
+        val checkedMatcher = simpleIf(index == settings.historyRandomness, isChecked(), isNotChecked())
         onView(withId(buttonId)).check(matches(allOf(isDisplayed(), checkedMatcher)))
     }
 

@@ -5,7 +5,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
@@ -76,7 +76,7 @@ private fun checkShuffledCorrectly(history: TestHistory, randomness: Int): Boole
         return true
     }
 
-    val repeatCount = ternaryIf(history.size == 2, 10, 5)
+    val repeatCount = simpleIf(history.size == 2, 10, 5)
     var shuffled = false
     repeatUntil(repeatCount, { shuffled }) {
         openHistoryFragment()
@@ -120,7 +120,7 @@ fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
  */
 private fun checkReshuffledCorrectly(historySize: Int): Boolean {
     // additional repeats for 2 items due to occasional failures
-    val repeats = ternaryIf(historySize == 2, 10, 5)
+    val repeats = simpleIf(historySize == 2, 10, 5)
     var reshuffled = false
 
     repeatUntil(repeats, { reshuffled }) {

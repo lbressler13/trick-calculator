@@ -40,7 +40,7 @@ class AttributionsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAttributionsBinding.inflate(layoutInflater)
-        // view model is tied to fragment lifecycle, so expansions are reset for each instance of fragment
+        // ViewModel is tied to fragment lifecycle, so expansions are reset for each instance of fragment
         viewModel = ViewModelProvider(this)[AttributionsViewModel::class.java]
 
         setFlaticonMessage()
@@ -95,9 +95,9 @@ class AttributionsFragment : BaseFragment() {
         val text = binding.flaticonPolicyMessage.text.toString()
         val spannableString = SpannableString(text)
 
-        URLClickableSpan.addToFirstWord(spannableString, "Flaticon", flaticonUrl)
+        URLClickableSpan.addToFirstOccurrence(spannableString, "Flaticon", flaticonUrl)
         if (viewModel.flaticonMessageExpanded) {
-            URLClickableSpan.addToFirstWord(spannableString, "here", flaticonAttrPolicyUrl)
+            URLClickableSpan.addToFirstOccurrence(spannableString, "here", flaticonAttrPolicyUrl)
         }
 
         binding.flaticonPolicyMessage.movementMethod = LinkMovementMethod()

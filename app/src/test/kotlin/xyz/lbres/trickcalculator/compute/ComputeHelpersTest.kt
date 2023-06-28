@@ -11,7 +11,7 @@ import xyz.lbres.trickcalculator.assertDivByZero
 
 class ComputeHelpersTest {
     @Test fun testGetMatchingParenIndex() = runGetMatchingParenIndexTests()
-    @Test fun testGetParsingError() = runGetParsingErrorTests()
+    @Test fun testGetParseErrorMessage() = runGetParseErrorMessageTests()
 
     @Test
     fun testIsOperator() {

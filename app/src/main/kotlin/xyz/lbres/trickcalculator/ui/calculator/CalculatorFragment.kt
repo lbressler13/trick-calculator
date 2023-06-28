@@ -12,7 +12,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.kotlinutils.general.ternaryIf
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
@@ -22,9 +22,8 @@ import xyz.lbres.trickcalculator.ui.history.HistoryViewModel
 import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import xyz.lbres.trickcalculator.utils.gone
+import xyz.lbres.trickcalculator.utils.seededShuffled
 import xyz.lbres.trickcalculator.utils.visible
-import java.util.Date
-import java.util.Random
 
 /**
  * Fragment to display main calculator functionality
@@ -34,7 +33,6 @@ class CalculatorFragment : BaseFragment() {
     private lateinit var computationViewModel: ComputationViewModel
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var historyViewModel: HistoryViewModel
-    private val random = Random(Date().time)
     override val navigateToSettings = R.id.navigateCalculatorToSettings
 
     /**
@@ -118,13 +116,8 @@ class CalculatorFragment : BaseFragment() {
             // only include exponent if exp is used
             val operators = when {
                 !settingsViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                !computationViewModel.computeText.contains("^") -> listOf(
-                    "+",
-                    "-",
-                    "x",
-                    "/"
-                ).shuffled(random) + listOf("^")
-                else -> listOf("+", "-", "x", "/", "^").shuffled(random)
+                !computationViewModel.computeText.contains("^") -> listOf("+", "-", "x", "/").seededShuffled() + "^"
+                else -> listOf("+", "-", "x", "/", "^").seededShuffled()
             }
 
             // maps operator symbols to their given functions
@@ -135,7 +128,7 @@ class CalculatorFragment : BaseFragment() {
                     operators[2] -> leftValue * rightValue
                     operators[3] -> leftValue / rightValue
                     operators[4] -> leftValue.pow(rightValue)
-                    else -> throw Exception("Invalid operator $operator")
+                    else -> throw Exception("Invalid operator: $operator")
                 }
             }
 
@@ -145,7 +138,7 @@ class CalculatorFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = ternaryIf(settingsViewModel.shuffleNumbers, (0..9).shuffled(random), (0..9).toList())
+            val numberOrder = simpleIf(settingsViewModel.shuffleNumbers, (0..9).seededShuffled(), (0..9).toList())
 
             var newHistoryItem: HistoryItem?
 
@@ -275,7 +268,7 @@ class CalculatorFragment : BaseFragment() {
      */
     private fun scrollTextToTop() {
         val movement = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
-        movement.goToTop(binding.mainText)
+        movement.toTop(binding.mainText)
     }
 
     /**
@@ -283,6 +276,6 @@ class CalculatorFragment : BaseFragment() {
      */
     private fun scrollTextToBottom() {
         val movementMethod = binding.mainText.movementMethod as UnprotectedScrollingMovementMethod
-        movementMethod.goToBottom(binding.mainText)
+        movementMethod.toBottom(binding.mainText)
     }
 }
