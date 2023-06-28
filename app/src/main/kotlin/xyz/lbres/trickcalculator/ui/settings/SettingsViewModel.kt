@@ -2,7 +2,7 @@ package xyz.lbres.trickcalculator.ui.settings
 
 import androidx.lifecycle.ViewModel
 import xyz.lbres.trickcalculator.SharedValues.random
-import xyz.lbres.trickcalculator.ext.intrange.appRandom
+import xyz.lbres.trickcalculator.utils.seededRandom
 
 /**
  * ViewModel to track settings that are shared across fragments
@@ -48,7 +48,7 @@ class SettingsViewModel : ViewModel() {
         shuffleNumbers = random.nextBoolean()
         shuffleOperators = random.nextBoolean()
 
-        historyRandomness = (0..3).appRandom()
+        historyRandomness = (0..3).seededRandom()
 
         clearOnError = true
         showSettingsButton = false

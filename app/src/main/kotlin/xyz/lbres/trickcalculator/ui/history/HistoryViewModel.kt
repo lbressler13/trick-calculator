@@ -5,17 +5,14 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
-import xyz.lbres.trickcalculator.ext.list.appShuffled
+import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.utils.History
-import java.util.Date
-import kotlin.random.Random
+import xyz.lbres.trickcalculator.utils.seededShuffled
 
 /**
  * Information about computation history
  */
 class HistoryViewModel : ViewModel() {
-    private val random = Random(Date().time)
-
     /**
      * Randomness used in current shuffled history
      */
@@ -52,7 +49,7 @@ class HistoryViewModel : ViewModel() {
     private fun getRandomHistory(): History {
         return when (appliedRandomness) {
             0 -> history // no randomness
-            1 -> history.appShuffled() // shuffled order
+            1 -> history.seededShuffled() // shuffled order
             2 -> shuffleHistoryValues() // shuffled values
             3 -> generateRandomHistory() ?: emptyList() // random generation
             else -> history
@@ -66,8 +63,8 @@ class HistoryViewModel : ViewModel() {
      * @return [History]: history where computations and values have been shuffled
      */
     private fun shuffleHistoryValues(): History {
-        val computations: List<StringList> = history.map { it.computation }.appShuffled()
-        val values: List<Pair<ExactFraction?, String?>> = history.map { Pair(it.result, it.error) }.appShuffled()
+        val computations: List<StringList> = history.map { it.computation }.seededShuffled()
+        val values: List<Pair<ExactFraction?, String?>> = history.map { Pair(it.result, it.error) }.seededShuffled()
 
         val shuffledHistory = computations.mapIndexed { index, comp ->
             val valuePair = values[index]

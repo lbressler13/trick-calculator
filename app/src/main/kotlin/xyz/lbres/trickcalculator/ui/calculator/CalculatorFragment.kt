@@ -16,15 +16,14 @@ import xyz.lbres.kotlinutils.general.ternaryIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
-import xyz.lbres.trickcalculator.ext.intrange.appShuffled
-import xyz.lbres.trickcalculator.ext.list.appShuffled
-import xyz.lbres.trickcalculator.ext.view.gone
-import xyz.lbres.trickcalculator.ext.view.visible
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.ui.history.HistoryViewModel
 import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.OperatorFunction
+import xyz.lbres.trickcalculator.utils.gone
+import xyz.lbres.trickcalculator.utils.seededShuffled
+import xyz.lbres.trickcalculator.utils.visible
 
 /**
  * Fragment to display main calculator functionality
@@ -117,13 +116,8 @@ class CalculatorFragment : BaseFragment() {
             // only include exponent if exp is used
             val operators = when {
                 !settingsViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                !computationViewModel.computeText.contains("^") -> listOf(
-                    "+",
-                    "-",
-                    "x",
-                    "/"
-                ).appShuffled() + listOf("^")
-                else -> listOf("+", "-", "x", "/", "^").appShuffled()
+                !computationViewModel.computeText.contains("^") -> listOf("+", "-", "x", "/").seededShuffled() + listOf("^")
+                else -> listOf("+", "-", "x", "/", "^").seededShuffled()
             }
 
             // maps operator symbols to their given functions
@@ -134,7 +128,7 @@ class CalculatorFragment : BaseFragment() {
                     operators[2] -> leftValue * rightValue
                     operators[3] -> leftValue / rightValue
                     operators[4] -> leftValue.pow(rightValue)
-                    else -> throw Exception("Invalid operator $operator")
+                    else -> throw Exception("Invalid operator: $operator")
                 }
             }
 
@@ -144,7 +138,7 @@ class CalculatorFragment : BaseFragment() {
                 operators.subList(0, 2), // add and subtract
             )
 
-            val numberOrder = ternaryIf(settingsViewModel.shuffleNumbers, (0..9).appShuffled(), (0..9).toList())
+            val numberOrder = ternaryIf(settingsViewModel.shuffleNumbers, (0..9).seededShuffled(), (0..9).toList())
 
             var newHistoryItem: HistoryItem?
 

@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.ext.view
+package xyz.lbres.trickcalculator.utils
 
 import android.view.View
 
