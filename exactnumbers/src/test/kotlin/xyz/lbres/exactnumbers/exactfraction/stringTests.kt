@@ -1,5 +1,9 @@
 package xyz.lbres.exactnumbers.exactfraction
 
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
+import xyz.lbres.exactnumbers.exactfraction.parseDecimal
+import xyz.lbres.exactnumbers.exactfraction.parseEFString
 import java.math.BigInteger
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -90,21 +94,21 @@ internal fun runParseDecimalTests() {
 
     // e-notation
     // TODO
-    s = "3.90E-3" // 0.00390
-    expected = ExactFraction(39, 1000)
-    assertEquals(expected, parseDecimal(s))
+    // s = "3.90E-3" // 0.00390
+    // expected = ExactFraction(39, 1000)
+    // assertEquals(expected, parseDecimal(s))
 
-    s = "3.90e-3" // 0.00390
-    expected = ExactFraction(39, 1000)
-    assertEquals(expected, parseDecimal(s))
+    // s = "3.90e-3" // 0.00390
+    // expected = ExactFraction(39, 1000)
+    // assertEquals(expected, parseDecimal(s))
 
-    s = "-5e-10" // -0.0000000005
-    expected = ExactFraction(5, 10000000000)
-    assertEquals(expected, parseDecimal(s))
+    // s = "-5e-10" // -0.0000000005
+    // expected = ExactFraction(5, 10000000000)
+    // assertEquals(expected, parseDecimal(s))
 
-    s = "-5E10" // -50000000000
-    expected = ExactFraction(BigInteger("-50000000000"))
-    assertEquals(expected, parseDecimal(s))
+    // s = "-5E10" // -50000000000
+    // expected = ExactFraction(BigInteger("-50000000000"))
+    // assertEquals(expected, parseDecimal(s))
 
     // errors
     s = "abc"

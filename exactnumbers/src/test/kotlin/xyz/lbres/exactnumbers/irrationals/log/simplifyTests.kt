@@ -2,6 +2,7 @@ package xyz.lbres.exactnumbers.irrationals.log
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
+import xyz.lbres.exactnumbers.irrationals.log.Log
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -154,7 +155,11 @@ internal fun runSimplifyListTests() {
         Log(ExactFraction(15, 4), 4),
         Log(ExactFraction(1, 16), 2)
     ).sorted()
-    expected = Pair(ExactFraction(4, 3), listOf(Log(6), Log(ExactFraction(15, 4), 4)).sorted())
+    expected = Pair(
+        ExactFraction(
+            4,
+            3
+        ), listOf(Log(6), Log(ExactFraction(15, 4), 4)).sorted())
     assertEquals(expected, Log.simplifyList(logs))
 
     // no changes
@@ -162,7 +167,14 @@ internal fun runSimplifyListTests() {
     expected = Pair(fractionOne, logs)
     assertEquals(expected, Log.simplifyList(logs))
 
-    logs = listOf(Log(ExactFraction(3, 7)), Log(ExactFraction(7, 3))).sorted()
+    logs = listOf(
+        Log(
+        ExactFraction(
+            3,
+            7
+        )
+    ), Log(ExactFraction(7, 3))
+    ).sorted()
     expected = Pair(fractionOne, logs)
     assertEquals(expected, Log.simplifyList(logs))
 

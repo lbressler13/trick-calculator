@@ -1,6 +1,6 @@
 package xyz.lbres.exactnumbers.irrationals.log
 
-import xyz.lbres.common.getIntFromDecimal
+import xyz.lbres.exactnumbers.common.getIntFromDecimal
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.math.log

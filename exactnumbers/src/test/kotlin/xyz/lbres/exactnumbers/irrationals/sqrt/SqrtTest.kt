@@ -6,6 +6,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.irrationals.common.Memoize
+import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.test.AfterTest
@@ -268,11 +269,22 @@ internal class SqrtTest {
         assertEquals(expected, sqrt.getSimplified())
 
         sqrt = Sqrt(3000)
-        expected = Pair(ExactFraction.TEN, Sqrt(ExactFraction(30)))
+        expected = Pair(
+            ExactFraction.TEN, Sqrt(
+                ExactFraction(
+                    30
+                )
+            )
+        )
         assertEquals(expected, sqrt.getSimplified())
 
         sqrt = Sqrt(ExactFraction(50, 27))
-        expected = Pair(ExactFraction(5, 3), Sqrt(ExactFraction(2, 3)))
+        expected = Pair(
+            ExactFraction(
+                5,
+                3
+            ), Sqrt(ExactFraction(2, 3))
+        )
         assertEquals(expected, sqrt.getSimplified())
 
         // no whole

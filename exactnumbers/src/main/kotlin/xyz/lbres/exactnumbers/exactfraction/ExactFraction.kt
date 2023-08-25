@@ -1,6 +1,6 @@
 package xyz.lbres.exactnumbers.exactfraction
 
-import xyz.lbres.common.divideByZero
+import xyz.lbres.exactnumbers.common.divideByZero
 import xyz.lbres.exactnumbers.common.NumberOverflowException
 import xyz.lbres.exactnumbers.ext.eq
 import xyz.lbres.exactnumbers.ext.toExactFraction
@@ -94,18 +94,32 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
 
     // UNARY OPERATORS
 
-    operator fun unaryMinus(): ExactFraction = ExactFraction(-numerator, denominator, fullSimplified = true)
-    operator fun unaryPlus(): ExactFraction = ExactFraction(numerator, denominator, fullSimplified = true)
+    operator fun unaryMinus(): ExactFraction =
+        ExactFraction(
+            -numerator,
+            denominator,
+            fullSimplified = true
+        )
+    operator fun unaryPlus(): ExactFraction =
+        ExactFraction(numerator, denominator, fullSimplified = true)
     operator fun not(): Boolean = isZero()
 
     operator fun inc(): ExactFraction {
         val newNumerator = numerator + denominator
-        return ExactFraction(newNumerator, denominator, fullSimplified = false)
+        return ExactFraction(
+            newNumerator,
+            denominator,
+            fullSimplified = false
+        )
     }
 
     operator fun dec(): ExactFraction {
         val newNumerator = numerator - denominator
-        return ExactFraction(newNumerator, denominator, fullSimplified = false)
+        return ExactFraction(
+            newNumerator,
+            denominator,
+            fullSimplified = false
+        )
     }
 
     // BINARY OPERATORS
@@ -113,7 +127,11 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
     operator fun plus(other: ExactFraction): ExactFraction {
         if (denominator == other.denominator) {
             val newNumerator = numerator + other.numerator
-            return ExactFraction(newNumerator, denominator, fullSimplified = false)
+            return ExactFraction(
+                newNumerator,
+                denominator,
+                fullSimplified = false
+            )
         }
 
         val scaled1 = numerator * other.denominator
@@ -121,7 +139,11 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
 
         val newNumerator = scaled1 + scaled2
         val newDenominator = denominator * other.denominator
-        return ExactFraction(newNumerator, newDenominator, fullSimplified = false)
+        return ExactFraction(
+            newNumerator,
+            newDenominator,
+            fullSimplified = false
+        )
     }
 
     operator fun plus(other: BigInteger): ExactFraction = plus(other.toExactFraction())
@@ -136,7 +158,11 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
     operator fun times(other: ExactFraction): ExactFraction {
         val newNumerator = numerator * other.numerator
         val newDenominator = denominator * other.denominator
-        return ExactFraction(newNumerator, newDenominator, fullSimplified = false)
+        return ExactFraction(
+            newNumerator,
+            newDenominator,
+            fullSimplified = false
+        )
     }
 
     operator fun times(other: BigInteger): ExactFraction = times(other.toExactFraction())
@@ -211,7 +237,11 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
             throw e
         }
 
-        val result = ExactFraction(numeratorMult, denominatorMult, fullSimplified = false)
+        val result = ExactFraction(
+            numeratorMult,
+            denominatorMult,
+            fullSimplified = false
+        )
         return if (other < 0) result.inverse() else result
     }
 
@@ -224,10 +254,19 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
             throw divideByZero
         }
 
-        return ExactFraction(denominator, numerator, fullSimplified = true)
+        return ExactFraction(
+            denominator,
+            numerator,
+            fullSimplified = true
+        )
     }
 
-    fun absoluteValue(): ExactFraction = ExactFraction(numerator.abs(), denominator, fullSimplified = true)
+    fun absoluteValue(): ExactFraction =
+        ExactFraction(
+            numerator.abs(),
+            denominator,
+            fullSimplified = true
+        )
     fun isNegative(): Boolean = numerator.isNegative()
     fun isZero(): Boolean = numerator.isZero()
 
@@ -470,7 +509,11 @@ class ExactFraction private constructor() : Comparable<ExactFraction>, Number() 
         return numerator.toBigDecimal().divide(denominator.toBigDecimal(), mc)
     }
 
-    private fun overflowException(type: String): Exception = ExactFractionOverflowException("Overflow when casting to $type", toFractionString())
+    private fun overflowException(type: String): Exception =
+        ExactFractionOverflowException(
+            "Overflow when casting to $type",
+            toFractionString()
+        )
 
     companion object {
         val ZERO = ExactFraction(0)

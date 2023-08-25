@@ -1,14 +1,14 @@
 package xyz.lbres.exactnumbers.irrationals.log
 
-import xyz.lbres.common.divideBigDecimals
-import xyz.lbres.common.divideByZero
+import xyz.lbres.exactnumbers.common.divideBigDecimals
+import xyz.lbres.exactnumbers.common.divideByZero
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.irrationals.common.Irrational
 import xyz.lbres.exactnumbers.irrationals.common.div
 import xyz.lbres.exactnumbers.irrationals.common.times
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
-import xyz.lbres.expressions.term.Term
+import xyz.lbres.exactnumbers.expressions.term.Term
 import xyz.lbres.kotlinutils.biginteger.ext.isZero
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -46,17 +46,44 @@ class Log private constructor(
     constructor(argument: ExactFraction, base: Int, isDivided: Boolean) : this(argument, base, isDivided, false)
 
     constructor(argument: Int) : this(ExactFraction(argument))
-    constructor(argument: Int, base: Int) : this(ExactFraction(argument), base)
-    constructor(argument: Int, isDivided: Boolean) : this(ExactFraction(argument), isDivided)
-    constructor(argument: Int, base: Int, isDivided: Boolean) : this(ExactFraction(argument), base, isDivided)
+    constructor(argument: Int, base: Int) : this(
+        ExactFraction(
+            argument
+        ), base)
+    constructor(argument: Int, isDivided: Boolean) : this(
+        ExactFraction(
+            argument
+        ), isDivided)
+    constructor(argument: Int, base: Int, isDivided: Boolean) : this(
+        ExactFraction(
+            argument
+        ), base, isDivided)
     constructor(argument: Long) : this(ExactFraction(argument))
-    constructor(argument: Long, base: Int) : this(ExactFraction(argument), base)
-    constructor(argument: Long, isDivided: Boolean) : this(ExactFraction(argument), isDivided)
-    constructor(argument: Long, base: Int, isDivided: Boolean) : this(ExactFraction(argument), base, isDivided)
+    constructor(argument: Long, base: Int) : this(
+        ExactFraction(
+            argument
+        ), base)
+    constructor(argument: Long, isDivided: Boolean) : this(
+        ExactFraction(
+            argument
+        ), isDivided)
+    constructor(argument: Long, base: Int, isDivided: Boolean) : this(
+        ExactFraction(
+            argument
+        ), base, isDivided)
     constructor(argument: BigInteger) : this(ExactFraction(argument))
-    constructor(argument: BigInteger, base: Int) : this(ExactFraction(argument), base)
-    constructor(argument: BigInteger, isDivided: Boolean) : this(ExactFraction(argument), isDivided)
-    constructor(argument: BigInteger, base: Int, isDivided: Boolean) : this(ExactFraction(argument), base, isDivided)
+    constructor(argument: BigInteger, base: Int) : this(
+        ExactFraction(
+            argument
+        ), base)
+    constructor(argument: BigInteger, isDivided: Boolean) : this(
+        ExactFraction(
+            argument
+        ), isDivided)
+    constructor(argument: BigInteger, base: Int, isDivided: Boolean) : this(
+        ExactFraction(
+            argument
+        ), base, isDivided)
 
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is Log) {

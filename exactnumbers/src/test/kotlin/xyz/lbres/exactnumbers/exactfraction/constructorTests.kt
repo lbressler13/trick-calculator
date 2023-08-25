@@ -1,6 +1,7 @@
 package xyz.lbres.exactnumbers.exactfraction
 
 import assertDivByZero
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import java.math.BigInteger
 import kotlin.test.assertEquals
 import kotlin.test.assertFails

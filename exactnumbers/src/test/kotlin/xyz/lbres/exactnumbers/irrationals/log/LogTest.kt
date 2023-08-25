@@ -2,6 +2,7 @@ package xyz.lbres.exactnumbers.irrationals.log
 
 import assertDivByZero
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.irrationals.log.Log
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

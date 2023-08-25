@@ -3,6 +3,7 @@ package xyz.lbres.exactnumbers.irrationals.sqrt
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.irrationals.common.Irrational
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
+import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -59,7 +60,15 @@ internal fun runSimplifyListTests() {
     assertEquals(expected, Sqrt.simplifyList(numbers))
 
     numbers = listOf(Sqrt(ExactFraction(2, 15)), Sqrt(16))
-    expected = Pair(ExactFraction.FOUR, listOf(Sqrt(ExactFraction(2, 15))))
+    expected = Pair(
+        ExactFraction.FOUR, listOf(
+            Sqrt(
+            ExactFraction(
+                2,
+                15
+            )
+        )
+        ))
     assertEquals(expected, Sqrt.simplifyList(numbers))
 
     numbers = listOf(
@@ -91,7 +100,15 @@ internal fun runSimplifyListTests() {
         Sqrt(15),
         Sqrt(4)
     )
-    expected = Pair(ExactFraction.TEN, listOf(Sqrt(ExactFraction(1, 3))))
+    expected = Pair(
+        ExactFraction.TEN, listOf(
+            Sqrt(
+            ExactFraction(
+                1,
+                3
+            )
+        )
+        ))
     assertEquals(expected, Sqrt.simplifyList(numbers))
 
     // no wholes
@@ -99,7 +116,11 @@ internal fun runSimplifyListTests() {
     expected = Pair(one, listOf(Sqrt(ExactFraction(34, 33))))
     assertEquals(expected, Sqrt.simplifyList(numbers))
 
-    numbers = listOf(Sqrt(15), Sqrt(ExactFraction(1511, 119)), Sqrt(ExactFraction(1, 13)))
+    numbers = listOf(
+        Sqrt(15), Sqrt(ExactFraction(1511, 119)), Sqrt(
+        ExactFraction(1, 13)
+    )
+    )
     expected = Pair(
         one,
         listOf(Sqrt(ExactFraction(22665, 1547)))
@@ -122,7 +143,15 @@ internal fun runSimplifyListTests() {
     assertEquals(expected, Sqrt.simplifyList(numbers))
 
     numbers = listOf(Sqrt(ExactFraction(2, 15)), rootOne, Sqrt(16))
-    expected = Pair(ExactFraction.FOUR, listOf(Sqrt(ExactFraction(2, 15))))
+    expected = Pair(
+        ExactFraction.FOUR, listOf(
+            Sqrt(
+            ExactFraction(
+                2,
+                15
+            )
+        )
+        ))
     assertEquals(expected, Sqrt.simplifyList(numbers))
 
     numbers = listOf(

@@ -1,4 +1,4 @@
-package xyz.lbres.common
+package xyz.lbres.exactnumbers.common
 
 /**
  * Error to be thrown when dividing by zero

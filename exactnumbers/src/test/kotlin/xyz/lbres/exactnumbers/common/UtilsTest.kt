@@ -1,4 +1,4 @@
-package xyz.lbres.common
+package xyz.lbres.exactnumbers.common
 
 import assertDivByZero
 import xyz.lbres.kotlinutils.biginteger.ext.isZero

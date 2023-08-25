@@ -6,6 +6,8 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import xyz.lbres.exactnumbers.irrationals.common.Memoize
+import xyz.lbres.exactnumbers.irrationals.sqrt.extractWholeOf
+import xyz.lbres.exactnumbers.irrationals.sqrt.getRootOf
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.test.AfterTest

@@ -1,5 +1,6 @@
 package xyz.lbres.exactnumbers.exactfraction
 
+import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import kotlin.test.assertEquals
 
 internal fun runPlusTests() {

@@ -4,7 +4,10 @@ import assertDivByZero
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.irrationals.log.Log
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
-import xyz.lbres.expressions.term.Term
+import xyz.lbres.exactnumbers.expressions.term.Term
+import xyz.lbres.exactnumbers.irrationals.common.Irrational
+import xyz.lbres.exactnumbers.irrationals.common.div
+import xyz.lbres.exactnumbers.irrationals.common.times
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,7 +24,12 @@ internal class IrrationalOperatorsTest {
         num2 = Log(ExactFraction(5, 4), true)
         expected = Term(
             ExactFraction.ONE,
-            listOf(Log(ExactFraction(4, 5)), Log(ExactFraction(5, 4), true))
+            listOf(Log(
+                ExactFraction(
+                    4,
+                    5
+                )
+            ), Log(ExactFraction(5, 4), true))
         )
         assertEquals(expected, num1 * num2)
 
@@ -29,7 +37,11 @@ internal class IrrationalOperatorsTest {
         num2 = Log(ExactFraction(5, 4))
         expected = Term(
             ExactFraction.ONE,
-            listOf(Log(ExactFraction(4, 5), 3), Log(ExactFraction(5, 4)))
+            listOf(Log(
+                ExactFraction(
+                    4,
+                    5
+                ), 3), Log(ExactFraction(5, 4)))
         )
         assertEquals(expected, num1 * num2)
 
@@ -52,12 +64,22 @@ internal class IrrationalOperatorsTest {
         // Both
         num1 = Log(ExactFraction(25), 4)
         num2 = Pi(true)
-        expected = Term(ExactFraction.ONE, listOf(Log(ExactFraction(25), 4), Pi(true)))
+        expected = Term(
+            ExactFraction.ONE, listOf(Log(
+                ExactFraction(
+                    25
+                ), 4), Pi(true)))
         assertEquals(expected, num1 * num2)
 
         num1 = Log(ExactFraction(25, 92))
         num2 = Pi()
-        expected = Term(ExactFraction.ONE, listOf(Log(ExactFraction(25, 92)), Pi()))
+        expected = Term(
+            ExactFraction.ONE, listOf(Log(
+                ExactFraction(
+                    25,
+                    92
+                )
+            ), Pi()))
         assertEquals(expected, num1 * num2)
     }
 
@@ -69,17 +91,30 @@ internal class IrrationalOperatorsTest {
         // Log
         var num1: Irrational = Log(ExactFraction.EIGHT)
         var num2: Irrational = Log(ExactFraction(15, 4), 7)
-        var expected = Term(ExactFraction.ONE, listOf(Log(ExactFraction.EIGHT), Log(ExactFraction(15, 4), 7, true)))
+        var expected = Term(
+            ExactFraction.ONE, listOf(Log(ExactFraction.EIGHT), Log(
+                ExactFraction(15, 4), 7, true)))
         assertEquals(expected, num1 / num2)
 
         num1 = Log(ExactFraction(1, 7))
         num2 = Log(ExactFraction.FOUR, true)
-        expected = Term(ExactFraction.ONE, listOf(Log(ExactFraction(1, 7)), Log(ExactFraction.FOUR)))
+        expected = Term(
+            ExactFraction.ONE, listOf(Log(
+                ExactFraction(
+                    1,
+                    7
+                )
+            ), Log(ExactFraction.FOUR)))
         assertEquals(expected, num1 / num2)
 
         num1 = Log(ExactFraction(1, 7), true)
         num2 = Log(ExactFraction.FOUR, true)
-        expected = Term(ExactFraction.ONE, listOf(Log(ExactFraction(1, 7), true), Log(ExactFraction.FOUR)))
+        expected = Term(
+            ExactFraction.ONE, listOf(Log(
+                ExactFraction(
+                    1,
+                    7
+                ), true), Log(ExactFraction.FOUR)))
         assertEquals(expected, num1 / num2)
 
         // Pi
@@ -106,12 +141,23 @@ internal class IrrationalOperatorsTest {
 
         num1 = Pi(true)
         num2 = Log(ExactFraction(15, 7), 4)
-        expected = Term(ExactFraction.ONE, listOf(Pi(true), Log(ExactFraction(15, 7), 4, true)))
+        expected = Term(
+            ExactFraction.ONE, listOf(Pi(true), Log(
+                ExactFraction(
+                    15,
+                    7
+                ), 4, true)))
         assertEquals(expected, num1 / num2)
 
         num1 = Pi()
         num2 = Log(ExactFraction(15, 7), true)
-        expected = Term(ExactFraction.ONE, listOf(Pi(), Log(ExactFraction(15, 7))))
+        expected = Term(
+            ExactFraction.ONE, listOf(Pi(), Log(
+                ExactFraction(
+                    15,
+                    7
+                )
+            )))
         assertEquals(expected, num1 / num2)
     }
 }
