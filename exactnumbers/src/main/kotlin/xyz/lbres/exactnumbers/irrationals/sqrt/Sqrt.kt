@@ -3,10 +3,10 @@ package xyz.lbres.exactnumbers.irrationals.sqrt
 import xyz.lbres.exactnumbers.common.divideBigDecimals
 import xyz.lbres.exactnumbers.common.divideByZero
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.expressions.term.Term
 import xyz.lbres.exactnumbers.irrationals.common.Irrational
 import xyz.lbres.exactnumbers.irrationals.log.Log
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
-import xyz.lbres.exactnumbers.expressions.term.Term
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -36,15 +36,21 @@ class Sqrt private constructor(val radicand: ExactFraction, private val fullySim
     private constructor(radicand: Int, fullySimplified: Boolean) : this(
         ExactFraction(
             radicand
-        ), fullySimplified)
+        ),
+        fullySimplified
+    )
     private constructor(radicand: Long, fullySimplified: Boolean) : this(
         ExactFraction(
             radicand
-        ), fullySimplified)
+        ),
+        fullySimplified
+    )
     private constructor(radicand: BigInteger, fullySimplified: Boolean) : this(
         ExactFraction(
             radicand
-        ), fullySimplified)
+        ),
+        fullySimplified
+    )
 
     // public methods to expose general Irrational operators
     operator fun times(other: Sqrt): Term = times(other)

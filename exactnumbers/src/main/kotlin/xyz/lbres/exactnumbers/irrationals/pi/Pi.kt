@@ -2,12 +2,12 @@ package xyz.lbres.exactnumbers.irrationals.pi
 
 import xyz.lbres.exactnumbers.common.divideBigDecimals
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.exactnumbers.expressions.term.Term
 import xyz.lbres.exactnumbers.irrationals.common.Irrational
 import xyz.lbres.exactnumbers.irrationals.common.div
 import xyz.lbres.exactnumbers.irrationals.common.times
 import xyz.lbres.exactnumbers.irrationals.log.Log
 import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
-import xyz.lbres.exactnumbers.expressions.term.Term
 import java.math.BigDecimal
 import kotlin.math.PI
 import kotlin.math.abs
