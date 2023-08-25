@@ -54,7 +54,8 @@ jobs:
         with:
           api-level: 33
           profile: Nexus 6
-          target: google_apis
+          target: google_apis_playstore
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -66,6 +67,8 @@ jobs:
         with:
           api-level: 33
           profile: Nexus 6
+          target: google_apis_playstore
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
