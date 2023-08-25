@@ -151,12 +151,11 @@ dependencies {
     val androidxCoreVersion = "1.8.0"
     val appCompatVersion = "1.4.1"
     val constraintLayoutVersion = "2.1.4"
+    val exactNumbersVersion = "0.1.0"
+    val kotlinUtilsVersion = "1.0.1"
     val lifecycleVersion = "2.5.1"
     val materialVersion = "1.6.1"
     val navigationVersion = "2.5.3"
-
-    val exactNumbersVersion = "0.1.0"
-    val kotlinUtilsVersion = "1.0.1"
 
     val androidxJunitVersion = "1.1.4"
     val androidxTestVersion = "1.5.0"
