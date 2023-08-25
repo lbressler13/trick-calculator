@@ -59,12 +59,12 @@ fun getEspressoRetries(): Int {
 
 android {
     namespace = "xyz.lbres.trickcalculator"
-    compileSdk = 31
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"
-        minSdk = 29 // maximum sdk available in tester used in github actions
-        targetSdk = 31
+        minSdk = 33
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
 
