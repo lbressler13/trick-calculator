@@ -12,6 +12,7 @@ val androidxJunitVersion by extra { "1.1.4" }
 val androidxTestVersion by extra { "1.5.0" }
 val espressoVersion by extra { "3.4.0" }
 val junitVersion by extra { "4.13.2" }
+val mockkVersion by extra { "1.13.7" }
 
 buildscript {
     repositories {

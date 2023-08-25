@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("org.jlleitschuh.gradle.ktlint") version "10.3.0" // ktlint
 }
 
 android {
@@ -23,22 +24,48 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+
+    sourceSets.getByName("main") {
+        java.setSrcDirs(listOf("src/main/kotlin"))
     }
+
+    sourceSets.getByName("test") {
+        java.setSrcDirs(listOf("src/test/kotlin"))
+    }
+
+    sourceSets.getByName("androidTest") {
+        kotlin.setSrcDirs(listOf("src/espresso/kotlin"))
+        java.setSrcDirs(listOf("src/espresso/kotlin"))
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
 dependencies {
+    val androidxCoreVersion: String by rootProject.extra
+    val kotlinUtilsVersion: String by rootProject.extra
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    val androidxJunitVersion: String by rootProject.extra
+    val espressoVersion: String by rootProject.extra
+    val junitVersion: String by rootProject.extra
+    val mockkVersion: String by rootProject.extra
+
+    implementation("androidx.core:core-ktx:$androidxCoreVersion")
+    implementation("androidx.core:core-ktx:$androidxCoreVersion")
+    implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
+
+    testImplementation(kotlin("test"))
+
+    testImplementation("io.mockk:mockk-android:$mockkVersion")
+    testImplementation("io.mockk:mockk-agent:$mockkVersion")
+    testImplementation("junit:junit:$junitVersion")
+    androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
 }
