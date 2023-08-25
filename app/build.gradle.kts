@@ -5,47 +5,6 @@ plugins {
 }
 apply(plugin = "kotlin-android")
 
-val githubUsername: String? = project.findProperty("github.username")?.toString() ?: System.getenv("USERNAME")
-val githubPassword: String? = project.findProperty("github.token")?.toString() ?: System.getenv("ACCESS_TOKEN")
-
-repositories {
-    // general repositories
-    google()
-    mavenCentral()
-
-    // kotlin utils
-    exclusiveContent {
-        forRepository {
-            maven {
-                url = uri("https://maven.pkg.github.com/lbressler13/kotlin-utils")
-                credentials {
-                    username = githubUsername
-                    password = githubPassword
-                }
-            }
-        }
-        filter {
-            includeModule("xyz.lbres", "kotlin-utils")
-        }
-    }
-
-    // exact numbers
-    exclusiveContent {
-        forRepository {
-            maven {
-                url = uri("https://maven.pkg.github.com/lbressler13/exact-numbers")
-                credentials {
-                    username = githubUsername
-                    password = githubPassword
-                }
-            }
-        }
-        filter {
-            includeModule("xyz.lbres", "exact-numbers")
-        }
-    }
-}
-
 fun getEspressoRetries(): Int {
     val defaultRetries = 0
 
@@ -59,12 +18,14 @@ fun getEspressoRetries(): Int {
 
 android {
     namespace = "xyz.lbres.trickcalculator"
-    compileSdk = 31
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"
-        minSdk = 29 // maximum sdk available in tester used in github actions
-        targetSdk = 31
+        // TODO
+        // minSdk = 29 // maximum sdk available in tester used in github actions
+        minSdk = 33
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
 
@@ -148,19 +109,18 @@ android {
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
-    val androidxCoreVersion = "1.8.0"
-    val appCompatVersion = "1.4.1"
-    val constraintLayoutVersion = "2.1.4"
-    val exactNumbersVersion = "0.1.0"
-    val kotlinUtilsVersion = "1.0.1"
-    val lifecycleVersion = "2.5.1"
-    val materialVersion = "1.6.1"
-    val navigationVersion = "2.5.3"
+    val androidxCoreVersion: String by rootProject.extra
+    val appCompatVersion: String by rootProject.extra
+    val constraintLayoutVersion: String by rootProject.extra
+    val kotlinUtilsVersion: String by rootProject.extra
+    val lifecycleVersion: String by rootProject.extra
+    val materialVersion: String by rootProject.extra
+    val navigationVersion: String by rootProject.extra
 
-    val androidxJunitVersion = "1.1.4"
-    val androidxTestVersion = "1.5.0"
-    val espressoVersion = "3.4.0"
-    val junitVersion = "4.13.2"
+    val androidxJunitVersion: String by rootProject.extra
+    val androidxTestVersion: String by rootProject.extra
+    val espressoVersion: String by rootProject.extra
+    val junitVersion: String by rootProject.extra
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -171,8 +131,9 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
     implementation("com.google.android.material:material:$materialVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
-    implementation("xyz.lbres:exact-numbers:$exactNumbersVersion")
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
+
+    implementation(project(":exactnumbers"))
 
     // testing
     testImplementation("junit:junit:$junitVersion")
