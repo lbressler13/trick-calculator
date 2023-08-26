@@ -35,9 +35,7 @@ jobs:
           api-level: 33
           profile: Nexus 6
           target: google_apis_playstore
-          # arch: x86_64
-          # force-avd-creation: false
-          # emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          arch: x86_64
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace -PespressoRetries=3
