@@ -6,8 +6,8 @@ on:
   push: # TODO remove this
 
 jobs:
-  test:
-    name: Run Tests
+  final-tests:
+    name: Espresso Tests (final build flavor)
 
     runs-on: macos-latest
     env:
@@ -28,26 +28,6 @@ jobs:
       - name: Gradle Cache
         uses: gradle/gradle-build-action@v2.4.2
 
-#      - name: AVD Cache
-#        uses: actions/cache@v3
-#        id: avd-cache
-#        with:
-#          path: |
-#            ~/.android/avd/*
-#            ~/.android/adb*
-#          key: avd-33
-#
-#      - name: Create AVD and Generate Snapshot
-#        if: steps.avd-cache.outputs.cache-hit != 'true'
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: 33
-#          profile: Nexus 6
-#          force-avd-creation: false
-#          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#          disable-animations: false
-#          script: echo "Generated AVD snapshot for caching."
-
       - name: Run Tests on Final Flavor
         timeout-minutes: 60
         uses: reactivecircus/android-emulator-runner@v2
@@ -55,22 +35,114 @@ jobs:
           api-level: 33
           profile: Nexus 6
           target: google_apis_playstore
-          arch: x86_64
+          # arch: x86_64
           # force-avd-creation: false
           # emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace -PespressoRetries=3
 
-#      - name: Run Tests on Dev Flavor
-#        timeout-minutes: 75
+  dev-tests:
+    name: Espresso Tests (dev build flavor)
+
+    runs-on: macos-latest
+    needs: final-tests
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      ACCESS_TOKEN: ${{ secrets.TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Java Version
+        uses: actions/setup-java@v3
+        with:
+          distribution: corretto
+          java-version: 11
+          cache: gradle
+
+      - name: Gradle Cache
+        uses: gradle/gradle-build-action@v2.4.2
+
+      - name: Run Tests on Dev Flavor
+        timeout-minutes: 60
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          profile: Nexus 6
+          target: google_apis_playstore
+          arch: x86_64
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace -PespressoRetries=3
+
+
+#  test:
+#    name: Run Tests
+#
+#    runs-on: macos-latest
+#    env:
+#      USERNAME: ${{ secrets.USERNAME }}
+#      ACCESS_TOKEN: ${{ secrets.TOKEN }}
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Set Java Version
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: corretto
+#          java-version: 11
+#          cache: gradle
+#
+#      - name: Gradle Cache
+#        uses: gradle/gradle-build-action@v2.4.2
+#
+##      - name: AVD Cache
+##        uses: actions/cache@v3
+##        id: avd-cache
+##        with:
+##          path: |
+##            ~/.android/avd/*
+##            ~/.android/adb*
+##          key: avd-33
+##
+##      - name: Create AVD and Generate Snapshot
+##        if: steps.avd-cache.outputs.cache-hit != 'true'
+##        uses: reactivecircus/android-emulator-runner@v2
+##        with:
+##          api-level: 33
+##          profile: Nexus 6
+##          force-avd-creation: false
+##          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+##          disable-animations: false
+##          script: echo "Generated AVD snapshot for caching."
+#
+#      - name: Run Tests on Final Flavor
+#        timeout-minutes: 60
 #        uses: reactivecircus/android-emulator-runner@v2
 #        with:
 #          api-level: 33
 #          profile: Nexus 6
 #          target: google_apis_playstore
 #          arch: x86_64
-#          force-avd-creation: false
+#          # force-avd-creation: false
+#          # emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
 #          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
 #          disable-animations: true
-#          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace -PespressoRetries=3
+#          script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace -PespressoRetries=3
+#
+##      - name: Run Tests on Dev Flavor
+##        timeout-minutes: 75
+##        uses: reactivecircus/android-emulator-runner@v2
+##        with:
+##          api-level: 33
+##          profile: Nexus 6
+##          target: google_apis_playstore
+##          arch: x86_64
+##          force-avd-creation: false
+##          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+##          disable-animations: true
+##          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace -PespressoRetries=3
