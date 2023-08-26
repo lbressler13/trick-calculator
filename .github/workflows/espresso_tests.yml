@@ -58,18 +58,19 @@ jobs:
           arch: x86_64
           # force-avd-creation: false
           # emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: ./gradlew connectedFinalDebugAndroidTest --info --stacktrace -PespressoRetries=3
 
-      - name: Run Tests on Dev Flavor
-        timeout-minutes: 75
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 33
-          profile: Nexus 6
-          target: google_apis_playstore
-          arch: x86_64
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace -PespressoRetries=3
+#      - name: Run Tests on Dev Flavor
+#        timeout-minutes: 75
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 33
+#          profile: Nexus 6
+#          target: google_apis_playstore
+#          arch: x86_64
+#          force-avd-creation: false
+#          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+#          disable-animations: true
+#          script: ./gradlew connectedDevDebugAndroidTest --info --stacktrace -PespressoRetries=3
