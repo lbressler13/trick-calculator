@@ -22,9 +22,7 @@ android {
 
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"
-        // TODO
-        // minSdk = 29 // maximum sdk available in tester used in github actions
-        minSdk = 33
+        minSdk = 29
         targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"

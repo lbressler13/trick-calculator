@@ -9,8 +9,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        // minSdk = 29
-        minSdk = 33
+        minSdk = 29
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
