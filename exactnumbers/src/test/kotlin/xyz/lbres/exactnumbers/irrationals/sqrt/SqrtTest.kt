@@ -18,7 +18,7 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-internal class SqrtTest {
+class SqrtTest {
     @BeforeTest
     fun setupMockk() {
         mockkObject(Memoize)
@@ -31,7 +31,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testConstructor() {
+    fun testConstructor() {
         // errors
         val expectedMessage = "Cannot calculate root of a negative number"
         assertFailsWith<ArithmeticException>(expectedMessage) { Sqrt(-ExactFraction.EIGHT) }
@@ -63,7 +63,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testIsZero() {
+    fun testIsZero() {
         // zero
         var sqrt = Sqrt.ZERO
         assertTrue(sqrt.isZero())
@@ -83,7 +83,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testSwapDivided() {
+    fun testSwapDivided() {
         // error
         assertDivByZero { Sqrt.ZERO.swapDivided() }
 
@@ -106,7 +106,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testIsRational() {
+    fun testIsRational() {
         // rational
         var sqrt = Sqrt.ZERO
         assertTrue(sqrt.isRational())
@@ -135,7 +135,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testGetRationalValue() {
+    fun testGetRationalValue() {
         // irrational
         var sqrt = Sqrt(2)
         assertNull(sqrt.getRationalValue())
@@ -173,7 +173,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun getValue() {
+    fun getValue() {
         var sqrt = Sqrt.ZERO
         var expected = BigDecimal.ZERO
         assertEquals(expected, sqrt.getValue())
@@ -208,7 +208,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testEquals() {
+    fun testEquals() {
         // equal
         var sqrt1 = Sqrt.ZERO
         assertEquals(sqrt1, sqrt1)
@@ -242,7 +242,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testGetSimplified() {
+    fun testGetSimplified() {
         val one = ExactFraction.ONE
 
         // rational
@@ -268,24 +268,11 @@ internal class SqrtTest {
         assertEquals(expected, sqrt.getSimplified())
 
         sqrt = Sqrt(3000)
-        expected = Pair(
-            ExactFraction.TEN,
-            Sqrt(
-                ExactFraction(
-                    30
-                )
-            )
-        )
+        expected = Pair(ExactFraction.TEN, Sqrt(ExactFraction(30)))
         assertEquals(expected, sqrt.getSimplified())
 
         sqrt = Sqrt(ExactFraction(50, 27))
-        expected = Pair(
-            ExactFraction(
-                5,
-                3
-            ),
-            Sqrt(ExactFraction(2, 3))
-        )
+        expected = Pair(ExactFraction(5, 3), Sqrt(ExactFraction(2, 3)))
         assertEquals(expected, sqrt.getSimplified())
 
         // no whole
@@ -303,7 +290,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testCompareTo() {
+    fun testCompareTo() {
         // equal
         var sqrt1 = Sqrt.ZERO
         assertEquals(sqrt1, sqrt1)
@@ -334,7 +321,7 @@ internal class SqrtTest {
     }
 
     @Test
-    internal fun testToString() {
+    fun testToString() {
         val symbol = "√"
 
         // whole number
@@ -360,5 +347,5 @@ internal class SqrtTest {
         assertEquals(expected, sqrt.toString())
     }
 
-    @Test internal fun testSimplifyList() = runSimplifyListTests()
+    @Test fun testSimplifyList() = runSimplifyListTests()
 }

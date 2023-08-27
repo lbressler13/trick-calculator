@@ -4,7 +4,7 @@ import java.math.BigInteger
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-internal fun runEqualsTests() {
+fun runEqualsTests() {
     assertEquals(ExactFraction(0, 1), ExactFraction(0, 1))
     assertEquals(ExactFraction(-1, 3), ExactFraction(-1, 3))
     assertEquals(ExactFraction(5, 2), ExactFraction(5, 2))
@@ -13,7 +13,7 @@ internal fun runEqualsTests() {
     assertNotEquals(ExactFraction(2, 3), ExactFraction(3, 2))
 }
 
-internal fun runEqTests() {
+fun runEqTests() {
     var ef = ExactFraction(0)
     assert(ef.eq(0))
     assert(ef.eq(0L))

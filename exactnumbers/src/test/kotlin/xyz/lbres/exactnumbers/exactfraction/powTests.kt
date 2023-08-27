@@ -5,7 +5,7 @@ import xyz.lbres.exactnumbers.ext.toExactFraction
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-internal fun runPowTests() {
+fun runPowTests() {
     var base = ExactFraction.NINE
     var exp = ExactFraction.ZERO
     var expected = ExactFraction.ONE

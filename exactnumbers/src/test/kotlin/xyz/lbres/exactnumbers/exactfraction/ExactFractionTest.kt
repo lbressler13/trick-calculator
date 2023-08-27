@@ -2,7 +2,7 @@ package xyz.lbres.exactnumbers.exactfraction
 
 import kotlin.test.Test
 
-internal class ExactFractionTest {
+class ExactFractionTest {
     // all constructors
     @Test fun testConstructor() = runConstructorTests()
 

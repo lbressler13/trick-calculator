@@ -3,7 +3,7 @@ package xyz.lbres.exactnumbers.exactfraction
 import java.math.BigInteger
 import kotlin.test.assertEquals
 
-internal fun runTimesTests() {
+fun runTimesTests() {
     // zero
     var first = ExactFraction(0)
     var second = ExactFraction(0)

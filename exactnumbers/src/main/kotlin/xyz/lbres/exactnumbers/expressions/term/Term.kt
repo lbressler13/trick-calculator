@@ -24,7 +24,7 @@ class Term internal constructor(coefficient: ExactFraction, numbers: List<Irrati
     init {
         if (coefficient.isZero() || numbers.any { it.isZero() }) {
             this.coefficient = ExactFraction.ZERO
-            this.numbers = listOf()
+            this.numbers = emptyList()
         } else {
             this.coefficient = coefficient
             this.numbers = numbers
@@ -73,9 +73,9 @@ class Term internal constructor(coefficient: ExactFraction, numbers: List<Irrati
      */
     fun getSimplified(): Term {
         val groups = numbers.groupBy { it.type }
-        val logs = Log.simplifyList(groups[Log.TYPE] ?: listOf())
-        val pis = Pi.simplifyList(groups[Pi.TYPE] ?: listOf())
-        val sqrts = Sqrt.simplifyList(groups[Sqrt.TYPE] ?: listOf())
+        val logs = Log.simplifyList(groups[Log.TYPE] ?: emptyList())
+        val pis = Pi.simplifyList(groups[Pi.TYPE] ?: emptyList())
+        val sqrts = Sqrt.simplifyList(groups[Sqrt.TYPE] ?: emptyList())
         val newCoefficient = coefficient * logs.first * sqrts.first
         val newNumbers = logs.second + sqrts.second + pis
 
@@ -138,8 +138,8 @@ class Term internal constructor(coefficient: ExactFraction, numbers: List<Irrati
     override fun hashCode(): Int = listOf("Term", coefficient, numbers).hashCode()
 
     companion object {
-        val ZERO = Term(ExactFraction.ZERO, listOf())
-        val ONE = Term(ExactFraction.ONE, listOf())
+        val ZERO = Term(ExactFraction.ZERO, emptyList())
+        val ONE = Term(ExactFraction.ONE, emptyList())
 
         /**
          * Public method of constructing a Term, by providing information about irrationals

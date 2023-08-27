@@ -2,7 +2,7 @@ package xyz.lbres.exactnumbers.exactfraction
 
 import xyz.lbres.exactnumbers.ext.eq
 
-internal fun runSimplifyTests() {
+fun runSimplifyTests() {
     runSimplifyZeroTests()
     runSimplifyGCDTests()
     runSimplifySignTests()

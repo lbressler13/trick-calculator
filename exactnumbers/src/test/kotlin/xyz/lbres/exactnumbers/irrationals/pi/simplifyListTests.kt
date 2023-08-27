@@ -9,11 +9,11 @@ internal fun runSimplifyListTests() {
     assertFailsWith<ClassCastException> { Pi.simplifyList(listOf(Pi(), Log.ONE)) }
 
     // equal
-    var expected: List<Pi> = listOf()
+    var expected: List<Pi> = emptyList()
 
     assertEquals(expected, Pi.simplifyList(null))
 
-    var pis: List<Pi> = listOf()
+    var pis: List<Pi> = emptyList()
     assertEquals(expected, Pi.simplifyList(pis))
 
     pis = listOf(Pi(), Pi(true))

@@ -10,29 +10,29 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
-internal class TermTest {
+class TermTest {
     private val logNum1 = Log(ExactFraction(15, 4))
     private val logNum2 = Log(8, 7)
     private val logNum3 = Log(ExactFraction(19, 33), true)
     private val logNum4 = Log(ExactFraction(25, 121))
     private val one = ExactFraction.ONE
 
-    @Test internal fun testConstructor() = runConstructorTests()
-    @Test internal fun testFromValues() = runFromValuesTests()
+    @Test fun testConstructor() = runConstructorTests()
+    @Test fun testFromValues() = runFromValuesTests()
 
-    @Test internal fun testTimes() = runTimesTests()
-    @Test internal fun testDiv() = runDivTests()
+    @Test fun testTimes() = runTimesTests()
+    @Test fun testDiv() = runDivTests()
 
-    @Test internal fun testGetSimplified() = runGetSimplifiedTests()
-    @Test internal fun testGetValue() = runGetValueTests()
+    @Test fun testGetSimplified() = runGetSimplifiedTests()
+    @Test fun testGetValue() = runGetValueTests()
 
     @Test
-    internal fun testEquals() {
+    fun testEquals() {
         // equal
         var term1 = Term.ZERO
         assertEquals(term1, term1)
 
-        term1 = Term(ExactFraction(-17, 4), listOf())
+        term1 = Term(ExactFraction(-17, 4), emptyList())
         assertEquals(term1, term1)
 
         term1 = Term(one, listOf(logNum1, logNum2))
@@ -50,18 +50,18 @@ internal class TermTest {
         assertEquals(term2, term1)
 
         // not equal
-        term1 = Term(one, listOf())
-        term2 = Term(ExactFraction.NEG_ONE, listOf())
+        term1 = Term(one, emptyList())
+        term2 = Term(ExactFraction.NEG_ONE, emptyList())
         assertNotEquals(term1, term2)
         assertNotEquals(term2, term1)
 
-        term1 = Term(ExactFraction.TWO, listOf())
-        term2 = Term(ExactFraction.HALF, listOf())
+        term1 = Term(ExactFraction.TWO, emptyList())
+        term2 = Term(ExactFraction.HALF, emptyList())
         assertNotEquals(term1, term2)
         assertNotEquals(term2, term1)
 
         term1 = Term(one, listOf(logNum1))
-        term2 = Term(one, listOf())
+        term2 = Term(one, emptyList())
         assertNotEquals(term1, term2)
         assertNotEquals(term2, term1)
 
@@ -76,7 +76,7 @@ internal class TermTest {
         assertNotEquals(term2, term1)
 
         term1 = Term(one, listOf(Pi()))
-        term2 = Term(one, listOf())
+        term2 = Term(one, emptyList())
         assertNotEquals(term1, term2)
         assertNotEquals(term2, term1)
 
@@ -91,7 +91,7 @@ internal class TermTest {
         assertNotEquals(term2, term1)
 
         term1 = Term(one, listOf(Sqrt(12)))
-        term2 = Term(one, listOf())
+        term2 = Term(one, emptyList())
         assertNotEquals(term1, term2)
         assertNotEquals(term2, term1)
 
@@ -122,7 +122,7 @@ internal class TermTest {
     }
 
     @Test
-    internal fun testUnaryMinus() {
+    fun testUnaryMinus() {
         var term = Term.ZERO
         var expected = Term.ZERO
         assertEquals(expected, -term)
@@ -143,8 +143,8 @@ internal class TermTest {
         expected = Term(ExactFraction.SIX, listOf(logNum3, logNum4, Pi(true), Sqrt(36)))
         assertEquals(expected, -term)
 
-        term = Term(ExactFraction(15, 44), listOf())
-        expected = Term(ExactFraction(-15, 44), listOf())
+        term = Term(ExactFraction(15, 44), emptyList())
+        expected = Term(ExactFraction(-15, 44), emptyList())
         assertEquals(expected, -term)
 
         term = Term(
@@ -167,7 +167,7 @@ internal class TermTest {
     }
 
     @Test
-    internal fun testUnaryPlus() {
+    fun testUnaryPlus() {
         var term = Term.ZERO
         assertEquals(term, +term)
 
@@ -183,7 +183,7 @@ internal class TermTest {
         term = Term(-ExactFraction.SIX, listOf(logNum3, Sqrt(121), logNum4, Pi(true)))
         assertEquals(term, +term)
 
-        term = Term(ExactFraction(15, 44), listOf())
+        term = Term(ExactFraction(15, 44), emptyList())
         assertEquals(term, +term)
 
         term = Term(
@@ -194,7 +194,7 @@ internal class TermTest {
     }
 
     @Test
-    internal fun testIsZero() {
+    fun testIsZero() {
         // zero
         var term = Term.ZERO
         assertTrue(term.isZero())
@@ -225,23 +225,23 @@ internal class TermTest {
         assertFalse(term.isZero())
     }
 
-    @Test internal fun testGetLogs() = runGetLogsTests()
-    @Test internal fun testGetPiCount() = runGetPiCountTests()
-    @Test internal fun testGetSquareRoots() = runGetSquareRootsTests()
+    @Test fun testGetLogs() = runGetLogsTests()
+    @Test fun testGetPiCount() = runGetPiCountTests()
+    @Test fun testGetSquareRoots() = runGetSquareRootsTests()
 
     @Test
-    internal fun testToString() {
+    fun testToString() {
         // zero
         var term = Term.ZERO
         var expected = "<0>"
         assertEquals(expected, term.toString())
 
         // just coefficient
-        term = Term(ExactFraction(-25), listOf())
+        term = Term(ExactFraction(-25), emptyList())
         expected = "<-25>"
         assertEquals(expected, term.toString())
 
-        term = Term(ExactFraction(44, 7), listOf())
+        term = Term(ExactFraction(44, 7), emptyList())
         expected = "<[44/7]>"
         assertEquals(expected, term.toString())
 

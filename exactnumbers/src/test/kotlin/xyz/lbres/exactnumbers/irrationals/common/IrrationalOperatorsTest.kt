@@ -8,9 +8,9 @@ import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class IrrationalOperatorsTest {
+class IrrationalOperatorsTest {
     @Test
-    internal fun testTimes() {
+    fun testTimes() {
         // Log
         var num1: Irrational = Log.ZERO
         var num2: Irrational = Log.ZERO
@@ -32,10 +32,7 @@ internal class IrrationalOperatorsTest {
         num2 = Log(ExactFraction(5, 4))
         expected = Term(
             ExactFraction.ONE,
-            listOf(
-                Log(ExactFraction(4, 5), 3),
-                Log(ExactFraction(5, 4))
-            )
+            listOf(Log(ExactFraction(4, 5), 3), Log(ExactFraction(5, 4)))
         )
         assertEquals(expected, num1 * num2)
 
@@ -74,7 +71,7 @@ internal class IrrationalOperatorsTest {
     }
 
     @Test
-    internal fun testDiv() {
+    fun testDiv() {
         // error
         assertDivByZero { Log.ONE / Log.ZERO }
 

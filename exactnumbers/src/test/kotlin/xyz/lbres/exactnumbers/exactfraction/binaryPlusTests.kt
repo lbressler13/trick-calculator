@@ -2,7 +2,7 @@ package xyz.lbres.exactnumbers.exactfraction
 
 import kotlin.test.assertEquals
 
-internal fun runPlusTests() {
+ fun runPlusTests() {
     // add zero
     var first = ExactFraction(0)
     var second = ExactFraction(0)

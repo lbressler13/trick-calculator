@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-internal fun runGetValueTests() {
+fun runGetValueTests() {
     // base 10
     var logNum = Log(ExactFraction.ONE)
     var expected = 0.toBigDecimal()
@@ -75,7 +75,7 @@ internal fun runGetValueTests() {
     assertEquals(expected, logNum.getValue())
 }
 
-internal fun runGetRationalValueTests() {
+fun runGetRationalValueTests() {
     // irrational
     var logNum = Log(6)
     assertNull(logNum.getRationalValue())

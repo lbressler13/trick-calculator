@@ -12,7 +12,7 @@ import kotlin.test.assertFailsWith
  *
  * @param function [() -> Unit]: the code to run
  */
-internal fun assertDivByZero(function: () -> Unit) {
+fun assertDivByZero(function: () -> Unit) {
     assertFailsWith<ArithmeticException>("divide by zero") { function() }
 }
 
@@ -23,7 +23,7 @@ internal fun assertDivByZero(function: () -> Unit) {
  * @param value [ExactFraction]: the value to cast
  * @param cast [() -> Unit]: the call to cast the value
  */
-internal fun assertExactFractionOverflow(type: String, value: ExactFraction, cast: () -> Unit) {
+fun assertExactFractionOverflow(type: String, value: ExactFraction, cast: () -> Unit) {
     val errorMessage = "Overflow when casting to $type"
     val error = assertFailsWith<ExactFractionOverflowException>(errorMessage) { cast() }
     assertEquals(value.toFractionString(), error.overflowValue)

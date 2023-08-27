@@ -10,6 +10,7 @@ import xyz.lbres.exactnumbers.irrationals.common.times
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
 import xyz.lbres.kotlinutils.biginteger.ext.isZero
+import xyz.lbres.kotlinutils.general.simpleIf
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -46,62 +47,17 @@ class Log private constructor(
     constructor(argument: ExactFraction, base: Int, isDivided: Boolean) : this(argument, base, isDivided, false)
 
     constructor(argument: Int) : this(ExactFraction(argument))
-    constructor(argument: Int, base: Int) : this(
-        ExactFraction(
-            argument
-        ),
-        base
-    )
-    constructor(argument: Int, isDivided: Boolean) : this(
-        ExactFraction(
-            argument
-        ),
-        isDivided
-    )
-    constructor(argument: Int, base: Int, isDivided: Boolean) : this(
-        ExactFraction(
-            argument
-        ),
-        base, isDivided
-    )
+    constructor(argument: Int, base: Int) : this(ExactFraction(argument), base)
+    constructor(argument: Int, isDivided: Boolean) : this(ExactFraction(argument), isDivided)
+    constructor(argument: Int, base: Int, isDivided: Boolean) : this(ExactFraction(argument), base, isDivided)
     constructor(argument: Long) : this(ExactFraction(argument))
-    constructor(argument: Long, base: Int) : this(
-        ExactFraction(
-            argument
-        ),
-        base
-    )
-    constructor(argument: Long, isDivided: Boolean) : this(
-        ExactFraction(
-            argument
-        ),
-        isDivided
-    )
-    constructor(argument: Long, base: Int, isDivided: Boolean) : this(
-        ExactFraction(
-            argument
-        ),
-        base, isDivided
-    )
+    constructor(argument: Long, base: Int) : this(ExactFraction(argument), base)
+    constructor(argument: Long, isDivided: Boolean) : this(ExactFraction(argument), isDivided)
+    constructor(argument: Long, base: Int, isDivided: Boolean) : this(ExactFraction(argument), base, isDivided)
     constructor(argument: BigInteger) : this(ExactFraction(argument))
-    constructor(argument: BigInteger, base: Int) : this(
-        ExactFraction(
-            argument
-        ),
-        base
-    )
-    constructor(argument: BigInteger, isDivided: Boolean) : this(
-        ExactFraction(
-            argument
-        ),
-        isDivided
-    )
-    constructor(argument: BigInteger, base: Int, isDivided: Boolean) : this(
-        ExactFraction(
-            argument
-        ),
-        base, isDivided
-    )
+    constructor(argument: BigInteger, base: Int) : this(ExactFraction(argument), base)
+    constructor(argument: BigInteger, isDivided: Boolean) : this(ExactFraction(argument), isDivided)
+    constructor(argument: BigInteger, base: Int, isDivided: Boolean) : this(ExactFraction(argument), base, isDivided)
 
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is Log) {
@@ -159,11 +115,7 @@ class Log private constructor(
             else -> ExactFraction(numLog, denomLog)
         }
 
-        return if (isDivided) {
-            result.inverse()
-        } else {
-            result
-        }
+        return simpleIf(isDivided, { result.inverse() }, { result })
     }
 
     /**
@@ -244,14 +196,14 @@ class Log private constructor(
         // TODO: improve simplification by looking at bases
         internal fun simplifyList(numbers: List<Irrational>?): Pair<ExactFraction, List<Log>> {
             if (numbers.isNullOrEmpty()) {
-                return Pair(ExactFraction.ONE, listOf())
+                return Pair(ExactFraction.ONE, emptyList())
             }
 
             @Suppress("UNCHECKED_CAST")
             numbers as List<Log>
 
             if (numbers.any(Log::isZero)) {
-                return Pair(ExactFraction.ZERO, listOf())
+                return Pair(ExactFraction.ZERO, emptyList())
             }
 
             val simplifiedNums = numbers.map { it.getSimplified() }
@@ -261,24 +213,19 @@ class Log private constructor(
                 .groupBy { Pair(it.argument, it.base) }
                 .flatMap { pair ->
                     if (Log(pair.key.first, pair.key.second) == ONE) {
-                        listOf()
+                        emptyList()
                     } else {
                         val currentLogs = pair.value
                         val countDivided = currentLogs.count { it.isDivided }
                         val countNotDivided = currentLogs.size - countDivided
 
                         when {
-                            countDivided == countNotDivided -> listOf()
+                            countDivided == countNotDivided -> emptyList()
                             countDivided > countNotDivided -> List(countDivided - countNotDivided) {
                                 Log(pair.key.first, pair.key.second, isDivided = true, fullySimplified = true)
                             }
                             else -> List(countNotDivided - countDivided) {
-                                Log(
-                                    pair.key.first,
-                                    pair.key.second,
-                                    isDivided = false,
-                                    fullySimplified = true
-                                )
+                                Log(pair.key.first, pair.key.second, isDivided = false, fullySimplified = true)
                             }
                         }
                     }

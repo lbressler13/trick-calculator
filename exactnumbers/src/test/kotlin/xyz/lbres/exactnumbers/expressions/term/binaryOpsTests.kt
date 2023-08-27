@@ -16,7 +16,7 @@ private val sqrt2 = Sqrt(ExactFraction(64, 121))
 private val sqrt3 = Sqrt(ExactFraction(15, 44))
 private val one = ExactFraction.ONE
 
-internal fun runTimesTests() {
+fun runTimesTests() {
     // zero
     var term1 = Term.ZERO
     var expected = Term.ZERO
@@ -25,7 +25,7 @@ internal fun runTimesTests() {
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
 
-    term2 = Term(ExactFraction.EIGHT, listOf())
+    term2 = Term(ExactFraction.EIGHT, emptyList())
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
 
@@ -35,7 +35,7 @@ internal fun runTimesTests() {
 
     // just logs
     term1 = Term(one, listOf(logNum1, logNum2, logNum3))
-    term2 = Term(one, listOf())
+    term2 = Term(one, emptyList())
     expected = Term(one, listOf(logNum1, logNum2, logNum3))
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
@@ -48,7 +48,7 @@ internal fun runTimesTests() {
 
     // just pi
     term1 = Term(one, listOf(Pi(), Pi()))
-    term2 = Term(one, listOf())
+    term2 = Term(one, emptyList())
     expected = Term(one, listOf(Pi(), Pi()))
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
@@ -67,7 +67,7 @@ internal fun runTimesTests() {
 
     // just sqrt
     term1 = Term(one, listOf(Sqrt(ExactFraction(19, 9)), sqrt1))
-    term2 = Term(one, listOf())
+    term2 = Term(one, emptyList())
     expected = Term(one, listOf(Sqrt(ExactFraction(19, 9)), sqrt1))
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
@@ -85,21 +85,21 @@ internal fun runTimesTests() {
     assertEquals(expected, term2 * term1)
 
     // just exact fraction
-    term1 = Term(one, listOf())
-    term2 = Term(ExactFraction.TWO, listOf())
-    expected = Term(ExactFraction.TWO, listOf())
+    term1 = Term(one, emptyList())
+    term2 = Term(ExactFraction.TWO, emptyList())
+    expected = Term(ExactFraction.TWO, emptyList())
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
 
-    term1 = Term(one, listOf())
-    term2 = Term(ExactFraction(-17, 3), listOf())
-    expected = Term(ExactFraction(-17, 3), listOf())
+    term1 = Term(one, emptyList())
+    term2 = Term(ExactFraction(-17, 3), emptyList())
+    expected = Term(ExactFraction(-17, 3), emptyList())
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
 
-    term1 = Term(ExactFraction.SEVEN, listOf())
-    term2 = Term(ExactFraction.HALF, listOf())
-    expected = Term(ExactFraction(7, 2), listOf())
+    term1 = Term(ExactFraction.SEVEN, emptyList())
+    term2 = Term(ExactFraction.HALF, emptyList())
+    expected = Term(ExactFraction(7, 2), emptyList())
     assertEquals(expected, term1 * term2)
     assertEquals(expected, term2 * term1)
 
@@ -120,7 +120,7 @@ internal fun runTimesTests() {
     assertEquals(expected, term2 * term1)
 }
 
-internal fun runDivTests() {
+fun runDivTests() {
     // divide by zero
     assertDivByZero { Term.ONE / Term.ZERO }
 
@@ -132,11 +132,11 @@ internal fun runDivTests() {
 
     // just logs
     term1 = Term(one, listOf(logNum1, logNum2, logNum3))
-    term2 = Term(one, listOf())
+    term2 = Term(one, emptyList())
     expected = Term(one, listOf(logNum1, logNum2, logNum3))
     assertEquals(expected, term1 / term2)
 
-    term1 = Term(one, listOf())
+    term1 = Term(one, emptyList())
     term2 = Term(one, listOf(logNum1, logNum2, logNum3))
     expected = Term(one, listOf(logNum1.swapDivided(), logNum2.swapDivided(), logNum3.swapDivided()))
     assertEquals(expected, term1 / term2)
@@ -148,11 +148,11 @@ internal fun runDivTests() {
 
     // just pi
     term1 = Term(one, listOf(Pi()))
-    term2 = Term(one, listOf())
+    term2 = Term(one, emptyList())
     expected = Term(one, listOf(Pi()))
     assertEquals(expected, term1 / term2)
 
-    term1 = Term(one, listOf())
+    term1 = Term(one, emptyList())
     term2 = Term(one, listOf(Pi()))
     expected = Term(one, listOf(Pi().swapDivided()))
     assertEquals(expected, term1 / term2)
@@ -164,11 +164,11 @@ internal fun runDivTests() {
 
     // just sqrt
     term1 = Term(one, listOf(sqrt1, sqrt2, sqrt3))
-    term2 = Term(one, listOf())
+    term2 = Term(one, emptyList())
     expected = Term(one, listOf(sqrt1, sqrt2, sqrt3))
     assertEquals(expected, term1 / term2)
 
-    term1 = Term(one, listOf())
+    term1 = Term(one, emptyList())
     term2 = Term(one, listOf(sqrt1, sqrt2, sqrt3))
     expected = Term(one, listOf(sqrt1.swapDivided(), sqrt2.swapDivided(), sqrt3.swapDivided()))
     assertEquals(expected, term1 / term2)
@@ -179,19 +179,19 @@ internal fun runDivTests() {
     assertEquals(expected, term1 / term2)
 
     // just exact fraction
-    term1 = Term(ExactFraction(-4, 3), listOf())
-    term2 = Term(one, listOf())
-    expected = Term(ExactFraction(-4, 3), listOf())
+    term1 = Term(ExactFraction(-4, 3), emptyList())
+    term2 = Term(one, emptyList())
+    expected = Term(ExactFraction(-4, 3), emptyList())
     assertEquals(expected, term1 / term2)
 
-    term1 = Term(one, listOf())
-    term2 = Term(ExactFraction.TWO, listOf())
-    expected = Term(ExactFraction.HALF, listOf())
+    term1 = Term(one, emptyList())
+    term2 = Term(ExactFraction.TWO, emptyList())
+    expected = Term(ExactFraction.HALF, emptyList())
     assertEquals(expected, term1 / term2)
 
-    term1 = Term(ExactFraction(-5, 2), listOf())
-    term2 = Term(ExactFraction(3, 4), listOf())
-    expected = Term(ExactFraction(-10, 3), listOf())
+    term1 = Term(ExactFraction(-5, 2), emptyList())
+    term2 = Term(ExactFraction(3, 4), emptyList())
+    expected = Term(ExactFraction(-10, 3), emptyList())
     assertEquals(expected, term1 / term2)
 
     // mix
