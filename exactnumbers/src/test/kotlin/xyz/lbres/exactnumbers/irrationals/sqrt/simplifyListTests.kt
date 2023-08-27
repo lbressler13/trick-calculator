@@ -91,7 +91,7 @@ internal fun runSimplifyListTests() {
         Sqrt(15),
         Sqrt(4)
     )
-    expected = Pair( ExactFraction.TEN, listOf(Sqrt(ExactFraction(1, 3))))
+    expected = Pair(ExactFraction.TEN, listOf(Sqrt(ExactFraction(1, 3))))
     assertEquals(expected, Sqrt.simplifyList(numbers))
 
     // no wholes

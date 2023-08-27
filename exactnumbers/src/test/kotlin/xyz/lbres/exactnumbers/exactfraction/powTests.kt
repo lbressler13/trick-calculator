@@ -1,6 +1,6 @@
 package xyz.lbres.exactnumbers.exactfraction
 
-import xyz.lbres.exactnumbers.common.NumberOverflowException
+import xyz.lbres.exactnumbers.exception.NumberOverflowException
 import xyz.lbres.exactnumbers.ext.toExactFraction
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

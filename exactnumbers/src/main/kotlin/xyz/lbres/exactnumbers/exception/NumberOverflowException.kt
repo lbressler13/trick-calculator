@@ -1,6 +1,4 @@
-package xyz.lbres.exactnumbers.common
-
-// TODO find correct package
+package xyz.lbres.exactnumbers.exception
 
 /**
  * [ArithmeticException] for number overflow

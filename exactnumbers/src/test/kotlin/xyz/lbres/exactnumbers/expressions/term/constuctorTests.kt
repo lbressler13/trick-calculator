@@ -54,7 +54,7 @@ internal fun runConstructorTests() {
     expectedCoeff = ExactFraction(17, 3)
     expectedNumbers = listOf(
         Pi(), logNum2,
-        Sqrt(ExactFraction(9, 25 ))
+        Sqrt(ExactFraction(9, 25))
     )
     assertEquals(expectedCoeff, term.coefficient)
     assertEquals(expectedNumbers, term.numbers)
