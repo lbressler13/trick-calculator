@@ -1,6 +1,5 @@
 package xyz.lbres.exactnumbers.irrationals.pi
 
-import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,7 +1,6 @@
 package xyz.lbres.exactnumbers.irrationals.pi
 
 import xyz.lbres.exactnumbers.irrationals.log.Log
-import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 

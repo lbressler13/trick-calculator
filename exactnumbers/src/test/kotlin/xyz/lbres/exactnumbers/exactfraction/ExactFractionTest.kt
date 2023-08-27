@@ -4,55 +4,54 @@ import kotlin.test.Test
 
 internal class ExactFractionTest {
     // all constructors
-    @Test fun testConstructor() = xyz.lbres.exactnumbers.exactfraction.runConstructorTests()
+    @Test fun testConstructor() = runConstructorTests()
 
     // simplify
     // includes all private methods used in simplification
-    @Test fun testSimplify() = xyz.lbres.exactnumbers.exactfraction.runSimplifyTests()
+    @Test fun testSimplify() = runSimplifyTests()
 
     // unary operators
-    @Test fun testUnaryMinus() = xyz.lbres.exactnumbers.exactfraction.runUnaryMinusTests()
-    @Test fun testUnaryPlus() = xyz.lbres.exactnumbers.exactfraction.runUnaryPlusTests()
-    @Test fun testNot() = xyz.lbres.exactnumbers.exactfraction.runNotTests()
-    @Test fun testInc() = xyz.lbres.exactnumbers.exactfraction.runIncTests()
-    @Test fun testDec() = xyz.lbres.exactnumbers.exactfraction.runDecTests()
+    @Test fun testUnaryMinus() = runUnaryMinusTests()
+    @Test fun testUnaryPlus() = runUnaryPlusTests()
+    @Test fun testNot() = runNotTests()
+    @Test fun testInc() = runIncTests()
+    @Test fun testDec() = runDecTests()
 
     // binary operators
-    @Test fun testPlus() = xyz.lbres.exactnumbers.exactfraction.runPlusTests()
-    @Test fun testMinus() = xyz.lbres.exactnumbers.exactfraction.runMinusTests()
-    @Test fun testTimes() = xyz.lbres.exactnumbers.exactfraction.runTimesTests()
-    @Test fun testDiv() = xyz.lbres.exactnumbers.exactfraction.runDivTests()
-    @Test fun testCompareTo() = xyz.lbres.exactnumbers.exactfraction.runCompareToTests()
-    @Test fun testEquals() = xyz.lbres.exactnumbers.exactfraction.runEqualsTests()
-    @Test fun testEq() = xyz.lbres.exactnumbers.exactfraction.runEqTests()
-    @Test fun testPow() = xyz.lbres.exactnumbers.exactfraction.runPowTests()
+    @Test fun testPlus() = runPlusTests()
+    @Test fun testMinus() = runMinusTests()
+    @Test fun testTimes() = runTimesTests()
+    @Test fun testDiv() = runDivTests()
+    @Test fun testCompareTo() = runCompareToTests()
+    @Test fun testEquals() = runEqualsTests()
+    @Test fun testEq() = runEqTests()
+    @Test fun testPow() = runPowTests()
 
     // unary non-operator functions
-    @Test fun testInverse() = xyz.lbres.exactnumbers.exactfraction.runInverseTests()
-    @Test fun testAbsoluteValue() = xyz.lbres.exactnumbers.exactfraction.runAbsoluteValueTests()
-    @Test fun testIsNegative() = xyz.lbres.exactnumbers.exactfraction.runIsNegativeTests()
-    @Test fun testIsZero() = xyz.lbres.exactnumbers.exactfraction.runIsZeroTests()
-    @Test fun testRoundToWhole() = xyz.lbres.exactnumbers.exactfraction.runRoundToWholeTests()
+    @Test fun testInverse() = runInverseTests()
+    @Test fun testAbsoluteValue() = runAbsoluteValueTests()
+    @Test fun testIsNegative() = runIsNegativeTests()
+    @Test fun testIsZero() = runIsZeroTests()
+    @Test fun testRoundToWhole() = runRoundToWholeTests()
 
     // parsing + toString
-    @Test fun testParseDecimal() = xyz.lbres.exactnumbers.exactfraction.runParseDecimalTests()
-    @Test fun testParseEFString() = xyz.lbres.exactnumbers.exactfraction.runParseEFStringTests()
-    @Test fun testCheckIsEFString() = xyz.lbres.exactnumbers.exactfraction.runCheckIsEFStringTests()
-    @Test fun testToDecimalString() = xyz.lbres.exactnumbers.exactfraction.runToDecimalStringTests()
-    @Test fun testToFractionString() =
-        xyz.lbres.exactnumbers.exactfraction.runToFractionStringTests()
-    @Test fun testToPairString() = xyz.lbres.exactnumbers.exactfraction.runToPairStringTests()
-    @Test fun testToEFString() = xyz.lbres.exactnumbers.exactfraction.runToEFStringTests()
+    @Test fun testParseDecimal() = runParseDecimalTests()
+    @Test fun testParseEFString() = runParseEFStringTests()
+    @Test fun testCheckIsEFString() = runCheckIsEFStringTests()
+    @Test fun testToDecimalString() = runToDecimalStringTests()
+    @Test fun testToFractionString() = runToFractionStringTests()
+    @Test fun testToPairString() = runToPairStringTests()
+    @Test fun testToEFString() = runToEFStringTests()
 
     // casting
-    @Test fun testToPair() = xyz.lbres.exactnumbers.exactfraction.runToPairTests()
-    @Test fun testToByte() = xyz.lbres.exactnumbers.exactfraction.runToByteTests()
-    @Test fun testToChar() = xyz.lbres.exactnumbers.exactfraction.runToCharTests()
-    @Test fun testToShort() = xyz.lbres.exactnumbers.exactfraction.runToShortTests()
-    @Test fun testToInt() = xyz.lbres.exactnumbers.exactfraction.runToIntTests()
-    @Test fun testToLong() = xyz.lbres.exactnumbers.exactfraction.runToLongTests()
-    @Test fun testToFloat() = xyz.lbres.exactnumbers.exactfraction.runToFloatTests()
-    @Test fun testToDouble() = xyz.lbres.exactnumbers.exactfraction.runToDoubleTests()
-    @Test fun testToBigDecimal() = xyz.lbres.exactnumbers.exactfraction.runToBigDecimalTests()
-    @Test fun testToBigInteger() = xyz.lbres.exactnumbers.exactfraction.runToBigIntegerTests()
+    @Test fun testToPair() = runToPairTests()
+    @Test fun testToByte() = runToByteTests()
+    @Test fun testToChar() = runToCharTests()
+    @Test fun testToShort() = runToShortTests()
+    @Test fun testToInt() = runToIntTests()
+    @Test fun testToLong() = runToLongTests()
+    @Test fun testToFloat() = runToFloatTests()
+    @Test fun testToDouble() = runToDoubleTests()
+    @Test fun testToBigDecimal() = runToBigDecimalTests()
+    @Test fun testToBigInteger() = runToBigIntegerTests()
 }

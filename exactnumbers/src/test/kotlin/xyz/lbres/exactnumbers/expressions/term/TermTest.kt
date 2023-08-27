@@ -4,7 +4,6 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.irrationals.log.Log
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
-import xyz.lbres.exactnumbers.expressions.term.Term
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -219,12 +218,7 @@ internal class TermTest {
         term = Term(-ExactFraction.HALF, listOf(logNum2, logNum2.swapDivided()))
         assertFalse(term.isZero())
 
-        term = Term(-ExactFraction.HALF, listOf(Sqrt(64), Sqrt(
-            ExactFraction(
-                1,
-                64
-            )
-        )))
+        term = Term(-ExactFraction.HALF, listOf(Sqrt(64), Sqrt(ExactFraction(1, 64))))
         assertFalse(term.isZero())
 
         term = Term(ExactFraction(-1, 1000000), listOf(Pi(true), Pi(true), Pi(true)))
@@ -274,18 +268,9 @@ internal class TermTest {
         expected = "<1x${Sqrt.ONE}>"
         assertEquals(expected, term.toString())
 
-        term = Term(one, listOf(Sqrt(32), Sqrt(127), Sqrt(
-            ExactFraction(
-                2,
-                9
-            )
-        )))
-        expected = "<1x${Sqrt(32)}x${Sqrt(127)}x${Sqrt(
-            ExactFraction(
-                2,
-                9
-            )
-        )}"
+        term = Term(one, listOf(Sqrt(32), Sqrt(127), Sqrt(ExactFraction(2, 9))))
+        expected = "<1x${Sqrt(32)}x${Sqrt(127)}x${Sqrt(ExactFraction(2, 9))}>"
+        assertEquals(expected, term.toString())
 
         // mix
         term = Term(ExactFraction.EIGHT, listOf(Pi(), logNum3, Sqrt(12)))

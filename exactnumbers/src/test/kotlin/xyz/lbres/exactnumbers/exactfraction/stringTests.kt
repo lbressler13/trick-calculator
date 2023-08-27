@@ -1,9 +1,5 @@
 package xyz.lbres.exactnumbers.exactfraction
 
-import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
-import xyz.lbres.exactnumbers.exactfraction.parseDecimal
-import xyz.lbres.exactnumbers.exactfraction.parseEFString
 import java.math.BigInteger
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

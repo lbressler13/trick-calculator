@@ -4,7 +4,6 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.irrationals.log.Log
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
-import xyz.lbres.exactnumbers.expressions.term.Term
 import kotlin.test.assertEquals
 
 private val logNum1 = Log(ExactFraction(15, 4))
@@ -70,13 +69,12 @@ internal fun runGetPiCountTests() {
     assertEquals(expected, term.getPiCount())
 
     term = Term(
-        one, listOf(
-            logNum1, logNum4, Sqrt(
-        ExactFraction(
-            64,
-            9
+        one,
+        listOf(
+            logNum1, logNum4,
+            Sqrt(ExactFraction(64, 9))
         )
-    )))
+    )
     assertEquals(expected, term.getPiCount())
 
     term = Term(one, listOf(logNum3, logNum4, Pi(true), Pi(), logNum2, Pi(true), Pi()))
@@ -132,27 +130,25 @@ internal fun runGetSquareRootsTests() {
     assertEquals(expected, term.getSquareRoots())
 
     term = Term(
-        one, listOf(Sqrt(
-        ExactFraction(
-            9,
-            23
+        one,
+        listOf(
+            Sqrt(ExactFraction(9, 23)),
+            Sqrt(ExactFraction(23, 9))
         )
-    ), Sqrt(ExactFraction(23, 9))))
-    expected = listOf(Sqrt(
-        ExactFraction(
-            9,
-            23
-        )
-    ), Sqrt(ExactFraction(23, 9)))
+    )
+    expected = listOf(
+        Sqrt(ExactFraction(9, 23)),
+        Sqrt(ExactFraction(23, 9))
+    )
     assertEquals(expected, term.getSquareRoots())
 
     term = Term(
-        one, listOf(Sqrt.ONE, Sqrt(97), Sqrt(
-        ExactFraction(
-            9,
-            25
+        one,
+        listOf(
+            Sqrt.ONE, Sqrt(97),
+            Sqrt(ExactFraction(9, 25))
         )
-    )))
+    )
     expected = listOf(Sqrt.ONE, Sqrt(97), Sqrt(ExactFraction(9, 25)))
     assertEquals(expected, term.getSquareRoots())
 
@@ -162,10 +158,13 @@ internal fun runGetSquareRootsTests() {
     assertEquals(expected, term.getSquareRoots())
 
     term = Term(
-        ExactFraction.EIGHT, listOf(Pi(), Sqrt.ONE, logNum1, Sqrt(97), Sqrt(
-            ExactFraction(9, 25)
-        ), logNum2
-        ))
+        ExactFraction.EIGHT,
+        listOf(
+            Pi(), Sqrt.ONE, logNum1, Sqrt(97),
+            Sqrt(ExactFraction(9, 25)),
+            logNum2
+        )
+    )
     expected = listOf(Sqrt.ONE, Sqrt(97), Sqrt(ExactFraction(9, 25)))
     assertEquals(expected, term.getSquareRoots())
 }

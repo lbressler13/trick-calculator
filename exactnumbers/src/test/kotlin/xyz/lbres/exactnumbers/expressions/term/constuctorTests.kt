@@ -5,7 +5,6 @@ import xyz.lbres.exactnumbers.irrationals.common.Irrational
 import xyz.lbres.exactnumbers.irrationals.log.Log
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
-import xyz.lbres.exactnumbers.expressions.term.Term
 import kotlin.test.assertEquals
 
 private val logNum1 = Log(ExactFraction(15, 4))
@@ -49,17 +48,14 @@ internal fun runConstructorTests() {
     assertEquals(expectedNumbers, term.numbers)
 
     term = Term(
-        ExactFraction(
-            17,
-            3
-        ), listOf(Pi(), logNum2, Sqrt(ExactFraction(9, 25))))
+        ExactFraction(17, 3),
+        listOf(Pi(), logNum2, Sqrt(ExactFraction(9, 25)))
+    )
     expectedCoeff = ExactFraction(17, 3)
-    expectedNumbers = listOf(Pi(), logNum2, Sqrt(
-        ExactFraction(
-            9,
-            25
-        )
-    ))
+    expectedNumbers = listOf(
+        Pi(), logNum2,
+        Sqrt(ExactFraction(9, 25 ))
+    )
     assertEquals(expectedCoeff, term.coefficient)
     assertEquals(expectedNumbers, term.numbers)
 
@@ -96,11 +92,9 @@ internal fun runFromValuesTests() {
     assertEquals(expectedNumbers, term.numbers)
 
     term = Term.fromValues(
-        ExactFraction.TWO, listOf(logNum1), listOf(
-            Sqrt(64), Sqrt.ZERO, Sqrt(
-                ExactFraction(3, 19)
-            )
-        ), -2
+        ExactFraction.TWO, listOf(logNum1),
+        listOf(Sqrt(64), Sqrt.ZERO, Sqrt(ExactFraction(3, 19))),
+        -2
     )
     assertEquals(expectedCoeff, term.coefficient)
     assertEquals(expectedNumbers, term.numbers)

@@ -5,7 +5,6 @@ import xyz.lbres.exactnumbers.irrationals.common.Irrational
 import xyz.lbres.exactnumbers.irrationals.log.Log
 import xyz.lbres.exactnumbers.irrationals.pi.Pi
 import xyz.lbres.exactnumbers.irrationals.sqrt.Sqrt
-import xyz.lbres.exactnumbers.expressions.term.Term
 import java.math.BigDecimal
 import kotlin.test.assertEquals
 
@@ -53,12 +52,9 @@ internal fun runGetSimplifiedTests() {
     assertEquals(expectedNumbers, result.numbers)
 
     term = Term(
-        ExactFraction.TWO, listOf(Sqrt(64), Sqrt(
-            ExactFraction(
-                75,
-                98
-            )
-        ), Sqrt(26)))
+        ExactFraction.TWO,
+        listOf(Sqrt(64), Sqrt(ExactFraction(75, 98)), Sqrt(26))
+    )
     expectedCoeff = ExactFraction(80, 7)
     expectedNumbers = listOf(Sqrt(ExactFraction(39)))
     result = term.getSimplified()
@@ -76,21 +72,19 @@ internal fun runGetSimplifiedTests() {
     assertEquals(expectedNumbers, result.numbers)
 
     term = Term(
-        ExactFraction.FOUR, listOf(Log(100), Sqrt(9), Sqrt(
-            ExactFraction(1, 4)
-        )))
+        ExactFraction.FOUR,
+        listOf(Log(100), Sqrt(9), Sqrt(ExactFraction(1, 4)))
+    )
     expectedCoeff = ExactFraction(12)
     expectedNumbers = listOf()
     result = term.getSimplified()
     assertEquals(expectedCoeff, result.coefficient)
     assertEquals(expectedNumbers, result.numbers)
 
-    term = Term(-ExactFraction.EIGHT, listOf(Pi(true), Sqrt(
-        ExactFraction(
-            27,
-            98
-        )
-    )))
+    term = Term(
+        -ExactFraction.EIGHT,
+        listOf(Pi(true), Sqrt(ExactFraction(27, 98)))
+    )
     expectedCoeff = ExactFraction(-24, 7)
     expectedNumbers = listOf(Sqrt(ExactFraction(3, 2)), Pi(true))
     result = term.getSimplified()
@@ -98,11 +92,9 @@ internal fun runGetSimplifiedTests() {
     assertEquals(expectedNumbers, result.numbers)
 
     term = Term(
-        ExactFraction(20), listOf(Log(
-            ExactFraction(
-                1,
-                27
-            ), 3, true)))
+        ExactFraction(20),
+        listOf(Log(ExactFraction(1, 27), 3, true))
+    )
     expectedCoeff = ExactFraction(-20, 3)
     expectedNumbers = listOf()
     result = term.getSimplified()
@@ -149,12 +141,9 @@ internal fun runGetSimplifiedTests() {
     assertEquals(expectedNumbers, result.numbers)
 
     term = Term(
-        ExactFraction.EIGHT, listOf(Sqrt(
-            ExactFraction(
-                1,
-                46
-            )
-        )))
+        ExactFraction.EIGHT,
+        listOf(Sqrt(ExactFraction(1, 46)))
+    )
     expectedCoeff = ExactFraction.EIGHT
     expectedNumbers = listOf(Sqrt(ExactFraction(1, 46)))
     result = term.getSimplified()
@@ -239,11 +228,9 @@ internal fun runGetValueTests() {
     assertEquals(expected, term.getValue())
 
     term = Term(
-        ExactFraction.SEVEN, listOf(Log(
-            ExactFraction(
-                6,
-                7
-            ), 4), Pi(), Log(40)))
+        ExactFraction.SEVEN,
+        listOf(Log(ExactFraction(6, 7), 4), Pi(), Log(40))
+    )
     expected = BigDecimal("-3.9175691871908989550925271506970548502975209152")
     assertEquals(expected, term.getValue())
 
