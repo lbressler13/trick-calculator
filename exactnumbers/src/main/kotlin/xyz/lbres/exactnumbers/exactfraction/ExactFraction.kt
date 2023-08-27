@@ -1,7 +1,7 @@
 package xyz.lbres.exactnumbers.exactfraction
 
-import xyz.lbres.exactnumbers.exception.NumberOverflowException
 import xyz.lbres.exactnumbers.common.divideByZero
+import xyz.lbres.exactnumbers.exception.NumberOverflowException
 import xyz.lbres.exactnumbers.ext.eq
 import xyz.lbres.exactnumbers.ext.toExactFraction
 import xyz.lbres.kotlinutils.biginteger.ext.ifZero
