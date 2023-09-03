@@ -13,7 +13,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.unmockkAll
 import org.hamcrest.CoreMatchers.allOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,6 +47,11 @@ class SettingsFragmentTest {
         if (ProductFlavor.devMode) {
             hideDevToolsButton()
         }
+    }
+
+    @After
+    fun cleanupTest() {
+        unmockkAll()
     }
 
     @Test

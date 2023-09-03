@@ -131,13 +131,16 @@ android {
     }
 
     testOptions {
-        unitTests.isReturnDefaultValues = true // mocks android Log
         animationsDisabled = true
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-MF")
     }
 
     kotlinOptions {
@@ -162,6 +165,7 @@ dependencies {
     val androidxTestVersion = "1.5.0"
     val espressoVersion = "3.4.0"
     val junitVersion = "4.13.2"
+    val mockkVersion = "1.13.7"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -177,10 +181,14 @@ dependencies {
 
     // testing
     testImplementation("junit:junit:$junitVersion")
+    testImplementation("io.mockk:mockk-agent:$mockkVersion")
+    testImplementation("io.mockk:mockk-android:$mockkVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestVersion") // needed to run on emulator
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
+    androidTestImplementation("io.mockk:mockk-agent:$mockkVersion")
+    androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
 }
