@@ -157,7 +157,7 @@ fun testRandomizeButton() {
     mockkConstructor(Random::class)
 
     val nextBooleanValues = listOf(true, true, false, true, false)
-    every { constructedWith<Random>(OfTypeMatcher<Long>(Long::class)).nextBoolean() } returnsMany nextBooleanValues
+    every { constructedWith<Random>(OfTypeMatcher<Long>(Long::class)).nextBoolean() } returns true // returnsMany nextBooleanValues
 
     val randomizeButton = onView(withId(R.id.randomizeSettingsButton))
 

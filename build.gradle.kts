@@ -10,7 +10,7 @@ buildscript {
     // only project-level dependencies, app-specific dependencies should go in application build files
     dependencies {
         classpath("com.android.tools.build:gradle:$gradleVersion")
-        classpath(kotlin("gradle-plugin", version = kotlinVersion))
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
     }
 }
 

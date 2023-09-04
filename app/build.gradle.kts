@@ -1,7 +1,8 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0" // ktlint
+    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.jetbrains.kotlin.android") // ktlint
 }
 apply(plugin = "kotlin-android")
 
@@ -59,12 +60,12 @@ fun getEspressoRetries(): Int {
 
 android {
     namespace = "xyz.lbres.trickcalculator"
-    compileSdk = 31
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"
         minSdk = 29 // maximum sdk available in tester used in github actions
-        targetSdk = 31
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
 
@@ -139,8 +140,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    val resourcePickFirsts = setOf("MANIFEST.MF", "META-INF/*")
     packagingOptions {
-        resources.excludes.add("META-MF")
+        resources.pickFirsts.addAll(resourcePickFirsts)
+
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 
     kotlinOptions {
