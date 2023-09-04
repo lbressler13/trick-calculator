@@ -14,17 +14,21 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import io.mockk.OfTypeMatcher
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.SharedValues
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 import xyz.lbres.trickcalculator.utils.seededRandom
 import kotlin.random.Random
+import kotlin.random.nextInt
 
 private val applyParensSwitch = onView(withId(R.id.applyParensSwitch))
 private val applyDecimalsSwitch = onView(withId(R.id.applyDecimalsSwitch))
@@ -35,6 +39,8 @@ private val shuffleNumbersSwitch = onView(withId(R.id.shuffleNumbersSwitch))
 private val shuffleOperatorsSwitch = onView(withId(R.id.shuffleOperatorsSwitch))
 
 private val settingsButton = onView(withId(R.id.settingsButton))
+
+private val checkedMatcher: (Boolean) -> Matcher<View> = { simpleIf(it, isChecked(), isNotChecked()) }
 
 fun testSettingsMaintained() {
     // set ui
@@ -152,12 +158,20 @@ fun testResetButton() {
 }
 
 fun testRandomizeButton() {
-    val checkedMatcher: (Boolean) -> Matcher<View> = { simpleIf(it, isChecked(), isNotChecked()) }
-
-    mockkConstructor(Random::class)
+    // mockkConstructor(Random::class)
 
     val nextBooleanValues = listOf(true, true, false, true, false)
-    every { constructedWith<Random>(OfTypeMatcher<Long>(Long::class)).nextBoolean() } returns true // returnsMany nextBooleanValues
+    // every { constructedWith<Random>(OfTypeMatcher<Long>(Long::class)).nextBoolean() } returns true // returnsMany nextBooleanValues
+    // every { constructedWith<Random>(OfTypeMatcher<Int>(Int::class)).nextBoolean() } returns true // returnsMany nextBooleanValues
+    // every { constructedWith<Random>().nextBoolean() } returns true // returnsMany nextBooleanValues
+
+    val mockRandom = mockk<Random> {
+        every { nextBoolean() } returns true
+        every { nextInt(0..3) } returns 2
+    }
+
+    mockkObject(SharedValues)
+    every { SharedValues.random } returns mockRandom
 
     val randomizeButton = onView(withId(R.id.randomizeSettingsButton))
 
@@ -183,9 +197,15 @@ fun testRandomizeButton() {
 
     onView(withId(R.id.applyDecimalsSwitch)).check(matches(checkedMatcher(true)))
     onView(withId(R.id.applyParensSwitch)).check(matches(checkedMatcher(true)))
-    onView(withId(R.id.shuffleComputationSwitch)).check(matches(checkedMatcher(false)))
+    onView(withId(R.id.shuffleComputationSwitch)).check(matches(checkedMatcher(true)))
     onView(withId(R.id.shuffleNumbersSwitch)).check(matches(checkedMatcher(true)))
-    onView(withId(R.id.shuffleOperatorsSwitch)).check(matches(checkedMatcher(false)))
+    onView(withId(R.id.shuffleOperatorsSwitch)).check(matches(checkedMatcher(true)))
+
+//    onView(withId(R.id.applyDecimalsSwitch)).check(matches(checkedMatcher(true)))
+//    onView(withId(R.id.applyParensSwitch)).check(matches(checkedMatcher(true)))
+//    onView(withId(R.id.shuffleComputationSwitch)).check(matches(checkedMatcher(false)))
+//    onView(withId(R.id.shuffleNumbersSwitch)).check(matches(checkedMatcher(true)))
+//    onView(withId(R.id.shuffleOperatorsSwitch)).check(matches(checkedMatcher(false)))
     // TODO mock and test history randomness
 
 //    try {
