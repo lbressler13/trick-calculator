@@ -1,8 +1,10 @@
 package xyz.lbres.trickcalculator.ui.history
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.PerformException
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import xyz.lbres.kotlinutils.pair.TypePair
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.matchers.matchesAtPosition
@@ -16,7 +18,7 @@ fun testRandomness0() {
     // no history
     checkNoHistoryMessageDisplayed()
 
-    val history = TestHistory()
+    val history: MutableList<TypePair<String>> = mutableListOf()
 
     // one element
     history.add(generateTestItem("1+2") { "3" })
@@ -43,17 +45,23 @@ fun testRandomness0() {
     val longResult = "-388245970060605516137019767887509499553681240225702923929715864051.57828"
     history.add(generateTestItem(longText) { longResult })
 
-    // check all items displayed
-    openHistoryFragment()
-    history.checkAllDisplayed(0)
-    closeFragment()
-
-    // test that order doesn't change
+    // TODO use matcher
+    // check all items displayed and ordered
     repeat(5) {
         openHistoryFragment()
-        if (!history.checkDisplayOrdered()) {
-            throw AssertionError("History items should be ordered in history randomness 0.")
+        history.forEachIndexed { position, item ->
+            val vhText = getViewHolderTextAtPosition(position)
+
+            if (vhText != item) {
+                throw AssertionError("Expected history item $item at position $position. Found $vhText.")
+            }
         }
+
+        try {
+            val vhText = getViewHolderTextAtPosition(history.size)
+            throw AssertionError("Expected history size ${history.size}. Retrieved item $vhText at position ${history.size}.")
+        } catch (_: PerformException) {}
+
         closeFragment()
     }
 }

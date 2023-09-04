@@ -141,33 +141,33 @@ class TestHistory {
      * @param position [Int]: position of ViewHolder
      * @return [Pair]<String, String>: pair where first value represents the compute text and second value represents result/error
      */
-    private fun getViewHolderTextAtPosition(position: Int): Pair<String, String> {
-        var computation = ""
-        var errorResult = ""
-
-        val getViewHolderText = object : ViewAction {
-            override fun getConstraints(): Matcher<View> = isDisplayed()
-            override fun getDescription(): String = "retrieving text from viewholder at position $position"
-
-            override fun perform(uiController: UiController?, view: View?) {
-                computation = view?.findViewById<TextView>(R.id.computeText)?.text?.toString() ?: ""
-
-                val number = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
-                val error = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
-                errorResult = when {
-                    !number.isNullOrBlank() -> number
-                    !error.isNullOrBlank() -> error
-                    else -> ""
-                }
-            }
-        }
-
-        onView(withId(R.id.itemsRecycler)).perform(
-            actionOnHistoryItemAtPosition(position, getViewHolderText)
-        )
-
-        return Pair(computation, errorResult)
-    }
+//    private fun getViewHolderTextAtPosition(position: Int): Pair<String, String> {
+//        var computation = ""
+//        var errorResult = ""
+//
+//        val getViewHolderText = object : ViewAction {
+//            override fun getConstraints(): Matcher<View> = isDisplayed()
+//            override fun getDescription(): String = "retrieving text from viewholder at position $position"
+//
+//            override fun perform(uiController: UiController?, view: View?) {
+//                computation = view?.findViewById<TextView>(R.id.computeText)?.text?.toString() ?: ""
+//
+//                val number = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
+//                val error = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
+//                errorResult = when {
+//                    !number.isNullOrBlank() -> number
+//                    !error.isNullOrBlank() -> error
+//                    else -> ""
+//                }
+//            }
+//        }
+//
+//        onView(withId(R.id.itemsRecycler)).perform(
+//            actionOnHistoryItemAtPosition(position, getViewHolderText)
+//        )
+//
+//        return Pair(computation, errorResult)
+//    }
 
     override fun toString(): String = computeHistory.toString()
 }

@@ -149,7 +149,7 @@ fun testResetButton() {
 
 fun testRandomizeButton() {
     val nextBooleanValues = listOf(
-        false, true, true, true, true,
+        false, true, false, true, false,
         false, true, false, true, false,
     )
     val mockRandom = mockk<Random> {

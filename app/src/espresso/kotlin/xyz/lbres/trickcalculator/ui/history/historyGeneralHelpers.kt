@@ -1,7 +1,9 @@
 package xyz.lbres.trickcalculator.ui.history
 
 import android.view.View
+import android.widget.TextView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -12,6 +14,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import xyz.lbres.kotlinutils.pair.TypePair
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
@@ -134,4 +137,38 @@ fun generateTestItem(computeText: String, previousResult: String = "", getResult
     }
 
     return TestHI(previousResult + computeText, result)
+}
+
+/**
+ * Get the computation and result/error text for a history item ViewHolder at a given position
+ *
+ * @param position [Int]: position of ViewHolder
+ * @return [TypePair]<String>: pair where first value represents the compute text and second value represents result/error
+ */
+fun getViewHolderTextAtPosition(position: Int): TypePair<String> {
+    var computation = ""
+    var errorResult = ""
+
+    val getViewHolderText = object : ViewAction {
+        override fun getConstraints(): Matcher<View> = isDisplayed()
+        override fun getDescription(): String = "retrieving text from viewholder at position $position"
+
+        override fun perform(uiController: UiController?, view: View?) {
+            computation = view?.findViewById<TextView>(R.id.computeText)?.text?.toString() ?: ""
+
+            val number = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
+            val error = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
+            errorResult = when {
+                !number.isNullOrBlank() -> number
+                !error.isNullOrBlank() -> error
+                else -> ""
+            }
+        }
+    }
+
+    onView(withId(R.id.itemsRecycler)).perform(
+        actionOnHistoryItemAtPosition(position, getViewHolderText)
+    )
+
+    return Pair(computation, errorResult)
 }
