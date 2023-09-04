@@ -187,7 +187,6 @@ dependencies {
 
     // testing
     testImplementation("junit:junit:$junitVersion")
-    testImplementation("io.mockk:mockk-agent:$mockkVersion")
     testImplementation("io.mockk:mockk-android:$mockkVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestVersion")
@@ -195,6 +194,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
-    androidTestImplementation("io.mockk:mockk-agent:$mockkVersion")
     androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
 }
