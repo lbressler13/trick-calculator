@@ -186,8 +186,8 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     // testing
-    testImplementation("junit:junit:$junitVersion")
     testImplementation("io.mockk:mockk-android:$mockkVersion")
+    testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestVersion") // needed to run on emulator
