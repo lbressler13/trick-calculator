@@ -9,13 +9,13 @@ on:
       - main
 
 jobs:
-  build:
-    name: "Unit Tests"
+  lint:
+    name: "Linting"
 
     runs-on: ubuntu-latest
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      ACCESS_TOKEN: ${{ secrets.TOKEN }}
+      TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout
@@ -24,5 +24,17 @@ jobs:
       - name: Linting
         run: ./gradlew ktlintCheck
 
-      - name: Unit Tests
-        run: ./gradlew test
+  unit-tests:
+    name: "Unit Tests"
+
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      TOKEN: ${{ secrets.TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Tests
+        run: ./gradlew test --info --stacktrace
