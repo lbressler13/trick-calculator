@@ -1,6 +1,5 @@
 package xyz.lbres.trickcalculator.ui.settings
 
-import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -14,9 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
-import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.SharedValues
 import xyz.lbres.trickcalculator.testutils.closeFragment
@@ -34,8 +31,6 @@ private val shuffleNumbersSwitch = onView(withId(R.id.shuffleNumbersSwitch))
 private val shuffleOperatorsSwitch = onView(withId(R.id.shuffleOperatorsSwitch))
 
 private val settingsButton = onView(withId(R.id.settingsButton))
-
-private val checkedMatcher: (Boolean) -> Matcher<View> = { simpleIf(it, isChecked(), isNotChecked()) }
 
 fun testSettingsMaintained() {
     // set ui
