@@ -132,8 +132,6 @@ android {
     }
 
     testOptions {
-        // TODO remove this
-        unitTests.isReturnDefaultValues = true // mocks android Log
         animationsDisabled = true
     }
 
@@ -164,6 +162,7 @@ dependencies {
     val androidxTestRunnerVersion = "1.5.2"
     val espressoVersion = "3.5.1"
     val junitVersion = "4.13.2"
+    val mockkVersion = "1.13.7"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -178,6 +177,7 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     // testing
+    testImplementation("io.mockk:mockk-android:$mockkVersion")
     testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
