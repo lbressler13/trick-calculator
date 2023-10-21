@@ -1,10 +1,13 @@
 package xyz.lbres.trickcalculator.compute
 
+import io.mockk.every
+import io.mockk.mockkStatic
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.trickcalculator.assertDivByZero
 import xyz.lbres.trickcalculator.splitString
+import xyz.lbres.trickcalculator.utils.AppLogger
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 
 private val exp = listOf("^")
@@ -162,6 +165,9 @@ fun runRunComputationTests() {
 }
 
 fun runParseTextTests() {
+    mockkStatic(AppLogger::class)
+    every { AppLogger.e(any(), any()) } returns 0
+
     // single value
     var text = listOf("3")
     var expected = ExactFraction.THREE

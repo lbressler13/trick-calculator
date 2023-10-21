@@ -59,12 +59,12 @@ fun getEspressoRetries(): Int {
 
 android {
     namespace = "xyz.lbres.trickcalculator"
-    compileSdk = 31
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "xyz.lbres.trickcalculator"
         minSdk = 29 // maximum sdk available in tester used in github actions
-        targetSdk = 31
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
 
@@ -128,10 +128,10 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     testOptions {
-        unitTests.isReturnDefaultValues = true // mocks android Log
         animationsDisabled = true
     }
 
@@ -148,20 +148,21 @@ android {
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
-    val androidxCoreVersion = "1.8.0"
-    val appCompatVersion = "1.4.1"
+    val androidxCoreVersion = "1.12.0"
+    val appCompatVersion = "1.6.1"
     val constraintLayoutVersion = "2.1.4"
-    val lifecycleVersion = "2.5.1"
-    val materialVersion = "1.6.1"
-    val navigationVersion = "2.5.3"
+    val exactNumbersVersion = "0.1.1"
+    val kotlinUtilsVersion = "1.2.0"
+    val lifecycleVersion = "2.6.2"
+    val materialVersion = "1.10.0"
+    val navigationVersion = "2.7.4"
 
-    val exactNumbersVersion = "0.1.0"
-    val kotlinUtilsVersion = "1.0.1"
-
-    val androidxJunitVersion = "1.1.4"
-    val androidxTestVersion = "1.5.0"
-    val espressoVersion = "3.4.0"
+    val androidxJunitVersion = "1.1.5"
+    val androidxTestRulesVersion = "1.5.0"
+    val androidxTestRunnerVersion = "1.5.2"
+    val espressoVersion = "3.5.1"
     val junitVersion = "4.13.2"
+    val mockkVersion = "1.13.7"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -176,10 +177,11 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     // testing
+    testImplementation("io.mockk:mockk-android:$mockkVersion")
     testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
-    androidTestImplementation("androidx.test:rules:$androidxTestVersion")
-    androidTestImplementation("androidx.test:runner:$androidxTestVersion") // needed to run on emulator
+    androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
+    androidTestImplementation("androidx.test:runner:$androidxTestRunnerVersion") // needed to run on emulator
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")

@@ -22,7 +22,7 @@ import xyz.lbres.trickcalculator.ui.attributions.imageattribution.ImageAttributi
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
 private val attributionsRecycler = onView(withId(R.id.attributionsRecycler))
-private const val nestedRecyclerId = R.id.imagesRecycler
+private val nestedRecyclerId = R.id.imagesRecycler
 
 /**
  * Wrapper function to scroll a RecyclerView to [position], with ViewHolder type [AuthorAttributionViewHolder]
