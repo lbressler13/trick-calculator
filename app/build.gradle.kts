@@ -128,6 +128,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     testOptions {
@@ -155,8 +156,8 @@ dependencies {
     val materialVersion = "1.6.1"
     val navigationVersion = "2.5.3"
 
-    val exactNumbersVersion = "0.1.0"
-    val kotlinUtilsVersion = "1.0.1"
+    val exactNumbersVersion = "0.1.1"
+    val kotlinUtilsVersion = "1.2.0"
 
     val androidxJunitVersion = "1.1.4"
     val androidxTestVersion = "1.5.0"
