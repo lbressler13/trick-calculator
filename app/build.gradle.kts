@@ -161,7 +161,6 @@ dependencies {
     val androidxTestRulesVersion = "1.5.0"
     val androidxTestRunnerVersion = "1.5.2"
     val espressoVersion = "3.5.1"
-    val junitVersion = "4.13.2"
     val mockkVersion = "1.13.7"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
@@ -179,7 +178,6 @@ dependencies {
     // testing
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk-android:$mockkVersion")
-    testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestRunnerVersion") // needed to run on emulator

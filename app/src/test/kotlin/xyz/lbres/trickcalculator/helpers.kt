@@ -1,9 +1,8 @@
 package xyz.lbres.trickcalculator
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
-import org.junit.function.ThrowingRunnable
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 import xyz.lbres.kotlinutils.list.StringList
 
 private const val iterations = 20
@@ -11,11 +10,11 @@ private const val iterations = 20
 /**
  * Assert that a function throws a divide by zero error.
  *
- * @param function [ThrowingRunnable]: function that throws exception
+ * @param function () -> Unit: function that throws exception
  */
-fun assertDivByZero(function: ThrowingRunnable) {
-    val error = assertThrows(ArithmeticException::class.java) {
-        function.run()
+fun assertDivByZero(function: () -> Unit) {
+    val error = assertFailsWith<ArithmeticException> {
+        function()
     }
     assertEquals("divide by zero", error.message)
 }

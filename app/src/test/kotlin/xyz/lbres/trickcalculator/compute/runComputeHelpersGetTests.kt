@@ -1,6 +1,6 @@
 package xyz.lbres.trickcalculator.compute
 
-import org.junit.Assert.assertEquals
+import kotlin.test.assertEquals
 
 fun runGetMatchingParenIndexTests() {
     var text = "( )".split(' ')

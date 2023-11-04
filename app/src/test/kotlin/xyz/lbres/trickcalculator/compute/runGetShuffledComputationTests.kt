@@ -1,6 +1,6 @@
 package xyz.lbres.trickcalculator.compute
 
-import org.junit.Assert.assertEquals
+import kotlin.test.assertEquals
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.utils.isNumber

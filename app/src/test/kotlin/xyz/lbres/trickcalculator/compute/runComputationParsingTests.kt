@@ -2,8 +2,8 @@ package xyz.lbres.trickcalculator.compute
 
 import io.mockk.every
 import io.mockk.mockkStatic
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.trickcalculator.assertDivByZero
 import xyz.lbres.trickcalculator.splitString
@@ -46,7 +46,7 @@ private val performReduced: OperatorFunction = { lval, rval, op ->
 fun runRunComputationTests() {
     // errors
     var text = splitString("1+3-")
-    var error = assertThrows(Exception::class.java) {
+    var error = assertFailsWith<Exception> {
         runComputation(null, text, allOps, performOp, (0..9).toList(), true, true, false)
     }
     assertEquals("Syntax error", error.message)
@@ -70,7 +70,7 @@ fun runRunComputationTests() {
     }
 
     text = splitString("1+0")
-    error = assertThrows(Exception::class.java) {
+    error = assertFailsWith<Exception> {
         runComputation(null, text, allOps, performReduced, (0..9).toList(), true, true, false)
     }
     assertEquals("Invalid operator +", error.message)
@@ -263,13 +263,13 @@ fun runParseTextTests() {
     assertEquals(expected, parseText(text, listOf(timesDiv, emptyList()), performOp))
 
     text = "5 x 3 / 6 + 2".split(' ')
-    var error = assertThrows(Exception::class.java) {
+    var error = assertFailsWith<Exception> {
         parseText(text, listOf(timesDiv, emptyList()), performOp)
     }
     assertEquals(error.message, "Parse error")
 
     text = "5 x 3 / 6 + 2".split(' ')
-    error = assertThrows(Exception::class.java) {
+    error = assertFailsWith<Exception> {
         parseText(text, allOps, performReduced)
     }
     assertEquals(error.message, "Invalid operator +")
