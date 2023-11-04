@@ -20,7 +20,7 @@ data class Settings(
     var showSettingsButton: Boolean,
     var shuffleComputation: Boolean,
     var shuffleNumbers: Boolean,
-    var shuffleOperators: Boolean,
+    var shuffleOperators: Boolean
 ) {
     /**
      * Constructor with default values

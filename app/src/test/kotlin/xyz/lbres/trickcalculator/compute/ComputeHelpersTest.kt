@@ -1,17 +1,18 @@
 package xyz.lbres.trickcalculator.compute
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.assertDivByZero
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @Suppress("KotlinConstantConditions")
 class ComputeHelpersTest {
     @Test fun testGetMatchingParenIndex() = runGetMatchingParenIndexTests()
+
     @Test fun testGetParseErrorMessage() = runGetParseErrorMessageTests()
 
     @Test

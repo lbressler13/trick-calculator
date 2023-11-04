@@ -2,13 +2,13 @@ package xyz.lbres.trickcalculator.compute
 
 import io.mockk.every
 import io.mockk.mockkStatic
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.trickcalculator.assertDivByZero
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.AppLogger
 import xyz.lbres.trickcalculator.utils.OperatorFunction
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 private val exp = listOf("^")
 private val plusMinus = listOf("+", "-")

@@ -1,9 +1,9 @@
 package xyz.lbres.trickcalculator
 
+import xyz.lbres.kotlinutils.list.StringList
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
-import xyz.lbres.kotlinutils.list.StringList
 
 private const val iterations = 20
 

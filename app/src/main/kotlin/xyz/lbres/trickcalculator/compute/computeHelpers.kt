@@ -60,6 +60,7 @@ fun applyOrderToEF(numbersOrder: IntList?, ef: ExactFraction?): ExactFraction? {
     val newDenom = BigInteger(newDenomString)
     return ExactFraction(newNum, newDenom)
 }
+
 /**
  * Given a list of strings and the index of a left paren, find the index of the corresponding right paren
  *

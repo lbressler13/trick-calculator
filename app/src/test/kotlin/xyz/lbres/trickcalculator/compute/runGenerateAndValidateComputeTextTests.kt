@@ -1,13 +1,13 @@
 package xyz.lbres.trickcalculator.compute
 
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.isNumber
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 private val ops = listOf("+", "-", "x", "/")
 

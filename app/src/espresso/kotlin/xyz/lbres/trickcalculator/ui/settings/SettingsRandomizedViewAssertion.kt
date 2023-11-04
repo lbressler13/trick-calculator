@@ -39,7 +39,7 @@ private class SettingsRandomizedViewAssertion : ViewAssertion {
                 initialSettings.showSettingsButton, // hardcoded in randomize, not part of randomization
                 view.findViewById<SwitchCompat>(R.id.shuffleComputationSwitch).isChecked,
                 view.findViewById<SwitchCompat>(R.id.shuffleNumbersSwitch).isChecked,
-                view.findViewById<SwitchCompat>(R.id.shuffleOperatorsSwitch).isChecked,
+                view.findViewById<SwitchCompat>(R.id.shuffleOperatorsSwitch).isChecked
             )
 
             if (viewSettings == initialSettings) {
