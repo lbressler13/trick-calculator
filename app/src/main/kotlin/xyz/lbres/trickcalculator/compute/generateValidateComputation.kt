@@ -1,6 +1,7 @@
 package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.tryOrDefault
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
@@ -75,7 +76,9 @@ fun generateAndValidateComputeText(
     when {
         splitText.isEmpty() && initialValue == null -> return emptyList()
         splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
-        initialValue == null && isOperator(splitText[0], ops) -> throw syntaxError
+        initialValue == null && splitText[0] != "-" && isOperator(splitText[0], ops) -> {
+            throw syntaxError
+        }
     }
 
     if (initialValue != null) {
@@ -88,7 +91,11 @@ fun generateAndValidateComputeText(
             throw syntaxError
         }
 
-        data.currentType = getTypeOf(element, ops) ?: throw syntaxError
+        data.currentType = if (element == "-" && (data.lastType == LPAREN || data.lastType == "") && data.currentType != NUMBER) {
+            NUMBER
+        } else {
+            getTypeOf(element, ops) ?: throw syntaxError
+        }
 
         if (data.currentType != NUMBER && data.currentNumber.isNotEmpty()) {
             addCurrentNumber(data)
@@ -156,6 +163,8 @@ private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean,
             data.currentDecimal = true
             data.lastDecimal = true
         }
+        element == "-" && data.currentNumber.isNotEmpty() -> throw syntaxError
+        element == "-" -> data.currentNumber += element
         else -> {
             data.currentNumber += digitFromNumbersOrder(element, numbersOrder)
             data.lastDecimal = false
@@ -174,12 +183,10 @@ private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): Stri
         return element
     }
 
-    return try {
+    return tryOrDefault(element, listOf(NumberFormatException::class)) {
         val index = element.toInt()
         val digit = numbersOrder[index]
         digit.toString()
-    } catch (_: NumberFormatException) {
-        element
     }
 }
 
@@ -210,7 +217,7 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
  * @param data [ComputeData]: data about current state of computation
  */
 private fun addCurrentNumber(data: ComputeData) {
-    if (data.currentNumber.isNotEmpty() && data.lastDecimal) {
+    if (data.currentNumber == "-" || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
         throw syntaxError
     }
 

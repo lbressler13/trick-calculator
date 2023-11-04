@@ -23,7 +23,10 @@ private fun testValidateErrors() {
     var text = listOf("+")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
-    text = splitString("-3")
+    text = splitString("/3")
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+
+    text = splitString("--3")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
     text = splitString("x3-4")
@@ -36,7 +39,13 @@ private fun testValidateErrors() {
     text = splitString("(+)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
-    text = splitString("(-3)")
+    text = splitString("(/3)")
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+
+    text = splitString("(3-)")
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+
+    text = splitString("(-3-)")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
     text = splitString("1+(3-4/)")
@@ -238,6 +247,13 @@ private fun testBuildText() {
         generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
     )
 
+    text = splitString("-1")
+    expected = listOf("-1")
+    assertEquals(
+        expected,
+        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
+    )
+
     text = splitString("1+2-3x7")
     expected = "1 + 2 - 3 x 7".split(" ")
     assertEquals(
@@ -269,6 +285,13 @@ private fun testBuildText() {
 
     text = splitString("(10056+23)-14+(13-(2))")
     expected = "( 10056 + 23 ) - 14 + ( 13 - ( 2 ) )".split(" ")
+    assertEquals(
+        expected,
+        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
+    )
+
+    text = splitString("4+(-31-4)/5")
+    expected = "4 + ( -31 - 4 ) / 5".split(' ')
     assertEquals(
         expected,
         generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
