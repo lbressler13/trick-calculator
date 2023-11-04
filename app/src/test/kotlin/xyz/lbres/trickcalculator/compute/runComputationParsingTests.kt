@@ -43,6 +43,7 @@ private val performReduced: OperatorFunction = { lval, rval, op ->
 }
 
 // relatively light, b/c functionality should all be tested in fn-specific tests
+@Suppress("BooleanLiteralArgument")
 fun runRunComputationTests() {
     // errors
     var text = splitString("1+3-")
@@ -70,7 +71,7 @@ fun runRunComputationTests() {
     }
 
     text = splitString("1+0")
-    error = assertFailsWith<Exception> {
+    error = assertFailsWith {
         runComputation(null, text, allOps, performReduced, (0..9).toList(), true, true, false)
     }
     assertEquals("Invalid operator +", error.message)
@@ -269,7 +270,7 @@ fun runParseTextTests() {
     assertEquals(error.message, "Parse error")
 
     text = "5 x 3 / 6 + 2".split(' ')
-    error = assertFailsWith<Exception> {
+    error = assertFailsWith {
         parseText(text, allOps, performReduced)
     }
     assertEquals(error.message, "Invalid operator +")

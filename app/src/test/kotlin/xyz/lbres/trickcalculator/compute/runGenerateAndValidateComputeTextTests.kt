@@ -18,6 +18,7 @@ fun runGenerateAndValidateComputeTextTests() {
     testBuildTextWithShuffle()
 }
 
+@Suppress("BooleanLiteralArgument")
 private fun testValidateErrors() {
     // operator at start or end
     var text = listOf("+")
@@ -209,6 +210,7 @@ private fun testValidateErrors() {
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 }
 
+@Suppress("BooleanLiteralArgument", "KotlinConstantConditions")
 private fun testBuildText() {
     // initial text is empty and initial value is not set
     var initialValue: ExactFraction? = null
@@ -387,6 +389,7 @@ private fun testBuildText() {
     )
 }
 
+@Suppress("BooleanLiteralArgument")
 private fun testBuildTextWithMods() {
     // numbers order
     var text = splitString("5x(.723-(16+2)/4)")
@@ -572,6 +575,7 @@ private fun testBuildTextWithMods() {
     )
 }
 
+@Suppress("BooleanLiteralArgument")
 private fun testBuildTextWithShuffle() {
     var text: StringList = emptyList()
     repeat(20) {

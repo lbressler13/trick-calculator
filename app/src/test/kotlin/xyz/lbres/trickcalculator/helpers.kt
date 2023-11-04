@@ -13,9 +13,7 @@ private const val iterations = 20
  * @param function () -> Unit: function that throws exception
  */
 fun assertDivByZero(function: () -> Unit) {
-    val error = assertFailsWith<ArithmeticException> {
-        function()
-    }
+    val error = assertFailsWith<ArithmeticException> { function() }
     assertEquals("divide by zero", error.message)
 }
 
@@ -41,8 +39,8 @@ fun splitString(s: String): StringList {
  * Perform a random action repeatedly, checking to ensure that the result that was randomized.
  * The action should also contain any assertions about a single result.
  *
- * @param randomAction [() -> T]: generate a single result, and perform any assertions about that result
- * @param randomCheck [(T) -> Boolean]: check if a result meets criteria for randomization
+ * @param randomAction () -> T: generate a single result, and perform any assertions about that result
+ * @param randomCheck (T) -> Boolean: check if a result meets criteria for randomization
  */
 fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
     var checkPassed = false
