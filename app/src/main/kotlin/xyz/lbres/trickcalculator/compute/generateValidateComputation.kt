@@ -72,6 +72,7 @@ fun generateAndValidateComputeText(
     shuffleComputation: Boolean
 ): StringList {
     val data = ComputeData()
+    println(Pair(initialValue, splitText))
 
     // empty compute text or starting with operator
     when {

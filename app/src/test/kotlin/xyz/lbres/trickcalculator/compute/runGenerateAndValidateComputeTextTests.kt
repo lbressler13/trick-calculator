@@ -22,198 +22,85 @@ fun runGenerateAndValidateComputeTextTests() {
 
 @Suppress("BooleanLiteralArgument")
 private fun testValidateErrors() {
-//    val syntaxErrorWithDefaults: (String, ExactFraction?) -> Unit = { text, initialValue ->
-//        generateAndValidateComputeText(initialValue, splitString(text), ops, null, true, true, false)
-//    }
-//
+    val syntaxErrorWithDefaults: (String, ExactFraction?, StringList) -> Unit = { text, initialValue, operators ->
+        assertSyntaxError {
+            generateAndValidateComputeText(initialValue, splitString(text), operators, null, true, true, false)
+        }
+    }
+
     // operator at start or end
-//    syntaxErrorWithDefaults("+", null)
-//    syntaxErrorWithDefaults("/3", null)
-//    syntaxErrorWithDefaults("--3", null)
-//    syntaxErrorWithDefaults("x3-4", null)
-//    syntaxErrorWithDefaults("/3", null)
-
-    var text = listOf("+")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("/3")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("--3")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("x3-4")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("3.0-(4+2)/")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("+", null, ops)
+    syntaxErrorWithDefaults("/3", null, ops)
+    syntaxErrorWithDefaults("--3", null, ops)
+    syntaxErrorWithDefaults("x3-4", null, ops)
+    syntaxErrorWithDefaults("/3", null, ops)
 
     // operator at start or end in parens
-    text = splitString("(+)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("(/3)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("(3-)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("(-3-)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("1+(3-4/)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("3.0-(4+3(2+))")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("(+)", null, ops)
+    syntaxErrorWithDefaults("(/3)", null, ops)
+    syntaxErrorWithDefaults("(3-)", null, ops)
+    syntaxErrorWithDefaults("(-3-)", null, ops)
+    syntaxErrorWithDefaults("1+(3-4/)", null, ops)
+    syntaxErrorWithDefaults("3.0-(4+3(2+))", null, ops)
 
     // empty parens
-    text = splitString("()")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("3/(2-6())")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("()", null, ops)
+    syntaxErrorWithDefaults("3/(2-6())", null, ops)
 
     // mismatched parens
-    text = listOf("(")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("(", null, ops)
+    syntaxErrorWithDefaults(")", null, ops)
+    syntaxErrorWithDefaults(")(", null, ops)
+    syntaxErrorWithDefaults("5-(0+(3-2)", null, ops)
+    syntaxErrorWithDefaults("(1)+3)", null, ops)
+    syntaxErrorWithDefaults("(1(8/9)+3(2+3)", null, ops)
 
-    text = listOf(")")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString(")(")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("5-(0+(3-2)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("(1)+3)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("(1(8/9)+3(2+3)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("(1(8/9)+3(2+3)")
+    var text = splitString("(1(8/9)+3(2+3)")
     assertSyntaxError {
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            null,
-            applyParens = false,
-            true,
-            false
-        )
+        generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
     }
 
     // invalid minus
-    text = listOf("-")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = listOf("(-)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("-", null, ops)
+    syntaxErrorWithDefaults("(-)", null, ops)
 
     // repeated ops
-    text = splitString("1+-2")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("1+22/x3")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("5-6(0+(3--2))")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("1+-2", null, ops)
+    syntaxErrorWithDefaults("1+22/x3", null, ops)
+    syntaxErrorWithDefaults("5-6(0+(3--2))", null, ops)
 
     // unknown char/invalid number
-    text = listOf("a")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("0*3")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("1(8/9)+3*(2+3)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("a", null, ops)
+    syntaxErrorWithDefaults("0*3", null, ops)
+    syntaxErrorWithDefaults("1(8/9)+3*(2+3)", null, ops)
 
     val partialOps = listOf("+", "-")
-    text = splitString("1(8/9)+3x(2+3)")
-    assertSyntaxError {
-        generateAndValidateComputeText(
-            null,
-            text,
-            partialOps,
-            null,
-            true,
-            true,
-            false
-        )
-    }
-
-    text = splitString("1(8/9)+-3.0.0x(2+3)")
-    assertSyntaxError {
-        generateAndValidateComputeText(
-            null,
-            text,
-            partialOps,
-            null,
-            true,
-            true,
-            false
-        )
-    }
-
-    text = splitString("0x--3")
-    assertSyntaxError {
-        generateAndValidateComputeText(
-            null,
-            text,
-            partialOps,
-            null,
-            true,
-            true,
-            false
-        )
-    }
+    syntaxErrorWithDefaults("1(8/9)+3x(2+3)", null, partialOps)
+    syntaxErrorWithDefaults("1(8/9)+-3.0.0x(2+3)", null, partialOps)
+    syntaxErrorWithDefaults("0x--3", null, partialOps)
 
     // invalid/repeated decimals
-    text = splitString("5.")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults("5.", null, ops)
 
     text = splitString("5.")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false) }
+    assertSyntaxError {
+        generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false)
+    }
 
-    text = listOf(".")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("5.0.1+10.2")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("5.0.+10.2")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("1+.45(..4)")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults(".", null, ops)
+    syntaxErrorWithDefaults("5.0.1+10.2", null, ops)
+    syntaxErrorWithDefaults("5.0.+10.2", null, ops)
+    syntaxErrorWithDefaults("1+.45(..4)", null, ops)
 
     text = splitString("1+.45(..4)")
     assertSyntaxError {
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            null,
-            true,
-            applyDecimals = false,
-            false
-        )
+        generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false)
     }
 
     // blank spaces
-    text = listOf("")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = listOf(" ")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = splitString("123+1 ")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+    syntaxErrorWithDefaults(" ", null, ops)
+    syntaxErrorWithDefaults("1-0\n", null, ops)
+    syntaxErrorWithDefaults("123+1 ", null, ops)
 
     // multi-digit
     text = listOf("12")
@@ -229,191 +116,105 @@ private fun testValidateErrors() {
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 }
 
-@Suppress("BooleanLiteralArgument", "KotlinConstantConditions")
+@Suppress("BooleanLiteralArgument")
 private fun testBuildText() {
+    val buildTextWithDefaults: (StringList, ExactFraction?, StringList) -> Unit = { text, initialValue, expected ->
+        assertEquals(
+            expected,
+            generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
+        )
+    }
+
     // initial text is empty and initial value is not set
-    var initialValue: ExactFraction? = null
-    var text: StringList = emptyList()
-    var expected: StringList = emptyList()
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(emptyList(), null, emptyList())
 
     // initial text is empty and initial value is set
-    text = emptyList()
-
-    initialValue = ExactFraction.EIGHT
-    expected = listOf(initialValue.toEFString())
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    var initialValue: ExactFraction?
+    buildTextWithDefaults(emptyList(), ExactFraction.EIGHT, listOf("EF[8 1]"))
 
     initialValue = ExactFraction(-13, 3)
-    expected = listOf(initialValue.toEFString())
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(emptyList(), initialValue, listOf("EF[-13 3]"))
 
     // initial text is not empty and initial value is not set
-    initialValue = null
 
     // all single digit
-    text = listOf("1")
-    expected = listOf("1")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(listOf("1"), null, listOf("1"))
+    buildTextWithDefaults(listOf("-", "1"), null, listOf("-1"))
 
-    text = splitString("-1")
-    expected = listOf("-1")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
-
-    text = splitString("1+2-3x7")
-    expected = "1 + 2 - 3 x 7".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    var text = splitString("1+2-3x7")
+    var expected = "1 + 2 - 3 x 7".split(" ")
+    buildTextWithDefaults(text, null, expected)
 
     text = splitString("1/(2x(3-1))")
     expected = "1 / ( 2 x ( 3 - 1 ) )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(text, null, expected)
 
     // multiple digits
-    text = splitString("123")
-    expected = listOf("123")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(splitString("123"), null, listOf("123"))
 
     text = splitString("12+106/23")
     expected = "12 + 106 / 23".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(text, null, expected)
 
     text = splitString("(10056+23)-14+(13-(2))")
     expected = "( 10056 + 23 ) - 14 + ( 13 - ( 2 ) )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(text, null, expected)
 
     text = splitString("4+(-31-4)/5")
     expected = "4 + ( -31 - 4 ) / 5".split(' ')
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(text, null, expected)
 
     // decimals
-    text = splitString("1.01")
-    expected = listOf("1.01")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
-
-    text = splitString(".5")
-    expected = listOf(".5")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(splitString("1.01"), null, listOf("1.01"))
+    buildTextWithDefaults(splitString(".5"), null, listOf(".5"))
 
     text = splitString("1.5/55x2.6")
     expected = "1.5 / 55 x 2.6".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(text, null, expected)
 
     text = splitString("5x(.723-(16+2)/4)")
     expected = "5 x ( .723 - ( 16 + 2 ) / 4 )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(text, null, expected)
 
     // initial text is not empty and initial value is set
-    initialValue = ExactFraction.ZERO
-    text = splitString("+1")
-    expected = listOf(initialValue.toEFString()) + "+ 1".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(splitString("+1"), ExactFraction.ZERO, listOf("EF[0 1]", "+", "1"))
 
-    initialValue = -ExactFraction.EIGHT
     text = splitString("+1x33.2")
-    expected = listOf(initialValue.toEFString()) + "+ 1 x 33.2".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    expected = listOf("EF[-8 1]") + "+ 1 x 33.2".split(" ")
+    buildTextWithDefaults(text, -ExactFraction.EIGHT, expected)
 
     initialValue = ExactFraction(1001, 57)
     text = splitString("/(.4-5x2)")
-    expected = listOf(initialValue.toEFString()) + "/ ( .4 - 5 x 2 )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    expected = listOf("EF[1001 57]") + "/ ( .4 - 5 x 2 )".split(" ")
+    buildTextWithDefaults(text, initialValue, expected)
 
-    initialValue = ExactFraction.ONE
-    text = splitString("-1+2")
-    expected = listOf(initialValue.toEFString()) + "- 1 + 2".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    expected = listOf("EF[1 1]") + "- 1 + 2".split(" ")
+    buildTextWithDefaults(splitString("-1+2"), ExactFraction.ONE, expected)
 
     // add times around parens
     text = splitString("45(7-1)")
     expected = "45 x ( 7 - 1 )".split(" ")
-    assertEquals(expected, generateAndValidateComputeText(null, text, ops, null, true, true, false))
+    buildTextWithDefaults(text, null, expected)
 
     text = splitString("(7-1)45")
     expected = "( 7 - 1 ) x 45".split(" ")
-    assertEquals(expected, generateAndValidateComputeText(null, text, ops, null, true, true, false))
+    buildTextWithDefaults(text, null, expected)
 
     text = splitString("15+(12-3.3)(18.5)(2/3(1-10))")
     expected = "15 + ( 12 - 3.3 ) x ( 18.5 ) x ( 2 / 3 x ( 1 - 10 ) )".split(" ")
-    assertEquals(expected, generateAndValidateComputeText(null, text, ops, null, true, true, false))
+    buildTextWithDefaults(text, null, expected)
 
-    initialValue = ExactFraction.HALF
     text = splitString("5+2(6-3.3)")
-    expected = listOf(initialValue.toEFString()) + "x 5 + 2 x ( 6 - 3.3 )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    expected = listOf("EF[1 2]") + "x 5 + 2 x ( 6 - 3.3 )".split(" ")
+    buildTextWithDefaults(text, ExactFraction.HALF, expected)
 
     text = splitString("(5/10)+2(6-3.3)")
-    expected = listOf(initialValue.toEFString()) + "x ( 5 / 10 ) + 2 x ( 6 - 3.3 )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-    )
+    expected = listOf("EF[1 2]") + "x ( 5 / 10 ) + 2 x ( 6 - 3.3 )".split(" ")
+    buildTextWithDefaults(text, ExactFraction.HALF, expected)
 
     text = splitString("(2(3)4)")
     expected = "( 2 x ( 3 ) x 4 )".split(' ')
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, true, true, false)
-    )
+    buildTextWithDefaults(text, null, expected)
 }
 
 @Suppress("BooleanLiteralArgument")
