@@ -146,7 +146,9 @@ android {
 }
 
 ktlint {
-    disabledRules.set(setOf("filename"))
+    disabledRules.set(
+        setOf("filename", "spacing-between-declarations-with-annotations", "spacing-between-declarations-with-comments")
+    )
 }
 
 dependencies {

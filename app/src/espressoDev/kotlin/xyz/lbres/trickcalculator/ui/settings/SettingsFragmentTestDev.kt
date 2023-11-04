@@ -206,10 +206,7 @@ class SettingsFragmentTestDev {
     }
 
     @Test fun settingsSaved() = testSettingsSaved()
-
     @Test fun randomizeButtonSaved() = testRandomizeButtonSaved()
-
     @Test fun resetButtonSaved() = testResetButtonSaved()
-
     @Test fun standardFunctionButtonSaved() = testStandardFunctionButtonSaved()
 }
