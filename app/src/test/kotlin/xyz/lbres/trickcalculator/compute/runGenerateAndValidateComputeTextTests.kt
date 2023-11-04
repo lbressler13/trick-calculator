@@ -7,7 +7,9 @@ import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.isNumber
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.assertFails
+
+// TODO split file. This is 700 lines
 
 private val ops = listOf("+", "-", "x", "/")
 
@@ -20,7 +22,17 @@ fun runGenerateAndValidateComputeTextTests() {
 
 @Suppress("BooleanLiteralArgument")
 private fun testValidateErrors() {
+//    val syntaxErrorWithDefaults: (String, ExactFraction?) -> Unit = { text, initialValue ->
+//        generateAndValidateComputeText(initialValue, splitString(text), ops, null, true, true, false)
+//    }
+//
     // operator at start or end
+//    syntaxErrorWithDefaults("+", null)
+//    syntaxErrorWithDefaults("/3", null)
+//    syntaxErrorWithDefaults("--3", null)
+//    syntaxErrorWithDefaults("x3-4", null)
+//    syntaxErrorWithDefaults("/3", null)
+
     var text = listOf("+")
     assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
@@ -93,6 +105,13 @@ private fun testValidateErrors() {
             false
         )
     }
+
+    // invalid minus
+    text = listOf("-")
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
+
+    text = listOf("(-)")
+    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
 
     // repeated ops
     text = splitString("1+-2")
@@ -348,6 +367,14 @@ private fun testBuildText() {
     initialValue = ExactFraction(1001, 57)
     text = splitString("/(.4-5x2)")
     expected = listOf(initialValue.toEFString()) + "/ ( .4 - 5 x 2 )".split(" ")
+    assertEquals(
+        expected,
+        generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
+    )
+
+    initialValue = ExactFraction.ONE
+    text = splitString("-1+2")
+    expected = listOf(initialValue.toEFString()) + "- 1 + 2".split(" ")
     assertEquals(
         expected,
         generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
@@ -669,6 +696,6 @@ private fun runSingleShuffledTest(
 }
 
 private fun assertSyntaxError(function: () -> Unit) {
-    val error = assertFailsWith<Exception> { function() }
+    val error = assertFails { function() }
     assertEquals("Syntax error", error.message)
 }

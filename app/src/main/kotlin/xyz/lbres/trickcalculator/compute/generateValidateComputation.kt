@@ -1,6 +1,7 @@
 package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.general.tryOrDefault
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
@@ -39,7 +40,7 @@ private data class ComputeData(
  *
  * Validations:
  * - Each element has length 1
- * - Doesn't start or end with operator
+ * - Doesn't start or end with operator, with the exception of a negative sign before the first digit
  * - All values are numbers, operators, or parens
  * - Parentheses are matched
  * - No successive operators
@@ -76,7 +77,7 @@ fun generateAndValidateComputeText(
     when {
         splitText.isEmpty() && initialValue == null -> return emptyList()
         splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
-        initialValue == null && splitText[0] != "-" && isOperator(splitText[0], ops) -> {
+        initialValue == null && isOperator(splitText[0], ops) && splitText[0] != "-" -> {
             throw syntaxError
         }
     }
@@ -91,11 +92,8 @@ fun generateAndValidateComputeText(
             throw syntaxError
         }
 
-        data.currentType = if (element == "-" && (data.lastType == LPAREN || data.lastType == "") && data.currentType != NUMBER) {
-            NUMBER
-        } else {
-            getTypeOf(element, ops) ?: throw syntaxError
-        }
+        val negative = element == "-" && (data.lastType == LPAREN || data.lastType == "") && data.currentType != NUMBER
+        data.currentType = simpleIf(negative, { NUMBER }, { getTypeOf(element, ops) ?: throw syntaxError })
 
         if (data.currentType != NUMBER && data.currentNumber.isNotEmpty()) {
             addCurrentNumber(data)
@@ -154,6 +152,8 @@ private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, init
  */
 private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean, numbersOrder: IntList?) {
     when {
+        element == "-" && data.currentNumber.isNotEmpty() -> throw syntaxError
+        element == "-" -> data.currentNumber += element
         element == "." && data.currentDecimal -> throw syntaxError
         element == "." -> {
             if (applyDecimals) {
@@ -163,8 +163,6 @@ private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean,
             data.currentDecimal = true
             data.lastDecimal = true
         }
-        element == "-" && data.currentNumber.isNotEmpty() -> throw syntaxError
-        element == "-" -> data.currentNumber += element
         else -> {
             data.currentNumber += digitFromNumbersOrder(element, numbersOrder)
             data.lastDecimal = false

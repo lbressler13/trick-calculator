@@ -96,8 +96,10 @@ class HistoryFragmentTest {
     @Test fun shuffleOperators() = testShuffleOperators()
     @Test fun shuffleNumbers() = testShuffleNumbers()
     @Test fun shuffleComputation() = testShuffleComputation()
+
     @Test fun noApplyDecimals() = testNoApplyDecimals()
     @Test fun noApplyParens() = testNoApplyParens()
+
     @Test fun multipleNoApply() = testMultipleNoApply()
     @Test fun multipleShuffle() = testMultipleShuffle()
     @Test fun multipleSettingsTypes() = testMultipleSettingsTypes()

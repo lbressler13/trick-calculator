@@ -8,7 +8,7 @@ import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.AppLogger
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.assertFails
 
 private val exp = listOf("^")
 private val plusMinus = listOf("+", "-")
@@ -47,7 +47,7 @@ private val performReduced: OperatorFunction = { lval, rval, op ->
 fun runRunComputationTests() {
     // errors
     var text = splitString("1+3-")
-    var error = assertFailsWith<Exception> {
+    var error = assertFails {
         runComputation(null, text, allOps, performOp, (0..9).toList(), true, true, false)
     }
     assertEquals("Syntax error", error.message)
@@ -71,7 +71,7 @@ fun runRunComputationTests() {
     }
 
     text = splitString("1+0")
-    error = assertFailsWith {
+    error = assertFails {
         runComputation(null, text, allOps, performReduced, (0..9).toList(), true, true, false)
     }
     assertEquals("Invalid operator +", error.message)
@@ -264,15 +264,11 @@ fun runParseTextTests() {
     assertEquals(expected, parseText(text, listOf(timesDiv, emptyList()), performOp))
 
     text = "5 x 3 / 6 + 2".split(' ')
-    var error = assertFailsWith<Exception> {
-        parseText(text, listOf(timesDiv, emptyList()), performOp)
-    }
+    var error = assertFails { parseText(text, listOf(timesDiv, emptyList()), performOp) }
     assertEquals(error.message, "Parse error")
 
     text = "5 x 3 / 6 + 2".split(' ')
-    error = assertFailsWith {
-        parseText(text, allOps, performReduced)
-    }
+    error = assertFails { parseText(text, allOps, performReduced) }
     assertEquals(error.message, "Invalid operator +")
 }
 
