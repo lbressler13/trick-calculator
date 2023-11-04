@@ -152,7 +152,7 @@ dependencies {
     val appCompatVersion = "1.6.1"
     val constraintLayoutVersion = "2.1.4"
     val exactNumbersVersion = "0.1.1"
-    val kotlinUtilsVersion = "1.2.0"
+    val kotlinUtilsVersion = "1.3.0"
     val lifecycleVersion = "2.6.2"
     val materialVersion = "1.10.0"
     val navigationVersion = "2.7.4"
@@ -177,6 +177,7 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     // testing
+    testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk-android:$mockkVersion")
     testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")

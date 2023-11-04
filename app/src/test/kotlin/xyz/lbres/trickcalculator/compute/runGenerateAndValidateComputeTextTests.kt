@@ -1,7 +1,7 @@
 package xyz.lbres.trickcalculator.compute
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
@@ -642,6 +642,6 @@ private fun runSingleShuffledTest(
 }
 
 private fun assertSyntaxError(function: () -> Unit) {
-    val error = assertThrows(Exception::class.java) { function() }
+    val error = assertFailsWith<Exception> { function() }
     assertEquals("Syntax error", error.message)
 }
