@@ -9,8 +9,6 @@ import xyz.lbres.trickcalculator.utils.isNumber
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
-// TODO split file. This is 700 lines
-
 private val ops = listOf("+", "-", "x", "/")
 
 fun runGenerateAndValidateComputeTextTests() {
@@ -20,409 +18,252 @@ fun runGenerateAndValidateComputeTextTests() {
     testBuildTextWithShuffle()
 }
 
-@Suppress("BooleanLiteralArgument")
-private fun testValidateErrors() {
-    val syntaxErrorWithDefaults: (String, ExactFraction?, StringList) -> Unit = { text, initialValue, operators ->
-        assertSyntaxError {
-            generateAndValidateComputeText(initialValue, splitString(text), operators, null, true, true, false)
-        }
-    }
-
-    // operator at start or end
-    syntaxErrorWithDefaults("+", null, ops)
-    syntaxErrorWithDefaults("/3", null, ops)
-    syntaxErrorWithDefaults("--3", null, ops)
-    syntaxErrorWithDefaults("x3-4", null, ops)
-    syntaxErrorWithDefaults("/3", null, ops)
-
-    // operator at start or end in parens
-    syntaxErrorWithDefaults("(+)", null, ops)
-    syntaxErrorWithDefaults("(/3)", null, ops)
-    syntaxErrorWithDefaults("(3-)", null, ops)
-    syntaxErrorWithDefaults("(-3-)", null, ops)
-    syntaxErrorWithDefaults("1+(3-4/)", null, ops)
-    syntaxErrorWithDefaults("3.0-(4+3(2+))", null, ops)
-
-    // empty parens
-    syntaxErrorWithDefaults("()", null, ops)
-    syntaxErrorWithDefaults("3/(2-6())", null, ops)
-
-    // mismatched parens
-    syntaxErrorWithDefaults("(", null, ops)
-    syntaxErrorWithDefaults(")", null, ops)
-    syntaxErrorWithDefaults(")(", null, ops)
-    syntaxErrorWithDefaults("5-(0+(3-2)", null, ops)
-    syntaxErrorWithDefaults("(1)+3)", null, ops)
-    syntaxErrorWithDefaults("(1(8/9)+3(2+3)", null, ops)
-
-    var text = splitString("(1(8/9)+3(2+3)")
-    assertSyntaxError {
-        generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
-    }
-
-    // invalid minus
-    syntaxErrorWithDefaults("-", null, ops)
-    syntaxErrorWithDefaults("(-)", null, ops)
-
-    // repeated ops
-    syntaxErrorWithDefaults("1+-2", null, ops)
-    syntaxErrorWithDefaults("1+22/x3", null, ops)
-    syntaxErrorWithDefaults("5-6(0+(3--2))", null, ops)
-
-    // unknown char/invalid number
-    syntaxErrorWithDefaults("a", null, ops)
-    syntaxErrorWithDefaults("0*3", null, ops)
-    syntaxErrorWithDefaults("1(8/9)+3*(2+3)", null, ops)
-
-    val partialOps = listOf("+", "-")
-    syntaxErrorWithDefaults("1(8/9)+3x(2+3)", null, partialOps)
-    syntaxErrorWithDefaults("1(8/9)+-3.0.0x(2+3)", null, partialOps)
-    syntaxErrorWithDefaults("0x--3", null, partialOps)
-
-    // invalid/repeated decimals
-    syntaxErrorWithDefaults("5.", null, ops)
-
-    text = splitString("5.")
-    assertSyntaxError {
-        generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false)
-    }
-
-    syntaxErrorWithDefaults(".", null, ops)
-    syntaxErrorWithDefaults("5.0.1+10.2", null, ops)
-    syntaxErrorWithDefaults("5.0.+10.2", null, ops)
-    syntaxErrorWithDefaults("1+.45(..4)", null, ops)
-
-    text = splitString("1+.45(..4)")
-    assertSyntaxError {
-        generateAndValidateComputeText(null, text, ops, null, true, applyDecimals = false, false)
-    }
-
-    // blank spaces
-    syntaxErrorWithDefaults(" ", null, ops)
-    syntaxErrorWithDefaults("1-0\n", null, ops)
-    syntaxErrorWithDefaults("123+1 ", null, ops)
-
-    // multi-digit
-    text = listOf("12")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = listOf("01")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = "1 + 10".split(' ')
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-
-    text = listOf("1.2")
-    assertSyntaxError { generateAndValidateComputeText(null, text, ops, null, true, true, false) }
-}
-
-@Suppress("BooleanLiteralArgument")
 private fun testBuildText() {
-    val buildTextWithDefaults: (StringList, ExactFraction?, StringList) -> Unit = { text, initialValue, expected ->
-        assertEquals(
-            expected,
-            generateAndValidateComputeText(initialValue, text, ops, null, true, true, false)
-        )
-    }
-
     // initial text is empty and initial value is not set
-    buildTextWithDefaults(emptyList(), null, emptyList())
+    assertEquals(emptyList(), buildTextWithDefaults(null, emptyList()))
 
     // initial text is empty and initial value is set
-    var initialValue: ExactFraction?
-    buildTextWithDefaults(emptyList(), ExactFraction.EIGHT, listOf("EF[8 1]"))
+    assertEquals(listOf("EF[8 1]"), buildTextWithDefaults(ExactFraction.EIGHT, emptyList()))
 
-    initialValue = ExactFraction(-13, 3)
-    buildTextWithDefaults(emptyList(), initialValue, listOf("EF[-13 3]"))
+    var initialValue = ExactFraction(-13, 3)
+    assertEquals(listOf("EF[-13 3]"), buildTextWithDefaults(initialValue, emptyList()))
 
     // initial text is not empty and initial value is not set
 
     // all single digit
-    buildTextWithDefaults(listOf("1"), null, listOf("1"))
-    buildTextWithDefaults(listOf("-", "1"), null, listOf("-1"))
+    assertEquals(listOf("1"), buildTextWithDefaults(null, listOf("1")))
+    assertEquals(listOf("-1"), buildTextWithDefaults(null, listOf("-", "1")))
 
     var text = splitString("1+2-3x7")
     var expected = "1 + 2 - 3 x 7".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     text = splitString("1/(2x(3-1))")
     expected = "1 / ( 2 x ( 3 - 1 ) )".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     // multiple digits
-    buildTextWithDefaults(splitString("123"), null, listOf("123"))
+    assertEquals(listOf("123"), buildTextWithDefaults(null, splitString("123")))
 
     text = splitString("12+106/23")
     expected = "12 + 106 / 23".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     text = splitString("(10056+23)-14+(13-(2))")
     expected = "( 10056 + 23 ) - 14 + ( 13 - ( 2 ) )".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     text = splitString("4+(-31-4)/5")
     expected = "4 + ( -31 - 4 ) / 5".split(' ')
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     // decimals
-    buildTextWithDefaults(splitString("1.01"), null, listOf("1.01"))
-    buildTextWithDefaults(splitString(".5"), null, listOf(".5"))
+    assertEquals(listOf("1.01"), buildTextWithDefaults(null, splitString("1.01")))
+    assertEquals(listOf(".5"), buildTextWithDefaults(null, splitString(".5")))
 
     text = splitString("1.5/55x2.6")
     expected = "1.5 / 55 x 2.6".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     text = splitString("5x(.723-(16+2)/4)")
     expected = "5 x ( .723 - ( 16 + 2 ) / 4 )".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     // initial text is not empty and initial value is set
-    buildTextWithDefaults(splitString("+1"), ExactFraction.ZERO, listOf("EF[0 1]", "+", "1"))
+    expected = listOf("EF[0 1]", "+", "1")
+    assertEquals(expected, buildTextWithDefaults(ExactFraction.ZERO, splitString("+1")))
 
     text = splitString("+1x33.2")
     expected = listOf("EF[-8 1]") + "+ 1 x 33.2".split(" ")
-    buildTextWithDefaults(text, -ExactFraction.EIGHT, expected)
+    assertEquals(expected, buildTextWithDefaults(-ExactFraction.EIGHT, text))
 
     initialValue = ExactFraction(1001, 57)
     text = splitString("/(.4-5x2)")
     expected = listOf("EF[1001 57]") + "/ ( .4 - 5 x 2 )".split(" ")
-    buildTextWithDefaults(text, initialValue, expected)
+    assertEquals(expected, buildTextWithDefaults(initialValue, text))
 
     expected = listOf("EF[1 1]") + "- 1 + 2".split(" ")
-    buildTextWithDefaults(splitString("-1+2"), ExactFraction.ONE, expected)
+    assertEquals(expected, buildTextWithDefaults(ExactFraction.ONE, splitString("-1+2")))
 
     // add times around parens
     text = splitString("45(7-1)")
     expected = "45 x ( 7 - 1 )".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     text = splitString("(7-1)45")
     expected = "( 7 - 1 ) x 45".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     text = splitString("15+(12-3.3)(18.5)(2/3(1-10))")
     expected = "15 + ( 12 - 3.3 ) x ( 18.5 ) x ( 2 / 3 x ( 1 - 10 ) )".split(" ")
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 
     text = splitString("5+2(6-3.3)")
     expected = listOf("EF[1 2]") + "x 5 + 2 x ( 6 - 3.3 )".split(" ")
-    buildTextWithDefaults(text, ExactFraction.HALF, expected)
+    assertEquals(expected, buildTextWithDefaults(ExactFraction.HALF, text))
 
     text = splitString("(5/10)+2(6-3.3)")
     expected = listOf("EF[1 2]") + "x ( 5 / 10 ) + 2 x ( 6 - 3.3 )".split(" ")
-    buildTextWithDefaults(text, ExactFraction.HALF, expected)
+    assertEquals(expected, buildTextWithDefaults(ExactFraction.HALF, text))
 
     text = splitString("(2(3)4)")
     expected = "( 2 x ( 3 ) x 4 )".split(' ')
-    buildTextWithDefaults(text, null, expected)
+    assertEquals(expected, buildTextWithDefaults(null, text))
 }
 
-@Suppress("BooleanLiteralArgument")
 private fun testBuildTextWithMods() {
     // numbers order
     var text = splitString("5x(.723-(16+2)/4)")
     var order = (9 downTo 0).toList()
     var expected = "4 x ( .276 - ( 83 + 7 ) / 5 )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, order, true, true, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, order = order))
 
-    text = emptyList()
-    expected = emptyList()
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, order, true, true, false)
-    )
+    assertEquals(emptyList(), buildTextWithDefaults(null, emptyList(), order = order))
 
     text = splitString("18+23/1.75")
     order = (0..9).toList()
     expected = "18 + 23 / 1.75".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, order, true, true, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, order = order))
 
     text = splitString("1+2/4")
     order = listOf(4, 7, 6, 3, 9, 2, 8, 0, 1, 5)
     expected = splitString("7+6/9")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, order, true, true, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, order = order))
 
     // not apply parens
-    text = emptyList()
-    expected = emptyList()
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
-    )
+    assertEquals(emptyList(), buildTextWithDefaults(null, emptyList(), applyParens = false))
 
     text = splitString("1+23.4/5")
     expected = "1 + 23.4 / 5".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, applyParens = false))
 
-    text = splitString("(1)")
-    expected = listOf("1")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
-    )
+    assertEquals(listOf("1"), buildTextWithDefaults(null, splitString("(1)"), applyParens = false))
 
     text = splitString("4-(5x(7/8))")
     expected = splitString("4-5x7/8")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, applyParens = false))
 
     text = splitString("(4-5)(7/8)") // times is added even when parens are stripped
     expected = splitString("4-5x7/8")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, applyParens = false, true, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, applyParens = false))
 
     // not apply decimals
-    text = emptyList()
-    expected = emptyList()
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, false, applyDecimals = false, false)
-    )
+    assertEquals(emptyList(), buildTextWithDefaults(null, emptyList(), applyDecimals = false))
 
     text = splitString("10000-805")
     expected = "10000 - 805".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, false, applyDecimals = false, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, applyDecimals = false))
 
     text = splitString("1.1-2")
     expected = "11 - 2".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, false, applyDecimals = false, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, applyDecimals = false))
 
     text = splitString("103.5x98.765-.99x3")
     expected = "1035 x 98765 - 99 x 3".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(null, text, ops, null, false, applyDecimals = false, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, applyDecimals = false))
 
     // combination
     text = splitString("10.3x(44+2.0)")
     order = listOf(4, 8, 1, 0, 5, 9, 3, 6, 2, 7)
 
     expected = "103 x 44 + 20".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            null,
-            applyParens = false,
-            applyDecimals = false,
-            false
-        )
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, applyParens = false, applyDecimals = false))
 
     expected = "840 x ( 55 + 14 )".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            order,
-            applyParens = true,
-            applyDecimals = false,
-            false
-        )
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, order = order, applyParens = true, applyDecimals = false))
 
     expected = "84.0 x 55 + 1.4".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            order,
-            applyParens = false,
-            applyDecimals = true,
-            false
-        )
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, order = order, applyParens = false, applyDecimals = true))
 
     expected = "840 x 55 + 14".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(
-            null,
-            text,
-            ops,
-            order,
-            applyParens = false,
-            applyDecimals = false,
-            false
-        )
-    )
+    assertEquals(expected, buildTextWithDefaults(null, text, order = order, applyParens = false, applyDecimals = false))
 
     // with initial value
     var ef = -ExactFraction.THREE
     text = splitString("33(2+8.5)")
     expected = listOf(ef.toEFString()) + "x 33 x 2 + 8.5".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(ef, text, ops, null, applyParens = false, true, false)
-    )
+    assertEquals(expected, buildTextWithDefaults(ef, text, applyParens = false, applyDecimals = true))
 
     ef = ExactFraction(2, 107)
     text = splitString("(14-4)-29.0-(0.5)(2)")
     order = (9 downTo 0).toList()
     expected = listOf(ef.toEFString()) + "x 85 - 5 - 709 - 94 x 7".split(" ")
-    assertEquals(
-        expected,
-        generateAndValidateComputeText(
-            ef,
-            text,
-            ops,
-            order,
-            applyParens = false,
-            applyDecimals = false,
-            false
-        )
-    )
+    assertEquals(expected, buildTextWithDefaults(ef, text, order = order, applyParens = false, applyDecimals = false))
 }
 
-@Suppress("BooleanLiteralArgument")
+private fun testValidateErrors() {
+    // operator at start or end
+    assertSyntaxError { buildTextWithDefaults(null, listOf("+")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("/3")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("--3")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("x3-4")) }
+
+    // operator at start or end in parens
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(+)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(/3)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(3-)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(-3-)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1+(3-4/)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("3.0-(4+3(2+))")) }
+
+    // empty parens
+    assertSyntaxError { buildTextWithDefaults(null, splitString("()")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("3/(2-6())")) }
+
+    // mismatched parens
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString(")")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString(")(")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("5-(0+(3-2)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(1))+3")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(1(8/9)+3(2+3)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(1(8/9)+3(2+3)"), applyParens = false) }
+
+    // invalid minus
+    assertSyntaxError { buildTextWithDefaults(null, splitString("-")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("(-)")) }
+
+    // repeated ops
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1+-2")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1+22/x3")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("5-6(0+(3--2))")) }
+
+    // unknown char/invalid number
+    assertSyntaxError { buildTextWithDefaults(null, splitString("a")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("0X3")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1(8/9)+3*(2+3)")) }
+
+    val partialOps = listOf("+", "-")
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1(8/9)+3x(2+3)"), ops = partialOps) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1(8/9)+-3.0.0x(2+3)"), ops = partialOps) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("0x--2"), ops = partialOps) }
+
+    // invalid/repeated decimals
+    assertSyntaxError { buildTextWithDefaults(null, splitString("5.")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("5."), applyDecimals = false) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString(".")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("5.0.1+10.2")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("5.0.+10.2")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1+.45(..4)")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1+.45(..4)"), applyDecimals = false) }
+
+    // blank spaces
+    assertSyntaxError { buildTextWithDefaults(null, splitString(" ")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("1-0\n")) }
+    assertSyntaxError { buildTextWithDefaults(null, splitString("123+1 ")) }
+
+    // multi-digit
+    assertSyntaxError { buildTextWithDefaults(null, listOf("12")) }
+    assertSyntaxError { buildTextWithDefaults(null, listOf("01")) }
+    assertSyntaxError { buildTextWithDefaults(null, "1 + 10".split(' ')) }
+    assertSyntaxError { buildTextWithDefaults(null, listOf("1.2")) }
+}
+
 private fun testBuildTextWithShuffle() {
-    var text: StringList = emptyList()
-    repeat(20) {
-        assertEquals(
-            text,
-            generateAndValidateComputeText(
-                null,
-                text,
-                ops,
-                null,
-                true,
-                true,
-                true
-            )
-        )
-    }
+    assertEquals(emptyList(), buildTextWithDefaults(null, emptyList(), shuffleComputation = true))
 
     // no modifications
-    text = splitString("1+3(4-7.5)")
+    var text = splitString("1+3(4-7.5)")
     var builtText = "1 + 3 x ( 4 - 7.5 )".split(' ')
     runSingleShuffledTest(text, builtText)
 
@@ -499,4 +340,16 @@ private fun runSingleShuffledTest(
 private fun assertSyntaxError(function: () -> Unit) {
     val error = assertFails { function() }
     assertEquals("Syntax error", error.message)
+}
+
+fun buildTextWithDefaults(
+    initialValue: ExactFraction?,
+    text: StringList,
+    ops: StringList = listOf("+", "-", "x", "/"),
+    order: IntList? = null,
+    applyParens: Boolean = true,
+    applyDecimals: Boolean = true,
+    shuffleComputation: Boolean = false
+): StringList {
+    return generateAndValidateComputeText(initialValue, text, ops, order, applyParens, applyDecimals, shuffleComputation)
 }
