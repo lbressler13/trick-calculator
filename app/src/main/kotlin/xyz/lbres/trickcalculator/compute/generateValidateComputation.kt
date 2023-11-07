@@ -17,6 +17,8 @@ private const val OPERATOR = "operator"
 private const val LPAREN = "lparen"
 private const val RPAREN = "rparen"
 
+private const val NEG = "-"
+
 private val parenCounts = mapOf(LPAREN to 1, RPAREN to -1)
 private val syntaxError = Exception("Syntax error")
 
@@ -72,13 +74,12 @@ fun generateAndValidateComputeText(
     shuffleComputation: Boolean
 ): StringList {
     val data = ComputeData()
-    println(Pair(initialValue, splitText))
 
     // empty compute text or starting with operator
     when {
         splitText.isEmpty() && initialValue == null -> return emptyList()
         splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
-        initialValue == null && isOperator(splitText[0], ops) && splitText[0] != "-" -> {
+        initialValue == null && isOperator(splitText[0], ops) && splitText[0] != NEG -> {
             throw syntaxError
         }
     }
@@ -93,7 +94,7 @@ fun generateAndValidateComputeText(
             throw syntaxError
         }
 
-        val negative = element == "-" && (data.lastType == LPAREN || data.lastType == "") && data.currentType != NUMBER
+        val negative = element == NEG && (data.lastType == LPAREN || data.lastType == "") && data.currentType != NUMBER
         data.currentType = simpleIf(negative, { NUMBER }, { getTypeOf(element, ops) ?: throw syntaxError })
 
         if (data.currentType != NUMBER && data.currentNumber.isNotEmpty()) {
@@ -153,8 +154,8 @@ private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, init
  */
 private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean, numbersOrder: IntList?) {
     when {
-        element == "-" && data.currentNumber.isNotEmpty() -> throw syntaxError
-        element == "-" -> data.currentNumber += element
+        element == NEG && data.currentNumber.isNotEmpty() -> throw syntaxError
+        element == NEG -> data.currentNumber += element
         element == "." && data.currentDecimal -> throw syntaxError
         element == "." -> {
             if (applyDecimals) {
@@ -216,7 +217,7 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
  * @param data [ComputeData]: data about current state of computation
  */
 private fun addCurrentNumber(data: ComputeData) {
-    if (data.currentNumber == "-" || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
+    if (data.currentNumber == NEG || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
         throw syntaxError
     }
 

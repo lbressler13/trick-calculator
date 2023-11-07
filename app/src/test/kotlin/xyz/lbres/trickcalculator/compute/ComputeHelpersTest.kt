@@ -28,7 +28,7 @@ class ComputeHelpersTest {
 
         // non-operator
         ops = listOf("/", "+", "-")
-        assertFalse(isOperator("*", ops))
+        assertFalse(isOperator("x", ops))
 
         ops = emptyList()
         assertFalse(isOperator("+", ops))
@@ -43,7 +43,6 @@ class ComputeHelpersTest {
     @Test
     fun testValidateNumbersOrder() {
         assertFalse(validateNumbersOrder(null))
-
         assertFalse(validateNumbersOrder(emptyList()))
 
         var order = listOf(0)

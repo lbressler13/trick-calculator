@@ -3,12 +3,14 @@ package xyz.lbres.trickcalculator.compute
 import io.mockk.every
 import io.mockk.mockkStatic
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.assertDivByZero
+import xyz.lbres.trickcalculator.assertFailsWithMessage
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.AppLogger
 import xyz.lbres.trickcalculator.utils.OperatorFunction
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 
 private val exp = listOf("^")
 private val plusMinus = listOf("+", "-")
@@ -43,126 +45,96 @@ private val performReduced: OperatorFunction = { lval, rval, op ->
 }
 
 // relatively light, b/c functionality should all be tested in fn-specific tests
-@Suppress("BooleanLiteralArgument")
 fun runRunComputationTests() {
     // errors
-    var text = splitString("1+3-")
-    var error = assertFails {
-        runComputation(null, text, allOps, performOp, (0..9).toList(), true, true, false)
-    }
-    assertEquals("Syntax error", error.message)
+    assertFailsWithMessage("Syntax error") { callRunComputation(null, splitString("1+3-")) }
 
-    text = splitString("1/0")
     assertDivByZero {
-        runComputation(null, text, allOps, performOp, (0..9).toList(), true, true, false)
+        callRunComputation(null, splitString("1/0"))
     }
 
-    var initialValue = ExactFraction.HALF
-    text = emptyList()
-    val divZeroOrder = listOf(1, 2, 0, 3, 4, 5, 6, 7, 8, 9)
     assertDivByZero {
-        runComputation(initialValue, text, allOps, performOp, divZeroOrder, true, true, false)
+        val order = listOf(1, 2, 0, 3, 4, 5, 6, 7, 8, 9)
+        callRunComputation(ExactFraction.HALF, emptyList(), order = order)
     }
 
-    initialValue = ExactFraction.EIGHT
-    text = splitString("/0")
     assertDivByZero {
-        runComputation(initialValue, text, allOps, performOp, (0..9).toList(), true, true, false)
+        callRunComputation(ExactFraction.EIGHT, splitString("/0"))
     }
 
-    text = splitString("1+0")
-    error = assertFails {
-        runComputation(null, text, allOps, performReduced, (0..9).toList(), true, true, false)
+    assertFailsWithMessage("Invalid operator +") {
+        callRunComputation(null, splitString("1+0"), executeOp = performReduced)
     }
-    assertEquals("Invalid operator +", error.message)
 
     // cannot test parsing and overflow errors b/c they should never happen
 
     // numbers order
-    text = splitString("1/0")
-    var nums = listOf(3, 8, 2, 6, 0, 1, 9, 7, 5, 4)
+    var order = listOf(3, 8, 2, 6, 0, 1, 9, 7, 5, 4)
     var expected = ExactFraction(8, 3)
-    var result = runComputation(null, text, allOps, performOp, nums, true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, splitString("1/0"), order = order))
 
-    text = splitString("2x(3+4)/6.9")
-    nums = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
+    var text = splitString("2x(3+4)/6.9")
+    order = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
     expected = ExactFraction(33, 9)
-    result = runComputation(null, text, allOps, performOp, nums, true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, order = order))
 
     // initial value is impacted by num order
-    initialValue = ExactFraction.THREE
     text = splitString("x2-31/0")
-    nums = listOf(5, 3, 8, 1, 7, 0, 6, 2, 4, 9)
+    order = listOf(5, 3, 8, 1, 7, 0, 6, 2, 4, 9)
     expected = ExactFraction(1, 15)
-    result = runComputation(initialValue, text, allOps, performOp, nums, true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(ExactFraction.THREE, text, order = order))
 
     // skip parens
     text = splitString("2(3+4)-6/(7-5)")
     expected = ExactFraction(29, 7)
-    result = runComputation(null, text, allOps, performOp, (0..9).toList(), false, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, applyParens = false))
 
     text = splitString("2x(3+4)/(6.4-.4)")
-    nums = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
+    order = listOf(1, 2, 3, 6, 5, 7, 9, 4, 8, 0)
     expected = ExactFraction(685, 38)
-    result = runComputation(null, text, allOps, performOp, nums, false, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, order = order, applyParens = false))
 
     // skip decimals
     text = splitString("0.5x2+7")
     expected = ExactFraction(17)
-    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, applyDecimals = false))
 
     text = splitString("8.7/(16-2)")
-    nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
+    order = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(80, 51)
-    result = runComputation(null, text, allOps, performOp, nums, true, false, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, order = order, applyDecimals = false))
 
     text = splitString("1.1+2.2+3.3")
     expected = ExactFraction(66)
-    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, false, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, applyDecimals = false))
 
     // skip parens + decimals
     text = splitString("8.7/(16-2)")
-    nums = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
+    order = listOf(3, 5, 1, 4, 9, 7, 2, 0, 8, 6)
     expected = ExactFraction(28, 52)
-    result = runComputation(null, text, allOps, performOp, nums, false, false, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, order = order, applyParens = false, applyDecimals = false))
 
     // alternate ops
     text = splitString("2(3/4)-6+(7x5)")
     expected = ExactFraction.ZERO
-    result = runComputation(null, text, listOf(plusMinus, timesDiv), performSwapped, (0..9).toList(), true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text, ops = listOf(plusMinus, timesDiv), executeOp = performSwapped))
 
     // normal
     text = splitString("(17+(12-90))/3")
     expected = ExactFraction(-61, 3)
-    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text))
 
     text = splitString("2(7-4)^(0-12/6)")
     expected = ExactFraction(2, 9)
-    result = runComputation(null, text, allOps, performOp, (0..9).toList(), true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(null, text))
 
-    initialValue = ExactFraction.ZERO
     text = splitString("+(17+(12-90))/3")
     expected = ExactFraction(-61, 3)
-    result = runComputation(initialValue, text, allOps, performOp, (0..9).toList(), true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(ExactFraction.ZERO, text))
 
-    initialValue = -ExactFraction.HALF
     text = splitString("x3-6")
     expected = ExactFraction(-15, 2)
-    result = runComputation(initialValue, text, allOps, performOp, (0..9).toList(), true, true, false)
-    assertEquals(expected, result)
+    assertEquals(expected, callRunComputation(-ExactFraction.HALF, text))
 }
 
 fun runParseTextTests() {
@@ -264,23 +236,20 @@ fun runParseTextTests() {
     assertEquals(expected, parseText(text, listOf(timesDiv, emptyList()), performOp))
 
     text = "5 x 3 / 6 + 2".split(' ')
-    var error = assertFails { parseText(text, listOf(timesDiv, emptyList()), performOp) }
-    assertEquals(error.message, "Parse error")
+    assertFailsWithMessage("Parse error") { parseText(text, listOf(timesDiv, emptyList()), performOp) }
 
     text = "5 x 3 / 6 + 2".split(' ')
-    error = assertFails { parseText(text, allOps, performReduced) }
-    assertEquals(error.message, "Invalid operator +")
+    assertFailsWithMessage("Invalid operator +") { parseText(text, allOps, performReduced) }
 }
 
 // should not include parens
 fun runParseOperatorRoundTests() {
     // unchanged
     var text = listOf("-1.00")
-    var expected = listOf("-1.00")
-    assertEquals(expected, parseOperatorRound(text, plusMinus, performOp))
+    assertEquals(listOf("-1.00"), parseOperatorRound(text, plusMinus, performOp))
 
     text = "1 x 3 / 17".split(' ')
-    expected = "1 x 3 / 17".split(' ')
+    var expected = "1 x 3 / 17".split(' ')
     assertEquals(expected, parseOperatorRound(text, plusMinus, performOp))
 
     text = "1 - 3 + 17".split(' ')
@@ -294,14 +263,12 @@ fun runParseOperatorRoundTests() {
 
     text = "1.3 x 2 / 10 x 20".split(' ')
     var ef = ExactFraction("5.2").toEFString()
-    expected = listOf(ef)
-    assertEquals(expected, parseOperatorRound(text, timesDiv, performOp))
+    assertEquals(listOf(ef), parseOperatorRound(text, timesDiv, performOp))
 
     text = "1.3 x 2 + 10 x 20".split(' ')
     ef = ExactFraction("2.6").toEFString()
     var ef2 = ExactFraction(200).toEFString()
-    expected = listOf(ef, "+", ef2)
-    assertEquals(expected, parseOperatorRound(text, timesDiv, performOp))
+    assertEquals(listOf(ef, "+", ef2), parseOperatorRound(text, timesDiv, performOp))
 
     text = "1000000000000 - 87 x 10000000000000000 + 33 / 11 + 6 x 40".split(' ')
     ef = ExactFraction("870000000000000000").toEFString()
@@ -323,8 +290,7 @@ fun runParseOperatorRoundTests() {
     text = "100 a 12 + 1.2 c 2.4 b 3".split(' ')
     ef = ExactFraction(112).toEFString()
     ef2 = ExactFraction.ONE.toEFString()
-    expected = listOf(ef, "+", ef2)
-    assertEquals(expected, parseOperatorRound(text, fakeOps, performFake))
+    assertEquals(listOf(ef, "+", ef2), parseOperatorRound(text, fakeOps, performFake))
 }
 
 fun runParseParensTests() {
@@ -363,4 +329,21 @@ fun runParseParensTests() {
     ef = ExactFraction(5, 3).toEFString()
     expected = listOf("2", "+", ef)
     assertEquals(expected, parseParens(text, listOf(plusMinus, timesDiv), performOp))
+}
+
+/**
+ * Call [runComputation] with default setting values.
+ * [initialValue] and [text] are required, but all settings values are optional and have defaults.
+ */
+private fun callRunComputation(
+    initialValue: ExactFraction?,
+    text: StringList,
+    ops: List<StringList> = allOps,
+    executeOp: OperatorFunction = performOp,
+    order: IntList = List(10) { it },
+    applyParens: Boolean = true,
+    applyDecimals: Boolean = true,
+    shuffleComputation: Boolean = false
+): ExactFraction {
+    return runComputation(initialValue, text, ops, executeOp, order, applyParens, applyDecimals, shuffleComputation)
 }

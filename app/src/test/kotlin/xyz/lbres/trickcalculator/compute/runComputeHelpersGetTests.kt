@@ -95,33 +95,33 @@ fun runGetParseErrorMessageTests() {
     assertEquals(expected, getParseErrorMessage("For input string \"\""))
 
     // number
-    val testNumberOverflow: (String) -> Unit = { number ->
+    val testNumberOverflowMessage: (String) -> Unit = { number ->
         val message = "For input string \"$number\""
         expected = "Number overflow on value $number"
         assertEquals(expected, getParseErrorMessage(message))
     }
 
-    testNumberOverflow("0")
-    testNumberOverflow("23")
-    testNumberOverflow("1000")
-    testNumberOverflow("-1000")
-    testNumberOverflow("100000000000000000000000")
-    testNumberOverflow("0.1")
-    testNumberOverflow("4.11111")
-    testNumberOverflow(".456")
-    testNumberOverflow("-.456")
+    testNumberOverflowMessage("0")
+    testNumberOverflowMessage("23")
+    testNumberOverflowMessage("1000")
+    testNumberOverflowMessage("-1000")
+    testNumberOverflowMessage("100000000000000000000000")
+    testNumberOverflowMessage("0.1")
+    testNumberOverflowMessage("4.11111")
+    testNumberOverflowMessage(".456")
+    testNumberOverflowMessage("-.456")
 
     // non-number
-    val testNonNumberSymbol: (String) -> Unit = { symbol ->
+    val testNonNumberSymbolMessage: (String) -> Unit = { symbol ->
         val message = "For input string \"$symbol\""
         expected = "Cannot parse symbol $symbol"
         assertEquals(expected, getParseErrorMessage(message))
     }
 
-    testNonNumberSymbol("(")
-    testNonNumberSymbol("hello world")
-    testNonNumberSymbol(".")
-    testNonNumberSymbol("-")
-    testNonNumberSymbol("1.1.")
-    testNonNumberSymbol("123.456.789")
+    testNonNumberSymbolMessage("(")
+    testNonNumberSymbolMessage("hello world")
+    testNonNumberSymbolMessage(".")
+    testNonNumberSymbolMessage("-")
+    testNonNumberSymbolMessage("1.1.")
+    testNonNumberSymbolMessage("123.456.789")
 }

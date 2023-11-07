@@ -13,8 +13,29 @@ private const val iterations = 20
  * @param function () -> Unit: function that throws exception
  */
 fun assertDivByZero(function: () -> Unit) {
-    val error = assertFailsWith<ArithmeticException> { function() }
-    assertEquals("divide by zero", error.message)
+    assertFailsWithMessage<ArithmeticException>("divide by zero", function)
+}
+
+/**
+ * Assert that a function throws an error with a given message.
+ *
+ * @param message [String]: expected message
+ * @param function () -> Unit: function that throws exception
+ */
+inline fun assertFailsWithMessage(message: String, function: () -> Unit) {
+    assertFailsWithMessage<Exception>(message, function)
+}
+
+/**
+ * Assert that a function throws an error of a specific type, with a given message.
+ *
+ * @param message [String]: expected message
+ * @param function () -> Unit: function that throws exception
+ */
+@JvmName("assertFailsWithMessageWithType")
+inline fun <reified T : Exception> assertFailsWithMessage(message: String, function: () -> Unit) {
+    val error = assertFailsWith<T> { function() }
+    assertEquals(message, error.message)
 }
 
 /**
