@@ -13,6 +13,7 @@ private val ops = listOf("+", "-", "x", "/")
 private val opsType = "operator"
 private val numType = "number"
 
+@Suppress("BooleanLiteralArgument")
 fun testBuildTextWithShuffle() {
     assertEquals(emptyList(), callGenerateAndValidate(null, emptyList(), shuffleComputation = true))
 
@@ -41,6 +42,7 @@ fun testBuildTextWithShuffle() {
     runSingleRandomizationTest(text, builtText, true, false, initialValue = ef)
 }
 
+@Suppress("BooleanLiteralArgument")
 fun testBuildTextWithRandomSigns() {
     assertEquals(emptyList(), callGenerateAndValidate(null, emptyList(), randomizeSigns = true))
 
@@ -74,6 +76,7 @@ fun testBuildTextWithRandomSigns() {
 }
 
 // shuffle computation + randomize signs
+@Suppress("BooleanLiteralArgument")
 fun testAllShuffling() {
     assertEquals(emptyList(), callGenerateAndValidate(null, emptyList(), shuffleComputation = true, randomizeSigns = true))
 
@@ -131,15 +134,18 @@ private fun runSingleRandomizationTest(
         result
     }
 
-    runRandomTest(buildText) {
-        val hasPositive = it.any { isNumber(it) && !it.startsWith('-') }
-        val hasNegative = it.any { isNumber(it) && it.startsWith('-') }
+    runRandomTest(buildText) { result ->
+        val hasPositive = result.any { isNumber(it) && !it.startsWith('-') }
+        val hasNegative = result.any { isNumber(it) && it.startsWith('-') }
         val validSigns = !randomizeSigns || (hasPositive && hasNegative)
 
-        validSigns && it != builtText
+        validSigns && result != builtText
     }
 }
 
+/**
+ * Map a built text list to a new list where all numbers and operators are replaced with type labels
+ */
 private fun mapToTypes(text: StringList): StringList {
     return text.map {
         when {
@@ -150,6 +156,9 @@ private fun mapToTypes(text: StringList): StringList {
     }
 }
 
+/**
+ * Map a built text list to a new list where negative values are stripped from all numbers, including EF-format strings
+ */
 private fun mapToAbsoluteValues(text: StringList): StringList {
     return text.map {
         when {
