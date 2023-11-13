@@ -10,6 +10,8 @@ import xyz.lbres.trickcalculator.utils.isNumber
 import kotlin.test.assertEquals
 
 private val ops = listOf("+", "-", "x", "/")
+private val opsType = "operator"
+private val numType = "number"
 
 fun testBuildTextWithShuffle() {
     assertEquals(emptyList(), callGenerateAndValidate(null, emptyList(), shuffleComputation = true))
@@ -73,7 +75,18 @@ fun testBuildTextWithRandomSigns() {
 
 // shuffle computation + randomize signs
 fun testAllShuffling() {
-    // TODO
+    assertEquals(emptyList(), callGenerateAndValidate(null, emptyList(), shuffleComputation = true, randomizeSigns = true))
+
+    // no initial value
+    var text = splitString("1+3.0004-4+6(-4+.32)")
+    var builtText = "1 + 3.0004 - 4 + 6 x ( -4 + .32 )".split(' ')
+    runSingleAllShufflingTest(text, builtText)
+
+    // initial value
+    val ef = -ExactFraction.THREE
+    text = splitString("x(-33)(2+8.5)/.73")
+    builtText = listOf(ef.toEFString()) + "x ( -33 ) x ( 2 + 8.5 ) / .73".split(" ")
+    runSingleRandomSignTest(text, builtText, initialValue = ef)
 }
 
 /**
@@ -88,17 +101,7 @@ private fun runSingleShuffledTest(
     applyParens: Boolean = true,
     applyDecimals: Boolean = true
 ) {
-    val opsType = "operator"
-    val numType = "number"
-
-    val mapping = builtText.map {
-        when {
-            isOperator(it, ops) -> opsType
-            isNumber(it) -> numType
-            else -> it
-        }
-    }
-
+    val typeMapping = mapToTypes(builtText)
     val expectedSorted = builtText.sorted()
 
     val buildText = {
@@ -114,15 +117,7 @@ private fun runSingleShuffledTest(
         )
 
         assertEquals(expectedSorted, result.sorted()) // contains same values
-
-        mapping.forEachIndexed { index, expectedType ->
-            val newValue = result[index]
-            when {
-                isOperator(newValue, ops) -> assertEquals(expectedType, opsType)
-                isNumber(newValue) -> assertEquals(expectedType, numType)
-                else -> assertEquals(expectedType, newValue)
-            }
-        }
+        assertEquals(typeMapping, mapToTypes(result))
 
         result
     }
@@ -138,16 +133,7 @@ private fun runSingleRandomSignTest(
     applyParens: Boolean = true,
     applyDecimals: Boolean = true
 ) {
-    val absValues = builtText.map {
-        when {
-            checkIsEFString(it) && ExactFraction(it).isNegative() -> {
-                val ef = ExactFraction(it)
-                (-ef).toEFString()
-            }
-            isNumber(it) && it.startsWith('-') -> it.substring(1)
-            else -> it
-        }
-    }
+    val absValues = mapToAbsoluteValues(builtText)
 
     val buildText = {
         val result = generateAndValidateComputeText(
@@ -161,18 +147,7 @@ private fun runSingleRandomSignTest(
             randomizeSigns = true
         )
 
-        val resultAbsValues = result.map {
-            when {
-                checkIsEFString(it) && ExactFraction(it).isNegative() -> {
-                    val ef = ExactFraction(it)
-                    (-ef).toEFString()
-                }
-                isNumber(it) && it.startsWith('-') -> it.substring(1)
-                else -> it
-            }
-        }
-
-        assertEquals(absValues, resultAbsValues) // contains same values
+        assertEquals(absValues, mapToAbsoluteValues(result)) // contains same values
 
         result
     }
@@ -181,5 +156,65 @@ private fun runSingleRandomSignTest(
         val hasNegative = it.any { isNumber(it) && it.startsWith('-') }
         val hasPositive = it.any { isNumber(it) && !it.startsWith('-') }
         it != builtText && hasPositive && hasNegative
+    }
+}
+
+private fun runSingleAllShufflingTest(
+    text: StringList,
+    builtText: StringList,
+    initialValue: ExactFraction? = null,
+    numbersOrder: IntList? = null,
+    applyParens: Boolean = true,
+    applyDecimals: Boolean = true
+) {
+    val typeMapping = mapToTypes(builtText)
+    val absSorted = mapToAbsoluteValues(builtText).sorted()
+
+    val buildText = {
+        val result = generateAndValidateComputeText(
+            initialValue,
+            text,
+            ops,
+            numbersOrder,
+            applyParens,
+            applyDecimals,
+            shuffleComputation = true,
+            randomizeSigns = true
+        )
+
+        val resultAbsValues = mapToAbsoluteValues(result)
+        assertEquals(absSorted, resultAbsValues.sorted()) // contains same values
+        assertEquals(typeMapping, mapToTypes(result))
+
+        result
+    }
+
+    runRandomTest(buildText) {
+        val hasNegative = it.any { isNumber(it) && it.startsWith('-') }
+        val hasPositive = it.any { isNumber(it) && !it.startsWith('-') }
+        it != builtText && hasPositive && hasNegative
+    }
+}
+
+private fun mapToTypes(text: StringList): StringList {
+    return text.map {
+        when {
+            isOperator(it, ops) -> opsType
+            isNumber(it) -> numType
+            else -> it
+        }
+    }
+}
+
+private fun mapToAbsoluteValues(text: StringList): StringList {
+    return text.map {
+        when {
+            checkIsEFString(it) && ExactFraction(it).isNegative() -> {
+                val ef = ExactFraction(it)
+                (-ef).toEFString()
+            }
+            isNumber(it) && it.startsWith('-') -> it.substring(1)
+            else -> it
+        }
     }
 }
