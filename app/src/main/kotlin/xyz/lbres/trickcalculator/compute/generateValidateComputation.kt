@@ -61,6 +61,7 @@ private data class ComputeData(
  * @param applyParens [Boolean]: whether or not parentheses should be applied
  * @param applyDecimals [Boolean]: whether or not decimals points should be applied.
  * This does not impact any decimals in the initial value.
+ * @param randomizeSigns [Boolean]: whether or not the signs of numbers should be randomized.
  * @param shuffleComputation [Boolean]: whether or not the order of numbers and order of ops should be shuffled.
  * @return [StringList]: modified list with adjacent digits/decimals combined into single numbers,
  * and with any of the specified modifications for number order, applying parens, and applying decimals.
@@ -73,8 +74,8 @@ fun generateAndValidateComputeText(
     numbersOrder: IntList?,
     applyParens: Boolean,
     applyDecimals: Boolean,
-    shuffleComputation: Boolean,
-    randomizeSigns: Boolean
+    randomizeSigns: Boolean,
+    shuffleComputation: Boolean
 ): StringList {
     val data = ComputeData()
 
@@ -136,6 +137,7 @@ fun generateAndValidateComputeText(
  * @param data [ComputeData]: data about current state of computation
  * @param initialValue [ExactFraction]: previously computed value, used as the first element in computation
  * @param initialText [StringList]: following compute text
+ * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
 private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, initialText: StringList, randomizeSigns: Boolean) {
     val value = simpleIf(randomizeSigns && random.nextBoolean(), -initialValue, initialValue)
@@ -150,7 +152,7 @@ private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, init
 }
 
 /**
- * Add a digit or decimal to the current number
+ * Add a digit, decimal, or negative to the current number
  *
  * @param data [ComputeData]: data about current state of computation
  * @param element [String]: element to add
@@ -220,6 +222,7 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
  * Add the current number to the compute text
  *
  * @param data [ComputeData]: data about current state of computation
+ * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
 private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
     if (data.currentNumber == NEG || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
@@ -233,7 +236,7 @@ private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
         }
 
         val number = if (randomizeSigns && random.nextBoolean(0.5f)) {
-            randomizeSign(data.currentNumber)
+            reverseSign(data.currentNumber)
         } else {
             data.currentNumber
         }
@@ -246,7 +249,13 @@ private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
     }
 }
 
-private fun randomizeSign(number: String): String {
+/**
+ * Reverse the sign of a number string by removing a negative sign if it exists, or adding it if it does not
+ *
+ * @param number [String]: initial number
+ * @return [String]: modified number
+ */
+private fun reverseSign(number: String): String {
     return simpleIf(number.startsWith('-'), number.substring(1), "-$number")
 }
 

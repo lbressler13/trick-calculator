@@ -275,8 +275,8 @@ fun callGenerateAndValidate(
     order: IntList? = null,
     applyParens: Boolean = true,
     applyDecimals: Boolean = true,
-    shuffleComputation: Boolean = false,
-    randomizeSigns: Boolean = false
+    randomizeSigns: Boolean = false,
+    shuffleComputation: Boolean = false
 ): StringList {
-    return generateAndValidateComputeText(initialValue, text, ops, order, applyParens, applyDecimals, shuffleComputation, randomizeSigns)
+    return generateAndValidateComputeText(initialValue, text, ops, order, applyParens, applyDecimals, randomizeSigns, shuffleComputation)
 }

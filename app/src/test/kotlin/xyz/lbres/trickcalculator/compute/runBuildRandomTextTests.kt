@@ -118,8 +118,8 @@ private fun runSingleRandomizationTest(
             numbersOrder,
             applyParens,
             applyDecimals,
-            shuffleComputation,
-            randomizeSigns
+            randomizeSigns,
+            shuffleComputation
         )
 
         assertEquals(typeMapping, mapToTypes(result))
