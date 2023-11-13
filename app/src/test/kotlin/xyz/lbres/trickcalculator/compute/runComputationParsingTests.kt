@@ -343,7 +343,8 @@ private fun callRunComputation(
     order: IntList = List(10) { it },
     applyParens: Boolean = true,
     applyDecimals: Boolean = true,
-    shuffleComputation: Boolean = false
+    shuffleComputation: Boolean = false,
+    randomizeSigns: Boolean = false
 ): ExactFraction {
-    return runComputation(initialValue, text, ops, executeOp, order, applyParens, applyDecimals, shuffleComputation)
+    return runComputation(initialValue, text, ops, executeOp, order, applyParens, applyDecimals, shuffleComputation, randomizeSigns)
 }

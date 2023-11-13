@@ -65,12 +65,12 @@ fun splitString(s: String): StringList {
  */
 fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
     var checkPassed = false
+    var i = 0
 
-    repeat(iterations) {
+    while (i < iterations && !checkPassed) {
         val result = randomAction()
-        if (randomCheck(result)) {
-            checkPassed = true
-        }
+        checkPassed = randomCheck(result)
+        i++
     }
 
     assertTrue(checkPassed)

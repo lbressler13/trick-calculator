@@ -6,6 +6,8 @@ import xyz.lbres.kotlinutils.general.tryOrDefault
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
+import xyz.lbres.kotlinutils.random.ext.nextBoolean
+import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.utils.isNumber
 import xyz.lbres.trickcalculator.utils.isNumberChar
 
@@ -71,7 +73,8 @@ fun generateAndValidateComputeText(
     numbersOrder: IntList?,
     applyParens: Boolean,
     applyDecimals: Boolean,
-    shuffleComputation: Boolean
+    shuffleComputation: Boolean,
+    randomizeSigns: Boolean
 ): StringList {
     val data = ComputeData()
 
@@ -85,7 +88,7 @@ fun generateAndValidateComputeText(
     }
 
     if (initialValue != null) {
-        addInitialValue(data, initialValue, splitText)
+        addInitialValue(data, initialValue, splitText, randomizeSigns)
     }
 
     // loop over all elements
@@ -98,7 +101,7 @@ fun generateAndValidateComputeText(
         data.currentType = simpleIf(negative, { NUMBER }, { getTypeOf(element, ops) ?: throw syntaxError })
 
         if (data.currentType != NUMBER && data.currentNumber.isNotEmpty()) {
-            addCurrentNumber(data)
+            addCurrentNumber(data, randomizeSigns)
         }
 
         data.openParenCount += parenCounts.getOrDefault(data.currentType, 0)
@@ -111,7 +114,7 @@ fun generateAndValidateComputeText(
 
     // add remaining number
     if (data.currentNumber.isNotEmpty()) {
-        addCurrentNumber(data)
+        addCurrentNumber(data, randomizeSigns)
     }
 
     // check syntax error at end
@@ -134,8 +137,10 @@ fun generateAndValidateComputeText(
  * @param initialValue [ExactFraction]: previously computed value, used as the first element in computation
  * @param initialText [StringList]: following compute text
  */
-private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, initialText: StringList) {
-    data.computeText.add(initialValue.toEFString())
+private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, initialText: StringList, randomizeSigns: Boolean) {
+    val value = simpleIf(randomizeSigns && random.nextBoolean(), -initialValue, initialValue)
+
+    data.computeText.add(value.toEFString())
     data.lastType = NUMBER
 
     // add times between initial val and first num
@@ -216,7 +221,7 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
  *
  * @param data [ComputeData]: data about current state of computation
  */
-private fun addCurrentNumber(data: ComputeData) {
+private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
     if (data.currentNumber == NEG || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
         throw syntaxError
     }
@@ -227,12 +232,22 @@ private fun addCurrentNumber(data: ComputeData) {
             data.computeText.add("x")
         }
 
-        data.computeText.add(data.currentNumber)
+        val number = if (randomizeSigns && random.nextBoolean(0.5f)) {
+            randomizeSign(data.currentNumber)
+        } else {
+            data.currentNumber
+        }
+
+        data.computeText.add(number)
         data.currentNumber = ""
         data.currentDecimal = false
 
         data.lastType = NUMBER
     }
+}
+
+private fun randomizeSign(number: String): String {
+    return simpleIf(number.startsWith('-'), number.substring(1), "-$number")
 }
 
 /**

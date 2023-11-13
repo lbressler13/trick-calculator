@@ -153,7 +153,8 @@ class CalculatorFragment : BaseFragment() {
                         numberOrder,
                         settingsViewModel.applyParens,
                         settingsViewModel.applyDecimals,
-                        settingsViewModel.shuffleComputation
+                        settingsViewModel.shuffleComputation,
+                        settingsViewModel.randomizeSigns
                     )
 
                 newHistoryItem = computationViewModel.setResult(null, computedValue)

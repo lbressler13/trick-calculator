@@ -32,6 +32,7 @@
     <string name="clear_on_error">Clear on Error</string>
     <string name="random_history_label">History Mode</string>
     <string name="randomize_settings">Randomize Settings</string>
+    <string name="randomize_signs">Randomize Signs</string>
     <string name="reset_settings">Reset Settings</string>
     <string name="show_settings_button">Show Settings Button</string>
     <string name="shuffle_computation">Shuffle Computation</string>

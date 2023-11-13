@@ -1,5 +1,7 @@
 package xyz.lbres.trickcalculator.ui.settings
 
+// TODO alphabetize params
+
 /**
  * Object containing all settings
  *
@@ -20,7 +22,8 @@ data class Settings(
     var showSettingsButton: Boolean,
     var shuffleComputation: Boolean,
     var shuffleNumbers: Boolean,
-    var shuffleOperators: Boolean
+    var shuffleOperators: Boolean,
+    var randomizeSigns: Boolean
 ) {
     /**
      * Constructor with default values
@@ -33,6 +36,7 @@ data class Settings(
         showSettingsButton = false,
         shuffleComputation = false,
         shuffleNumbers = false,
-        shuffleOperators = true
+        shuffleOperators = true,
+        randomizeSigns = false
     )
 }
