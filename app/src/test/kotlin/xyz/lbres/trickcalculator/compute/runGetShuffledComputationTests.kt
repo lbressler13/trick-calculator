@@ -1,9 +1,9 @@
 package xyz.lbres.trickcalculator.compute
 
-import org.junit.Assert.assertEquals
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.utils.isNumber
+import kotlin.test.assertEquals
 
 private val fullOps = listOf("+", "-", "x", "/", "^")
 private const val iterations = 20

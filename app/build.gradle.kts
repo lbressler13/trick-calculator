@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0" // ktlint
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.1" // ktlint
 }
 apply(plugin = "kotlin-android")
 
@@ -145,6 +145,12 @@ android {
     }
 }
 
+ktlint {
+    disabledRules.set(
+        setOf("filename", "spacing-between-declarations-with-annotations", "spacing-between-declarations-with-comments")
+    )
+}
+
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
@@ -152,7 +158,7 @@ dependencies {
     val appCompatVersion = "1.6.1"
     val constraintLayoutVersion = "2.1.4"
     val exactNumbersVersion = "0.1.1"
-    val kotlinUtilsVersion = "1.2.0"
+    val kotlinUtilsVersion = "1.3.0"
     val lifecycleVersion = "2.6.2"
     val materialVersion = "1.10.0"
     val navigationVersion = "2.7.4"
@@ -161,7 +167,6 @@ dependencies {
     val androidxTestRulesVersion = "1.5.0"
     val androidxTestRunnerVersion = "1.5.2"
     val espressoVersion = "3.5.1"
-    val junitVersion = "4.13.2"
     val mockkVersion = "1.13.7"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
@@ -177,8 +182,8 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     // testing
+    testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk-android:$mockkVersion")
-    testImplementation("junit:junit:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestRunnerVersion") // needed to run on emulator

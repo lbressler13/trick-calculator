@@ -8,7 +8,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matcher
-import xyz.lbres.kotlinutils.collection.ext.toMultiSet
+import xyz.lbres.kotlinutils.collection.ext.toConstMultiSet
 import xyz.lbres.trickcalculator.R
 
 /**
@@ -49,19 +49,19 @@ class TestHistory {
 
         when (randomness) {
             0, 1 -> {
-                val displayedSet = displayedValues.toMultiSet()
-                val computeHistorySet = computeHistory.toMultiSet()
+                val displayedSet = displayedValues.toConstMultiSet()
+                val computeHistorySet = computeHistory.toConstMultiSet()
                 allDisplayed = displayedSet == computeHistorySet
 
                 val diff = computeHistorySet - displayedSet
                 errorMessage = "ViewHolders with text $diff not found. History: $computeHistory"
             }
             2 -> {
-                val computations = computeHistory.map { it.first }.toMultiSet()
-                val results = computeHistory.map { it.second }.toMultiSet()
+                val computations = computeHistory.map { it.first }.toConstMultiSet()
+                val results = computeHistory.map { it.second }.toConstMultiSet()
 
-                val displayedComputations = displayedValues.map { it.first }.toMultiSet()
-                val displayedResults = displayedValues.map { it.second }.toMultiSet()
+                val displayedComputations = displayedValues.map { it.first }.toConstMultiSet()
+                val displayedResults = displayedValues.map { it.second }.toConstMultiSet()
                 allDisplayed = computations == displayedComputations && results == displayedResults
 
                 val computationDiff = computations - displayedComputations
@@ -101,8 +101,8 @@ class TestHistory {
         }
 
         val displayedValues = computeHistory.indices.map { getViewHolderTextAtPosition(it) }
-        val computeHistorySet = computeHistory.toMultiSet()
-        val displayedSet = displayedValues.toMultiSet()
+        val computeHistorySet = computeHistory.toConstMultiSet()
+        val displayedSet = displayedValues.toConstMultiSet()
 
         return when (randomness) {
             0 -> checkDisplayOrdered()

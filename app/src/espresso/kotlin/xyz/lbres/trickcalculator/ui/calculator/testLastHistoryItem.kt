@@ -83,7 +83,10 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     useLastButton.perform(click())
     checkMainTextMatchesAny(
         setOf(
-            "[5]$computation", "[1]$computation", "[6]$computation", "[1.5]$computation"
+            "[5]$computation",
+            "[1]$computation",
+            "[6]$computation",
+            "[1.5]$computation"
         )
     )
 

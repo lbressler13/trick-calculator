@@ -1,11 +1,11 @@
 package xyz.lbres.trickcalculator.compute
 
 import io.mockk.unmockkAll
-import org.junit.After
-import org.junit.Test
+import kotlin.test.AfterTest
+import kotlin.test.Test
 
 class RunComputationTest {
-    @After
+    @AfterTest
     fun cleanupMockk() {
         unmockkAll()
     }

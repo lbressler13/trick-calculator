@@ -54,25 +54,13 @@ class HistoryFragmentTest {
         onView(withId(R.id.mainText)).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun randomness0() = testRandomness0()
-
-    @Test
-    fun randomness1() = testRandomness1()
-
-    @Test
-    fun randomness1Reshuffled() = testRandomness1Reshuffled()
-
-    @Test
-    fun randomness2() = testRandomness2()
-
-    @Test
-    fun randomness2Reshuffled() = testRandomness2Reshuffled()
-
+    @Test fun randomness0() = testRandomness0()
+    @Test fun randomness1() = testRandomness1()
+    @Test fun randomness1Reshuffled() = testRandomness1Reshuffled()
+    @Test fun randomness2() = testRandomness2()
+    @Test fun randomness2Reshuffled() = testRandomness2Reshuffled()
     // @Test fun randomness3() {} // TODO
-
-    @Test
-    fun longHistory() = testLongHistory()
+    @Test fun longHistory() = testLongHistory()
 
     @Test
     fun clearOnError() {

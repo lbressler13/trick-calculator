@@ -135,7 +135,7 @@ class CalculatorFragment : BaseFragment() {
             val operatorRounds = listOf(
                 listOf(operators[4]), // exponent
                 operators.subList(2, 4), // multiply and divide
-                operators.subList(0, 2), // add and subtract
+                operators.subList(0, 2) // add and subtract
             )
 
             val numberOrder = simpleIf(settingsViewModel.shuffleNumbers, (0..9).seededShuffled(), (0..9).toList())

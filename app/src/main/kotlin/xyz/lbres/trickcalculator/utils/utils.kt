@@ -1,6 +1,7 @@
 package xyz.lbres.trickcalculator.utils
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.tryOrDefault
 
 /**
  * Determine if a string can be parsed to a number.
@@ -14,11 +15,9 @@ fun isNumber(value: String): Boolean {
         return false
     }
 
-    return try {
+    return tryOrDefault(false) {
         ExactFraction(value)
         true
-    } catch (_: Exception) {
-        false
     }
 }
 

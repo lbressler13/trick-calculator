@@ -1,6 +1,6 @@
 package xyz.lbres.trickcalculator.compute
 
-import org.junit.Test
+import kotlin.test.Test
 
 class GenerateValidateComputationTest {
     @Test fun testGenerateAndValidateComputeText() = runGenerateAndValidateComputeTextTests()

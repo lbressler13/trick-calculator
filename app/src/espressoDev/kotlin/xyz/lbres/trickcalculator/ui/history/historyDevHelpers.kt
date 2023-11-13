@@ -37,7 +37,7 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefre
             scrollToHistoryItemAtPosition(position),
             actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText)),
             actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.resultText)),
-            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.errorText)),
+            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.errorText))
         )
     }
 

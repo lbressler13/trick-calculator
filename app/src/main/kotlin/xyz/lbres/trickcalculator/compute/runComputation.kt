@@ -80,7 +80,7 @@ fun runComputation(
 fun parseText(
     computeText: StringList,
     operatorRounds: List<StringList>,
-    performSingleOp: OperatorFunction,
+    performSingleOp: OperatorFunction
 ): ExactFraction {
     var currentState = computeText
 

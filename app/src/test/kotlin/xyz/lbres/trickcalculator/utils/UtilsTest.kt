@@ -1,135 +1,66 @@
 package xyz.lbres.trickcalculator.utils
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class UtilsTest {
     @Test
     fun testIsNumber() {
         // number
-        var value = "0"
-        assertTrue(isNumber(value))
+        assertTrue(isNumber("0"))
+        assertTrue(isNumber("123"))
+        assertTrue(isNumber("-123"))
+        assertTrue(isNumber("1.2349"))
+        assertTrue(isNumber(".987"))
+        assertTrue(isNumber("-.10"))
+        assertTrue(isNumber("EF[-123 457]"))
 
-        value = "123"
-        assertTrue(isNumber(value))
+        var longValue = "123232323232323232323232323232323"
+        assertTrue(isNumber(longValue))
 
-        value = "-123"
-        assertTrue(isNumber(value))
-
-        value = "1.2349"
-        assertTrue(isNumber(value))
-
-        value = ".987"
-        assertTrue(isNumber(value))
-
-        value = "-.10"
-        assertTrue(isNumber(value))
-
-        value = "123232323232323232323232323232323"
-        assertTrue(isNumber(value))
-
-        value = "-100000000000000000000000000000000.4444444444444444444444"
-        assertTrue(isNumber(value))
-
-        value = "EF[-123 457]"
-        assertTrue(isNumber(value))
+        longValue = "-100000000000000000000000000000000.4444444444444444444444"
+        assertTrue(isNumber(longValue))
 
         // not number
-        value = ""
-        assertFalse(isNumber(value))
-
-        value = " "
-        assertFalse(isNumber(value))
-
-        value = "1 2"
-        assertFalse(isNumber(value))
-
-        value = "--3"
-        assertFalse(isNumber(value))
-
-        value = "10.10.10"
-        assertFalse(isNumber(value))
-
-        value = "5."
-        assertFalse(isNumber(value))
-
-        value = "2+3"
-        assertFalse(isNumber(value))
-
-        value = "2 + 3"
-        assertFalse(isNumber(value))
-
-        value = "+"
-        assertFalse(isNumber(value))
-
-        value = "a"
-        assertFalse(isNumber(value))
-
-        value = "hello world"
-        assertFalse(isNumber(value))
+        assertFalse(isNumber(""))
+        assertFalse(isNumber(" "))
+        assertFalse(isNumber(" 1 2"))
+        assertFalse(isNumber("--3"))
+        assertFalse(isNumber("10.10.10"))
+        assertFalse(isNumber("5."))
+        assertFalse(isNumber("2+3"))
+        assertFalse(isNumber("2 + 3"))
+        assertFalse(isNumber("+"))
+        assertFalse(isNumber("a"))
+        assertFalse(isNumber("hello world"))
     }
 
     @Test
     fun testIsNumberChar() {
         // number chats
-        var value = "0"
-        assertTrue(isNumberChar(value))
-
-        value = "1"
-        assertTrue(isNumberChar(value))
-
-        value = "2"
-        assertTrue(isNumberChar(value))
-
-        value = "3"
-        assertTrue(isNumberChar(value))
-
-        value = "4"
-        assertTrue(isNumberChar(value))
-
-        value = "5"
-        assertTrue(isNumberChar(value))
-
-        value = "6"
-        assertTrue(isNumberChar(value))
-
-        value = "7"
-        assertTrue(isNumberChar(value))
-
-        value = "8"
-        assertTrue(isNumberChar(value))
-
-        value = "9"
-        assertTrue(isNumberChar(value))
-
-        value = "."
-        assertTrue(isNumberChar(value))
+        assertTrue(isNumberChar("0"))
+        assertTrue(isNumberChar("1"))
+        assertTrue(isNumberChar("2"))
+        assertTrue(isNumberChar("3"))
+        assertTrue(isNumberChar("4"))
+        assertTrue(isNumberChar("5"))
+        assertTrue(isNumberChar("6"))
+        assertTrue(isNumberChar("7"))
+        assertTrue(isNumberChar("8"))
+        assertTrue(isNumberChar("0"))
+        assertTrue(isNumberChar("."))
 
         // multiple numbers
-        value = "00"
-        assertFalse(isNumberChar(value))
-
-        value = ".1"
-        assertFalse(isNumberChar(value))
-
-        value = "10.0"
-        assertFalse(isNumberChar(value))
+        assertFalse(isNumberChar("00"))
+        assertFalse(isNumberChar(".1"))
+        assertFalse(isNumberChar("10.0"))
 
         // non-numbers
-        value = "a"
-        assertFalse(isNumberChar(value))
-
-        value = "0a"
-        assertFalse(isNumberChar(value))
-
-        value = "-1"
-        assertFalse(isNumberChar(value))
-
-        value = "2/0.1"
-        assertFalse(isNumberChar(value))
-
-        value = "+"
-        assertFalse(isNumberChar(value))
+        assertFalse(isNumberChar("a"))
+        assertFalse(isNumberChar("0a"))
+        assertFalse(isNumberChar("-1"))
+        assertFalse(isNumberChar("2/0.1"))
+        assertFalse(isNumberChar("+"))
     }
 }

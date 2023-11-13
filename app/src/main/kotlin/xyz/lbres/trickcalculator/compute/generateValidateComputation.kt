@@ -1,6 +1,8 @@
 package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.general.tryOrDefault
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
@@ -14,6 +16,8 @@ private const val NUMBER = "number"
 private const val OPERATOR = "operator"
 private const val LPAREN = "lparen"
 private const val RPAREN = "rparen"
+
+private const val NEG = "-"
 
 private val parenCounts = mapOf(LPAREN to 1, RPAREN to -1)
 private val syntaxError = Exception("Syntax error")
@@ -38,7 +42,7 @@ private data class ComputeData(
  *
  * Validations:
  * - Each element has length 1
- * - Doesn't start or end with operator
+ * - Doesn't start or end with operator, with the exception of a negative sign before the first digit
  * - All values are numbers, operators, or parens
  * - Parentheses are matched
  * - No successive operators
@@ -75,7 +79,9 @@ fun generateAndValidateComputeText(
     when {
         splitText.isEmpty() && initialValue == null -> return emptyList()
         splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
-        initialValue == null && isOperator(splitText[0], ops) -> throw syntaxError
+        initialValue == null && isOperator(splitText[0], ops) && splitText[0] != NEG -> {
+            throw syntaxError
+        }
     }
 
     if (initialValue != null) {
@@ -88,7 +94,8 @@ fun generateAndValidateComputeText(
             throw syntaxError
         }
 
-        data.currentType = getTypeOf(element, ops) ?: throw syntaxError
+        val negative = element == NEG && (data.lastType == LPAREN || data.lastType == "") && data.currentType != NUMBER
+        data.currentType = simpleIf(negative, { NUMBER }, { getTypeOf(element, ops) ?: throw syntaxError })
 
         if (data.currentType != NUMBER && data.currentNumber.isNotEmpty()) {
             addCurrentNumber(data)
@@ -147,6 +154,8 @@ private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, init
  */
 private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean, numbersOrder: IntList?) {
     when {
+        element == NEG && data.currentNumber.isNotEmpty() -> throw syntaxError
+        element == NEG -> data.currentNumber += element
         element == "." && data.currentDecimal -> throw syntaxError
         element == "." -> {
             if (applyDecimals) {
@@ -174,12 +183,10 @@ private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): Stri
         return element
     }
 
-    return try {
+    return tryOrDefault(element, listOf(NumberFormatException::class)) {
         val index = element.toInt()
         val digit = numbersOrder[index]
         digit.toString()
-    } catch (_: NumberFormatException) {
-        element
     }
 }
 
@@ -210,7 +217,7 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
  * @param data [ComputeData]: data about current state of computation
  */
 private fun addCurrentNumber(data: ComputeData) {
-    if (data.currentNumber.isNotEmpty() && data.lastDecimal) {
+    if (data.currentNumber == NEG || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
         throw syntaxError
     }
 

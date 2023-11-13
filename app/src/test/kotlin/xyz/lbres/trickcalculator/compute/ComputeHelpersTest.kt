@@ -1,58 +1,51 @@
 package xyz.lbres.trickcalculator.compute
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.assertDivByZero
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
+@Suppress("KotlinConstantConditions")
 class ComputeHelpersTest {
     @Test fun testGetMatchingParenIndex() = runGetMatchingParenIndexTests()
     @Test fun testGetParseErrorMessage() = runGetParseErrorMessageTests()
 
     @Test
     fun testIsOperator() {
-        var element = "-"
+        // operator
         var ops: StringList = listOf("-")
-        assertTrue(isOperator(element, ops))
+        assertTrue(isOperator("-", ops))
 
-        element = "+"
         ops = listOf("/", "+", "-")
-        assertTrue(isOperator(element, ops))
+        assertTrue(isOperator("+", ops))
 
-        element = "*"
+        ops = listOf("abc", "def", "+")
+        assertTrue(isOperator("abc", ops))
+
+        // non-operator
         ops = listOf("/", "+", "-")
-        assertFalse(isOperator(element, ops))
+        assertFalse(isOperator("x", ops))
 
-        element = "+"
         ops = emptyList()
-        assertFalse(isOperator(element, ops))
+        assertFalse(isOperator("+", ops))
 
-        element = "abc"
         ops = listOf("abc", "def", "+")
-        assertTrue(isOperator(element, ops))
+        assertFalse(isOperator("ab", ops))
 
-        element = "ab"
         ops = listOf("abc", "def", "+")
-        assertFalse(isOperator(element, ops))
-
-        element = "ABC"
-        ops = listOf("abc", "def", "+")
-        assertFalse(isOperator(element, ops))
+        assertFalse(isOperator("ABC", ops))
     }
 
     @Test
     fun testValidateNumbersOrder() {
-        var order: IntList? = null
-        assertFalse(validateNumbersOrder(order))
+        assertFalse(validateNumbersOrder(null))
+        assertFalse(validateNumbersOrder(emptyList()))
 
-        order = emptyList()
-        assertFalse(validateNumbersOrder(order))
-
-        order = listOf(0)
+        var order = listOf(0)
         assertFalse(validateNumbersOrder(order))
 
         order = (1..9).toList()

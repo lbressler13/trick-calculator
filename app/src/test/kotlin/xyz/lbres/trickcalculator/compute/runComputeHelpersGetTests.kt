@@ -1,6 +1,6 @@
 package xyz.lbres.trickcalculator.compute
 
-import org.junit.Assert.assertEquals
+import kotlin.test.assertEquals
 
 fun runGetMatchingParenIndexTests() {
     var text = "( )".split(' ')
@@ -81,107 +81,47 @@ fun runGetMatchingParenIndexTests() {
 
 fun runGetParseErrorMessageTests() {
     // no value to parse
-    var error: String? = null
     var expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
 
-    error = ""
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "\""
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "hello"
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "hello world\""
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "\"'hello world'"
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "'hello \" world'"
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "'hello \" world'"
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"abc"
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"\""
-    expected = "Parse error"
-    assertEquals(expected, getParseErrorMessage(error))
+    assertEquals(expected, getParseErrorMessage(null))
+    assertEquals(expected, getParseErrorMessage(""))
+    assertEquals(expected, getParseErrorMessage("\""))
+    assertEquals(expected, getParseErrorMessage("hello"))
+    assertEquals(expected, getParseErrorMessage("hello world\""))
+    assertEquals(expected, getParseErrorMessage("\"'hello world'"))
+    assertEquals(expected, getParseErrorMessage("'hello \" world'"))
+    assertEquals(expected, getParseErrorMessage("For input string \"abc"))
+    assertEquals(expected, getParseErrorMessage("For input string 123456\""))
+    assertEquals(expected, getParseErrorMessage("For input string \"\""))
 
     // number
-    error = "For input string: \"0\""
-    expected = "Number overflow on value 0"
-    assertEquals(expected, getParseErrorMessage(error))
+    val testNumberOverflowMessage: (String) -> Unit = { number ->
+        val message = "For input string \"$number\""
+        expected = "Number overflow on value $number"
+        assertEquals(expected, getParseErrorMessage(message))
+    }
 
-    error = "For input string: \"23\""
-    expected = "Number overflow on value 23"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"1000\""
-    expected = "Number overflow on value 1000"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"-1000\""
-    expected = "Number overflow on value -1000"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    val veryBig = "100000000000000000000000"
-    error = "For input string: \"$veryBig\""
-    expected = "Number overflow on value $veryBig"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"0.1\""
-    expected = "Number overflow on value 0.1"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"4.11111\""
-    expected = "Number overflow on value 4.11111"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \".456\""
-    expected = "Number overflow on value .456"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"-.456\""
-    expected = "Number overflow on value -.456"
-    assertEquals(expected, getParseErrorMessage(error))
+    testNumberOverflowMessage("0")
+    testNumberOverflowMessage("23")
+    testNumberOverflowMessage("1000")
+    testNumberOverflowMessage("-1000")
+    testNumberOverflowMessage("100000000000000000000000")
+    testNumberOverflowMessage("0.1")
+    testNumberOverflowMessage("4.11111")
+    testNumberOverflowMessage(".456")
+    testNumberOverflowMessage("-.456")
 
     // non-number
+    val testNonNumberSymbolMessage: (String) -> Unit = { symbol ->
+        val message = "For input string \"$symbol\""
+        expected = "Cannot parse symbol $symbol"
+        assertEquals(expected, getParseErrorMessage(message))
+    }
 
-    error = "For input string: \"(\""
-    expected = "Cannot parse symbol ("
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"hello world\""
-    expected = "Cannot parse symbol hello world"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \".\""
-    expected = "Cannot parse symbol ."
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"-\""
-    expected = "Cannot parse symbol -"
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"1.1.\""
-    expected = "Cannot parse symbol 1.1."
-    assertEquals(expected, getParseErrorMessage(error))
-
-    error = "For input string: \"123.456.789\""
-    expected = "Cannot parse symbol 123.456.789"
-    assertEquals(expected, getParseErrorMessage(error))
+    testNonNumberSymbolMessage("(")
+    testNonNumberSymbolMessage("hello world")
+    testNonNumberSymbolMessage(".")
+    testNonNumberSymbolMessage("-")
+    testNonNumberSymbolMessage("1.1.")
+    testNonNumberSymbolMessage("123.456.789")
 }

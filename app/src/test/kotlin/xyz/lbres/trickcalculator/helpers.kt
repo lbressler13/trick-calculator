@@ -1,23 +1,41 @@
 package xyz.lbres.trickcalculator
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
-import org.junit.function.ThrowingRunnable
 import xyz.lbres.kotlinutils.list.StringList
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 private const val iterations = 20
 
 /**
  * Assert that a function throws a divide by zero error.
  *
- * @param function [ThrowingRunnable]: function that throws exception
+ * @param function () -> Unit: function that throws exception
  */
-fun assertDivByZero(function: ThrowingRunnable) {
-    val error = assertThrows(ArithmeticException::class.java) {
-        function.run()
-    }
-    assertEquals("divide by zero", error.message)
+fun assertDivByZero(function: () -> Unit) {
+    assertFailsWithMessage<ArithmeticException>("divide by zero", function)
+}
+
+/**
+ * Assert that a function throws an error with a given message.
+ *
+ * @param message [String]: expected message
+ * @param function () -> Unit: function that throws exception
+ */
+inline fun assertFailsWithMessage(message: String, function: () -> Unit) {
+    assertFailsWithMessage<Exception>(message, function)
+}
+
+/**
+ * Assert that a function throws an error of a specific type, with a given message.
+ *
+ * @param message [String]: expected message
+ * @param function () -> Unit: function that throws exception
+ */
+@JvmName("assertFailsWithMessageWithType")
+inline fun <reified T : Exception> assertFailsWithMessage(message: String, function: () -> Unit) {
+    val error = assertFailsWith<T> { function() }
+    assertEquals(message, error.message)
 }
 
 /**
@@ -42,8 +60,8 @@ fun splitString(s: String): StringList {
  * Perform a random action repeatedly, checking to ensure that the result that was randomized.
  * The action should also contain any assertions about a single result.
  *
- * @param randomAction [() -> T]: generate a single result, and perform any assertions about that result
- * @param randomCheck [(T) -> Boolean]: check if a result meets criteria for randomization
+ * @param randomAction () -> T: generate a single result, and perform any assertions about that result
+ * @param randomCheck (T) -> Boolean: check if a result meets criteria for randomization
  */
 fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
     var checkPassed = false
