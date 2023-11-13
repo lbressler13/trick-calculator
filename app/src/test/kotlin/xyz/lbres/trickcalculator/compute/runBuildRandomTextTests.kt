@@ -19,26 +19,26 @@ fun testBuildTextWithShuffle() {
     // no modifications
     var text = splitString("1+3(4-7.5)")
     var builtText = "1 + 3 x ( 4 - 7.5 )".split(' ')
-    runSingleShuffledTest(text, builtText)
+    runSingleRandomizationTest(text, builtText, true, false)
 
     // modifications
     text = splitString("5x(.723-(16+2)/4)")
     val order = (9 downTo 0).toList()
 
     builtText = "4 x ( .276 - ( 83 + 7 ) / 5 )".split(" ")
-    runSingleShuffledTest(text, builtText, numbersOrder = order)
+    runSingleRandomizationTest(text, builtText, true, false, numbersOrder = order)
 
     builtText = "4 x .276 - 83 + 7 / 5".split(" ")
-    runSingleShuffledTest(text, builtText, numbersOrder = order, applyParens = false)
+    runSingleRandomizationTest(text, builtText, true, false, numbersOrder = order, applyParens = false)
 
     builtText = "4 x ( 276 - ( 83 + 7 ) / 5 )".split(" ")
-    runSingleShuffledTest(text, builtText, numbersOrder = order, applyDecimals = false)
+    runSingleRandomizationTest(text, builtText, true, false, numbersOrder = order, applyDecimals = false)
 
     // initial value
     val ef = -ExactFraction.THREE
     text = splitString("33(2+8.5)/.73")
     builtText = listOf(ef.toEFString()) + "x 33 x ( 2 + 8.5 ) / .73".split(" ")
-    runSingleShuffledTest(text, builtText, initialValue = ef)
+    runSingleRandomizationTest(text, builtText, true, false, initialValue = ef)
 }
 
 fun testBuildTextWithRandomSigns() {
@@ -47,30 +47,30 @@ fun testBuildTextWithRandomSigns() {
     // no modifications
     var text = splitString("1+3.0004-4+6(-4+.32)")
     var builtText = "1 + 3.0004 - 4 + 6 x ( -4 + .32 )".split(' ')
-    runSingleRandomSignTest(text, builtText)
+    runSingleRandomizationTest(text, builtText, false, true)
 
     text = splitString("-1+3.0004-4+6(-4+.32)")
     builtText = "-1 + 3.0004 - 4 + 6 x ( -4 + .32 )".split(' ')
-    runSingleRandomSignTest(text, builtText)
+    runSingleRandomizationTest(text, builtText, false, true)
 
     // modifications
     text = splitString("5x(.723-(-16+2)/(-4))")
     val order = (9 downTo 0).toList()
 
     builtText = "4 x ( .276 - ( -83 + 7 ) / ( -5 ) )".split(" ")
-    runSingleRandomSignTest(text, builtText, numbersOrder = order)
+    runSingleRandomizationTest(text, builtText, false, true, numbersOrder = order)
 
     builtText = "4 x .276 - -83 + 7 / -5".split(" ")
-    runSingleRandomSignTest(text, builtText, numbersOrder = order, applyParens = false)
+    runSingleRandomizationTest(text, builtText, false, true, numbersOrder = order, applyParens = false)
 
     builtText = "4 x ( 276 - ( -83 + 7 ) / ( -5 ) )".split(" ")
-    runSingleRandomSignTest(text, builtText, numbersOrder = order, applyDecimals = false)
+    runSingleRandomizationTest(text, builtText, false, true, numbersOrder = order, applyDecimals = false)
 
     // initial value
     val ef = -ExactFraction.THREE
     text = splitString("x(-33)(2+8.5)/.73")
     builtText = listOf(ef.toEFString()) + "x ( -33 ) x ( 2 + 8.5 ) / .73".split(" ")
-    runSingleRandomSignTest(text, builtText, initialValue = ef)
+    runSingleRandomizationTest(text, builtText, false, true, initialValue = ef)
 }
 
 // shuffle computation + randomize signs
@@ -80,59 +80,31 @@ fun testAllShuffling() {
     // no initial value
     var text = splitString("1+3.0004-4+6(-4+.32)")
     var builtText = "1 + 3.0004 - 4 + 6 x ( -4 + .32 )".split(' ')
-    runSingleAllShufflingTest(text, builtText)
+    runSingleRandomizationTest(text, builtText, true, true)
 
     // initial value
     val ef = -ExactFraction.THREE
     text = splitString("x(-33)(2+8.5)/.73")
     builtText = listOf(ef.toEFString()) + "x ( -33 ) x ( 2 + 8.5 ) / .73".split(" ")
-    runSingleRandomSignTest(text, builtText, initialValue = ef)
+    runSingleRandomizationTest(text, builtText, true, true, initialValue = ef)
 }
 
 /**
- * Run a single test where shuffleComputation setting is `true`.
- * [text] and [builtText] are required, but all other settings values are optional and have defaults.
+ * Run a single text with shuffled/randomized values.
+ * [text], [builtText], [shuffleComputation], and [randomizeSigns] are required,
+ * but all other settings values are optional and have defaults.
  */
-private fun runSingleShuffledTest(
+private fun runSingleRandomizationTest(
     text: StringList,
     builtText: StringList,
+    shuffleComputation: Boolean,
+    randomizeSigns: Boolean,
     initialValue: ExactFraction? = null,
     numbersOrder: IntList? = null,
     applyParens: Boolean = true,
     applyDecimals: Boolean = true
 ) {
     val typeMapping = mapToTypes(builtText)
-    val expectedSorted = builtText.sorted()
-
-    val buildText = {
-        val result = generateAndValidateComputeText(
-            initialValue,
-            text,
-            ops,
-            numbersOrder,
-            applyParens,
-            applyDecimals,
-            shuffleComputation = true,
-            randomizeSigns = false
-        )
-
-        assertEquals(expectedSorted, result.sorted()) // contains same values
-        assertEquals(typeMapping, mapToTypes(result))
-
-        result
-    }
-
-    runRandomTest(buildText) { it != builtText }
-}
-
-private fun runSingleRandomSignTest(
-    text: StringList,
-    builtText: StringList,
-    initialValue: ExactFraction? = null,
-    numbersOrder: IntList? = null,
-    applyParens: Boolean = true,
-    applyDecimals: Boolean = true
-) {
     val absValues = mapToAbsoluteValues(builtText)
 
     val buildText = {
@@ -143,56 +115,28 @@ private fun runSingleRandomSignTest(
             numbersOrder,
             applyParens,
             applyDecimals,
-            false,
-            randomizeSigns = true
+            shuffleComputation,
+            randomizeSigns
         )
 
-        assertEquals(absValues, mapToAbsoluteValues(result)) // contains same values
-
-        result
-    }
-
-    runRandomTest(buildText) {
-        val hasNegative = it.any { isNumber(it) && it.startsWith('-') }
-        val hasPositive = it.any { isNumber(it) && !it.startsWith('-') }
-        it != builtText && hasPositive && hasNegative
-    }
-}
-
-private fun runSingleAllShufflingTest(
-    text: StringList,
-    builtText: StringList,
-    initialValue: ExactFraction? = null,
-    numbersOrder: IntList? = null,
-    applyParens: Boolean = true,
-    applyDecimals: Boolean = true
-) {
-    val typeMapping = mapToTypes(builtText)
-    val absSorted = mapToAbsoluteValues(builtText).sorted()
-
-    val buildText = {
-        val result = generateAndValidateComputeText(
-            initialValue,
-            text,
-            ops,
-            numbersOrder,
-            applyParens,
-            applyDecimals,
-            shuffleComputation = true,
-            randomizeSigns = true
-        )
-
-        val resultAbsValues = mapToAbsoluteValues(result)
-        assertEquals(absSorted, resultAbsValues.sorted()) // contains same values
         assertEquals(typeMapping, mapToTypes(result))
 
+        val resultAbsValues = mapToAbsoluteValues(result)
+        when {
+            shuffleComputation && randomizeSigns -> assertEquals(absValues.sorted(), resultAbsValues.sorted())
+            shuffleComputation -> assertEquals(builtText.sorted(), result.sorted())
+            randomizeSigns -> assertEquals(absValues, resultAbsValues)
+        }
+
         result
     }
 
     runRandomTest(buildText) {
-        val hasNegative = it.any { isNumber(it) && it.startsWith('-') }
         val hasPositive = it.any { isNumber(it) && !it.startsWith('-') }
-        it != builtText && hasPositive && hasNegative
+        val hasNegative = it.any { isNumber(it) && it.startsWith('-') }
+        val validSigns = !randomizeSigns || (hasPositive && hasNegative)
+
+        validSigns && it != builtText
     }
 }
 
