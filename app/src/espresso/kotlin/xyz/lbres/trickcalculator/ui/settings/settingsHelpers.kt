@@ -21,6 +21,7 @@ import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 fun checkInitialSettings(checkSettingsButton: Boolean = true) {
     onView(withId(R.id.applyParensSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
     onView(withId(R.id.applyDecimalsSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
+    onView(withId(R.id.randomizeSignsSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
     onView(withId(R.id.shuffleComputationSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
     onView(withId(R.id.shuffleNumbersSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
     onView(withId(R.id.shuffleOperatorsSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
@@ -44,6 +45,7 @@ fun checkInitialSettings(checkSettingsButton: Boolean = true) {
 fun checkStandardSettings() {
     onView(withId(R.id.applyParensSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
     onView(withId(R.id.applyDecimalsSwitch)).check(matches(allOf(isDisplayed(), isChecked())))
+    onView(withId(R.id.randomizeSignsSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
     onView(withId(R.id.shuffleComputationSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
     onView(withId(R.id.shuffleNumbersSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
     onView(withId(R.id.shuffleOperatorsSwitch)).check(matches(allOf(isDisplayed(), isNotChecked())))
@@ -75,6 +77,7 @@ fun checkSettingsDisplayed(settings: Settings, settingsSwitchDisplayed: Boolean 
     checkSetting(R.id.applyDecimalsSwitch, settings.applyDecimals)
     checkSetting(R.id.applyParensSwitch, settings.applyParens)
     checkSetting(R.id.clearOnErrorSwitch, settings.clearOnError)
+    checkSetting(R.id.randomizeSignsSwitch, settings.randomizeSigns)
     checkSetting(R.id.shuffleComputationSwitch, settings.shuffleComputation)
     checkSetting(R.id.shuffleNumbersSwitch, settings.shuffleNumbers)
     checkSetting(R.id.shuffleOperatorsSwitch, settings.shuffleOperators)

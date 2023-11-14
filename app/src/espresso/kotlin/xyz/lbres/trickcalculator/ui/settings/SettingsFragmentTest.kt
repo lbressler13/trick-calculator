@@ -29,6 +29,8 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
+// TODO add randomize signs to tests
+
 @RunWith(AndroidJUnit4::class)
 class SettingsFragmentTest {
     @Rule
@@ -66,6 +68,7 @@ class SettingsFragmentTest {
         // switches
         testSwitch(R.id.applyParensSwitch, true)
         testSwitch(R.id.applyDecimalsSwitch, true)
+        testSwitch(R.id.randomizeSignsSwitch, false)
         testSwitch(R.id.shuffleComputationSwitch, false)
         testSwitch(R.id.shuffleNumbersSwitch, false)
         testSwitch(R.id.shuffleOperatorsSwitch, true)

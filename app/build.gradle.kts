@@ -1,9 +1,8 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("kotlin-android") apply true
     id("org.jlleitschuh.gradle.ktlint") version "11.6.1" // ktlint
 }
-apply(plugin = "kotlin-android")
 
 val githubUsername: String? = project.findProperty("github.username")?.toString() ?: System.getenv("USERNAME")
 val githubPassword: String? = project.findProperty("github.token")?.toString() ?: System.getenv("ACCESS_TOKEN")
