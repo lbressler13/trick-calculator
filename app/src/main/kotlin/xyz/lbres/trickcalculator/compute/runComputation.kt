@@ -34,8 +34,8 @@ fun runComputation(
     numbersOrder: IntList,
     applyParens: Boolean,
     applyDecimals: Boolean,
-    shuffleComputation: Boolean,
-    randomizeSigns: Boolean
+    randomizeSigns: Boolean,
+    shuffleComputation: Boolean
 ): ExactFraction {
     val validatedNumOrder = simpleIf(validateNumbersOrder(numbersOrder), numbersOrder, null)
     val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
@@ -47,8 +47,8 @@ fun runComputation(
         validatedNumOrder,
         applyParens,
         applyDecimals,
-        shuffleComputation,
-        randomizeSigns
+        randomizeSigns,
+        shuffleComputation
     )
 
     return try {

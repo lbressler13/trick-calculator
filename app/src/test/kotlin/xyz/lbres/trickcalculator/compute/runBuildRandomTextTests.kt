@@ -4,14 +4,13 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.trickcalculator.assertDivByZero
 import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.isNumber
 import kotlin.test.assertEquals
 
 private val ops = listOf("+", "-", "x", "/")
-private val opsType = "operator"
-private val numType = "number"
 
 @Suppress("BooleanLiteralArgument")
 fun testBuildTextWithShuffle() {
@@ -95,7 +94,7 @@ fun testAllShuffling() {
 /**
  * Run a single text with shuffled/randomized values.
  * [text], [builtText], [shuffleComputation], and [randomizeSigns] are required,
- * but all other settings values are optional and have defaults.
+ * but all other values are optional and have defaults.
  */
 private fun runSingleRandomizationTest(
     text: StringList,
@@ -144,20 +143,20 @@ private fun runSingleRandomizationTest(
 }
 
 /**
- * Map a built text list to a new list where all numbers and operators are replaced with type labels
+ * Map a list of values to a new list where all numbers and operators are replaced with type labels
  */
 private fun mapToTypes(text: StringList): StringList {
     return text.map {
         when {
-            isOperator(it, ops) -> opsType
-            isNumber(it) -> numType
+            isOperator(it, ops) -> "operator"
+            isNumber(it) -> "number"
             else -> it
         }
     }
 }
 
 /**
- * Map a built text list to a new list where negative values are stripped from all numbers, including EF-format strings
+ * Map a list of values to a new list where negative values are stripped from all numbers, including EF-format strings
  */
 private fun mapToAbsoluteValues(text: StringList): StringList {
     return text.map {

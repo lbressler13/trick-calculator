@@ -6,7 +6,6 @@ import xyz.lbres.kotlinutils.general.tryOrDefault
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
-import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.utils.isNumber
 import xyz.lbres.trickcalculator.utils.isNumberChar
@@ -235,7 +234,7 @@ private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
             data.computeText.add("x")
         }
 
-        val number = if (randomizeSigns && random.nextBoolean(0.5f)) {
+        val number = if (randomizeSigns && random.nextBoolean()) {
             reverseSign(data.currentNumber)
         } else {
             data.currentNumber
