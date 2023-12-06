@@ -58,23 +58,6 @@ fun clearText() {
 }
 
 /**
- * Click backspace button
- */
-fun backspace() {
-    onView(withId(R.id.backspaceButton)).perform(click())
-}
-
-/**
- * Click backspace button and validate the result
- *
- * @param newText [String]: expected text in main textview after clicking backspace
- */
-fun backspaceTo(newText: String) {
-    backspace()
-    mainText.check(matches(withText(newText)))
-}
-
-/**
  * Click equals button
  */
 fun equals() {

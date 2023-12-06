@@ -12,7 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
-import org.junit.Before
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,12 +22,10 @@ import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver
-import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.withSavedText
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.withEmptyString
-import xyz.lbres.trickcalculator.testutils.withNonEmptyString
 
 // TODO tests for settings
 
@@ -44,10 +42,8 @@ class CalculatorFragmentTest {
     @JvmField
     val retryRule = RetryRule()
 
-    @Before
-    fun setupTest() {
-        // must be performed in setup instead of cleanup, because mainText might not be visible at end of a test
-        mainText.perform(clearSavedText())
+    @After
+    fun cleanupTest() {
         TextSaver.clearAllSavedValues()
     }
 
@@ -95,108 +91,13 @@ class CalculatorFragmentTest {
     }
 
     @Test
-    fun typeInMainText() {
-        mainText.check(matches(withEmptyString()))
-
-        // digits
-        onView(withId(R.id.oneButton)).perform(click())
-        mainText.check(matches(withText("1")))
-
-        onView(withId(R.id.twoButton)).perform(click())
-        mainText.check(matches(withText("12")))
-
-        onView(withId(R.id.threeButton)).perform(click())
-        mainText.check(matches(withText("123")))
-
-        onView(withId(R.id.fourButton)).perform(click())
-        mainText.check(matches(withText("1234")))
-
-        onView(withId(R.id.fiveButton)).perform(click())
-        mainText.check(matches(withText("12345")))
-
-        onView(withId(R.id.sixButton)).perform(click())
-        mainText.check(matches(withText("123456")))
-
-        onView(withId(R.id.sevenButton)).perform(click())
-        mainText.check(matches(withText("1234567")))
-
-        onView(withId(R.id.eightButton)).perform(click())
-        mainText.check(matches(withText("12345678")))
-
-        onView(withId(R.id.nineButton)).perform(click())
-        mainText.check(matches(withText("123456789")))
-
-        onView(withId(R.id.zeroButton)).perform(click())
-        mainText.check(matches(withText("1234567890")))
-
-        // operators
-        onView(withId(R.id.plusButton)).perform(click())
-        mainText.check(matches(withText("1234567890+")))
-
-        onView(withId(R.id.minusButton)).perform(click())
-        mainText.check(matches(withText("1234567890+-")))
-
-        onView(withId(R.id.timesButton)).perform(click())
-        mainText.check(matches(withText("1234567890+-x")))
-
-        onView(withId(R.id.divideButton)).perform(click())
-        mainText.check(matches(withText("1234567890+-x/")))
-
-        onView(withId(R.id.expButton)).perform(click())
-        mainText.check(matches(withText("1234567890+-x/^")))
-
-        onView(withId(R.id.lparenButton)).perform(click())
-        mainText.check(matches(withText("1234567890+-x/^(")))
-
-        onView(withId(R.id.rparenButton)).perform(click())
-        mainText.check(matches(withText("1234567890+-x/^()")))
-
-        onView(withId(R.id.decimalButton)).perform(click())
-        mainText.check(matches(withText("1234567890+-x/^().")))
-    }
+    fun typeInMainText() = testTypeInMainText()
 
     @Test
-    fun useClear() {
-        val clearButton = onView(withId(R.id.clearButton))
+    fun useClear() = testUseClearButton()
 
-        // empty
-        mainText.check(matches(withEmptyString()))
-        clearButton.perform(click())
-        mainText.check(matches(withEmptyString()))
-
-        // with text
-        typeText("123")
-        mainText.check(matches(withNonEmptyString()))
-        clearButton.perform(click())
-        mainText.check(matches(withEmptyString()))
-
-        typeText("(.7-45+55/5)^3(4.3)")
-        mainText.check(matches(withNonEmptyString()))
-        clearButton.perform(click())
-        mainText.check(matches(withEmptyString()))
-
-        // with computed
-        typeText("123")
-        equals()
-        mainText.check(matches(withNonEmptyString()))
-        clearButton.perform(click())
-        mainText.check(matches(withEmptyString()))
-
-        typeText("100x44-3")
-        equals()
-        mainText.check(matches((withNonEmptyString())))
-        clearButton.perform(click())
-        mainText.check(matches(withEmptyString()))
-
-        // with error
-        typeText("100..3")
-        equals()
-        mainText.check(matches(withNonEmptyString()))
-        errorText.check(matches(allOf(isDisplayed(), withNonEmptyString())))
-        clearButton.perform(click())
-        mainText.check(matches(withEmptyString()))
-        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
-    }
+    @Test
+    fun useBackspace() = testBackspace()
 
     @Test
     fun equalsSingleNumber() = testEqualsSingleNumber()
@@ -292,72 +193,6 @@ class CalculatorFragmentTest {
             typeText("(4+2)")
             equals()
         }
-    }
-
-    @Test
-    fun useBackspace() {
-        // blank
-        mainText.check(matches(withEmptyString()))
-        backspace()
-        mainText.check(matches(withEmptyString()))
-
-        // with text
-        clearText()
-        typeText("1")
-        backspace()
-        mainText.check(matches(withEmptyString()))
-
-        clearText()
-        typeText("123")
-        backspace()
-        mainText.check(matches(withText("12")))
-
-        clearText()
-        typeText("123+0.1")
-        backspaceTo("123+0.")
-        backspaceTo("123+0")
-        backspaceTo("123+")
-        backspaceTo("123")
-        backspaceTo("12")
-        backspaceTo("1")
-        backspaceTo("")
-
-        // with computed value
-        clearText()
-        typeText("123")
-        equals()
-        mainText.check(matches(withText("[123]")))
-        backspaceTo("")
-
-        clearText()
-        typeText("123")
-        equals()
-        typeText("+5")
-        mainText.check(matches(withText("[123]+5")))
-        backspace()
-        backspaceTo("[123]")
-        backspaceTo("")
-
-        // with error
-        clearText()
-        typeText("+")
-        mainText.check(matches(withText("+")))
-        equals()
-        onView(withId(R.id.errorText)).check(matches(isDisplayed()))
-        backspace()
-        mainText.check(matches(withEmptyString()))
-        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
-
-        clearText()
-        typeText("1+")
-        mainText.check(matches(withText("1+")))
-        equals()
-        onView(withId(R.id.errorText)).check(matches(isDisplayed()))
-        backspace()
-        mainText.check(matches(withText("1")))
-        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
-        equals()
-        mainText.check(matches(withText("[1]")))
     }
 
     @Test
