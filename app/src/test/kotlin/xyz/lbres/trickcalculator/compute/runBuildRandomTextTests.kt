@@ -4,7 +4,6 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
-import xyz.lbres.trickcalculator.assertDivByZero
 import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.isNumber

@@ -33,9 +33,9 @@ fun testSettingsSaved() {
     openHistoryFragment()
     openSettingsFromDialog()
 
-    onView(withId(R.id.applyDecimalsSwitch)).perform(click())
+    onView(withId(R.id.randomizeSignsSwitch)).perform(click())
     onView(withId(R.id.settingsButtonSwitch)).perform(click())
-    settings.applyDecimals = !settings.applyDecimals
+    settings.applyDecimals = settings.randomizeSigns
     settings.showSettingsButton = !settings.showSettingsButton
 
     closeFragment() // close settings

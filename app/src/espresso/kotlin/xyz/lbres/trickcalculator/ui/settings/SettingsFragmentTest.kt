@@ -29,8 +29,6 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.viewactions.forceClick
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
-// TODO add randomize signs to tests
-
 @RunWith(AndroidJUnit4::class)
 class SettingsFragmentTest {
     @Rule
