@@ -2,6 +2,7 @@ package xyz.lbres.trickcalculator.testutils.textsaver
 
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.IdRes
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
@@ -101,6 +102,9 @@ class TextSaver {
          * [Matcher] to check if the text in a view matches the saved value
          */
         fun withSavedText(): Matcher<View> = PreviousTextViewMatcher()
+
+        // TODO remove this
+        fun savedTextForView(@IdRes viewResId: Int): String? = savedTextMapping[viewResId]
 
         /**
          * Clear all saved values in the TextSaver

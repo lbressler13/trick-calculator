@@ -3,6 +3,7 @@ package xyz.lbres.trickcalculator.ui.calculator
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -24,6 +25,7 @@ import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.withSavedText
+import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.withEmptyString
 import xyz.lbres.trickcalculator.testutils.withNonEmptyString
 
@@ -239,6 +241,50 @@ class CalculatorFragmentTest {
             onView(withId(R.id.errorText)).check(
                 matches(anyOf(not(isDisplayed()), withText("Error: Divide by zero")))
             )
+        }
+    }
+
+    @Test
+    fun equalsWithRandomizedSigns() {
+        toggleShuffleOperators()
+        openSettingsFragment()
+        onView(withId(R.id.randomizeSignsSwitch))
+            .perform(click())
+            .check(matches(isChecked()))
+        closeFragment()
+
+        var options = setOf("[-5]", "[5]")
+        checkMainTextMatchesSeveral(options, 2, 10, true) {
+            typeText("5")
+            equals()
+        }
+        checkMainTextMatchesSeveral(options, 2, 10, true) {
+            typeText("-5")
+            equals()
+        }
+
+        options = setOf("[3]", "[-1]", "[-3]", "[1]")
+        checkMainTextMatchesSeveral(options, 2, 10, true) {
+            typeText("1+2")
+            equals()
+        }
+        checkMainTextMatchesSeveral(options, 2, 10, true) {
+            typeText("-1-2")
+            equals()
+        }
+
+        options = setOf("[0.6]", "[-0.6]")
+        checkMainTextMatchesSeveral(options, 2, 10, true) {
+            typeText("-.75/1.25")
+            equals()
+        }
+
+        options = setOf("[6]", "[18]", "[-6]", "[-18]")
+        checkMainTextMatchesSeveral(options, 2, 10, true) {
+            typeText("3")
+            equals()
+            typeText("(4+2)")
+            equals()
         }
     }
 

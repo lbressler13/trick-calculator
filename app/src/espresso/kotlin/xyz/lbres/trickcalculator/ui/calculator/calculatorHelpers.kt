@@ -9,6 +9,10 @@ import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.savedTextForView
 
 private val mainText = onView(withId(R.id.mainText))
 
@@ -95,6 +99,27 @@ fun checkMainTextMatches(text: String) {
 fun checkMainTextMatchesAny(options: Set<String>) {
     val matchers = options.map { withText(it) }.toMutableList()
     mainText.check(matches(anyOf(matchers)))
+}
+
+// TODO configure min iterations
+fun checkMainTextMatchesSeveral(options: Set<String>, minimumMatched: Int, iterations: Int, breakOnMin: Boolean = false, enterText: () -> Unit) {
+    val results: MutableSet<String> = mutableSetOf()
+    var i = 0
+
+    while (i < iterations && (breakOnMin && results.size < minimumMatched)) {
+        enterText()
+        mainText.perform(saveText())
+        checkMainTextMatchesAny(options)
+        results.add(savedTextForView(R.id.mainText)!!)
+        mainText.perform(clearSavedText())
+        clearText()
+
+        i++
+    }
+
+    if (results.size < minimumMatched) {
+        throw AssertionError("Number of distinct values expected to be at least $minimumMatched. Distinct values: $results")
+    }
 }
 
 /**
