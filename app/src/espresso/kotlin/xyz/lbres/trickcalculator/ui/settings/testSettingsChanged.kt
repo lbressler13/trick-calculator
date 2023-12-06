@@ -105,7 +105,7 @@ fun testResetButton() {
     onView(withId(R.id.historyButton3)).perform(click())
 
     // reset
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
     settingsButton.check(isNotPresented())
 
@@ -124,7 +124,7 @@ fun testResetButton() {
 
     // open settings button w/ existing changes + reset
     settingsButton.check(matches(isDisplayed())).perform(click())
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
 
     // validate that settings button still exists
@@ -134,7 +134,7 @@ fun testResetButton() {
     // modify settings through settings button + reset
     randomizeSignsSwitch.perform(click())
     clearOnErrorSwitch.perform(click())
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
 
     // validate that settings button is still checked
     openSettingsFragment()
@@ -142,7 +142,7 @@ fun testResetButton() {
     settingsButtonSwitch.check(matches(isChecked()))
 
     // reset through regular method + validate settings still exists
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
     settingsButton.check(matches(isDisplayed()))
 }
 

@@ -56,7 +56,7 @@ class SettingsFragmentTest {
     @Test
     fun loadFullUi() {
         checkInitialSettings()
-        onView(withId(R.id.resetSettingsButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.resetSettingsButton)).perform(scrollTo()).check(matches(isDisplayed()))
         onView(withId(R.id.randomizeSettingsButton)).perform(scrollTo()).check(matches(isDisplayed()))
         onView(withId(R.id.standardFunctionButton)).perform(scrollTo()).check(matches(isDisplayed()))
     }
@@ -119,9 +119,9 @@ class SettingsFragmentTest {
 
         // full ui otherwise displayed
         checkInitialSettings(checkSettingsButton = false)
-        onView(withId(R.id.resetSettingsButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.randomizeSettingsButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.standardFunctionButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.resetSettingsButton)).perform(scrollTo()).check(matches(isDisplayed()))
+        onView(withId(R.id.randomizeSettingsButton)).perform(scrollTo()).check(matches(isDisplayed()))
+        onView(withId(R.id.standardFunctionButton)).perform(scrollTo()).check(matches(isDisplayed()))
     }
 
     @Test
