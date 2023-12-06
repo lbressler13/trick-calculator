@@ -10,8 +10,8 @@ import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.countDistinctValues
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
-import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.savedTextForView
 
 private val mainText = onView(withId(R.id.mainText))
 
@@ -110,21 +110,21 @@ fun checkMainTextMatchesAny(options: Set<String>) {
  * @param enterText () -> [Unit]: function to enter text into the main textview
  */
 fun checkMainTextMatchesMultiple(options: Set<String>, minMatches: Int, minIterations: Int, maxIterations: Int, enterText: () -> Unit) {
-    val results: MutableSet<String> = mutableSetOf()
+    mainText.perform(clearSavedText())
+    var distinctValues = 0
     var i = 0
-    while (i < maxIterations && (i < minIterations || results.size < minMatches)) {
+    while (i < maxIterations && (i < minIterations || distinctValues < minMatches)) {
         enterText()
         mainText.perform(saveText())
         checkMainTextMatchesAny(options)
-        results.add(savedTextForView(R.id.mainText)!!)
-        mainText.perform(clearSavedText())
+        distinctValues = countDistinctValues(R.id.mainText)
         clearText()
 
         i++
     }
 
-    if (results.size < minMatches) {
-        throw AssertionError("Number of distinct values expected to be at least $minMatches. Distinct values: $results")
+    if (distinctValues < minMatches) {
+        throw AssertionError("Number of distinct values expected to be at least $minMatches. Actual number: $distinctValues")
     }
 }
 

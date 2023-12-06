@@ -38,8 +38,14 @@ class TextSaver {
         override fun perform(uiController: UiController?, view: View?) {
             if (view != null) {
                 val text = (view as TextView).text?.toString()
+                val savedValues = savedTextMapping[view.id]
+
                 if (text != null) {
-                    savedTextMapping[view.id] = text
+                    if (savedValues == null) {
+                        savedTextMapping[view.id] = mutableListOf(text)
+                    } else {
+                        savedValues.add(text)
+                    }
                 }
             }
         }
@@ -58,7 +64,7 @@ class TextSaver {
                 return false
             }
 
-            val savedText: String? = savedTextMapping[view.id]
+            val savedText: String? = savedTextMapping[view.id]?.last()
 
             return savedText != null && view.text?.toString() == savedText
         }
@@ -86,7 +92,7 @@ class TextSaver {
         /**
          * Mapping of view IDs to saved string values
          */
-        private var savedTextMapping: MutableMap<Int, String> = mutableMapOf()
+        private var savedTextMapping: MutableMap<Int, MutableList<String>> = mutableMapOf()
 
         /**
          * [ViewAction] to clear saved text for a view
@@ -103,8 +109,16 @@ class TextSaver {
          */
         fun withSavedText(): Matcher<View> = PreviousTextViewMatcher()
 
-        // TODO remove this
-        fun savedTextForView(@IdRes viewResId: Int): String? = savedTextMapping[viewResId]
+        /**
+         * Count the number of distinct values that have been saved for a view with a given ID.
+         * Does not include values saved before most recent clear.
+         *
+         * @param viewResId [Int]: resource ID of view to retrieve values for
+         * @return [Int]: number of distinct values saved for the given view with the given ID
+         */
+        fun countDistinctValues(@IdRes viewResId: Int): Int {
+            return savedTextMapping[viewResId]?.distinct()?.size ?: 0
+        }
 
         /**
          * Clear all saved values in the TextSaver
