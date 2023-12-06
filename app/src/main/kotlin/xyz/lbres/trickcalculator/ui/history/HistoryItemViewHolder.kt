@@ -2,8 +2,8 @@ package xyz.lbres.trickcalculator.ui.history
 
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.trickcalculator.databinding.ViewHolderHistoryItemBinding
-import xyz.lbres.trickcalculator.utils.gone
-import xyz.lbres.trickcalculator.utils.visible
+import xyz.lbres.trickcalculator.ext.view.gone
+import xyz.lbres.trickcalculator.ext.view.visible
 
 /**
  * ViewHolder for a single history item view

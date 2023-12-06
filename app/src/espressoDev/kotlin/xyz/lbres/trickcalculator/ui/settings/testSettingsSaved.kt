@@ -35,7 +35,7 @@ fun testSettingsSaved() {
 
     onView(withId(R.id.randomizeSignsSwitch)).perform(click())
     onView(withId(R.id.settingsButtonSwitch)).perform(click())
-    settings.applyDecimals = settings.randomizeSigns
+    settings.randomizeSigns = !settings.randomizeSigns
     settings.showSettingsButton = !settings.showSettingsButton
 
     closeFragment() // close settings

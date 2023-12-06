@@ -100,6 +100,7 @@ fun checkMainTextMatchesAny(options: Set<String>) {
     mainText.check(matches(anyOf(matchers)))
 }
 
+// TODO use in additional tests
 /**
  * Check that the main textview matches several different values when repeating test
  *
