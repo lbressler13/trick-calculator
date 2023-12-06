@@ -9,7 +9,6 @@ import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
-import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.savedTextForView
@@ -92,21 +91,28 @@ fun checkMainTextMatches(text: String) {
 }
 
 /**
- * Check that the main textview matches one out of a list of options
+ * Check that the main textview matches one out of a set of options
  *
- * @param options [Set]<[String]>: list of valid values for main textview
+ * @param options [Set]<String>: valid values for main textview
  */
 fun checkMainTextMatchesAny(options: Set<String>) {
     val matchers = options.map { withText(it) }.toMutableList()
     mainText.check(matches(anyOf(matchers)))
 }
 
-// TODO configure min iterations
-fun checkMainTextMatchesSeveral(options: Set<String>, minimumMatched: Int, iterations: Int, breakOnMin: Boolean = false, enterText: () -> Unit) {
+/**
+ * Check that the main textview matches several different values when repeating test
+ *
+ * @param options [Set]<String>: valid values for main textview
+ * @param minMatches [Int]: minimum number of distinct values for main textview
+ * @param minIterations [Int]: minimum number of times to run test
+ * @param maxIterations [Int]: maximum number of times to run test
+ * @param enterText () -> [Unit]: function to enter text into the main textview
+ */
+fun checkMainTextMatchesMultiple(options: Set<String>, minMatches: Int, minIterations: Int, maxIterations: Int, enterText: () -> Unit) {
     val results: MutableSet<String> = mutableSetOf()
     var i = 0
-
-    while (i < iterations && (breakOnMin && results.size < minimumMatched)) {
+    while (i < maxIterations && (i < minIterations || results.size < minMatches)) {
         enterText()
         mainText.perform(saveText())
         checkMainTextMatchesAny(options)
@@ -117,8 +123,8 @@ fun checkMainTextMatchesSeveral(options: Set<String>, minimumMatched: Int, itera
         i++
     }
 
-    if (results.size < minimumMatched) {
-        throw AssertionError("Number of distinct values expected to be at least $minimumMatched. Distinct values: $results")
+    if (results.size < minMatches) {
+        throw AssertionError("Number of distinct values expected to be at least $minMatches. Distinct values: $results")
     }
 }
 
