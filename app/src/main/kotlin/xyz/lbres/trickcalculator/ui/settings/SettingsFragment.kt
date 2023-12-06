@@ -65,6 +65,7 @@ class SettingsFragment : BaseFragment() {
         binding.applyDecimalsSwitch.isChecked = viewModel.applyDecimals
         binding.applyParensSwitch.isChecked = viewModel.applyParens
         binding.clearOnErrorSwitch.isChecked = viewModel.clearOnError
+        binding.randomizeSignsSwitch.isChecked = viewModel.randomizeSigns
         binding.settingsButtonSwitch.isChecked = viewModel.showSettingsButton
         binding.shuffleComputationSwitch.isChecked = viewModel.shuffleComputation
         binding.shuffleNumbersSwitch.isChecked = viewModel.shuffleNumbers
@@ -121,6 +122,7 @@ class SettingsFragment : BaseFragment() {
         viewModel.applyDecimals = binding.applyDecimalsSwitch.isChecked
         viewModel.applyParens = binding.applyParensSwitch.isChecked
         viewModel.clearOnError = binding.clearOnErrorSwitch.isChecked
+        viewModel.randomizeSigns = binding.randomizeSignsSwitch.isChecked
         viewModel.showSettingsButton = binding.settingsButtonSwitch.isChecked
         viewModel.shuffleComputation = binding.shuffleComputationSwitch.isChecked
         viewModel.shuffleNumbers = binding.shuffleNumbersSwitch.isChecked

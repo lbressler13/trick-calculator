@@ -35,6 +35,11 @@
                 android:text="@string/shuffle_numbers" />
 
             <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/randomizeSignsSwitch"
+                style="@style/SettingsFragmentItem"
+                android:text="@string/randomize_signs" />
+
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/applyParensSwitch"
                 style="@style/SettingsFragmentItem"
                 android:checked="true"

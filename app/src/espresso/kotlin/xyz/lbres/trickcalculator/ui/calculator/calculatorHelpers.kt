@@ -9,6 +9,9 @@ import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.countDistinctValues
+import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
 
 private val mainText = onView(withId(R.id.mainText))
 
@@ -88,13 +91,42 @@ fun checkMainTextMatches(text: String) {
 }
 
 /**
- * Check that the main textview matches one out of a list of options
+ * Check that the main textview matches one out of a set of options
  *
- * @param options [Set]<[String]>: list of valid values for main textview
+ * @param options [Set]<String>: valid values for main textview
  */
 fun checkMainTextMatchesAny(options: Set<String>) {
     val matchers = options.map { withText(it) }.toMutableList()
     mainText.check(matches(anyOf(matchers)))
+}
+
+// TODO use in additional tests
+/**
+ * Check that the main textview matches several different values when repeating test
+ *
+ * @param options [Set]<String>: valid values for main textview
+ * @param minMatches [Int]: minimum number of distinct values for main textview
+ * @param minIterations [Int]: minimum number of times to run test
+ * @param maxIterations [Int]: maximum number of times to run test
+ * @param enterText () -> [Unit]: function to enter text into the main textview
+ */
+fun checkMainTextMatchesMultiple(options: Set<String>, minMatches: Int, minIterations: Int, maxIterations: Int, enterText: () -> Unit) {
+    mainText.perform(clearSavedText())
+    var distinctValues = 0
+    var i = 0
+    while (i < maxIterations && (i < minIterations || distinctValues < minMatches)) {
+        enterText()
+        mainText.perform(saveText())
+        checkMainTextMatchesAny(options)
+        distinctValues = countDistinctValues(R.id.mainText)
+        clearText()
+
+        i++
+    }
+
+    if (distinctValues < minMatches) {
+        throw AssertionError("Number of distinct values expected to be at least $minMatches. Actual number: $distinctValues")
+    }
 }
 
 /**

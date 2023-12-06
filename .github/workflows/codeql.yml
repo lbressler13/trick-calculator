@@ -22,8 +22,8 @@ jobs:
     timeout-minutes: 180
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      TOKEN: ${{ secrets.TOKEN }}
-    
+      ACCESS_TOKEN: ${{ secrets.TOKEN }}
+
     permissions:
       actions: read
       contents: read

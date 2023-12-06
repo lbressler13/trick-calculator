@@ -6,6 +6,7 @@ import xyz.lbres.kotlinutils.general.tryOrDefault
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.mutablelist.ext.popRandom
+import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.utils.isNumber
 import xyz.lbres.trickcalculator.utils.isNumberChar
 
@@ -59,6 +60,7 @@ private data class ComputeData(
  * @param applyParens [Boolean]: whether or not parentheses should be applied
  * @param applyDecimals [Boolean]: whether or not decimals points should be applied.
  * This does not impact any decimals in the initial value.
+ * @param randomizeSigns [Boolean]: whether or not the signs of numbers should be randomized.
  * @param shuffleComputation [Boolean]: whether or not the order of numbers and order of ops should be shuffled.
  * @return [StringList]: modified list with adjacent digits/decimals combined into single numbers,
  * and with any of the specified modifications for number order, applying parens, and applying decimals.
@@ -71,6 +73,7 @@ fun generateAndValidateComputeText(
     numbersOrder: IntList?,
     applyParens: Boolean,
     applyDecimals: Boolean,
+    randomizeSigns: Boolean,
     shuffleComputation: Boolean
 ): StringList {
     val data = ComputeData()
@@ -85,7 +88,7 @@ fun generateAndValidateComputeText(
     }
 
     if (initialValue != null) {
-        addInitialValue(data, initialValue, splitText)
+        addInitialValue(data, initialValue, splitText, randomizeSigns)
     }
 
     // loop over all elements
@@ -98,7 +101,7 @@ fun generateAndValidateComputeText(
         data.currentType = simpleIf(negative, { NUMBER }, { getTypeOf(element, ops) ?: throw syntaxError })
 
         if (data.currentType != NUMBER && data.currentNumber.isNotEmpty()) {
-            addCurrentNumber(data)
+            addCurrentNumber(data, randomizeSigns)
         }
 
         data.openParenCount += parenCounts.getOrDefault(data.currentType, 0)
@@ -111,7 +114,7 @@ fun generateAndValidateComputeText(
 
     // add remaining number
     if (data.currentNumber.isNotEmpty()) {
-        addCurrentNumber(data)
+        addCurrentNumber(data, randomizeSigns)
     }
 
     // check syntax error at end
@@ -133,9 +136,12 @@ fun generateAndValidateComputeText(
  * @param data [ComputeData]: data about current state of computation
  * @param initialValue [ExactFraction]: previously computed value, used as the first element in computation
  * @param initialText [StringList]: following compute text
+ * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
-private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, initialText: StringList) {
-    data.computeText.add(initialValue.toEFString())
+private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, initialText: StringList, randomizeSigns: Boolean) {
+    val value = simpleIf(randomizeSigns && random.nextBoolean(), -initialValue, initialValue)
+
+    data.computeText.add(value.toEFString())
     data.lastType = NUMBER
 
     // add times between initial val and first num
@@ -145,7 +151,7 @@ private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, init
 }
 
 /**
- * Add a digit or decimal to the current number
+ * Add a digit, decimal, or negative to the current number
  *
  * @param data [ComputeData]: data about current state of computation
  * @param element [String]: element to add
@@ -215,8 +221,9 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
  * Add the current number to the compute text
  *
  * @param data [ComputeData]: data about current state of computation
+ * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
-private fun addCurrentNumber(data: ComputeData) {
+private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
     if (data.currentNumber == NEG || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
         throw syntaxError
     }
@@ -227,12 +234,28 @@ private fun addCurrentNumber(data: ComputeData) {
             data.computeText.add("x")
         }
 
-        data.computeText.add(data.currentNumber)
+        val number = if (randomizeSigns && random.nextBoolean()) {
+            reverseSign(data.currentNumber)
+        } else {
+            data.currentNumber
+        }
+
+        data.computeText.add(number)
         data.currentNumber = ""
         data.currentDecimal = false
 
         data.lastType = NUMBER
     }
+}
+
+/**
+ * Reverse the sign of a number string by removing a negative sign if it exists, or adding it if it does not
+ *
+ * @param number [String]: initial number
+ * @return [String]: modified number
+ */
+private fun reverseSign(number: String): String {
+    return simpleIf(number.startsWith('-'), number.substring(1), "-$number")
 }
 
 /**

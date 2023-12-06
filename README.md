@@ -34,6 +34,7 @@ Here is the complete list:
 | Apply parentheses     | true    | Apply parentheses entered in textbox                              |
 | Clear text on error   | false   | Clear textbox when error occurs                                   |
 | History mode          | 1       | Degree of randomness in computation history                       |
+| Randomize signs       | false   | Randomize the sign of each number                                 |
 | Show settings button  | false   | Show settings button on main screen                               |
 | Shuffle computation   | false   | Shuffle order of numbers and order of ops within the computation  |
 | Shuffle numbers       | false   | Shuffle value of numbers                                          |
@@ -67,7 +68,7 @@ In the spirit of the app, this access is undocumented.
 │   │   │   │   ├── compute  <-- code to perform calculation
 │   │   │   │   ├── ext      <-- extension methods for existing classes
 │   │   │   │   ├── ui       <-- app UI
-│   │   │   │   ├── utils
+│   │   │   │   ├── utils    <-- utility functions and useful typealiases
 │   │   │   ├── res          <-- app resources, including strings, layouts, and images
 │   │   │   ├── AndroidManifest.xml
 │   │   ├── test             <-- unit tests
@@ -95,6 +96,7 @@ See [here](https://developer.android.com/studio/build/build-variants) for inform
 
 This app has dependencies on packages that are hosted in the GitHub Packages registry.
 In order to build the project, you will need a GitHub access token with at least the `read:packages` scope.
+
 **Do not commit your access token.**
 
 You can add the following properties to a gradle.properties file in order to build:
@@ -119,9 +121,7 @@ See [here](https://docs.github.com/en/packages/working-with-a-github-packages-re
 
 **All** new computation needs unit tests.
 The computation in here is messy and complicated, and manually testing everything is difficult and it **will** miss edge cases.
-The tests are annoying and time consuming to write, but it will all be worth it when you refactor the most important code and can test that it still works.
-The hours writing tests will be worth it. 
-
+The tests are annoying and time consuming, but they will be worth it.
 You will gain a huge appreciation for testing and TDD.
 
 Unit tests can be run via an IDE, or with the following command:

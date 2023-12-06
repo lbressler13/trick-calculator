@@ -15,6 +15,7 @@ class SettingsViewModel : ViewModel() {
     var applyParens: Boolean = true
     var clearOnError: Boolean = false
     var historyRandomness: Int = 1
+    var randomizeSigns: Boolean = false
     var showSettingsButton: Boolean = false
     var shuffleComputation: Boolean = false
     var shuffleNumbers: Boolean = false
@@ -33,6 +34,7 @@ class SettingsViewModel : ViewModel() {
         applyParens = defaults.applyParens
         clearOnError = defaults.clearOnError
         historyRandomness = defaults.historyRandomness
+        randomizeSigns = defaults.randomizeSigns
         shuffleComputation = defaults.shuffleComputation
         shuffleNumbers = defaults.shuffleNumbers
         shuffleOperators = defaults.shuffleOperators
@@ -44,6 +46,7 @@ class SettingsViewModel : ViewModel() {
     fun randomizeSettings() {
         applyDecimals = random.nextBoolean()
         applyParens = random.nextBoolean()
+        randomizeSigns = random.nextBoolean()
         shuffleComputation = random.nextBoolean()
         shuffleNumbers = random.nextBoolean()
         shuffleOperators = random.nextBoolean()
@@ -62,6 +65,7 @@ class SettingsViewModel : ViewModel() {
         applyParens = true
         clearOnError = false
         historyRandomness = 0
+        randomizeSigns = false
         shuffleComputation = false
         shuffleNumbers = false
         shuffleOperators = false

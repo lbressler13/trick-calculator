@@ -4,18 +4,16 @@ import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.assertFailsWithMessage
-import xyz.lbres.trickcalculator.runRandomTest
 import xyz.lbres.trickcalculator.splitString
-import xyz.lbres.trickcalculator.utils.isNumber
 import kotlin.test.assertEquals
-
-private val ops = listOf("+", "-", "x", "/")
 
 fun runGenerateAndValidateComputeTextTests() {
     testValidateErrors()
     testBuildText()
     testBuildTextWithMods()
     testBuildTextWithShuffle()
+    testBuildTextWithRandomSigns()
+    testAllShuffling()
 }
 
 private fun testValidateErrors() {
@@ -259,88 +257,6 @@ private fun testBuildTextWithMods() {
     assertEquals(expected, callGenerateAndValidate(ef, text, order = order, applyParens = false, applyDecimals = false))
 }
 
-private fun testBuildTextWithShuffle() {
-    assertEquals(emptyList(), callGenerateAndValidate(null, emptyList(), shuffleComputation = true))
-
-    // no modifications
-    var text = splitString("1+3(4-7.5)")
-    var builtText = "1 + 3 x ( 4 - 7.5 )".split(' ')
-    runSingleShuffledTest(text, builtText)
-
-    // modifications
-    text = splitString("5x(.723-(16+2)/4)")
-    val order = (9 downTo 0).toList()
-
-    builtText = "4 x ( .276 - ( 83 + 7 ) / 5 )".split(" ")
-    runSingleShuffledTest(text, builtText, numbersOrder = order)
-
-    builtText = "4 x .276 - 83 + 7 / 5".split(" ")
-    runSingleShuffledTest(text, builtText, numbersOrder = order, applyParens = false)
-
-    builtText = "4 x ( 276 - ( 83 + 7 ) / 5 )".split(" ")
-    runSingleShuffledTest(text, builtText, numbersOrder = order, applyDecimals = false)
-
-    // initial value
-    val ef = -ExactFraction.THREE
-    text = splitString("33(2+8.5)/.73")
-    builtText = listOf(ef.toEFString()) + "x 33 x ( 2 + 8.5 ) / .73".split(" ")
-    runSingleShuffledTest(text, builtText, initialValue = ef)
-}
-
-/**
- * Run a single test where shuffleComputation setting is `true`.
- * [text] and [builtText] are required, bu tall other settings values are optional and have defaults.
- */
-private fun runSingleShuffledTest(
-    text: StringList,
-    builtText: StringList,
-    initialValue: ExactFraction? = null,
-    numbersOrder: IntList? = null,
-    applyParens: Boolean = true,
-    applyDecimals: Boolean = true
-) {
-    val opsType = "operator"
-    val numType = "number"
-
-    val mapping = builtText.map {
-        when {
-            isOperator(it, ops) -> opsType
-            isNumber(it) -> numType
-            else -> it
-        }
-    }
-
-    val expectedSorted = builtText.sorted()
-
-    val buildText = {
-        val result = generateAndValidateComputeText(
-            initialValue,
-            text,
-            ops,
-            numbersOrder,
-            applyParens,
-            applyDecimals,
-            shuffleComputation = true
-        )
-
-        assertEquals(expectedSorted, result.sorted()) // contains same values
-
-        mapping.forEachIndexed { index, expectedType ->
-            val newValue = result[index]
-            when {
-                isOperator(newValue, ops) -> assertEquals(expectedType, opsType)
-                isNumber(newValue) -> assertEquals(expectedType, numType)
-                else -> assertEquals(expectedType, newValue)
-            }
-        }
-
-        result
-    }
-
-    val checkShuffled: (StringList) -> Boolean = { it != builtText }
-    runRandomTest(buildText, checkShuffled)
-}
-
 /**
  * Assert that a syntax error is thrown
  */
@@ -352,14 +268,15 @@ private fun assertSyntaxError(function: () -> Unit) {
  * Call [generateAndValidateComputeText] with default setting values.
  * [initialValue] and [text] are required, but all settings values are optional and have defaults.
  */
-private fun callGenerateAndValidate(
+fun callGenerateAndValidate(
     initialValue: ExactFraction?,
     text: StringList,
     ops: StringList = listOf("+", "-", "x", "/"),
     order: IntList? = null,
     applyParens: Boolean = true,
     applyDecimals: Boolean = true,
+    randomizeSigns: Boolean = false,
     shuffleComputation: Boolean = false
 ): StringList {
-    return generateAndValidateComputeText(initialValue, text, ops, order, applyParens, applyDecimals, shuffleComputation)
+    return generateAndValidateComputeText(initialValue, text, ops, order, applyParens, applyDecimals, randomizeSigns, shuffleComputation)
 }

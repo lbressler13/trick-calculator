@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.utils
+package xyz.lbres.trickcalculator.ext.view
 
 import android.view.View
 import androidx.test.espresso.UiController

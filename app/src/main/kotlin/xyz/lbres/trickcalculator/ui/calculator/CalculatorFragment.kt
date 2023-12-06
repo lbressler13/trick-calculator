@@ -16,14 +16,14 @@ import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.compute.runComputation
 import xyz.lbres.trickcalculator.databinding.FragmentCalculatorBinding
+import xyz.lbres.trickcalculator.ext.view.gone
+import xyz.lbres.trickcalculator.ext.view.visible
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.history.HistoryItem
 import xyz.lbres.trickcalculator.ui.history.HistoryViewModel
 import xyz.lbres.trickcalculator.ui.settings.SettingsViewModel
 import xyz.lbres.trickcalculator.utils.OperatorFunction
-import xyz.lbres.trickcalculator.utils.gone
 import xyz.lbres.trickcalculator.utils.seededShuffled
-import xyz.lbres.trickcalculator.utils.visible
 
 /**
  * Fragment to display main calculator functionality
@@ -153,6 +153,7 @@ class CalculatorFragment : BaseFragment() {
                         numberOrder,
                         settingsViewModel.applyParens,
                         settingsViewModel.applyDecimals,
+                        settingsViewModel.randomizeSigns,
                         settingsViewModel.shuffleComputation
                     )
 

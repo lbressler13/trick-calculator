@@ -36,6 +36,7 @@ private class SettingsRandomizedViewAssertion : ViewAssertion {
                 view.findViewById<SwitchCompat>(R.id.applyParensSwitch).isChecked,
                 initialSettings.clearOnError, // hardcoded in randomize, not part of randomization
                 historyRandomness,
+                view.findViewById<SwitchCompat>(R.id.randomizeSignsSwitch).isChecked,
                 initialSettings.showSettingsButton, // hardcoded in randomize, not part of randomization
                 view.findViewById<SwitchCompat>(R.id.shuffleComputationSwitch).isChecked,
                 view.findViewById<SwitchCompat>(R.id.shuffleNumbersSwitch).isChecked,

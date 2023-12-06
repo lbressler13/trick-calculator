@@ -21,6 +21,7 @@ private val applyParensSwitch = onView(withId(R.id.applyParensSwitch))
 private val applyDecimalsSwitch = onView(withId(R.id.applyDecimalsSwitch))
 private val clearOnErrorSwitch = onView(withId(R.id.clearOnErrorSwitch))
 private val settingsButtonSwitch = onView(withId(R.id.settingsButtonSwitch))
+private val randomizeSignsSwitch = onView(withId(R.id.randomizeSignsSwitch))
 private val shuffleComputationSwitch = onView(withId(R.id.shuffleComputationSwitch))
 private val shuffleNumbersSwitch = onView(withId(R.id.shuffleNumbersSwitch))
 private val shuffleOperatorsSwitch = onView(withId(R.id.shuffleOperatorsSwitch))
@@ -32,6 +33,7 @@ fun testSettingsMaintained() {
     applyParensSwitch.perform(click())
     applyDecimalsSwitch.perform(click())
     clearOnErrorSwitch.perform(click())
+    randomizeSignsSwitch.perform(click())
     shuffleComputationSwitch.perform(click())
     shuffleNumbersSwitch.perform(click())
     shuffleOperatorsSwitch.perform(click())
@@ -44,6 +46,7 @@ fun testSettingsMaintained() {
         applyParens = false,
         clearOnError = true,
         historyRandomness = 3,
+        randomizeSigns = true,
         showSettingsButton = true,
         shuffleComputation = true,
         shuffleNumbers = true,
@@ -95,13 +98,14 @@ fun testResetButton() {
 
     // modify settings
     applyParensSwitch.perform(click())
+    randomizeSignsSwitch.perform(click())
     shuffleComputationSwitch.perform(click())
     shuffleNumbersSwitch.perform(click())
     shuffleOperatorsSwitch.perform(click())
     onView(withId(R.id.historyButton3)).perform(click())
 
     // reset
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
     settingsButton.check(isNotPresented())
 
@@ -120,7 +124,7 @@ fun testResetButton() {
 
     // open settings button w/ existing changes + reset
     settingsButton.check(matches(isDisplayed())).perform(click())
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
     onView(withText("Calculator")).check(matches(isDisplayed()))
 
     // validate that settings button still exists
@@ -128,9 +132,9 @@ fun testResetButton() {
     checkInitialSettings(checkSettingsButton = false)
 
     // modify settings through settings button + reset
-    applyDecimalsSwitch.perform(click())
+    randomizeSignsSwitch.perform(click())
     clearOnErrorSwitch.perform(click())
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
 
     // validate that settings button is still checked
     openSettingsFragment()
@@ -138,7 +142,7 @@ fun testResetButton() {
     settingsButtonSwitch.check(matches(isChecked()))
 
     // reset through regular method + validate settings still exists
-    resetButton.perform(click())
+    resetButton.perform(scrollTo(), click())
     settingsButton.check(matches(isDisplayed()))
 }
 
@@ -188,7 +192,9 @@ fun testStandardFunctionButton() {
     checkStandardSettings()
 
     // modify settings
+    applyDecimalsSwitch.perform(click())
     applyParensSwitch.perform(click())
+    randomizeSignsSwitch.perform(click())
     shuffleComputationSwitch.perform(click())
     shuffleNumbersSwitch.perform(click())
     shuffleOperatorsSwitch.perform(click())
