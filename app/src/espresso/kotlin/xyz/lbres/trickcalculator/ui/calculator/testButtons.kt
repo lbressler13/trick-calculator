@@ -9,6 +9,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.clearText
+import xyz.lbres.trickcalculator.testutils.equals
+import xyz.lbres.trickcalculator.testutils.typeText
 import xyz.lbres.trickcalculator.testutils.withAnyText
 import xyz.lbres.trickcalculator.testutils.withEmptyString
 import xyz.lbres.trickcalculator.testutils.withNonEmptyString

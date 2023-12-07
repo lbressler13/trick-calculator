@@ -8,8 +8,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import junit.framework.AssertionFailedError
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.clearText
+import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.repeatUntil
+import xyz.lbres.trickcalculator.testutils.typeText
 import xyz.lbres.trickcalculator.testutils.withEmptyString
 
 private val mainText = onView(withId(R.id.mainText))

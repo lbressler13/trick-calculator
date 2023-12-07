@@ -13,13 +13,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.doClearHistory
 import xyz.lbres.trickcalculator.testutils.doRefreshUI
+import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
+import xyz.lbres.trickcalculator.testutils.typeText
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)

@@ -7,8 +7,10 @@ import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
+import xyz.lbres.trickcalculator.testutils.typeText
 
 fun testRandomizedSigns() {
     toggleShuffleOperators()

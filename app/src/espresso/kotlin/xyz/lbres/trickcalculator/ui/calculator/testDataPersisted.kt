@@ -8,11 +8,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.withSavedText
+import xyz.lbres.trickcalculator.testutils.typeText
 import xyz.lbres.trickcalculator.testutils.withAnyText
 import xyz.lbres.trickcalculator.testutils.withEmptyString
 
