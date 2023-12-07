@@ -97,6 +97,11 @@ class CalculatorFragmentTest {
     @Test fun randomizedSigns() = testRandomizedSigns()
     // TODO additional settings
 
+    @Test fun useLastHistoryItem() = testLastHistoryItem()
+
+    @Test fun dataPersistedOnLeave() = testDataPersistedOnLeave()
+
+    // navigation
     @Test
     fun openHistoryFragment() {
         val historyButton = onView(withId(R.id.historyButton))
@@ -106,15 +111,10 @@ class CalculatorFragmentTest {
     }
 
     @Test
-    fun useLastHistoryItem() = testLastHistoryItem(mainText)
-
-    @Test
     fun openInfoFragment() {
         val infoButton = onView(withId(R.id.infoButton))
         infoButton.check(matches(isDisplayed()))
         infoButton.perform(click())
         onView(withText("Image Attributions")).check(matches(isDisplayed()))
     }
-
-    @Test fun dataPersistedOnLeave() = testDataPersistedOnLeave()
 }

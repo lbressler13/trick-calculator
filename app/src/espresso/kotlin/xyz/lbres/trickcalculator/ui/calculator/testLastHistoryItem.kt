@@ -1,7 +1,6 @@
 package xyz.lbres.trickcalculator.ui.calculator
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -9,54 +8,25 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.withAnyText
 
-fun testLastHistoryItem(mainText: ViewInteraction) {
-    val useLastButton = onView(withId(R.id.useLastHistoryButton))
+private val mainText = onView(withId(R.id.mainText))
+private val useLastButton = onView(withId(R.id.useLastHistoryButton))
+
+fun testLastHistoryItem() {
+    val errorText = onView(withId(R.id.errorText))
 
     // none
     useLastButton.check(matches(not(isDisplayed())))
 
-    // one value
-    clearText()
-    typeText("123")
-    equals()
-    mainText.check(matches(withText("[123]")))
-    useLastButton.perform(click())
-    mainText.check(matches(withText("123")))
+    // one number
+    runSingleTest("123", "[123]")
+    runSingleTest("(-1234)", "[-1234]")
+    runSingleTest("00001.50000", "[1.5]")
 
-    clearText()
-    typeText("(1234)")
-    equals()
-    mainText.check(matches(withText("[1234]")))
-    useLastButton.perform(click())
-    mainText.check(matches(withText("(1234)")))
-    // doesn't pull previous item
-    useLastButton.perform(click())
-    mainText.check(matches(withText("(1234)")))
-
-    clearText()
-    typeText("00001.50000")
-    equals()
-    mainText.check(matches(withText("[1.5]")))
-    useLastButton.perform(click())
-    mainText.check(matches(withText("00001.50000")))
-
-    // multiple values
-    clearText()
-    var computation = "123+456"
-    typeText(computation)
-    equals()
-    mainText.check(matches(not(withText(computation))))
-    useLastButton.perform(click())
-    mainText.check(matches(withText(computation)))
-
-    clearText()
-    computation = ".5(66+99/33)x22x2+0.001"
-    typeText(computation)
-    equals()
-    mainText.check(matches(not(withText(computation))))
-    useLastButton.perform(click())
-    mainText.check(matches(withText(computation)))
+    // multiple numbers
+    runSingleTest("13+46")
+    runSingleTest(".5(66+99/3)x0.001")
 
     // with computed value
     clearText()
@@ -66,50 +36,83 @@ fun testLastHistoryItem(mainText: ViewInteraction) {
     useLastButton.perform(click())
     mainText.check(matches(withText("1234")))
 
-    clearText()
-    typeText("1234")
-    equals()
-    typeText("+2")
-    equals()
-    useLastButton.perform(click())
-    mainText.check(matches(withText("[1234]+2")))
+    runSingleTestWithComputedValue("1234", "+2", setOf("[1234]+2"))
 
-    clearText()
-    typeText("3+2")
-    equals()
-    computation = "(5.4+2)-3"
-    typeText(computation)
-    equals()
-    useLastButton.perform(click())
-    checkMainTextMatchesAny(
-        setOf(
-            "[5]$computation",
-            "[1]$computation",
-            "[6]$computation",
-            "[1.5]$computation"
-        )
+    val longComputation = "(5.4+2)-3"
+    var options = setOf(
+        "[5]$longComputation",
+        "[1]$longComputation",
+        "[6]$longComputation",
+        "[1.5]$longComputation"
     )
+    runSingleTestWithComputedValue("3+2", longComputation, options)
 
     // after error
     clearText()
     typeText("(1")
     equals() // set error
     mainText.check(matches(withText("(1")))
-    onView(withId(R.id.errorText)).check(matches(isDisplayed()))
+    errorText.check(matches(isDisplayed()))
     useLastButton.perform(click())
     mainText.check(matches(withText("(1"))) // pulls computation without error
-    onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+    errorText.check(matches(not(isDisplayed())))
 
     clearText()
     typeText("6x3")
     equals() // set result
-    checkMainTextMatchesAny(setOf("[9]", "[3]", "[18]", "[2]"))
+    options = setOf("[9]", "[3]", "[18]", "[2]")
+    mainText.check(matches(withAnyText(options)))
     typeText("+")
     equals() // set error
-    onView(withId(R.id.errorText)).check(matches(isDisplayed()))
+    errorText.check(matches(isDisplayed()))
     clearText()
-    onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
+    errorText.check(matches(not(isDisplayed())))
     useLastButton.perform(click()) // pull in previous result
-    onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
-    checkMainTextMatchesAny(setOf("[9]+", "[3]+", "[18]+", "[2]+"))
+    errorText.check(matches(not(isDisplayed())))
+    options = setOf("[9]+", "[3]+", "[18]+", "[2]+")
+    mainText.check(matches(withAnyText(options)))
+
+    // repeat button clicks
+    clearText()
+    typeText("00")
+    equals()
+    mainText.check(matches(withText("[0]")))
+    useLastButton.perform(click())
+    mainText.check(matches(withText("00")))
+    useLastButton.perform(click())
+    mainText.check(matches(withText("00")))
+
+    clearText()
+    useLastButton.perform(click())
+    mainText.check(matches(withText("00")))
+
+    clearText()
+    typeText("1")
+    useLastButton.perform(click())
+    mainText.check(matches(withText("00")))
+}
+
+private fun runSingleTest(computation: String, expectedText: String? = null) {
+    clearText()
+    typeText(computation)
+    equals()
+
+    if (expectedText != null) {
+        mainText.check(matches(withText(expectedText)))
+    } else {
+        mainText.check(matches(not(withText(computation))))
+    }
+
+    useLastButton.perform(click())
+    mainText.check(matches(withText(computation)))
+}
+
+private fun runSingleTestWithComputedValue(comp1: String, comp2: String, previousOptions: Set<String>) {
+    clearText()
+    typeText(comp1)
+    equals()
+    typeText(comp2)
+    equals()
+    useLastButton.perform(click())
+    mainText.check(matches(withAnyText(previousOptions)))
 }
