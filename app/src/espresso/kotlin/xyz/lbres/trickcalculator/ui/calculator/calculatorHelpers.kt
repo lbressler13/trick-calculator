@@ -12,6 +12,7 @@ import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.countDistinctValues
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
+import xyz.lbres.trickcalculator.testutils.withAnyText
 
 private val mainText = onView(withId(R.id.mainText))
 
@@ -78,7 +79,7 @@ fun checkMainTextMatches(text: String) {
  *
  * @param options [Set]<String>: valid values for main textview
  */
-fun checkMainTextMatchesAny(options: Set<String>) {
+fun checkMainTextMatchesAny(options: Collection<String>) {
     val matchers = options.map { withText(it) }.toMutableList()
     mainText.check(matches(anyOf(matchers)))
 }
@@ -93,14 +94,15 @@ fun checkMainTextMatchesAny(options: Set<String>) {
  * @param maxIterations [Int]: maximum number of times to run test
  * @param enterText () -> [Unit]: function to enter text into the main textview
  */
-fun checkMainTextMatchesMultiple(options: Set<String>, minMatches: Int, minIterations: Int, maxIterations: Int, enterText: () -> Unit) {
+fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, minIterations: Int, maxIterations: Int, enterText: () -> Unit) {
+    clearText()
     mainText.perform(clearSavedText())
     var distinctValues = 0
     var i = 0
     while (i < maxIterations && (i < minIterations || distinctValues < minMatches)) {
         enterText()
         mainText.perform(saveText())
-        checkMainTextMatchesAny(options)
+        mainText.check(matches(withAnyText(options)))
         distinctValues = countDistinctValues(R.id.mainText)
         clearText()
 
@@ -119,3 +121,5 @@ fun leaveAndReturn() {
     openAttributionsFragment()
     closeFragment()
 }
+
+fun optionsOf(numberOptions: Set<Number>): List<String> = numberOptions.map { "[$it]" }

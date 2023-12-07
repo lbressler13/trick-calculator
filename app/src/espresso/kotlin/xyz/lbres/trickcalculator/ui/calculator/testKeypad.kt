@@ -16,7 +16,7 @@ import xyz.lbres.trickcalculator.testutils.withNonEmptyString
 private val mainText = onView(withId(R.id.mainText))
 private val errorText = onView(withId(R.id.errorText))
 
-fun testTypeInMainText() {
+fun testNumpadButtons() {
     mainText.check(matches(withEmptyString()))
 
     // digits
@@ -76,7 +76,7 @@ fun testTypeInMainText() {
     mainText.check(matches(withText("1234567890+-x/^().")))
 }
 
-fun testUseClearButton() {
+fun testClearButton() {
     val clearButton = onView(withId(R.id.clearButton))
 
     // empty
@@ -119,7 +119,7 @@ fun testUseClearButton() {
     onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
 }
 
-fun testBackspace() {
+fun testBackspaceButton() {
     val backspaceButton = onView(withId(R.id.backspaceButton))
 
     // blank

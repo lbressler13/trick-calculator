@@ -10,7 +10,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Rule
@@ -90,60 +89,16 @@ class CalculatorFragmentTest {
         onView(withId(R.id.settingsButton)).check(matches(not(isDisplayed())))
     }
 
-    @Test
-    fun typeInMainText() = testTypeInMainText()
+    @Test fun numpadButtons() = testNumpadButtons()
+    @Test fun clearButton() = testClearButton()
+    @Test fun backspaceButton() = testBackspaceButton()
 
-    @Test
-    fun useClear() = testUseClearButton()
-
-    @Test
-    fun useBackspace() = testBackspace()
-
-    @Test
-    fun equalsSingleNumber() = testEqualsSingleNumber()
-
-    @Test
-    fun equalsWithSingleOperator() = testEqualsWithSingleOperator()
-
-    @Test
-    fun equalsWithSeveralOperators() = testEqualsWithSeveralOperators()
-
-    @Test
-    fun equalsWithParens() = testEqualsWithParens()
-
-    @Test
-    fun equalsWithPreviouslyComputed() = testEqualsWithPreviouslyComputed()
-
-    @Test
-    fun equalsWithError() {
-        // syntax errors
-        typeText("+")
-        equals()
-        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
-
-        clearText()
-        typeText("1+")
-        equals()
-        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
-        typeText("2")
-        equals()
-        onView(withId(R.id.errorText)).check(matches(not(isDisplayed())))
-
-        clearText()
-        typeText("()")
-        equals()
-        errorText.check(matches(allOf(isDisplayed(), withText("Error: Syntax error"))))
-
-        // divide by zero
-        repeat(10) {
-            clearText()
-            typeText("1/0")
-            equals()
-            onView(withId(R.id.errorText)).check(
-                matches(anyOf(not(isDisplayed()), withText("Error: Divide by zero")))
-            )
-        }
-    }
+    @Test fun equalsWithNoOperators() = testEqualsWithNoOperators()
+    @Test fun equalsWithSingleOperatorType() = testEqualsWithSingleOperatorType()
+    @Test fun equalsWithSeveralOperatorTypes() = testEqualsWithSeveralOperatorTypes()
+    @Test fun equalsWithParentheses() = testEqualsWithParentheses()
+    @Test fun equalsWithPreviouslyComputed() = testEqualsWithPreviouslyComputed()
+    @Test fun equalsWithError() = testEqualsWithError()
 
     @Test
     fun equalsWithRandomizedSigns() {
