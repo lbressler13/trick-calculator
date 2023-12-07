@@ -69,12 +69,14 @@ fun testNumberAndOperatorButtons() {
     onView(withId(R.id.expButton)).perform(click())
     mainText.check(matches(withText("1234567890+-x/^")))
 
+    // parentheses
     onView(withId(R.id.lparenButton)).perform(click())
     mainText.check(matches(withText("1234567890+-x/^(")))
 
     onView(withId(R.id.rparenButton)).perform(click())
     mainText.check(matches(withText("1234567890+-x/^()")))
 
+    // decimal
     onView(withId(R.id.decimalButton)).perform(click())
     mainText.check(matches(withText("1234567890+-x/^().")))
 }

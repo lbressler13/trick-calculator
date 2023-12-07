@@ -52,7 +52,7 @@ fun leaveAndReturn() {
 }
 
 /**
- * Map a set of numbers to strings, in the format of a computations result
+ * Map a set of numbers to strings, in the format of a computation result
  *
  * @param numberOptions [Set]<Number>: numbers to map
  * @return [List]<String>: list where each number has been cast to a string, surrounded by square brackets

@@ -95,6 +95,13 @@ fun testLastHistoryItem() {
     mainText.check(matches(withText("00")))
 }
 
+/**
+ * Type a computation and validate that it is retrieved using last item button.
+ * Also validates result of the computation, if [expectedText] is not `null`
+ *
+ * @param computation [String]: computation to type
+ * @param expectedText [String]?: expected result of computation, defaults to `null`
+ */
 private fun runSingleTest(computation: String, expectedText: String? = null) {
     clearText()
     typeText(computation)
@@ -110,6 +117,13 @@ private fun runSingleTest(computation: String, expectedText: String? = null) {
     mainText.check(matches(withText(computation)))
 }
 
+/**
+ * Type two computations and check that second computation is retrieved using last item button
+ *
+ * @param comp1 [String]: first computation to type
+ * @param comp2 [String]: second computation to type
+ * @param previousOptions [Set]<String>: possible results of [comp1]
+ */
 private fun runSingleTestWithComputedValue(comp1: String, comp2: String, previousOptions: Set<String>) {
     clearText()
     typeText(comp1)
