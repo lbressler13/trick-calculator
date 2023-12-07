@@ -89,7 +89,18 @@ private fun runSingleGetShuffledComputationTest(text: StringList, ops: StringLis
         result
     }
 
-    val checkShuffled: (StringList) -> Boolean = { it != text }
+    val distinctElements = text.toSet()
+    val distinctResults: MutableSet<StringList> = mutableSetOf()
 
-    runRandomTest(shuffleList, checkShuffled)
+    val minResults = when {
+        distinctElements.size < 3 -> 1
+        distinctElements.size < 5 -> 2
+        distinctElements.size > 8 -> 4
+        else -> 3
+    }
+
+    runRandomTest(shuffleList) { result ->
+        distinctResults.add(result)
+        result != text && distinctResults.size >= minResults
+    }
 }

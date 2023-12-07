@@ -63,7 +63,6 @@ fun equals() {
     onView(withId(R.id.equalsButton)).perform(click())
 }
 
-// TODO use in additional tests
 /**
  * Check that the main textview matches several different values when repeating test
  *

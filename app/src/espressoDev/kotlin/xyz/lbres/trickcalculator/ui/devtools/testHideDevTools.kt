@@ -30,9 +30,9 @@ fun testHideDevToolsOptionsDisplayed() {
     spinner.check(matches(withSpinnerText("5000ms"))).perform(click())
 
     spinnerItemAt(0).check(matches(isDisplayedWithText("5000ms")))
-    spinnerItemAt(0).check(matches(isDisplayedWithText("1000ms")))
-    spinnerItemAt(0).check(matches(isDisplayedWithText("3000ms")))
-    spinnerItemAt(0).check(matches(isDisplayedWithText("6000ms")))
+    spinnerItemAt(0).check(matches(isDisplayedWithText("10000ms")))
+    spinnerItemAt(0).check(matches(isDisplayedWithText("30000ms")))
+    spinnerItemAt(0).check(matches(isDisplayedWithText("60000ms")))
 
     var performException = false
     try {

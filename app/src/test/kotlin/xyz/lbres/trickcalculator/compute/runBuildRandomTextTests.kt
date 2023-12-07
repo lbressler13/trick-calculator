@@ -132,12 +132,23 @@ private fun runSingleRandomizationTest(
         result
     }
 
+    val distinctElements = text.toSet()
+    val distinctResults: MutableSet<StringList> = mutableSetOf()
+
+    val minResults = when {
+        distinctElements.size < 3 -> 1
+        distinctElements.size < 5 -> 2
+        distinctElements.size > 8 -> 4
+        else -> 3
+    }
+
     runRandomTest(buildText) { result ->
+        distinctResults.add(result)
         val hasPositive = result.any { isNumber(it) && !it.startsWith('-') }
         val hasNegative = result.any { isNumber(it) && it.startsWith('-') }
         val validSigns = !randomizeSigns || (hasPositive && hasNegative)
 
-        validSigns && result != builtText
+        validSigns && result != builtText && distinctResults.size >= minResults
     }
 }
 
