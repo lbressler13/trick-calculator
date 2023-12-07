@@ -4,8 +4,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.hamcrest.Matchers.anyOf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
@@ -63,25 +61,6 @@ fun clearText() {
  */
 fun equals() {
     onView(withId(R.id.equalsButton)).perform(click())
-}
-
-/**
- * Check that the main textview matches a specific value
- *
- * @param text [String]: expected text
- */
-fun checkMainTextMatches(text: String) {
-    mainText.check(matches(withText(text)))
-}
-
-/**
- * Check that the main textview matches one out of a set of options
- *
- * @param options [Set]<String>: valid values for main textview
- */
-fun checkMainTextMatchesAny(options: Collection<String>) {
-    val matchers = options.map { withText(it) }.toMutableList()
-    mainText.check(matches(anyOf(matchers)))
 }
 
 // TODO use in additional tests

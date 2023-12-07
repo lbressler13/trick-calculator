@@ -12,12 +12,12 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withSpinnerText
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.closeDialog
+import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.openDevTools
 
 private val spinner = onView(withId(R.id.devToolsTimeSpinner))
@@ -29,10 +29,10 @@ fun testHideDevToolsOptionsDisplayed() {
 
     spinner.check(matches(withSpinnerText("5000ms"))).perform(click())
 
-    spinnerItemAt(0).check(matches(allOf(isDisplayed(), withText("5000ms"))))
-    spinnerItemAt(1).check(matches(allOf(isDisplayed(), withText("10000ms"))))
-    spinnerItemAt(2).check(matches(allOf(isDisplayed(), withText("30000ms"))))
-    spinnerItemAt(3).check(matches(allOf(isDisplayed(), withText("60000ms"))))
+    spinnerItemAt(0).check(matches(isDisplayedWithText("5000ms")))
+    spinnerItemAt(0).check(matches(isDisplayedWithText("1000ms")))
+    spinnerItemAt(0).check(matches(isDisplayedWithText("3000ms")))
+    spinnerItemAt(0).check(matches(isDisplayedWithText("6000ms")))
 
     var performException = false
     try {

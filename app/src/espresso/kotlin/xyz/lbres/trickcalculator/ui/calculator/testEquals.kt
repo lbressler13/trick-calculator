@@ -9,6 +9,7 @@ import junit.framework.AssertionFailedError
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
+import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.withEmptyString
 
 private val mainText = onView(withId(R.id.mainText))
@@ -177,10 +178,9 @@ fun testEqualsWithError() {
     errorText.check(matches(isDisplayedWithText(syntaxError)))
 
     // divide by zero
-    var i = 0
     var errorThrown = false
 
-    while (i < 10 && !errorThrown) {
+    repeatUntil(10, { errorThrown }) {
         clearText()
         typeText("1/0")
         equals()
@@ -191,7 +191,5 @@ fun testEqualsWithError() {
         } catch (_: AssertionFailedError) {
             errorText.check(matches(not(isDisplayed())))
         }
-
-        i++
     }
 }
