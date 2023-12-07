@@ -88,7 +88,7 @@ class CalculatorFragmentTest {
     // equals
     @Test fun equalsWithNoOperators() = testEqualsWithNoOperators()
     @Test fun equalsWithSingleOperatorType() = testEqualsWithSingleOperatorType()
-    @Test fun equalsWithSeveralOperatorTypes() = testEqualsWithSeveralOperatorTypes()
+    @Test fun equalsWithMultipleOperatorTypes() = testEqualsWithMultipleOperatorTypes()
     @Test fun equalsWithParentheses() = testEqualsWithParentheses()
     @Test fun equalsWithPreviouslyComputed() = testEqualsWithPreviouslyComputed()
     @Test fun equalsWithError() = testEqualsWithError()

@@ -74,7 +74,7 @@ fun testEqualsWithSingleOperatorType() {
     }
 }
 
-fun testEqualsWithSeveralOperatorTypes() {
+fun testEqualsWithMultipleOperatorTypes() {
     var options = setOf(
         3, 13, 5.5, 21, // + = +
         7, -3, 4.5, -11, // + = -
