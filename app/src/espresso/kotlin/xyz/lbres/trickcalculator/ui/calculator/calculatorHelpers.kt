@@ -66,7 +66,7 @@ fun equals() {
 /**
  * Check that the main textview matches several different values when repeating test
  *
- * @param options [Set]<String>: valid values for main textview
+ * @param options [Collection]<String>: valid values for main textview
  * @param minMatches [Int]: minimum number of distinct values for main textview
  * @param minIterations [Int]: minimum number of times to run test
  * @param maxIterations [Int]: maximum number of times to run test
@@ -100,4 +100,10 @@ fun leaveAndReturn() {
     closeFragment()
 }
 
-fun optionsOf(numberOptions: Set<Number>): List<String> = numberOptions.map { "[$it]" }
+/**
+ * Map a set of numbers to strings, in the format of a computations result
+ *
+ * @param numberOptions [Set]<Number>: numbers to map
+ * @return [List]<String>: list where each number has been cast to a string, surrounded by square brackets
+ */
+fun resultsOf(numberOptions: Set<Number>): List<String> = numberOptions.map { "[$it]" }

@@ -39,9 +39,19 @@ fun withEmptyString(): Matcher<View> = withText("")
  */
 fun withNonEmptyString(): Matcher<View> = not(withText(""))
 
+/**
+ * [Matcher] that checks if the text of a TextView is any of the given options
+ *
+ * @param options [Collection]<String>: text values to check
+ */
 fun withAnyText(options: Collection<String>): Matcher<View> {
     val matchers = options.map { withText(it) }.toMutableList()
     return anyOf(matchers)
 }
 
+/**
+ * [Matcher] that checks if a TextView is displayed and has the given text
+ *
+ * @param text [String]: expected text
+ */
 fun isDisplayedWithText(text: String): Matcher<View> = allOf(isDisplayed(), withText(text))

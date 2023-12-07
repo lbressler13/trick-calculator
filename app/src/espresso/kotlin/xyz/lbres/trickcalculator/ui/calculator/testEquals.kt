@@ -47,30 +47,28 @@ fun testEqualsWithNoOperators() {
 
 fun testEqualsWithSingleOperatorType() {
     var options = setOf(1, -3, -2, -0.5)
-    checkMainTextMatchesMultiple(optionsOf(options), 2, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
         typeText("-1+2")
         equals()
     }
 
     options = setOf(2, 6, 8, 16)
-    checkMainTextMatchesMultiple(optionsOf(options), 4, 4, 40) {
+    checkMainTextMatchesMultiple(resultsOf(options), 4, 4, 40) {
         typeText("4^2") // exponent
         equals()
     }
 
     options = setOf(5.5, -2.5, 6, 0.375)
-    checkMainTextMatchesMultiple(optionsOf(options), 2, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
         typeText("1.5x4") // decimal
         equals()
     }
 
     options = setOf(11, -7, 40, 0.1)
-    checkMainTextMatchesMultiple(optionsOf(options), 2, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
         typeText("2x5x4") // repeats of single operator
         equals()
     }
-
-    // var options = setOf(22, 2, 120, 1.2)
 }
 
 fun testEqualsWithSeveralOperatorTypes() {
@@ -81,7 +79,7 @@ fun testEqualsWithSeveralOperatorTypes() {
         6.5, -1.5, 10, 0.3125, // + = /
         29, 21, 100, 6.25 // + = ^
     )
-    checkMainTextMatchesMultiple(optionsOf(options), 5, 5, 20) {
+    checkMainTextMatchesMultiple(resultsOf(options), 5, 5, 20) {
         typeText("5^2-4") // exponent
         equals()
     }
@@ -92,7 +90,7 @@ fun testEqualsWithSeveralOperatorTypes() {
         14, 6, 2.5, // + = x
         4.4, -3.6, 1.6 // + = /
     )
-    checkMainTextMatchesMultiple(optionsOf(options), 4, 4, 20) {
+    checkMainTextMatchesMultiple(resultsOf(options), 4, 4, 20) {
         typeText("2+5-4")
         equals()
     }
@@ -103,7 +101,7 @@ fun testEqualsWithSeveralOperatorTypes() {
         8.875, -9, 1.125, 19, -12.75, 15.25, // + = *
         -8, 12, 48, 28, 66, 94 // + = /
     )
-    checkMainTextMatchesMultiple(optionsOf(options), 3, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 3, 5, 10) {
         typeText("10-.5x4/2+16") // exponent
         equals()
     }
@@ -125,7 +123,7 @@ fun testEqualsWithParentheses() {
         18, 2, 2.5, // + = x
         0.22222222, 2, 0.1 // + = /
     )
-    checkMainTextMatchesMultiple(optionsOf(options), 3, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 3, 5, 10) {
         typeText("2(5-4)") // exponent
         equals()
     }
@@ -133,13 +131,13 @@ fun testEqualsWithParentheses() {
 
 fun testEqualsWithPreviouslyComputed() {
     var options = setOf(125, 121, 246, 61.5)
-    checkMainTextMatchesMultiple(optionsOf(options), 2, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
         typeText("123")
         equals()
         typeText("+2")
         equals()
     }
-    checkMainTextMatchesMultiple(optionsOf(options), 2, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
         typeText("123")
         equals()
         typeText("2") // add times between values
@@ -147,7 +145,7 @@ fun testEqualsWithPreviouslyComputed() {
     }
 
     options = setOf(0, -1, -0.25, -1)
-    checkMainTextMatchesMultiple(optionsOf(options), 2, 5, 10) {
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
         typeText("-.5")
         equals()
         typeText(".5")

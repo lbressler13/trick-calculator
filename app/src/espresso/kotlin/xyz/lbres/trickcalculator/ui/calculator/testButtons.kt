@@ -16,7 +16,7 @@ import xyz.lbres.trickcalculator.testutils.withNonEmptyString
 private val mainText = onView(withId(R.id.mainText))
 private val errorText = onView(withId(R.id.errorText))
 
-fun testNumpadButtons() {
+fun testNumberAndOperatorButtons() {
     mainText.check(matches(withEmptyString()))
 
     // digits
@@ -123,62 +123,59 @@ fun testBackspaceButton() {
     val backspaceButton = onView(withId(R.id.backspaceButton))
 
     // blank
-    mainText.check(matches(withEmptyString()))
+    mainText.check(matches(withText("")))
+    backspaceAndValidate("")
     backspaceButton.perform(click())
     mainText.check(matches(withEmptyString()))
 
     // with text
     clearText()
     typeText("1")
-    backspaceButton.perform(click())
-    mainText.check(matches(withEmptyString()))
+    backspaceAndValidate("")
 
     clearText()
     typeText("123")
-    backspaceButton.perform(click())
-    mainText.check(matches(withText("12")))
+    backspaceAndValidate("12")
 
     clearText()
     typeText("123+0.1")
-    backspaceTo("123+0.")
-    backspaceTo("123+0")
-    backspaceTo("123+")
-    backspaceTo("123")
-    backspaceTo("12")
-    backspaceTo("1")
-    backspaceTo("")
+    backspaceAndValidate("123+0.")
+    backspaceAndValidate("123+0")
+    backspaceAndValidate("123+")
+    backspaceAndValidate("123")
+    backspaceAndValidate("12")
+    backspaceAndValidate("1")
+    backspaceAndValidate("")
 
     // with computed value
     clearText()
     typeText("123")
     equals()
     mainText.check(matches(withText("[123]")))
-    backspaceTo("")
+    backspaceAndValidate("")
 
     clearText()
     typeText("123")
     equals()
     typeText("+5")
     mainText.check(matches(withText("[123]+5")))
-    backspaceButton.perform(click())
-    backspaceTo("[123]")
-    backspaceTo("")
+    backspaceAndValidate("[123]+")
+    backspaceAndValidate("[123]")
+    backspaceAndValidate("")
 
     // with error
     clearText()
     typeText("+")
     equals()
     errorText.check(matches(isDisplayed()))
-    backspaceButton.perform(click())
-    mainText.check(matches(withEmptyString()))
+    backspaceAndValidate("")
     errorText.check(matches(not(isDisplayed())))
 
     clearText()
     typeText("1+2.")
     equals()
     errorText.check(matches(isDisplayed()))
-    backspaceButton.perform(click())
-    mainText.check(matches(withText("1+2")))
+    backspaceAndValidate("1+2")
     errorText.check(matches(not(isDisplayed())))
     equals()
     val options = setOf("[3]", "[-1]", "[2]", "[0.5]")
@@ -190,7 +187,7 @@ fun testBackspaceButton() {
  *
  * @param newText [String]: expected text in main textview after clicking backspace
  */
-private fun backspaceTo(newText: String) {
+private fun backspaceAndValidate(newText: String) {
     onView(withId(R.id.backspaceButton)).perform(click())
     mainText.check(matches(withText(newText)))
 }

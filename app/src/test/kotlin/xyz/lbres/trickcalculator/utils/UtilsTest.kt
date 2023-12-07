@@ -62,5 +62,6 @@ class UtilsTest {
         assertFalse(isNumberChar("-1"))
         assertFalse(isNumberChar("2/0.1"))
         assertFalse(isNumberChar("+"))
+        assertFalse(isNumberChar("-"))
     }
 }

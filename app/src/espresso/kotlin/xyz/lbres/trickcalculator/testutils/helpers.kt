@@ -3,13 +3,13 @@ package xyz.lbres.trickcalculator.testutils
 /**
  * Alternate to standard [repeat] function, to allow breaking out of the loop.
  *
- * @param maxRepeats [Int]: number of times to repeat code without breaking loop
+ * @param maxIterations [Int]: number of times to repeat code without breaking loop
  * @param breakCondition () -> [Boolean]: condition to break out of loop
  * @param function () -> [Unit]: code to execute repeatedly
  */
-fun repeatUntil(maxRepeats: Int, breakCondition: () -> Boolean, function: () -> Unit) {
+fun repeatUntil(maxIterations: Int, breakCondition: () -> Boolean, function: () -> Unit) {
     var repeats = 0
-    while (repeats < maxRepeats && !breakCondition()) {
+    while (repeats < maxIterations && !breakCondition()) {
         function()
         repeats++
     }

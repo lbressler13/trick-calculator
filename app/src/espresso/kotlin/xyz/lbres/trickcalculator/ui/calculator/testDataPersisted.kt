@@ -62,7 +62,7 @@ fun testDataPersistedOnLeave() {
     mainText.check(matches(withText(("[123]"))))
 
     var options = setOf(5, -3, 4, 0.25)
-    checkMainTextPersisted("1+4", options)
+    checkComputedValuePersisted("1+4", options)
 
     options = setOf(
         3, 22, 3.25, // + = +
@@ -70,7 +70,7 @@ fun testDataPersistedOnLeave() {
         14, 6, 2.5, // + = x
         4.4, -3.6, 1.6 // + = /
     )
-    checkMainTextPersisted("2+5-4", options)
+    checkComputedValuePersisted("2+5-4", options)
 
     options = setOf(
         10, -21.5, 11.875, -5, -21.875, -5.75, // + = +
@@ -78,36 +78,49 @@ fun testDataPersistedOnLeave() {
         8.875, -9, 1.125, 19, -12.75, 15.25, // + = *
         -8, 12, 48, 28, 66, 94 // + = /
     )
-    checkMainTextPersisted("10-.5x4/2+16", options)
+    checkComputedValuePersisted("10-.5x4/2+16", options)
 
     // error
-    clearText()
-    typeText("+")
-    equals()
-    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
-    leaveAndReturn()
-    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
-    mainText.check(matches(withText("+")))
+    checkErrorPersisted("+", "+", "Error: Syntax error")
 
     clearText()
     openSettingsFragment()
     onView(withId(R.id.clearOnErrorSwitch)).perform(click())
     closeFragment()
-    typeText("1+1..0")
-    equals()
-    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
-    mainText.check(matches(withText("")))
-    leaveAndReturn()
-    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
-    mainText.check(matches(withText("")))
+
+    checkErrorPersisted("1+1..0", "", "Error: Syntax error")
 }
 
-private fun checkMainTextPersisted(text: String, options: Set<Number>) {
+/**
+ * Test that text in main textview is persisted with a previously computed value
+ *
+ * @param text [String]: computation to type
+ * @param options [Set]<Number>: possible results of computation
+ */
+private fun checkComputedValuePersisted(text: String, options: Set<Number>) {
     clearText()
     typeText(text)
     equals()
-    mainText.check(matches(withAnyText(optionsOf(options))))
+    mainText.check(matches(withAnyText(resultsOf(options))))
     mainText.perform(saveText())
     leaveAndReturn()
     mainText.check(matches(withSavedText()))
+}
+
+/**
+ * Test that error message and text in main textview are persisted
+ *
+ * @param text [String]: computation to type
+ * @param textAfterError [String]: value expected in main textview after error
+ * @param errorMessage [String]: expected error message
+ */
+private fun checkErrorPersisted(text: String, textAfterError: String, errorMessage: String) {
+    clearText()
+    typeText(text)
+    equals()
+    mainText.check(matches(withText(textAfterError)))
+    errorText.check(matches(isDisplayedWithText(errorMessage)))
+    leaveAndReturn()
+    mainText.check(matches(withText(textAfterError)))
+    errorText.check(matches(isDisplayedWithText(errorMessage)))
 }

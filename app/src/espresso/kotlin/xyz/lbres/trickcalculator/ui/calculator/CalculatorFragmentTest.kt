@@ -81,7 +81,7 @@ class CalculatorFragmentTest {
     }
 
     // keypad except equals
-    @Test fun numpadButtons() = testNumpadButtons()
+    @Test fun numberAndOperatorButtons() = testNumberAndOperatorButtons()
     @Test fun clearButton() = testClearButton()
     @Test fun backspaceButton() = testBackspaceButton()
 
@@ -99,8 +99,6 @@ class CalculatorFragmentTest {
 
     @Test fun useLastHistoryItem() = testLastHistoryItem()
 
-    @Test fun dataPersistedOnLeave() = testDataPersistedOnLeave()
-
     // navigation
     @Test
     fun openHistoryFragment() {
@@ -117,4 +115,6 @@ class CalculatorFragmentTest {
         infoButton.perform(click())
         onView(withText("Image Attributions")).check(matches(isDisplayed()))
     }
+
+    @Test fun dataPersistedOnLeave() = testDataPersistedOnLeave()
 }
