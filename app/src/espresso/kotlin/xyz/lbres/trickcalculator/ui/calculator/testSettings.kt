@@ -67,44 +67,24 @@ fun testRandomizeSigns() {
     closeFragment()
 
     var options: Set<Number> = setOf(5, -5)
-    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10) {
-        typeText("5")
-        equals()
-    }
-    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10) {
-        typeText("-5")
-        equals()
-    }
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10, "5")
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10, "-5")
 
     options = setOf(3, -1, -3, 1)
-    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
-        typeText("1+2")
-        equals()
-    }
-    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10) {
-        typeText("-1-2")
-        equals()
-    }
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10, "1+2")
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10, "-1-2")
 
     options = setOf(0.6, -0.6)
-    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10) {
-        typeText("-.75/1.25")
-        equals()
-    }
+    var text = "-.75/1.25"
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10, text)
 
     options = setOf(0.25, 1.75, -0.25, -1.75)
-    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10) {
-        typeText("-1+3/4")
-        equals()
-    }
+    text = "-1+3/4"
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 5, 10, text)
 
     options = setOf(6, 18, -6, -18)
-    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10) {
-        typeText("3")
-        equals()
-        typeText("(4+2)")
-        equals()
-    }
+    val texts = listOf("3", "(4+2)")
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10, texts)
 }
 
 fun testUnshuffleOperators() {
@@ -132,6 +112,21 @@ fun testUnshuffleOperators() {
         equals()
         errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
     }
+}
+
+fun testShuffleNumbers() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    onView(withId(R.id.shuffleNumbersSwitch)).perform(click())
+    closeFragment()
+
+    var options: Set<Number> = (0..9).toSet()
+    checkMainTextMatchesMultiple(resultsOf(options), 3, 3, 10, "0")
+    checkMainTextMatchesMultiple(resultsOf(options), 3, 3, 10, "7")
+
+    options = setOf(0, 11.1111, 22.2222, 33.3333, 44.4444, 55.5555, 66.6666, 77.7777, 88.8888, 99.9999)
+    checkMainTextMatchesMultiple(resultsOf(options), 3, 3, 10, "44.4444")
+    // TODO
 }
 
 private fun runSingleClearErrorTest(text: String, error: String) {

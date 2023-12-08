@@ -3,13 +3,16 @@ package xyz.lbres.trickcalculator.ui.calculator
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.closeFragment
+import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.countDistinctValues
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
+import xyz.lbres.trickcalculator.testutils.typeText
 import xyz.lbres.trickcalculator.testutils.withAnyText
 
 private val mainText = onView(withId(R.id.mainText))
@@ -21,15 +24,19 @@ private val mainText = onView(withId(R.id.mainText))
  * @param minMatches [Int]: minimum number of distinct values for main textview
  * @param minIterations [Int]: minimum number of times to run test
  * @param maxIterations [Int]: maximum number of times to run test
- * @param enterText () -> [Unit]: function to enter text into the main textview
+ * @param computations [StringList]: list of values to type
  */
-fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, minIterations: Int, maxIterations: Int, enterText: () -> Unit) {
+fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, minIterations: Int, maxIterations: Int, computations: StringList) {
     clearText()
     mainText.perform(clearSavedText())
     var distinctValues = 0
     var i = 0
     while (i < maxIterations && (i < minIterations || distinctValues < minMatches)) {
-        enterText()
+        for (text in computations) {
+            typeText(text)
+            equals()
+        }
+
         mainText.perform(saveText())
         mainText.check(matches(withAnyText(options)))
         distinctValues = countDistinctValues(R.id.mainText)
@@ -41,6 +48,10 @@ fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, m
     if (distinctValues < minMatches) {
         throw AssertionError("Number of distinct values expected to be at least $minMatches. Actual number: $distinctValues")
     }
+}
+
+fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, minIterations: Int, maxIterations: Int, computation: String) {
+    checkMainTextMatchesMultiple(options, minMatches, minIterations, maxIterations, listOf(computation))
 }
 
 /**

@@ -68,3 +68,12 @@ fun clearText() {
 fun equals() {
     onView(withId(R.id.equalsButton)).perform(click())
 }
+
+/**
+ * Toggle shuffle operators setting from calculator screen
+ */
+fun toggleShuffleOperators() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    closeFragment()
+}
