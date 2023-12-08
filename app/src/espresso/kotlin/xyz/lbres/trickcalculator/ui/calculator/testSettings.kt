@@ -4,15 +4,61 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.equals
+import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.typeText
+import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
+import xyz.lbres.trickcalculator.testutils.withAnyText
+import xyz.lbres.trickcalculator.testutils.withEmptyString
 
-fun testRandomizedSigns() {
+private val mainText = onView(withId(R.id.mainText))
+private val errorText = onView(withId(R.id.errorText))
+
+fun testClearOnError() {
+    openSettingsFragment()
+    onView(withId(R.id.clearOnErrorSwitch)).perform(click())
+    closeFragment()
+
+    runSingleClearErrorTest("+", "Error: Syntax error")
+    runSingleClearErrorTest("0.", "Error: Syntax error")
+
+    typeText("0.")
+    errorText.check(isNotPresented())
+    equals()
+    mainText.check(matches(withEmptyString()))
+    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
+
+    // previously computed
+    typeText("3")
+    equals()
+    typeText(".")
+    errorText.check(isNotPresented())
+    equals()
+    mainText.check(matches(withEmptyString()))
+    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
+
+    // valid text not cleared
+    typeText("3/4")
+    equals()
+    val options = setOf(7, -1, 12, 0.75)
+    mainText.check(matches(withAnyText(resultsOf(options))))
+
+    // divide by zero
+    toggleShuffleOperators()
+    clearText()
+    runSingleClearErrorTest("1/0", "Error: Divide by zero")
+}
+
+fun testRandomizeSigns() {
     toggleShuffleOperators()
     openSettingsFragment()
     onView(withId(R.id.randomizeSignsSwitch))
@@ -59,4 +105,13 @@ fun testRandomizedSigns() {
         typeText("(4+2)")
         equals()
     }
+}
+
+private fun runSingleClearErrorTest(text: String, error: String) {
+    typeText(text)
+    mainText.check(matches(withText(text)))
+    errorText.check(matches(not(isDisplayed())))
+    equals()
+    mainText.check(matches(withEmptyString()))
+    errorText.check(matches(isDisplayedWithText(error)))
 }

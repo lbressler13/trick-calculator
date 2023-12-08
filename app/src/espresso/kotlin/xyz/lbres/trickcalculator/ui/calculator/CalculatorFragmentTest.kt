@@ -94,7 +94,8 @@ class CalculatorFragmentTest {
     @Test fun equalsWithError() = testEqualsWithError()
 
     // settings
-    @Test fun randomizedSigns() = testRandomizedSigns()
+    @Test fun clearOnError() = testClearOnError()
+    @Test fun randomizeSigns() = testRandomizeSigns()
     // TODO additional settings
 
     @Test fun useLastHistoryItem() = testLastHistoryItem()
