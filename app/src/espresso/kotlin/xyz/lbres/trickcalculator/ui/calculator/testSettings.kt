@@ -107,6 +107,33 @@ fun testRandomizeSigns() {
     }
 }
 
+fun testUnshuffleOperators() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    closeFragment()
+
+    repeat(5) {
+        clearText()
+        typeText("-.2+5^2/(8-4x3)")
+        equals()
+        mainText.check(matches(withText("[-6.45]")))
+    }
+
+    clearText()
+    typeText("1+2")
+    equals()
+    typeText("6")
+    equals()
+    mainText.check(matches(withText("[18]")))
+
+    repeat(5) {
+        clearText()
+        typeText("1/0")
+        equals()
+        errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
+    }
+}
+
 private fun runSingleClearErrorTest(text: String, error: String) {
     typeText(text)
     mainText.check(matches(withText(text)))

@@ -95,6 +95,7 @@ class CalculatorFragmentTest {
 
     // settings
     @Test fun clearOnError() = testClearOnError()
+    @Test fun unshuffleOperators() = testUnshuffleOperators()
     @Test fun randomizeSigns() = testRandomizeSigns()
     // TODO additional settings
 
