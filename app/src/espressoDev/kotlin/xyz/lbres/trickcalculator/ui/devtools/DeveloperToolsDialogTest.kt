@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.openDevTools
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 
@@ -36,14 +37,10 @@ class DeveloperToolsDialogTest {
 
         onView(withText("Developer Tools")).check(matches(isDisplayed()))
 
-        onView(withId(R.id.clearHistoryButton))
-            .check(matches(allOf(isDisplayed(), withText("Clear history"))))
-        onView(withId(R.id.refreshUIButton))
-            .check(matches(allOf(isDisplayed(), withText("Refresh UI"))))
-        onView(withId(R.id.openSettingsButton))
-            .check(matches(allOf(isDisplayed(), withText("Open settings fragment"))))
-        onView(withId(R.id.hideDevToolsButton))
-            .check(matches(allOf(isDisplayed(), withText("Hide dev tools"))))
+        onView(withId(R.id.clearHistoryButton)).check(matches(isDisplayedWithText("Clear history")))
+        onView(withId(R.id.refreshUIButton)).check(matches(isDisplayedWithText("Refresh UI")))
+        onView(withId(R.id.openSettingsButton)).check(matches(isDisplayedWithText("Open settings fragment")))
+        onView(withId(R.id.hideDevToolsButton)).check(matches(isDisplayedWithText("Hide dev tools")))
 
         onView(withId(R.id.devToolsTimeSpinner))
             .check(matches(allOf(isDisplayed(), withSpinnerText("5000ms"))))

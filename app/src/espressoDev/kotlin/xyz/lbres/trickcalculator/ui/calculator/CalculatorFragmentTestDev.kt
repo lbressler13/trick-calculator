@@ -13,18 +13,21 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
 import xyz.lbres.trickcalculator.R
+import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.doClearHistory
 import xyz.lbres.trickcalculator.testutils.doRefreshUI
+import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.openHistoryFragment
 import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
+import xyz.lbres.trickcalculator.testutils.typeText
 import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class CalculatorFragmentTestDev {
-
+    private val mainText = onView(withId(R.id.mainText))
     private val useHistoryButton = onView(withId(R.id.useLastHistoryButton))
 
     @Rule
@@ -68,11 +71,11 @@ class CalculatorFragmentTestDev {
         equals()
 
         useHistoryButton.check(matches(isDisplayed())).perform(click())
-        onView(withId(R.id.mainText)).check(matches(withText("12+34")))
+        mainText.check(matches(withText("12+34")))
 
         doClearHistory()
 
-        onView(withId(R.id.mainText)).check(matches(withText("12+34")))
+        mainText.check(matches(withText("12+34")))
         useHistoryButton.check(isNotPresented())
     }
 
@@ -104,7 +107,7 @@ class CalculatorFragmentTestDev {
         typeText("1-3+4")
         doRefreshUI()
 
-        checkMainTextMatches("1-3+4")
+        mainText.check(matches(withText("1-3+4")))
         useHistoryButton.check(isNotPresented())
 
         // with result
@@ -112,7 +115,7 @@ class CalculatorFragmentTestDev {
         typeText("x6")
 
         doRefreshUI()
-        checkMainTextMatches("[2]x6")
+        mainText.check(matches(withText("[2]x6")))
         useHistoryButton.check(matches(isDisplayed()))
 
         // with error
@@ -121,7 +124,7 @@ class CalculatorFragmentTestDev {
         equals()
 
         doRefreshUI()
-        checkMainTextMatches("5/0")
+        mainText.check(matches(withText("5/0")))
         onView(withId(R.id.errorText)).check(matches(withText("Error: Divide by zero")))
     }
 }

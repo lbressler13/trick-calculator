@@ -3,9 +3,6 @@ package xyz.lbres.trickcalculator
 import xyz.lbres.kotlinutils.list.StringList
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertTrue
-
-private const val iterations = 20
 
 /**
  * Assert that a function throws a divide by zero error.
@@ -64,6 +61,7 @@ fun splitString(s: String): StringList {
  * @param randomCheck (T) -> Boolean: check if a result meets criteria for randomization
  */
 fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
+    val iterations = 20
     var checkPassed = false
     var i = 0
 
@@ -73,5 +71,7 @@ fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
         i++
     }
 
-    assertTrue(checkPassed)
+    if (!checkPassed) {
+        throw AssertionError("Randomized test failed")
+    }
 }

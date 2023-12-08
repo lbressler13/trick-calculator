@@ -3,8 +3,11 @@ package xyz.lbres.trickcalculator.testutils
 import android.content.Intent
 import android.view.View
 import androidx.test.espresso.intent.Intents.getIntents
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import java.lang.AssertionError
@@ -35,3 +38,20 @@ fun withEmptyString(): Matcher<View> = withText("")
  * [Matcher] that checks if text of TextView is a non-empty string
  */
 fun withNonEmptyString(): Matcher<View> = not(withText(""))
+
+/**
+ * [Matcher] that checks if the text of a TextView matches any of the given options
+ *
+ * @param options [Collection]<String>: text values to match
+ */
+fun withAnyText(options: Collection<String>): Matcher<View> {
+    val matchers = options.map { withText(it) }.toMutableList()
+    return anyOf(matchers)
+}
+
+/**
+ * [Matcher] that checks if a TextView is displayed and has the given text
+ *
+ * @param text [String]: expected text
+ */
+fun isDisplayedWithText(text: String): Matcher<View> = allOf(isDisplayed(), withText(text))
