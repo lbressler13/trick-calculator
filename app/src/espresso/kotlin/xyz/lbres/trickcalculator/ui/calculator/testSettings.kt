@@ -122,56 +122,35 @@ fun testShuffleNumbers() {
     onView(withId(R.id.shuffleNumbersSwitch)).perform(click())
     closeFragment()
 
-    var options: MutableSet<Number> = (0..9).toMutableSet()
-    checkMainTextMatchesMultiple(resultsOf(options), 3, 3, 10, "0")
-    checkMainTextMatchesMultiple(resultsOf(options), 3, 3, 10, "7")
+    var options: Set<Number> = (0..9).toSet()
+    checkMainTextMatchesMultiple(resultsOf(options), 10, 10, 100, "0")
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 5, "7")
 
     clearText()
-    options = mutableSetOf(0, 1.11, 2.22, 3.33, 4.44, 5.55, 6.66, 7.77, 8.88, 9.99)
+    options = setOf(0, 1.11, 2.22, 3.33, 4.44, 5.55, 6.66, 7.77, 8.88, 9.99)
     checkMainTextMatchesMultiple(resultsOf(options), 3, 3, 10, "4.44")
 
     clearText()
-    options = mutableSetOf()
-    for (i in 0..9) {
-        for (j in 0..9) {
-            for (k in 0..9) {
-                if (i != j && i != k && j != k) {
-                    val number = i * 100 + j * 10 + k
-                    options.add(-number)
-                }
-            }
-        }
+    options = generateShuffledNumbers { i, j, k ->
+        val number = i * 100 + j * 10 + k
+        -number
     }
     checkMainTextMatchesMultiple(resultsOf(options), 4, 5, 10, "-123")
 
     clearText()
-    options = mutableSetOf()
-    for (i in 0..9) {
-        for (j in 0..9) {
-            for (k in 0..9) {
-                if (i != j && i != k && j != k) {
-                    val first = i * 10 + j
-                    val second = k
-                    options.add(first + second)
-                }
-            }
-        }
+    options = generateShuffledNumbers { i, j, k ->
+        val first = i * 10 + j
+        val second = k
+        first + second
     }
     checkMainTextMatchesMultiple(resultsOf(options), 4, 5, 10, "02+9")
 
     clearText()
-    options = mutableSetOf()
-    for (i in 0..9) {
-        for (j in 0..9) {
-            for (k in 0..9) {
-                if (i != j && i != k && j != k) {
-                    val first = i
-                    val second = j * 10 + i
-                    val third = k
-                    options.add(first - second * third)
-                }
-            }
-        }
+    options = generateShuffledNumbers { i, j, k ->
+        val first = i
+        val second = j * 10 + i
+        val third = k
+        first - second * third
     }
     checkMainTextMatchesMultiple(resultsOf(options), 4, 5, 10, "2-82x7")
 
@@ -200,17 +179,22 @@ private fun runSingleClearErrorTest(text: String, error: String) {
     errorText.check(matches(isDisplayedWithText(error)))
 }
 
+/**
+ * Apply a transformation to all permutations of 3 distinct digits
+ *
+ * @param transform (Int, Int, Int) -> Number: transformation to apply
+ * @return [Set]<Number>: result of applying transformation to all permutations
+ */
 private fun generateShuffledNumbers(transform: (Int, Int, Int) -> Number): Set<Number> {
-    val numbers: MutableSet<Number> = mutableSetOf()
+    val options: MutableSet<Number> = mutableSetOf()
     for (i in 0..9) {
         for (j in 0..9) {
             for (k in 0..9) {
                 if (i != j && i != k && j != k) {
-                    numbers.add(transform(i, j, k))
+                    options.add(transform(i, j, k))
                 }
             }
         }
     }
-
-    return numbers
+    return options
 }
