@@ -69,7 +69,9 @@ private fun testValidateErrors() {
     assertSyntaxError { callGenerateAndValidate(null, splitString(".")) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("."), applyDecimals = false) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("5.0.1+10.2")) }
+    assertSyntaxError { callGenerateAndValidate(null, splitString("5.0.1+10.2"), applyDecimals = false) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("5.0.+10.2")) }
+    assertSyntaxError { callGenerateAndValidate(null, splitString("5.0.+10.2"), applyDecimals = false) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("1+.45(..4)")) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("1+.45(..4)"), applyDecimals = false) }
 
@@ -83,6 +85,7 @@ private fun testValidateErrors() {
     assertSyntaxError { callGenerateAndValidate(null, listOf("01")) }
     assertSyntaxError { callGenerateAndValidate(null, "1 + 10".split(' ')) }
     assertSyntaxError { callGenerateAndValidate(null, listOf("1.2")) }
+    assertSyntaxError { callGenerateAndValidate(null, listOf("EF[1 1]")) }
 }
 
 private fun testBuildText() {
