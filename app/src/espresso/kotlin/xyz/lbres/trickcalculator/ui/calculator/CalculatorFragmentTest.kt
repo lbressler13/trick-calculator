@@ -95,10 +95,18 @@ class CalculatorFragmentTest {
 
     // settings
     @Test fun clearOnError() = testClearOnError()
+
     @Test fun unshuffleOperators() = testUnshuffleOperators()
     @Test fun shuffleNumbers() = testShuffleNumbers()
+    // @Test fun shuffleComputation() = testShuffleComputation() // TODO
     @Test fun randomizeSigns() = testRandomizeSigns()
-    // TODO additional settings
+
+    @Test fun noApplyDecimals() = testNoApplyDecimals()
+    @Test fun noApplyParentheses() = testNoApplyParentheses()
+
+    // @Test fun multipleNoApply() = testMultipleNoApply() // TODO
+    // @Test fun multipleShuffle() = testMultipleShuffle() // TODO
+    // @Test fun multipleSettingsTypes() = testMultipleSettingsTypes() // TOD
 
     @Test fun useLastHistoryItem() = testLastHistoryItem()
 

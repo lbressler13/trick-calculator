@@ -119,7 +119,7 @@ fun generateAndValidateComputeText(
 
     // check syntax error at end
     val endsWithOperator = data.lastType == OPERATOR && data.currentNumber.isEmpty()
-    if (data.openParenCount != 0 || endsWithOperator) {
+    if (data.openParenCount != 0 || endsWithOperator || data.lastDecimal) {
         throw syntaxError
     }
 
@@ -214,6 +214,7 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
     }
 
     data.lastType = data.currentType
+    data.currentDecimal = false
     data.lastDecimal = false
 }
 
@@ -224,7 +225,7 @@ private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolea
  * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
 private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
-    if (data.currentNumber == NEG || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
+    if (data.currentNumber == NEG || data.lastDecimal) {
         throw syntaxError
     }
 
@@ -243,6 +244,7 @@ private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
         data.computeText.add(number)
         data.currentNumber = ""
         data.currentDecimal = false
+        data.lastDecimal = false
 
         data.lastType = NUMBER
     }

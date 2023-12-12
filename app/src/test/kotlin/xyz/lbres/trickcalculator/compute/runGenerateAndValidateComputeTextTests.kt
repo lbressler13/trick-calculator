@@ -67,6 +67,7 @@ private fun testValidateErrors() {
     assertSyntaxError { callGenerateAndValidate(null, splitString("5.")) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("5."), applyDecimals = false) }
     assertSyntaxError { callGenerateAndValidate(null, splitString(".")) }
+    assertSyntaxError { callGenerateAndValidate(null, splitString("."), applyDecimals = false) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("5.0.1+10.2")) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("5.0.+10.2")) }
     assertSyntaxError { callGenerateAndValidate(null, splitString("1+.45(..4)")) }
