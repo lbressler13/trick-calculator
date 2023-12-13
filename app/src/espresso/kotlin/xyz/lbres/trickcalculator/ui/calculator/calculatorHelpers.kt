@@ -50,6 +50,15 @@ fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, m
     }
 }
 
+/**
+ * Check that the main textview matches several different values when repeating test
+ *
+ * @param options [Collection]<String>: valid values for main textview
+ * @param minMatches [Int]: minimum number of distinct values for main textview
+ * @param minIterations [Int]: minimum number of times to run test
+ * @param maxIterations [Int]: maximum number of times to run test
+ * @param computation [String]: value to type
+ */
 fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, minIterations: Int, maxIterations: Int, computation: String) {
     checkMainTextMatchesMultiple(options, minMatches, minIterations, maxIterations, listOf(computation))
 }

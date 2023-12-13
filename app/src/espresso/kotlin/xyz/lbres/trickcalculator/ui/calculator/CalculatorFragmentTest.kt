@@ -98,7 +98,7 @@ class CalculatorFragmentTest {
 
     @Test fun unshuffleOperators() = testUnshuffleOperators()
     @Test fun shuffleNumbers() = testShuffleNumbers()
-    // @Test fun shuffleComputation() = testShuffleComputation() // TODO
+    @Test fun shuffleComputation() = testShuffleComputation()
     @Test fun randomizeSigns() = testRandomizeSigns()
 
     @Test fun noApplyDecimals() = testNoApplyDecimals()
@@ -106,7 +106,7 @@ class CalculatorFragmentTest {
 
     // @Test fun multipleNoApply() = testMultipleNoApply() // TODO
     // @Test fun multipleShuffle() = testMultipleShuffle() // TODO
-    // @Test fun multipleSettingsTypes() = testMultipleSettingsTypes() // TOD
+    // @Test fun multipleSettingsTypes() = testMultipleSettingsTypes() // TODO
 
     @Test fun useLastHistoryItem() = testLastHistoryItem()
 

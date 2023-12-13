@@ -114,10 +114,53 @@ fun testShuffleNumbers() {
     }
     checkMainTextMatchesMultiple(resultsOf(options), 4, 5, 10, "2-82x7")
 
+    // divide by zero
     var errorThrown = false
     repeatUntil(100, { errorThrown }) {
         clearText()
         typeText("1/2")
+        equals()
+        try {
+            errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
+            errorThrown = true
+        } catch (_: AssertionFailedError) {}
+    }
+
+    if (!errorThrown) {
+        throw AssertionError("Divide by zero error expected to be thrown")
+    }
+}
+
+fun testShuffleComputation() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    onView(withId(R.id.shuffleComputationSwitch)).perform(click())
+    closeFragment()
+
+    typeText("-34")
+    equals()
+    mainText.check(matches(withText("[-34]")))
+    clearText()
+
+    var options = setOf(0.5, 2)
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 3, 10, "1/2")
+
+    options = setOf(
+        244, -255, -242, 2, -255, 0, 4, 8, 0, 5, 8, 2,
+        -5, -4, -8, -1024, -8, -625, -2, 2, -2, 0, 3, 0,
+        -4, -4, -4, 0, -3, 0, -4, -0.99609375, 255, -3, -0.992, 124
+    )
+    checkMainTextMatchesMultiple(resultsOf(options), 5, 5, 20, "1-(4-5)^1")
+
+    // previous result
+    options = setOf(1, -1)
+    checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10, listOf("1", "-2"))
+
+    // divide by zero
+    var errorThrown = false
+    repeatUntil(100, { errorThrown }) {
+        clearText()
+        typeText("0/1")
         equals()
         try {
             errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
