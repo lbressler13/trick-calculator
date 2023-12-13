@@ -3,7 +3,6 @@ package xyz.lbres.trickcalculator.ui.calculator
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import junit.framework.AssertionFailedError
@@ -14,18 +13,20 @@ import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
 import xyz.lbres.trickcalculator.testutils.repeatUntil
-import xyz.lbres.trickcalculator.testutils.toggleShuffleOperators
 import xyz.lbres.trickcalculator.testutils.typeText
 
 private val mainText = onView(withId(R.id.mainText))
 private val errorText = onView(withId(R.id.errorText))
 
+private val randomizeSignsSwitch = onView(withId(R.id.randomizeSignsSwitch))
+private val shuffleComputationSwitch = onView(withId(R.id.shuffleComputationSwitch))
+private val shuffleNumbersSwitch = onView(withId(R.id.shuffleNumbersSwitch))
+private val shuffleOperatorsSwitch = onView(withId(R.id.shuffleOperatorsSwitch))
+
 fun testRandomizeSigns() {
-    toggleShuffleOperators()
     openSettingsFragment()
-    onView(withId(R.id.randomizeSignsSwitch))
-        .perform(click())
-        .check(matches(isChecked()))
+    shuffleOperatorsSwitch.perform(click())
+    randomizeSignsSwitch.perform(click())
     closeFragment()
 
     var options: Set<Number> = setOf(5, -5)
@@ -51,7 +52,7 @@ fun testRandomizeSigns() {
 
 fun testUnshuffleOperators() {
     openSettingsFragment()
-    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    shuffleOperatorsSwitch.perform(click())
     closeFragment()
 
     repeat(5) {
@@ -78,8 +79,8 @@ fun testUnshuffleOperators() {
 
 fun testShuffleNumbers() {
     openSettingsFragment()
-    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
-    onView(withId(R.id.shuffleNumbersSwitch)).perform(click())
+    shuffleOperatorsSwitch.perform(click())
+    shuffleNumbersSwitch.perform(click())
     closeFragment()
 
     var options: Set<Number> = (0..9).toSet()
@@ -133,8 +134,8 @@ fun testShuffleNumbers() {
 
 fun testShuffleComputation() {
     openSettingsFragment()
-    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
-    onView(withId(R.id.shuffleComputationSwitch)).perform(click())
+    shuffleOperatorsSwitch.perform(click())
+    shuffleComputationSwitch.perform(click())
     closeFragment()
 
     typeText("-34")
@@ -171,6 +172,55 @@ fun testShuffleComputation() {
     if (!errorThrown) {
         throw AssertionError("Divide by zero error expected to be thrown")
     }
+}
+
+private fun getSingleOpTransform(op: (Int, Int) -> Number): (Int, Int, Int) -> Number {
+    return { i, j, k ->
+        val first = i * 10 + j
+        val second = i * 10 + k
+        op(first, second)
+    }
+}
+
+fun testMultipleShuffle() {
+    // randomize signs
+
+    // operators, numbers
+    openSettingsFragment()
+    shuffleNumbersSwitch.perform(click())
+    closeFragment()
+
+    // TODO handle decimals
+    val singleOpOptions: ((Int, Int) -> Number) -> Set<Number> = { op ->
+        generateShuffledNumbers { i, j, k ->
+            val first = i * 10 + j
+            val second = i * 10 + k
+            op(first, second)
+        }
+    }
+    var options = singleOpOptions(Int::plus) + singleOpOptions(Int::minus) + singleOpOptions(Int::times) + singleOpOptions(Int::div)
+    checkMainTextMatchesMultiple(resultsOf(options), 5, 5, 10, "01+02")
+
+    // operators, computation
+    openSettingsFragment()
+    shuffleNumbersSwitch.perform(click())
+    shuffleComputationSwitch.perform(click())
+    closeFragment()
+
+    checkMainTextMatchesMultiple(resultsOf(options), 5, 5, 10, "")
+
+    // numbers, computation
+    openSettingsFragment()
+    shuffleOperatorsSwitch.perform(click())
+    shuffleNumbersSwitch.perform(click())
+    closeFragment()
+
+    // operators, numbers, computation
+    openSettingsFragment()
+    shuffleNumbersSwitch.perform(click())
+    closeFragment()
+
+    // errors
 }
 
 /**

@@ -108,6 +108,8 @@ class CalculatorFragmentTest {
     // @Test fun multipleShuffle() = testMultipleShuffle() // TODO
     // @Test fun multipleSettingsTypes() = testMultipleSettingsTypes() // TODO
 
+    @Test fun historyRandomness() = testHistoryRandomness()
+
     @Test fun useLastHistoryItem() = testLastHistoryItem()
 
     // navigation

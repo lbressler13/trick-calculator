@@ -1,5 +1,7 @@
 package xyz.lbres.trickcalculator.ui.settings
 
+// TODO setting for saving history
+
 /**
  * Object containing all settings
  *
