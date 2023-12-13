@@ -104,7 +104,7 @@ class CalculatorFragmentTest {
     @Test fun noApplyDecimals() = testNoApplyDecimals()
     @Test fun noApplyParentheses() = testNoApplyParentheses()
 
-    // @Test fun multipleNoApply() = testMultipleNoApply() // TODO
+    @Test fun multipleNoApply() = testMultipleNoApply()
     // @Test fun multipleShuffle() = testMultipleShuffle() // TODO
     // @Test fun multipleSettingsTypes() = testMultipleSettingsTypes() // TODO
 

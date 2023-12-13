@@ -147,6 +147,59 @@ fun testNoApplyParentheses() {
     mainText.check(matches(withText("[5]")))
 }
 
+fun testMultipleNoApply() {
+    openSettingsFragment()
+    onView(withId(R.id.shuffleOperatorsSwitch)).perform(click())
+    onView(withId(R.id.applyParensSwitch)).perform(click())
+    onView(withId(R.id.applyDecimalsSwitch)).perform(click())
+    closeFragment()
+
+    repeat(3) {
+        // no parens or decimal
+        clearText()
+        typeText("1+2")
+        equals()
+        mainText.check(matches(withText("[3]")))
+
+        // parens and no decimal
+        clearText()
+        typeText("(1+2)3")
+        equals()
+        mainText.check(matches(withText("[7]")))
+
+        // decimal and no parens
+        clearText()
+        typeText("1.2")
+        equals()
+        mainText.check(matches(withText("[12]")))
+
+        // both
+        clearText()
+        typeText("(2-1.0)/(4+3)")
+        equals()
+        mainText.check(matches(withText("[2.5]")))
+    }
+
+    // errors
+    clearText()
+    typeText("(1.2")
+    equals()
+    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
+
+    clearText()
+    typeText("(1.)")
+    equals()
+    errorText.check(matches(isDisplayedWithText("Error: Syntax error")))
+
+    // using result
+    clearText()
+    typeText("2/3")
+    equals()
+    typeText("+1")
+    equals()
+    mainText.check(matches(withText("[1.66666667]")))
+}
+
 private fun runSingleClearErrorTest(text: String, error: String) {
     typeText(text)
     mainText.check(matches(withText(text)))
