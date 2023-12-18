@@ -5,13 +5,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import junit.framework.AssertionFailedError
 import org.hamcrest.Matchers.not
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
-import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.typeText
 import xyz.lbres.trickcalculator.testutils.withEmptyString
 
@@ -151,18 +149,5 @@ fun testEqualsWithError() {
     errorText.check(matches(isDisplayedWithText(syntaxError)))
 
     // divide by zero
-    var errorThrown = false
-
-    repeatUntil(10, { errorThrown }) {
-        clearText()
-        typeText("1/0")
-        equals()
-
-        try {
-            errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
-            errorThrown = true
-        } catch (_: AssertionFailedError) {
-            errorText.check(matches(not(isDisplayed())))
-        }
-    }
+    repeatUntilDivideByZero("1/0", iterations = 10)
 }

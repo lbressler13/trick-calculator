@@ -5,14 +5,12 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import junit.framework.AssertionFailedError
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.equals
 import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.openSettingsFragment
-import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.typeText
 
 private val mainText = onView(withId(R.id.mainText))
@@ -116,20 +114,7 @@ fun testShuffleNumbers() {
     checkMainTextMatchesMultiple(resultsOf(options), 4, 5, 10, "2-82x7")
 
     // divide by zero
-    var errorThrown = false
-    repeatUntil(100, { errorThrown }) {
-        clearText()
-        typeText("1/2")
-        equals()
-        try {
-            errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
-            errorThrown = true
-        } catch (_: AssertionFailedError) {}
-    }
-
-    if (!errorThrown) {
-        throw AssertionError("Divide by zero error expected to be thrown")
-    }
+    repeatUntilDivideByZero("1/2")
 }
 
 fun testShuffleComputation() {
@@ -158,69 +143,7 @@ fun testShuffleComputation() {
     checkMainTextMatchesMultiple(resultsOf(options), 2, 2, 10, listOf("1", "-2"))
 
     // divide by zero
-    var errorThrown = false
-    repeatUntil(100, { errorThrown }) {
-        clearText()
-        typeText("0/1")
-        equals()
-        try {
-            errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
-            errorThrown = true
-        } catch (_: AssertionFailedError) {}
-    }
-
-    if (!errorThrown) {
-        throw AssertionError("Divide by zero error expected to be thrown")
-    }
-}
-
-private fun getSingleOpTransform(op: (Int, Int) -> Number): (Int, Int, Int) -> Number {
-    return { i, j, k ->
-        val first = i * 10 + j
-        val second = i * 10 + k
-        op(first, second)
-    }
-}
-
-fun testMultipleShuffle() {
-    // randomize signs
-
-    // operators, numbers
-    openSettingsFragment()
-    shuffleNumbersSwitch.perform(click())
-    closeFragment()
-
-    // TODO handle decimals
-    val singleOpOptions: ((Int, Int) -> Number) -> Set<Number> = { op ->
-        generateShuffledNumbers { i, j, k ->
-            val first = i * 10 + j
-            val second = i * 10 + k
-            op(first, second)
-        }
-    }
-    var options = singleOpOptions(Int::plus) + singleOpOptions(Int::minus) + singleOpOptions(Int::times) + singleOpOptions(Int::div)
-    checkMainTextMatchesMultiple(resultsOf(options), 5, 5, 10, "01+02")
-
-    // operators, computation
-    openSettingsFragment()
-    shuffleNumbersSwitch.perform(click())
-    shuffleComputationSwitch.perform(click())
-    closeFragment()
-
-    checkMainTextMatchesMultiple(resultsOf(options), 5, 5, 10, "")
-
-    // numbers, computation
-    openSettingsFragment()
-    shuffleOperatorsSwitch.perform(click())
-    shuffleNumbersSwitch.perform(click())
-    closeFragment()
-
-    // operators, numbers, computation
-    openSettingsFragment()
-    shuffleNumbersSwitch.perform(click())
-    closeFragment()
-
-    // errors
+    repeatUntilDivideByZero("0/1")
 }
 
 /**

@@ -200,9 +200,15 @@ fun testMultipleNoApply() {
     mainText.check(matches(withText("[1.66666667]")))
 }
 
-private fun runSingleClearErrorTest(text: String, error: String) {
-    typeText(text)
-    mainText.check(matches(withText(text)))
+/**
+ * Run single text for clearing error, and check main text and error text
+ *
+ * @param computation [String]: computation to type in main textview
+ * @param error [String]: expected error message
+ */
+private fun runSingleClearErrorTest(computation: String, error: String) {
+    typeText(computation)
+    mainText.check(matches(withText(computation)))
     errorText.check(matches(not(isDisplayed())))
     equals()
     mainText.check(matches(withEmptyString()))

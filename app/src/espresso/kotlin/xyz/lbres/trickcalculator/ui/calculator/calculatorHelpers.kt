@@ -3,12 +3,15 @@ package xyz.lbres.trickcalculator.ui.calculator
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import junit.framework.AssertionFailedError
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.testutils.clearText
 import xyz.lbres.trickcalculator.testutils.closeFragment
 import xyz.lbres.trickcalculator.testutils.equals
+import xyz.lbres.trickcalculator.testutils.isDisplayedWithText
 import xyz.lbres.trickcalculator.testutils.openAttributionsFragment
+import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.clearSavedText
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.countDistinctValues
 import xyz.lbres.trickcalculator.testutils.textsaver.TextSaver.Companion.saveText
@@ -78,3 +81,28 @@ fun leaveAndReturn() {
  * @return [List]<String>: list where each number has been cast to a string, surrounded by square brackets
  */
 fun resultsOf(numberOptions: Set<Number>): List<String> = numberOptions.map { "[$it]" }
+
+/**
+ * Repeat computation until a divide by zero error is thrown
+ *
+ * @param computation [String]: computation to type
+ * @param iterations [Int]: number of repeats. Defaults to 100
+ */
+fun repeatUntilDivideByZero(computation: String, iterations: Int = 100) {
+    val errorText = onView(withId(R.id.errorText))
+    var errorThrown = false
+
+    repeatUntil(iterations, { errorThrown }) {
+        clearText()
+        typeText(computation)
+        equals()
+        try {
+            errorText.check(matches(isDisplayedWithText("Error: Divide by zero")))
+            errorThrown = true
+        } catch (_: AssertionFailedError) {}
+    }
+
+    if (!errorThrown) {
+        throw AssertionError("Divide by zero error expected to be thrown")
+    }
+}
