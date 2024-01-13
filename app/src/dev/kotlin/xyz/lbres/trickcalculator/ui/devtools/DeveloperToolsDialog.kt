@@ -158,6 +158,7 @@ class DeveloperToolsDialog : DialogFragment() {
         if (!launchedSettingsFragment) {
             requireBaseFragment().handlePostDevTools()
         }
+        launchedSettingsFragment = false
     }
 
     companion object {
