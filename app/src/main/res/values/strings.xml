@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trick Calculator</string>
+    <string name="app_name">Calculator</string>
     <string name="title_action_bar">Calculator</string>
 
     <!-- Numpad -->
