@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentSettingsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.utils.AppLogger
 
 /**
  * Fragment to display all configuration options for calculator
@@ -48,8 +48,8 @@ class SettingsFragment : BaseFragment() {
 
         val fromDialogKey = getString(R.string.from_dialog_key)
         fromDialog = arguments?.getBoolean(fromDialogKey) ?: false
-        val backStackSize = requireParentFragment().childFragmentManager.backStackEntryCount
-        fromCalculatorFragment = backStackSize == 1
+        val fromCalculatorKey = getString(R.string.from_calculator_key)
+        fromCalculatorFragment = arguments?.getBoolean(fromCalculatorKey) ?: false
 
         initUi()
 
@@ -71,12 +71,9 @@ class SettingsFragment : BaseFragment() {
         binding.shuffleNumbersSwitch.isChecked = viewModel.shuffleNumbers
         binding.shuffleOperatorsSwitch.isChecked = viewModel.shuffleOperators
 
-        val checkedIndex = viewModel.historyRandomness
-        val checkedButton = if (checkedIndex in historyButtons.indices) {
-            historyButtons[checkedIndex]
-        } else {
-            historyButtons[0]
-        }
+        var checkedIndex = viewModel.historyRandomness
+        checkedIndex = simpleIf(checkedIndex in historyButtons.indices, checkedIndex, 0)
+        val checkedButton = historyButtons[checkedIndex]
         binding.historyRandomnessGroup.check(checkedButton.id)
 
         binding.settingsButtonSwitch.isVisible = fromDialog || !fromCalculatorFragment
@@ -133,19 +130,6 @@ class SettingsFragment : BaseFragment() {
     }
 
     /**
-     * Close previous fragment
-     */
-    private fun closePreviousFragment() {
-        try {
-            requireBaseActivity().popBackStack()
-        } catch (e: Exception) {
-            // expected to fail when UI is recreating due to configuration changes or via dev tools
-            val appName = getString(R.string.app_name)
-            AppLogger.e(appName, "Failed to close parent fragment: ${e.message}")
-        }
-    }
-
-    /**
      * Save settings to ViewModel and return to calculator screen, if not coming through dev tools
      */
     override fun onDestroy() {
@@ -157,10 +141,6 @@ class SettingsFragment : BaseFragment() {
 
         if (fromDialog && devToolsCallback != null) {
             devToolsCallback!!()
-        }
-
-        if (!fromDialog && !fromCalculatorFragment) {
-            closePreviousFragment()
         }
     }
 

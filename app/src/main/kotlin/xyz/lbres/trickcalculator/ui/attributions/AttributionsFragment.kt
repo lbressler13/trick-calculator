@@ -28,8 +28,7 @@ class AttributionsFragment : BaseFragment() {
     override val navigateToSettings = R.id.navigateAttributionsToSettings
 
     override var titleResId: Int = R.string.title_attributions
-    override var actionBarOnClick: (() -> Unit)? =
-        { requireBaseActivity().runNavAction(R.id.navigateAttributionsToSettings) }
+    override var actionBarOnClick: (() -> Unit)? = { requireBaseActivity().replaceWithSettings() }
 
     /**
      * Initialize fragment

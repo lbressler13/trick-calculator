@@ -38,6 +38,14 @@ class BaseActivity : AppCompatActivity() {
     }
 
     /**
+     * Pop most recent fragment from backstack, and navigate from calculator fragment to settings.
+     */
+    fun replaceWithSettings() {
+        popBackStack()
+        runNavAction(R.id.navigateCalculatorToSettings)
+    }
+
+    /**
      * Run navigation action.
      *
      * @param actionResId [Int]: resource ID of action to run
