@@ -1,7 +1,6 @@
 package xyz.lbres.trickcalculator.ui.history
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 
@@ -44,7 +43,7 @@ class HistoryItem {
      */
     constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) {
         // parse EF-formatted value into decimal string
-        if (computation.isNotEmpty() && checkIsEFString(computation[0])) {
+        if (computation.isNotEmpty() && ExactFraction.isEFString(computation[0])) {
             val decimal = ExactFraction(computation[0]).toDecimalString(5)
             val newComputation = computation.copyWithReplacement(0, decimal)
             this.computation = newComputation
