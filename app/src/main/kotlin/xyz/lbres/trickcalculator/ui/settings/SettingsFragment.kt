@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentSettingsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
@@ -23,11 +22,6 @@ class SettingsFragment : BaseFragment() {
     private lateinit var historyButtons: List<RadioButton>
 
     override val navigateToSettings: Int? = null
-
-    /**
-     * Value indicating if the settings menu was launched from the calculator fragment
-     */
-    private var fromCalculatorFragment = false
 
     /**
      * Value indicating if the settings menu was launched through the dev tools dialog, starting on any fragment
@@ -49,9 +43,9 @@ class SettingsFragment : BaseFragment() {
         val fromDialogKey = getString(R.string.from_dialog_key)
         fromDialog = arguments?.getBoolean(fromDialogKey) ?: false
         val fromCalculatorKey = getString(R.string.from_calculator_key)
-        fromCalculatorFragment = arguments?.getBoolean(fromCalculatorKey) ?: false
+        val fromCalculatorFragment = arguments?.getBoolean(fromCalculatorKey) ?: false
 
-        initUi()
+        initUi(fromCalculatorFragment)
 
         return binding.root
     }
@@ -59,7 +53,7 @@ class SettingsFragment : BaseFragment() {
     /**
      * Set values in UI based on ViewModel and add necessary onClick actions
      */
-    private fun initUi() {
+    private fun initUi(fromCalculatorFragment: Boolean) {
         historyButtons = listOf(binding.historyButton0, binding.historyButton1, binding.historyButton2, binding.historyButton3)
 
         binding.applyDecimalsSwitch.isChecked = viewModel.applyDecimals
@@ -72,7 +66,9 @@ class SettingsFragment : BaseFragment() {
         binding.shuffleOperatorsSwitch.isChecked = viewModel.shuffleOperators
 
         var checkedIndex = viewModel.historyRandomness
-        checkedIndex = simpleIf(checkedIndex in historyButtons.indices, checkedIndex, 0)
+        if (checkedIndex !in historyButtons.indices) {
+            checkedIndex = 0
+        }
         val checkedButton = historyButtons[checkedIndex]
         binding.historyRandomnessGroup.check(checkedButton.id)
 

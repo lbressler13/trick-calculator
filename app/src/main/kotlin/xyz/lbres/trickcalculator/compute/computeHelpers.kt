@@ -105,9 +105,9 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
  * @return `true` if validation succeeds, `false` otherwise
  */
 fun validateNumbersOrder(order: IntList?): Boolean {
-    return order != null && order.size == 10 &&
+    return order != null &&
         order.joinToString("") != "0123456789" &&
-        order.toSet() == (0..9).toSet()
+        order.sorted().joinToString("") == "0123456789"
 }
 
 /**
