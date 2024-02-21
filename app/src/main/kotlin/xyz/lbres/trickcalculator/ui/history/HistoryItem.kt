@@ -7,7 +7,7 @@ import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 /**
  * Information about a single computation and its result
  */
-class HistoryItem {
+class HistoryItem private constructor(computation: StringList, result: ExactFraction?, error: String?, previousResult: ExactFraction?) {
     /**
      * Input computation
      */
@@ -28,32 +28,32 @@ class HistoryItem {
      */
     val error: String?
 
-    /**
-     * Constructor for HistoryItem resulting from an error
-     */
-    constructor(computation: StringList, error: String, previousResult: ExactFraction? = null) {
-        this.computation = computation
-        this.result = null
+    init {
+        this.computation = if (result != null && computation.isNotEmpty() && ExactFraction.isEFString(computation[0])) {
+            // parse EF-formatted value into decimal string
+            val decimal = ExactFraction(computation[0]).toDecimalString(5)
+            val newComputation = computation.copyWithReplacement(0, decimal)
+            newComputation
+        } else {
+            computation
+        }
+
+        this.result = result
         this.error = error
         this.previousResult = previousResult
     }
 
     /**
+     * Constructor for HistoryItem resulting from an error
+     */
+    constructor(computation: StringList, error: String, previousResult: ExactFraction? = null)
+        : this (computation, null, error, previousResult)
+
+    /**
      * Constructor for HistoryItem for a successful computation
      */
-    constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) {
-        // parse EF-formatted value into decimal string
-        if (computation.isNotEmpty() && ExactFraction.isEFString(computation[0])) {
-            val decimal = ExactFraction(computation[0]).toDecimalString(5)
-            val newComputation = computation.copyWithReplacement(0, decimal)
-            this.computation = newComputation
-        } else {
-            this.computation = computation
-        }
-        this.result = result
-        this.error = null
-        this.previousResult = previousResult
-    }
+    constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null)
+        : this (computation, result, null, previousResult)
 
     override fun toString(): String {
         if (error != null) {

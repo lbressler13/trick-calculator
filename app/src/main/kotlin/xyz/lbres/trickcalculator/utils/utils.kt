@@ -1,6 +1,7 @@
 package xyz.lbres.trickcalculator.utils
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
+import xyz.lbres.kotlinutils.general.succeeds
 import xyz.lbres.kotlinutils.general.tryOrDefault
 
 /**
@@ -10,16 +11,7 @@ import xyz.lbres.kotlinutils.general.tryOrDefault
  * @param value [String]: value to check
  * @return `true` if value can be parsed to a ExactFraction, `false` otherwise
  */
-fun isNumber(value: String): Boolean {
-    if (value.count { it == '-' } > 1 || value.count { it == '.' } > 1) {
-        return false
-    }
-
-    return tryOrDefault(false) {
-        ExactFraction(value)
-        true
-    }
-}
+fun isNumber(value: String): Boolean = succeeds { ExactFraction(value) }
 
 /**
  * Determine if a string consists of a single character that is part of a number, meaning a digit or decimal

@@ -56,7 +56,7 @@ abstract class BaseFragment : NavHostFragment() {
     /**
      * Callback to call when dev tools flow completes, from either the dialog or the settings fragment
      */
-    open fun handlePostDevTools() {}
+    open fun postDevToolsCallback() {}
 
     /**
      * Close the fragment

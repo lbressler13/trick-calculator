@@ -1,6 +1,8 @@
 package xyz.lbres.trickcalculator.ui.history
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.databinding.ViewHolderHistoryItemBinding
 import xyz.lbres.trickcalculator.ext.view.gone
 import xyz.lbres.trickcalculator.ext.view.visible
@@ -19,12 +21,7 @@ class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
         binding.resultText.text = item.result?.toDecimalString(5) ?: ""
         binding.errorText.text = item.error ?: ""
 
-        if (item.result != null) {
-            binding.resultText.visible()
-            binding.errorText.gone()
-        } else {
-            binding.resultText.gone()
-            binding.errorText.visible()
-        }
+        binding.resultText.visibility = simpleIf(item.result == null, View.GONE, View.VISIBLE)
+        binding.errorText.visibility = simpleIf(item.result == null, View.VISIBLE, View.GONE)
     }
 }

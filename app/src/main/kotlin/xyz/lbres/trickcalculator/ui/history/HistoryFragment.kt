@@ -64,13 +64,7 @@ class HistoryFragment : BaseFragment() {
             // error
             displayError -> {
                 // set error message to blink
-                val blinking: Animation = AlphaAnimation(0.0f, 1.0f)
-                blinking.duration = 200
-
-                blinking.startOffset = 10
-                blinking.repeatMode = Animation.REVERSE
-                blinking.repeatCount = Animation.INFINITE
-                binding.errorMessage.startAnimation(blinking)
+                startErrorAnimation()
 
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.gone()
@@ -101,11 +95,24 @@ class HistoryFragment : BaseFragment() {
      * Update randomized history when randomness setting is changed, and redisplay UI.
      * Redisplay can happen when randomness changes, or when history is cleared.
      */
-    override fun handlePostDevTools() {
+    override fun postDevToolsCallback() {
         if (settingsViewModel.historyRandomness != historyViewModel.randomness) {
             historyViewModel.randomness = settingsViewModel.historyRandomness
         }
 
         setUI() // handles history being cleared
+    }
+
+    /**
+     * Start blinking animation for error message
+     */
+    private fun startErrorAnimation() {
+        val blinking: Animation = AlphaAnimation(0.0f, 1.0f)
+        blinking.duration = 200
+
+        blinking.startOffset = 10
+        blinking.repeatMode = Animation.REVERSE
+        blinking.repeatCount = Animation.INFINITE
+        binding.errorMessage.startAnimation(blinking)
     }
 }
