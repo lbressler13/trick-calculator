@@ -4,8 +4,6 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.databinding.ViewHolderHistoryItemBinding
-import xyz.lbres.trickcalculator.ext.view.gone
-import xyz.lbres.trickcalculator.ext.view.visible
 
 /**
  * ViewHolder for a single history item view

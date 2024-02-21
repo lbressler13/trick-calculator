@@ -46,14 +46,14 @@ class HistoryItem private constructor(computation: StringList, result: ExactFrac
     /**
      * Constructor for HistoryItem resulting from an error
      */
-    constructor(computation: StringList, error: String, previousResult: ExactFraction? = null)
-        : this (computation, null, error, previousResult)
+    constructor(computation: StringList, error: String, previousResult: ExactFraction? = null) :
+        this (computation, null, error, previousResult)
 
     /**
      * Constructor for HistoryItem for a successful computation
      */
-    constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null)
-        : this (computation, result, null, previousResult)
+    constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) :
+        this (computation, result, null, previousResult)
 
     override fun toString(): String {
         if (error != null) {
