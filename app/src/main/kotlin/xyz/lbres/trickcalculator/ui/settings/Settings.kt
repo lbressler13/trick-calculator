@@ -13,7 +13,7 @@ package xyz.lbres.trickcalculator.ui.settings
  * @param shuffleNumbers [Boolean]
  * @param shuffleOperators [Boolean]
  */
-data class Settings(
+class Settings(
     var applyDecimals: Boolean,
     var applyParens: Boolean,
     var clearOnError: Boolean,

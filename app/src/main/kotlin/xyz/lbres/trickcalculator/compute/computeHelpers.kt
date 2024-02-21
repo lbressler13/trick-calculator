@@ -20,6 +20,20 @@ import java.math.BigInteger
 fun isOperator(element: String, ops: StringList): Boolean = element in ops
 
 /**
+ * Map element to their impact on the open paren count
+ *
+ * @param element [String]: element to check
+ * @return [Int]: 1 or -1 for a paren, and 0 for any other element
+ */
+fun getParenValue(element: String): Int {
+    return when (element) {
+        "(" -> 1
+        ")" -> -1
+        else -> 0
+    }
+}
+
+/**
  * Modify the numerator and denominator of an ExactFraction based on a number substitution order.
  * Each digit in the numerator/denominator will be replaced by the corresponding value in the order.
  * For example, 0 will be replaced by the 0th value in the number order.
@@ -79,11 +93,7 @@ fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
         .filter { it.value == "(" || it.value == ")" }
 
     for (idxVal in onlyParens) {
-        if (idxVal.value == "(") {
-            openCount++
-        } else if (idxVal.value == ")") {
-            openCount--
-        }
+        openCount += getParenValue(idxVal.value)
 
         if (openCount.isZero()) {
             return idxVal.index

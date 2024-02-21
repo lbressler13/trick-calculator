@@ -41,6 +41,18 @@ class ComputeHelpersTest {
     }
 
     @Test
+    fun testGetParenValue() {
+        assertEquals(1, getParenValue("("))
+        assertEquals(-1, getParenValue(")"))
+
+        assertEquals(0, getParenValue(") "))
+        assertEquals(0, getParenValue("))"))
+        assertEquals(0, getParenValue("()"))
+        assertEquals(0, getParenValue("-"))
+        assertEquals(0, getParenValue("4"))
+    }
+
+    @Test
     fun testValidateNumbersOrder() {
         assertFalse(validateNumbersOrder(null))
         assertFalse(validateNumbersOrder(emptyList()))

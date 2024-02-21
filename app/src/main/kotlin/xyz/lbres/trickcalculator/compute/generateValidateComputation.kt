@@ -20,7 +20,6 @@ private const val RPAREN = "rparen"
 
 private const val NEG = "-"
 
-private val parenCounts = mapOf(LPAREN to 1, RPAREN to -1)
 private val syntaxError = Exception("Syntax error")
 
 /**
@@ -102,7 +101,7 @@ fun generateAndValidateComputeText(
             addCurrentNumber(data, randomizeSigns)
         }
 
-        data.openParenCount += parenCounts.getOrDefault(data.currentType, 0)
+        data.openParenCount += getParenValue(element)
         when {
             nonNumberSyntaxError(data) -> throw syntaxError
             data.currentType == NUMBER -> addDigit(data, element, applyDecimals, numbersOrder)
