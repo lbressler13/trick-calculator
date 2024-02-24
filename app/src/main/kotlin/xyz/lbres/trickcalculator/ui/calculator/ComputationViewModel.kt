@@ -70,17 +70,6 @@ class ComputationViewModel : ViewModel() {
             updatedComputeText = listOf(decimalString) + updatedComputeText
         }
 
-        // if computed val was used and next item is a number, pad with times symbol
-        if (
-            updatedComputeText.size > 1 &&
-            lastComputed != null &&
-            updatedComputeText[0] == lastComputed.toDecimalString() &&
-            isNumberChar(updatedComputeText[1])
-        ) {
-            val start = listOf(updatedComputeText[0], "x")
-            updatedComputeText = start + updatedComputeText.subList(1, updatedComputeText.size)
-        }
-
         return when {
             error != null -> HistoryItem(updatedComputeText, error!!, lastComputed)
             computedValue != null -> HistoryItem(updatedComputeText, computedValue!!, lastComputed)
@@ -120,7 +109,6 @@ class ComputationViewModel : ViewModel() {
      *
      * @param item [HistoryItem]: item containing compute text and previous computed value
      */
-    // TODO remove times symbol that was added after computed value
     fun useHistoryItemAsComputeText(item: HistoryItem) {
         resetComputeData()
 
