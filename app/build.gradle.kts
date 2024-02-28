@@ -164,9 +164,9 @@ dependencies {
     val constraintLayoutVersion = "2.1.4"
     val exactNumbersVersion = "1.0.2"
     val kotlinUtilsVersion = "1.3.1"
-    val lifecycleVersion = "2.6.2"
-    val materialVersion = "1.10.0"
-    val navigationVersion = "2.7.4"
+    val lifecycleVersion = "2.7.0"
+    val materialVersion = "1.11.0"
+    val navigationVersion = "2.7.7"
 
     val androidxJunitVersion = "1.1.5"
     val androidxTestRulesVersion = "1.5.0"
