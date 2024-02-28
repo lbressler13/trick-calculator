@@ -8,7 +8,7 @@ import xyz.lbres.kotlinutils.general.succeeds
  * Number is defined as an [ExactFraction].
  *
  * @param value [String]: value to check
- * @return `true` if value can be parsed to a ExactFraction, `false` otherwise
+ * @return `true` if value can be parsed to an ExactFraction, `false` otherwise
  */
 fun isNumber(value: String): Boolean = succeeds { ExactFraction(value) }
 
