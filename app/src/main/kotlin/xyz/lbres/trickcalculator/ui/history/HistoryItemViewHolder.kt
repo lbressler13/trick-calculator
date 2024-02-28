@@ -17,8 +17,9 @@ class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
     // update UI to show information about current history item
     fun update(item: HistoryItem) {
         var computeText = item.computation
-        // pad with times if the first two values are numbers
-        if (computeText.size > 1 && isNumber(computeText[0]) && isNumber(computeText[1])) {
+
+        // pad with times if the first value is previously computed and the second is a number
+        if (item.previousResult != null && isNumber(computeText.getOrNull(1))) {
             computeText = listOf(computeText[0], "x") + computeText.subList(1, computeText.size)
         }
 
