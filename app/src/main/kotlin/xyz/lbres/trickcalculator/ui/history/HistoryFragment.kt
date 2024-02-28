@@ -9,6 +9,7 @@ import android.view.animation.Animation
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import xyz.lbres.trickcalculator.BuildConfig
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentHistoryBinding
 import xyz.lbres.trickcalculator.ext.view.gone
@@ -64,7 +65,9 @@ class HistoryFragment : BaseFragment() {
             // error
             displayError -> {
                 // set error message to blink
-                startErrorAnimation()
+                if (!BuildConfig.IS_ESPRESSO) {
+                    startErrorAnimation()
+                }
 
                 binding.itemsRecycler.gone()
                 binding.noHistoryMessage.gone()

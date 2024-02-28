@@ -45,6 +45,11 @@ repositories {
     }
 }
 
+fun getIsEspresso(): Boolean {
+    val property = project.findProperty("isEspresso")
+    return property == "true"
+}
+
 fun getEspressoRetries(): Int {
     val defaultRetries = 0
 
@@ -68,6 +73,7 @@ android {
         versionName = "1.0.0"
 
         buildConfigField("int", "ESPRESSO_RETRIES", getEspressoRetries().toString())
+        buildConfigField("Boolean", "IS_ESPRESSO", getIsEspresso().toString())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"

@@ -20,10 +20,10 @@ import java.math.BigInteger
 fun isOperator(element: String, ops: StringList): Boolean = element in ops
 
 /**
- * Map element to their impact on the open paren count
+ * Map element to its impact on the open paren count
  *
  * @param element [String]: element to check
- * @return [Int]: 1 or -1 for a paren, and 0 for any other element
+ * @return [Int]: 1 or -1 for a paren, or 0 for any other element
  */
 fun getParenValue(element: String): Int {
     return when (element) {
