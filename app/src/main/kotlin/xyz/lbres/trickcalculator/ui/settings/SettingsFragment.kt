@@ -135,8 +135,8 @@ class SettingsFragment : BaseFragment() {
             saveSettingsToViewModel()
         }
 
-        if (fromDialog && devToolsCallback != null) {
-            devToolsCallback!!()
+        if (fromDialog) {
+            devToolsCallback?.invoke()
         }
     }
 

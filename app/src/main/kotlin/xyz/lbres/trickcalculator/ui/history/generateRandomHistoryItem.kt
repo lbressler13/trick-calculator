@@ -146,8 +146,7 @@ private fun generateErrorMessage(): String {
         "Number overflow exception"
     )
 
-    // TODO use seeded values
-    val message = messages.random()
+    val message = messages.seededRandom()
 
     if (message == "Number overflow exception") {
         val overflow = (Long.MIN_VALUE..Long.MAX_VALUE).random()

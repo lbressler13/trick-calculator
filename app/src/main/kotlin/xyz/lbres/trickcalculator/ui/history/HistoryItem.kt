@@ -13,9 +13,6 @@ import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
  * @param error [String]?: error message if computation threw an error
  */
 class HistoryItem private constructor(computation: StringList, val result: ExactFraction?, val error: String?, val previousResult: ExactFraction?) {
-    /**
-     * Input computation
-     */
     val computation: StringList
 
     init {
@@ -32,13 +29,13 @@ class HistoryItem private constructor(computation: StringList, val result: Exact
      * Constructor for HistoryItem resulting from an error
      */
     constructor(computation: StringList, error: String, previousResult: ExactFraction? = null) :
-        this (computation, null, error, previousResult)
+        this (computation, result = null, error, previousResult)
 
     /**
      * Constructor for HistoryItem for a successful computation
      */
     constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) :
-        this (computation, result, null, previousResult)
+        this (computation, result, error = null, previousResult)
 
     override fun toString(): String {
         if (error != null) {
