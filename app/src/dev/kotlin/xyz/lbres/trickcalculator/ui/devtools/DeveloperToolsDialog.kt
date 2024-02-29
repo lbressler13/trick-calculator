@@ -127,7 +127,7 @@ class DeveloperToolsDialog : DialogFragment() {
             if (baseFragment.navigateToSettings != null) {
                 val args = bundleOf(fromDialogKey to true)
                 requireBaseActivity().runNavAction(baseFragment.navigateToSettings!!, args)
-                SettingsFragment.devToolsCallback = { baseFragment.handlePostDevTools() }
+                SettingsFragment.devToolsCallback = { baseFragment.postDevToolsCallback() }
             }
             launchedSettingsFragment = true
             dismiss()
@@ -156,7 +156,7 @@ class DeveloperToolsDialog : DialogFragment() {
 
         // callback will be called in settings fragment
         if (!launchedSettingsFragment) {
-            requireBaseFragment().handlePostDevTools()
+            requireBaseFragment().postDevToolsCallback()
         }
         launchedSettingsFragment = false
     }

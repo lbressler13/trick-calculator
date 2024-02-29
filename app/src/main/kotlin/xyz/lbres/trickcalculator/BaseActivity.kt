@@ -24,7 +24,7 @@ class BaseActivity : AppCompatActivity() {
         ProductFlavor.setupFlavor(this)
 
         setContentView(binding.root)
-        isDarkMode = isDarkMode()
+        isDarkMode = getSystemDarkMode()
     }
 
     /**
@@ -45,13 +45,7 @@ class BaseActivity : AppCompatActivity() {
      */
     fun runNavAction(actionResId: Int, args: Bundle? = null) {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        if (args == null) {
-            navController.navigate(actionResId)
-        } else {
-            navController.navigate(actionResId, args)
-        }
+        navHostFragment.navController.navigate(actionResId, args)
     }
 
     /**
@@ -60,17 +54,17 @@ class BaseActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
-        val wasDarkMode = isDarkMode
-        isDarkMode = isDarkMode()
-        if (wasDarkMode != isDarkMode) {
+        val newMode = getSystemDarkMode()
+        if (newMode != isDarkMode) {
             recreate()
+            isDarkMode = newMode
         }
     }
 
     /**
      * Determine if phone is set to dark mode
      */
-    private fun isDarkMode(): Boolean {
+    private fun getSystemDarkMode(): Boolean {
         val nightModeFlags: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return when (nightModeFlags) {
             Configuration.UI_MODE_NIGHT_YES -> true

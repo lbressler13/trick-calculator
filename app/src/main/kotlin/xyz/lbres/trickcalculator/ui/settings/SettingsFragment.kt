@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentSettingsBinding
 import xyz.lbres.trickcalculator.ui.BaseFragment
-import xyz.lbres.trickcalculator.utils.AppLogger
 
 /**
  * Fragment to display all configuration options for calculator
@@ -23,11 +22,6 @@ class SettingsFragment : BaseFragment() {
     private lateinit var historyButtons: List<RadioButton>
 
     override val navigateToSettings: Int? = null
-
-    /**
-     * Value indicating if the settings menu was launched from the calculator fragment
-     */
-    private var fromCalculatorFragment = false
 
     /**
      * Value indicating if the settings menu was launched through the dev tools dialog, starting on any fragment
@@ -48,10 +42,10 @@ class SettingsFragment : BaseFragment() {
 
         val fromDialogKey = getString(R.string.from_dialog_key)
         fromDialog = arguments?.getBoolean(fromDialogKey) ?: false
-        val backStackSize = requireParentFragment().childFragmentManager.backStackEntryCount
-        fromCalculatorFragment = backStackSize == 1
+        val fromCalculatorKey = getString(R.string.from_calculator_key)
+        val fromCalculatorFragment = arguments?.getBoolean(fromCalculatorKey) ?: false
 
-        initUi()
+        initUi(fromCalculatorFragment)
 
         return binding.root
     }
@@ -59,7 +53,7 @@ class SettingsFragment : BaseFragment() {
     /**
      * Set values in UI based on ViewModel and add necessary onClick actions
      */
-    private fun initUi() {
+    private fun initUi(fromCalculatorFragment: Boolean) {
         historyButtons = listOf(binding.historyButton0, binding.historyButton1, binding.historyButton2, binding.historyButton3)
 
         binding.applyDecimalsSwitch.isChecked = viewModel.applyDecimals
@@ -71,12 +65,11 @@ class SettingsFragment : BaseFragment() {
         binding.shuffleNumbersSwitch.isChecked = viewModel.shuffleNumbers
         binding.shuffleOperatorsSwitch.isChecked = viewModel.shuffleOperators
 
-        val checkedIndex = viewModel.historyRandomness
-        val checkedButton = if (checkedIndex in historyButtons.indices) {
-            historyButtons[checkedIndex]
-        } else {
-            historyButtons[0]
+        var checkedIndex = viewModel.historyRandomness
+        if (checkedIndex !in historyButtons.indices) {
+            checkedIndex = 0
         }
+        val checkedButton = historyButtons[checkedIndex]
         binding.historyRandomnessGroup.check(checkedButton.id)
 
         binding.settingsButtonSwitch.isVisible = fromDialog || !fromCalculatorFragment
@@ -133,19 +126,6 @@ class SettingsFragment : BaseFragment() {
     }
 
     /**
-     * Close previous fragment
-     */
-    private fun closePreviousFragment() {
-        try {
-            requireBaseActivity().popBackStack()
-        } catch (e: Exception) {
-            // expected to fail when UI is recreating due to configuration changes or via dev tools
-            val appName = getString(R.string.app_name)
-            AppLogger.e(appName, "Failed to close parent fragment: ${e.message}")
-        }
-    }
-
-    /**
      * Save settings to ViewModel and return to calculator screen, if not coming through dev tools
      */
     override fun onDestroy() {
@@ -155,12 +135,8 @@ class SettingsFragment : BaseFragment() {
             saveSettingsToViewModel()
         }
 
-        if (fromDialog && devToolsCallback != null) {
-            devToolsCallback!!()
-        }
-
-        if (!fromDialog && !fromCalculatorFragment) {
-            closePreviousFragment()
+        if (fromDialog) {
+            devToolsCallback?.invoke()
         }
     }
 

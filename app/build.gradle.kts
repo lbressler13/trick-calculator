@@ -45,6 +45,10 @@ repositories {
     }
 }
 
+fun getIsEspresso(): Boolean {
+    return project.findProperty("isEspresso") == "true"
+}
+
 fun getEspressoRetries(): Int {
     val defaultRetries = 0
 
@@ -68,6 +72,7 @@ android {
         versionName = "1.0.0"
 
         buildConfigField("int", "ESPRESSO_RETRIES", getEspressoRetries().toString())
+        buildConfigField("Boolean", "IS_ESPRESSO", getIsEspresso().toString())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
@@ -156,11 +161,11 @@ dependencies {
     val androidxCoreVersion = "1.12.0"
     val appCompatVersion = "1.6.1"
     val constraintLayoutVersion = "2.1.4"
-    val exactNumbersVersion = "0.1.1"
-    val kotlinUtilsVersion = "1.3.0"
-    val lifecycleVersion = "2.6.2"
-    val materialVersion = "1.10.0"
-    val navigationVersion = "2.7.4"
+    val exactNumbersVersion = "1.0.2"
+    val kotlinUtilsVersion = "1.3.1"
+    val lifecycleVersion = "2.7.0"
+    val materialVersion = "1.11.0"
+    val navigationVersion = "2.7.7"
 
     val androidxJunitVersion = "1.1.5"
     val androidxTestRulesVersion = "1.5.0"

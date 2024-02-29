@@ -10,6 +10,11 @@ fun IntRange.seededRandom(): Int = random(random)
 fun IntRange.seededShuffled(): IntList = shuffled(random)
 
 /**
+ * LongRange methods using shared random as a seed
+ */
+fun LongRange.seededRandom(): Long = random(random)
+
+/**
  * List methods using shared random as a seed
  */
 fun <E> List<E>.seededRandom(): E = random(random)

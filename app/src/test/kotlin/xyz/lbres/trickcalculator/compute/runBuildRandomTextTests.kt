@@ -1,7 +1,6 @@
 package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.trickcalculator.runRandomTest
@@ -171,7 +170,7 @@ private fun mapToTypes(text: StringList): StringList {
 private fun mapToAbsoluteValues(text: StringList): StringList {
     return text.map {
         when {
-            checkIsEFString(it) && ExactFraction(it).isNegative() -> {
+            ExactFraction.isEFString(it) && ExactFraction(it).isNegative() -> {
                 val ef = ExactFraction(it)
                 (-ef).toEFString()
             }

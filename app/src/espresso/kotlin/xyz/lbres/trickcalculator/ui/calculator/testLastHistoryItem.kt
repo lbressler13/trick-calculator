@@ -50,6 +50,16 @@ fun testLastHistoryItem() {
     )
     runSingleTestWithComputedValue("3+2", longComputation, options)
 
+    // no times added for multiplication
+    clearText()
+    typeText("1234")
+    equals()
+    typeText("2")
+    useLastButton.perform(click())
+    mainText.check(matches(withText("1234")))
+
+    runSingleTestWithComputedValue("1234", "2", setOf("[1234]2"))
+
     // after error
     clearText()
     typeText("(1")

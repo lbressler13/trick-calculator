@@ -20,7 +20,6 @@ private const val RPAREN = "rparen"
 
 private const val NEG = "-"
 
-private val parenCounts = mapOf(LPAREN to 1, RPAREN to -1)
 private val syntaxError = Exception("Syntax error")
 
 /**
@@ -82,9 +81,7 @@ fun generateAndValidateComputeText(
     when {
         splitText.isEmpty() && initialValue == null -> return emptyList()
         splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
-        initialValue == null && isOperator(splitText[0], ops) && splitText[0] != NEG -> {
-            throw syntaxError
-        }
+        initialValue == null && isOperator(splitText[0], ops) && splitText[0] != NEG -> throw syntaxError
     }
 
     if (initialValue != null) {
@@ -104,7 +101,7 @@ fun generateAndValidateComputeText(
             addCurrentNumber(data, randomizeSigns)
         }
 
-        data.openParenCount += parenCounts.getOrDefault(data.currentType, 0)
+        data.openParenCount += getParenValue(element)
         when {
             nonNumberSyntaxError(data) -> throw syntaxError
             data.currentType == NUMBER -> addDigit(data, element, applyDecimals, numbersOrder)

@@ -14,6 +14,7 @@ class UtilsTest {
         assertTrue(isNumber("1.2349"))
         assertTrue(isNumber(".987"))
         assertTrue(isNumber("-.10"))
+        assertTrue(isNumber("123E-7"))
         assertTrue(isNumber("EF[-123 457]"))
 
         var longValue = "123232323232323232323232323232323"
@@ -23,6 +24,7 @@ class UtilsTest {
         assertTrue(isNumber(longValue))
 
         // not number
+        assertFalse(isNumber(null))
         assertFalse(isNumber(""))
         assertFalse(isNumber(" "))
         assertFalse(isNumber(" 1 2"))

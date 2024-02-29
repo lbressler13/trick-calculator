@@ -1,8 +1,5 @@
 package xyz.lbres.trickcalculator.ui.history
 
-import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.kotlinutils.general.simpleIf
-import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.utils.History
@@ -25,17 +22,14 @@ fun generateRandomHistory(history: History, randomness: Int?): History {
  * @return [History]: history where computations and values have been shuffled
  */
 private fun shuffleHistoryValues(history: History): History {
-    val computations: List<StringList> = history.map { it.computation }.seededShuffled()
-    val values: List<Pair<ExactFraction?, String?>> = history.map { Pair(it.result, it.error) }.seededShuffled()
-
-    val shuffledHistory = computations.mapIndexed { index, comp ->
-        val valuePair = values[index]
-        if (valuePair.first != null) {
-            HistoryItem(comp, valuePair.first!!)
-        } else {
-            HistoryItem(comp, valuePair.second!!)
+    val shuffledHistory = history.seededShuffled()
+        .zip(history.seededShuffled()) { item1: HistoryItem, item2: HistoryItem ->
+            if (item2.result != null) {
+                HistoryItem(item1.computation, item2.result)
+            } else {
+                HistoryItem(item1.computation, item2.error!!)
+            }
         }
-    }
 
     return shuffledHistory
 }
@@ -47,11 +41,9 @@ private fun shuffleHistoryValues(history: History): History {
  * @return [History]: possibly null history of generated computations, with same length as real history (if not null)
  */
 private fun createRandomizedHistory(history: History): History? {
-    val probabilityError = simpleIf(history.isEmpty(), 1f, 0.2f)
-
-    if (random.nextBoolean(probabilityError)) {
-        return null
+    return when {
+        history.isEmpty() -> null
+        random.nextBoolean(0.2f) -> null
+        else -> List(history.size) { generateRandomHistoryItem() }
     }
-
-    return List(history.size) { generateRandomHistoryItem() }
 }

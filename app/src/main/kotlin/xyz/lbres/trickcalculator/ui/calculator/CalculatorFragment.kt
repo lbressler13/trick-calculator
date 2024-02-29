@@ -103,7 +103,8 @@ class CalculatorFragment : BaseFragment() {
      * Launch SettingsFragment
      */
     private val settingsButtonOnClick = {
-        requireBaseActivity().runNavAction(R.id.navigateCalculatorToSettings)
+        val fromCalculatorKey = getString(R.string.from_calculator_key)
+        requireBaseActivity().runNavAction(R.id.navigateCalculatorToSettings, bundleOf(fromCalculatorKey to true))
     }
 
     /**
@@ -258,7 +259,7 @@ class CalculatorFragment : BaseFragment() {
     /**
      * Hide useLastHistory button when history is cleared
      */
-    override fun handlePostDevTools() {
+    override fun postDevToolsCallback() {
         if (historyViewModel.history.isEmpty()) {
             binding.useLastHistoryButton.gone()
         }

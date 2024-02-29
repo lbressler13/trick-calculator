@@ -146,11 +146,10 @@ private fun generateErrorMessage(): String {
         "Number overflow exception"
     )
 
-    // TODO use seeded values
-    val message = messages.random()
+    val message = messages.seededRandom()
 
     if (message == "Number overflow exception") {
-        val overflow = (Long.MIN_VALUE..Long.MAX_VALUE).random()
+        val overflow = (Long.MIN_VALUE..Long.MAX_VALUE).seededRandom()
         return "Number overflow exception on $overflow"
     }
 
@@ -165,14 +164,14 @@ private fun generateErrorMessage(): String {
  */
 private fun addParens(computation: MStringList) {
     if (computation.size > 1) {
-        var startIndex = (0 until computation.size - 1).random()
+        var startIndex = (0 until computation.size - 1).seededRandom()
         // must be inserted before a number
         if (isOperator(computation[startIndex], operators)) {
             startIndex--
         }
         computation.add(startIndex, "(")
 
-        var endIndex = (startIndex + 1 until computation.size).random()
+        var endIndex = (startIndex + 1 until computation.size).seededRandom()
         // must be inserted after a number
         if (isNumber(computation[endIndex])) {
             endIndex++
@@ -198,13 +197,13 @@ private fun addSyntaxError(computation: MStringList) {
         "extraOperator",
         "emptyParens",
         "extraDecimal"
-    ).random()
+    ).seededRandom()
 
     when (errorType) {
         "singleParen" -> addUnmatchedParen(computation)
         "extraOperator" -> addOperatorSyntaxError(computation)
         "emptyParens" -> {
-            val index = (0..computation.size).random()
+            val index = (0..computation.size).seededRandom()
             computation.add(index, "()")
         }
         "extraDecimal" -> addDecimalSyntaxError(computation)
@@ -217,12 +216,12 @@ private fun addSyntaxError(computation: MStringList) {
  * @param computation [MStringList]: existing computation
  */
 private fun addOperatorSyntaxError(computation: MStringList) {
-    val index = (0..computation.size).random()
-    var operator = operators.random()
+    val index = (0..computation.size).seededRandom()
+    var operator = operators.seededRandom()
 
     // putting - at the start of the operation would look like a negative, not a syntax error
     if (index.isZero() && operator == "-") {
-        operator = listOf("+", "x", "/", "^").random()
+        operator = listOf("+", "x", "/", "^").seededRandom()
     }
 
     // check for same operator twice in a row
@@ -237,7 +236,7 @@ private fun addOperatorSyntaxError(computation: MStringList) {
 
         // select new operator to avoid adjacent duplicates
         if (adjacentOperator == operator) {
-            operator = operators.filter { it != operator }.random()
+            operator = operators.filter { it != operator }.seededRandom()
         }
     }
     computation.add(index, operator)
@@ -249,7 +248,7 @@ private fun addOperatorSyntaxError(computation: MStringList) {
  * @param computation [MStringList]: existing computation
  */
 private fun addDecimalSyntaxError(computation: MStringList) {
-    var index = (0..computation.size).random()
+    var index = (0..computation.size).seededRandom()
     if (index != computation.size) {
         val item = computation[index]
         if (isNumber(item) && !item.contains(".")) {
@@ -265,8 +264,8 @@ private fun addDecimalSyntaxError(computation: MStringList) {
  * @param computation [MStringList]: existing computation, which may already contain matched parentheses
  */
 private fun addUnmatchedParen(computation: MStringList) {
-    var index = (0..computation.size).random()
-    var paren = listOf("(", ")").random()
+    var index = (0..computation.size).seededRandom()
+    var paren = listOf("(", ")").seededRandom()
 
     // biased in favor of putting paren next to the existing paren, if possible
     val existingIndex = computation.indexOf(paren)

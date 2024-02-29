@@ -1,60 +1,46 @@
 package xyz.lbres.trickcalculator.ui.history
 
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
-import xyz.lbres.exactnumbers.exactfraction.checkIsEFString
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 
 /**
  * Information about a single computation and its result
  */
-class HistoryItem {
-    /**
-     * Input computation
-     */
+class HistoryItem private constructor(computation: StringList, val result: ExactFraction?, val error: String?, val previousResult: ExactFraction?) {
     val computation: StringList
 
-    /**
-     * Result of computation if no error was thrown
-     */
-    val result: ExactFraction?
-
-    /**
-     * Result that is used as the first term of the computation
-     */
-    val previousResult: ExactFraction?
-
-    /**
-     * Error message if computation threw an error
-     */
-    val error: String?
+    init {
+        this.computation = if (result != null && computation.isNotEmpty() && ExactFraction.isEFString(computation[0])) {
+            // parse EF-formatted value into decimal string
+            val decimal = ExactFraction(computation[0]).toDecimalString(5)
+            computation.copyWithReplacement(0, decimal)
+        } else {
+            computation
+        }
+    }
 
     /**
      * Constructor for HistoryItem resulting from an error
+     *
+     * @param computation [StringList]: input computation
+     * @param error [String]: error message that was thrown by computation
+     * @param previousResult [ExactFraction]?: result that is used as the first term of the computation.
+     * Defaults to `null`
      */
-    constructor(computation: StringList, error: String, previousResult: ExactFraction? = null) {
-        this.computation = computation
-        this.result = null
-        this.error = error
-        this.previousResult = previousResult
-    }
+    constructor(computation: StringList, error: String, previousResult: ExactFraction? = null) :
+        this (computation, result = null, error, previousResult)
 
     /**
      * Constructor for HistoryItem for a successful computation
+     *
+     * @param computation [StringList]: input computation
+     * @param result [ExactFraction]: result of computation
+     * @param previousResult [ExactFraction]?: result that is used as the first term of the computation.
+     * Defaults to `null`
      */
-    constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) {
-        // parse EF-formatted value into decimal string
-        if (computation.isNotEmpty() && checkIsEFString(computation[0])) {
-            val decimal = ExactFraction(computation[0]).toDecimalString(5)
-            val newComputation = computation.copyWithReplacement(0, decimal)
-            this.computation = newComputation
-        } else {
-            this.computation = computation
-        }
-        this.result = result
-        this.error = null
-        this.previousResult = previousResult
-    }
+    constructor(computation: StringList, result: ExactFraction, previousResult: ExactFraction? = null) :
+        this (computation, result, error = null, previousResult)
 
     override fun toString(): String {
         if (error != null) {

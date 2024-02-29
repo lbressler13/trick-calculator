@@ -75,6 +75,7 @@
 
     <!-- Keys -->
     <string name="initial_fragment_load_key">initialFragmentLoad</string>
+    <string name="from_calculator_key">fromCalcFragment</string>
 
     <!-- Dev Tools -->
     <string name="dev_tools_button">{ }</string>

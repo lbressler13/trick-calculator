@@ -1,9 +1,10 @@
 package xyz.lbres.trickcalculator.ui.history
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.trickcalculator.databinding.ViewHolderHistoryItemBinding
-import xyz.lbres.trickcalculator.ext.view.gone
-import xyz.lbres.trickcalculator.ext.view.visible
+import xyz.lbres.trickcalculator.utils.isNumber
 
 /**
  * ViewHolder for a single history item view
@@ -15,16 +16,18 @@ class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
 
     // update UI to show information about current history item
     fun update(item: HistoryItem) {
-        binding.computeText.text = item.computation.joinToString("")
+        var computeText = item.computation
+
+        // pad with times if the first value is previously computed and the second is a number
+        if (item.previousResult != null && isNumber(computeText.getOrNull(1))) {
+            computeText = listOf(computeText[0], "x") + computeText.subList(1, computeText.size)
+        }
+
+        binding.computeText.text = computeText.joinToString("")
         binding.resultText.text = item.result?.toDecimalString(5) ?: ""
         binding.errorText.text = item.error ?: ""
 
-        if (item.result != null) {
-            binding.resultText.visible()
-            binding.errorText.gone()
-        } else {
-            binding.resultText.gone()
-            binding.errorText.visible()
-        }
+        binding.resultText.visibility = simpleIf(item.result == null, View.GONE, View.VISIBLE)
+        binding.errorText.visibility = simpleIf(item.result == null, View.VISIBLE, View.GONE)
     }
 }
