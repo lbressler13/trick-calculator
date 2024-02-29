@@ -81,7 +81,7 @@ fun generateAndValidateComputeText(
     when {
         splitText.isEmpty() && initialValue == null -> return emptyList()
         splitText.isEmpty() -> return listOf(initialValue!!.toEFString())
-        initialValue == null && isOperator(splitText[0], ops - NEG) -> throw syntaxError
+        initialValue == null && isOperator(splitText[0], ops) && splitText[0] != NEG -> throw syntaxError
     }
 
     if (initialValue != null) {

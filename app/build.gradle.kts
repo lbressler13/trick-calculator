@@ -46,8 +46,7 @@ repositories {
 }
 
 fun getIsEspresso(): Boolean {
-    val property = project.findProperty("isEspresso")
-    return property == "true"
+    return project.findProperty("isEspresso") == "true"
 }
 
 fun getEspressoRetries(): Int {
