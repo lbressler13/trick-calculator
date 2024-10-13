@@ -158,19 +158,19 @@ ktlint {
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
-    val androidxCoreVersion = "1.12.0"
-    val appCompatVersion = "1.6.1"
+    val androidxCoreVersion = "1.13.1"
+    val appCompatVersion = "1.7.0"
     val constraintLayoutVersion = "2.1.4"
     val exactNumbersVersion = "1.0.2"
     val kotlinUtilsVersion = "1.3.1"
-    val lifecycleVersion = "2.7.0"
-    val materialVersion = "1.11.0"
-    val navigationVersion = "2.7.7"
+    val lifecycleVersion = "2.8.6"
+    val materialVersion = "1.12.0"
+    val navigationVersion = "2.8.2"
 
-    val androidxJunitVersion = "1.1.5"
-    val androidxTestRulesVersion = "1.5.0"
-    val androidxTestRunnerVersion = "1.5.2"
-    val espressoVersion = "3.5.1"
+    val androidxJunitVersion = "1.2.1"
+    val androidxTestRulesVersion = "1.6.1"
+    val androidxTestRunnerVersion = "1.6.2"
+    val espressoVersion = "3.6.1"
     val mockkVersion = "1.13.7"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
