@@ -2,7 +2,7 @@ package xyz.lbres.trickcalculator.ui.settings
 
 import androidx.lifecycle.ViewModel
 import xyz.lbres.trickcalculator.SharedValues.random
-import xyz.lbres.trickcalculator.utils.seededRandom
+import xyz.lbres.trickcalculator.ext.random.seededRandom
 
 /**
  * ViewModel to track settings that are shared across fragments

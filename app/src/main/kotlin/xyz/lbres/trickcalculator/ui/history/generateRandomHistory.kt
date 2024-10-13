@@ -2,8 +2,8 @@ package xyz.lbres.trickcalculator.ui.history
 
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.trickcalculator.SharedValues.random
+import xyz.lbres.trickcalculator.ext.random.seededShuffled
 import xyz.lbres.trickcalculator.utils.History
-import xyz.lbres.trickcalculator.utils.seededShuffled
 
 fun generateRandomHistory(history: History, randomness: Int?): History {
     return when (randomness) {

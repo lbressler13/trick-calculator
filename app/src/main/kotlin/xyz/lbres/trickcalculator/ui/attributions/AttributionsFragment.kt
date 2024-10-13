@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.trickcalculator.R
 import xyz.lbres.trickcalculator.databinding.FragmentAttributionsBinding
+import xyz.lbres.trickcalculator.ext.string.underlined
 import xyz.lbres.trickcalculator.ui.BaseFragment
 import xyz.lbres.trickcalculator.ui.attributions.authorattribution.AuthorAttributionAdapter
 import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonAttrPolicyUrl
 import xyz.lbres.trickcalculator.ui.attributions.constants.flaticonUrl
-import xyz.lbres.trickcalculator.utils.createUnderlineText
 
 /**
  * Fragment to display image attributions for all Flaticon images used in the app, as required by Flaticon
@@ -81,11 +81,11 @@ class AttributionsFragment : BaseFragment() {
         if (viewModel.flaticonMessageExpanded) {
             // expand text
             binding.flaticonPolicyMessage.text = fullMessage
-            binding.expandCollapseMessage.text = createUnderlineText(collapseString)
+            binding.expandCollapseMessage.text = collapseString.underlined()
         } else {
             // collapse text
             binding.flaticonPolicyMessage.text = shortMessage
-            binding.expandCollapseMessage.text = createUnderlineText(expandString)
+            binding.expandCollapseMessage.text = expandString.underlined()
         }
         addFlaticonLinks()
     }
