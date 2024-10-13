@@ -8,17 +8,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
-import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 
 @RunWith(AndroidJUnit4::class)
 class StringExtTest {
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
-
-    @Rule
-    @JvmField
-    val retryRule = RetryRule(maxRetries = 0)
 
     @Test
     fun underlined() {
