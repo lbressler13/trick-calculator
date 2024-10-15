@@ -1,6 +1,9 @@
 package xyz.lbres.trickcalculator
 
 import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.kotlinutils.set.multiset.MutableMultiSet
+import xyz.lbres.kotlinutils.set.multiset.mutableMultiSetOf
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -73,5 +76,46 @@ fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
 
     if (!checkPassed) {
         throw AssertionError("Randomized test failed")
+    }
+}
+
+/**
+ * Retry a test multiple times, and only fail if all tries fail
+ *
+ * @param tries [Int]: number of times to run the test. Defaults to 2 (a single retry)
+ * @param retryableTest () -> [Unit]: test to run
+ */
+fun runTestWithRetry(tries: Int = 2, retryableTest: () -> Unit) {
+    repeat(tries - 1) {
+        try {
+            retryableTest()
+            return
+        } catch (_: AssertionError) {
+            println("Test failed. Retrying...")
+        }
+    }
+
+    retryableTest()
+}
+
+/**
+ * Repeatedly generate a random value, and check that the results are evenly distributed
+ *
+ * @param values [Iterable]<T>: all possible values
+ * @param iterations [Int]: number of times to generate value
+ * @param getValue ([Iterable]<T>) -> T: function that takes [values] as parameter, and uses it to randomly generate a value
+ */
+fun <T> checkDistributedResults(values: Iterable<T>, iterations: Int, getValue: (Iterable<T>) -> T) {
+    val results: MutableMultiSet<T> = mutableMultiSetOf()
+    repeat(iterations) {
+        val result = getValue(values)
+        results.add(result)
+        assertContains(values, result)
+    }
+
+    val average = iterations / values.count()
+    val allowedRange = (average * 2 / 3)..(average * 4 / 3)
+    values.forEach {
+        assertContains(allowedRange, results.getCountOf(it))
     }
 }
