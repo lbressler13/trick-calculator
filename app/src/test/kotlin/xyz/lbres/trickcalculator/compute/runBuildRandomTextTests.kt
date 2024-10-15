@@ -152,7 +152,6 @@ private fun runSingleRandomizationTest(
 
             validSigns && result != builtText && distinctResults.size >= minResults
         }
-
     }
 }
 
