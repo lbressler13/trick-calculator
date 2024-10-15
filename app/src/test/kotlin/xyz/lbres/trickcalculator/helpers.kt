@@ -57,29 +57,6 @@ fun splitString(s: String): StringList {
 }
 
 /**
- * Perform a random action repeatedly, checking to ensure that the result that was randomized.
- * The action should also contain any assertions about a single result.
- *
- * @param randomAction () -> T: generate a single result, and perform any assertions about that result
- * @param randomCheck (T) -> Boolean: check if a result meets criteria for randomization
- */
-fun <T> runRandomTest(randomAction: () -> T, randomCheck: (T) -> Boolean) {
-    val iterations = 20
-    var checkPassed = false
-    var i = 0
-
-    while (i < iterations && !checkPassed) {
-        val result = randomAction()
-        checkPassed = randomCheck(result)
-        i++
-    }
-
-    if (!checkPassed) {
-        throw AssertionError("Randomized test failed")
-    }
-}
-
-/**
  * Retry a test multiple times, and only fail if all tries fail
  *
  * @param tries [Int]: number of times to run the test. Defaults to 2 (a single retry)
