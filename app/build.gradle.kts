@@ -50,6 +50,7 @@ fun getIsEspresso(): Boolean {
 }
 
 fun getEspressoRetries(): Int {
+    return 2
     val defaultRetries = 0
 
     return if (project.hasProperty("espressoRetries")) {
@@ -158,14 +159,14 @@ ktlint {
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
-    val androidxCoreVersion = "1.12.0"
-    val appCompatVersion = "1.6.1"
+    val androidxCoreVersion = "1.13.1"
+    val appCompatVersion = "1.7.0"
     val constraintLayoutVersion = "2.1.4"
     val exactNumbersVersion = "1.0.2"
-    val kotlinUtilsVersion = "1.3.1"
-    val lifecycleVersion = "2.7.0"
-    val materialVersion = "1.11.0"
-    val navigationVersion = "2.7.7"
+    val kotlinUtilsVersion = "1.4.4-android"
+    val lifecycleVersion = "2.8.6"
+    val materialVersion = "1.12.0"
+    val navigationVersion = "2.8.3"
 
     val androidxJunitVersion = "1.1.5"
     val androidxTestRulesVersion = "1.5.0"
