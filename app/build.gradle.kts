@@ -50,7 +50,6 @@ fun getIsEspresso(): Boolean {
 }
 
 fun getEspressoRetries(): Int {
-    return 2
     val defaultRetries = 0
 
     return if (project.hasProperty("espressoRetries")) {
@@ -168,10 +167,10 @@ dependencies {
     val materialVersion = "1.12.0"
     val navigationVersion = "2.8.3"
 
-    val androidxJunitVersion = "1.1.5"
-    val androidxTestRulesVersion = "1.5.0"
-    val androidxTestRunnerVersion = "1.5.2"
-    val espressoVersion = "3.5.1"
+    val androidxJunitVersion = "1.2.1"
+    val androidxTestRulesVersion = "1.6.1"
+    val androidxTestRunnerVersion = "1.6.2"
+    val espressoVersion = "3.6.1"
     val mockkVersion = "1.13.7"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
