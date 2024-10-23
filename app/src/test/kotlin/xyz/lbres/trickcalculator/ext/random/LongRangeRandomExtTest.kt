@@ -9,8 +9,8 @@ class LongRangeRandomExtTest {
     @Test
     fun testSeededRandom() {
         val range = 1L..1L
-        assertEquals(1, range.seededRandom())
-        assertEquals(1, range.seededRandom())
+        assertEquals(1L, range.seededRandom())
+        assertEquals(1L, range.seededRandom())
 
         runTestWithRetry {
             checkDistributedResults(1L..10L, 100000) { (it as LongRange).seededRandom() }
