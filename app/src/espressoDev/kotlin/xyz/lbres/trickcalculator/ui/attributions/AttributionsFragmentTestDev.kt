@@ -25,6 +25,7 @@ import xyz.lbres.trickcalculator.ui.attributions.constants.authorAttributions
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTestDev {
+
     private val recyclerId = R.id.attributionsRecycler
 
     @Rule

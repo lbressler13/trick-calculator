@@ -25,6 +25,7 @@ import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class SettingsFragmentTestDev {
+
     private val devToolsButton = onView(withId(R.id.devToolsButton))
     private val settingsDialogButton = onView(withId(R.id.openSettingsButton))
     private val closeButton = onView(withId(R.id.closeButton))
@@ -205,10 +206,7 @@ class SettingsFragmentTestDev {
     }
 
     @Test fun settingsSaved() = testSettingsSaved()
-
     @Test fun randomizeButtonSaved() = testRandomizeButtonSaved()
-
     @Test fun resetButtonSaved() = testResetButtonSaved()
-
     @Test fun standardFunctionButtonSaved() = testStandardFunctionButtonSaved()
 }

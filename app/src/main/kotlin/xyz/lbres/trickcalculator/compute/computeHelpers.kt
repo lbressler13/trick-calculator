@@ -17,10 +17,7 @@ import java.math.BigInteger
  * @param ops [List]: list of operators to check against
  * @return `true` is the element is a member of the ops list, `false` otherwise
  */
-fun isOperator(
-    element: String,
-    ops: StringList,
-): Boolean = element in ops
+fun isOperator(element: String, ops: StringList): Boolean = element in ops
 
 /**
  * Map element to its impact on the open paren count
@@ -50,10 +47,7 @@ fun getParenValue(element: String): Int {
  * @return [ExactFraction]: number which has been modified as described above, or `null` if [ef] was `null`
  * @throws ArithmeticException divide by zero if the modified denominator has value 0
  */
-fun applyOrderToEF(
-    numbersOrder: IntList?,
-    ef: ExactFraction?,
-): ExactFraction? {
+fun applyOrderToEF(numbersOrder: IntList?, ef: ExactFraction?): ExactFraction? {
     if (numbersOrder == null || ef == null) {
         return ef
     }
@@ -61,22 +55,20 @@ fun applyOrderToEF(
     val numString = ef.numerator.toString()
     val denomString = ef.denominator.toString()
 
-    val newNumString =
-        numString.map {
-            // keep negative sign in numerator
-            if (it == '-') {
-                '-'
-            } else {
-                val index = it.digitToInt()
-                numbersOrder[index].toString()
-            }
-        }.joinToString("")
-
-    val newDenomString =
-        denomString.map {
+    val newNumString = numString.map {
+        // keep negative sign in numerator
+        if (it == '-') {
+            '-'
+        } else {
             val index = it.digitToInt()
             numbersOrder[index].toString()
-        }.joinToString("")
+        }
+    }.joinToString("")
+
+    val newDenomString = denomString.map {
+        val index = it.digitToInt()
+        numbersOrder[index].toString()
+    }.joinToString("")
 
     val newNum = BigInteger(newNumString)
     val newDenom = BigInteger(newDenomString)
@@ -93,16 +85,12 @@ fun applyOrderToEF(
  * @param computeText [StringList]: list of string values to parse, consisting of operators, numbers, and parens
  * @return [Int] index of closing paren, or -1 if it cannot be found
  */
-fun getMatchingParenIndex(
-    openIndex: Int,
-    computeText: StringList,
-): Int {
+fun getMatchingParenIndex(openIndex: Int, computeText: StringList): Int {
     var openCount = 0
-    val onlyParens =
-        computeText.withIndex()
-            .toList()
-            .subList(openIndex, computeText.size)
-            .filter { it.value == "(" || it.value == ")" }
+    val onlyParens = computeText.withIndex()
+        .toList()
+        .subList(openIndex, computeText.size)
+        .filter { it.value == "(" || it.value == ")" }
 
     for (idxVal in onlyParens) {
         openCount += getParenValue(idxVal.value)

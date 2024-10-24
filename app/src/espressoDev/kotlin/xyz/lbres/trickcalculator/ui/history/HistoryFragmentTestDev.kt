@@ -24,6 +24,7 @@ import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
 
 @RunWith(AndroidJUnit4::class)
 class HistoryFragmentTestDev {
+
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
@@ -150,11 +151,7 @@ class HistoryFragmentTestDev {
      * @param randomness [Int]: history randomness setting
      * @param error [String]: error message for [AssertionError] if test fails. History is appended.
      */
-    private fun runSingleUpdateRandomnessTest(
-        history: TestHistory,
-        randomness: Int,
-        error: String,
-    ) {
+    private fun runSingleUpdateRandomnessTest(history: TestHistory, randomness: Int, error: String) {
         val historyButtonIds = listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
         val buttonId = historyButtonIds[randomness]
 

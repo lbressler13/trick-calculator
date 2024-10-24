@@ -54,10 +54,7 @@ fun scrollToHistoryItemAtPosition(position: Int): ViewAction {
  * @param action [ViewAction]: action to perform
  * @return [ViewAction]: action to perform given [action] on the ViewHolder at position [position]
  */
-fun actionOnHistoryItemAtPosition(
-    position: Int,
-    action: ViewAction,
-): ViewAction {
+fun actionOnHistoryItemAtPosition(position: Int, action: ViewAction): ViewAction {
     return RecyclerViewActions.actionOnItemAtPosition<HistoryItemViewHolder>(position, action)
 }
 
@@ -109,11 +106,7 @@ fun checkNoHistoryMessageNotPresented() {
  * @param getResult () -> [String]: function to get the result of the computation
  * @return [TestHI]: history item with the typed text and generated result
  */
-fun generateTestItem(
-    computeText: String,
-    previousResult: String = "",
-    getResult: () -> String,
-): TestHI {
+fun generateTestItem(computeText: String, previousResult: String = "", getResult: () -> String): TestHI {
     val maxDecimalLength = 5
 
     if (previousResult == "") {
@@ -131,12 +124,11 @@ fun generateTestItem(
         val mc = MathContext(maxDecimalLength, RoundingMode.HALF_UP)
         val fullDecimalString = decimal.round(mc).toEngineeringString()
         val decimalString = fullDecimalString.substringAfter('.')
-        val eString =
-            if (pieces.size == 3) {
-                "E${pieces[2]}"
-            } else {
-                ""
-            }
+        val eString = if (pieces.size == 3) {
+            "E${pieces[2]}"
+        } else {
+            ""
+        }
 
         result = "${pieces[0]}.$decimalString$eString"
     }

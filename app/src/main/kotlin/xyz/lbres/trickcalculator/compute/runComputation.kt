@@ -40,17 +40,16 @@ fun runComputation(
     val validatedNumOrder = simpleIf(validateNumbersOrder(numbersOrder), numbersOrder, null)
     val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
 
-    val computeText =
-        generateAndValidateComputeText(
-            modifiedInitialValue,
-            initialText,
-            operatorRounds.flatten(),
-            validatedNumOrder,
-            applyParens,
-            applyDecimals,
-            randomizeSigns,
-            shuffleComputation,
-        )
+    val computeText = generateAndValidateComputeText(
+        modifiedInitialValue,
+        initialText,
+        operatorRounds.flatten(),
+        validatedNumOrder,
+        applyParens,
+        applyDecimals,
+        randomizeSigns,
+        shuffleComputation,
+    )
 
     return try {
         parseText(computeText, operatorRounds, performSingleOp)

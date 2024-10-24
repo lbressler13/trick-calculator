@@ -5,10 +5,7 @@ import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.ext.random.seededShuffled
 import xyz.lbres.trickcalculator.utils.History
 
-fun generateRandomHistory(
-    history: History,
-    randomness: Int?,
-): History {
+fun generateRandomHistory(history: History, randomness: Int?): History {
     return when (randomness) {
         0 -> history // no randomness
         1 -> history.seededShuffled() // shuffled order
@@ -25,15 +22,14 @@ fun generateRandomHistory(
  * @return [History]: history where computations and values have been shuffled
  */
 private fun shuffleHistoryValues(history: History): History {
-    val shuffledHistory =
-        history.seededShuffled()
-            .zip(history.seededShuffled()) { item1: HistoryItem, item2: HistoryItem ->
-                if (item2.result != null) {
-                    HistoryItem(item1.computation, item2.result)
-                } else {
-                    HistoryItem(item1.computation, item2.error!!)
-                }
+    val shuffledHistory = history.seededShuffled()
+        .zip(history.seededShuffled()) { item1: HistoryItem, item2: HistoryItem ->
+            if (item2.result != null) {
+                HistoryItem(item1.computation, item2.result)
+            } else {
+                HistoryItem(item1.computation, item2.error!!)
             }
+        }
 
     return shuffledHistory
 }

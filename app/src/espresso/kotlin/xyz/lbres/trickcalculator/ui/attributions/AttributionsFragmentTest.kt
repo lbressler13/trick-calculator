@@ -151,10 +151,7 @@ class AttributionsFragmentTest {
 
         onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("here"))
         expectedLinkClicks++
-        assertLinkOpened(
-            "https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE",
-            expectedLinkClicks,
-        )
+        assertLinkOpened("https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE", expectedLinkClicks)
     }
 
     @Test

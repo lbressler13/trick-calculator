@@ -41,18 +41,17 @@ fun testSettingsMaintained() {
 
     settingsButtonSwitch.perform(click())
 
-    val settings =
-        Settings(
-            applyDecimals = false,
-            applyParens = false,
-            clearOnError = true,
-            historyRandomness = 3,
-            randomizeSigns = true,
-            showSettingsButton = true,
-            shuffleComputation = true,
-            shuffleNumbers = true,
-            shuffleOperators = false,
-        )
+    val settings = Settings(
+        applyDecimals = false,
+        applyParens = false,
+        clearOnError = true,
+        historyRandomness = 3,
+        randomizeSigns = true,
+        showSettingsButton = true,
+        shuffleComputation = true,
+        shuffleNumbers = true,
+        shuffleOperators = false,
+    )
 
     checkSettingsDisplayed(settings)
 

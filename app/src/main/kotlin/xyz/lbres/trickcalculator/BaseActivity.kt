@@ -10,6 +10,7 @@ import xyz.lbres.trickcalculator.databinding.ActivityBaseBinding
  * Activity that contains all functionality of app
  */
 class BaseActivity : AppCompatActivity() {
+
     lateinit var binding: ActivityBaseBinding
     private var isDarkMode = true
 
@@ -42,10 +43,7 @@ class BaseActivity : AppCompatActivity() {
      * @param actionResId [Int]: resource ID of action to run
      * @param args [Bundle?]: arguments to pass with action
      */
-    fun runNavAction(
-        actionResId: Int,
-        args: Bundle? = null,
-    ) {
+    fun runNavAction(actionResId: Int, args: Bundle? = null) {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController.navigate(actionResId, args)
     }

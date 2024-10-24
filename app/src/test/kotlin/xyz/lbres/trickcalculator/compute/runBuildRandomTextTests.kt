@@ -109,17 +109,16 @@ private fun runSingleRandomizationTest(
     val absValues = mapToAbsoluteValues(builtText)
 
     val buildText = {
-        val result =
-            generateAndValidateComputeText(
-                initialValue,
-                text,
-                ops,
-                numbersOrder,
-                applyParens,
-                applyDecimals,
-                randomizeSigns,
-                shuffleComputation,
-            )
+        val result = generateAndValidateComputeText(
+            initialValue,
+            text,
+            ops,
+            numbersOrder,
+            applyParens,
+            applyDecimals,
+            randomizeSigns,
+            shuffleComputation,
+        )
 
         assertEquals(typeMapping, mapToTypes(result))
 
@@ -136,13 +135,12 @@ private fun runSingleRandomizationTest(
     val distinctElements = text.toSet()
     val distinctResults: MutableSet<StringList> = mutableSetOf()
 
-    val minResults =
-        when {
-            distinctElements.size < 3 -> 1
-            distinctElements.size < 5 -> 2
-            distinctElements.size > 8 -> 4
-            else -> 3
-        }
+    val minResults = when {
+        distinctElements.size < 3 -> 1
+        distinctElements.size < 5 -> 2
+        distinctElements.size > 8 -> 4
+        else -> 3
+    }
 
     runTestWithRetry(tries = 20) {
         assertTrue {

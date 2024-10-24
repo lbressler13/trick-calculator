@@ -17,10 +17,7 @@ private class NotPresentedViewAssertion : ViewAssertion {
      *
      * @param view [View]?: view to check
      */
-    override fun check(
-        view: View?,
-        noViewFoundException: NoMatchingViewException?,
-    ) {
+    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
         if (view != null && view.isShown) {
             val viewText = HumanReadables.describe(view)
             throw AssertionError("View is present in hierarchy and visible: $viewText")

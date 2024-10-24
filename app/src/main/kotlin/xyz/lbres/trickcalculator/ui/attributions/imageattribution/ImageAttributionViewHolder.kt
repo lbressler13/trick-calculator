@@ -14,6 +14,7 @@ import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
  */
 class ImageAttributionViewHolder(private val binding: ViewHolderImageAttributionBinding) :
     RecyclerView.ViewHolder(binding.root) {
+
     // update UI to show information about current image
     fun update(image: ImageAttribution) {
         // initialize icon

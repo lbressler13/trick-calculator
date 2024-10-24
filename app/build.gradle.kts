@@ -149,12 +149,6 @@ android {
     }
 }
 
-// ktlint {
-//    disabledRules.set(
-//        setOf("filename", "spacing-between-declarations-with-annotations", "spacing-between-declarations-with-comments"),
-//    )
-// }
-
 dependencies {
     val kotlinVersion: String by rootProject.extra
 

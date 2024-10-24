@@ -61,9 +61,7 @@ class DeveloperToolsDialogTest {
     }
 
     @Test fun hideDevToolsOptionsDisplayed() = testHideDevToolsOptionsDisplayed()
-
     @Test fun interactWithHideDevToolsSpinner() = testInteractWithHideDevToolsSpinner()
-
     @Test fun hideDevTools() = testHideDevTools()
 
     @Test

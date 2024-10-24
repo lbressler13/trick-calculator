@@ -142,10 +142,7 @@ class SettingsFragmentTest {
      * @param id [IdRes]: view ID of the switch
      * @param initialChecked [Boolean]: if the switch is expected to be checked initially, before any interaction
      */
-    private fun testSwitch(
-        @IdRes id: Int,
-        initialChecked: Boolean,
-    ) {
+    private fun testSwitch(@IdRes id: Int, initialChecked: Boolean) {
         val switch = onView(withId(id))
         val inititalCheck = simpleIf(initialChecked, isChecked(), isNotChecked())
         val oppositeCheck = simpleIf(initialChecked, isNotChecked(), isChecked())
@@ -166,13 +163,12 @@ class SettingsFragmentTest {
      * @param checked [Int]: index of button expected to be checked
      */
     private fun checkHistoryChecked(checked: Int) {
-        val buttons =
-            listOf(
-                onView(withId(R.id.historyButton0)),
-                onView(withId(R.id.historyButton1)),
-                onView(withId(R.id.historyButton2)),
-                onView(withId(R.id.historyButton3)),
-            )
+        val buttons = listOf(
+            onView(withId(R.id.historyButton0)),
+            onView(withId(R.id.historyButton1)),
+            onView(withId(R.id.historyButton2)),
+            onView(withId(R.id.historyButton3)),
+        )
 
         for (button in buttons.withIndex()) {
             if (button.index == checked) {

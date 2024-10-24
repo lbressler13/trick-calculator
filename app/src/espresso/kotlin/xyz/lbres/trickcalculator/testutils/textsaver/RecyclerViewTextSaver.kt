@@ -22,10 +22,7 @@ class RecyclerViewTextSaver {
      * @param position [Int]: position of ViewHolder in RecyclerView
      * @param viewId [IdRes]: view ID for the view to save text for
      */
-    private class SaveTextViewAction(
-        val position: Int,
-        @IdRes val viewId: Int,
-    ) : ViewAction {
+    private class SaveTextViewAction(val position: Int, @IdRes val viewId: Int) : ViewAction {
         override fun getConstraints(): Matcher<View> = isDisplayed()
 
         override fun getDescription(): String = "saving text for view with ID $viewId at position $position"
@@ -36,10 +33,7 @@ class RecyclerViewTextSaver {
          * @param uiController [UiController]
          * @param viewHolder [View]: view for ViewHolder at specified position
          */
-        override fun perform(
-            uiController: UiController?,
-            viewHolder: View,
-        ) {
+        override fun perform(uiController: UiController?, viewHolder: View) {
             val textview = viewHolder.findViewById<TextView>(viewId)
             val text = textview?.text?.toString()
 
@@ -56,10 +50,7 @@ class RecyclerViewTextSaver {
      * @param position [Int]: position of ViewHolder in RecyclerView
      * @param viewId [IdRes]: view ID for the view to match text for
      */
-    private class PreviousTextViewMatcher(
-        val position: Int,
-        @IdRes val viewId: Int,
-    ) : TypeSafeMatcher<View>() {
+    private class PreviousTextViewMatcher(val position: Int, @IdRes val viewId: Int) : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description?) {
             description?.appendText("matching saved text at position $position")
         }
@@ -87,18 +78,13 @@ class RecyclerViewTextSaver {
      * @param position [Int]: position of ViewHolder in RecyclerView
      * @param viewId [IdRes]: view ID for the view to clear text for
      */
-    private class ClearSavedTextViewAction(
-        val position: Int,
-        @IdRes val viewId: Int,
-    ) : ViewAction {
+    private class ClearSavedTextViewAction(val position: Int, @IdRes val viewId: Int) : ViewAction {
         override fun getConstraints(): Matcher<View> = isDisplayed()
 
-        override fun getDescription(): String = "clearing saved text for view with ID $viewId at position $position"
+        override fun getDescription(): String =
+            "clearing saved text for view with ID $viewId at position $position"
 
-        override fun perform(
-            uiController: UiController?,
-            viewHolder: View,
-        ) {
+        override fun perform(uiController: UiController?, viewHolder: View) {
             val key = Pair(position, viewId)
             savedTextMapping.remove(key)
         }
@@ -117,10 +103,7 @@ class RecyclerViewTextSaver {
          * @param position [Int]: position of ViewHolder in RecyclerView
          * @param viewId [IdRes]: view ID for the view to clear text for
          */
-        fun clearSavedTextAtPosition(
-            position: Int,
-            @IdRes viewId: Int,
-        ): ViewAction = ClearSavedTextViewAction(position, viewId)
+        fun clearSavedTextAtPosition(position: Int, @IdRes viewId: Int): ViewAction = ClearSavedTextViewAction(position, viewId)
 
         /**
          /**
@@ -130,10 +113,7 @@ class RecyclerViewTextSaver {
          * @param viewId [IdRes]: view ID for the view to save text for
          */
          */
-        fun saveTextAtPosition(
-            position: Int,
-            @IdRes viewId: Int,
-        ): ViewAction = SaveTextViewAction(position, viewId)
+        fun saveTextAtPosition(position: Int, @IdRes viewId: Int): ViewAction = SaveTextViewAction(position, viewId)
 
         /**
          * [Matcher] to match text against the previously saved test
@@ -141,10 +121,7 @@ class RecyclerViewTextSaver {
          * @param position [Int]: position of ViewHolder in RecyclerView
          * @param viewId [IdRes]: view ID for the view to match text for
          */
-        fun withSavedTextAtPosition(
-            position: Int,
-            @IdRes viewId: Int,
-        ): Matcher<in View?> = PreviousTextViewMatcher(position, viewId)
+        fun withSavedTextAtPosition(position: Int, @IdRes viewId: Int): Matcher<in View?> = PreviousTextViewMatcher(position, viewId)
 
         /**
          * Clear all saved values in the text saver

@@ -23,10 +23,7 @@ class RetryRule(val maxRetries: Int = BuildConfig.ESPRESSO_RETRIES) : TestRule {
      * @param description [Description]: description of test
      * @return [Statement]
      */
-    override fun apply(
-        test: Statement,
-        description: Description,
-    ) = runTest(test, description)
+    override fun apply(test: Statement, description: Description) = runTest(test, description)
 
     /**
      * Get a statement to run and retry a test
@@ -35,10 +32,7 @@ class RetryRule(val maxRetries: Int = BuildConfig.ESPRESSO_RETRIES) : TestRule {
      * @param description [Description]: description of test
      * @return [Statement]
      */
-    private fun runTest(
-        test: Statement,
-        description: Description,
-    ): Statement {
+    private fun runTest(test: Statement, description: Description): Statement {
         return object : Statement() {
             /**
              * Run the test, and retry on failure based on [maxRetries]

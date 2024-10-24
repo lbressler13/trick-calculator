@@ -51,10 +51,7 @@ fun scrollToImagePosition(position: Int): ViewAction {
  * @param action [ViewAction]: action to perform
  * @return [ViewAction]: action to perform given [action] on the ViewHolder at position [position]
  */
-fun actionOnAuthorItemAtPosition(
-    position: Int,
-    action: ViewAction,
-): ViewAction {
+fun actionOnAuthorItemAtPosition(position: Int, action: ViewAction): ViewAction {
     return RecyclerViewActions.actionOnItemAtPosition<AuthorAttributionViewHolder>(position, action)
 }
 

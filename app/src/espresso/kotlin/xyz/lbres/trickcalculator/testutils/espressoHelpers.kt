@@ -21,10 +21,7 @@ import java.lang.AssertionError
  * @param url [String]: the expected url of last link
  * @param expectedLinkClicks [Int]: expected number of times that links have been clicked
  */
-fun assertLinkOpened(
-    url: String,
-    expectedLinkClicks: Int,
-) {
+fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
     val intents = getIntents().filter { it.action == Intent.ACTION_VIEW }
 
     if (intents.size != expectedLinkClicks) {

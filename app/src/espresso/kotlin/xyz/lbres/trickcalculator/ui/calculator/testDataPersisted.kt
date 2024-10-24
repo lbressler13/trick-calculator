@@ -67,22 +67,20 @@ fun testDataPersistedOnLeave() {
     var options = setOf(5, -3, 4, 0.25)
     checkComputedValuePersisted("1+4", options)
 
-    options =
-        setOf(
-            3, 22, 3.25, // + = +
-            1, -18, 0.75, // + = -
-            14, 6, 2.5, // + = x
-            4.4, -3.6, 1.6, // + = /
-        )
+    options = setOf(
+        3, 22, 3.25, // + = +
+        1, -18, 0.75, // + = -
+        14, 6, 2.5, // + = x
+        4.4, -3.6, 1.6, // + = /
+    )
     checkComputedValuePersisted("2+5-4", options)
 
-    options =
-        setOf(
-            10, -21.5, 11.875, -5, -21.875, -5.75, // + = +
-            10, 41.5, 8.125, 25, 41.875, 25.75, // + = -
-            8.875, -9, 1.125, 19, -12.75, 15.25, // + = *
-            -8, 12, 48, 28, 66, 94, // + = /
-        )
+    options = setOf(
+        10, -21.5, 11.875, -5, -21.875, -5.75, // + = +
+        10, 41.5, 8.125, 25, 41.875, 25.75, // + = -
+        8.875, -9, 1.125, 19, -12.75, 15.25, // + = *
+        -8, 12, 48, 28, 66, 94, // + = /
+    )
     checkComputedValuePersisted("10-.5x4/2+16", options)
 
     // error
@@ -102,10 +100,7 @@ fun testDataPersistedOnLeave() {
  * @param text [String]: computation to type
  * @param options [Set]<Number>: possible results of computation
  */
-private fun checkComputedValuePersisted(
-    text: String,
-    options: Set<Number>,
-) {
+private fun checkComputedValuePersisted(text: String, options: Set<Number>) {
     clearText()
     typeText(text)
     equals()
@@ -122,11 +117,7 @@ private fun checkComputedValuePersisted(
  * @param textAfterError [String]: value expected in main textview after error
  * @param errorMessage [String]: expected error message
  */
-private fun checkErrorPersisted(
-    text: String,
-    textAfterError: String,
-    errorMessage: String,
-) {
+private fun checkErrorPersisted(text: String, textAfterError: String, errorMessage: String) {
     clearText()
     typeText(text)
     equals()

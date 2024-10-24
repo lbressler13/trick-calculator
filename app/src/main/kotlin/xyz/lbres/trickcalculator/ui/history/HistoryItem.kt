@@ -7,23 +7,17 @@ import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 /**
  * Information about a single computation and its result
  */
-class HistoryItem private constructor(
-    computation: StringList,
-    val result: ExactFraction?,
-    val error: String?,
-    val previousResult: ExactFraction?,
-) {
+class HistoryItem private constructor(computation: StringList, val result: ExactFraction?, val error: String?, val previousResult: ExactFraction?) {
     val computation: StringList
 
     init {
-        this.computation =
-            if (result != null && computation.isNotEmpty() && ExactFraction.isEFString(computation[0])) {
-                // parse EF-formatted value into decimal string
-                val decimal = ExactFraction(computation[0]).toDecimalString(5)
-                computation.copyWithReplacement(0, decimal)
-            } else {
-                computation
-            }
+        this.computation = if (result != null && computation.isNotEmpty() && ExactFraction.isEFString(computation[0])) {
+            // parse EF-formatted value into decimal string
+            val decimal = ExactFraction(computation[0]).toDecimalString(5)
+            computation.copyWithReplacement(0, decimal)
+        } else {
+            computation
+        }
     }
 
     /**

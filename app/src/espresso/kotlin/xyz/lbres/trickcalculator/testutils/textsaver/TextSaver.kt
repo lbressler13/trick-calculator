@@ -22,11 +22,10 @@ class TextSaver {
      * [ViewAction] to save text from a TextView in a variable that can be accessed by the [PreviousTextViewMatcher]
      */
     private class SaveTextViewAction : ViewAction {
-        override fun getConstraints(): Matcher<View> =
-            allOf(
-                isAssignableFrom(TextView::class.java),
-                isDisplayed(),
-            )
+        override fun getConstraints(): Matcher<View> = allOf(
+            isAssignableFrom(TextView::class.java),
+            isDisplayed(),
+        )
 
         override fun getDescription(): String = "saving text for view"
 
@@ -36,10 +35,7 @@ class TextSaver {
          * @param uiController [UiController]
          * @param view [View]: TextView to read text from
          */
-        override fun perform(
-            uiController: UiController?,
-            view: View?,
-        ) {
+        override fun perform(uiController: UiController?, view: View?) {
             if (view != null) {
                 val text = (view as TextView).text?.toString()
                 val savedValues = savedTextMapping[view.id]
@@ -78,18 +74,14 @@ class TextSaver {
      * [ViewAction] to clear the saved text for a view
      */
     private class ClearSavedTextViewAction : ViewAction {
-        override fun getConstraints(): Matcher<View> =
-            allOf(
-                isAssignableFrom(TextView::class.java),
-                isDisplayed(),
-            )
+        override fun getConstraints(): Matcher<View> = allOf(
+            isAssignableFrom(TextView::class.java),
+            isDisplayed(),
+        )
 
         override fun getDescription(): String = "clearing saved text for view"
 
-        override fun perform(
-            uiController: UiController?,
-            view: View?,
-        ) {
+        override fun perform(uiController: UiController?, view: View?) {
             if (view?.id != null) {
                 savedTextMapping.remove(view.id)
             }
@@ -124,9 +116,7 @@ class TextSaver {
          * @param viewResId [Int]: resource ID of view to retrieve values for
          * @return [Int]: number of distinct values saved for the given view with the given ID
          */
-        fun countDistinctValues(
-            @IdRes viewResId: Int,
-        ): Int {
+        fun countDistinctValues(@IdRes viewResId: Int): Int {
             return savedTextMapping[viewResId]?.distinct()?.size ?: 0
         }
 

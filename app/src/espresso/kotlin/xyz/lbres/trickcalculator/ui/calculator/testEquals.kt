@@ -75,38 +75,35 @@ fun testEqualsWithSingleOperatorType() {
 }
 
 fun testEqualsWithMultipleOperatorTypes() {
-    var options =
-        setOf(
-            3, 13, 5.5, 21, // + = +
-            7, -3, 4.5, -11, // + = -
-            14, 6, 2.5, 80, // + = x
-            6.5, -1.5, 10, 0.3125, // + = /
-            29, 21, 100, 6.25, // + = ^
-        )
+    var options = setOf(
+        3, 13, 5.5, 21, // + = +
+        7, -3, 4.5, -11, // + = -
+        14, 6, 2.5, 80, // + = x
+        6.5, -1.5, 10, 0.3125, // + = /
+        29, 21, 100, 6.25, // + = ^
+    )
     checkMainTextMatchesMultiple(resultsOf(options), 5, 5, 20) {
         typeText("5^2-4") // exponent
         equals()
     }
 
-    options =
-        setOf(
-            3, 22, 3.25, // + = +
-            1, -18, 0.75, // + = -
-            14, 6, 2.5, // + = x
-            4.4, -3.6, 1.6, // + = /
-        )
+    options = setOf(
+        3, 22, 3.25, // + = +
+        1, -18, 0.75, // + = -
+        14, 6, 2.5, // + = x
+        4.4, -3.6, 1.6, // + = /
+    )
     checkMainTextMatchesMultiple(resultsOf(options), 4, 4, 20) {
         typeText("2+5-4")
         equals()
     }
 
-    options =
-        setOf(
-            10, -21.5, 11.875, -5, -21.875, -5.75, // + = +
-            10, 41.5, 8.125, 25, 41.875, 25.75, // + = -
-            8.875, -9, 1.125, 19, -12.75, 15.25, // + = *
-            -8, 12, 48, 28, 66, 94, // + = /
-        )
+    options = setOf(
+        10, -21.5, 11.875, -5, -21.875, -5.75, // + = +
+        10, 41.5, 8.125, 25, 41.875, 25.75, // + = -
+        8.875, -9, 1.125, 19, -12.75, 15.25, // + = *
+        -8, 12, 48, 28, 66, 94, // + = /
+    )
     checkMainTextMatchesMultiple(resultsOf(options), 3, 5, 10) {
         typeText("10-.5x4/2+16") // exponent
         equals()
@@ -123,13 +120,12 @@ fun testEqualsWithParentheses() {
     equals()
     mainText.check(matches(withText("[-5]")))
 
-    val options =
-        setOf(
-            3, 22, 3.25, // + = +
-            -7, -18, 0.75, // + = -
-            18, 2, 2.5, // + = x
-            0.22222222, 2, 0.1, // + = /
-        )
+    val options = setOf(
+        3, 22, 3.25, // + = +
+        -7, -18, 0.75, // + = -
+        18, 2, 2.5, // + = x
+        0.22222222, 2, 0.1, // + = /
+    )
     checkMainTextMatchesMultiple(resultsOf(options), 3, 5, 10) {
         typeText("2(5-4)") // exponent
         equals()

@@ -135,12 +135,7 @@ fun generateAndValidateComputeText(
  * @param initialText [StringList]: following compute text
  * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
-private fun addInitialValue(
-    data: ComputeData,
-    initialValue: ExactFraction,
-    initialText: StringList,
-    randomizeSigns: Boolean,
-) {
+private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, initialText: StringList, randomizeSigns: Boolean) {
     val value = simpleIf(randomizeSigns && random.nextBoolean(), -initialValue, initialValue)
 
     data.computeText.add(value.toEFString())
@@ -160,12 +155,7 @@ private fun addInitialValue(
  * @param applyDecimals [Boolean]: whether or not decimals should be applied
  * @param numbersOrder [IntList]?: list of numbers containing the values 0..9 in any other order, or `null`
  */
-private fun addDigit(
-    data: ComputeData,
-    element: String,
-    applyDecimals: Boolean,
-    numbersOrder: IntList?,
-) {
+private fun addDigit(data: ComputeData, element: String, applyDecimals: Boolean, numbersOrder: IntList?) {
     when {
         element == NEG && data.currentNumber.isNotEmpty() -> throw syntaxError
         element == NEG -> data.currentNumber += element
@@ -191,10 +181,7 @@ private fun addDigit(
  * @param element [String]: value to map
  * @param numbersOrder [IntList]?: list of numbers containing the values 0..9 in any other order, or `null`
  */
-private fun digitFromNumbersOrder(
-    element: String,
-    numbersOrder: IntList?,
-): String {
+private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): String {
     if (numbersOrder == null) {
         return element
     }
@@ -213,11 +200,7 @@ private fun digitFromNumbersOrder(
  * @param element [String]: element to add
  * @param applyParens [Boolean]: whether or not parens should be applied
  */
-private fun addNonNumber(
-    data: ComputeData,
-    element: String,
-    applyParens: Boolean,
-) {
+private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolean) {
     // add times between preceding num and paren, or between adjacent parens
     if ((data.lastType == NUMBER && data.currentType == LPAREN) || (data.lastType == RPAREN && data.currentType == LPAREN)) {
         data.computeText.add("x")
@@ -237,10 +220,7 @@ private fun addNonNumber(
  * @param data [ComputeData]: data about current state of computation
  * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
-private fun addCurrentNumber(
-    data: ComputeData,
-    randomizeSigns: Boolean,
-) {
+private fun addCurrentNumber(data: ComputeData, randomizeSigns: Boolean) {
     if (data.currentNumber == NEG || (data.currentNumber.isNotEmpty() && data.lastDecimal)) {
         throw syntaxError
     }
@@ -251,12 +231,11 @@ private fun addCurrentNumber(
             data.computeText.add("x")
         }
 
-        val number =
-            if (randomizeSigns && random.nextBoolean()) {
-                reverseSign(data.currentNumber)
-            } else {
-                data.currentNumber
-            }
+        val number = if (randomizeSigns && random.nextBoolean()) {
+            reverseSign(data.currentNumber)
+        } else {
+            data.currentNumber
+        }
 
         data.computeText.add(number)
         data.currentNumber = ""
@@ -283,10 +262,7 @@ private fun reverseSign(number: String): String {
  * @param ops [StringList]: list of valid operators
  * @return [String]?: the element's type, or `null` if it matches no valid type
  */
-private fun getTypeOf(
-    element: String,
-    ops: StringList,
-): String? {
+private fun getTypeOf(element: String, ops: StringList): String? {
     return when {
         isOperator(element, ops) -> OPERATOR
         element == "(" -> LPAREN
@@ -319,21 +295,17 @@ private fun nonNumberSyntaxError(data: ComputeData): Boolean {
  * @return [StringList]: a list containing the same elements as the computeText, with the orders of numbers and operators shuffled
  */
 // public for testing purposes
-fun getShuffledComputation(
-    computeText: StringList,
-    ops: StringList,
-): StringList {
+fun getShuffledComputation(computeText: StringList, ops: StringList): StringList {
     val numbers = computeText.filter { isNumber(it) }.toMutableList()
     val operators = computeText.filter { isOperator(it, ops) }.toMutableList()
 
-    val newText =
-        computeText.map {
-            when {
-                isOperator(it, ops) -> operators.popRandom()!!
-                isNumber(it) -> numbers.popRandom()!!
-                else -> it
-            }
+    val newText = computeText.map {
+        when {
+            isOperator(it, ops) -> operators.popRandom()!!
+            isNumber(it) -> numbers.popRandom()!!
+            else -> it
         }
+    }
 
     return newText
 }

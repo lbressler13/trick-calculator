@@ -12,11 +12,7 @@ import xyz.lbres.trickcalculator.R
  * @param breakCondition () -> [Boolean]: condition to break out of loop
  * @param function () -> [Unit]: code to execute repeatedly
  */
-fun repeatUntil(
-    maxIterations: Int,
-    breakCondition: () -> Boolean,
-    function: () -> Unit,
-) {
+fun repeatUntil(maxIterations: Int, breakCondition: () -> Boolean, function: () -> Unit) {
     var repeats = 0
     while (repeats < maxIterations && !breakCondition()) {
         function()
@@ -31,28 +27,27 @@ fun repeatUntil(
  */
 fun typeText(text: String) {
     for (c in text) {
-        val buttonId =
-            when (c) {
-                '1' -> R.id.oneButton
-                '2' -> R.id.twoButton
-                '3' -> R.id.threeButton
-                '4' -> R.id.fourButton
-                '5' -> R.id.fiveButton
-                '6' -> R.id.sixButton
-                '7' -> R.id.sevenButton
-                '8' -> R.id.eightButton
-                '9' -> R.id.nineButton
-                '0' -> R.id.zeroButton
-                '+' -> R.id.plusButton
-                '-' -> R.id.minusButton
-                'x' -> R.id.timesButton
-                '/' -> R.id.divideButton
-                '^' -> R.id.expButton
-                '(' -> R.id.lparenButton
-                ')' -> R.id.rparenButton
-                '.' -> R.id.decimalButton
-                else -> null
-            }
+        val buttonId = when (c) {
+            '1' -> R.id.oneButton
+            '2' -> R.id.twoButton
+            '3' -> R.id.threeButton
+            '4' -> R.id.fourButton
+            '5' -> R.id.fiveButton
+            '6' -> R.id.sixButton
+            '7' -> R.id.sevenButton
+            '8' -> R.id.eightButton
+            '9' -> R.id.nineButton
+            '0' -> R.id.zeroButton
+            '+' -> R.id.plusButton
+            '-' -> R.id.minusButton
+            'x' -> R.id.timesButton
+            '/' -> R.id.divideButton
+            '^' -> R.id.expButton
+            '(' -> R.id.lparenButton
+            ')' -> R.id.rparenButton
+            '.' -> R.id.decimalButton
+            else -> null
+        }
 
         if (buttonId != null) {
             onView(withId(buttonId)).perform(click())

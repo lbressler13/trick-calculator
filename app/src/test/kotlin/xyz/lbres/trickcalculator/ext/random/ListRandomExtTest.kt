@@ -35,15 +35,14 @@ class ListRandomExtTest {
         val intList = listOf(7, 5, 6)
         val stringList = listOf("6", "7", "5")
 
-        val intResultOptions =
-            setOf(
-                listOf(5, 6, 7),
-                listOf(5, 7, 6),
-                listOf(6, 5, 7),
-                listOf(6, 7, 5),
-                listOf(7, 5, 6),
-                listOf(7, 6, 5),
-            )
+        val intResultOptions = setOf(
+            listOf(5, 6, 7),
+            listOf(5, 7, 6),
+            listOf(6, 5, 7),
+            listOf(6, 7, 5),
+            listOf(7, 5, 6),
+            listOf(7, 6, 5),
+        )
         val stringResultOptions = intResultOptions.map { it.map(Int::toString) }
 
         runTestWithRetry {

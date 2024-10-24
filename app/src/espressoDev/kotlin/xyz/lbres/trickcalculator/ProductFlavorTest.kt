@@ -15,6 +15,7 @@ import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 
 @RunWith(AndroidJUnit4::class)
 class ProductFlavorTest {
+
     @Rule
     @JvmField
     val rule = ActivityScenarioRule(BaseActivity::class.java)

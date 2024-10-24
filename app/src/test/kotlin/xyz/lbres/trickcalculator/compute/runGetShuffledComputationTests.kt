@@ -58,21 +58,17 @@ fun runGetShuffledComputationTests() {
     runSingleGetShuffledComputationTest(text, partialOps)
 }
 
-private fun runSingleGetShuffledComputationTest(
-    text: StringList,
-    ops: StringList = fullOps,
-) {
+private fun runSingleGetShuffledComputationTest(text: StringList, ops: StringList = fullOps) {
     val opsType = "operator"
     val numType = "number"
 
-    val mapping =
-        text.map {
-            when {
-                isOperator(it, ops) -> opsType
-                isNumber(it) -> numType
-                else -> it
-            }
+    val mapping = text.map {
+        when {
+            isOperator(it, ops) -> opsType
+            isNumber(it) -> numType
+            else -> it
         }
+    }
 
     val expectedSorted = text.sorted()
 
@@ -97,13 +93,12 @@ private fun runSingleGetShuffledComputationTest(
     val distinctElements = text.toSet()
     val distinctResults: MutableSet<StringList> = mutableSetOf()
 
-    val minResults =
-        when {
-            distinctElements.size < 3 -> 1
-            distinctElements.size < 5 -> 2
-            distinctElements.size > 8 -> 4
-            else -> 3
-        }
+    val minResults = when {
+        distinctElements.size < 3 -> 1
+        distinctElements.size < 5 -> 2
+        distinctElements.size > 8 -> 4
+        else -> 3
+    }
 
     runTestWithRetry(tries = 20) {
         assertTrue {

@@ -36,11 +36,7 @@ class ComputationViewModel : ViewModel() {
      * @param clearOnError [Boolean]: if compute data should be cleared in event of an error. Defaults to `false`
      * @return [HistoryItem]?: new history item based on previous values and new result/error
      */
-    fun setResult(
-        newError: String?,
-        newComputed: ExactFraction?,
-        clearOnError: Boolean = false,
-    ): HistoryItem? {
+    fun setResult(newError: String?, newComputed: ExactFraction?, clearOnError: Boolean = false): HistoryItem? {
         val lastComputeText = computeText
         val lastComputed = computedValue
         error = newError
@@ -64,10 +60,7 @@ class ComputationViewModel : ViewModel() {
      *
      * @return [HistoryItem]?: the generated item
      */
-    private fun generateHistoryItem(
-        lastComputed: ExactFraction?,
-        lastComputeText: StringList,
-    ): HistoryItem? {
+    private fun generateHistoryItem(lastComputed: ExactFraction?, lastComputeText: StringList): HistoryItem? {
         var updatedComputeText = lastComputeText
 
         // add computed text to start of computation

@@ -46,9 +46,6 @@ private class MatchesAtPositionViewMatcher(private val position: Int, private va
  * @param position [Int]: position of ViewHolder in recycler
  * @param vhMatcher [Int]: matcher for ViewHolder
  */
-fun matchesAtPosition(
-    position: Int,
-    vhMatcher: Matcher<View?>,
-): Matcher<View> {
+fun matchesAtPosition(position: Int, vhMatcher: Matcher<View?>): Matcher<View> {
     return MatchesAtPositionViewMatcher(position, vhMatcher)
 }

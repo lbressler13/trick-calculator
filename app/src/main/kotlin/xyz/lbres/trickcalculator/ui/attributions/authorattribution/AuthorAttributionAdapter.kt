@@ -15,20 +15,15 @@ import xyz.lbres.trickcalculator.ui.attributions.AuthorAttribution
  */
 class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel) :
     RecyclerView.Adapter<AuthorAttributionViewHolder>() {
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int,
-    ): AuthorAttributionViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorAttributionViewHolder {
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
 
         val binding = ViewHolderAuthorAttributionBinding.inflate(layoutInflater, parent, false)
         return AuthorAttributionViewHolder(binding)
     }
 
-    override fun onBindViewHolder(
-        holder: AuthorAttributionViewHolder,
-        position: Int,
-    ) {
+    override fun onBindViewHolder(holder: AuthorAttributionViewHolder, position: Int) {
         val author = authors[position]
         val setShowingIcons: (Boolean) -> Unit = { viewModel.attributionsExpanded[position] = it }
         holder.update(author, viewModel.attributionsExpanded[position], setShowingIcons)

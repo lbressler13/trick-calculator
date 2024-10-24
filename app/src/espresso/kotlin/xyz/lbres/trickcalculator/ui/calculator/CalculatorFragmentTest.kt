@@ -82,22 +82,15 @@ class CalculatorFragmentTest {
 
     // keypad except equals
     @Test fun numberAndOperatorButtons() = testNumberAndOperatorButtons()
-
     @Test fun clearButton() = testClearButton()
-
     @Test fun backspaceButton() = testBackspaceButton()
 
     // equals
     @Test fun equalsWithNoOperators() = testEqualsWithNoOperators()
-
     @Test fun equalsWithSingleOperatorType() = testEqualsWithSingleOperatorType()
-
     @Test fun equalsWithMultipleOperatorTypes() = testEqualsWithMultipleOperatorTypes()
-
     @Test fun equalsWithParentheses() = testEqualsWithParentheses()
-
     @Test fun equalsWithPreviouslyComputed() = testEqualsWithPreviouslyComputed()
-
     @Test fun equalsWithError() = testEqualsWithError()
 
     // settings
