@@ -20,40 +20,80 @@ class ViewExtTest {
 
     @Test
     fun visible() {
-        val view = View(getContextEspresso(activityRule))
+        var view = View(getContextEspresso(activityRule))
         view.visibility = View.INVISIBLE
+        view.visible()
+        assertEquals(View.VISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.GONE
+        view.visible()
+        assertEquals(View.VISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.VISIBLE
         view.visible()
         assertEquals(View.VISIBLE, view.visibility)
     }
 
     @Test
     fun invisible() {
-        val view = View(getContextEspresso(activityRule))
+        var view = View(getContextEspresso(activityRule))
         view.visibility = View.VISIBLE
+        view.invisible()
+        assertEquals(View.INVISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.GONE
+        view.invisible()
+        assertEquals(View.INVISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.INVISIBLE
         view.invisible()
         assertEquals(View.INVISIBLE, view.visibility)
     }
 
     @Test
     fun gone() {
-        val view = View(getContextEspresso(activityRule))
+        var view = View(getContextEspresso(activityRule))
         view.visibility = View.VISIBLE
+        view.gone()
+        assertEquals(View.GONE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.INVISIBLE
+        view.gone()
+        assertEquals(View.GONE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.GONE
         view.gone()
         assertEquals(View.GONE, view.visibility)
     }
 
     @Test
     fun enable() {
-        val view = View(getContextEspresso(activityRule))
+        var view = View(getContextEspresso(activityRule))
         view.isEnabled = false
+        view.enable()
+        assertTrue(view.isEnabled)
+
+        view = View(getContextEspresso(activityRule))
+        view.isEnabled = true
         view.enable()
         assertTrue(view.isEnabled)
     }
 
     @Test
     fun disable() {
-        val view = View(getContextEspresso(activityRule))
+        var view = View(getContextEspresso(activityRule))
         view.isEnabled = true
+        view.disable()
+        assertFalse(view.isEnabled)
+
+        view = View(getContextEspresso(activityRule))
+        view.isEnabled = false
         view.disable()
         assertFalse(view.isEnabled)
     }

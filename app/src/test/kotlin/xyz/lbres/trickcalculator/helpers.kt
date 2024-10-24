@@ -68,7 +68,7 @@ fun runTestWithRetry(tries: Int = 2, retryableTest: () -> Unit) {
             retryableTest()
             return
         } catch (_: AssertionError) {
-            println("Test failed. Retrying...")
+            println("Test failed on try ${it + 1}. Retrying...")
         }
     }
 
