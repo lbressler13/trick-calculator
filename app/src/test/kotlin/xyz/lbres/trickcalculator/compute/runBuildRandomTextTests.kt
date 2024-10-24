@@ -3,10 +3,11 @@ package xyz.lbres.trickcalculator.compute
 import xyz.lbres.exactnumbers.exactfraction.ExactFraction
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
-import xyz.lbres.trickcalculator.runRandomTest
+import xyz.lbres.trickcalculator.runTestWithRetry
 import xyz.lbres.trickcalculator.splitString
 import xyz.lbres.trickcalculator.utils.isNumber
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 private val ops = listOf("+", "-", "x", "/")
 
@@ -141,13 +142,16 @@ private fun runSingleRandomizationTest(
         else -> 3
     }
 
-    runRandomTest(buildText) { result ->
-        distinctResults.add(result)
-        val hasPositive = result.any { isNumber(it) && !it.startsWith('-') }
-        val hasNegative = result.any { isNumber(it) && it.startsWith('-') }
-        val validSigns = !randomizeSigns || (hasPositive && hasNegative)
+    runTestWithRetry(tries = 20) {
+        assertTrue {
+            val result = buildText()
+            distinctResults.add(result)
+            val hasPositive = result.any { isNumber(it) && !it.startsWith('-') }
+            val hasNegative = result.any { isNumber(it) && it.startsWith('-') }
+            val validSigns = !randomizeSigns || (hasPositive && hasNegative)
 
-        validSigns && result != builtText && distinctResults.size >= minResults
+            validSigns && result != builtText && distinctResults.size >= minResults
+        }
     }
 }
 

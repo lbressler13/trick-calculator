@@ -9,8 +9,8 @@ import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import xyz.lbres.kotlinutils.random.ext.nextFromWeightedList
 import xyz.lbres.trickcalculator.SharedValues.random
 import xyz.lbres.trickcalculator.compute.isOperator
+import xyz.lbres.trickcalculator.ext.random.seededRandom
 import xyz.lbres.trickcalculator.utils.isNumber
-import xyz.lbres.trickcalculator.utils.seededRandom
 
 private typealias MStringList = MutableList<String>
 

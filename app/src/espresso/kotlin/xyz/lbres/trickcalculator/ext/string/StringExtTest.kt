@@ -1,4 +1,4 @@
-package xyz.lbres.trickcalculator.utils
+package xyz.lbres.trickcalculator.ext.string
 
 import android.text.style.UnderlineSpan
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -8,23 +8,18 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
-import xyz.lbres.trickcalculator.testutils.rules.RetryRule
 
 @RunWith(AndroidJUnit4::class)
-class UiUtilsTest {
+class StringExtTest {
     @Rule
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
-    @Rule
-    @JvmField
-    val retryRule = RetryRule(maxRetries = 0)
-
     @Test
-    fun createUnderlineText() {
+    fun underlined() {
         // must be tested in espresso tests to avoid compile errors from not mocking SpannableString
         val string = "Hello world"
-        val underlined = createUnderlineText(string)
+        val underlined = string.underlined()
         val spans = underlined.getSpans(0, string.length, UnderlineSpan::class.java)
         assertEquals(1, spans.size)
 

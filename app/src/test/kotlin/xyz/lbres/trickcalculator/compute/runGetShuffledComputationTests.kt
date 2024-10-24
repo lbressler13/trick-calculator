@@ -1,9 +1,10 @@
 package xyz.lbres.trickcalculator.compute
 
 import xyz.lbres.kotlinutils.list.StringList
-import xyz.lbres.trickcalculator.runRandomTest
+import xyz.lbres.trickcalculator.runTestWithRetry
 import xyz.lbres.trickcalculator.utils.isNumber
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 private val fullOps = listOf("+", "-", "x", "/", "^")
 private const val iterations = 20
@@ -99,8 +100,12 @@ private fun runSingleGetShuffledComputationTest(text: StringList, ops: StringLis
         else -> 3
     }
 
-    runRandomTest(shuffleList) { result ->
-        distinctResults.add(result)
-        result != text && distinctResults.size >= minResults
+    runTestWithRetry(tries = 20) {
+        assertTrue {
+            val result = shuffleList()
+            distinctResults.add(result)
+
+            result != text && distinctResults.size >= minResults
+        }
     }
 }

@@ -1,20 +1,16 @@
 package xyz.lbres.trickcalculator.ext.view
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.isNotEnabled
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import android.view.View
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.trickcalculator.BaseActivity
-import xyz.lbres.trickcalculator.R
-import xyz.lbres.trickcalculator.testutils.rules.RetryRule
-import xyz.lbres.trickcalculator.testutils.viewassertions.isNotPresented
+import xyz.lbres.trickcalculator.testutils.getContextEspresso
 
 @RunWith(AndroidJUnit4::class)
 class ViewExtTest {
@@ -22,48 +18,83 @@ class ViewExtTest {
     @JvmField
     val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
-    @Rule
-    @JvmField
-    val retryRule = RetryRule(maxRetries = 0)
-
     @Test
     fun visible() {
-        onView(withId(R.id.settingsButton))
-            .check(isNotPresented())
-            .perform(callVisible())
-            .check(matches(isDisplayed()))
+        var view = View(getContextEspresso(activityRule))
+        view.visibility = View.INVISIBLE
+        view.visible()
+        assertEquals(View.VISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.GONE
+        view.visible()
+        assertEquals(View.VISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.VISIBLE
+        view.visible()
+        assertEquals(View.VISIBLE, view.visibility)
     }
 
     @Test
     fun invisible() {
-        onView(withId(R.id.infoButton))
-            .check(matches(isDisplayed()))
-            .perform(callInvisible())
-            .check(isNotPresented())
+        var view = View(getContextEspresso(activityRule))
+        view.visibility = View.VISIBLE
+        view.invisible()
+        assertEquals(View.INVISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.GONE
+        view.invisible()
+        assertEquals(View.INVISIBLE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.INVISIBLE
+        view.invisible()
+        assertEquals(View.INVISIBLE, view.visibility)
     }
 
     @Test
     fun gone() {
-        onView(withId(R.id.infoButton))
-            .check(matches(isDisplayed()))
-            .perform(callGone())
-            .check(isNotPresented())
+        var view = View(getContextEspresso(activityRule))
+        view.visibility = View.VISIBLE
+        view.gone()
+        assertEquals(View.GONE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.INVISIBLE
+        view.gone()
+        assertEquals(View.GONE, view.visibility)
+
+        view = View(getContextEspresso(activityRule))
+        view.visibility = View.GONE
+        view.gone()
+        assertEquals(View.GONE, view.visibility)
     }
 
     @Test
     fun enable() {
-        onView(withId(R.id.infoButton))
-            .perform(callDisable())
-            .check(matches(isNotEnabled()))
-            .perform(callEnable())
-            .check(matches(isEnabled()))
+        var view = View(getContextEspresso(activityRule))
+        view.isEnabled = false
+        view.enable()
+        assertTrue(view.isEnabled)
+
+        view = View(getContextEspresso(activityRule))
+        view.isEnabled = true
+        view.enable()
+        assertTrue(view.isEnabled)
     }
 
     @Test
     fun disable() {
-        onView(withId(R.id.infoButton))
-            .check(matches(isEnabled()))
-            .perform(callDisable())
-            .check(matches(isNotEnabled()))
+        var view = View(getContextEspresso(activityRule))
+        view.isEnabled = true
+        view.disable()
+        assertFalse(view.isEnabled)
+
+        view = View(getContextEspresso(activityRule))
+        view.isEnabled = false
+        view.disable()
+        assertFalse(view.isEnabled)
     }
 }

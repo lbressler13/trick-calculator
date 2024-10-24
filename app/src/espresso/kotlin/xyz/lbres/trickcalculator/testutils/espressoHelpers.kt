@@ -1,15 +1,18 @@
 package xyz.lbres.trickcalculator.testutils
 
+import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.test.espresso.intent.Intents.getIntents
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
+import xyz.lbres.trickcalculator.BaseActivity
 import java.lang.AssertionError
 
 /**
@@ -55,3 +58,18 @@ fun withAnyText(options: Collection<String>): Matcher<View> {
  * @param text [String]: expected text
  */
 fun isDisplayedWithText(text: String): Matcher<View> = allOf(isDisplayed(), withText(text))
+
+/**
+ * Get the current activity context
+ *
+ * @param activityRule [ActivityScenarioRule]: test rule with the activity
+ * @return [Context] context object
+ */
+fun getContextEspresso(activityRule: ActivityScenarioRule<BaseActivity>): Context {
+    var context: Context? = null
+    activityRule.scenario.onActivity {
+        context = it.supportFragmentManager.fragments[0].requireContext()
+    }
+
+    return context!!
+}
