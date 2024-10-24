@@ -55,10 +55,15 @@ class HistoryFragmentTest {
     }
 
     @Test fun randomness0() = testRandomness0()
+
     @Test fun randomness1() = testRandomness1()
+
     @Test fun randomness1Reshuffled() = testRandomness1Reshuffled()
+
     @Test fun randomness2() = testRandomness2()
+
     @Test fun randomness2Reshuffled() = testRandomness2Reshuffled()
+
     // @Test fun randomness3() {} // TODO
     @Test fun longHistory() = testLongHistory()
 
@@ -94,13 +99,18 @@ class HistoryFragmentTest {
     }
 
     @Test fun shuffleOperators() = testShuffleOperators()
+
     @Test fun shuffleNumbers() = testShuffleNumbers()
+
     @Test fun shuffleComputation() = testShuffleComputation()
 
     @Test fun noApplyDecimals() = testNoApplyDecimals()
+
     @Test fun noApplyParens() = testNoApplyParens()
 
     @Test fun multipleNoApply() = testMultipleNoApply()
+
     @Test fun multipleShuffle() = testMultipleShuffle()
+
     @Test fun multipleSettingsTypes() = testMultipleSettingsTypes()
 }

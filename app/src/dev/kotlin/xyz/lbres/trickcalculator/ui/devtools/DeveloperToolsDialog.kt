@@ -63,7 +63,7 @@ class DeveloperToolsDialog : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -84,7 +84,7 @@ class DeveloperToolsDialog : DialogFragment() {
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.dev_tools_time_options,
-            R.layout.component_spinner_item_selected
+            R.layout.component_spinner_item_selected,
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(R.layout.component_spinner_item_dropdown)

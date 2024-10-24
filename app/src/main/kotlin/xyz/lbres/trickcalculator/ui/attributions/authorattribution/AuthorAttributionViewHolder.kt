@@ -23,7 +23,6 @@ import xyz.lbres.trickcalculator.ui.attributions.imageattribution.ImageAttributi
  */
 class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributionBinding) :
     RecyclerView.ViewHolder(binding.root) {
-
     // constant icons and content descriptions
     private val expandIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_right)
     private val collapseIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_down)
@@ -34,7 +33,7 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
     fun update(
         author: AuthorAttribution,
         initialShowingIcons: Boolean,
-        setShowingIcons: (Boolean) -> Unit
+        setShowingIcons: (Boolean) -> Unit,
     ) {
         initializeAttributionText(author)
         initializeAdapter(author.images)

@@ -24,7 +24,11 @@ private val itemsRecycler = onView(withId(R.id.itemsRecycler))
  * @param randomness [Int]: history randomness setting
  * @param withRefresh [Boolean]: if UI should be refreshed instead of closing/re-opening the fragment. Defaults to `false`
  */
-fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefresh: Boolean = false) {
+fun runSingleNotReshuffledCheck(
+    history: TestHistory,
+    randomness: Int,
+    withRefresh: Boolean = false,
+) {
     val buttonId = historyButtonIds[randomness]
 
     openSettingsFromDialog()
@@ -37,7 +41,7 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefre
             scrollToHistoryItemAtPosition(position),
             actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText)),
             actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.resultText)),
-            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.errorText))
+            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.errorText)),
         )
     }
 
@@ -51,11 +55,12 @@ fun runSingleNotReshuffledCheck(history: TestHistory, randomness: Int, withRefre
 
     // match saved values
     for (position in 0 until history.size) {
-        val savedValuesMatcher = allOf(
-            withSavedTextAtPosition(position, R.id.computeText),
-            withSavedTextAtPosition(position, R.id.resultText),
-            withSavedTextAtPosition(position, R.id.errorText)
-        )
+        val savedValuesMatcher =
+            allOf(
+                withSavedTextAtPosition(position, R.id.computeText),
+                withSavedTextAtPosition(position, R.id.resultText),
+                withSavedTextAtPosition(position, R.id.errorText),
+            )
 
         itemsRecycler.perform(scrollToHistoryItemAtPosition(position))
         itemsRecycler.check(matches(matchesAtPosition(position, savedValuesMatcher)))

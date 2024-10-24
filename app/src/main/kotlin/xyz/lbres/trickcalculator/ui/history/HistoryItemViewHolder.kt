@@ -13,7 +13,6 @@ import xyz.lbres.trickcalculator.utils.isNumber
  */
 class HistoryItemViewHolder(private val binding: ViewHolderHistoryItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
-
     // update UI to show information about current history item
     fun update(item: HistoryItem) {
         var computeText = item.computation

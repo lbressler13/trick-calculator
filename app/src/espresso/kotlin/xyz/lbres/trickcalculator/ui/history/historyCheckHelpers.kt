@@ -14,16 +14,18 @@ import xyz.lbres.trickcalculator.testutils.repeatUntil
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
 
-private val randomnessErrors = mapOf(
-    0 to "History items should be ordered in history randomness 0.",
-    1 to "History items should be shuffled in history randomness 1.",
-    2 to "History items and pairs should be shuffled in history randomness 2."
-)
+private val randomnessErrors =
+    mapOf(
+        0 to "History items should be ordered in history randomness 0.",
+        1 to "History items should be shuffled in history randomness 1.",
+        2 to "History items and pairs should be shuffled in history randomness 2.",
+    )
 
-private val reshuffledErrors = mapOf(
-    1 to "Items not re-shuffled for history randomness 1.",
-    2 to "Items not re-shuffled for history randomness 2."
-)
+private val reshuffledErrors =
+    mapOf(
+        1 to "Items not re-shuffled for history randomness 1.",
+        2 to "Items not re-shuffled for history randomness 2.",
+    )
 
 private val itemsRecycler = onView(withId(R.id.itemsRecycler))
 
@@ -34,17 +36,21 @@ private val itemsRecycler = onView(withId(R.id.itemsRecycler))
  * @param history [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
  */
-fun checkRandomness(history: TestHistory, randomness: Int) {
+fun checkRandomness(
+    history: TestHistory,
+    randomness: Int,
+) {
     setHistoryRandomness(randomness)
 
     openHistoryFragment()
     history.checkAllDisplayed(randomness)
     closeFragment()
 
-    val correctOrder = when (randomness) {
-        0 -> checkOrdered(history)
-        else -> checkShuffledCorrectly(history, randomness)
-    }
+    val correctOrder =
+        when (randomness) {
+            0 -> checkOrdered(history)
+            else -> checkShuffledCorrectly(history, randomness)
+        }
 
     if (history.size > 1 && !correctOrder) {
         val errorMessage = randomnessErrors[randomness] ?: "Items in unexpected order."
@@ -71,7 +77,10 @@ private fun checkOrdered(history: TestHistory): Boolean {
  * @param randomness [Int]: history randomness setting
  * @return [Boolean]: `true` if elements are shuffled even once, `false` otherwise
  */
-private fun checkShuffledCorrectly(history: TestHistory, randomness: Int): Boolean {
+private fun checkShuffledCorrectly(
+    history: TestHistory,
+    randomness: Int,
+): Boolean {
     if (history.size <= 1) {
         return true
     }
@@ -93,14 +102,17 @@ private fun checkShuffledCorrectly(history: TestHistory, randomness: Int): Boole
  * @param history [TestHistory]: list of items in history
  * @param randomness [Int]: history randomness setting
  */
-fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
+fun runSingleReshuffledCheck(
+    history: TestHistory,
+    randomness: Int,
+) {
     checkRandomness(history, randomness)
     openHistoryFragment()
 
     // save all current values
     for (position in 0 until history.size) {
         itemsRecycler.perform(
-            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText))
+            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText)),
         )
     }
 
@@ -133,7 +145,8 @@ private fun checkReshuffledCorrectly(historySize: Int): Boolean {
                 val matcher = allOf(not(withSavedTextAtPosition(position, R.id.computeText)))
                 itemsRecycler.check(matches(matchesAtPosition(position, matcher)))
                 reshuffled = true
-            } catch (_: Throwable) {}
+            } catch (_: Throwable) {
+            }
         }
 
         closeFragment()

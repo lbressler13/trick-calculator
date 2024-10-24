@@ -12,6 +12,7 @@ import kotlin.test.assertTrue
 @Suppress("KotlinConstantConditions")
 class ComputeHelpersTest {
     @Test fun testGetMatchingParenIndex() = runGetMatchingParenIndexTests()
+
     @Test fun testGetParseErrorMessage() = runGetParseErrorMessageTests()
 
     @Test

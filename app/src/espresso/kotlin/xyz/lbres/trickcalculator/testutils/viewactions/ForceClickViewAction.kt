@@ -12,6 +12,7 @@ import org.hamcrest.Matcher
  */
 private class ForceClickViewAction : ViewAction {
     override fun getConstraints(): Matcher<View> = isClickable()
+
     override fun getDescription(): String = "force-clicking a view"
 
     /**
@@ -20,7 +21,10 @@ private class ForceClickViewAction : ViewAction {
      * @param uiController [UiController]
      * @param view [View]: view to click
      */
-    override fun perform(uiController: UiController, view: View) {
+    override fun perform(
+        uiController: UiController,
+        view: View,
+    ) {
         if (view.isShown) {
             view.callOnClick()
         }

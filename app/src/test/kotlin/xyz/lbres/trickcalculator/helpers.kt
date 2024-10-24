@@ -22,7 +22,10 @@ fun assertDivByZero(function: () -> Unit) {
  * @param message [String]: expected message
  * @param function () -> Unit: function that throws exception
  */
-inline fun assertFailsWithMessage(message: String, function: () -> Unit) {
+inline fun assertFailsWithMessage(
+    message: String,
+    function: () -> Unit,
+) {
     assertFailsWithMessage<Exception>(message, function)
 }
 
@@ -33,7 +36,10 @@ inline fun assertFailsWithMessage(message: String, function: () -> Unit) {
  * @param function () -> Unit: function that throws exception
  */
 @JvmName("assertFailsWithMessageWithType")
-inline fun <reified T : Exception> assertFailsWithMessage(message: String, function: () -> Unit) {
+inline fun <reified T : Exception> assertFailsWithMessage(
+    message: String,
+    function: () -> Unit,
+) {
     val error = assertFailsWith<T> { function() }
     assertEquals(message, error.message)
 }
@@ -62,7 +68,10 @@ fun splitString(s: String): StringList {
  * @param tries [Int]: number of times to run the test. Defaults to 2 (a single retry)
  * @param retryableTest () -> [Unit]: test to run
  */
-fun runTestWithRetry(tries: Int = 2, retryableTest: () -> Unit) {
+fun runTestWithRetry(
+    tries: Int = 2,
+    retryableTest: () -> Unit,
+) {
     repeat(tries - 1) {
         try {
             retryableTest()
@@ -82,7 +91,11 @@ fun runTestWithRetry(tries: Int = 2, retryableTest: () -> Unit) {
  * @param iterations [Int]: number of times to generate value
  * @param getValue ([Iterable]<T>) -> T: function that takes [values] as parameter, and uses it to randomly generate a value
  */
-fun <T> checkDistributedResults(values: Iterable<T>, iterations: Int, getValue: (Iterable<T>) -> T) {
+fun <T> checkDistributedResults(
+    values: Iterable<T>,
+    iterations: Int,
+    getValue: (Iterable<T>) -> T,
+) {
     val results: MutableMultiSet<T> = mutableMultiSetOf()
     repeat(iterations) {
         val result = getValue(values)

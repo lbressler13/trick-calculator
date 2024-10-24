@@ -5,5 +5,6 @@ package xyz.lbres.trickcalculator
  */
 object ProductFlavor : ProductFlavorConfig {
     override val devMode = false
+
     override fun setupFlavor(activity: BaseActivity) {}
 }

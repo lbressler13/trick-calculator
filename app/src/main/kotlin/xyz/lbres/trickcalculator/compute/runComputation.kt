@@ -35,21 +35,22 @@ fun runComputation(
     applyParens: Boolean,
     applyDecimals: Boolean,
     randomizeSigns: Boolean,
-    shuffleComputation: Boolean
+    shuffleComputation: Boolean,
 ): ExactFraction {
     val validatedNumOrder = simpleIf(validateNumbersOrder(numbersOrder), numbersOrder, null)
     val modifiedInitialValue = applyOrderToEF(validatedNumOrder, initialValue)
 
-    val computeText = generateAndValidateComputeText(
-        modifiedInitialValue,
-        initialText,
-        operatorRounds.flatten(),
-        validatedNumOrder,
-        applyParens,
-        applyDecimals,
-        randomizeSigns,
-        shuffleComputation
-    )
+    val computeText =
+        generateAndValidateComputeText(
+            modifiedInitialValue,
+            initialText,
+            operatorRounds.flatten(),
+            validatedNumOrder,
+            applyParens,
+            applyDecimals,
+            randomizeSigns,
+            shuffleComputation,
+        )
 
     return try {
         parseText(computeText, operatorRounds, performSingleOp)
@@ -82,7 +83,7 @@ fun runComputation(
 fun parseText(
     computeText: StringList,
     operatorRounds: List<StringList>,
-    performSingleOp: OperatorFunction
+    performSingleOp: OperatorFunction,
 ): ExactFraction {
     var currentState = computeText
 
@@ -124,7 +125,7 @@ fun parseText(
 fun parseOperatorRound(
     computeText: StringList,
     ops: StringList,
-    performSingleOp: OperatorFunction
+    performSingleOp: OperatorFunction,
 ): StringList {
     val simplifiedList: MutableList<String> = mutableListOf()
 
@@ -170,7 +171,7 @@ fun parseOperatorRound(
 fun parseParens(
     computeText: StringList,
     operatorRounds: List<StringList>,
-    performSingleOp: OperatorFunction
+    performSingleOp: OperatorFunction,
 ): StringList {
     val simplifiedList: MutableList<String> = mutableListOf()
     var index = 0

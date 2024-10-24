@@ -16,7 +16,10 @@ import xyz.lbres.kotlinutils.generic.ext.ifNull
  * @param childViewId [IdRes]: resource ID for view to perform action on
  * @param childAction [ViewAction]: action to perform on child
  */
-private class ActionOnChildWithIdViewAction(@param:IdRes private val childViewId: Int, private val childAction: ViewAction) : ViewAction {
+private class ActionOnChildWithIdViewAction(
+    @param:IdRes private val childViewId: Int,
+    private val childAction: ViewAction,
+) : ViewAction {
     override fun getConstraints(): Matcher<View> = isDisplayed()
 
     override fun getDescription(): String = "clicking view with $childViewId"
@@ -24,13 +27,17 @@ private class ActionOnChildWithIdViewAction(@param:IdRes private val childViewId
     /**
      * Perform [childAction] on a child view with a given ID
      */
-    override fun perform(uiController: UiController?, view: View) {
-        val targetView = view.findViewById<View>(childViewId).ifNull {
-            throw PerformException.Builder().withActionDescription(this.toString())
-                .withViewDescription(HumanReadables.describe(view))
-                .withCause(IllegalStateException("No view found with id $childViewId"))
-                .build()
-        }
+    override fun perform(
+        uiController: UiController?,
+        view: View,
+    ) {
+        val targetView =
+            view.findViewById<View>(childViewId).ifNull {
+                throw PerformException.Builder().withActionDescription(this.toString())
+                    .withViewDescription(HumanReadables.describe(view))
+                    .withCause(IllegalStateException("No view found with id $childViewId"))
+                    .build()
+            }
 
         childAction.perform(uiController, targetView)
     }
@@ -42,6 +49,9 @@ private class ActionOnChildWithIdViewAction(@param:IdRes private val childViewId
  * @param childViewId [IdRes]: resource ID for view to perform action on
  * @param childAction [ViewAction]: action to perform on child
  */
-fun actionOnChildWithId(@IdRes childViewId: Int, childAction: ViewAction): ViewAction {
+fun actionOnChildWithId(
+    @IdRes childViewId: Int,
+    childAction: ViewAction,
+): ViewAction {
     return ActionOnChildWithIdViewAction(childViewId, childAction)
 }

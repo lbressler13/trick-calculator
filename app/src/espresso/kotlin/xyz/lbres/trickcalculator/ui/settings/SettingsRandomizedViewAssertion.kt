@@ -16,32 +16,37 @@ private class SettingsRandomizedViewAssertion : ViewAssertion {
      *
      * @param view [View]?: view to check, expected to be root of a settings fragment
      */
-    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
+    override fun check(
+        view: View?,
+        noViewFoundException: NoMatchingViewException?,
+    ) {
         if (view == null) {
             throw AssertionError("Settings view is null")
         } else {
             val initialSettings = Settings()
 
             val historyGroup = view.findViewById<RadioGroup>(R.id.historyRandomnessGroup)
-            val historyRandomness = when (historyGroup.checkedRadioButtonId) {
-                R.id.historyButton0 -> 0
-                R.id.historyButton1 -> 1
-                R.id.historyButton2 -> 2
-                R.id.historyButton3 -> 3
-                else -> initialSettings.historyRandomness
-            }
+            val historyRandomness =
+                when (historyGroup.checkedRadioButtonId) {
+                    R.id.historyButton0 -> 0
+                    R.id.historyButton1 -> 1
+                    R.id.historyButton2 -> 2
+                    R.id.historyButton3 -> 3
+                    else -> initialSettings.historyRandomness
+                }
 
-            val viewSettings = Settings(
-                view.findViewById<SwitchCompat>(R.id.applyDecimalsSwitch).isChecked,
-                view.findViewById<SwitchCompat>(R.id.applyParensSwitch).isChecked,
-                initialSettings.clearOnError, // hardcoded in randomize, not part of randomization
-                historyRandomness,
-                view.findViewById<SwitchCompat>(R.id.randomizeSignsSwitch).isChecked,
-                initialSettings.showSettingsButton, // hardcoded in randomize, not part of randomization
-                view.findViewById<SwitchCompat>(R.id.shuffleComputationSwitch).isChecked,
-                view.findViewById<SwitchCompat>(R.id.shuffleNumbersSwitch).isChecked,
-                view.findViewById<SwitchCompat>(R.id.shuffleOperatorsSwitch).isChecked
-            )
+            val viewSettings =
+                Settings(
+                    view.findViewById<SwitchCompat>(R.id.applyDecimalsSwitch).isChecked,
+                    view.findViewById<SwitchCompat>(R.id.applyParensSwitch).isChecked,
+                    initialSettings.clearOnError, // hardcoded in randomize, not part of randomization
+                    historyRandomness,
+                    view.findViewById<SwitchCompat>(R.id.randomizeSignsSwitch).isChecked,
+                    initialSettings.showSettingsButton, // hardcoded in randomize, not part of randomization
+                    view.findViewById<SwitchCompat>(R.id.shuffleComputationSwitch).isChecked,
+                    view.findViewById<SwitchCompat>(R.id.shuffleNumbersSwitch).isChecked,
+                    view.findViewById<SwitchCompat>(R.id.shuffleOperatorsSwitch).isChecked,
+                )
 
             if (viewSettings == initialSettings) {
                 throw AssertionError("Randomized settings match initial settings")

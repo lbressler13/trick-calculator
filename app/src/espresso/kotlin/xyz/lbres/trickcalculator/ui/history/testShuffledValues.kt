@@ -142,14 +142,19 @@ fun testShuffleComputation() {
 private fun getMainTextResult(): String {
     var text = ""
 
-    val getText = object : ViewAction {
-        override fun getConstraints(): Matcher<View> = withId(R.id.mainText)
-        override fun getDescription(): String = "retrieving main text"
+    val getText =
+        object : ViewAction {
+            override fun getConstraints(): Matcher<View> = withId(R.id.mainText)
 
-        override fun perform(uiController: UiController?, view: View?) {
-            text = (view as TextView).text?.toString() ?: ""
+            override fun getDescription(): String = "retrieving main text"
+
+            override fun perform(
+                uiController: UiController?,
+                view: View?,
+            ) {
+                text = (view as TextView).text?.toString() ?: ""
+            }
         }
-    }
 
     onView(withId(R.id.mainText)).perform(getText)
 

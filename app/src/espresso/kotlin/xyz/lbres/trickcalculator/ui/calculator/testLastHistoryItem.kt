@@ -42,12 +42,13 @@ fun testLastHistoryItem() {
     runSingleTestWithComputedValue("1234", "+2", setOf("[1234]+2"))
 
     val longComputation = "(5.4+2)-3"
-    var options = setOf(
-        "[5]$longComputation",
-        "[1]$longComputation",
-        "[6]$longComputation",
-        "[1.5]$longComputation"
-    )
+    var options =
+        setOf(
+            "[5]$longComputation",
+            "[1]$longComputation",
+            "[6]$longComputation",
+            "[1.5]$longComputation",
+        )
     runSingleTestWithComputedValue("3+2", longComputation, options)
 
     // no times added for multiplication
@@ -112,7 +113,10 @@ fun testLastHistoryItem() {
  * @param computation [String]: computation to type
  * @param expectedText [String]?: expected result of computation, defaults to `null`
  */
-private fun runSingleTest(computation: String, expectedText: String? = null) {
+private fun runSingleTest(
+    computation: String,
+    expectedText: String? = null,
+) {
     clearText()
     typeText(computation)
     equals()
@@ -134,7 +138,11 @@ private fun runSingleTest(computation: String, expectedText: String? = null) {
  * @param comp2 [String]: second computation to type
  * @param previousOptions [Set]<String>: possible results of [comp1]
  */
-private fun runSingleTestWithComputedValue(comp1: String, comp2: String, previousOptions: Set<String>) {
+private fun runSingleTestWithComputedValue(
+    comp1: String,
+    comp2: String,
+    previousOptions: Set<String>,
+) {
     clearText()
     typeText(comp1)
     equals()

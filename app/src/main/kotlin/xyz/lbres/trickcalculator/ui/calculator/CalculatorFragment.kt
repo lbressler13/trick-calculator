@@ -41,7 +41,7 @@ class CalculatorFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentCalculatorBinding.inflate(layoutInflater)
         computationViewModel = ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
@@ -115,11 +115,12 @@ class CalculatorFragment : BaseFragment() {
         if (computationViewModel.computeText.isNotEmpty()) {
             // set action for each operator
             // only include exponent if exp is used
-            val operators = when {
-                !settingsViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
-                !computationViewModel.computeText.contains("^") -> listOf("+", "-", "x", "/").seededShuffled() + "^"
-                else -> listOf("+", "-", "x", "/", "^").seededShuffled()
-            }
+            val operators =
+                when {
+                    !settingsViewModel.shuffleOperators -> listOf("+", "-", "x", "/", "^")
+                    !computationViewModel.computeText.contains("^") -> listOf("+", "-", "x", "/").seededShuffled() + "^"
+                    else -> listOf("+", "-", "x", "/", "^").seededShuffled()
+                }
 
             // maps operator symbols to their given functions
             val performOperation: OperatorFunction = { leftValue, rightValue, operator ->
@@ -133,11 +134,12 @@ class CalculatorFragment : BaseFragment() {
                 }
             }
 
-            val operatorRounds = listOf(
-                listOf(operators[4]), // exponent
-                operators.subList(2, 4), // multiply and divide
-                operators.subList(0, 2) // add and subtract
-            )
+            val operatorRounds =
+                listOf(
+                    listOf(operators[4]), // exponent
+                    operators.subList(2, 4), // multiply and divide
+                    operators.subList(0, 2), // add and subtract
+                )
 
             val numberOrder = simpleIf(settingsViewModel.shuffleNumbers, (0..9).seededShuffled(), (0..9).toList())
 
@@ -155,25 +157,26 @@ class CalculatorFragment : BaseFragment() {
                         settingsViewModel.applyParens,
                         settingsViewModel.applyDecimals,
                         settingsViewModel.randomizeSigns,
-                        settingsViewModel.shuffleComputation
+                        settingsViewModel.shuffleComputation,
                     )
 
                 newHistoryItem = computationViewModel.setResult(null, computedValue)
                 updateUI()
                 scrollTextToTop()
             } catch (e: Exception) {
-                val error: String = if (e.message == null) {
-                    "Computation error"
-                } else {
-                    var message: String = e.message!!.trim()
+                val error: String =
+                    if (e.message == null) {
+                        "Computation error"
+                    } else {
+                        var message: String = e.message!!.trim()
 
-                    if (message.isNotEmpty() && message[0].isLowerCase()) {
-                        val firstChar = message[0]
-                        message = message.replaceFirst(firstChar, firstChar.uppercaseChar())
+                        if (message.isNotEmpty() && message[0].isLowerCase()) {
+                            val firstChar = message[0]
+                            message = message.replaceFirst(firstChar, firstChar.uppercaseChar())
+                        }
+
+                        message
                     }
-
-                    message
-                }
 
                 newHistoryItem = computationViewModel.setResult(error, null, settingsViewModel.clearOnError)
                 updateUI()

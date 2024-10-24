@@ -40,7 +40,10 @@ class TestHistory {
      * If `false`, the function will return `false`. Defaults to `true`.
      * @return [Boolean]: `true` if the check passes, `false` if it fails and [throwError] is set to `false`
      */
-    fun checkAllDisplayed(randomness: Int, throwError: Boolean = true): Boolean {
+    fun checkAllDisplayed(
+        randomness: Int,
+        throwError: Boolean = true,
+    ): Boolean {
         checkAllowedRandomness(randomness)
 
         val displayedValues = computeHistory.indices.map { getViewHolderTextAtPosition(it) }
@@ -145,25 +148,31 @@ class TestHistory {
         var computation = ""
         var errorResult = ""
 
-        val getViewHolderText = object : ViewAction {
-            override fun getConstraints(): Matcher<View> = isDisplayed()
-            override fun getDescription(): String = "retrieving text from viewholder at position $position"
+        val getViewHolderText =
+            object : ViewAction {
+                override fun getConstraints(): Matcher<View> = isDisplayed()
 
-            override fun perform(uiController: UiController?, view: View?) {
-                computation = view?.findViewById<TextView>(R.id.computeText)?.text?.toString() ?: ""
+                override fun getDescription(): String = "retrieving text from viewholder at position $position"
 
-                val number = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
-                val error = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
-                errorResult = when {
-                    !number.isNullOrBlank() -> number
-                    !error.isNullOrBlank() -> error
-                    else -> ""
+                override fun perform(
+                    uiController: UiController?,
+                    view: View?,
+                ) {
+                    computation = view?.findViewById<TextView>(R.id.computeText)?.text?.toString() ?: ""
+
+                    val number = view?.findViewById<TextView>(R.id.resultText)?.text?.toString()
+                    val error = view?.findViewById<TextView>(R.id.errorText)?.text?.toString()
+                    errorResult =
+                        when {
+                            !number.isNullOrBlank() -> number
+                            !error.isNullOrBlank() -> error
+                            else -> ""
+                        }
                 }
             }
-        }
 
         onView(withId(R.id.itemsRecycler)).perform(
-            actionOnHistoryItemAtPosition(position, getViewHolderText)
+            actionOnHistoryItemAtPosition(position, getViewHolderText),
         )
 
         return Pair(computation, errorResult)

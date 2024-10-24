@@ -20,6 +20,7 @@ import xyz.lbres.trickcalculator.ui.attributions.URLClickableSpan
  */
 private class ClickLinkInTextViewAction(private val textToClick: String) : ViewAction {
     override fun getConstraints(): Matcher<View> = isAssignableFrom(TextView::class.java)
+
     override fun getDescription(): String = "clicking a URLClickableSpan with text $textToClick"
 
     /**
@@ -28,7 +29,10 @@ private class ClickLinkInTextViewAction(private val textToClick: String) : ViewA
      * @param uiController [UiController]
      * @param view [View]
      */
-    override fun perform(uiController: UiController, view: View) {
+    override fun perform(
+        uiController: UiController,
+        view: View,
+    ) {
         view as TextView
         val fullText = view.text as SpannableString
 
@@ -43,12 +47,13 @@ private class ClickLinkInTextViewAction(private val textToClick: String) : ViewA
         // get all url clickable spans in text
         val spans: Array<URLClickableSpan> = fullText.getSpans(0, fullText.length, URLClickableSpan::class.java)
         // find matching span
-        val span = spans.firstOrNull {
-            val start = fullText.getSpanStart(it)
-            val end = fullText.getSpanEnd(it)
-            val spanText = fullText.substring(start, end)
-            textToClick == spanText
-        }
+        val span =
+            spans.firstOrNull {
+                val start = fullText.getSpanStart(it)
+                val end = fullText.getSpanEnd(it)
+                val spanText = fullText.substring(start, end)
+                textToClick == spanText
+            }
 
         if (span != null) {
             span.onClick(view)

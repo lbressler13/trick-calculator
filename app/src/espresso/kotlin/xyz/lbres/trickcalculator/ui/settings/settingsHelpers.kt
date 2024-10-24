@@ -66,7 +66,10 @@ fun checkStandardSettings() {
  * @param settingsSwitchDisplayed [Boolean]: is the settings button switch should be visible.
  * Defaults to `true`
  */
-fun checkSettingsDisplayed(settings: Settings, settingsSwitchDisplayed: Boolean = true) {
+fun checkSettingsDisplayed(
+    settings: Settings,
+    settingsSwitchDisplayed: Boolean = true,
+) {
     val checkSetting: (Int, Boolean) -> Unit = { switchId, settingValue ->
         val switch = onView(withId(switchId))
         val checkedMatcher = simpleIf(settingValue, isChecked(), isNotChecked())

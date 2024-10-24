@@ -344,7 +344,7 @@ private fun callRunComputation(
     applyParens: Boolean = true,
     applyDecimals: Boolean = true,
     shuffleComputation: Boolean = false,
-    randomizeSigns: Boolean = false
+    randomizeSigns: Boolean = false,
 ): ExactFraction {
     return runComputation(initialValue, text, ops, executeOp, order, applyParens, applyDecimals, shuffleComputation, randomizeSigns)
 }

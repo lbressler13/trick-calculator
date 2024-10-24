@@ -30,23 +30,25 @@ private const val probabilityParens = 0.2f
  * Values for generating an ExactFraction to use as a the result in a HistoryItem
  */
 private const val probabilityWholeNumberResult = 0.6f
-private val weightedRangesResult = listOf(
-    Pair(0 until 500, 0.2f),
-    Pair(500 until 10000, 0.3f),
-    Pair(10000 until Int.MAX_VALUE / 2, 0.25f),
-    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.25f)
-)
+private val weightedRangesResult =
+    listOf(
+        Pair(0 until 500, 0.2f),
+        Pair(500 until 10000, 0.3f),
+        Pair(10000 until Int.MAX_VALUE / 2, 0.25f),
+        Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.25f),
+    )
 
 /**
  * Values for generating an ExactFraction to use as a term in the generated computation
  */
 private const val probabilityWholeNumberComputation = 0.85f
-private val weightedRangesComputation = listOf(
-    Pair(0 until 1000, 0.5f),
-    Pair(1000 until 100000, 0.2f),
-    Pair(100000 until Int.MAX_VALUE / 2, 0.2f),
-    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.1f)
-)
+private val weightedRangesComputation =
+    listOf(
+        Pair(0 until 1000, 0.5f),
+        Pair(1000 until 100000, 0.2f),
+        Pair(100000 until Int.MAX_VALUE / 2, 0.2f),
+        Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.1f),
+    )
 
 private val operators = listOf("+", "-", "x", "/", "^")
 
@@ -80,18 +82,20 @@ fun generateRandomHistoryItem(): HistoryItem {
 private fun generateComputation(length: Int): StringList {
     val totalLength = length * 2 - 1
 
-    val computation = MutableList(totalLength) {
-        if (it % 2 == 0) {
-            val ef = generateExactFraction(
-                weightedRangesComputation,
-                probabilityWholeNumberComputation,
-                allowNegative = false
-            )
-            ef.toDecimalString(5)
-        } else {
-            operators.seededRandom()
+    val computation =
+        MutableList(totalLength) {
+            if (it % 2 == 0) {
+                val ef =
+                    generateExactFraction(
+                        weightedRangesComputation,
+                        probabilityWholeNumberComputation,
+                        allowNegative = false,
+                    )
+                ef.toDecimalString(5)
+            } else {
+                operators.seededRandom()
+            }
         }
-    }
 
     if (random.nextBoolean(probabilityParens)) {
         addParens(computation)
@@ -115,7 +119,7 @@ private fun generateComputation(length: Int): StringList {
 private fun generateExactFraction(
     weightedRanges: WeightedList<IntRange>,
     probabilityWholeNumber: Float,
-    allowNegative: Boolean = true
+    allowNegative: Boolean = true,
 ): ExactFraction {
     val wholeNumber = random.nextBoolean(probabilityWholeNumber)
     val negative = allowNegative && random.nextBoolean()
@@ -140,11 +144,12 @@ private fun generateExactFraction(
  * @return [String]: an error message
  */
 private fun generateErrorMessage(): String {
-    val messages = listOf(
-        "Syntax error",
-        "Divide by zero",
-        "Number overflow exception"
-    )
+    val messages =
+        listOf(
+            "Syntax error",
+            "Divide by zero",
+            "Number overflow exception",
+        )
 
     val message = messages.seededRandom()
 
@@ -192,12 +197,13 @@ private fun addParens(computation: MStringList) {
  * @param computation [MStringList]: existing computation
  */
 private fun addSyntaxError(computation: MStringList) {
-    val errorType = listOf(
-        "singleParen",
-        "extraOperator",
-        "emptyParens",
-        "extraDecimal"
-    ).seededRandom()
+    val errorType =
+        listOf(
+            "singleParen",
+            "extraOperator",
+            "emptyParens",
+            "extraDecimal",
+        ).seededRandom()
 
     when (errorType) {
         "singleParen" -> addUnmatchedParen(computation)
@@ -228,11 +234,12 @@ private fun addOperatorSyntaxError(computation: MStringList) {
     if (!index.isZero() && index != computation.size) {
         val current = computation[index]
         val previous = computation[index - 1]
-        val adjacentOperator = when {
-            isOperator(current, operators) -> current
-            isOperator(previous, operators) -> previous
-            else -> ""
-        }
+        val adjacentOperator =
+            when {
+                isOperator(current, operators) -> current
+                isOperator(previous, operators) -> previous
+                else -> ""
+            }
 
         // select new operator to avoid adjacent duplicates
         if (adjacentOperator == operator) {
@@ -270,10 +277,11 @@ private fun addUnmatchedParen(computation: MStringList) {
     // biased in favor of putting paren next to the existing paren, if possible
     val existingIndex = computation.indexOf(paren)
     if (existingIndex != -1) {
-        val indices = listOf(
-            Pair(existingIndex, 0.7f),
-            Pair(index, 0.3f)
-        )
+        val indices =
+            listOf(
+                Pair(existingIndex, 0.7f),
+                Pair(index, 0.3f),
+            )
         index = random.nextFromWeightedList(indices)
     }
 

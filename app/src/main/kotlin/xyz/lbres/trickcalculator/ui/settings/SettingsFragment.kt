@@ -36,7 +36,11 @@ class SettingsFragment : BaseFragment() {
     /**
      * Initialize fragment
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
