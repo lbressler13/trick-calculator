@@ -24,7 +24,7 @@ class TextSaver {
     private class SaveTextViewAction : ViewAction {
         override fun getConstraints(): Matcher<View> = allOf(
             isAssignableFrom(TextView::class.java),
-            isDisplayed()
+            isDisplayed(),
         )
 
         override fun getDescription(): String = "saving text for view"
@@ -76,7 +76,7 @@ class TextSaver {
     private class ClearSavedTextViewAction : ViewAction {
         override fun getConstraints(): Matcher<View> = allOf(
             isAssignableFrom(TextView::class.java),
-            isDisplayed()
+            isDisplayed(),
         )
 
         override fun getDescription(): String = "clearing saved text for view"

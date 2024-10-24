@@ -46,7 +46,7 @@ fun testLastHistoryItem() {
         "[5]$longComputation",
         "[1]$longComputation",
         "[6]$longComputation",
-        "[1.5]$longComputation"
+        "[1.5]$longComputation",
     )
     runSingleTestWithComputedValue("3+2", longComputation, options)
 

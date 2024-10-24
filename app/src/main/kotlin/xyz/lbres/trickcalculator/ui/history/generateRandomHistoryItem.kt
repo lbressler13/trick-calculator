@@ -34,7 +34,7 @@ private val weightedRangesResult = listOf(
     Pair(0 until 500, 0.2f),
     Pair(500 until 10000, 0.3f),
     Pair(10000 until Int.MAX_VALUE / 2, 0.25f),
-    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.25f)
+    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.25f),
 )
 
 /**
@@ -45,7 +45,7 @@ private val weightedRangesComputation = listOf(
     Pair(0 until 1000, 0.5f),
     Pair(1000 until 100000, 0.2f),
     Pair(100000 until Int.MAX_VALUE / 2, 0.2f),
-    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.1f)
+    Pair(Int.MAX_VALUE / 2..Int.MAX_VALUE, 0.1f),
 )
 
 private val operators = listOf("+", "-", "x", "/", "^")
@@ -85,7 +85,7 @@ private fun generateComputation(length: Int): StringList {
             val ef = generateExactFraction(
                 weightedRangesComputation,
                 probabilityWholeNumberComputation,
-                allowNegative = false
+                allowNegative = false,
             )
             ef.toDecimalString(5)
         } else {
@@ -115,7 +115,7 @@ private fun generateComputation(length: Int): StringList {
 private fun generateExactFraction(
     weightedRanges: WeightedList<IntRange>,
     probabilityWholeNumber: Float,
-    allowNegative: Boolean = true
+    allowNegative: Boolean = true,
 ): ExactFraction {
     val wholeNumber = random.nextBoolean(probabilityWholeNumber)
     val negative = allowNegative && random.nextBoolean()
@@ -143,7 +143,7 @@ private fun generateErrorMessage(): String {
     val messages = listOf(
         "Syntax error",
         "Divide by zero",
-        "Number overflow exception"
+        "Number overflow exception",
     )
 
     val message = messages.seededRandom()
@@ -196,7 +196,7 @@ private fun addSyntaxError(computation: MStringList) {
         "singleParen",
         "extraOperator",
         "emptyParens",
-        "extraDecimal"
+        "extraDecimal",
     ).seededRandom()
 
     when (errorType) {
@@ -272,7 +272,7 @@ private fun addUnmatchedParen(computation: MStringList) {
     if (existingIndex != -1) {
         val indices = listOf(
             Pair(existingIndex, 0.7f),
-            Pair(index, 0.3f)
+            Pair(index, 0.3f),
         )
         index = random.nextFromWeightedList(indices)
     }

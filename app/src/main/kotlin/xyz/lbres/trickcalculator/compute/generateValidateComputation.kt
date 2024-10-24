@@ -33,7 +33,7 @@ private data class ComputeData(
     var openParenCount: Int = 0,
     // track decimal state in case applyDecimals = false
     var currentDecimal: Boolean = false, // if current num already has a decimal, used to check if there are multiple decimals
-    var lastDecimal: Boolean = false // if the most recent element was a decimal, used to check a number ends with a decimal
+    var lastDecimal: Boolean = false, // if the most recent element was a decimal, used to check a number ends with a decimal
 )
 
 /**
@@ -73,7 +73,7 @@ fun generateAndValidateComputeText(
     applyParens: Boolean,
     applyDecimals: Boolean,
     randomizeSigns: Boolean,
-    shuffleComputation: Boolean
+    shuffleComputation: Boolean,
 ): StringList {
     val data = ComputeData()
 

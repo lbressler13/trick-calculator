@@ -50,7 +50,7 @@ fun testSettingsMaintained() {
         showSettingsButton = true,
         shuffleComputation = true,
         shuffleNumbers = true,
-        shuffleOperators = false
+        shuffleOperators = false,
     )
 
     checkSettingsDisplayed(settings)

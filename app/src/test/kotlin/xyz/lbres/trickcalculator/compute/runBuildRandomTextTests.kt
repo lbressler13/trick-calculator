@@ -103,7 +103,7 @@ private fun runSingleRandomizationTest(
     initialValue: ExactFraction? = null,
     numbersOrder: IntList? = null,
     applyParens: Boolean = true,
-    applyDecimals: Boolean = true
+    applyDecimals: Boolean = true,
 ) {
     val typeMapping = mapToTypes(builtText)
     val absValues = mapToAbsoluteValues(builtText)
@@ -117,7 +117,7 @@ private fun runSingleRandomizationTest(
             applyParens,
             applyDecimals,
             randomizeSigns,
-            shuffleComputation
+            shuffleComputation,
         )
 
         assertEquals(typeMapping, mapToTypes(result))

@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android") apply true
-    id("org.jlleitschuh.gradle.ktlint") version "11.6.1" // ktlint
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1" // ktlint
 }
 
 val githubUsername: String? = project.findProperty("github.username")?.toString() ?: System.getenv("USERNAME")
@@ -149,12 +149,6 @@ android {
     }
 }
 
-ktlint {
-    disabledRules.set(
-        setOf("filename", "spacing-between-declarations-with-annotations", "spacing-between-declarations-with-comments")
-    )
-}
-
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
@@ -194,4 +188,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
+}
+
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    version.set("0.49.1")
 }

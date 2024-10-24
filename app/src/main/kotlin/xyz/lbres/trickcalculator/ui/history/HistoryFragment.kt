@@ -33,7 +33,7 @@ class HistoryFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
         settingsViewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]

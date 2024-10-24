@@ -280,7 +280,7 @@ fun callGenerateAndValidate(
     applyParens: Boolean = true,
     applyDecimals: Boolean = true,
     randomizeSigns: Boolean = false,
-    shuffleComputation: Boolean = false
+    shuffleComputation: Boolean = false,
 ): StringList {
     return generateAndValidateComputeText(initialValue, text, ops, order, applyParens, applyDecimals, randomizeSigns, shuffleComputation)
 }

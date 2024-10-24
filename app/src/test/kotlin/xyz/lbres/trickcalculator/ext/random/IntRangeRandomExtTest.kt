@@ -32,7 +32,7 @@ class IntRangeRandomExtTest {
             listOf(6, 5, 7),
             listOf(6, 7, 5),
             listOf(7, 5, 6),
-            listOf(7, 6, 5)
+            listOf(7, 6, 5),
         )
         runTestWithRetry {
             checkDistributedResults(resultOptions, 100000) { range.seededShuffled() }

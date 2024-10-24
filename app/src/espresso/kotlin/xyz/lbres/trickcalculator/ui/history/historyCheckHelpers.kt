@@ -17,12 +17,12 @@ import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Compa
 private val randomnessErrors = mapOf(
     0 to "History items should be ordered in history randomness 0.",
     1 to "History items should be shuffled in history randomness 1.",
-    2 to "History items and pairs should be shuffled in history randomness 2."
+    2 to "History items and pairs should be shuffled in history randomness 2.",
 )
 
 private val reshuffledErrors = mapOf(
     1 to "Items not re-shuffled for history randomness 1.",
-    2 to "Items not re-shuffled for history randomness 2."
+    2 to "Items not re-shuffled for history randomness 2.",
 )
 
 private val itemsRecycler = onView(withId(R.id.itemsRecycler))
@@ -100,7 +100,7 @@ fun runSingleReshuffledCheck(history: TestHistory, randomness: Int) {
     // save all current values
     for (position in 0 until history.size) {
         itemsRecycler.perform(
-            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText))
+            actionOnHistoryItemAtPosition(position, saveTextAtPosition(position, R.id.computeText)),
         )
     }
 

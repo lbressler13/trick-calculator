@@ -39,7 +39,7 @@ class AttributionsFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentAttributionsBinding.inflate(layoutInflater)
         // ViewModel is tied to fragment lifecycle, so expansions are reset for each instance of fragment

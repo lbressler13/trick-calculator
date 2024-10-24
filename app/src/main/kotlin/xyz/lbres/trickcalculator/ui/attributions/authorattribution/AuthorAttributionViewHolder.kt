@@ -34,7 +34,7 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
     fun update(
         author: AuthorAttribution,
         initialShowingIcons: Boolean,
-        setShowingIcons: (Boolean) -> Unit
+        setShowingIcons: (Boolean) -> Unit,
     ) {
         initializeAttributionText(author)
         initializeAdapter(author.images)

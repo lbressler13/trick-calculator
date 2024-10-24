@@ -163,7 +163,7 @@ class TestHistory {
         }
 
         onView(withId(R.id.itemsRecycler)).perform(
-            actionOnHistoryItemAtPosition(position, getViewHolderText)
+            actionOnHistoryItemAtPosition(position, getViewHolderText),
         )
 
         return Pair(computation, errorResult)

@@ -167,7 +167,7 @@ class SettingsFragmentTest {
             onView(withId(R.id.historyButton0)),
             onView(withId(R.id.historyButton1)),
             onView(withId(R.id.historyButton2)),
-            onView(withId(R.id.historyButton3))
+            onView(withId(R.id.historyButton3)),
         )
 
         for (button in buttons.withIndex()) {

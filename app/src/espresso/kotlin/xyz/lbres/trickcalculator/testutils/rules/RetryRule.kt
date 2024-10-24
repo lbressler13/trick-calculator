@@ -51,7 +51,7 @@ class RetryRule(val maxRetries: Int = BuildConfig.ESPRESSO_RETRIES) : TestRule {
                         val remainingTries = maxRetries - i - 1
                         AppLogger.e(
                             "RetryRule",
-                            "${description.displayName} failed, $remainingTries retries remaining"
+                            "${description.displayName} failed, $remainingTries retries remaining",
                         )
                     }
                 }

@@ -41,7 +41,7 @@ class CalculatorFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentCalculatorBinding.inflate(layoutInflater)
         computationViewModel = ViewModelProvider(requireActivity())[ComputationViewModel::class.java]
@@ -136,7 +136,7 @@ class CalculatorFragment : BaseFragment() {
             val operatorRounds = listOf(
                 listOf(operators[4]), // exponent
                 operators.subList(2, 4), // multiply and divide
-                operators.subList(0, 2) // add and subtract
+                operators.subList(0, 2), // add and subtract
             )
 
             val numberOrder = simpleIf(settingsViewModel.shuffleNumbers, (0..9).seededShuffled(), (0..9).toList())
@@ -155,7 +155,7 @@ class CalculatorFragment : BaseFragment() {
                         settingsViewModel.applyParens,
                         settingsViewModel.applyDecimals,
                         settingsViewModel.randomizeSigns,
-                        settingsViewModel.shuffleComputation
+                        settingsViewModel.shuffleComputation,
                     )
 
                 newHistoryItem = computationViewModel.setResult(null, computedValue)

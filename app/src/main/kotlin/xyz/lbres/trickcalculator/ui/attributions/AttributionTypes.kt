@@ -10,7 +10,7 @@ package xyz.lbres.trickcalculator.ui.attributions
 data class AuthorAttribution(
     val name: String,
     val url: String,
-    val images: List<ImageAttribution>
+    val images: List<ImageAttribution>,
 )
 
 /**
@@ -23,5 +23,5 @@ data class AuthorAttribution(
 data class ImageAttribution(
     val iconResId: Int,
     val contentDescriptionId: Int,
-    val url: String
+    val url: String,
 )

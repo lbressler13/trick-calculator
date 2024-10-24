@@ -41,7 +41,7 @@ class ListRandomExtTest {
             listOf(6, 5, 7),
             listOf(6, 7, 5),
             listOf(7, 5, 6),
-            listOf(7, 6, 5)
+            listOf(7, 6, 5),
         )
         val stringResultOptions = intResultOptions.map { it.map(Int::toString) }
 
