@@ -45,6 +45,5 @@ private class ActionOnChildWithIdViewAction(
  * @param childViewId [IdRes]: resource ID for view to perform action on
  * @param childAction [ViewAction]: action to perform on child
  */
-fun actionOnChildWithId(@IdRes childViewId: Int, childAction: ViewAction): ViewAction {
-    return ActionOnChildWithIdViewAction(childViewId, childAction)
-}
+fun actionOnChildWithId(@IdRes childViewId: Int, childAction: ViewAction): ViewAction =
+    ActionOnChildWithIdViewAction(childViewId, childAction)

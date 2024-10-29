@@ -66,7 +66,8 @@ class TestHistory {
 
                 val computationDiff = computations - displayedComputations
                 val resultDiff = results - displayedResults
-                errorMessage = "ViewHolders with compute text $computationDiff and result text $resultDiff not found. History: $computeHistory"
+                errorMessage = "ViewHolders with compute text $computationDiff and result text $resultDiff not " +
+                    "found. History: $computeHistory"
             }
         }
 
