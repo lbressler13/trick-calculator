@@ -237,16 +237,28 @@ private fun testBuildTextWithMods() {
     order = listOf(4, 8, 1, 0, 5, 9, 3, 6, 2, 7)
 
     expected = "103 x 44 + 20".split(" ")
-    assertEquals(expected, callGenerateAndValidate(null, text, order = null, applyParens = false, applyDecimals = false))
+    assertEquals(
+        expected,
+        callGenerateAndValidate(null, text, order = null, applyParens = false, applyDecimals = false),
+    )
 
     expected = "840 x ( 55 + 14 )".split(" ")
-    assertEquals(expected, callGenerateAndValidate(null, text, order = order, applyParens = true, applyDecimals = false))
+    assertEquals(
+        expected,
+        callGenerateAndValidate(null, text, order = order, applyParens = true, applyDecimals = false),
+    )
 
     expected = "84.0 x 55 + 1.4".split(" ")
-    assertEquals(expected, callGenerateAndValidate(null, text, order = order, applyParens = false, applyDecimals = true))
+    assertEquals(
+        expected,
+        callGenerateAndValidate(null, text, order = order, applyParens = false, applyDecimals = true),
+    )
 
     expected = "840 x 55 + 14".split(" ")
-    assertEquals(expected, callGenerateAndValidate(null, text, order = order, applyParens = false, applyDecimals = false))
+    assertEquals(
+        expected,
+        callGenerateAndValidate(null, text, order = order, applyParens = false, applyDecimals = false),
+    )
 
     // with initial value
     var ef = -ExactFraction.THREE
@@ -282,5 +294,14 @@ fun callGenerateAndValidate(
     randomizeSigns: Boolean = false,
     shuffleComputation: Boolean = false,
 ): StringList {
-    return generateAndValidateComputeText(initialValue, text, ops, order, applyParens, applyDecimals, randomizeSigns, shuffleComputation)
+    return generateAndValidateComputeText(
+        initialValue,
+        text,
+        ops,
+        order,
+        applyParens,
+        applyDecimals,
+        randomizeSigns,
+        shuffleComputation,
+    )
 }

@@ -192,4 +192,5 @@ dependencies {
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     version.set("0.49.1")
+    additionalEditorconfig.set(mapOf("max_line_length" to "120"))
 }

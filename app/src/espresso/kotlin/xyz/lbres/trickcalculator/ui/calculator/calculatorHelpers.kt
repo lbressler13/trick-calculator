@@ -23,7 +23,13 @@ private val mainText = onView(withId(R.id.mainText))
  * @param maxIterations [Int]: maximum number of times to run test
  * @param enterText () -> [Unit]: function to enter text into the main textview
  */
-fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, minIterations: Int, maxIterations: Int, enterText: () -> Unit) {
+fun checkMainTextMatchesMultiple(
+    options: Collection<String>,
+    minMatches: Int,
+    minIterations: Int,
+    maxIterations: Int,
+    enterText: () -> Unit,
+) {
     clearText()
     mainText.perform(clearSavedText())
     var distinctValues = 0
@@ -39,7 +45,9 @@ fun checkMainTextMatchesMultiple(options: Collection<String>, minMatches: Int, m
     }
 
     if (distinctValues < minMatches) {
-        throw AssertionError("Number of distinct values expected to be at least $minMatches. Actual number: $distinctValues")
+        throw AssertionError(
+            "Number of distinct values expected to be at least $minMatches. Actual number: $distinctValues",
+        )
     }
 }
 

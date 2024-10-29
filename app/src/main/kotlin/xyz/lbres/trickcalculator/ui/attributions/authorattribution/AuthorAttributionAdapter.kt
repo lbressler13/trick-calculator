@@ -13,7 +13,10 @@ import xyz.lbres.trickcalculator.ui.attributions.AuthorAttribution
  * @param authors [List]<AuthorAttribution>: list of AuthorAttribution objects
  * @param viewModel [AttributionsViewModel]: view model containing information about which attributions are expanded
  */
-class AuthorAttributionAdapter(private val authors: List<AuthorAttribution>, private val viewModel: AttributionsViewModel) :
+class AuthorAttributionAdapter(
+    private val authors: List<AuthorAttribution>,
+    private val viewModel: AttributionsViewModel,
+) :
     RecyclerView.Adapter<AuthorAttributionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorAttributionViewHolder {

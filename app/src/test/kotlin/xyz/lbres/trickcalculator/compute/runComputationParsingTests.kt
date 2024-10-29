@@ -117,7 +117,10 @@ fun runRunComputationTests() {
     // alternate ops
     text = splitString("2(3/4)-6+(7x5)")
     expected = ExactFraction.ZERO
-    assertEquals(expected, callRunComputation(null, text, ops = listOf(plusMinus, timesDiv), executeOp = performSwapped))
+    assertEquals(
+        expected,
+        callRunComputation(null, text, ops = listOf(plusMinus, timesDiv), executeOp = performSwapped),
+    )
 
     // normal
     text = splitString("(17+(12-90))/3")
@@ -346,5 +349,7 @@ private fun callRunComputation(
     shuffleComputation: Boolean = false,
     randomizeSigns: Boolean = false,
 ): ExactFraction {
-    return runComputation(initialValue, text, ops, executeOp, order, applyParens, applyDecimals, shuffleComputation, randomizeSigns)
+    return runComputation(
+        initialValue, text, ops, executeOp, order, applyParens, applyDecimals, shuffleComputation, randomizeSigns,
+    )
 }

@@ -12,7 +12,10 @@ import org.hamcrest.TypeSafeMatcher
  * @param position [Int]: position of ViewHolder in recycler
  * @param vhMatcher [Int]: matcher to apply to ViewHolder
  */
-private class MatchesAtPositionViewMatcher(private val position: Int, private val vhMatcher: Matcher<View?>) : TypeSafeMatcher<View>() {
+private class MatchesAtPositionViewMatcher(
+    private val position: Int,
+    private val vhMatcher: Matcher<View?>,
+) : TypeSafeMatcher<View>() {
     override fun describeTo(description: Description?) {
         if (description != null) {
             description.appendText("matching view at position $position with child matcher: ")
