@@ -286,12 +286,12 @@ private fun getTypeOf(element: String, ops: StringList): String? {
  * @return [Boolean]: `true` if there is an error, `false` otherwise
  */
 private fun nonNumberSyntaxError(data: ComputeData): Boolean {
-    val operatorInsideLParen = data.lastType == LPAREN && data.currentType == OPERATOR
-    val operatorInsideRParen = data.lastType == OPERATOR && data.currentType == RPAREN
+    val operatorInsideLparen = data.lastType == LPAREN && data.currentType == OPERATOR
+    val operatorInsideRparen = data.lastType == OPERATOR && data.currentType == RPAREN
     val doubleOperators = data.lastType == OPERATOR && data.currentType == OPERATOR
     val emptyParens = data.lastType == LPAREN && data.currentType == RPAREN
 
-    return data.openParenCount < 0 || operatorInsideLParen || operatorInsideRParen || doubleOperators || emptyParens
+    return data.openParenCount < 0 || operatorInsideLparen || operatorInsideRparen || doubleOperators || emptyParens
 }
 
 /**
