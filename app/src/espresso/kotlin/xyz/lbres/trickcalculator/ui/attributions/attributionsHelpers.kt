@@ -98,7 +98,8 @@ fun checkImagesDisplayed(positions: IntList) {
             attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, scrollImagesRecycler))
 
             val urlMatcher = allOf(isShown(), hasDescendant(withText(url)))
-            val nestedMatcher = allOf(withId(nestedRecyclerId), isDisplayed(), matchesAtPosition(nestedPosition, urlMatcher))
+            val nestedMatcher =
+                allOf(withId(nestedRecyclerId), isDisplayed(), matchesAtPosition(nestedPosition, urlMatcher))
 
             attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
         }

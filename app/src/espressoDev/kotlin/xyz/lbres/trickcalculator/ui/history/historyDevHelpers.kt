@@ -13,7 +13,8 @@ import xyz.lbres.trickcalculator.testutils.openSettingsFromDialog
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.saveTextAtPosition
 import xyz.lbres.trickcalculator.testutils.textsaver.RecyclerViewTextSaver.Companion.withSavedTextAtPosition
 
-private val historyButtonIds = listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
+private val historyButtonIds =
+    listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
 private val itemsRecycler = onView(withId(R.id.itemsRecycler))
 
 /**

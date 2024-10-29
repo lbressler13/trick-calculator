@@ -152,7 +152,8 @@ class HistoryFragmentTestDev {
      * @param error [String]: error message for [AssertionError] if test fails. History is appended.
      */
     private fun runSingleUpdateRandomnessTest(history: TestHistory, randomness: Int, error: String) {
-        val historyButtonIds = listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
+        val historyButtonIds =
+            listOf(R.id.historyButton0, R.id.historyButton1, R.id.historyButton2, R.id.historyButton3)
         val buttonId = historyButtonIds[randomness]
 
         openSettingsFromDialog()

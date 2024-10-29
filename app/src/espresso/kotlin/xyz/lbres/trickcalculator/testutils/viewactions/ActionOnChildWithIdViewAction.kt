@@ -16,7 +16,10 @@ import xyz.lbres.kotlinutils.generic.ext.ifNull
  * @param childViewId [IdRes]: resource ID for view to perform action on
  * @param childAction [ViewAction]: action to perform on child
  */
-private class ActionOnChildWithIdViewAction(@param:IdRes private val childViewId: Int, private val childAction: ViewAction) : ViewAction {
+private class ActionOnChildWithIdViewAction(
+    @param:IdRes private val childViewId: Int,
+    private val childAction: ViewAction,
+) : ViewAction {
     override fun getConstraints(): Matcher<View> = isDisplayed()
 
     override fun getDescription(): String = "clicking view with $childViewId"

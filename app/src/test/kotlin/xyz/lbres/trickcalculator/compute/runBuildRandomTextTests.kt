@@ -76,7 +76,10 @@ fun testBuildTextWithRandomSigns() {
 // shuffle computation + randomize signs
 @Suppress("BooleanLiteralArgument")
 fun testAllShuffling() {
-    assertEquals(emptyList(), callGenerateAndValidate(null, emptyList(), shuffleComputation = true, randomizeSigns = true))
+    assertEquals(
+        emptyList(),
+        callGenerateAndValidate(null, emptyList(), shuffleComputation = true, randomizeSigns = true),
+    )
 
     // no initial value
     var text = splitString("1+3.0004-4+6(-4+.32)")

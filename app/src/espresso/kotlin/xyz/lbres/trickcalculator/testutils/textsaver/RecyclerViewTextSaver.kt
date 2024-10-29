@@ -103,7 +103,10 @@ class RecyclerViewTextSaver {
          * @param position [Int]: position of ViewHolder in RecyclerView
          * @param viewId [IdRes]: view ID for the view to clear text for
          */
-        fun clearSavedTextAtPosition(position: Int, @IdRes viewId: Int): ViewAction = ClearSavedTextViewAction(position, viewId)
+        fun clearSavedTextAtPosition(position: Int, @IdRes viewId: Int): ViewAction = ClearSavedTextViewAction(
+            position,
+            viewId,
+        )
 
         /**
          /**
@@ -121,7 +124,10 @@ class RecyclerViewTextSaver {
          * @param position [Int]: position of ViewHolder in RecyclerView
          * @param viewId [IdRes]: view ID for the view to match text for
          */
-        fun withSavedTextAtPosition(position: Int, @IdRes viewId: Int): Matcher<in View?> = PreviousTextViewMatcher(position, viewId)
+        fun withSavedTextAtPosition(position: Int, @IdRes viewId: Int): Matcher<in View?> = PreviousTextViewMatcher(
+            position,
+            viewId,
+        )
 
         /**
          * Clear all saved values in the text saver

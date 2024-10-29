@@ -54,7 +54,12 @@ class SettingsFragment : BaseFragment() {
      * Set values in UI based on ViewModel and add necessary onClick actions
      */
     private fun initUi(fromCalculatorFragment: Boolean) {
-        historyButtons = listOf(binding.historyButton0, binding.historyButton1, binding.historyButton2, binding.historyButton3)
+        historyButtons = listOf(
+            binding.historyButton0,
+            binding.historyButton1,
+            binding.historyButton2,
+            binding.historyButton3,
+        )
 
         binding.applyDecimalsSwitch.isChecked = viewModel.applyDecimals
         binding.applyParensSwitch.isChecked = viewModel.applyParens

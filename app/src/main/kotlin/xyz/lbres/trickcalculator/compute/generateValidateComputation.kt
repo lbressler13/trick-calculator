@@ -32,8 +32,8 @@ private data class ComputeData(
     var currentNumber: String = "",
     var openParenCount: Int = 0,
     // track decimal state in case applyDecimals = false
-    var currentDecimal: Boolean = false, // if current num already has a decimal, used to check if there are multiple decimals
-    var lastDecimal: Boolean = false, // if the most recent element was a decimal, used to check a number ends with a decimal
+    var currentDecimal: Boolean = false, // if currentNumber already has a decimal
+    var lastDecimal: Boolean = false, // if most recent element was a decimal
 )
 
 /**
@@ -135,7 +135,12 @@ fun generateAndValidateComputeText(
  * @param initialText [StringList]: following compute text
  * @param randomizeSigns [Boolean]: if the signs of numbers should be randomized
  */
-private fun addInitialValue(data: ComputeData, initialValue: ExactFraction, initialText: StringList, randomizeSigns: Boolean) {
+private fun addInitialValue(
+    data: ComputeData,
+    initialValue: ExactFraction,
+    initialText: StringList,
+    randomizeSigns: Boolean,
+) {
     val value = simpleIf(randomizeSigns && random.nextBoolean(), -initialValue, initialValue)
 
     data.computeText.add(value.toEFString())
@@ -201,8 +206,10 @@ private fun digitFromNumbersOrder(element: String, numbersOrder: IntList?): Stri
  * @param applyParens [Boolean]: whether or not parens should be applied
  */
 private fun addNonNumber(data: ComputeData, element: String, applyParens: Boolean) {
+    val numBeforeParen = data.lastType == NUMBER && data.currentType == LPAREN
+    val adjacentParens = data.lastType == RPAREN && data.currentType == LPAREN
     // add times between preceding num and paren, or between adjacent parens
-    if ((data.lastType == NUMBER && data.currentType == LPAREN) || (data.lastType == RPAREN && data.currentType == LPAREN)) {
+    if (numBeforeParen || adjacentParens) {
         data.computeText.add("x")
     }
 
@@ -279,7 +286,8 @@ private fun getTypeOf(element: String, ops: StringList): String? {
  * @return [Boolean]: `true` if there is an error, `false` otherwise
  */
 private fun nonNumberSyntaxError(data: ComputeData): Boolean {
-    val operatorInsideParens = (data.lastType == LPAREN && data.currentType == OPERATOR) || (data.lastType == OPERATOR && data.currentType == RPAREN)
+    val operatorInsideParens = (data.lastType == LPAREN && data.currentType == OPERATOR) ||
+        (data.lastType == OPERATOR && data.currentType == RPAREN)
     val doubleOperators = data.lastType == OPERATOR && data.currentType == OPERATOR
     val emptyParens = data.lastType == LPAREN && data.currentType == RPAREN
 

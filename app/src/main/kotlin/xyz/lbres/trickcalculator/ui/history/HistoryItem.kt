@@ -7,7 +7,12 @@ import xyz.lbres.kotlinutils.list.ext.copyWithReplacement
 /**
  * Information about a single computation and its result
  */
-class HistoryItem private constructor(computation: StringList, val result: ExactFraction?, val error: String?, val previousResult: ExactFraction?) {
+class HistoryItem private constructor(
+    computation: StringList,
+    val result: ExactFraction?,
+    val error: String?,
+    val previousResult: ExactFraction?,
+) {
     val computation: StringList
 
     init {

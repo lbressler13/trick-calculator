@@ -74,7 +74,9 @@ class AttributionsFragmentTest {
     @Test
     fun flaticonMessage() {
         val flaticonShort = "All icons are taken from Flaticon. Expand for details of their attribution policies."
-        val flaticonLong = "All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies."
+        val flaticonLong = "All icons are taken from Flaticon, which allows free use of icons for personal and " +
+            "commercial purposes with attribution. In accordance with their policies, attributions are provided " +
+            "below.\n\nSee here for more information about their policies."
 
         // initial view
         onView(withId(R.id.flaticonPolicyMessage)).check(matches(withText(flaticonShort)))
@@ -151,7 +153,13 @@ class AttributionsFragmentTest {
 
         onView(withId(R.id.flaticonPolicyMessage)).perform(clickLinkInText("here"))
         expectedLinkClicks++
-        assertLinkOpened("https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE", expectedLinkClicks)
+
+        /* ktlint-disable max-line-length */
+        assertLinkOpened(
+            "https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE",
+            expectedLinkClicks,
+        )
+        /* ktlint-enable max-line-length */
     }
 
     @Test

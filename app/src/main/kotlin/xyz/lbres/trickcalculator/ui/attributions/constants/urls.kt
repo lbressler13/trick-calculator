@@ -1,3 +1,4 @@
+/* ktlint-disable max-line-length */
 package xyz.lbres.trickcalculator.ui.attributions.constants
 
 /**

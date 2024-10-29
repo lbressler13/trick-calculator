@@ -25,7 +25,14 @@ class ListRandomExtTest {
             val stringList = listOf("hello", "world", "hello world", "goodbye", "planet", "farewell", "earth")
             checkDistributedResults(stringList, 100000) { (it as StringList).seededRandom() }
 
-            val listList = listOf(emptyList(), listOf("hello"), listOf("12345"), listOf("", "1", "11", "111"), listOf("goodbye", "world"))
+            val listList =
+                listOf(
+                    emptyList(),
+                    listOf("hello"),
+                    listOf("12345"),
+                    listOf("", "1", "11", "111"),
+                    listOf("goodbye", "world"),
+                )
             checkDistributedResults(listList, 1000) { (it as List<StringList>).seededRandom() }
         }
     }
